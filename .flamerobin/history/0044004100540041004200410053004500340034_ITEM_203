@@ -1,0 +1,4 @@
+update
+    mercadoriasorc.cfop = '6108'
+where
+    mercadoriasorc.cfop = '6one'

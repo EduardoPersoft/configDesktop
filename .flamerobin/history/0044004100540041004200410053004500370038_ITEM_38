@@ -1,0 +1,102 @@
+insert into 
+cadastroparceiros
+
+(CADASTRO, 
+RAZAOSOCIAL, 
+NOME, 
+CADASTROPARCEIROS.INSCESTADUAL, 
+DOCUMENTO, 
+CADASTROPARCEIROS.TELEFONE, 
+LOGRADOURO, 
+BAIRRO, 
+CEP, 
+CIDADE, 
+EMAIL, 
+status,
+tipopessoa,
+
+ CONTRIBUINTE,   
+
+ TIPOEMPRESA,       
+ usuario ,
+ dataalteracao,
+ usuarioAPROVACAO ,
+ dataAPROVACAO,
+
+    
+    documentoduplicado,
+    parceirocliente,
+    parceirofornecedor, 
+    parceirovendedor,
+    parceirotransportadora,
+    parceirocolaborador, 
+    parceirooutros,    
+    
+    APROVADO, 
+    AVISOFINANCEIRO, 
+    AVISOVENDAS, 
+    AVISOFATURAMENTO, 
+    AVISOCOMPRAS, 
+    AVISOREGISTRO, 
+    IMPRIMIRLAUDO, 
+    EXIGIRLAUDO, 
+    OPTANTESIMPLES, 
+    GRUPOEMPRESARIAL
+)
+
+select distinct
+CADASTRO as cadastro,
+RAZAOSOCIAL, 
+NOME, 
+RGINSCEST, 
+CPFCNPJ, 
+FONE, 
+ENDERECO, 
+BAIRRO, 
+CEP, 
+CIDADE, 
+EMAIL, 
+1 as status,
+case (substring (CPFCNPJ from 1 for 15))
+    when '' then 'F'
+    else 'J' end as tipopessoa,
+case (substring (CPFCNPJ from 1 for 15))
+    when '' then 'N'
+    else 'S' end as CONTRIBUINTE,   
+case (substring (CPFCNPJ from 1 for 15))
+    when '' then 'N'
+    else 'S' end as TIPOEMPRESA,       
+    'ADMPERSOFT' AS usuario ,
+    '09.09.2025' AS dataalteracao,
+    'ADMPERSOFT' AS usuarioAPROVACAO ,
+    '09.09.2025' AS dataAPROVACAO,
+
+    
+    'N' as documentoduplicado,
+    'S' as parceirocliente,
+    'N' as parceirofornecedor, 
+    'N' as parceirovendedor,
+    'N' as parceirotransportadora,
+    'N' as parceirocolaborador, 
+    'N' as parceirooutros,    
+    
+    'S' as APROVADO, 
+    'N' as AVISOFINANCEIRO, 
+    'N' as AVISOVENDAS, 
+    'N' as AVISOFATURAMENTO, 
+    'N' as AVISOCOMPRAS, 
+    'N' as AVISOREGISTRO, 
+    'N' as IMPRIMIRLAUDO, 
+    'N' as EXIGIRLAUDO, 
+    'N' as OPTANTESIMPLES, 
+    CADASTRO as GRUPOEMPRESARIAL
+from 
+T_CLIENTES 
+where not exists (select t_clientes.CPFCNPJ from CADASTROPARCEIROS where t_clientes.CADASTRO=CADASTROPARCEIROS.CADASTRO)
+and t_cadastro.cadastro in(
+select
+    max(t_clientes.cadastro)
+from 
+    t_clientes
+group by 
+    t_clientes.cpfcnpj)

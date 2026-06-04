@@ -1,0 +1,2 @@
+select * from TITULOREC
+where filial=12286 and idtitulo=484710

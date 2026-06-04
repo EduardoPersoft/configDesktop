@@ -1,0 +1,4 @@
+select mercadoriasped.VLRFINALMERCAD,
+       mercadoriasped.VLRTOTALMERCAD,
+       mercadoriasped.DESCONTONOTA from mercadoriasped where filial=1 
+and idnota=18444

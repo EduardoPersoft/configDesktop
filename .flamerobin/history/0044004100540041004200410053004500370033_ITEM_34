@@ -1,0 +1,24 @@
+select
+    distinct
+    cadcli.cadastro,
+    cadcli.nome,
+    case notafiscal.frete
+    when '0' then 'Remetente'
+    when 'R' then 'Remetente'
+    when '1' then 'Destinatario'
+    when 'D' then 'Destinatario'
+    when '2' then 'Terceiro'
+    when '3' then 'Carro Remetente'
+    when '4' then 'Carro Destinatario'
+    else 'Nenhum' end,
+    cadtrans.nome transportadora
+from
+    NOTAFISCAL
+inner join
+    cadastroparceiros cadcli on
+        notafiscal.DESTINATARIO=cadcli.cadastro
+inner join 
+    cadastroparceiros  cadtrans on
+        NOTAFISCAL.CODIGOTRANSP=cadtrans.cadastro
+order by
+    notafiscal.DATAEMISSAO desc

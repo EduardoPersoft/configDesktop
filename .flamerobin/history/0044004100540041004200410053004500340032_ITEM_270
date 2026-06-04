@@ -1,0 +1,3 @@
+select * from INVENTARIOESTOQUEDATA
+where filial=110 and
+data='26.09.2023'

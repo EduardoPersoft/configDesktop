@@ -1,0 +1,5 @@
+select 
+    tipocobranca,
+    descricao,
+    tpag
+from TIPOCOBRANCA where TIPOCOBRANCA.tpag in (3,4)

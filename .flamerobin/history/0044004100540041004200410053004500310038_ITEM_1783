@@ -1,0 +1,335 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_EXPEDICAOPRODUCAOMAT (
+    PFILIAL integer,
+    PIDMOVIMENTO integer,
+    PIDNOTA integer )
+RETURNS (
+    IDNOTA integer,
+    FILIAL integer,
+    IDMOVIMENTO integer,
+    ORDEMPARA varchar(10),
+    CIDADEFILIAL varchar(30),
+    RAZAOFILIAL varchar(60),
+    NUMEROPEDIDO integer,
+    DATAEMISSAO timestamp,
+    DATACADASTRO timestamp,
+    DESTINATARIO integer,
+    RAZAOSOCIAL varchar(60),
+    LOGRADOURO varchar(50),
+    NUMERO integer,
+    BAIRRO varchar(30),
+    COMPLEMENTO varchar(20),
+    CIDADE varchar(30),
+    UF varchar(2),
+    CEP varchar(8),
+    DOCUMENTO varchar(14),
+    INSCESTADUAL varchar(20),
+    INSCMUNICIPAL varchar(20),
+    EMAIL_1 varchar(50),
+    TELEFONE_1 varchar(20),
+    TELEFONECOMERCIAL varchar(20),
+    CELULAR varchar(20),
+    FAX_1 varchar(20),
+    PRINCIPALCONTATO varchar(40),
+    LOCALENTREGA varchar(400),
+    CODIGO varchar(15),
+    DESCRICAO varchar(240),
+    QUANTIDADE double precision,
+    UNIDADE varchar(3),
+    DIAHOJE smallint,
+    ANOHOJE integer,
+    MESHOJEEXTENSO varchar(10),
+    C_LARGURA double precision,
+    C_COMPRIMENTO double precision,
+    C_M2 double precision,
+    C_MENSAGEM1 blob sub_type 0,
+    C_MENSAGEM2 blob sub_type 0,
+    C_PRAZO smallint,
+    TODOSVENDEDORES varchar(40),
+    C_CONTATOENTREGA varchar(40),
+    C_TELEFONEENTREGA varchar(20),
+    C_MENSAGEMSERVICO blob sub_type 0,
+    IDMERCADORIA integer,
+    PRAZOENTREGA timestamp,
+    P_ORDEM integer,
+    LOJA varchar(50),
+    CLIENTENOME varchar(50) )
+
+AS
+declare variable c_espessura varchar(20);
+declare variable c_acabamento varchar(20);
+declare variable c_formato varchar(20);
+declare variable c_cor varchar(40);
+declare variable c_cores varchar(240);
+declare variable idmovmat integer;
+declare variable complementodescricao varchar(240);
+BEGIN
+/*    FOR SELECT C_Pedido2op.Filial,
+               C_PEDIDO2OP.Idpedido,
+               C_Pedido2op.Idmovimento
+        FROM C_PEDIDO2OP
+        where C_Pedido2op.Usuario = (SELECT ESTSIN.CONSOLIDADO FROM ESTSIN
+                             WHERE ESTSIN.RELATORIO='C_EXPED')
+    INTO :FILIAL,:IDNOTA,:IDMOVIMENTO
+    DO BEGIN*/
+
+    UPDATE MOVIMENTOESTOQUE SET MOVIMENTOESTOQUE.c_impressaoop = CAST('NOW' AS TIMESTAMP)
+    WHERE MOVIMENTOESTOQUE.FILIAL=:PFILIAL AND MOVIMENTOESTOQUE.IDMOVIMENTO=:PIDMOVIMENTO;
+    
+    
+        ordempara = '*';
+        FILIAL=PFILIAL;
+        IDNOTA=pIDNOTA;
+        IDMOVIMENTO=PIDMOVIMENTO;
+
+
+            select
+            PEDIDO.c_contatoentrega,
+            PEDIDO.c_telefoneentrega,
+            PEDIDO.numeronota,
+            PEDIDO.dataemissao,
+            pedido.c_contatoentrega,
+            pedido.c_telefoneentrega,
+
+            /*pedido.DATACADASTRO+pedido.c_prazo -
+               CASE WHEN PEDIDO.Ufentrega<>CADFIL.Uf THEN 3 ELSE 0 END AS PRAZOENTREGA,
+            */
+            pedido.ENTREGA,
+            pedido.c_mensagem1,
+            pedido.c_mensagem2,
+            pedido.c_mensagemservico,
+
+            cadcli.nome,
+            cadcli.logradouro ,
+            cadcli.numero ,
+            cadcli.bairro ,
+            cadcli.complemento ,
+            cadcli.cidade ,
+            cadcli.uf ,
+            cadcli.cep ,
+            cadcli.documento,
+            cadcli.inscestadual ,
+            cadcli.inscmunicipal ,
+            cadcli.email,
+            cadcli.telefone ,
+            cadcli.telefonecomercial,
+            cadcli.celular,
+            cadcli.fax,
+            cadcli.principalcontato ,
+             cast(
+                case coalesce(pedido.Logradouroentrega,'') when '' then 'O MESMO'
+                else COALESCE(pedido.logradouroentrega,'') || ', ' ||
+                 COALESCE(pedido.numeroentrega,'') || ' '||
+                 COALESCE(pedido.complementoentrega,'') || ' '||
+                 COALESCE(pedido.bairroentrega,'') || ' '||
+                 COALESCE(pedido.cidadeentrega,'') || ' '||
+                 COALESCE(pedido.ufentrega,'')|| ' '||
+                 ', CEP: ' || pedido.cepentrega
+                end
+            as varchar(400)) as localentrega,
+            cadcli.razaosocial, 
+
+            (SELECT FIRST 1 vend2.nome
+            from vendedoresped
+            inner join cadastroparceiros vend2 on (vendedoresped.vendedor=vend2.cadastro)
+            where vendedoresped.idnota=pedido.idnota)AS todosvendedores,
+
+            extract(day from (cast('now' as timestamp)))as diahoje,
+            extract(year from (cast('now' as timestamp))) as anohoje,
+            case extract(month from (cast('now' as timestamp)))
+                when 1 then 'Janeiro'
+                WHEN 2 then 'Fevereiro'
+                WHEN 3 then 'Mar??o'
+                WHEN 4 then 'Abril'
+                WHEN 5 then 'Maio'
+                WHEN 6 then 'Junho'
+                WHEN 7 then 'Julho'
+                WHEN 8 then 'Agosto'
+                WHEN 9 then 'Setembro'
+                WHEN 10 then 'Outubro'
+                WHEN 11 then 'Novembro'
+                WHEN 12 then 'Dezembro' end as meshojeExtenso,
+            cadloja.nome,
+            pedido.c_prazo,
+
+            cadloja.cidade ,
+            cadloja.razaosocial ,
+            PEDIDO.datacadastro ,
+            PEDIDO.DESTINATARIO
+
+
+
+            from pedido
+            inner join cadastroparceiros cadcli on
+                    (cadcli.cadastro=pedido.destinatario)
+            inner join cadastroparceiros cadfil on
+                    (cadfil.cadastro=pedido.filial)
+            left join cadastroparceiros cadloja on (cadloja.cadastro=pedido.c_loja)
+            where pedido.filial=:filial
+            and pedido.idnota=:idnota
+            into
+
+            :c_contatoentrega, :c_telefoneentrega, :numeropedido,  :dataemissao,
+            :c_contatoentrega,:c_telefoneentrega,:prazoentrega,:c_mensagem1,
+            :c_mensagem2,:c_mensagemservico,:clientenome, :logradouro, :numero,
+            :bairro, :complemento, :cidade,:uf, :cep, :documento, :inscestadual,
+            :inscmunicipal, :email_1,:telefone_1, :telefonecomercial, :celular,
+            :fax_1,:principalcontato, :localentrega, :razaosocial,
+            :todosvendedores,:diahoje, :anohoje,:meshojeExtenso,loja,c_prazo,
+            :cidadefilial, :razaofilial,:datacadastro, :destinatario;
+
+
+            FOR SELECT
+                CASE WHEN  MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN MERCADORIASPED.CODIGO
+                ELSE MATERIALMOVIMENTOESTOQUE.IDITEM END,
+                CASE WHEN MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN SUBSTRING(MERCADORIASPED.DESCRICAO FROM 1 FOR 240)
+                ELSE CASE
+                        COALESCE(MATERIALMOVIMENTOESTOQUE.c_descricao,'') WHEN ''
+                     THEN --mercadoriasped.DESREDUZIDA at?? 10jan2020
+                         ITEMESTOQUE.DESCRICAO
+                     ELSE MATERIALMOVIMENTOESTOQUE.C_DESCRICAO END
+                END,
+                CASE WHEN MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN MERCADORIASPED.quantidade
+                ELSE MATERIALMOVIMENTOESTOQUE.quantidade END ,
+                MERCADORIASPED.unidade,
+                CASE WHEN MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN MERCADORIASPED.c_largura
+                ELSE MATERIALMOVIMENTOESTOQUE.c_largura END,
+                CASE WHEN MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN MERCADORIASPED.c_comprimento
+                ELSE MATERIALMOVIMENTOESTOQUE.c_comprimento END,
+                CASE WHEN MATERIALMOVIMENTOESTOQUE.IDITEM IS null
+                THEN MERCADORIASPED.c_m2
+                ELSE MATERIALMOVIMENTOESTOQUE.QUANTIDADE END,
+                MERCADORIASPED.IDMERCADORIA,
+                COALESCE(MATERIALMOVIMENTOESTOQUE.c_espessura,''),
+                COALESCE(c_acabamento.descricao,''),
+                CASE COALESCE(MATERIALMOVIMENTOESTOQUE.c_formato,'0') WHEN '0' THEN ''
+                WHEN '1' THEN 'NORMAL'
+                WHEN '2' THEN 'OVAL'
+                WHEN '3' THEN 'REDONDO'
+                WHEN '4' THEN 'CONFORME PLANTA'
+                ELSE 'RECORTE NO LOCAL' END,
+                MATERIALMOVIMENTOESTOQUE.idmovimentomaterial,
+                COALESCE(MERCADORIASPED.c_complemento,'')
+
+
+            FROM MERCADORIASPED
+            LEFT JOIN materialmovimentoestoque ON (MERCADORIASPED.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL
+            AND MERCADORIASPED.idnota=MATERIALMOVIMENTOESTOQUE.IDPEDIDO
+            AND MERCADORIASPED.idmercadoria=MATERIALMOVIMENTOESTOQUE.idmercadoria)
+            left join movimentoestoque on 
+                movimentoestoque.filial=materialmovimentoestoque.filial and 
+                movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+            LEFT JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MATERIALMOVIMENTOESTOQUE.IDITEM)
+            LEFT JOIN c_acabamento ON (C_ACABAMENTO.codigo=materialmovimentoestoque.c_acabamento)
+            WHERE MERCADORIASPED.FILIAL=:FILIAL
+            AND MERCADORIASPED.IDNOTA=:Idnota
+            and movimentoestoque.tipomovimento='12'
+            INTO
+
+            :codigo, :descricao, :quantidade, :unidade, :c_largura,
+            :c_comprimento, c_m2,IDMERCADORIA, :c_espessura, :c_acabamento,
+            :c_formato,:IDMOVMAT,:complementodescricao
+
+            DO BEGIN
+
+                IF(COMPLEMENTODESCRICAO<>'') THEN
+                    DESCRICAO = SUBSTRING(DESCRICAO ||' '||COMPLEMENTODESCRICAO FROM 1 FOR 240);
+
+               c_cores = '';
+               for select itemestoque.c_descricaofio from composicaoOP
+               inner join itemestoque on (itemestoque.codigo=composicaoOP.codigo)
+               where composicaoop.filial=:filial
+               and composicaoop.idmovimento=:idmovimento
+               and composicaoop.idmovimentomaterial=:IDMOVMAT
+               into :c_cor do
+                    c_cores = SUBSTRING(C_cores||' '||COALESCE(c_cor,'') FROM 1 FOR 240);
+/*$$IBEC$$                    c_cores = SUBSTRING(C_cores||' '||COALESCE(c_cor,'') FROM 1 FOR 240);
+
+                DESCRICAO = SUBSTRING(DESCRICAO || '' ||C_CORES FROM 1 FOR 240);
+
+               if (COALESCE(C_ACABAMENTO,'')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Acabamento: ' || C_ACABAMENTO FROM 1 FOR 240);
+               if (COALESCE(C_ESPESSURA,'')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Espessura: '||C_ESPESSURA FROM 1 FOR 240);
+               if (COALESCE(c_formato, '')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Formato: '||C_FORMATO FROM 1 FOR 240);
+ $$IBEC$$*/
+
+                if (not :descricao like '%Cores:%') then
+                begin
+                    DESCRICAO = SUBSTRING(DESCRICAO || '' ||C_CORES FROM 1 FOR 240);
+                end
+
+               if (not :descricao like '%Acabamento:%') then
+               begin
+               if (COALESCE(C_ACABAMENTO,'')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Acabamento: ' || C_ACABAMENTO FROM 1 FOR 240);
+               end
+
+               if (not :descricao like '%Espessura:%') then
+               begin
+               if (COALESCE(C_ESPESSURA,'')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Espessura: '||C_ESPESSURA FROM 1 FOR 240);
+               end
+
+               if (not :descricao like '%Formato:%') then
+               begin
+               if (COALESCE(c_formato, '')<>'') then
+                    DESCRICAO = SUBSTRING(DESCRICAO || ' Formato: '||C_FORMATO FROM 1 FOR 240);
+               end
+
+               ORDEMPARA='PRODUCAO';
+               P_ORDEM = 0;
+               SUSPEND;
+               ORDEMPARA='EXPEDICAO';
+               P_ORDEM = 2;
+               SUSPEND;
+            END
+
+            C_LARGURA = NULL;
+            C_COMPRIMENTO = NULL;
+            C_M2 = NULL;
+
+            FOR SELECT
+
+            CAST(SERVICOSPED.codigo  AS VARCHAR(15)) AS CODIGO,
+            SUBSTRING(SERVICOSPED.descricao FROM 1 FOR 240),
+            SERVICOSPED.quantidade ,
+            SERVICOSPED.unidade,
+            SERVICOSPED.IDSERVICO
+            FROM SERVICOSPED
+            WHERE SERVICOSPED.FILIAL=:FILIAL
+            AND SERVICOSPED.IDNOTA=:IDNOTA
+
+            INTO codigo,descricao,quantidade,unidade,IDMERCADORIA
+
+            DO BEGIN
+               ORDEMPARA='PRODUCAO';
+               P_ORDEM = 1;
+               SUSPEND;
+               ORDEMPARA='EXPEDICAO';
+               P_ORDEM = 3;
+               SUSPEND;
+           END
+
+
+    if (ORDEMPARA='*') then BEGIN
+        RAZAOSOCIAL= 'ORDEM DE PRODU????O J?? IMPRESSA';
+        SUSPEND;
+    END
+
+
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_EXPEDICAOPRODUCAOMAT TO  SYSDBA;
+

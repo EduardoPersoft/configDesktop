@@ -1,0 +1,11 @@
+update  
+    titulorec 
+set
+    titulorec.VALOREMABERTO=titulorec.VALORTITULO,
+    titulorec.TOTALPAGO=0,
+    titulorec.TOTALDESCONTO=0,
+    titulorec.TOTALJUROS=0
+where 
+    titulorec.filial=12826 and
+    titulorec.VALOREMABERTO=0 and
+    titulorec.baixa is null

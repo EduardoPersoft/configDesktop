@@ -1,0 +1,1 @@
+delete from mercadoriasnotacompra where filial=1

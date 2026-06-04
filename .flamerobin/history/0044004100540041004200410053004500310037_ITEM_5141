@@ -1,0 +1,19 @@
+select 
+    c_coletas.coleta,
+    c_coletas.DATACOLETA,
+    c_coletas.QTDEXPEDICOES,
+    C_COLETAS.VALOR,
+    c_Coletas.VALORMEDIO,
+    (select count(movimentoestoque.IDMOVIMENTO)
+         from MOVIMENTOESTOQUE
+         where movimentoestoque.coleta=
+               c_coletas.COLETA and TIPOMOVIMENTO='13')
+from 
+    C_COLETAS
+
+where
+    c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025' and
+    (select count(movimentoestoque.IDMOVIMENTO)
+         from MOVIMENTOESTOQUE
+         where movimentoestoque.coleta=
+               c_coletas.COLETA and TIPOMOVIMENTO='13')<>C_COLETAS.QTDEXPEDICOES

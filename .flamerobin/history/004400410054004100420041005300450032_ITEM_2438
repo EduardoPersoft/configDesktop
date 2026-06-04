@@ -1,0 +1,16 @@
+SELECT
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.filial=5 and
+    mercadoriaspedcompra.idnota=52376
+    
+    
+SELECT
+    mercadoriaspedcompra.*
+FROM
+    MERCADORIASPEDCOMPRA
+where 
+    mercadoriaspedcompra.filial=5
+    and mercadoriaspedcompra.codigo='05043'

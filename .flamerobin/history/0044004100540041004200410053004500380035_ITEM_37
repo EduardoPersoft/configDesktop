@@ -1,0 +1,4 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.PESOLIQUIDO=(select t_itens.pesobruto from t_itens where t_itens.codigo=itemestoque.codigo)

@@ -1,0 +1,15 @@
+select first 1 
+                movimentoestoque.PREVISAOFIMPRODUCAO
+            from
+                materialmovimentoestoque
+            inner join 
+                MOVIMENTOESTOQUE on
+                    MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+                    materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+            where
+                materialmovimentoestoque.filial=110 and
+                materialmovimentoestoque.idpedido=11545 and
+                materialmovimentoestoque.idmercadoria=1 and
+                movimentoestoque.tipomovimento='12' and
+                movimentoestoque.PREVISAOFIMPRODUCAO is not null
+ 

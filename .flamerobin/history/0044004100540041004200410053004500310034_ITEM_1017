@@ -1,0 +1,41 @@
+select
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop,
+    sum(mercadoriasnotacompra.vlrfinalmercad),
+    
+    sum(mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR) FRETE,
+    
+    sum(MERCADORIASNOTACOMPRA.VALORIPI),
+    
+    sum(mercadoriasnotacompra.vlrfinalmercad+
+    mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR+
+    MERCADORIASNOTACOMPRA.VALORIPI) TOTAL
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.08.2023' and '31.08.2023' 
+group by
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop
+ORDER BY 
+notacompra.dataemissao,
+notacompra.NRNOTAFORNECEDOR

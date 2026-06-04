@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where materiallote.iditem='MPP06CPPW-HTG60'

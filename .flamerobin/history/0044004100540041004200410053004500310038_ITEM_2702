@@ -1,0 +1,2 @@
+select * from estsin where
+relatorio like 'C_COMISSAOAUTONOMO%'

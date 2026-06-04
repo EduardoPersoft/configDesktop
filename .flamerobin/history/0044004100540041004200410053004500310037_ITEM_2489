@@ -1,0 +1,7 @@
+select
+    count(pedido.idnota)
+from
+    PEDIDO
+where
+    pedido.DATACADASTRO=cast('now' as date) and
+    pedido.CANCELAMENTO = 'N'

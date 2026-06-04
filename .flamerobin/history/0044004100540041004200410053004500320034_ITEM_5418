@@ -1,0 +1,6 @@
+update 
+    T_TITULOREC
+set
+    t_titulorec.importado = null
+where
+    t_titulorec.EMISSAO='29.03.2023'

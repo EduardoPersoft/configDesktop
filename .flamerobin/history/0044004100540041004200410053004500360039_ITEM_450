@@ -1,0 +1,9 @@
+select
+    c_consumo.codigo,
+    c_consumo.consumo,
+    c_saldoz2.saldo
+from
+    C_CONSUMO
+inner join
+    c_saldoz2 on
+        c_saldoz2.codigo=c_consumo.codigo

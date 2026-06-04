@@ -1,0 +1,8 @@
+SELECT  
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.NUMERONOTA,
+    notafiscal.VLRTOTALNOTA
+FROM    
+    NOTAFISCAL
+    

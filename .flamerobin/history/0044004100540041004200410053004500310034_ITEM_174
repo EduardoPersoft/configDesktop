@@ -1,0 +1,12 @@
+        select 
+            *
+        from
+            mapaProducao
+        inner join
+            RECURSOSXCENTROCUSTOS on
+                RECURSOSXCENTROCUSTOS.ID=MAPAPRODUCAO.RECURSO
+        where
+            mapaProducao.filial = 110 and
+            mapaProducao.idMovimento = 5196 and
+            recursosXCentroCustos.centroCusto in (
+                '102', '104')

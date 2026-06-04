@@ -1,0 +1,1 @@
+select * from movimentoestoque where filial=1 and movimentoestoque.tipomovimento='09' order by idmovimento desc

@@ -1,0 +1,6 @@
+update 
+    MOVIMENTOESTOQUE
+SET
+    movimentoestoque.idpedido = movimentoestoque.documento
+WHERE
+    movimentoestoque.tipomovimento=13

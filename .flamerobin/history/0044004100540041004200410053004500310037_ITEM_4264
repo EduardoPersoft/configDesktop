@@ -1,0 +1,2 @@
+select * from NFECTRL
+where nfectrl.IDRESULTADO is null

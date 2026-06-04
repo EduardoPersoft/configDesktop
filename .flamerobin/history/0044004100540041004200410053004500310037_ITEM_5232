@@ -1,0 +1,4 @@
+select 
+    c_destinoavulso.*
+from 
+    c_destinoavulso

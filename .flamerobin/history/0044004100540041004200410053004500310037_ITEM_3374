@@ -1,0 +1,81 @@
+ /* 
+update
+    VENDEDORESNOTA
+set
+    vendedoresNOTA.comissaovenda=(select
+                                    vendedor.COMISSAOvenda 
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoresNOTA.vendedor),
+    vendedoresNOTA.COMISSAORECEBIMENTO=(select
+                                    vendedor.COMISSAORECEBIMENTO
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoreSNOTA.vendedor)
+where
+    VENDEDORESNOTA.COMISSAORECEBIMENTO IS NULL
+    
+                                    
+                                  
+update
+    VENDEDORESPED
+set
+    vendedoresped.comissaovenda=(select
+                                    vendedor.COMISSAOvenda 
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoresped.vendedor),
+    vendedoresped.COMISSAORECEBIMENTO=(select
+                                    vendedor.COMISSAORECEBIMENTO
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoresped.vendedor)
+where
+    VENDEDORESPED.COMISSAORECEBIMENTO IS NULL
+    
+                                    
+                                    
+update
+    VENDEDORESPED
+set
+    vendedoresped.comissaovenda=(select
+                                    vendedor.COMISSAOvenda 
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.vendedor=vendedoresped.vendedor),
+    vendedoresped.COMISSAORECEBIMENTO=(select
+                                    vendedor.COMISSAORECEBIMENTO
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoresped.vendedor)
+where
+    VENDEDORESPED.COMISSAORECEBIMENTO IS NULL
+    
+*/                                    
+                                    
+update
+    VENDEDORESPED
+set
+    vendedoresped.comissaovenda=(select
+                                    vendedor.COMISSAOvenda 
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.cadastro=vendedoresped.vendedor),
+    vendedoresped.COMISSAORECEBIMENTO=(select
+                                    vendedor.COMISSAORECEBIMENTO
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.cadastro=vendedoresped.vendedor)
+where
+    VENDEDORESPED.COMISSAORECEBIMENTO IS NULL
+    
+                                    
+                                    

@@ -1,0 +1,4 @@
+update
+    MATERIALLOTE
+set 
+    MATERIALlote.QUANTIDADE=cast(quantidade as decimal(12,2))

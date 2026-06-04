@@ -1,0 +1,22 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO,
+    materiallocal.saldototal
+from
+    ITEMESTOQUE
+inner join
+    materiallocal on
+        itemestoque.codigo=materiallocal.IDITEM and
+        materiallocal.filial=5  and
+        materiallocal.idlocal=1
+inner join
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and
+        materialfilial.iditem=materiallocal.iditem
+where
+        materiallocal.saldototal=0
+order by
+            4
+

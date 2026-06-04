@@ -1,0 +1,20 @@
+select 
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    pedido.datacadastro,
+    cadastroparceiros.nome,
+    mercadoriasped.quantidade
+FROM
+    mercadoriasped
+inner JOIN
+    pedido on
+        mercadoriadped.filial=pedido.filial and 
+        mercadoriasped.idnota=pedido.IDNOTA
+inner JOIN
+    cadastroparceiros on
+        cadastroparcieros.cadastro = pedido.destinatario
+WHERE
+    mercadoriasped.filial=1 AND
+    mercadoriasped.baixa = 'N' AND
+    mercadoriasped.codigo = '9801005-Y'

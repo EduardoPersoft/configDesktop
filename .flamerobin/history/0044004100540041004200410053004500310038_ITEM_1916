@@ -1,0 +1,7 @@
+select
+    filial,idnota,datareferencia
+from
+    PEDIDO
+where 
+    filial=1 and
+    idnota=70463

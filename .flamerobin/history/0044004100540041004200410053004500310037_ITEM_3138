@@ -1,0 +1,2 @@
+select * from VERSAOALTERACAO
+where cast(substring(veraoalteracao.sql from 1 for 1000) as varchar(1000)) like '%TIPOCHAVEPIX'

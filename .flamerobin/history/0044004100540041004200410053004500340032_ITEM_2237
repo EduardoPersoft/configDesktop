@@ -1,0 +1,4 @@
+update 
+    configuracoesgerais
+set 
+    url = null, emailweb='N'

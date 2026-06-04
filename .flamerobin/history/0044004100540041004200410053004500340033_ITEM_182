@@ -1,0 +1,5 @@
+update
+    PEDIDO
+set
+    uuid = destinatario||'-'||filial||'-'||idnota
+where filial=110    

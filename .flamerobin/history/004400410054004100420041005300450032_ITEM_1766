@@ -1,0 +1,53 @@
+select MERCADORIASNOTA.CODIGO, MERCADORIASNOTA.DESREDUZIDA, MERCADORIASNOTA.QUANTIDADE,
+                   MERCADORIASNOTA.UNIDADE,
+                   MERCADORIASNOTA.VLRFINALMERCAD - (coalesce(MERCADORIASNOTA.VLRDESCPRODUTO, 0) + coalesce(MERCADORIASNOTA.DESCONTONOTA, 0)),
+                   coalesce(MERCADORIASNOTA.VLRDESCPRODUTO, 0) + coalesce(MERCADORIASNOTA.DESCONTONOTA, 0),
+                   case substring(MERCADORIASNOTA.SITUACAOTRIBUT from 4 for 1)
+                     when '' then MERCADORIASNOTA.SITUACAOTRIBUT
+                     else substring(MERCADORIASNOTA.SITUACAOTRIBUT from 2 for 3)
+                   end,
+                   MERCADORIASNOTA.CFOP,
+                   case
+                     when ITEMESTOQUE.TIPOPRODUTO not in ('1', '3', '4') then 0
+                     else case
+                            when (mercadoriasnota.vlricmsrecolhido>0 and NOTACOMPRA.DEVOLUCAO = 'N' AND MERCADORIASNOTA.CFOP NOT IN ('1949','2949')) then 0
+                            else MERCADORIASNOTA.ICMSBASE
+                          end
+                   end,
+                   MERCADORIASNOTA.ALIQUOTAICMS,
+                   case
+                     when ITEMESTOQUE.TIPOPRODUTO not in ('1', '3', '4') then 0
+                     else case
+                            when (mercadoriasnota.vlricmsrecolhido>0 and NOTACOMPRA.DEVOLUCAO = 'N' AND MERCADORIASNOTA.CFOP NOT IN ('1949','2949')) then 0
+                            else MERCADORIASNOTA.VALORICMS
+                          end
+                   end,
+                   case WHEN NOTACOMPRA.DEVOLUCAO = 'S' OR  MERCADORIASNOTA.CFOP IN ('1949','2949') then MERCADORIASNOTA.VLRBASESUBST
+                     else 0
+                   end,
+                   MERCADORIASNOTA.ALIQUOTASUBSTITUTO,
+                   case WHEN NOTACOMPRA.DEVOLUCAO='S'  OR MERCADORIASNOTA.CFOP IN ('1949','2949') then MERCADORIASNOTA.VLRICMSRECOLHIDO
+                     else 0
+                   end,
+                   substring ( MERCADORIASNOTA.CSTIPI from 1 for 2),
+                   MERCADORIASNOTA.IPIBASE, MERCADORIASNOTA.PIPI,
+                   (
+                   case
+                     when MERCADORIASNOTA.CSTIPI in (0) then MERCADORIASNOTA.VALORIPI
+                     else 0
+                   end),
+                   MERCADORIASNOTA.CSTPIS, MERCADORIASNOTA.BASEPIS, MERCADORIASNOTA.PPIS, MERCADORIASNOTA.VLRPISPASEP,
+                   MERCADORIASNOTA.CSTCOFINS, MERCADORIASNOTA.BASECOFINS, MERCADORIASNOTA.PCOFINS,
+                   MERCADORIASNOTA.VLRCOFINS,
+                   case NATUREZAOPERACAO
+                     when 'S' then 0
+                     else 1
+                   end,
+                   notacompra.devolucao
+            from MERCADORIASNOTACOMPRA MERCADORIASNOTA
+            inner join ITEMESTOQUE on (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+            inner join NOTACOMPRA on (MERCADORIASNOTA.FILIAL = NOTACOMPRA.FILIAL and
+                  MERCADORIASNOTA.IDNOTA = NOTACOMPRA.IDNOTA)
+            inner join NATUREZAOPERACAO on (NOTACOMPRA.OPERACAO = NATUREZAOPERACAO.ID)
+            where MERCADORIASNOTA.FILIAL = 1 and
+                  MERCADORIASNOTA.IDNOTA = 293025

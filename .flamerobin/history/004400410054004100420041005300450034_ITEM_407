@@ -1,0 +1,1 @@
+select * from itemestoque where codigo='PE-19636'    

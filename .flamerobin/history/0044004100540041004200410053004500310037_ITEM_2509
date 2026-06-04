@@ -1,0 +1,11 @@
+select
+    orcamento.datacadastro,
+    extract(orcamento.DATACADASTRO from weekday),
+    count(orcamento.idnota)    
+from
+    orcamento
+where
+    orcamento.datacadastro>='10.07.2023'
+group by
+    orcamento.datacadastro.
+    extract(orcamento.DATACADASTRO from weekday),

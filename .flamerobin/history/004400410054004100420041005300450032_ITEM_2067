@@ -1,0 +1,26 @@
+insert into ITEMESTOQUECODIGOS(codigo,codigoalternativo)
+(select
+    i1.codigo,i1.codigo
+from
+    ITEMESTOQUE i1
+UNION
+select
+    i1.codigo,itembase
+from
+    ITEMESTOQUE i1
+UNION
+select
+    i1.codigo, referencia
+from
+    ITEMESTOQUE i1
+UNION
+select
+    i1.itembase,i1.codigo
+from
+    itemestoque i1
+union
+select
+    i1.codigo,i1.CODIGOALTERNATIVO
+from
+    ITEMESTOQUECODIGOS i1
+)

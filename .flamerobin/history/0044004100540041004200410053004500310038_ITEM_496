@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MATERIALMOVIMENTOESTOQUE
+WHERE
+    materialmovimentoestoque.iditem like 'M-%' AND
+    materialmovimentoestoque.LOCALARMAZENAMENTO = 89

@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    C_LOGproduto
+WHERE
+    status_code is null

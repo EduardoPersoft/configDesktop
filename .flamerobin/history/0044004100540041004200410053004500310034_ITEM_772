@@ -1,0 +1,1 @@
+alter table orcamento alter msgdadosadicionais type varchar(1000)

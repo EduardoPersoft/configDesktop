@@ -1,0 +1,8 @@
+select 
+    GRUPO,
+    DESCFORNEC,
+    FORNECEDOR,
+    DESCRICAO,
+    CODFOR
+from
+    C_ITENSNOVOS

@@ -1,0 +1,2 @@
+create index c_fatpediddata(
+on c_faturasped(filial,idnota,data)

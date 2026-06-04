@@ -1,0 +1,4 @@
+select CADASTROPARCEIROS.*
+from CADASTROPARCEIROS
+inner join vendedor on
+    CADASTROPARCEIROS.cadastro=vendedor.CADASTRO

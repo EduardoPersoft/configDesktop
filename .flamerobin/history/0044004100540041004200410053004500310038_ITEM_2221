@@ -1,0 +1,6 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.custounitario = 46.26,
+    itemcustodata.custototal = quantidade*46.26
+WHERE CODIGO='01.12.0595'

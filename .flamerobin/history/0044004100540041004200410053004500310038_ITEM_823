@@ -1,0 +1,1 @@
+select * from lantocontrec where lantocontrec.CONTACONTABIL='10197'

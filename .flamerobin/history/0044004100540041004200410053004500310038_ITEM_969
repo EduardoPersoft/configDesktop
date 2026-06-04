@@ -1,0 +1,9 @@
+ select
+    contacorrente.id,
+    contaCorrente.descricaoConta
+from
+    contaCorrente
+where
+    contaCorrente.filial = ?
+order by
+    ContaCorrente.DESCRICAOCONTA

@@ -1,0 +1,6 @@
+select
+*
+from
+    TURNODEFAULT
+where 
+    TURNODEFAULT.RECURSO=7

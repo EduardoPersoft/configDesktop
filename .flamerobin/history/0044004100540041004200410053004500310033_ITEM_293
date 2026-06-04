@@ -1,0 +1,1 @@
+update mercadoriaspedcompra set idpedvenda=15872 where mercadoriaspedcompra.IDPEDVEN=15486

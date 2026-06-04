@@ -1,0 +1,30 @@
+select 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    itemestoque.descricao,
+    inventarioestoquedata.lote,
+    inventarioestoquedata.local,
+    local.descricao,
+    locallote.quantidade saldoatual,
+    inventarioestoquedata.quantidade contado,
+    inventarioestoquedata.quantidadeEstoque esperado,
+    inventarioestoquedata.idmovimento            
+from 
+    inventarioestoquedata
+inner join
+    itemestoque on
+        itemestoque.codigo=inventarioestoquedata.CODIGO
+inner join
+    locallote on
+        locallote.filial=INVENTARIOESTOQUEDATA.filial and
+        locallote.iditem=inventarioestoquedata.codigo and
+        locallote."LOCAL"=inventarioestoquedata."LOCAL" and
+        locallote.lote=inventarioestoquedata.lote
+left join
+    local on
+        local.id=inventarioestoquedata."LOCAL"
+where
+    inventarioestoquedata=1
+        
+        
+

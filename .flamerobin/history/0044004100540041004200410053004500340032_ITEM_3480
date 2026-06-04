@@ -1,0 +1,8 @@
+select 
+    *
+from
+    PEDIDO
+where 
+    pedido.filial=110 and
+    pedido.datacadastro <= '31.01.2025' and
+    pedido.DATACANCELAMENTO is null

@@ -1,0 +1,1 @@
+select * from C_COMISSAOPEDIDOPAGA where id = 64399 order by id desc

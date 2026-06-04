@@ -1,0 +1,7 @@
+update
+    MERCADORIASNOTAcompra
+set
+    MERCADORIASNOTAcompra.cstipi=49
+where
+    MERCADORIASNOTAcompra.cstipi=0 and
+    MERCADORIASNOTAcompra.valoripi=0    ; 

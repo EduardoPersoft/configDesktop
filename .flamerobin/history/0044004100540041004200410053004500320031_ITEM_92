@@ -1,0 +1,8 @@
+select
+    *
+from
+    TITULOSANEXADOSDOC
+WHERE
+    filial=1 and
+    IDCONTACORRENTe=341 and
+    IDMOVTOBANCARIO=15244

@@ -1,0 +1,6 @@
+select
+    *
+from    
+    LANTOCONTREC
+where
+    lantocontrec.IDLANCAMENTO=2

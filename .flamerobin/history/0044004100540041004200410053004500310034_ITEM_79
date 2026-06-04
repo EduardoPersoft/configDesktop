@@ -1,0 +1,6 @@
+update
+    mercadoriasped
+set 
+        descricao = (select itemestoque.descricao from itemestoque where itemestoque.codigo=mercadoriasnota.codigo)
+where 
+    descricao='[BINARY]'

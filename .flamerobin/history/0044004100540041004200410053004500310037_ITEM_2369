@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where lote like '4324/1%'

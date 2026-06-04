@@ -1,0 +1,38 @@
+SELECT 
+    PEDIDO.uuid,
+    PEDIDO.FILIAL,
+    PEDIDO.IDNOTA,
+    PEDIDO.DATAREFERENCIA,
+    PEDIDO.ENTREGA,
+    CADCLI.NOME,
+    PEDIDO.VLRTOTALNOTA,
+    PEDIDO.NUMPEDIDOCLIENTE,
+    CADCLI.UF, 
+    CADCLI.CIDADE,
+    pedido.cancelamento, 
+    pedido.dataEmissao, 
+    pedido.bloqueadoFaturamento,
+    (SELECT FIRST 1
+        CADVEN.NOME
+     FROM
+        VENDEDORESPED
+     INNER JOIN
+        CADASTROPARCEIROS CADVEN ON
+            CADVEN.CADASTRO=VENDEDORESPED.VENDEDOR
+     WHERE
+        VENDEDORESPED.FILIAL=PEDIDO.FILIAL AND
+        VENDEDORESPED.IDNOTA=PEDIDO.IDNOTA) AS NOMEVENDEDOR 
+FROM
+    PEDIDO 
+INNER JOIN 
+    CADASTROPARCEIROS CADCLI ON
+        CADCLI.CADASTRO = PEDIDO.DESTINATARIO
+WHERE
+    pedido.filial=? and
+    pedido.dataemissao is not null and
+    exists (select * from MERCADORIASPED
+           where mercadoriasped.filial=pedido.filial and
+           mercadoriasped.idnota=pedido.idnota and
+           MERCADORIASPED.BAIXA='N')
+order by
+    PEDIDO.DATACADASTRO

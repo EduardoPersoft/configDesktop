@@ -1,0 +1,4 @@
+update 
+    MERCADORIASPEDCOMPRA
+SET
+    mercadoriaspedcompra.C_QTDEENTREGUE=mercadoriaspedcompra.QTDEENTREGUE

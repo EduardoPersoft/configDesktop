@@ -1,0 +1,193 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ROYALTIESANALITICO1
+RETURNS (
+    VLRTOTALMERCADORIAS double precision,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    IDPEDIDO integer,
+    DATAEMISSAO timestamp,
+    CLIENTENOME varchar(50),
+    VENDEDOR integer,
+    P_ROYALTIES numeric(12,2),
+    CODIGO varchar(15),
+    NOMEROYALTIES varchar(60),
+    DOCUMENTOROYALTIES varchar(18),
+    CADROYALTIES integer,
+    VALORROYALTIES numeric(12,2),
+    RAZAOFILIAL varchar(60),
+    LOGRADOURO varchar(60),
+    COMPLEMENTO varchar(20),
+    NUMERO integer,
+    BAIRRO varchar(72),
+    CIDADE varchar(50),
+    UF varchar(2),
+    DOCUMENTOFILIAL varchar(18),
+    INSCESTADUAL varchar(20),
+    INSCMUNICIPAL varchar(20),
+    C_CCTITULAR varchar(50),
+    C_CCBANCO smallint,
+    C_CCAGENCIA varchar(10),
+    C_CCNUMERO varchar(20),
+    C_PROYALTES decimal(12,2),
+    VALORIRRF numeric(12,3),
+    VALORINSS numeric(12,3),
+    VALORCSLL numeric(12,3),
+    VALORPIS numeric(12,3),
+    VALORCOFINS numeric(12,3),
+    TOTALIMPOSTOS  numeric(12,3),
+    TOTALLIQUIDO  numeric(12,3)
+     )
+
+AS
+declare variable p_itembase varchar (15);
+declare variable modo char(1);
+declare variable percentualirrf decimal(12,4);
+declare variable percentualinss decimal(12,4);
+declare variable percentualcsll decimal(12,4);
+declare variable percentualpis decimal(12,4);
+declare variable percentualcofins decimal(12,4);
+
+begin
+
+
+    SELECT ESTSIN.Datainicial,ESTSIN.DATAFINAL
+    FROM ESTSIN
+    WHERE ESTSIN.RELATORIO = 'C_ROYALTIES'
+    INTO :DATAINICIAL,:DATAFINAL;
+ 
+ FOR SELECT
+
+    (mercadoriasped.VLRTOTALMERCAD+(MERCADORIASPED.C_VALORSERVICO*MERCADORIASPED.QUANTIDADE)-COALESCE(MERCADORIASPED.C_DESCBASECOMISSAO,0))*C_PEDIDODATAFINLIB.SINAL,
+    C_PEDIDODATAFINLIB.IDNOTA,
+    cadcli.NOME,
+    pedido.dataemissao,
+    
+    C_ROYALTES.PARTICIPACAO,
+    C_ROYALTES.MODO,
+    --CASE COALESCE(ITEMESTOQUE.ITEMBASE,'')
+    --WHEN '' THEN C_ROYALTES.PARTICIPACAO
+    --ELSE (select first 1 C_ROYALTES.PARTICIPACAO from C_ROYALTES
+    --where itemestoque.ITEMBASE=C_ROYALTES.ITEMESTOQUE) END,
+
+    MERCADORIASPED.CODIGO,
+
+    substring(cadROYALTIES.razaosocial from 1 for 50) as nome,
+    cadROYALTIES.CADASTRO,
+    cadROYALTIES.C_CCTITULAR,
+    cadROYALTIES.C_CCBANCO,
+    cadROYALTIES.C_CCAGENCIA,
+    cadROYALTIES.C_CCNUMERO,
+
+    cadfil.razaosocial AS razaofilial,
+    CASE WHEN (cadfil.DOCUMENTO<>'') AND
+               (NOT cadfil.DOCUMENTO IS NULL) THEN
+                CASE cadfil.TIPOPESSOA WHEN 'F' THEN
+                     CAST(SUBSTRING(cadfil.DOCUMENTO FROM 1 FOR 3)||'.'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 4 FOR 3)||'.'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 7 FOR 3)||'-'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+                WHEN 'J' THEN
+                     CAST(SUBSTRING(cadfil.DOCUMENTO FROM 1 FOR 2)||'.'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 3 FOR 3)||'.'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 6 FOR 3)||'/'||
+                     SUBSTRING(cadfil.DOCUMENTO FROM 9 FOR 4)||'-'||
+                    SUBSTRING(cadfil.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+                ELSE NULL END
+     ELSE NULL END AS documentofilial,
+     CASE WHEN (cadROYALTIES.DOCUMENTO<>'') AND
+               (NOT cadROYALTIES.DOCUMENTO IS NULL) THEN
+                CASE cadROYALTIES.TIPOPESSOA WHEN 'F' THEN
+                     CAST(SUBSTRING(cadROYALTIES.DOCUMENTO FROM 1 FOR 3)||'.'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 4 FOR 3)||'.'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 7 FOR 3)||'-'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+                WHEN 'J' THEN
+                     CAST(SUBSTRING(cadROYALTIES.DOCUMENTO FROM 1 FOR 2)||'.'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 3 FOR 3)||'.'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 6 FOR 3)||'/'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 9 FOR 4)||'-'||
+                     SUBSTRING(cadROYALTIES.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+                ELSE NULL END
+         ELSE NULL END AS DOCUMENTOROYALTIES,
+
+         cadfil.LOGRADOURO,
+         cadfil.NUMERO,
+         cadfil.COMPLEMENTO,
+         cadfil.BAIRRO,
+         cadfil.CIDADE,
+         cadfil.UF, 
+         cadfil.INSCESTADUAL,
+         cadfil.INSCMUNICIPAL,
+         COALESCE ( itemestoque.C_PROYALTEs,0) ,
+         coalesce (itemestoque.ITEMBASE, ''),
+         coalesce (FORNECEDORES.PERCENTUALIRF,0),         
+         coalesce (FORNECEDORES.percentualinss,0),
+         coalesce (FORNECEDORES.percentualcsll,0),
+         coalesce (FORNECEDORES.percentualpis,0),
+         coalesce (FORNECEDORES.percentualcofins,0)
+
+
+   FROM C_PEDIDODATAFINLIB (:datainicial, :datafinal)
+
+  inner  join mercadoriasped on (mercadoriasped.filial=C_PEDIDODATAFINLIB.filial and
+                                 mercadoriasped.idnota=C_PEDIDODATAFINLIB.IDNOTA)
+  inner join itemestoque on (mercadoriasped.CODIGO=itemestoque.codigo)
+  inner join pedido on (pedido.FILIAL=C_PEDIDODATAFINLIB.FILIAL and
+                        pedido.IDNOTA=C_PEDIDODATAFINLIB.IDNOTA)
+  inner join C_ROYALTES on (C_ROYALTES.ITEMESTOQUE=
+    CASE COALESCE(ITEMESTOQUE.ITEMBASE,'')
+    WHEN '' THEN ITEMESTOQUE.CODIGO
+    ELSE itemestoque.ITEMBASE END)
+  inner join cadAstroparceiros cadROYALTIES ON (cadROYALTIES.CADASTRO=C_ROYALTES.CADASTRO)
+  INNER JOIN CADASTROPARCEIROS CADFIL ON (C_PEDIDODATAFINLIB.FILIAL=CADFIL.CADASTRO)
+  INNER JOIN CADASTROPARCEIROS CADcli ON (pedido.DESTINATARIO=cadcli.CADASTRO)
+  left join FORNECEDORES on fornecedores.cadastro=cadroyalties.CADASTRO
+  into
+       :VLRTOTALMERCADORIAS,
+       :IDPEDIDO,  :CLIENTENOME, :DATAEMISSAO ,
+       :P_ROYALTIES, modo, CODIGO, :NOMEROYALTIES, :CADROYALTIES,
+       :C_CCTITULAR, :C_CCBANCO, :C_CCAGENCIA, :C_CCNUMERO,
+       :RAZAOFILIAL, :DOCUMENTOFILIAL, :DOCUMENTOROYALTIES,:LOGRADOURO, :NUMERO, :COMPLEMENTO,
+       :BAIRRO, :CIDADE, :UF, :INSCESTADUAL, :INSCMUNICIPAL, :C_PROYALTES, :p_itembase,
+       :percentualirrf, :percentualinss, :percentualcsll, :percentualpis, :percentualcofins
+  do begin
+
+     if (:P_ITEMBASE<>'') then
+     select itemestoque.C_PROYALTES
+     from itemestoque
+     where itemestoque.CODIGO=:P_ITEMBASE into C_PROYALTES;
+
+     VALORROYALTIES=vlrtotalmercadorias*(P_ROYALTIES/100)*(C_PROYALTES/100);
+
+     VALORIRRF = 0;
+     VALORINSS = 0;
+     VALORCSLL = 0;
+     VALORPIS = 0;
+     VALORCOFINS = 0;
+     TOTALIMPOSTOS = 0;
+     TOTALLIQUIDO = 0;
+     
+     if(modo = 'D') then begin
+        VALORIRRF = VALORROYALTIES * percentualirrf / 100;
+        VALORINSS = VALORROYALTIES * percentualinss / 100;
+        VALORCSLL = VALORROYALTIES * percentualcsll / 100;
+        VALORPIS = VALORROYALTIES * percentualpis / 100;
+        VALORCOFINS = VALORROYALTIES * percentualcofins / 100;
+        TOTALIMPOSTOS = valorirrf + valorinss + valorcsll + valorpis + valorcofins;
+     end
+     
+     TOTALLIQUIDO = VALORROYALTIES - totalimpostos;
+     
+     suspend;
+  end
+
+   
+
+ end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ROYALTIESANALITICO1 TO  SYSDBA;
+

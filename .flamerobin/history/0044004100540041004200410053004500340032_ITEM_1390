@@ -1,0 +1,59 @@
+insert into INVENTARIOESTOQUEDATA(filial,codigo,lote,loca,data,quantidade, quantidadeestoque)
+select
+    110,
+    itemestoque.codigo,
+    materiallote.lote,
+    local.id as idLocal,
+    '31.01.2024',
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL),
+    0
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+     itemcustodata on
+        itemcustodata.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        itemcustodata.codigo=materialmovimentoestoque.iditem 
+inner join
+    local on
+        local.ID=materialmovimentoestoque.LOCALARMAZENAMENTO
+inner join
+    tipoItemEstoque on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO
+left join
+    materiallote on
+        materiallote.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materiallote.iditem=MATERIALMOVIMENTOESTOQUE.iditem and
+        materiallote.lote=materialmovimentoestoque.lote
+        
+where
+    movimentoestoque.filial=110 and
+    itemcustodata.DATAINVENTARIO='31.01.2024' and
+    movimentoestoque.emissao<=itemcustodata.DATAINVENTARIO 
+    and movimentoestoque.LOCALARMAZENAMENTO<>3
+group by 
+    TIPOITEMESTOQUE.descricao,
+    GRUPOMERCADORIA.GRUPO,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.codigo,
+    itemestoque.descricao,    
+    local.id,
+    local.descricao,    
+    materiallote.lote,
+    materiallote.C_LARGURA,
+    materiallote.C_GRAMATURA,
+    materiallote.uuid,
+    materiallote.codigoBarra,
+    itemestoque.unidade,
+    itemcustodata.custounitario
+HAVING 
+   sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)>0.001 

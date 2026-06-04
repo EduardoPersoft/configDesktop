@@ -1,0 +1,24 @@
+select
+    itemestoque.CODIGO,
+    itemestoque.descricao,
+    (select
+        min(pedidocompra.DATACADASTRO+
+            PRAZOMERCPEDCOMPRA.dias)
+     from 
+        MERCADORIASPEDCOMPRA
+     inner join 
+        PRAZOMERCPEDCOMPRA on
+            prazomercpedcompra.filial=mercadoriaspedcompra.FILIAL
+            and prazomercpedcompra.idnota=MERCADORIASpedCOMPRA.idnota 
+            and prazomercpedcompra.IDITEM=mercadoriaspcompra.IDMERCADORIA
+     inner join
+        pedidocompra on
+            pedidocompra.filial=mercadoriaspedcompra.filial and
+            pedidocompra.idnota=mercadoriaspedcompra.idnota
+     where 
+        mercadoriaspedcompra.codigo=itemestoque.codigo and
+        mercadoriaspedcompra.baixa='N')
+from
+    ITEMESTOQUE
+where
+    itemestoque.TIPOPRODUTO in (3, 5)

@@ -1,0 +1,52 @@
+
+update 
+    SPEDFISCAL_0
+set
+    SPEDFISCAL_0.COD_MUN = (SELECT
+                                ESTADO.CODIGOIBGE
+                             from   
+                                CADASTROPARCEIROS
+                             INNER JOIN
+                                ESTADO ON
+                                    ESTADO.ESTADO=CADASTROPARCEIROS.UF
+                             where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)||
+                            (select
+                                CADASTROPARCEIROS.MUNICIPIO
+                             from
+                                CADASTROPARCEIROS
+                            where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)
+WHERE                                
+    SEGMENTO='0150';
+    
+    
+    
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000'
+where
+    cod_ncm='99999999';
+
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000';
+
+
+update 
+    SPEDFISCAL_0
+set
+    SPEDFISCAL_0.COD_MUN = '9999999'
+WHERE                                
+    SEGMENTO='0150' and
+    exists 
+        (select
+            *
+         from
+            CADASTROPARCEIROS
+         where
+            CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART and
+            CADASTROPARCEIROS.uf='EX');
+    

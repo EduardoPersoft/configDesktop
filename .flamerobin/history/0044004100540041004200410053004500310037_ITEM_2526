@@ -1,0 +1,6 @@
+update
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.coletadata='2023-07-19 12:16:51'
+where 
+    movimentoestoque.COLETADATA='19.07.2023'

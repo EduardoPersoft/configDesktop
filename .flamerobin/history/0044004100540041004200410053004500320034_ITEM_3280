@@ -1,0 +1,6 @@
+select 
+    movimentoestoque.idnota,
+    movimentoestoque.processamento,
+    movimentoestoque.EMISSAO
+from 
+    movimentoestoque

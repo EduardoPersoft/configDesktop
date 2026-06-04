@@ -1,0 +1,3 @@
+select pedido.* from PEDIDO
+where pedido.datacadastro>='01.01.2026' and coalesce(pedido.LOGRADOUROENTREGA,'')<>''
+order by pedido.DATACADASTRO desc

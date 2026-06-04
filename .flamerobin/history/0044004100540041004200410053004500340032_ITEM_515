@@ -1,0 +1,29 @@
+select
+    apontamentocomp.filial,
+    apontamentocomp.idmovimento,
+    apontamentocomp.idmaterial,
+    apontamentocomp.IDCOMPOSICAO,
+    apontamentocomp.id,
+    apontamentocomp.lote,
+    apontamentocomp.quantidade,
+    LOCAL.ID,
+    LOCAL.DESCRICAO
+from
+    apontamentocomp
+inner join 
+    composicaoop on 
+    APONTAMENTOCOMP.FILIAL=composicaoop.FILIAL and 
+    APONTAMENTOCOMP.IDMOVIMENTO=composicaoop.IDMOVIMENTO and 
+    APONTAMENTOCOMP.IDCOMPOSICAO=composicaoop.IDCOMPOSICAO
+inner join 
+    LOCALLOTE on 
+    APONTAMENTOCOMP.FILIAL=LOCALLOTE.FILIAL and 
+    APONTAMENTOCOMP.IDLOCAL=LOCALLOTE.LOCAL and 
+    APONTAMENTOCOMP.LOTE=LOCALLOTE.LOTE 
+    composicaoop.codigo=locallote.iditem
+inner join 
+    local on 
+    LOCALLOTE.LOCAL=LOCAL.ID
+where  
+    apontamentocomp.filial=110 and
+    apontamentocomp.idmovimento=17813

@@ -1,0 +1,91 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_FIOPEDIDOEMABERTO
+RETURNS (
+    CODIGO varchar(15),
+    DESCRICAO varchar(240),
+    QUANTIDADE double precision,
+    IDMOVIMENTO integer,
+    DOCUMENTO varchar(10),
+    EMISSAO timestamp,
+    C_EMPENHO integer,
+    RAZAOFILIAL varchar(60),
+    FILIAL integer,
+    PEMPENHOINI integer,
+    PEMPENHOFIM integer,
+    CODIGOPRODUTO varchar(15),
+    DESCPRODUTO varchar(240),
+    MATERIALINICIAL varchar(15),
+    MATERIALFINAL varchar(15),
+    AREA decimal(12,3),
+    IDCOMPOSICAO integer,
+    IDMOVIMENTOMATERIAL integer,
+    SALDO DECIMAL(12,2) )
+AS
+declare variable pesoConsumo decimal(12,3);
+DECLARE VARIABLE M2 DECIMAL(12,3);
+begin
+
+select 
+    estsin.MATERIALINICIAL,
+    estsin.materialfinal
+FROM
+    ESTSIN
+where 
+    estsin.relatorio='C_FIOPEDEMABERTO'
+INTO :MATERIALINICIAL, :MATERIALFINAL;
+
+for SELECT
+    COMPOSICAOOP.codigo,
+    MAT.DESCRICAO,
+    COMPOSICAOOP.quantidade AS QUANTIDADE,
+    movimentoestoque.idmovimento,
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    movimentoestoque.c_empenho ,
+    MATERIALMOVIMENTOESTOQUE.IDITEM,
+    PROD.DESCRICAO,
+    MATERIALMOVIMENTOESTOQUE.C_PESOCONSUMO,
+    materialmovimentoestoque.quantidade,
+    COMPOSICAOOP.IDCOMPOSICAO,
+    MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+
+    FROM COMPOSICAOOP
+    INNER JOIN MOVIMENTOESTOQUE ON (MOVIMENTOESTOQUE.FILIAL=COMPOSICAOOP.filial AND
+            MOVIMENTOESTOQUE.idmovimento=COMPOSICAOOP.idmovimento)
+    INNER JOIN MATERIALMOVIMENTOESTOQUE ON (MATERIALMOVIMENTOESTOQUE.filial=COMPOSICAOOP.FILIAL
+        AND MATERIALMOVIMENTOESTOQUE.idmovimento=COMPOSICAOOP.IDMOVIMENTO
+        AND MATERIALMOVIMENTOESTOQUE.idmovimentomaterial=COMPOSICAOOP.idmovimentomaterial)
+    INNER JOIN ITEMESTOQUE PROD ON (PROD.CODIGO=MATERIALMOVIMENTOESTOQUE.iditem)
+    INNER JOIN ITEMESTOQUE MAT ON (MAT.CODIGO=COMPOSICAOOP.codigo)
+    WHERE MOVIMENTOESTOQUE.TIPOMOVIMENTO = '12'
+    AND MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+    AND COMPOSICAOOP.CODIGO BETWEEN :MATERIALINICIAL AND :MATERIALFINAL
+    and not exists (select * from pedido 
+                    where pedido.filial=materialmovimentoestoque.filial and 
+                          pedido.C_PEDIDOSUBSTITUIDO=materialmovimentoestoque.idpedido)
+    into :codigo, :descricao, :quantidade, :idmovimento, :documento, :emissao,
+         :c_empenho,codigoproduto,descproduto,pesoconsumo, m2, IDCOMPOSICAO, IDMOVIMENTOMATERIAL
+    do begin
+        select 
+            sum(materiallocal.SALDOTOTAL)
+        from
+            materiallocal
+        where
+            MATERIALLOCAL.FILIAL=1 and
+            MATERIALLOCAL.IDLOCAL = 1
+            materiallocal.iditem = :codigo
+        into
+            saldo;
+        area = 0;
+        if(pesoconsumo>0) THEN
+            area = quantidade / pesoconsumo;
+    
+        suspend;
+    end
+end^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_FIOPEDIDOEMABERTO TO  SYSDBA;
+

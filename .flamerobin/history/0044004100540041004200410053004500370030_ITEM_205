@@ -1,0 +1,39 @@
+update 
+    c_movfinanceiro
+set 
+    c_movfinanceiro.CONTACORRENTEIMPORTADA=2019,
+    c_movfinanceiro.id= (select 
+                            titulorec.IDTITULO
+                        from
+                            titulorec
+                        where
+                            titulorec.filial=110 and
+                            titulorec.titulo=c_movfinanceiro.documento and
+                            COALESCE(titulorec.fatura,'')='' and 
+                            coalesce(titulorec.TIPOBAIXA, '')<>'E' )
+WHERE ID IS NULL;
+                        
+update
+    c_movfinanceiro
+set
+    contaOriginal = (select
+                        titulorec.CONTACORRENTE
+                     from
+                        TITULOREC
+                     where
+                        titulorec.filial=110 and
+                        titulorec.idtitulo=c_movfinanceiro.id),
+    tipobaixa = (select
+                        titulorec.tipobaixa
+                     from
+                        TITULOREC
+                     where
+                        titulorec.filial=110 and
+                        titulorec.idtitulo=c_movfinanceiro.id),
+    VALORABERTO = (select
+                        titulorec.VALOREMABERTO
+                     from
+                        TITULOREC
+                     where
+                        titulorec.filial=110 and
+                        titulorec.idtitulo=c_movfinanceiro.id);                

@@ -1,0 +1,32 @@
+select
+    C_MOVFINANCEIRO.documento,
+    c_movfinanceiro.fatura,    
+    contaImportada.descricaoconta contaImportada,
+    c_movfinanceiro.CONTAORIGINAL,
+    c_movfinanceiro.DATAPAGAMENTO,
+    c_movfinanceiro.TIPOBAIXA,
+    c_movfinanceiro.ANALISE,
+    C_MOVFINANCEIRO.ERRO
+from
+    C_MOVFINANCEIRO
+left join
+    titulorec on
+        titulorec.filial=110 and
+        titulorec.idtitulo=c_movfinanceiro.ID
+left join
+    contacorrente contaImportada on
+        contaImportada.filial=110 and
+        contaImportada.CODIGO=C_MOVFINANCEIRO.CONTACORRENTEIMPORTADA
+where
+    exists (
+        select
+            *
+        from 
+            C_MOVFINANCEIROD
+        where
+            c_movfinanceirod.documento=C_MOVFINANCEIRO.DOCUMENTO and
+            c_movfinanceirod.fatura=c_movfinanceiro.fatura)
+order by
+    C_MOVFINANCEIRO.documento,
+    c_movfinanceiro.fatura,
+    c_movfinanceiro.acao

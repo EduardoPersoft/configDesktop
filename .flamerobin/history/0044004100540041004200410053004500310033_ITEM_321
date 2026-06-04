@@ -1,0 +1,8 @@
+select 
+    *
+FROM
+    mercadoriasped
+WHERE
+    mercadoriasped.filial=1 AND
+    mercadoriasped.baixa = 'N' AND
+    mercadoriasped.codigo = '9801005-Y'

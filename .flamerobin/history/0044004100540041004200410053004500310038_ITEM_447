@@ -1,0 +1,23 @@
+select
+    movimentoestoque.IDMOVIMENTO,
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    localOrigem.descricao,
+    MATERIALMOVIMENTOESTOQUE.iditem destino,
+    case materialmovimentoestoque.LOCALARMAZENAMENTO when 3 then (-1) else (1) end *
+    materialmovimentoestoque.quantidade qtd
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento        
+inner join
+    local localOrigem on
+        localOrigem.id = movimentoestoque.LOCALARMAZENAMENTO
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.01.2021' and '31.12.2021' and
+    movimentoestoque.tipomovimento = '07' and
+    movimentoestoque.LOCALARMAZENAMENTO = 3
+    

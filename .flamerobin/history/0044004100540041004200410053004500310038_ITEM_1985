@@ -1,0 +1,9 @@
+select 
+    *
+from
+    MATERIALLOTE
+where
+    materiallote.iditem between '01.12.' and '01,14.9999' and
+    materiallote.lote='.' and
+    materiallote.filial=1 and
+    materiallote.quantidade>0.09

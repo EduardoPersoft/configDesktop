@@ -1,0 +1,3 @@
+delete from apontamentocomp
+where filial=110 and
+idmovimento=18894

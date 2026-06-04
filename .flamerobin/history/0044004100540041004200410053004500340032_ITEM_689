@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+where locallote.iditem='MPP02CPE/HRB'
+AND LOCALLOTE.LOTE='58271/5'

@@ -1,0 +1,17 @@
+select
+    itemestoque.codigo,
+    coalesce(preco2.preco, preco1.preco)
+from
+    ITEMESTOQUE
+left join
+    listaprecoproduto preco1 on
+        preco1.lista=1 and
+        preco1.PRODUTO=itemestoque.CODIGO
+left join
+    listaprecoproduto preco2 on
+        preco2.lista=2 and
+        preco2.PRODUTO=itemestoque.CODIGO
+where
+    coalesce(coalesce(preco1.preco, preco2.preco),0) > 0 and
+    itemestoque.grupo in (95, 96, 6, 10,14, 2, 11, 16, 13, 18, 98,
+                          180, 3, 17, 4, 33, 7, 8, 9, 12)

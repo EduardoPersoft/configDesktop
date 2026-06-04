@@ -1,0 +1,41 @@
+
+
+SELECT  
+
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO as dataemissaonota,
+    cadcli.nome as nomecliente,
+    movimentoestoque.dedido,
+    transp.nome as transporte,
+    c_coletas.VALOR as valorentrega,
+    notafiscal.VLRTOTALNOTA as valorpedido,
+    cadven.nome as nomevendedor,
+    movimentoEstoque.motorista as nomemotoboy,
+    c_coletas.COLETA as OS
+    
+    
+
+FROM
+    MOVIMENTOESTOQUE
+LEFT JOIN 
+    NOTAFISCAL ON 
+        NOTAFISCAL.FILIAL=MOVIMENTOESTOQUE.FILIAL 
+         and notafiscal.idnota=movimentoestoque.idnotaexpedicao
+        AND NOTAFISCAL.DATACANCELAMENTO IS NULL 
+left join 
+    cadastroparceiros cadven on
+        (cadven.CADASTRO=notafiscal.vendedor)
+LEFT JOIN
+    CADASTROPARCEIROS CADCLI ON
+        CADCLI.CADASTRO=notafiscal.DESTINATARIO
+
+LEFT JOIN 
+    CADASTROPARCEIROS TRANSP ON 
+     (TRANSP.CADASTRO = notafiscal.codigotransp)
+left join 
+    c_coletas on 
+        (cast (c_coletas.coleta as varchar (20))=coalesce (movimentoestoque.coleta,''))
+where
+    notafiscal.dataemissao between '01.05.2025' and '31.05.2025'
+ORDER BY 
+    movimentoestoque.idmovimento desc

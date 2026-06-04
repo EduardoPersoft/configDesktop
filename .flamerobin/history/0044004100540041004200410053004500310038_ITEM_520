@@ -1,0 +1,1 @@
+select * from materiallote where iditem like 'M-%'

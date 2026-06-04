@@ -1,0 +1,17 @@
+select 
+    MOVIMENTOESTOQUE.*
+from
+    MOVIMENTOESTOQUE
+INNER join
+    MATERIALMOVIMENTOESTOQUE ON
+        MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.FILIAL and
+        MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO
+INNER join
+    MERCADORIASPED ON
+        MERCADORIASPED.filial=materialmovimentoestoque.filial and 
+        mercadoriasped.idnota=materialmovimentoestoque.idnota
+where
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and
+    MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N' and
+    mercadoriasped.baixa='S'
+    

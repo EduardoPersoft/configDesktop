@@ -1,0 +1,16 @@
+update 
+    MERCADORIASPED
+SET
+    mercadoriasped.minimo=0,
+    baixa='S'
+where
+    filial=1 and 
+    baixa='N' AND
+    idnota <= 63331 AND
+    exists (
+    select * from PEDIDO
+    where pedido.filial=mercadoriasped.filial 
+    and pedido.idnota=mercadoriasped.IDNOTA
+    and pedido.datacadastro<='01.04.2021')
+order by
+    idnota

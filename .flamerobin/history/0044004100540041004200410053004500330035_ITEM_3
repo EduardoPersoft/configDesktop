@@ -1,0 +1,2 @@
+select * from VENDEDOR
+where cadastro in (17182,23054,39993)

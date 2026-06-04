@@ -1,0 +1,5 @@
+delete
+FROM
+    ITEMESTOQUECODIGOS
+where 
+    substring(itemestoquecodigos.codigo from 2 for 4)=itemestoquecodigos.codigoalternativo

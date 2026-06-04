@@ -1,0 +1,15 @@
+update 
+    MOVIMENTOESTOQUE
+set 
+    movimentoestoque.IDPEDIDO=(
+        select first 1
+            MATERIALMOVIMENTOESTOQUE.IDPEDIDO
+        from
+            MATERIALMOVIMENTOESTOQUE
+        where
+            materialmovimentoestoque.filial=movimentoestoque.filial and
+            MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.idmovimento)
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.EMISSAO='27.08.2025' and
+    movimentoestoque.TIPOMOVIMENTO='13'

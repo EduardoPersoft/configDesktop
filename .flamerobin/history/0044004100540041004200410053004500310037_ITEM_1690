@@ -1,0 +1,7 @@
+select 
+    *
+from
+    NFECTRL
+where
+    nfectrl.filial=12826 and
+    nfectrl.idnota=118091

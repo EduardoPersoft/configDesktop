@@ -1,0 +1,11 @@
+select * from VENDEDORESPED 
+where filial=1 and idnota=74329
+
+/*
+VENDEDORESPED.C_IDCOMISSAO=769 and not exists
+(select * from C_COMISSAOPEDIDOPAGA
+where c_comissaopedidopaga.filial=vendedoresped.filial 
+and c_comissaopedidopaga.IDNOTA=vendedoresped.idnota 
+and c_comissaopedidopaga.vendedor=vendedoresped.VENDEDOR
+and c_comissaopedidopaga.id=769)
+*/

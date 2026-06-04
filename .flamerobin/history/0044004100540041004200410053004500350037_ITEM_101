@@ -1,0 +1,26 @@
+select 
+    cadven.nome,
+    (select 
+        count(pedido.idnota)
+     from 
+        pedido
+     where  
+        pedido.filial=1 and
+        pedido.vendedor=105 and
+        pedido.datacadastro between '01.05.2024' and '31.12.2024' and
+        pedido.cancelamento='N'),
+    (select 
+        count(pedido.idnota)
+     from 
+        orcamento pedido
+     where  
+        pedido.filial=1 and
+        pedido.vendedor=105 and
+        pedido.datacadastro between '01.05.2024' and '31.12.2024' and
+        pedido.cancelamento='N')
+
+    
+from    
+    cadastroparceiros cadven
+where
+    cadven.cadastro=105

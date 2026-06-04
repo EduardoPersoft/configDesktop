@@ -1,0 +1,29 @@
+select pedido.filial, 
+       pedido.idnota, 
+       pedido.c_loja,
+       pedido.datacadastro,
+       min(c_faturasped.LIBERACAO),
+       pedido.DATAEMISSAO,
+       pedido.C_DATACOMISSAO,
+       pedido.datareferencia,
+       pedido.C_PEDIDOSUBSTITUIDO
+from
+        pedido
+left join
+    c_faturasped on
+        c_faturasped.filial=pedido.filial and
+        c_faturasped.idnota=pedido.idnota
+where
+    pedido.c_loja=3 and
+    (pedido.datacadastro >= '01.02.2023' or
+     pedido.C_DATACOMISSAO >='01.02.2023' or
+     c_faturasped.liberacao >= '01.02.2023')
+group by
+    pedido.filial, 
+       pedido.idnota, 
+       pedido.c_loja,
+       pedido.datacadastro,
+       pedido.DATAEMISSAO,
+       pedido.C_DATACOMISSAO,
+       pedido.datareferencia,
+       pedido.C_PEDIDOSUBSTITUIDO

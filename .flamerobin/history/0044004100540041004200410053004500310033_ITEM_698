@@ -1,0 +1,4 @@
+update
+    ORCAMENTO
+set 
+    orcamento.CLCTRANSP='N'

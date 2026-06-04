@@ -1,0 +1,8 @@
+SELECT
+    filial,
+    idnota,
+    calculada
+FROM
+    pedido
+WHERE
+    pedido.idnota=75890

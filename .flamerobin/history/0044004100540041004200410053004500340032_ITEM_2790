@@ -1,0 +1,8 @@
+update notafiscal
+set notafiscal.operacao=1061
+where filial=110 and
+idnota in (
+3877,
+3906,
+3909,
+3917)

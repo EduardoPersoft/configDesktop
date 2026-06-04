@@ -1,0 +1,7 @@
+select
+    *
+from
+    LOGALTERACAO
+where
+    tipo='D' and 
+    data>='04.08.2023'

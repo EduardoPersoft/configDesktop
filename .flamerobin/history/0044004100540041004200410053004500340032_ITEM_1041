@@ -1,0 +1,42 @@
+select 
+    contascontabeis.contacontabil,
+    contascontabeis.descricao,
+    sum((LANTOCONTPAG.VALOR / TITULOPAG.VALORTITULO * TITULOSANEXADOS.VALOR)*
+    case movbancarios.tipomovimento when 'D' then (-1) else 1 end)  
+    
+from
+    movbancarios
+inner join
+    titulosanexados on 
+    MOVBANCARIOS.FILIAL=TITULOSANEXADOS.FILIAL and
+    MOVBANCARIOS.IDCONTACORRENTE=TITULOSANEXADOS.IDCONTACORRENTE and
+    MOVBANCARIOS.IDMOVTOBANCARIO=TITULOSANEXADOS.idmovtobanc
+
+inner join
+    TITULOPAG on 
+    TITULOSANEXADOS.FILIAL=TITULOPAG.FILIAL and
+    TITULOSANEXADOS.IDTITULO=TITULOPAG.IDTITULO
+inner join 
+    lantocontpag on 
+    TITULOSANEXADOS.FILIAL=LANTOCONTPAG.FILIAL and
+    TITULOSANEXADOS.IDTITULO= LANTOCONTPAG.idmovtobanc
+inner join 
+    ESTABELECIMENTO on 
+    MOVBANCARIOS.FILIAL=ESTABELECIMENTO.CADASTRO 
+inner join 
+    CONTASCONTABEIS on
+    ESTABELECIMENTO.PLANOCONTAS=CONTASCONTABEIS.IDPLANO and 
+    LANTOCONTPAG.contacontabil = contascontabeis.CONTACONTABIL
+inner join 
+    CADASTROPARCEIROS on 
+    TITULOPAG.PARCEIRO= CADASTROPARCEIROS.CADASTRO
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=titulopag.contacorrente
+where
+    MOVBANCARIOS.MOVIMENTACAO between '01.11.2023'  and '30.11.2023' and
+   TITULOSANEXADOS.tipotitulo='P'
+Group by 
+    contascontabeis.contacontabil,
+    contascontabeis.descricao

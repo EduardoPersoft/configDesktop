@@ -1,0 +1,4 @@
+select * from materialmovimentoestoque where filial=1
+and iditem in ('PE-3303', 'PE-3310')
+order by iditem
+

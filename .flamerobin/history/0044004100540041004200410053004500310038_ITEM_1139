@@ -1,0 +1,31 @@
+select
+    pedido.idnota,
+    cast(titulorec.emissao as date) as emissao,
+    cast(titulorec.baixa as date) as baixa,
+    titulorec.valortitulo,
+    pedido.VLRTOTALNOTA,
+    case when exists (select 
+                    * 
+                 from 
+                    mercadoriasped 
+                where 
+                    mercadoriasped.filial=pedido.FILIAL and
+                    mercadoriasped.idnota=pedido.idnota and
+                    mercadoriasped.baixa='N') then 'Falta' else 'Entregue' end
+                
+from 
+    PEDIDO
+inner join
+    c_faturasped on
+        c_faturasped.filial=pedido.filial and
+        c_faturasped.idnota=pedido.idnota 
+inner join
+    titulorec on
+        titulorec.filial=c_Faturasped.filial and
+        titulorec.idtitulo=c_faturasped.IDTITULO
+where
+    c_faturasped.sequencia=0 and
+    pedido.filial=1 and
+    pedido.destinatario = 29472  
+order by 
+    emissao desc

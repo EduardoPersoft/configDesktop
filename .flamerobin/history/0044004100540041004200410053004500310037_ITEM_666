@@ -1,0 +1,13 @@
+select 
+    mercadoriasnota.*
+FROM
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on 
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+WHERE
+    notafiscal.filial=1 AND
+    notafiscal.dataemissao between '01.08.2021' and '31.08.2021' and
+    substring(mercadoriasnota.cfop from 1 for 1) in (1, 2) AND
+    mercadoriasnota.cstpis<50

@@ -1,0 +1,20 @@
+select 
+    movtitulorec.DATAENVIO,
+    movtitulorec.DATAALTERACAO,
+    movtitulorec.HORAALTERACAO,
+    movtitulorec.vencimento,
+    movtitulorec.* 
+from 
+    movtitulorec 
+inner join
+    titulorec on
+        titulorec.filial=movtitulorec.filial and
+        titulorec.idtitulo=movtitulorec.idtitulo
+where 
+    movtitulorec.filial=5 and 
+    movtitulorec.tipomovto='B' and
+    movtitulorec.dataenvio<>cast(movtitulorec.dataenvio as date) and 
+    titulorec.baixa is null    
+order by
+    movtitulorec.DATAENVIO
+    

@@ -1,0 +1,7 @@
+select 
+    *
+from
+    mercadoriasnotacompra 
+where
+    mercadoriasnotacompra.filial=1 and
+    mercadoriasnotacompra.idntoa=123324

@@ -1,0 +1,10 @@
+select 
+    * 
+from 
+    movtotitulopag 
+where 
+    dtmovtotitulo='31.12.2020'
+    and exists
+        (select * from titulopag where titulopag.filial=movtotitulopag.filial
+        and titulopag.idtitulo=movtotitulopag.idtitulo
+        and titulopag.baixa='31.12.2020')

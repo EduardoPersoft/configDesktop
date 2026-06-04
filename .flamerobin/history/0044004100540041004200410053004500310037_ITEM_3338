@@ -1,0 +1,10 @@
+select
+    extract(year from orcamento.DATACADASTRO),    
+    extract(month from orcamento.DATACADASTRO),
+    count(orcamento.idnota)
+from
+    ORCAMENTO
+group by 
+    extract(year from orcamento.DATACADASTRO),
+    extract(month from orcamento.DATACADASTRO)
+    

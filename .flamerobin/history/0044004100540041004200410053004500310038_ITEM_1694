@@ -1,0 +1,2 @@
+select * from cadastorparceiros
+where nome like '%EURO%'

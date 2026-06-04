@@ -1,0 +1,19 @@
+select    
+    1 as id,
+    CADASTROPARCEIROS.nome,
+    count(orcamento.idnota)    
+from
+    pedido orcamento
+inner join
+    vendedoresorc on
+        vendedoresorc.filial=orcamento.filial and
+        vendedoresorc.idnota=orcamento.IDNOTA
+inner join
+    CADASTROPARCEIROS on
+        cadastroparceiros.cadastro=vendedoresorc.vendedor
+where
+    orcamento.datacadastro>cast('now' as date)-extract(day from cast('now' as date)) and
+    orcamento.dataCancelamento is null
+group by
+    CADASTROPARCEIROS.nome
+order by nome    

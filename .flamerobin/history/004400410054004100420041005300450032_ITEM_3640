@@ -1,0 +1,22 @@
+UPDATE
+    MATERIALLOCAL
+SET
+    materiallocal.saldototal = 
+        (select
+            sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+         FROM
+            MATERIALMOVIMENTOESTOQUE
+         where
+            materialmovimentoestoque.filial=5 AND
+            materialmovimentoestoque.idmovimento>=206463 AND
+            MATERIALMOVIMENTOESTOQUE.iditem=materiallocal.iditem)
+where EXISTS
+(select 
+    * 
+from 
+    materialmovimentoestoque
+WHERE
+    materialmovimentoestoque.filial=5 AND
+    materialmovimentoestoque.idmovimento>=206463 AND
+    MATERIALMOVIMENTOESTOQUE.iditem=materiallocal.iditem)
+    

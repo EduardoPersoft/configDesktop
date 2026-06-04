@@ -1,0 +1,2 @@
+update MOVIMENTOESTOQUE
+set movimentoestoque.alteracaodata=cast(movimentoestoque.alteracaodata as date)

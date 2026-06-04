@@ -1,0 +1,2 @@
+select * from C_CORES
+where ' PRO3055FLI001'

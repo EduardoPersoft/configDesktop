@@ -1,0 +1,8 @@
+update 
+    servicosped
+set
+    servicosped.QTDEENVIADA=0,
+    servicosped.baixa='N' 
+where
+    servicosped.filial=1 and
+    servicosped.idnota=66999

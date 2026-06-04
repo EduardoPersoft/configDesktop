@@ -1,0 +1,1 @@
+update titulorec set dataenvio = null where titulorec.DATAENVIO='02.03.2022'

@@ -1,0 +1,12 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    grupomercadoria.descrica as grupo
+from
+    itemestoque
+inner join
+    grupomercadoria on
+        grupomercadoria.grupo=itemestoque.GRUPO
+
+    

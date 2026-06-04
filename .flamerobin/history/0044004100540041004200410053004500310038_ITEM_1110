@@ -1,0 +1,8 @@
+select 
+    codigo, 
+    tipoproduto, 
+    valorULTIMACOMPRA
+from    
+    itemestoque
+where
+    itemestoque.codigo='23401'

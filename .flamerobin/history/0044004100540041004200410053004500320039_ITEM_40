@@ -1,0 +1,3 @@
+select * from registrocontato
+where upper(substring(cast(registrocontato.descricao as varchar(1000)) 
+                      from 1 for 1000)) like '%AUTOEXEC.NT%'

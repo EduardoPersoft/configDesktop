@@ -1,0 +1,1 @@
+select * from pedidocompra where filial=110 and idnota=493

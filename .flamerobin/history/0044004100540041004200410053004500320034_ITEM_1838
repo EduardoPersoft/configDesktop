@@ -1,0 +1,1 @@
+update titulorec set titulorec.CODRETORNO='02' where contacorrente = 707

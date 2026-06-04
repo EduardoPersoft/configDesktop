@@ -1,0 +1,16 @@
+select 
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa = 'N' AND
+    mercadoriaspedcompra.QTDEENTREGUE <= (
+        select 
+            sum(mercadoriasnotacompra.quantidade) 
+        from 
+            MERCADORIASnotaCOMPRA
+        where 
+            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+            mercadoriasnotacompra.IDMERCADORIA=mercadoriaspedcompra.IDMERCADORIA)

@@ -1,0 +1,1 @@
+delete from nfectrl where data<'01.01.2016'

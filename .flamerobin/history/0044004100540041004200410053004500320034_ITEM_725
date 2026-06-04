@@ -1,0 +1,16 @@
+select 
+    materialmovimentoestoque.*,
+    movimentoestoque.emissao,
+    movimentoestoque.tipomovimento,
+    materialmovimentoestoque.valor/materialmovimentoestoque.quantidade
+from 
+    materialmovimentoestoque
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where 
+    materialmovimentoestoque.iditem='13863'
+    and movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02')
+order by
+    emissao desc

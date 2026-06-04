@@ -1,0 +1,60 @@
+select 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    itemestoque.descricao,
+    inventarioestoquedata.lote,
+    inventarioestoquedata.local,
+    local.descricao,
+    inventarioestoquedata."DATA",
+    locallote.quantidade saldoatual,
+    inventarioestoquedata.quantidade contado,
+    inventarioestoquedata.quantidadeEstoque esperado,
+    inventarioestoquedata.idmovimento            
+from 
+    inventarioestoquedata
+inner join
+    itemestoque on
+        itemestoque.codigo=inventarioestoquedata.CODIGO
+inner join
+    locallote on
+        locallote.filial=INVENTARIOESTOQUEDATA.filial and
+        locallote.iditem=inventarioestoquedata.codigo and
+        locallote."LOCAL"=inventarioestoquedata."LOCAL" and
+        locallote.lote=inventarioestoquedata.lote
+left join
+    local on
+        local.id=inventarioestoquedata."LOCAL"
+where
+    inventarioestoquedata.filial=1
+        
+union        
+
+select 
+    locallote.filial,
+    locallote.iditem,
+    itemestoque.descricao,
+    locallote.lote,
+    locallote."LOCAL",
+    local.descricao,
+    inventarioestoquedata."DATA",
+    locallote.quantidade saldoatual,
+    inventarioestoquedata.quantidade contado,
+    inventarioestoquedata.quantidadeEstoque esperado,
+    inventarioestoquedata.idmovimento            
+from 
+    inventarioestoquedata
+inner join
+    itemestoque on
+        itemestoque.codigo=inventarioestoquedata.CODIGO
+inner join
+    locallote on
+        locallote.filial=INVENTARIOESTOQUEDATA.filial and
+        locallote.iditem=inventarioestoquedata.codigo and
+        locallote."LOCAL"=inventarioestoquedata."LOCAL" and
+        locallote.lote=inventarioestoquedata.lote
+left join
+    local on
+        local.id=inventarioestoquedata."LOCAL"
+where
+    inventarioestoquedata.filial=1
+     

@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.iditem='MPP03MAT2G18'

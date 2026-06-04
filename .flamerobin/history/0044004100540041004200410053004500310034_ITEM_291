@@ -1,0 +1,6 @@
+update
+    notacompra
+set
+    notacompra.DESTINATARIO =notacompra.destinatario-354214
+where
+    notacompra.destinatario>35000

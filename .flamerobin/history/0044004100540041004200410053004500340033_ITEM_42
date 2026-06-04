@@ -1,0 +1,22 @@
+select 
+
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    apontamentocomp.lote,
+   apontamentocomp.quantidade
+from 
+    materialmovimentoestoque
+inner join,, 
+    composicaoop on 
+    composicaoop.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and 
+    composicaoop.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+    composicaoop.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+inner join 
+    APONTAMENTOCOMP on 
+     composicaoop.FILIAL=APONTAMENTOCOMP.FILIAL and 
+    composicaoop.IDMOVIMENTO=APONTAMENTOCOMP.IDMOVIMENTO and
+    composicaoop.IDMOVIMENTOMATERIAL=APONTAMENTOCOMP.IDMATERIAL and
+    composicaoop.IDCOMPOSICAO=APONTAMENTOCOMP.IDCOMPOSICAO 
+where 
+    materialmovimentoestoque.filial=110 and
+    materialmovimentoestoque.iditem='MPP06CPPCOPO' and 
+    coalesce(materialmovimentoestoque.concluido, 'N') ='N'

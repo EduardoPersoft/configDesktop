@@ -1,0 +1,7 @@
+select 
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    filial=1 and
+    lote='3277'

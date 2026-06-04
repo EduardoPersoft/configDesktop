@@ -1,0 +1,1 @@
+select * from C_LOGPRODUTOECOMMERCE WHERE coalesce(status_code ,1) not in ('200','201')

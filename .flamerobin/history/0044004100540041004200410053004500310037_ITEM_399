@@ -1,0 +1,1 @@
+select C_LOGPRODUTOECOMMERCE.*, cast(substring(C_LOGPRODUTOECOMMERCE.CONTENT from 1 for 100) as varchar(100)) from C_LOGPRODUTOECOMMERCE where status_code =500

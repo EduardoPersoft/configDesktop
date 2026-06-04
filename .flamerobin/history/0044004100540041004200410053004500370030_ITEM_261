@@ -1,0 +1,5 @@
+select  filial,idnota,c_arte, c_statusarte,
+mercadoriasped.C_NOVOREPETICAOALTERADO
+from MERCADORIASPED
+where filial=110 and 
+idnota in (11350, 12866)

@@ -1,0 +1,1 @@
+select pedido.TIPODESCFINANCEIRO, pedido.* from orcamento pedido where filial=12826 order by idnota desc

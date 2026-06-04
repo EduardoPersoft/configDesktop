@@ -1,0 +1,14 @@
+update
+    PEDIDO
+set 
+    pedido.CONTACORRENTECOBRAN=1
+where
+    exists (
+        select
+            *
+        from
+            mercadoriasped
+        where
+            pedido.filial=mercadoriasped.filial and
+            pedido.idnota=mercadoriasped.idnota and
+            mercadoriasped.baixa='N')

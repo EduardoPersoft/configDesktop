@@ -1,0 +1,4 @@
+UPDATE
+    C_LOGSALDOECOMMERCE
+SET
+    status_code = 200

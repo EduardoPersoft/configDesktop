@@ -1,0 +1,13 @@
+select 
+    filial,
+    iditem,
+    lote,
+    quantidade,
+    c_largura,
+    c_gramatura 
+from 
+    materiallote 
+where 
+filial=110 and 
+lote like 'I230930/60/6%' and
+ iditem='MPP02BCO2OUT'

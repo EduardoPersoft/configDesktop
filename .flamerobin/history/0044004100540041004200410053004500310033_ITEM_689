@@ -1,0 +1,5 @@
+select codigo,descricao,
+itemestoque.QUANTIDADEVOLUME,itemestoque.QUANTIDADEUNIDADE
+from
+itemestoque
+where itemestoque.QUANTIDADEVOLUME is not null

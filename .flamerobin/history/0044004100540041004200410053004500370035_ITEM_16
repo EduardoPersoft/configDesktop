@@ -1,0 +1,3 @@
+alter table mercadoriasnota 
+alter descricao type blob sub_type 0
+character set  iso8859_1

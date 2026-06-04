@@ -1,0 +1,2 @@
+select filial,idnota,idpedido,idmercadoriaped from NOTAFISCAL
+where filial=110 and idnota=5982

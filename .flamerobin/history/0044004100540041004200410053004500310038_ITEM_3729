@@ -1,0 +1,6 @@
+select 
+   *
+from 
+    REGISTROCONTATO
+where
+    REGISTROCONTATO.PARCEIRO=12007

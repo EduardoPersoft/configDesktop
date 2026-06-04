@@ -1,0 +1,3 @@
+select * from mercadoriasnota
+where mercadoriasnota.idpedido is not null
+and mercadoriasnota.filial=5

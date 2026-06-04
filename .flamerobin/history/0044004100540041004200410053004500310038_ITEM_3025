@@ -1,0 +1,14 @@
+select pedido.filial,
+       pedido.datacadastro,
+       pedido.idnota,
+       pedido.IDORCAMENTO 
+from 
+    PEDIDO
+inner join
+    orcamento on 
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.idrelacionamento
+where 
+    pedido.DATAREFERENCIa>='2024-11-30'
+order by idorcamento
+

@@ -1,0 +1,42 @@
+select
+    1 as id,
+    movimentoestoque.emissao,
+    SUM((COALESCE(MOVIMENTOESTOQUE.SAIDAPRODUCAO, CAST('NOW' AS TIMESTAMP)) -
+    MOVIMENTOESTOQUE.ENTRADAPRODUCAO)*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS PICKING,
+    
+    
+    SUM((COALESCE(NOTAFISCAL.datahoraemissao, CAST('NOW' AS TIMESTAMP)) -
+    MOVIMENTOESTOQUE.SAIDAPRODUCAO)*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS NF,
+    
+
+    SUM((COALESCE(movimentoestoque.COLETADATA, CAST('NOW' AS TIMESTAMP)) -
+    NOTAFISCAL.datahoraemissao)*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS Shipping    ,
+    
+    sum(cast((coalesce(coalesce(notafiscal.datahoraEntrega, 
+                            movimentoestoque.dataEntrega),
+                   CAST('NOW' AS TIMESTAMP))-
+          coalesce(movimentoestoque.COLETADATA, 
+                   coalesce(notafiscal.datahoraEntrega, 
+                            coalesce(movimentoestoque.dataEntrega,
+                                     CAST('NOW' AS TIMESTAMP)
+                                     )
+                            ))
+                   )*24*60 as integer)) /
+        case sum(case when movimentoestoque.COLETADATA is null then 0 else 1 end) when 0 then 1 
+        else sum(case when movimentoestoque.COLETADATA is null then 0 else 1 end) end AS delivery    
+from
+    MOVIMENTOESTOQUE
+INNER join
+    PEDIDO ON
+        MOVIMENTOESTOQUE.FILIAL=PEDIDO.FILIAL and
+        MOVIMENTOESTOQUE.IDPEDIDO=PEDIDO.IDNOTA
+left join        
+    NOTAFISCAL on
+        notafiscal.filial=movimentoestoque.filial and
+        notafiscal.idnota=movimentoestoque.IDNOTAEXPEDICAO
+where
+    MOVIMENTOESTOQUE.EMISSAO > cast('now' as date)-extract(day from cast('now' as date)) and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and
+    MOVIMENTOESTOQUE.transportadora=15154
+group by
+    movimentoestoque.emissao

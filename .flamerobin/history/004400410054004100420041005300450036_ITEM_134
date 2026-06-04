@@ -1,0 +1,7 @@
+SELECT
+    *
+from 
+    MATERIALLOCAL
+WHERE
+    materiallocal.filial=1 AND
+    materiallocal.saldototal<0

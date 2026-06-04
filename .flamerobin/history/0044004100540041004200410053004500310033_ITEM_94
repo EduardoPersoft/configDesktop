@@ -1,0 +1,24 @@
+select 
+    itemestoque.datacadastro,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    GRUPOMERCADORIA.descricao
+from 
+    ITEMESTOQUE
+inner JOIN
+    GRUPOMERCADORIA on
+        grupomercadoria.GRUPO=itemestoque.grupo
+where 
+itemestoque.grupo=7
+
+
+and not EXISTS
+(select 
+    *
+FROM
+    Materialmovimentoestoque
+WHERE
+    materialmovimentoestoque.filial=1 AND
+    materialmovimentoestoque.iditem=itemestoque.codigo)
+    
+order by 2

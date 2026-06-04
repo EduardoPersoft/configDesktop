@@ -1,0 +1,15 @@
+SET TERM ^ ;
+ALTER TRIGGER SALDOENTRADA_INSERT INACTIVE
+BEFORE insert POSITION 0
+
+
+AS
+begin
+
+if (new.saldo <=0) then saldoentrada.USADO=0;
+if (new.saldo >0 and NEW.SALDO < new.quantidade) then saldoentrada.usado=1;
+if (new.saldo = new.quantidade) then saldoentrada.usado=2;
+
+end
+^
+SET TERM ; ^

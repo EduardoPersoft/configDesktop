@@ -1,0 +1,6 @@
+select 
+*
+from 
+    C_REQUISICAOMATERIAL
+order by
+    id desc

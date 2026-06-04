@@ -1,0 +1,14 @@
+update
+    C_COLETAS
+set
+    C_COLETAS.QTDEXPEDICOES=
+        (select count(movimentoestoque.IDMOVIMENTO)
+         from MOVIMENTOESTOQUE
+         where movimentoestoque.coleta=
+               c_coletas.COLETA and TIPOMOVIMENTO='13')
+where
+    C_COLETAS.QTDEXPEDICOES<>
+        (select count(movimentoestoque.IDMOVIMENTO)
+         from MOVIMENTOESTOQUE
+         where movimentoestoque.coleta=
+               c_coletas.COLETA and TIPOMOVIMENTO='13')

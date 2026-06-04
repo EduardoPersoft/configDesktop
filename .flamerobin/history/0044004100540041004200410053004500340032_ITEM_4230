@@ -1,0 +1,11 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.TIPOPRODUTO,
+    itemestoque.referencia
+from 
+    itemestoque
+where
+    ITEMESTOQUE.CODIGO LIKE 'MPP%'
+ORDER BY
+    ITEMESTOQUE.CODIGO

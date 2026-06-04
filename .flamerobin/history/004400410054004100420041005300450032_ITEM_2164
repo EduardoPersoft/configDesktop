@@ -1,0 +1,33 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    materialfilial.CONSUMOMEDIO,
+    (SELECT
+        count(mercadoriasped.idmercadoria)
+     FROM
+        MERCADORIASPED
+     inner JOIN
+        pedido on
+            pedido.filial=mercadoriasped.filial AND
+            pedido.idnota=mercadoriasped.idnota
+     where
+        mercadoriasped.codigo=itemestoque.CODIGO
+        and pedido.filial=1
+        and pedido.DATAEMISSAO between '01.05.2020' and '30.04.2021'
+    (select
+        sum(coalesce(materiallocal.saldototal, 0)) 
+    from 
+        MATERIALLOCAL
+    where
+        materialfilial.filial=materiallocal.filial AND
+        materiallocal.iditem=materialfilial.iditem) saldo
+from 
+    ITEMESTOQUE
+INNER JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        itemestoque.codigo=materialfilial.IDITEM        
+order by
+    materialfilial.CONSUMOMEDIO desc
+    

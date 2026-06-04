@@ -1,0 +1,7 @@
+select 
+    *
+from
+    MERCADORIASPEDCOMPRA
+where 
+    mercadoriaspedcompra.filial=5 and
+    mercaodiraspedcompra.codigo='34283'

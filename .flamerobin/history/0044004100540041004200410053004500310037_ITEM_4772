@@ -1,0 +1,16 @@
+update 
+    locallote
+set 
+    datalocacao = (select 
+                        max(movimentoestoque.EMISSAO)
+                   from 
+                        MATERIALMOVIMENTOESTOQUE
+                   inner join
+                        movimentoestoque on
+                            movimentoestoque.filial=materialmovimentoestoque.filial and
+                            movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+                    where
+                        MATERIALMOVIMENTOESTOQUE.filial=locallote.filial and
+                        materialmovimentoestoque.iditem=locallote.iditem and
+                        materialmovimentoestoque.lote=locallote.lote and
+                        materialmovimentoestoque.local=locallote.local)

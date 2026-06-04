@@ -1,0 +1,4 @@
+UPDATE
+    C_LOGPRODUTOECOMMERCE
+SET
+    status_code = 200

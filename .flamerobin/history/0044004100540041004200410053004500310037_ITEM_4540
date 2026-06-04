@@ -1,0 +1,4 @@
+select filial,idnota,datacadastro,numeronota, dataemissao,tipocobranca,contacorrente,condicaopagamento from NOTAFISCAL
+where filial=1
+and dataemissao>='01.03.2025'
+order by dataemissao desc

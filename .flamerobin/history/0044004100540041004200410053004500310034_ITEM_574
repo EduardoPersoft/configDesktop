@@ -1,0 +1,8 @@
+select
+    *
+from
+    NOTAFISCAL
+where
+    notafiscal.filial=3894 
+order by
+    notafiscal.uuid desc

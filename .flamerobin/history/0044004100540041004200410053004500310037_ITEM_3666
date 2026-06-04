@@ -1,0 +1,14 @@
+select
+    orcamento.vendedor,
+    count(orcamento.idnota) qtd,
+    sum((select 
+            count(mercadoriasorc.idnota)
+         from
+            MERCADORIASORC
+         where
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota)) qtditens,
+    sum(orcamento.VLRTOTALnota)
+from
+    orcamento
+where orcamento.DATAREFERENCIA between '01.08.2024' and '31.08.2024'

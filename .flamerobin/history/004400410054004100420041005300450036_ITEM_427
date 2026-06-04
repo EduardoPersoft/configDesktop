@@ -1,0 +1,2 @@
+select * from LOGALTERACAO where objeto='ESTOQUE' and tipo='A' 
+and substring(alteracoes from 1 for 400) like '%107 326%'

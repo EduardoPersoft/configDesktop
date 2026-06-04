@@ -1,0 +1,1 @@
+update titulopag set moeda = 1 where moeda =0

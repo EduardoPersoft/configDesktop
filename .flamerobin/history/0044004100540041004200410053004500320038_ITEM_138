@@ -1,0 +1,38 @@
+SET TERM ^ ;
+
+CREATE PROCEDURE getModelo(
+id smallint,
+salto smallint)    
+RETURNS ( 
+numero integer,
+datahora timestamp,
+data date)
+AS 
+
+BEGIN
+  /* write your code here */ 
+  update
+    MODELODOCTO
+  set 
+    ultimanota = ultimanota + :salto
+  where 
+    modelodocto.id=:id;
+    
+  select 
+    MODELODOCTO.ULTIMANOTA,
+    cast('now' as timestamp),
+    cast('now' as date)
+  from
+    MODELODOCTO
+  where
+    modelodocto.id = :id
+  into
+    :numero,
+    :datahora,
+    :data;
+
+  suspend;  
+
+END^
+
+SET TERM ; ^

@@ -1,0 +1,11 @@
+select
+    *
+from
+    movimentoestoque
+where
+    filial=110 and
+    tipomovimento in (10,11) and
+    (localtransferencia=3 or MOVIMENTOESTOQUE.LOCALARMAZENAMENTO=3)  and
+    emissao='01.03.2024'
+order by
+    idmovimento desc

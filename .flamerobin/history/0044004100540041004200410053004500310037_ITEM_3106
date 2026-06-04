@@ -1,0 +1,2 @@
+update  CADASTROPARCEIROS set grupoempresarial=cadastro
+where grupoempresarial is null

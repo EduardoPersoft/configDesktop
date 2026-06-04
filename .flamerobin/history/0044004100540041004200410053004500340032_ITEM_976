@@ -1,0 +1,29 @@
+select
+    TIPOITEMESTOQUE.DESCRICAO tipomaterial,
+    sum(coalesce(MATERIALMOVIMENTOESTOQUE.valor,0)) as valorestoque       
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+left join
+    movimentoestoque on
+        movimentoestoque.filial=notacompra.filial and
+        movimentoestoque.IDNOTACOMPRA=notacompra.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadoriasnotacompra.idmercadoria
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+where
+    notacompra.dataemissao between '01.11.2023' and '30.11.2023' and
+    itemestoque.tipoproduto = '1'
+group by    
+    TIPOITEMESTOQUE.DESCRICAO

@@ -1,0 +1,7 @@
+select 
+    *
+from
+    TITULOREC
+where 
+    filial=5 and
+    titulorec.titulo='55457'

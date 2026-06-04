@@ -1,0 +1,22 @@
+select
+    notafiscal.*
+from 
+    NOTAFISCAL
+where
+    notafiscal.DATAEMISSAO between '01.08.2023' and '31.08.2023'
+    and notafiscal.CANCELAMENTO is not null 
+    and notafiscal.ENTRADASAIDA = 'S'
+    and not exists (select
+                        *
+                    from
+                        ESTABELECIMENTO
+                    where
+                        estabelecimento.cadastro=notafiscal.destinatario)
+    and exists (select 
+                    *
+                from
+                    faturas
+                where
+                    faturas.filial=notafiscal.filial and
+                    faturas.idnota=notafiscal.idnota)
+                    

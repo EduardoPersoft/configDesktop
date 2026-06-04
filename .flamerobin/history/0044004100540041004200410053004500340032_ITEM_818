@@ -1,0 +1,83 @@
+select
+    CADCLI.NOME,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    notafiscal.numeronota,
+    notafiscal.dataemissao,
+    mercadoriasnota.idpedido,
+    mercadoriasnota.IDMERCPEDIDO,
+    mercadoriasnota.cfop,    
+    mercadoriasnota.QUANTIDADE,
+    mercadoriasnota.unidade,
+    case mercadoriasnota.unidade when 'KG' 
+    then mercadoriasnota.quantidade
+    else mercadoriasnota.QUANTIDADE*itemestoque.C_PESOMPPOREMBALAGEM
+    end as peso,
+    (select
+        sum(composicaoop.QUANTIDADE)
+     from
+        MOVIMENTOESTOQUE
+     inner join
+        MATERIALMOVIMENTOESTOQUE on
+            MOVIMENTOESTOQUE.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+            MATERIALMOVIMENTOESTOQUE.PRODUTO=mercadoriasnota.codigo
+     inner join
+        composicaoop on
+            materialmovimentoestoque.filial=composicaoop.filial and
+            materialmovimentoestoque.IDMOVIMENTO=composicaoop.IDMOVIMENTO and
+            materialmovimentoestoque.IDMOVIMENTOMATERIAL=composicaoop.IDMOVIMENTOMATERIAL
+     where
+        movimentoestoque.filial=mercadoriasnota.filial and
+        movimentoestoque.idpedido=mercadoriasnota.IDpedido ) mpSolicitada,
+    (select
+        sum(composicaoop.QUANTIDADE)
+     from
+        MOVIMENTOESTOQUE
+     inner join
+        MATERIALMOVIMENTOESTOQUE on
+            MOVIMENTOESTOQUE.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+            MATERIALMOVIMENTOESTOQUE.PRODUTO=mercadoriasnota.codigo
+     inner join
+        composicaoop on
+            materialmovimentoestoque.filial=composicaoop.filial and
+            materialmovimentoestoque.IDMOVIMENTO=composicaoop.IDMOVIMENTO and
+            materialmovimentoestoque.IDMOVIMENTOMATERIAL=composicaoop.IDMOVIMENTOMATERIAL
+     where
+        movimentoestoque.filial=mercadoriasnota.filial and
+        movimentoestoque.idpedido=mercadoriasnota.IDpedido )/
+     select
+        max(materialmovimentoestoque.QUANTIDADE)
+     from
+        MOVIMENTOESTOQUE
+     inner join
+        MATERIALMOVIMENTOESTOQUE on
+            MOVIMENTOESTOQUE.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+            MATERIALMOVIMENTOESTOQUE.PRODUTO=mercadoriasnota.codigo and
+            materialmovimentoestoque.iditem=mercadoriasnota.codigo
+     where
+        movimentoestoque.filial=mercadoriasnota.filial and
+        movimentoestoque.idpedido=mercadoriasnota.IDpedido)*mercadoriasnota.quantidade
+        
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.destinatario
+where
+    notafiscal.filial=110 and
+    notafiscal.DATAEMISSAO between '01.09.2023' and '30.09.2023' and
+    notafiscal.CANCELAMENTO='N' and
+    itemestoque.tipoproduto='4' and
+    mercadoriasnota.cfop not in ('6116', '5122', '5901', '5911', '5916' )
+order by
+    mercadoriasnota.cfop

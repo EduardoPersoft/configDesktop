@@ -1,0 +1,2 @@
+select * from servicospedcompra 
+where servicospedcompra.baixa='N' and servicospedcompra.filial=1

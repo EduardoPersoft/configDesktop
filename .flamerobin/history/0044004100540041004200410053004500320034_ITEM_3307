@@ -1,0 +1,17 @@
+SELECT 
+    titulorec.titulo,
+    titulorec.fatura,
+    cadcli.nome,
+    titulorec.emissao,
+    titulorec.vencimento,
+    titulorec.valor 
+FROM 
+    TITULOREC 
+inner join
+    CADASTROPARCEIROS on
+        cadastroparceiros.cadastro=titulorec.PARCEIRO
+WHERE 
+    TITULOREC.FILIAL=5 AND 
+    coalesce(titulorec.CODRETORNO,'') <> '' and 
+    coalesce(titulorec.LINHADIGITAVEL, '') = '' and
+    titulorec.baixa is null

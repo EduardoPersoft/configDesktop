@@ -1,0 +1,11 @@
+SELECT
+    ITEMESTOQUECODIGOS.*,
+    itemestoque.descricao
+FROM
+    ITEMESTOQUECODIGOS
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = itemestoquecodigos.CODIGO
+WHERE
+    ITEMESTOQUECODIGOS.CODIGOALTERNATIVO like '%BR%' 
+    and itemestoque.descricao like '%retento%'

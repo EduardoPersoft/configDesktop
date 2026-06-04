@@ -1,0 +1,18 @@
+select 
+    distinct
+    t2.titulo,
+    t2.fatura,
+    t2.MENSAGEM,
+    cast(substring(t1.OBSERVACOES from 1 for 1000) as varchar(1000))
+from 
+    titulopag t2
+inner JOIN
+    titulopag t1 on
+        t1.filial=t2.filial AND
+        t1.titulo=t2.titulo AND
+        t1.parceiro=t2.PARCEIRO AND
+        t1.fatura=t2.fatura AND
+        coalesce(t1.observacoes, '')<> ''
+where
+    t2.filial=5 AND
+    t2.EMISSAO='26.12.2021'

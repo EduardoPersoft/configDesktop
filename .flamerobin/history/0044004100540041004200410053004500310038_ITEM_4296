@@ -1,0 +1,26 @@
+select
+    movimentoestoque.emissao,
+    movimentoestoque.documento,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    itemestoque.descricao,
+    MATERIALMOVIMENTOESTOQUE.QUANTIDADE,
+    cast(materialmovimentoestoque.valor/
+    MATERIALMOVIMENTOESTOQUE.quantidade
+    as decimal(12,3)) as unitario,
+    MATERIALMOVIMENTOESTOQUE.quantidade,
+    materialmovimentoestoque.VALOR
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join 
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.iditem
+where
+    MATERIALMOVIMENTOESTOQUE.filial=1 and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=7 and
+    MOVIMENTOESTOQUE.emissao between '01.11.2025' and '30.11.2025' and
+    movimentoestoque.TIPOMOVIMENTO='02'
+    

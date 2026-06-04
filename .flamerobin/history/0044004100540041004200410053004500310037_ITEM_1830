@@ -1,0 +1,5 @@
+select
+    i1.codigo,
+    i1.codigo as codchave
+from
+    itemestoque i1

@@ -1,0 +1,2 @@
+insert into turnoS(RECURSO,INICIO,FIM)
+VALUES(1, '2024-11-20 13:00', '2024-11-20 21:00')

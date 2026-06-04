@@ -1,0 +1,20 @@
+select 
+            M2.IDNOTA,
+            M2.QUANTIDADE,
+            M2.QTDEENVIADA,
+            M2.MINIMO
+            
+         FROM
+            MERCADORIASPED m2
+         INNER JOIN
+            PEDIDO p2 ON
+                p2.FILIAL=m2.FILIAL AND
+                p2.IDNOTA=m2.IDNOTA and
+                p2.cancelamento='N' and
+                p2.dataemissao is not null 
+         WHERE
+            m2.FILIAL=5 AND
+            m2.baixa='N' AND
+            m2.idnota<>623 and
+            m2.codigoestoque='32069'
+                         

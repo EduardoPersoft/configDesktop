@@ -1,0 +1,27 @@
+select 
+
+    c_centrocustoxlocal.CENTROCUSTO,
+    sum(MATERIALMOVIMENTOESTOQUE.valor) as valor
+    
+
+from 
+    MOVIMENTOESTOQUE
+inner join
+    pedido on
+        pedido.filial=movimentoestoque.filial and
+        pedido.idnota=movimentoestoque.idpedido
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+left join
+    c_centrocustoxlocal on
+        c_Centrocustoxlocal.idlocal=pedido.c_loja        
+   
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.TIPOMOVIMENTO = '07' and 
+    movimentoestoque.emissao between '01.01.2022' and '30.06.2022'
+group by
+    c_centrocustoxlocal.CENTROCUSTO
+    

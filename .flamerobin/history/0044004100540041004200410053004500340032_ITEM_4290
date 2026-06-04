@@ -1,0 +1,3 @@
+select * from centrocustos
+where idplano=2
+order by centrocusto

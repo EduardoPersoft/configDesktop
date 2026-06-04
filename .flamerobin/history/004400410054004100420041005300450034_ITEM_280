@@ -1,0 +1,11 @@
+select movimentoestoque.documento, MATERIALMOVIMENTOESTOQUE.* from MATERIALMOVIMENTOESTOQUE
+inner join movimentoestoque on (materialmovimentoestoque.filial=movimentoestoque.filial AND
+materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento)
+where materialmovimentoestoque.concluido='N' and MATERIALMOVIMENTOESTOQUE.C_TUFTINGFUNDO is NULL
+ and EXISTS
+(select * from mercadoriasped 
+where mercadoriasped.filial =materialmovimentoestoque.filial AND
+mercadoriasped.idnota=MATERIALMOVIMENTOESTOQUE.idpedido AND
+mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA AND
+mercadoriasped.baixa='S')
+order by movimentoestoque.documento

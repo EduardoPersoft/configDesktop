@@ -1,0 +1,17 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    max(movimentoestoque.emissao) ULTIMACOMPRA
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materialmovimentoestoque on
+        materialmovimentoestoque.iditem=itemestoque.CODIGO
+inner JOIN
+    movimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+group by
+    1, 2
+order by 
+    3

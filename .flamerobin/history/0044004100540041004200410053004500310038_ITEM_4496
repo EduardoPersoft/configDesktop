@@ -1,0 +1,2 @@
+select * from PEDIDO
+where pedido.c_malote in (32750, 32753, 32752)

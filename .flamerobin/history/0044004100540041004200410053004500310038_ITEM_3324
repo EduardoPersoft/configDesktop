@@ -1,0 +1,20 @@
+select 
+    *
+from
+    PEDIDO
+where 
+    pedido.filial=1 and 
+    pedido.CANCELAMENTO='N' and
+    pedido.DATAEMISSAO is not null and 
+    pedido.dataemissao>'01.01.2025' and
+    exists (select * from C_FATURASPED
+            where c_faturasped.filial=pedido.filial and
+            c_faturasped.idnota=pedido.idnota and
+            c_faturasped.C_MALOTE is not null) --and 
+    /*
+    not exists (select * from MOVIMENTOESTOQUE
+                where movimentoestoque.filial=pedido.filial and
+                MOVIMENTOESTOQUE.IDpedido=pedido.IDNOTA and
+                movimentoestoque.TIPOMOVIMENTO='13')
+    */
+    

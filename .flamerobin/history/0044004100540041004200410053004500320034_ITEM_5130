@@ -1,0 +1,29 @@
+
+delete from T_CADASTRODOCTITULO;
+
+delete from c_i_movest5;
+
+
+
+
+update t_titulorec 
+set importado = 'S' 
+where importado is null;
+
+/*
+
+Select * from C_IMPORTARMOVIMENTOS_PREPARAR(5)
+
+
+
+EXecute procedure C_IMPORTARNOTAS1
+*/
+/*
+
+
+
+EXECUTE PROCEDURE IMPORTATITULOREC('22.02.2023')
+
+    EXECUTE PROCEDURE T_ATUALIZARTITULOPARCEIRO('08.02.2023');
+
+*/

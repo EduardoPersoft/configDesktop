@@ -1,0 +1,13 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    C_ITEMREGIOES.REGIAO,
+    c_itemregioes.PERCENTUAL
+from
+    ITEMESTOQUE
+where 
+    itemestoque.TIPOPRODUTO='4' and 
+    itemestoque.codigo between '1000' and '3'
+order by
+        itemestoque.codigo
+    

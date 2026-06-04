@@ -1,0 +1,2 @@
+select * from orcamento
+where orcamento.VENDEDOR=21083

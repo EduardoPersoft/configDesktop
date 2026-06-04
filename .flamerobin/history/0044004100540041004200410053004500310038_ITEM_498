@@ -1,0 +1,14 @@
+SELECT
+    movimentoestoque.LOCALARMAZENAMENTO,
+    movimentoestoque.LOCALTRANSFERENCIA,
+    MATERIALMOVIMENTOESTOQUE.*
+FROM
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+WHERE
+    materialmovimentoestoque.iditem like 'M-%' AND
+    movimentoestoque.TIPOMOVIMENTO = 10
+    

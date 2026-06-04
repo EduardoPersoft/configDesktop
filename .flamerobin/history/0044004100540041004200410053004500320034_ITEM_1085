@@ -1,0 +1,1 @@
+update titulorec set idtitulo = null where  importado is null

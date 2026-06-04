@@ -1,0 +1,14 @@
+select
+    count(orcamento.idnota)
+from
+    orcamento
+where 
+    orcamento.DATACADASTRO=cast('now' as date)
+    
+select
+    count(orcamento.idnota)
+from
+    pedido orcamento
+where 
+    orcamento.DATAreferencia=cast('now' as date)
+        

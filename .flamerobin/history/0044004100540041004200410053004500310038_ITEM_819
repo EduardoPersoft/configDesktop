@@ -1,0 +1,30 @@
+select 
+    c_centrocustoxlocal.CENTROCUSTO,
+    cast(sum(MATERIALMOVIMENTOESTOQUE.valor) as decimal(12,2)) as valor
+from 
+    MOVIMENTOESTOQUE SAIDA
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=SAIDA.filial and
+        materialmovimentoestoque.idmovimento=SAIDA.idmovimento
+INNER join
+    MOVIMENTOESTOQUE OP ON
+        SAIDA.FILIAL=OP.FILIAL and
+        SAIDA.IDOP=OP.IDMOVIMENTO
+
+LEFT join
+    pedido on
+        pedido.filial=OP.filial and
+        pedido.idnota=OP.idpedido
+left join
+    c_centrocustoxlocal on
+        c_Centrocustoxlocal.idlocal=pedido.c_loja        
+   
+where
+    SAIDA.filial=1 and
+    SAIDA.TIPOMOVIMENTO = '09' and 
+    SAIDA.emissao between '01.01.2022' and '30.06.2022' and
+    substring(MATERIALMOVIMENTOESTOQUE.IDITEM from 1 for 2) = 'M-'
+group by
+    c_centrocustoxlocal.CENTROCUSTO
+    

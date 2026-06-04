@@ -1,0 +1,14 @@
+SELECT  
+    *
+FROM
+        TITULOREC
+WHERE
+    titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+
+order by
+    titulorec.filial,
+    titulorec.titulo,
+    titulorec.fatura

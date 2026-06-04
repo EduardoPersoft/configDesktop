@@ -1,0 +1,4 @@
+select * from TITULOSANEXADOS
+where filial=110 
+order by 
+idmovtobanc desc

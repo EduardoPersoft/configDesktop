@@ -1,0 +1,1 @@
+select * from PEDIDO where PARCEIRO IN (1747, 1879)

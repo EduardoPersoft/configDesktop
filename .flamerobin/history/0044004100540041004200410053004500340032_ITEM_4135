@@ -1,0 +1,3 @@
+select * from NOTAFISCAL
+where filial=110
+and idmovimento=78348

@@ -1,0 +1,17 @@
+select 
+    * 
+from 
+    NOTAFISCAL
+inner join 
+    NATUREZAOPERACAO on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+where 
+    notafiscal.dataemissao between '20.11.2023' and '30.11.2023'
+    and NATUREZAOPERACAO.ESTOQUE='S' 
+    and notafiscal.IDMOVIMENTO is  null
+    and NOTAFISCAL.CANCELAMENTO = 'N'
+    and not exists (
+        select * from MOVIMENTOESTOQUE
+        where movimentoestoque.FILIAL=notafiscal.FILIAL
+        and movimentoestoque.idmovimento=NOTAFISCAL.IDMOVIMENTO)
+order by numeronota

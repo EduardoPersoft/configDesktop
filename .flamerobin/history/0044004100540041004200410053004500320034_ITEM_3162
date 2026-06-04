@@ -1,0 +1,3 @@
+select * from titulorec 
+where filial=5 and titulorec.tipobaixa='N'
+and linhadigitavel=' ' and codigobarra is not null

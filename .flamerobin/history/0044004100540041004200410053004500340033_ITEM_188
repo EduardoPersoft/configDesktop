@@ -1,0 +1,4 @@
+select * from PEDIDO
+where filial=1
+order by 
+idnota desc

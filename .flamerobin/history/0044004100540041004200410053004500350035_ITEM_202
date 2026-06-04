@@ -1,0 +1,11 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    GRUPOMERCADORIA.grupo,
+    c_especificacoes.DESCRICAO
+from 
+    ITEMESTOQUE
+left join
+    C_eSPECIFICACOES.IDITEM=ITEMESTOQUE.CODIGO
+WHERE 
+    UPPER(C_eSPECIFICACOES.DESCRICAO)='MEDIDAS'

@@ -1,0 +1,12 @@
+update
+    CADASTROPARCEIROS
+set
+    PARCEIROCLIENTE = CASE WHEN 'S'
+        EXISTS (
+            select 
+                *
+            from
+                CLIENTES
+            where
+                CLIENTES.CADASTRO=CADASTROPARCEIROS.CADASTRO)        
+    else 'N' end

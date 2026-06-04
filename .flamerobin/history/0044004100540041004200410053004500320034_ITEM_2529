@@ -1,0 +1,17 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.definicao,
+    itemestoque.referencia,
+    grupomercadoria.descricao,
+    itemestoquexarquivo.NOMEARQUIVO
+from
+    itemestoquexarquivo
+inner join
+    itemestoque on
+        itemestoque.codigo=itemestoquexarquivo.CODIGO
+inner join 
+    GRUPOMERCADORIA on 
+        GRUPOMERCADORIA.grupo=itemestoque.grupo
+where
+    ITEMESTOQUEXARQUIVO.ordem=0

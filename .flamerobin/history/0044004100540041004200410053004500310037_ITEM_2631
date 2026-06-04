@@ -1,0 +1,54 @@
+select
+    cast(itemestoque.CODIGOTRIBUTACAO as integer) as codigoTributacao,
+    sum(mercadoriasnota.VLRFINALMERCAD) VLRFINALMERCAD,
+    sum(mercadoriasnota.valoripi) valoripi,
+    sum(mercadoriasnota.valoricms) valoricms,
+    sum(mercadoriasnota.VLRCOFINS) VLRCOFINS,
+    sum(mercadoriasnota.VLRPISPASEP) VLRCOFINS,
+    sum(mercadoriasnota.VLRICMSRECOLHIDO) VLRICMSRECOLHIDO,
+    sum(mercadoriasnota.ICMSSTFCPVALOR) ICMSSTFCPVALOR,
+    sum(mercadoriasnota.OUTDESPACESSOR) OUTDESPACESSOR,
+    sum(mercadoriasnota.seguro) seguro,
+    sum(mercadoriasnota.frete) frete,  
+    sum(mercadoriasnota.ACRESCIMONOTA) ACRESCIMONOTA,
+    sum(mercadoriasnota.DESCONTONOTA) DESCONTONOTA,
+    sum((mercadoriasnota.VLRFINALMERCAD+
+    mercadoriasnota.valoripi+
+    mercadoriasnota.VLRICMSRECOLHIDO+
+    mercadoriasnota.ICMSSTFCPVALOR+
+    mercadoriasnota.OUTDESPACESSOR+
+    mercadoriasnota.seguro+
+    mercadoriasnota.frete+
+    mercadoriasnota.ACRESCIMONOTA)-
+    (mercadoriasnota.DESCONTONOTA)) as total    
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on
+        mercadoriasnota.codigo=itemestoque.codigo
+inner join
+    naturezaoperacao on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+where
+    notafiscal.DATAEMISSAO between '01.07.2023' and '31.07.2023'
+    and notafiscal.DATACANCELAMENTO is null
+    and notafiscal.ENTRADASAIDA = 'S'
+    and not exists (select
+                        *
+                    from
+                        ESTABELECIMENTO
+                    where
+                        estabelecimento.cadastro=notafiscal.destinatario)
+    and exists (select 
+                    *
+                from
+                    faturas
+                where
+                    faturas.filial=notafiscal.filial and
+                    faturas.idnota=notafiscal.idnota)
+group by
+    1

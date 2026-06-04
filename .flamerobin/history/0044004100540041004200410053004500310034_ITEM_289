@@ -1,0 +1,6 @@
+update
+    titulorec
+set
+    titulorec.PARCEIRO =titulorec.PARCEIRO-354214
+where
+    titulorec.PARCEIRO>35000

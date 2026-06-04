@@ -1,0 +1,1 @@
+create index i_c_i_movestx on c_i_movestx(idnota,codpeca)

@@ -1,0 +1,5 @@
+update
+    PEDIDO
+set
+    pedido.DATAREFERENCIA=cast(pedido.DATAREFERENCIA as date)
+

@@ -1,0 +1,27 @@
+select
+    MATERIALMOVIMENTOESTOQUE.codigo,
+    extract(month from movimentoestoque.emissao) mes,
+    extract(year from movimentoestoque.emissao) ano,
+    sum(case materialmovimentoestoque.sinal where 1 
+        then materialmovimentoestoque.QUANTIDADE
+        else 0
+        end) qtdEntrada, 
+    sum(case materialmovimentoestoque.sinal where 1 
+        then materialmovimentoestoque.valor
+        else 0
+        end) valorEntrada, 
+    sum(case materialmovimentoestoque.sinal where -1 
+        then materialmovimentoestoque.QUANTIDADE
+        else 0
+        end) qtdSaida, 
+    sum(case materialmovimentoestoque.sinal where -1 
+        then materialmovimentoestoque.valor
+        else 0
+        end) valorSaida, 
+    sum(materialmovimentoestoque.sinal*materialmovimentoestoque.QUANTIDADE) saldo        
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento

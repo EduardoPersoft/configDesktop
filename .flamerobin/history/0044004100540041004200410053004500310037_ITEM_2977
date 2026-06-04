@@ -1,0 +1,9 @@
+select 
+    codigo,
+    descricao,
+    referencia,
+    metatag
+from 
+    itemestoque 
+where 
+   codigo = '2498903'

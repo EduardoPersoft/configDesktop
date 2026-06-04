@@ -1,0 +1,2 @@
+select * TITULOSANEXADOS where filial=233
+and idtitulo=136378

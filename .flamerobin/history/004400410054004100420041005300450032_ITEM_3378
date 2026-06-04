@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    MOVTOTITULOPAG
+WHERE
+    filial=5 AND
+    movtotitulopag.DATAPROCMOV='04.08.2021' 

@@ -1,0 +1,2 @@
+select * from c_faturasped
+where filial=70845

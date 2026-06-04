@@ -1,0 +1,16 @@
+select 
+    mercadoriasped.codigo,
+    itemestoque.descricao,
+    itemestoque.PESOLIQUIDO,
+    itemestoque.pesobruto,
+    mercadoriasped.quantidade,
+    mercadoriasped.PESOBRUTO,
+    mercadoriasped.PESOLIQUIDO
+from
+    MERCADORIASPED
+inner join
+    itemestoque on
+        mercadoriasped.codigo=itemestoque.CODIGO
+where 
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=50582

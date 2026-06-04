@@ -1,0 +1,2 @@
+select * from MERCADORIASPED
+where codigo='PE-24761'

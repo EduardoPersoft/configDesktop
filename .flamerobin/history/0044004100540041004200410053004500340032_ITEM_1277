@@ -1,0 +1,6 @@
+select filial,idnota,idmercadoria,codigo,mercadoriasnota.idpedido,
+mercadoriasnota.IDMERCADORIA,mercadoriasnota.idpedido,
+mercadoriasnota.IDMERCPEDIDO,
+mercadoriasnota.FILIALPED from mercadoriasnota 
+where filial=110 and idnota=2659
+order by idnota desc

@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    vendedoresnota
+order by 
+    idnota desc

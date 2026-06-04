@@ -1,0 +1,15 @@
+select  
+    pedido.datacadastro,
+    mercadoriasped.*
+from 
+    MERCADORIASPED
+inner join
+    pedido on
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.filial=110 and
+    pedido.DATACADASTRO <= '31.08.2022'
+order by
+    pedido.datacadastro desc

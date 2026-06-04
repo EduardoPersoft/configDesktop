@@ -1,0 +1,9 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.IDPEDIDO,    
+    movimentoestoque.documento
+from
+    MOVIMENTOESTOQUE
+where
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and 
+    coalesce(movimentoestoque.IMPRESSO, 'N') ='N'

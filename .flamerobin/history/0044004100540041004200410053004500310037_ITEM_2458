@@ -1,0 +1,25 @@
+select
+    listapreco.lista,
+    listapreco.NOMELISTA,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    LISTAPRECOPRODUTO.preco,
+    CLASSIFICACAOFISCAL.ALIQUOTA pipi,
+    TRIBUTACAOICMSUF.ALIQUOTA,
+    TRIBUTACAOICMSUF.REDUCAO,
+    TRIBUTACAOICMSUF.LUCROSUBSTITUICAO
+from
+    LISTAPRECOPRODUTO
+inner join
+    LISTAPRECO on
+        listapreco.lista=LISTAPRECOPRODUTO.LISTA
+inner join
+    itemestoque on
+        itemestoque.codigo=listaprecoproduto.PRODUTO
+inner join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+inner join
+    TRIBUTACAOICMSUF on
+        TRIBUTACAOICMSUF.id=itemestoque.TRIBUTACAOICMS and
+        TRIBUTACAOICMSUF.UF='SP'

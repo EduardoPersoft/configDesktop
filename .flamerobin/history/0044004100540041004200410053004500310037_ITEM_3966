@@ -1,0 +1,4 @@
+update transportadora
+set notaautomatica='N'
+
+where cadastro<>15154

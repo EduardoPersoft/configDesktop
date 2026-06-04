@@ -1,0 +1,12 @@
+select 
+    * 
+from 
+    ITEMESTOQUE
+where
+    itemestoque.C_CLIENTE is not null and
+    not (itemestoque.itembase like 'I1%' OR
+         itemestoque.itembase like 'I2%' OR
+         itemestoque.itembase like 'I3%' OR
+         itemestoque.itembase like 'L1%' OR
+         itemestoque.itembase like 'L2%' OR
+         itemestoque.itembase like 'L3%' )

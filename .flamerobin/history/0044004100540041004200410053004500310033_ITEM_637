@@ -1,0 +1,90 @@
+SET TERM ^ ;
+ALTER PROCEDURE SALDODOPEDIDOMATERIAL (
+    PFILIAL integer )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    DATAENTREGA timestamp,
+    QUANTIDADE double precision )
+
+AS
+declare variable vqtdentregue double precision;
+declare variable vqtdaentregar double precision;
+declare variable vdatapedido timestamp;
+declare variable vdias smallint;
+declare variable vqtddia double precision;
+declare variable vexpedicao double precision;
+begin
+   for select mercadoriasped.filial,
+              mercadoriasped.idnota,
+              mercadoriasped.idmercadoria,
+              mercadoriasped.qtdeenviada,
+              pedido.datacadastro
+       from mercadoriasped
+       inner join pedido on (mercadoriasped.filial=pedido.filial
+                       and mercadoriasped.idnota=pedido.idnota)
+      inner join naturezaoperacao on (pedido.operacao=naturezaoperacao.id)
+       where mercadoriasped.filial=:pfilial
+       and mercadoriasped.baixa='N'
+       and pedido.dataemissao is not null
+       and pedido.cancelamento='N'
+   --  and naturezaoperacao.estoque='S'
+       plan (mercadoriasped index (i_mercadoriaspedbaixa),
+             pedido index (rdb$primary855),
+             NATUREZAOPERACAO INDEX (RDB$PRIMARY746))
+    into :filial,:idnota,:idmercadoria,:vqtdentregue,:vdatapedido do begin
+       vqtdaentregar = 0;
+       vexpedicao = 0;
+/*
+       SELECT
+            SUM(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+       FROM
+            MATERIALMOVIMENTOESTOQUE
+       INNER JOIN
+            MOVIMENTOESTOQUE
+             ON
+                MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.FILIAL AND
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO
+        WHERE
+            MATERIALMOVIMENTOESTOQUE.FILIAL = :FILIAL AND
+            MOVIMENTOESTOQUE.TIPOMOVIMENTO = '13' AND
+            MATERIALMOVIMENTOESTOQUE.IDPEDIDO = :idnota AND   
+            MATERIALMOVIMENTOESTOQUE.IDMERCADORIA = :IDMERCADORIA AND       
+            NOT EXISTS 
+            (SELECT * FROM NOTAFISCAL 
+             WHERE NOTAFISCAL.movimentoestoquefilial = MOVIMENTOESTOQUE.FILIAL AND
+                NOTAFISCAL.IDmovimento = MOVIMENTOESTOQUE.IDmovimento
+                   )
+        PLAN JOIN (MATERIALMOVIMENTOESTOQUE INDEX (I_MATMOVPEDIDO),
+          MOVIMENTOESTOQUE INDEX (RDB$PRIMARY200)
+          )
+       
+                
+       into :vexpedicao;
+       
+        vqtdentregue = vqtdentregue + coalesce(vexpedicao, 0);
+  */     
+       for select prazomercped.dias,prazomercped.qtde
+       from prazomercped
+       where prazomercped.filial=:filial
+       and prazomercped.idnota=:idnota
+       and prazomercped.iditem=:idmercadoria
+       into :vdias,:vqtddia do begin
+          vqtdaentregar=vqtdaentregar+vqtddia;
+          if (vqtdaentregar>vqtdentregue) then begin
+             dataentrega=:vdatapedido+:vdias;
+             quantidade = vqtdaentregar - vqtdentregue;
+             vqtdentregue = vqtdaentregar;
+             suspend;
+          end
+       end
+    end
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE SALDODOPEDIDOMATERIAL TO  SYSDBA;
+

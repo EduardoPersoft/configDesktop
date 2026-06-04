@@ -1,0 +1,3 @@
+select * from FATPED
+where fatped.filial=233 and
+fatped.idnota=4

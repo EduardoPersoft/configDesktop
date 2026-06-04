@@ -1,0 +1,2 @@
+select * from FORNECEDORES
+where moeda is null

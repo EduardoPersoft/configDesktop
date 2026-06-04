@@ -1,0 +1,1 @@
+select * from pedido where coalesce(pedido.REDUTORIMPOSTOS,0)>0

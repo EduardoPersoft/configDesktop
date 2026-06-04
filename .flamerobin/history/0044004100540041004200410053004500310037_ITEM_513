@@ -1,0 +1,12 @@
+SELECT
+    mercadoriasnotacompra.*
+FROM
+    MERCADORIASNOTACOMPRA
+inner JOIN
+    notacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.idnota
+WHERE
+    notacompra.filial=1 AND
+    notacompra.DATAENTRADA between '01.08.2021' and '31.08.2021' and
+    mercadoriasnotacompra.cstPIS=0

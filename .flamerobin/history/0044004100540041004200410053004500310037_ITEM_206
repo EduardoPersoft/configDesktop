@@ -1,0 +1,25 @@
+UPDATE
+    INVENTARIOESTOQUEDATA
+set
+    INVENTARIOESTOQUEDATA.QUANTIDADEESTOQUE= 
+        (select
+            materiallocal.SALDOTOTAL
+         FROM
+            MATERIALLOCAL
+         WHERE
+            materiallocal.filial=inventarioestoquedata.filial AND
+            materiallocal.iditem=inventarioestoquedata.codigo AND
+            materiallocal.IDLOCAL=inventarioestoquedata.LOCAL)
+WHERE
+not EXISTS
+    (select *
+     from MATERIALMOVIMENTOESTOQUE
+     inner join movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+     where MATERIALMOVIMENTOESTOQUE.filial=INVENTARIOESTOQUEDATA.filial AND
+     materialmovimentoestoque.IDITEM=inventarioestoquedata.codigo AND
+     materialmovimentoestoque.lote=inventarioestoquedata.lote AND
+     materialmovimentoestoque.LOCALARMAZENAMENTO=inventarioestoquedata.local AND
+     movimentoestoque.EMISSAO>=inventarioestoquedata.data)
+

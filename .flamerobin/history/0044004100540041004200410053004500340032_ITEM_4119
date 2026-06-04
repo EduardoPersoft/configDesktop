@@ -1,0 +1,27 @@
+select 
+    MOVBANCARIOS.filial,
+    MOVBANCARIOS.IDCONTACORRENTE,     
+    MOVBANCARIOS.IDMOVTOBANCARIO,
+    MOVBANCARIOS.PAGAMENTO,
+    (select 
+           movtitulorec.DTMOVTOBANCARIO
+     from 
+          movtitulorec
+     inner join
+          titulosanexados on 
+            (titulosanexados.filial=movtitulorec.filial and 
+             titulosanexados.IDTITULO=movtitulorec.IDTITULO and    
+             titulosanexados.idcontacorrente = movtitulorec.CONTACORRENTE and     
+             (titulosanexados.IDMOVTOTITULO-1)= movtitulorec.IDMOVIMENTO and
+             titulosanexados.tipotitulo = 'R')
+     where   
+            titulosanexados.filial = movbancarios.filial and
+            titulosanexados.idcontacorrente = movbancarios.idcontacorrente and
+            titulosanexados.idmovtobanc = movbancarios.idmovtobancario  
+             )
+from 
+    MOVBANCARIOS    
+
+where 
+    MOVBANCARIOS.filial=110 and
+    MOVBANCARIOS.PAGAMENTO is null

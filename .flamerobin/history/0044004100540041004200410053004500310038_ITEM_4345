@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO
+where produto='PE-25207'

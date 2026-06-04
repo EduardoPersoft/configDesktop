@@ -1,0 +1,11 @@
+SELECT
+    *
+FROM
+    pedido
+WHERE
+    pedido.c_malote is null and
+    exists (
+    select * from titulorec
+    where titulorec.filial=1
+    and titulorec.titulo='P'||pedido.idnota)
+

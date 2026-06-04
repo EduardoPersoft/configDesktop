@@ -1,0 +1,1 @@
+update itemestoque set itemestoque.filialpadrao=12826 where substring(itemestoque.codigo from 1 for 1) = '6'

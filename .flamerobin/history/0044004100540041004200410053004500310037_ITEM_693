@@ -1,0 +1,10 @@
+UPDATE
+    MERCADORIASNOTACOMPRA mercadoriasnota
+set 
+    mercadoriasnota.cstpis = 99,
+    mercadoriasnota.cstcofins = 99
+WHERE
+    mercadoriasnota.filial=1 AND
+    mercadoriasnota.idnota>=298890
+    mercadoriasnota.cfop in ('2020', '1202','1411')  and
+    mercadoriasnota.cstpis=2

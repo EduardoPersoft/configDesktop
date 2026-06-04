@@ -1,0 +1,55 @@
+select
+    'Recebido' tipo,
+    sum(movtitulorec.VALORPAGO*
+           case movtitulorec.TIPOMOVTO when 'D'
+           then 1 else -1 end )
+from 
+    movtitulorec
+where
+    extract(month from movtitulorec.dtmovtotitulo) = extract(month from cast('now' as timestamp)) and
+    extract(year from movtitulorec.dtmovtotitulo) = extract(year from cast('now' as timestamp)) and
+    movtitulorec.TIPOMOVTO in ('D', 'F') and
+    not exists (
+        select 
+            *
+        from
+            ESTABELECIMENTO
+        where
+            estabelecimento.cadastro=MOVTITULOREC.Parceiro)
+union        
+select
+    'Pagos' tipo,
+    sum(movtitulorec.VALORPAGO*
+           case movtitulorec.TIPOMOVTO when 'D'
+           then 1 else -1 end )
+from 
+    movtotitulopag movtitulorec
+where
+    extract(month from movtitulorec.dtmovtotitulo) = extract(month from cast('now' as timestamp)) and
+    extract(year from movtitulorec.dtmovtotitulo) = extract(year from cast('now' as timestamp)) and
+    movtitulorec.TIPOMOVTO in ('D', 'F') and
+    not exists (
+        select 
+            *
+        from
+            ESTABELECIMENTO
+        where
+            estabelecimento.cadastro=MOVTITULOREC.Parceiro)
+union            
+select
+    'aReceber' tipo,
+    sum(titulorec.VALOREMABERTO)
+from
+    TITULOREC
+where
+    extract(month from titulorec.provavel) = extract(month from cast('now' as timestamp)) and
+    extract(year from titulorec.provavel) = extract(year from cast('now' as timestamp)) 
+union            
+select
+    'aPagar' tipo,
+    sum(tituloPAG.VALOREMABERTO)
+from
+    TITULOPAG
+where
+    extract(month from tituloPAG.PROGRAMACAO) = extract(month from cast('now' as timestamp)) and
+    extract(year from tituloPAG.PROGRAMACAO) = extract(year from cast('now' as timestamp)) 

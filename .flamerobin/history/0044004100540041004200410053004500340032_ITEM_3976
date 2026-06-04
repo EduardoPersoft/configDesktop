@@ -1,0 +1,1 @@
+select * from VOLUMESMOVIMENTOESTOQUE where filial=110 and idpedido=11610 and TIPOMOVIMENTO='13'

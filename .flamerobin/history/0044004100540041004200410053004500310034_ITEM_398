@@ -1,0 +1,3 @@
+update pedido
+set condicaopagamento=99
+where filial=110 and idnota=9548

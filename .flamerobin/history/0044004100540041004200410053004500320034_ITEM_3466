@@ -1,0 +1,4 @@
+alter table SPEDFISCAL_C
+ADD  CODIGOC110 char(6),
+ADD  DESCRICAOC110 char(60)
+ADD  NUM_DOC_REF char(9)

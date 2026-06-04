@@ -1,0 +1,8 @@
+update 
+    NOTAFISCAL
+set     
+    notafiscal.simples = 14.72
+where
+    filial=3941 and
+    dataemissao between '01.01.2024' and '31.12.2024'
+        

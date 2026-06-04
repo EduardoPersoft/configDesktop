@@ -1,0 +1,13 @@
+select 
+    IDITEM,
+    sequencia,
+    filial,
+    idcentrocusto,
+    tempo,
+    produto,
+    quantidaeaproduzir,
+    setup
+from 
+    CENTROCUSTOSITEM
+where
+    centrocustositem.iditem='1'

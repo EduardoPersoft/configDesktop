@@ -1,0 +1,9 @@
+update 
+    mercadoriasnotacompra 
+set
+    mercadoriasnotacompra.CSTPIS=case mercadoriasnotacompra.CSTPIS when 70 then 98 else mercadoriasnotacompra.CSTPIS end,
+    mercadoriasnotacompra.cstcofins=case mercadoriasnotacompra.cstcofins when 70 then 98 else mercadoriasnotacompra.cstcofins end 
+where 
+    MERCADORIASNOTACOMPRA.filial=1 and 
+    mercadoriasnotacompra.idnota>=5219;
+

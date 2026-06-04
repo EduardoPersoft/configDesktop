@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    PRAZOMERCPEDCOMPRA
+WHERE
+    paracomercpedcompra.filial=1 
+    and prazmercpedcompra.dias75

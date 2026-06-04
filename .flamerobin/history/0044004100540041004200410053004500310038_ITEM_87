@@ -1,0 +1,6 @@
+select c_faturasped.* from c_faturasped 
+inner join pedido on 
+    pedido.filial=c_Faturasped.filial  AND
+    pedido.idnota=c_faturasped.idnota
+where c_faturasped.IDTITULO is not NULL
+and pedido.C_MALOTE is null

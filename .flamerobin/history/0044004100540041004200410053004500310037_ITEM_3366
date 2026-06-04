@@ -1,0 +1,69 @@
+SELECT 
+       coalesce(cadven.cadastro, -1),
+       coalesce(cadven.nome, 'SEM VENDEDOR'),     
+
+       sum(COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)+
+           COALESCE(mercadoriasnota.VALORIPI,0)+
+           COALESCE(MERCADORIASNOTA.VLRICMSRECOLHIDO,0)+
+           COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0)+
+           mercadoriasnota.frete+
+           mercadoriasnota.seguro+
+           mercadoriasnota.OUTDESPACESSOR-
+           (coalesce(mercadoriasnota.DESCONTONOTA,0)+
+            coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+            case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end))   as VLRPERIODO,
+
+       sum(COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)+
+           COALESCE(mercadoriasnota.VALORIPI,0)+
+           COALESCE(MERCADORIASNOTA.VLRICMSRECOLHIDO,0)+
+           COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0)+
+           mercadoriasnota.frete+
+           mercadoriasnota.seguro+
+           mercadoriasnota.OUTDESPACESSOR-
+           (coalesce(mercadoriasnota.DESCONTONOTA,0)+
+            coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+            case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end))   as VLRDIA
+
+    
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+INNER join 
+        mercadoriasnota  on
+           ( mercadoriasnota.filial=notafiscal.filial and 
+             mercadoriasnota.idnota=notafiscal.idnota)
+INNER join 
+        itemestoque on 
+            (itemestoque.codigo=mercadoriasnota.codigo)
+            
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro = (select first 1 
+                                vendedoresped.VENDEDOR
+                           from
+                                vendedoresped
+                           where
+                                vendedoresped.filial=mercadoriasnota.filial and
+                                vendedoresped.idnota=mercadoriasnota.IDPEDido)
+
+WHERE 
+    DATAEMISSAO BETWEEN '01.05.2024' and '31.05.2024'
+    AND NOT NOTAFISCAL.DATAEMISSAO IS NULL
+    AND NOTAFISCAL.CANCELAMENTO = 'N'
+--    AND NOTAFISCAL.ENTRADASAIDA='S'
+        
+
+group by 
+       
+       cadven.cadastro,
+       cadven.nome

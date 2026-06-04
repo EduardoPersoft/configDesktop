@@ -1,0 +1,1 @@
+select cast(substring(content from 1 for 50) as varchar(50)) from C_LOGPRODUTOECOMMERCE WHERE coalesce(status_code ,1) not in ('200','201')

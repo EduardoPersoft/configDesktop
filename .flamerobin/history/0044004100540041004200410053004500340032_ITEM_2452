@@ -1,0 +1,2 @@
+delete from MATERIALMOVIMENTOESTOQUE
+where idmovimento between 49138 and 49562

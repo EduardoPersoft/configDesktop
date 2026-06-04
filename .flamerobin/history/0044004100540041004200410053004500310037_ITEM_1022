@@ -1,0 +1,6 @@
+UPDATE  
+    C_LOGPRODUTOECOMMERCE
+set
+    c_logprodutoecommerce.status_code = NULL
+where    
+    C_LOGPRODUTOECOMMERCE.STATUS_CODE='201'

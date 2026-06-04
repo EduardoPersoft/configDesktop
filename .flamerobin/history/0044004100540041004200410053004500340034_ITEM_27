@@ -1,0 +1,6 @@
+select * from materiallocal
+inner join
+itemestoque on
+    itemestoque.codigo=materiallocal.iditem
+where materiallocal.saldototal>0
+order by idlocal

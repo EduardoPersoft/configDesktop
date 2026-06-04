@@ -1,0 +1,2 @@
+select * from  QRCODEENTREGA
+where filial=1 and idnota=340308

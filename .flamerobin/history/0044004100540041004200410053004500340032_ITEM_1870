@@ -1,0 +1,8 @@
+update 
+    MOVIMENTOESTOQUE
+set
+    emissao='29.02.2024'
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.TIPOMOVIMENTO in ('10', '11', '17') and
+    movimentoestoque.emissao in ('04.03.2024', '05.03.2024')

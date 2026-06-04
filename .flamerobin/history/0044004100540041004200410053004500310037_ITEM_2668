@@ -1,0 +1,37 @@
+select
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    extract(year from movimentoestoque.emissao) ano,
+    extract(month from movimentoestoque.emissao) mes,
+    sum(case when movimentoestoque.tipomovimento in ('01', '02', '05') 
+        then materialmovimentoestoque.QUANTIDADE
+        else 0
+        end) qtdEntrada, 
+    sum(case when movimentoestoque.tipomovimento in ('01', '02', '05') 
+        then materialmovimentoestoque.valor
+        else 0
+        end) valorEntrada, 
+    sum(case when movimentoestoque.tipomovimento in ('01', '02', '05') 
+        then materialmovimentoestoque.QUANTIDADE*materialmovimentoestoque.sinal*(-1)
+        else 0
+        end) qtdSaida, 
+    sum(case not movimentoestoque.tipomovimento when in ('01', '02', '05')
+        then materialmovimentoestoque.valor*materialmovimentoestoque.sinal*(-1)
+        else 0
+        end) valorSaida
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=12826 and
+    MATERIALMOVIMENTOESTOQUE.iditem<'6'
+group by
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    extract(year from movimentoestoque.emissao),
+    extract(month from movimentoestoque.emissao)
+order by    
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    extract(year from movimentoestoque.emissao),
+    extract(month from movimentoestoque.emissao)

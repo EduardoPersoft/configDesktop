@@ -1,0 +1,1 @@
+select * from usuario where usuariO IN ('VENDAS 2', 'VENDAS 5', 'COMPRAS')

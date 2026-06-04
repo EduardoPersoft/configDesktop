@@ -1,0 +1,16 @@
+delete from c_margens;
+
+insert into C_MARGENS(id, qtdPadrao) values(1, 3000);
+insert into C_MARGENS(id, qtdPadrao) values(2, 2000);
+insert into C_MARGENS(id, qtdPadrao) values(3, 1500);
+insert into C_MARGENS(id, qtdPadrao) values(4, 1000);
+insert into C_MARGENS(id, qtdPadrao) values(5, 750);
+insert into C_MARGENS(id, qtdPadrao) values(6, 500);
+insert into C_MARGENS(id, qtdPadrao) values(7, 400);
+insert into C_MARGENS(id, qtdPadrao) values(8, 300);
+insert into C_MARGENS(id, qtdPadrao) values(9, 200);
+insert into C_MARGENS(id, qtdPadrao) values(10, 100);
+insert into C_MARGENS(id, qtdPadrao) values(11, 50);
+
+
+

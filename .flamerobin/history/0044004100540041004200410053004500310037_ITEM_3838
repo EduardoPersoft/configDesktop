@@ -1,0 +1,136 @@
+select
+    cadven.cadastro,
+    cadven.nome,
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024') qtdorc ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024') qtditemorc ,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024') valororc,
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     INNER join
+        NATUREZAOPERACAO ON
+            NATUREZAOPERACAO.ID=ORCAMENTO.OPERACAO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' and
+        NATUREZAOPERACAO.FATURA='S') qtdPED ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     INNER join
+        NATUREZAOPERACAO ON
+            NATUREZAOPERACAO.ID=ORCAMENTO.OPERACAO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' and
+        NATUREZAOPERACAO.FATURA='S') qtditemPED,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     INNER join
+        NATUREZAOPERACAO ON
+            NATUREZAOPERACAO.ID=ORCAMENTO.OPERACAO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' and
+        NATUREZAOPERACAO.FATURA='S' and
+        not exists (select 
+                    estabelecimento.CADASTRO
+                from
+                    estabelecimento 
+                where 
+                    estabelecimento.cadastro=orcamento.destinatario)) VALORPED
+from
+    VENDEDOR
+inner join
+    CADASTROPARCEIROS cadven  on
+        vendedor.cadastro=cadven.CADASTRO
+where
+    cadven.status=1 AND
+    coalesce((select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024'),0)+
+    coalesce((select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024'),0)+        
+    coalesce((select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024'),0)+
+    coalesce((select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     INNER join
+        NATUREZAOPERACAO ON
+            NATUREZAOPERACAO.ID=ORCAMENTO.OPERACAO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' and        
+        NATUREZAOPERACAO.FATURA='S' and
+        not exists (select 
+                    estabelecimento.CADASTRO
+                from
+                    estabelecimento 
+                where 
+                    estabelecimento.cadastro=orcamento.destinatario)),0) > 0

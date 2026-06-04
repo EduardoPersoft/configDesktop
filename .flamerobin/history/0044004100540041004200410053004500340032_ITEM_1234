@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=1 and idmoviemnto=27605

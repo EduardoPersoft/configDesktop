@@ -1,0 +1,10 @@
+SELECT 
+    MERCADORIASPEDcompra.codigo,
+    itemestoque.descricao,
+    mercadoriaspedcompra.VLRFINALMERCAD,
+    mercadoriaspedcompra.VALORICMS
+from
+    MERCADORIASPEDCOMPRA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo

@@ -1,0 +1,2 @@
+insert into c_centrocustoxlocal(idlocal)
+select local.id from local

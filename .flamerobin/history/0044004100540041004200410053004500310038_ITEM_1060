@@ -1,0 +1,2 @@
+select * from NOTAFISCAL
+order by idnota desc

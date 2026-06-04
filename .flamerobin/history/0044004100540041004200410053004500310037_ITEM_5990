@@ -1,0 +1,14 @@
+select
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.iditem,
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade) total
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=MOVIMENTOESTOQUE.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+    MOVIMENTOESTOQUE.filial=1 and
+    movimentoestoque.EMISSAO >= cast('now' as date) -90

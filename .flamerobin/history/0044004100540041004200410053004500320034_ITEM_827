@@ -1,0 +1,15 @@
+UPDATE
+    MERCADORIASNOTA m1
+SET
+    m1.precolista = (select 
+                                    m2.precolista 
+                                   from 
+                                    MERCADORIASNOTA m2
+                                   where 
+                                        m2.filial=5 AND
+                                        m2.idnota=26010 AND
+                                        m2.idmercadoria=m1.idmercadoria)
+WHERE
+    m1.filial=5 AND
+    m1.idnota=26009 
+    

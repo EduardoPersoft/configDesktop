@@ -1,0 +1,3 @@
+update titulorec set titulorec = cast(titulorec.dataenvio as date)
+where
+cast(titulorec.dataenvio as date)<>titulorec.dataenvio

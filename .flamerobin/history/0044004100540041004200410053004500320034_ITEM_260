@@ -1,0 +1,31 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.SALDOTOTAL,
+    listaprecoproduto.preco,
+    listaprecoproduto.custoconsiderado,
+    max(movimentoestoque.emissao) ULTIMACOMPRA
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materialmovimentoestoque on
+        materialmovimentoestoque.iditem=itemestoque.CODIGO
+inner JOIN
+    movimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento AND
+        movimentoestoque.TIPOMOVIMENTO='01'
+inner join 
+    materiallocal on
+        materiallocal.filial=5 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.idlocal=1 AND
+        materiallocal.SALDOTOTAL>0
+inner JOIN
+    listaprecoproduto on
+        LISTAPRECOPRODUTO.produto=itemestoque.codigo AND
+        listaprecoproduto.lista=1
+group by
+    1, 2, 3, 4, 5
+order by 
+    6

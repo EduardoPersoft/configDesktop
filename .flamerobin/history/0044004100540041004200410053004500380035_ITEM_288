@@ -1,0 +1,29 @@
+SET TERM ^ ;
+ALTER TRIGGER SALDO_B0 ACTIVE
+BEFORE insert OR update POSITION 0
+
+
+AS
+declare variable vpermiteestoquenegativo char (1) ;
+begin
+ /* Trigger text */
+
+   select COALESCE(estabelecimento.permiteestoquenegativo,'N') from estabelecimento
+   WHERE ESTABELECIMENTO.CADASTRO=NEW.FILIAL
+   into:vpermiteestoquenegativo;
+   
+   if (vpermiteestoquenegativo='S') then
+       select coalesce(local.podezerar,'S') FROM LOCAL
+       where local.id=new.LOCAL
+       into:vpermiteestoquenegativo;
+   
+   if (vpermiteestoquenegativo='N') then
+       if (COALESCE(new.quantidade,0)<COALESCE(old.quantidade,0) ) then
+         if (NEW.quantidade<0) then
+          exception ESTOQUENEGATIVO;
+          
+    
+
+end
+^
+SET TERM ; ^

@@ -1,0 +1,14 @@
+SELECT 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    c_fornecedorpeca.DESCRICAO
+FROM 
+    itemestoque
+inner join
+    c_fornecedorpeca on
+        c_fornecedorpeca.ID=itemestoque.C_FORNECEDOR
+/*
+where
+    itemestoque.referencia = ?
+*/

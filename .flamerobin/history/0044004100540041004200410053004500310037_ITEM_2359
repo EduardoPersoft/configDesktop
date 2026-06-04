@@ -1,0 +1,6 @@
+select 
+    *
+from
+    NOTAFISCAL
+where
+    NOTAFISCAL.numeronota=126961

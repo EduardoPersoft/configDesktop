@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and titulorec.EMISSAO='23.02.2022' order by contacorrente

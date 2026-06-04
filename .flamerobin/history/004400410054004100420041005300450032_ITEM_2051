@@ -1,0 +1,15 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    cast(materialfilial.consumomedio as integer) consumomedio
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo
+WHERE
+    itemestoque.descricao like '%VIZCO%'
+ORDER BY
+    CAST(ITEMESTOQUE.CODIGO AS INTEGER)

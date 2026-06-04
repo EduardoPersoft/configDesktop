@@ -1,0 +1,8 @@
+update
+    titulorec 
+set
+    titulorec.DATAENVIO = cast(titulorec.dataenvio as date)
+where 
+    titulorec.filial = 5 and
+    titulorec.dataenvio <> cast(titulorec.dataenvio as date) and
+    titulorec.baixa is null

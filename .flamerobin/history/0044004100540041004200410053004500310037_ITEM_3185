@@ -1,0 +1,12 @@
+select
+    *
+from 
+    ORCAMENTO
+where
+    orcamento.DATAEMISSAO='27.03.2024' and
+    (orcamento.TIPOCOBRANCA<>(select
+                                clientes.TIPOCOBRANCA
+                             from
+                                CLIENTES
+                             where
+                                clientes.cadastro=orcamento.DESTINATARIO))

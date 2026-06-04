@@ -1,0 +1,7 @@
+update
+    TITULOPAG
+set
+    idtitulo=363165
+where
+    filial=1 and 
+    idtitulo=363164

@@ -1,0 +1,16 @@
+SELECT
+    mercadoriasped.codigo,
+    mercadoriasped.quantidade,
+    mercadoriasped.CLASSIFISCAL,
+    CLASSIFICACAOFISCAL.descricao,
+    mercadoriasped.PRECOLISTA,
+    mercadoriasped.VLRICMSRECOLHIDO,
+    mercadoriasped.TIPOMERCADORIA,
+    mercadoriasped.CLASSIFICACAOTRIBUTARIA
+from
+    mercadoriasorc mercadoriasped
+inner JOIN
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=mercadoriasped.CLASSIFISCAL
+WHERE
+    filial=5 and idnota=198695

@@ -1,0 +1,25 @@
+select 
+    GRUPOMERCADORIA.descricao grupo,
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    cadfor.nome fornecedor,
+    itemestoque.C_NOMENOFORNECEDOR descricaoFornecedor,
+    c_listacusto.custo
+from 
+    c_listacusto
+inner join
+    itemestoque on
+        itemestoque.codigo=c_listacusto.IDITEM
+inner join
+    GRUPOMERCADORIA on
+        GRUPOMERCADORIA.grupo=itemestoque.GRUPO
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=itemestoque.FABRICANTE
+where
+    coalesce(c_listacusto.custo,0)>0
+order by
+    GRUPOMERCADORIA.descricao,
+    cadfor.nome,
+    itemestoque.C_NOMENOFORNECEDOR
+    

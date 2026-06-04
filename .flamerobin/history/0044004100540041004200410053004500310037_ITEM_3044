@@ -1,0 +1,3 @@
+select * from local
+where descricao like 'Z2-' 
+and prioridade<>1

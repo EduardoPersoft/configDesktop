@@ -1,0 +1,2 @@
+select titulopag.emissao, titulopag.* from titulopag 
+where idtitulo=376869

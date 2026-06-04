@@ -1,0 +1,8 @@
+select 
+    cfiscal,
+    descricao,
+    c_tributacaoicms
+from 
+    CLASSIFICACAOFISCAL
+order by
+    descricao

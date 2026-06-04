@@ -1,0 +1,2 @@
+update CONFIGURACOESGERAIS
+set CONFIGURACOESGERAIS.URL='http://erp.persoft.com.br/primeflex/'

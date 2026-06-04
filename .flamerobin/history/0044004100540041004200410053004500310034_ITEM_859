@@ -1,0 +1,29 @@
+select
+    notacompra.dataentrada,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    mercadoriasnotacompra.quantidade,
+    mercadoriasnotacompra.vlrfinalmercad,
+    mercadoriasnotacompra.icmsbase,
+    mercadoriasnotacompra.icmsoutros,
+    mercadoriasnotacompra.VALORICMS,
+    mercadoriasnotacompra.vlrfinalmercad-mercadoriasnotacompra.VALORICMS
+from
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+where
+    notacompra.filial=110 and
+    notacompra.dataentrada between '01.07.2023' and '31.07.2023' and
+    mercadoriasnotacompra.cfop='1102'

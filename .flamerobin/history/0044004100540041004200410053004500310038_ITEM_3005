@@ -1,0 +1,4 @@
+select * from ITEMCUSTODATA
+where itemcustodata.filial=1
+and itemcustodata.codigo='01.12.0105'
+order by datainventario desc

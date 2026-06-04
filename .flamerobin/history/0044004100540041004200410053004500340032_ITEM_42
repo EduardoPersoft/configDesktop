@@ -1,0 +1,4 @@
+update 
+    NOTACOMPRA
+set
+    notacompra.dataentrada=notacompra.dataemissao

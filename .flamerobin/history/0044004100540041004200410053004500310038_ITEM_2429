@@ -1,0 +1,8 @@
+select
+    *
+from
+    ITEMCUSTODATA
+where  
+        itemcustodata
+where
+    codigo='02.01.1010'

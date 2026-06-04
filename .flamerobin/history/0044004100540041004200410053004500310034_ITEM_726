@@ -1,0 +1,1 @@
+select * from materialfilial where not exists (select * from itemestoque where itemestoque.codigo=materialfilial.iditem)

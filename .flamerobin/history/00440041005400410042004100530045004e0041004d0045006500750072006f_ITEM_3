@@ -1,0 +1,1 @@
+select * from LISTAPRECOPRODUTO where variavel = 0 order by variavel desc

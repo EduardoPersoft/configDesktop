@@ -1,0 +1,4 @@
+select * from NOTAFISCAL
+where notafiscal.filial=1
+and 
+notafiscal.numeronota=3446

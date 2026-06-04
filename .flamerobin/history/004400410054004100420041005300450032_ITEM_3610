@@ -1,0 +1,6 @@
+UPDATE
+    MERCADORIASNOTACOMPRA
+SET
+    statusconferencia=NULL
+WHERE
+    filial=5 and idnota between 12043 and 120152

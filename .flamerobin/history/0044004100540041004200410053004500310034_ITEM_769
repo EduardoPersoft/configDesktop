@@ -1,0 +1,3 @@
+select * from MOVTITULOREC
+where movtitulorec.filial=110
+and mvotitulorec.idtitulo=1285

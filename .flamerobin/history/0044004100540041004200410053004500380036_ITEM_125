@@ -1,0 +1,41 @@
+select
+    titulopag.filial,
+    titulopag.idtitulo,
+    titulopag.vencimento,
+    titulopag.titulo,
+    LANTOCONTPAG.Centrocusto,
+    CENTROCUSTOs.descricao descricaocentro,
+    lantocontPag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO descricaoconta,
+    extract(month from titulopag.vencimento) ano,
+    extract(month from titulopag.vencimento) mes,
+    lantocontpag.VALOR valor
+       
+from 
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=TITULOPAG.FILIAL
+inner join
+    CONTASCONTABEIS on 
+        CONTASCONTABEIS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        lantocontpag.CONTACONTABIL = contascontabeis.CONTACONTABIL  
+left join
+    CENTROCUSTOS on 
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCENTROCUSTOS and
+        CENTROCUSTOS.CENTROCUSTO=lantocontpag.CENTROCUSTO
+where 
+    titulopag.filial=1 and 
+    titulopag.vencimento between '2026-02-01' and '2026-02-28' and
+    lantocontpag.CENTROCUSTO='1202'
+order by
+    lantocontpag.CENTROCUSTO,
+    CENTROCUSTOs.descricao,
+    lantocontpag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    extract(month from titulopag.vencimento),
+    extract(month from titulopag.vencimento)

@@ -1,0 +1,11 @@
+select 
+    titulorec.FILIAL,
+    titulorec.idtitulo,
+    titulorec.titulo,
+    titulorec.emissao,
+    titulorec.NUMBOLBANCO,
+    titulorec.CODIGOBARRA,
+    titulorec.LINHADIGITAVEL
+from TITULOREC
+
+order by emissao

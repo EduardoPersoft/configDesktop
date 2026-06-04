@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MERCADORIASNOTA
+WHERE
+    filial=1 AND
+    idnota in (486, 487, 488, 489)

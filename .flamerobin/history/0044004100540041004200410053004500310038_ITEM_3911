@@ -1,0 +1,2 @@
+select * from TITULOSANEXADOS where 
+idtitulo=136378

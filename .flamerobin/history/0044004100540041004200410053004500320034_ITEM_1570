@@ -1,0 +1,6 @@
+update
+    mercdoriaspedcompra 
+set
+    descricao=desreduzida
+where 
+    filial=5 and idnota=57467

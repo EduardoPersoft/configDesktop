@@ -1,0 +1,214 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ITENSCOMRESERVAS (
+    PFILIAL integer )
+RETURNS (
+    CODIGO varchar(15),
+    SALDO numeric(12,2),
+    RESERVAPEDIDO numeric(12,2),
+    RESERVANOTA numeric(12,2),
+    RESERVAOP numeric(12,2),
+    RESERVAPEDCOMPRA numeric(12,2),
+    VALORUNITARIO numeric(12,2),
+    FILIAL integer )
+
+AS
+begin
+
+FILIAL=PFILIAL;
+
+
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+-- todos os itens
+for select
+      ITEMESTOQUE.CODIGO
+FROM
+    ITEMESTOQUE
+WHERE
+     ITEMESTOQUE.TIPOPRODUTO<>5
+into :codigo
+do begin
+   suspend;
+end
+
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+
+--reserva de pedidos
+FOR SELECT
+    mercadoriasped.IDITEM, 
+    mercadoriasped.quantidade-coalesce(mercadoriasped.QTDEENVIADA, 0)
+FROM
+    mercadoriasped
+INNER JOIN PEDIDO ON
+                  (mercadoriasped.FILIAL=PEDIDO.FILIAL
+                   AND mercadoriasped.IDNOTA=PEDIDO.IDNOTA)
+WHERE
+    mercadoriasped.baixa='N' and
+    pedido.DATACANCELAMENTO is null and
+    pedido.DATAEMISSAO is not null
+into :CODIGO,  :reservapedido
+DO begin
+    suspend;
+end
+
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+--saldo do item
+FOR select
+     MATERIALLOCAL.IDITEM,
+     coalesce(MATERIALLOCAL.SALDOTOTAL,0)
+FROM
+    MATERIALLOCAL
+WHERE
+     MATERIALLOCAL.FILIAL=:FILIAL
+INTO
+    :CODIGO,  :SALDO
+do BEGIN 
+       suspend;
+end
+
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+--valor do item
+for SELECT
+      MATERIALFILIAL.IDITEM,
+      MATERIALFILIAL.CUSTOMEDIO
+FROM
+    MATERIALFILIAL 
+WHERE
+     MATERIALFILIAL.FILIAL=:FILIAL
+INTO
+     :CODIGO, :VALORUNITARIO
+do BEGIN 
+       suspend;
+end
+
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+--reserva de notas
+for SELECT
+    COMPOSICAOMERCNOTA.IDITEM,
+    COMPOSICAOMERCNOTA.QUANTIDADE
+
+FROM
+    COMPOSICAOMERCNOTA
+
+INNER JOIN
+      NOTAFISCAL ON
+                 (NOTAFISCAL.FILIAL=COMPOSICAOMERCNOTA.FILIAL AND
+                  NOTAFISCAL.IDNOTA=COMPOSICAOMERCNOTA.IDNOTA)
+INNER JOIN NATUREZAOPERACAO ON
+      (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+
+WHERE
+    COMPOSICAOMERCNOTA.FILIAL=:FILIAL AND
+    COMPOSICAOMERCNOTA.IDITEM=:codigo AND
+    NOTAFISCAL.DATAEMISSAO IS NULL AND
+    NOTAFISCAL.DATACANCELAMENTO IS NULL AND
+    NOTAFISCAL.ENTRADASAIDA='S' AND
+    NOTAFISCAL.DEVOLUCAO='N' AND
+    NATUREZAOPERACAO.ESTOQUE='S' AND
+    NATUREZAOPERACAO.ENTRADASAIDA='S'
+INTO :codigo, :reservanota
+do BEGIN 
+       suspend;
+end 
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+--reserva de ordem de produção
+for SELECT  composicaoop.CODIGO,
+         (composicaoop.quantidade-
+            coalesce(
+                (select sum(materialmovimentoestoque.quantidade)
+                from movimentoestoque
+                inner join materialmovimentoestoque on (
+                    movimentoestoque.filial=materialmovimentoestoque.filial
+                    and movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+                where movimentoestoque.filial=composicaoop.filial
+                and movimentoestoque.idmovimento=composicaoop.idmovimento
+                and movimentoestoque.idopitem=composicaoop.idmovimentomaterial
+                and movimentoestoque.tipomovimento='09'
+                and materialmovimentoestoque.iditem=composicaoop.codigo
+                and materialmovimentoestoque.lote=composicaoop.lote),0))
+FROM composicaoop
+inner join materialmovimentoestoque on (
+                    materialmovimentoestoque.filial=composicaoop.filial
+            and materialmovimentoestoque.idmovimento=composicaoop.idmovimento
+    and materialmovimentoestoque.idmovimentomaterial=composicaoop.idmovimentomaterial)
+inner join movimentoestoque on (movimentoestoque.filial=materialmovimentoestoque.filial
+                and movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+WHERE composicaoop.filial=:FILIAL
+
+and materialmovimentoestoque.concluido='N'
+and COALESCE (movimentoestoque.cancelado,'N')<>'S'
+PLAN JOIN (COMPOSICAOOP INDEX (I_COMPOSICAOOP_LOTE),MATERIALMOVIMENTOESTOQUE INDEX (RDB$PRIMARY199),MOVIMENTOESTOQUE INDEX (RDB$PRIMARY200))
+into :codigo, :reservaop
+do BEGIN 
+       suspend;
+end
+    SALDO=0;
+    RESERVAPEDIDO=0;
+    RESERVANOTA=0;
+    RESERVAOP=0;
+    RESERVAPEDCOMPRA=0;
+    VALORUNITARIO =0;
+
+--reserva de mercdoriaspedcompra
+
+for SELECT
+    MERCADORIASPEDCOMPRA.CODIGO,
+    (MERCADORIASPEDCOMPRA.quantidade-(COALESCE(MERCADORIASPEDCOMPRA.QTDEENTREGUE,0)))
+FROM MERCADORIASPEDCOMPRA
+INNER JOIN PEDIDOCOMPRA ON (
+    MERCADORIASPEDCOMPRA.FILIAL=PEDIDOCOMPRA.FILIAL and
+    MERCADORIASPEDCOMPRA.IDNOTA=PEDIDOCOMPRA.IDNOTA)
+WHERE
+    MERCADORIASPEDCOMPRA.BAIXA='N'
+AND PEDIDOCOMPRA.DATAAPROVACAO IS NOT null
+AND PEDIDOCOMPRA.DATACANCELAMENTO IS NULL
+AND MERCADORIASPEDCOMPRA.FILIAL=:FILIAL
+--AND MERCADORIASPEDCOMPRA.CFOP IN ('1902','1903','1925','2902','2903','2925')
+INTO :codigo, :RESERVAPEDCOMPRA
+do BEGIN 
+       suspend;
+end
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ITENSCOMRESERVAS TO  SYSDBA;
+

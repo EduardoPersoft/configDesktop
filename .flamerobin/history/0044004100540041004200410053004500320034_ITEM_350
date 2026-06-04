@@ -1,0 +1,6 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    itemestoque.localizacao
+from 
+    itemestoque

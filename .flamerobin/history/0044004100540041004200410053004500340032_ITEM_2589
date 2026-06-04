@@ -1,0 +1,3 @@
+select pedido,dataEntrega from PEDIDO
+where filial=110 
+and idnota=11545

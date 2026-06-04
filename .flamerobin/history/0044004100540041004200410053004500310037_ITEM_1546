@@ -1,0 +1,85 @@
+update 
+    notafiscal
+set
+    notafiscal.BASECOFINSMERC=(
+        select 
+            sum(mercadoriasnota.basecofins)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+    notafiscal.VALORCOFINS=(
+        select 
+            sum(mercadoriasnota.vlrcofins)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+
+    notafiscal.BASEPISPASEPMERC=(
+        select 
+            sum(mercadoriasnota.BASEPIS)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+    notafiscal.valorpis=(
+        select 
+            sum(mercadoriasnota.VLRPISPASEP)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota)
+where
+    notafiscal.filial=1 and
+    notafiscal.idnota>=306406 
+
+update 
+    mercadoriasnota
+set
+    mercadoriasnota.CSTCOFINS=4,
+    mercadoriasnota.PCOFINS=0,
+    mercadoriasnota.basecofins=0,
+    mercadoriasnota.VLRCOFINS=0,
+    
+    mercadoriasnota.cstpis=4,
+    mercadoriasnota.ppis=0,
+    mercadoriasnota.basepis=0,
+    mercadoriasnota.VLRPISPASEP=0
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406 and
+    mercadoriasnota.cstpis=2 and
+    substring(mercadoriasnota.cfop from 1 for 1) in ('5', '6', '7')
+    
+update 
+    mercadoriasnota
+set
+    mercadoriasnota.CSTCOFINS=98,
+    mercadoriasnota.PCOFINS=0,
+    mercadoriasnota.basecofins=0,
+    mercadoriasnota.VLRCOFINS=0,
+    
+    mercadoriasnota.cstpis=98,
+    mercadoriasnota.ppis=0,
+    mercadoriasnota.basepis=0,
+    mercadoriasnota.VLRPISPASEP=0
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406 and
+    mercadoriasnota.cstpis=2 and
+    substring(mercadoriasnota.cfop from 1 for 1) in ('1', '2')    
+    
+
+update
+    MERCADORIASNOTA
+set 
+    mercadoriasnota.ppis=0
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406 and
+    mercadoriasnota.cstpi in (4,98)
+    

@@ -1,0 +1,80 @@
+SELECT
+    PEDIDO.FILIAL,
+    PEDIDO.IDNOTA,
+    CADASTROPARCEIROS.IDORIGinal,
+    CARRINHO.NUMEROPEDIDOCLIENTE,    
+    CASE 
+        WHEN
+            PEDIDO.CANCELAMENTO ='S' 
+        THEN 'CANCELED'
+
+        WHEN
+            exists ( SELECT
+                                *
+                          FROM
+                                MATERIALMOVIMENTOESTOQUE
+                            INNER JOIN 
+                                MOVIMENTOESTOQUE ON
+                                    MOVIMENTOESTOQUE.FILIAL = MATERIALMOVIMENTOESTOQUE.FILIAL AND
+                                    MOVIMENTOESTOQUE.IDMOVIMENTO = MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+                        WHERE
+                            MATERIALMOVIMENTOESTOQUE.FILIAL=C_LOGPEDIDOECOMMERCE.FILIAL AND
+                            MATERIALMOVIMENTOESTOQUE.IDPEDIDO=C_LOGPEDIDOECOMMERCE.IDNOTA AND
+                            MOVIMENTOESTOQUe.TIPOMOVIMENTO = '13' AND
+                            MOVIMENTOESTOQUE.COLETADATA IS NOT NULL ) THEN 'SENT'
+        WHEN
+            exists (select 
+                            * 
+                        from 
+                            MERCADORIASNOTA
+                        inner join 
+                            notafiscal on 
+                                mercadoriasnota.filial=notafiscal.filial AND
+                                mercadoriasnota.idnota=notafiscal.idnota 
+                        WHERE
+                            mercadoriasnota.filialped = pedido.filial AND
+                            mercadoriasnota.idpedido = pedido.IDNOTA AND
+                            notafiscal.cancelamento = 'N' AND
+                            notafiscal.NUMERONOTA is not null ) 
+        then 'BILLED'                        
+        WHEN             
+            ( SELECT
+                    COUNT(*) 
+              FROM
+                    MATERIALMOVIMENTOESTOQUE
+                WHERE
+                    MATERIALMOVIMENTOESTOQUE.FILIAL=C_LOGPEDIDOECOMMERCE.FILIAL AND
+                    MATERIALMOVIMENTOESTOQUE.IDPEDIDO=C_LOGPEDIDOECOMMERCE.IDNOTA AND
+                    MATERIALMOVIMENTOESTOQUE.CONCLUIDO='S') 
+                =    
+            (SELECT
+                    COUNT(*) 
+              FROM
+                MERCADORIASPED
+            WHERE
+                MERCADORIASPED.FILIAL=C_LOGPEDIDOECOMMERCE.FILIAL AND
+                MERCADORIASPED.IDNOTA=C_LOGPEDIDOECOMMERCE.IDNOTA) 
+        THEN 'SEPARETED'                                                     
+        when pedido.LIBERADOFINANCEIRO='S' then  'PAID'
+        ELSE 'NEW'
+    END,
+    
+    C_LOGPEDIDOECOMMERCE.INCLUSAO,
+    C_LOGPEDIDOECOMMERCE.ENVIADO,
+    C_LOGPEDIDOECOMMERCE.STATUS_CODE,
+    cast(substring(C_LOGPEDIDOECOMMERCE.CONTENT from 1 for 100) as varchar(100))
+FROM
+    C_LOGPEDIDOECOMMERCE
+INNER JOIN    
+    PEDIDO ON
+       C_LOGPEDIDOECOMMERCE.FILIAL = PEDIDO.FILIAL AND
+       C_LOGPEDIDOECOMMERCE.IDNOTA = PEDIDO.IDNOTA 
+INNER JOIN
+    CARRINHO ON
+        CARRINHO.FILIAL = C_LOGPEDIDOECOMMERCE.FILIAL AND
+        CARRINHO.ID = C_LOGPEDIDOECOMMERCE.IDNOTA
+INNER JOIN
+    CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO = PEDIDO.DESTINATARIO
+WHERE 
+    COALESCE(C_LOGPEDIDOECOMMERCE.STATUS_CODE, '') NOT IN ('200', '201')

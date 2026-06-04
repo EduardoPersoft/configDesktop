@@ -1,0 +1,2 @@
+select * from materiallocal
+where iditem='MPP02TRAC85ME'

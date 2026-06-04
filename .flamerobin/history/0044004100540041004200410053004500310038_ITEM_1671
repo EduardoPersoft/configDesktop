@@ -1,0 +1,9 @@
+select 
+    codigo, 
+    descricao, 
+    c_cor 
+from 
+    itemestoque
+where
+    codigo in ('PE-24859', 'PE-24860')
+

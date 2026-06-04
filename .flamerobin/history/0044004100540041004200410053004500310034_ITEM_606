@@ -1,0 +1,10 @@
+create table c_composicaomercorc(
+filial integer not null,
+idnota integer not null,
+sequencia integer not null,
+tipo smallint,
+gramatura decimal(12,2),
+custokg decimal(12,2),
+custoM2 decimal(12,2),
+constraint pk_c_composicaomercorc
+primary key (filial,idnota,sequencia))

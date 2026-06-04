@@ -1,0 +1,12 @@
+select 
+    extract(year from provisaorec.vencimento) as ano,
+    extract(month from provisaorec.vencimento) as mes,
+    sum(provisaorec.valor)
+from
+    PROVISAOREC
+where
+    provisaorec.filial=1 and
+    provisaorec.VENCIMENTO between '01.01.2026' and '31.12.2026'
+group by
+    extract(year from provisaorec.vencimento) as ano,
+    extract(month from provisaorec.vencimento) as mes

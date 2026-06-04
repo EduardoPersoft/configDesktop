@@ -1,0 +1,2 @@
+select * from pedido
+where vendedor is null and datacadastro>='01.01.2024'

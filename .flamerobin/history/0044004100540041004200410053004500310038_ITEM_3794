@@ -1,0 +1,2 @@
+select * from vendedoresped
+where idnota=75706

@@ -1,0 +1,2 @@
+select  * from SERVICOSPEDCOMPRA
+where filial=110 and idnota=2026

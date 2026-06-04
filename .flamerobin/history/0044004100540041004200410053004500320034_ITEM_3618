@@ -1,0 +1,29 @@
+SELECT 
+               CAST('NV' AS CHAR(2)) AS origem,
+               notafiscal.uf AS uf,
+               notafiscal.entradasaida,
+               CAST(mercadoriasnota.cfop AS VARCHAR(4)),
+               notafiscal.devolucao,
+               COALESCE(mercadoriasnota.acrescimonota,0),
+               COALESCE(mercadoriasnota.descontonota,0),
+               COALESCE(mercadoriasnota.vlrdescproduto,0),
+               COALESCE(mercadoriasnota.frete,0),
+               COALESCE(mercadoriasnota.seguro,0),
+               COALESCE(mercadoriasnota.outdespacessor,0),
+               COALESCE(mercadoriasnota.vlricmsrecolhido,0)+COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0),
+               mercadoriasnota.cstipi,
+               COALESCE(mercadoriasnota.ipibase, 0),
+               COALESCE(mercadoriasnota.valoripi,0),
+               mercadoriasnota.vlrfinalmercad,
+               'N'
+         FROM notafiscal
+         INNER JOIN mercadoriasnota ON (
+               notafiscal.filial=mercadoriasnota.filial AND
+               notafiscal.idnota=mercadoriasnota.idnota)
+         left JOIN modelodocto ON (notafiscal.modelo=modelodocto.id)
+         WHERE notafiscal.filial=5
+         and notafiscal.dataemissao between '01.08.2022' and '31.08.2022'
+         AND coalesce(notafiscal.cancelamento,'N')<>'S'
+         AND modelodocto.blocosped='C'
+         AND cast(modelodocto.codmodelofiscal as char(2)) IN ('55','1','1B','4','5')
+         and uf='BA'

@@ -1,0 +1,194 @@
+select m1.filial,
+       m1.idnota,
+       m1.idmercadoria,
+       m1.codigo itemestoque_codigo,
+       m1.descricao itemestoque_descricao,
+       m1.desreduzida,
+
+       m1.classificacaotributaria as itemestoque_tributacaoicms,
+       m1.tipomercadoria as itemestoque_tipoproduto,
+       m1.quantidade,
+       
+
+       (coalesce(m1.vlrfinalmercad,0)+
+       coalesce(m1.valoripi,0)+
+       coalesce(m1.vlricmsrecolhido,0))/
+       case when coalesce(m1.quantidade, 0) = 0 
+       then 1 else m1.quantidade end as precounitariocomimposto,
+
+       coalesce(m1.vlrfinalmercad,0)+
+       coalesce(m1.valoripi,0)+
+       coalesce(m1.vlricmsrecolhido,0)
+            mercped_vlrcomimposto,
+
+       m1.precounitario          mercped_precounitario,
+       m1.vlrtotalmercad         mercped_vlrtotalmercad,
+       m1.vlrfinalmercad         mercped_vlrfinalmercad,
+
+       m1.descontonota as mercped_descontonota,           
+       m1.acrescimonota as mercped_acrescimonota, 
+       m1.comissao               mercped_comissao               ,
+       m1.margemlucro            mercped_margemlucro            ,
+       m1.margemcontribuicao     mercped_margemcontribuicao     ,
+       m1.variavel               mercped_variavel               ,
+
+       m1.custo                  mercped_custo                  ,	
+       m1.fatorimpostos          mercped_fatorimpostos          ,
+
+       itemestoquexarquivo.nomearquivo itemestoque_nomearquivo,
+       itemestoque.definicao itemestoque_definicao,
+       itemestoque.descriminacao itemestoque_descriminacao,
+       itemestoque.referencia itemestoque_referencia,
+       grupomercadoria.descricao as itemestoque_grupo,
+       familia.descricao as itemestoque_familia,
+
+       ( select
+            first 1
+            p2.datacadastro
+        from
+            pedido p2
+        inner join
+            mercadoriasped m2 on
+                m2.filial=p2.filial and
+                m2.idnota=p2.idnota
+        where
+            p2.filial=p1.filial and
+            p2.destinatario=p1.destinatario and
+            m2.codigo=itemestoque.codigo
+        plan join (p2 index (i_pedido_cliente_emissao),
+                  m2 index (rdb$primary837) )
+         order by 
+            p2.datacadastro desc, p1.idnota desc          
+                  ) as mercped_dataultimacompra ,
+       ( select
+            first 1
+            m2.precounitario
+        from
+            pedido p2
+        inner join
+            mercadoriasped m2 on
+                m2.filial=p2.filial and
+                m2.idnota=p2.idnota
+        where
+            p2.filial=p1.filial and
+            p2.destinatario=p1.destinatario and
+            m2.codigo=itemestoque.codigo       
+        plan join (p2 index (i_pedido_cliente_emissao),
+                  m2 index (rdb$primary837) )
+         order by 
+            p2.datacadastro desc, p1.idnota desc          
+                  ) as mercped_precoultimacompra ,
+
+       (select first 1 resumocompras.emissao from resumocompras
+        where resumocompras.item=coalesce(itemestoque.itembase, m1.codigo)
+        order by emissao desc) as ultimacompra,                  
+
+       coalesce((select 
+            sum(materiallocal.saldototal)
+        from 
+            materiallocal 
+        inner join
+            local on
+                local.id=materiallocal.idlocal
+        where
+        materiallocal.iditem=m1.codigo and
+            local.disponivel='S'),0)
+        -
+        coalesce((select 
+            sum(m2.quantidade - coalesce(m2.qtdeenviada,0))
+         from
+            mercadoriasped m2
+         inner join
+            pedido p2 on
+                p2.filial=m2.filial and
+                p2.idnota=m2.idnota and
+                p2.cancelamento='n' and
+                p2.dataemissao is not null 
+         where
+            m2.baixa='N' and
+            m2.idnota<>m1.idnota and
+            m2.codigo=m1.codigo
+                         ),0)
+             mercped_estoquedisponivel,
+    
+       m1.classifiscal as cf_cfiscal,
+       classificacaofiscal.descricao as cf_descricao,
+       classificacaofiscal.cest as cf_cest,
+
+       m1.sistemacalculaicms,
+       m1.icms,
+       m1.origemmercadoria as itemestoque_codigotributacao,
+      m1.situacaotribut as mercped_situacaotribut,
+       m1.icmsbase mercped_icmsbase,
+       m1.aliquotaicms mercped_aliquotaicms,
+       m1.valoricms mercped_valoricms,
+       m1.icmsoutros mercped_icmsoutros,
+       m1.icmsisento mercped_icmsisento,
+
+       m1.sistemacalculasubstituicao,
+       m1.plucro,
+       m1.vlrbasesubst,
+      m1.aliquotasubstituto,
+      m1.vlricmssubst,
+       m1.icmsstfcp,
+       m1.icmsstfcpvalor,
+       m1.vlricmsrecolhido,
+
+       m1.sistemacalculaipi,
+       m1.ipi,
+       m1.cstipi mercped_cstipi,
+       m1.ipibase mercped_ipibase,
+       m1.pipi mercped_pipi,
+       m1.valoripi mercped_valoripi,
+       m1.ipioutros mercped_ipioutros,
+       m1.ipiisento mercped_ipiisento,
+    
+       m1.sistemacalculapis,
+       m1.cstpis as mercped_cstpis,
+       m1.basepis as mercped_basepis,
+       m1.ppis as mercped_ppis,
+       m1.vlrpispasep as mercped_vlrpispasep,
+
+       m1.sistemacalculacofins,
+      m1.cstcofins as mercped_cstcofins,
+      m1.basecofins as mercped_basecofins,
+      m1.pcofins as mercped_pcofins,
+      m1.vlrcofins as mercped_vlrcofins,
+       m1.vtottrib as mercped_vtottrib,
+       m1.ptottrib as mercped_ptottrib ,
+
+       m1.cfop as mercped_cfop,
+
+	   itemestoque.estocado itemestoque_estocado,
+	   m1.pesoliquido as mercped_pesoliquido,
+ 	   m1.pesobruto as mercped_pesobruto, 
+       m1.qtdeproduto as mercped_qtdeproduto,
+       m1.qtdevolume as mercped_qtdevolume,
+      m1.quantidadeestoque as mercped_quantidadeestoque,
+    
+      m1.estocado,
+      itemestoque.pesoliquido itemestoque_pesoliquido,
+       itemestoque.pesobruto itemestoque_pesobruto,
+       itemestoque.quantidadeunidade itemestoque_quantidadeunidade,
+       itemestoque.quantidadevolume itemestoque_quantidadevolume,
+       m1.fatorestoque as itemestoque_fatorunidade,
+       m1.unidadeestoque  as mercped_unidadeestoque,
+    
+       m1.frete as mercped_frete,
+       m1.seguro as mercped_seguro,
+       m1.outdespacessor as mercped_outdespacessor,
+
+      cast('n' as char(1)) as p_check
+    
+from  NOTAFISCAL p1
+inner join  MERCADORIASNOTA m1 on
+    p1.filial=m1.filial and p1.idnota=m1.idnota
+left join classificacaofiscal on classificacaofiscal.cfiscal=m1.classifiscal
+left join itemestoque on itemestoque.codigo=m1.codigo
+left join grupomercadoria on (grupomercadoria.grupo=itemestoque.grupo)
+left join familia on (familia.id=itemestoque.familia)
+left join itemestoquexarquivo on (
+    itemestoquexarquivo.codigo=itemestoque.codigo and
+    itemestoquexarquivo.ordem=0)
+--where p1.uuid = ?
+order by m1.idmercadoria

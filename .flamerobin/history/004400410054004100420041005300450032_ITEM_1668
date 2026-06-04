@@ -1,0 +1,1 @@
+select * from c_i_movest5 where codtiposaida=2 and codpeca='13567'

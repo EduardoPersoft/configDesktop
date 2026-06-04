@@ -1,0 +1,9 @@
+update mercadoriasnota
+set mercadoriasnota.QTDBAIXA=quantidade
+where filial=110 and
+idnota in (
+3942,
+3936,
+3931,
+3815,
+3854)

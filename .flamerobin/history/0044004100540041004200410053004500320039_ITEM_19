@@ -1,0 +1,40 @@
+select 
+    registroContato.registro,
+    registroContato.processamento,
+    registroContato.abertura,
+    registroContato.tipoOcorrencia tipoOcorrenciaId,
+    TIPOOCORRENCIA.DESCRICAO tipoOcorrenciaDescricao,    
+    registroContato.atendente atendenteId,
+    atendente.USUARIO atendenteUsuario,
+   
+    registroContato.PARCEIRO,
+    cadParceiro.nome,
+    cadParceiro.telefone,
+    registroContato.contato,
+    
+    registroContato.assunto,
+    registroContato.descricao,
+    
+    registroContato.responsavel responsavelId,
+    responsavel.usuario responsavelNome.
+    
+    registroContato.previsaoResposta,
+    registroContato.fechamento,
+    
+    registroContato.usuario,
+    registroContato.dataAlteracao
+from 
+    registroContato
+inner join
+    cadastroParceiros cadParceiro on
+        cadParceiro.cadastro=registroContato.parceiro
+inner join
+    TIPOOCORRENCIA on
+        tipoOcorrencia.id=registroContato.TIPOOCORRENCIA
+inner join
+    usuario atendente on
+        atendente.id=registroContato.ATENDENTE
+inner join
+    usuario responsavel on
+        responsavel.id=registroContato.RESPONSAVEL
+        

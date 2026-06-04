@@ -1,0 +1,5 @@
+INSERT INTO LOGVIEW (ID, DOCUMENTO, UUID, DATAHORA)
+VALUES (coalesce((select max(logview.id) from logview), 0)+1, ?, ?,cast('now' as timestamp))
+
+
+select * from logview

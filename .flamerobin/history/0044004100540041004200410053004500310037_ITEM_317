@@ -1,0 +1,6 @@
+update
+    TITULOREC
+SET
+    titulorec.dataenvio = null
+WHERE
+    titulorec.DATAENVIO='30.07.2021'

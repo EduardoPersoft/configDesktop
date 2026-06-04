@@ -1,0 +1,25 @@
+select
+    locallote.iditem,
+    locallote.lote,
+    sum(locallote.quantidade) quantidade,
+    sum(locallote.quantidade)*
+    coalesce(ITEMCUSTODATA.CUSTOUNITARIO,1) as valor
+from
+    LOCALLOTE
+left join
+    ITEMCUSTODATA on
+        ITEMCUSTODATA.FILIAL=locallote.filial and
+        ITEMCUSTODATA.codigo=locallote.IDITEM and
+        itemcustodata.DATAINVENTARIO='2025-10-31'
+where
+    locallote.lote in ('116080/1/10',
+'206666/1',
+'205586/1',
+'114312/1',
+'73930/1',
+'74006/1',
+'3150/1')
+group by
+    locallote.filial,
+    locallote.iditem,
+    locallote.lote

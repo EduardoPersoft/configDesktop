@@ -1,0 +1,1 @@
+alter table local add permiteexpedicao char(1)

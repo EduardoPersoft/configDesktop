@@ -1,0 +1,4 @@
+UPDATE MOVIMENTOESTOQUE
+SET MOVIMENTOESTOQUE.EMISSAO='30.04.2024'
+where movimentoestoque.emissao>'30.04.2024'
+and usuario='ELIANE'

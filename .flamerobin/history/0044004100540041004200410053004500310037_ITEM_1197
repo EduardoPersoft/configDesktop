@@ -1,0 +1,13 @@
+update 
+    mercadoriasnotacompra 
+set
+    mercadoriasnotacompra.ppis=0,
+    mercadoriasnotacompra.basepis=0,    
+    mercadoriasnotacompra.VLRPISPASEP=0,
+    mercadoriasnotacompra.pcofins=0,
+    mercadoriasnotacompra.basecofins=0,    
+    mercadoriasnotacompra.vlrcofins=0
+where 
+    MERCADORIASNOTACOMPRA.filial=1 and 
+    mercadoriasnotacompra.idnota>=5219 and
+    mercadoriasnotacompra.cst<>50

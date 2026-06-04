@@ -1,0 +1,34 @@
+SELECT
+       I1.CODIGO,
+       I1.REFERENCIA,
+       I1.DESCRICAO,
+       I1.unidade,
+       ARQ1.NOMEARQUIVO,
+       GRUPOMERCADORIA.DESCRICAO GRUPO,
+       FAMILIA.DESCRICAO FAMILIA, 
+        I1.DEFINICAO,
+        coalesce(I1.metatag, '') as metatag
+      
+        
+      
+        
+FROM itemestoque i1
+LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=I1.CLASSIFISCAL)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ1 ON (ARQ1.CODIGO=I1.CODIGO AND ARQ1.ORDEM=0)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ2 ON (ARQ2.CODIGO=I1.CODIGO AND ARQ2.ORDEM=1)
+LEFT JOIN UNIDADE ON (UNIDADE.UNIDADE=CASE COALESCE(I1.UNIDADE2, '') WHEN ''
+                                      THEN I1.UNIDADE
+                                      ELSE I1.UNIDADE2 END)  
+LEFT JOIN 
+    GRUPOMERCADORIA ON 
+        GRUPOMERCADORIA.GRUPO=I1.GRUPO
+LEFT JOIN 
+    FAMILIA ON 
+        FAMILIA.ID=I1.FAMILIA
+WHERE 
+    I1.codigo LIKE 'I3-%' AND
+     exists (
+    select * from composicaoitem
+    where composicaoitem.iditem=i1.codigo)
+order by 
+    i1.codigo

@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where  c_largura=320 and iditem='MPP01METAL'

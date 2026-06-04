@@ -1,0 +1,290 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_IMPORTARCADASTROCLIENTES
+RETURNS (
+    CODIGO INTEGER,
+    CADASTRO INTEGER,
+    ACAO VARCHAR(20) )
+
+AS
+declare variable   RAZAO Varchar(60);
+declare variable   FANTASIA Varchar(60);
+declare variable   VENDEDOR Integer;
+declare variable   DOCUMENTO Varchar(20);
+declare variable   INSCEST Varchar(20);
+declare variable   INSCMUN Varchar(20);
+declare variable   ATIVEMPRESARIAL Integer;
+declare variable   REPRESENTANTE Varchar(60);
+declare variable   NC Varchar(60);
+declare variable   CC Varchar(60);
+declare variable   CONTATO1 Varchar(60);
+declare variable   DEPTO1 Varchar(60);
+declare variable   CONTATO2 Varchar(60);
+declare variable   DEPTO2 Varchar(60);
+declare variable   FONE1 Varchar(20);
+declare variable   FONE2 Varchar(20);
+declare variable   REG Varchar(20);
+declare variable   CDFT Varchar(20);
+declare variable   SIMPLES Char(1);
+declare variable   ENDERECO Varchar(60);
+declare variable   BAIRRO Varchar(72);
+declare variable   CIDADE Varchar(60);
+declare variable   UF Varchar(2);
+declare variable   CEP Varchar(9);
+declare variable   CXPOST Varchar(20);
+declare variable   TELEFAX Varchar(20);
+declare variable   ENDCOBR Varchar(60);
+declare variable   BAIRROCOBR Varchar(72);
+declare variable   CIDADECOBR Varchar(60);
+declare variable   UFCOBR Varchar(2);
+declare variable   CEPCOBR Varchar(9);
+declare variable   CXPOSTCOBR Varchar(20);
+declare variable   EMAIL Varchar(60);
+declare variable   EMAILNFE Varchar(60);
+declare variable   DOCUMENTO2 Varchar(14);
+declare variable   qtdcliente integer;
+   
+BEGIN
+  /* write your code here */ 
+ 
+    CODIGO = NULL;
+    CADASTRO = NULL;
+    ACAO = 'NUMERACAO NOVA';
+    SUSPEND;
+    
+    for select
+        t_Cadastro.CODIGO
+    from 
+        t_Cadastro
+    WHERE   
+        T_CADASTRO.CADASTRO IS NULL
+    into :codigo do BEGIN
+        
+        select 
+            max(cadastroparceiros.cadastro)
+        FROM
+            CADASTROPARCEIROS
+        into
+            :cadastro;
+        
+        update 
+            T_CADASTRO
+        SET
+            t_cadastro.cadastro = :cadastro.
+            t_cadastro.documento2 = t_cadastro.DOCUMENTO
+        where 
+            t_cadastro.codigo = :codigo;
+    end
+        
+    CODIGO = NULL;
+    CADASTRO = NULL;
+    ACAO = 'INSERCAO CADASTRO';
+    SUSPEND;
+    
+    
+    INSERT INTO CADASTROPARCEIROS(
+        CADASTRO,
+        C_CODCLIENTEANTIGO,
+        RAZAOSOCIAL,
+        NOME,
+        DOCUMENTO,
+        INSCESTADUAL,
+        INSCMUNICIPAL,
+        PRINCIPALCONTATO,
+        EMAIL,
+        LOGRADOURO,
+        NUMERO,
+        COMPLEMENTO,
+        BAIRRO,
+        CIDADE,
+        UF,
+        CEP)   
+
+    SELECT 
+        t_cadastro.cadastro,
+        T_CADASTRO.CODIGO,
+        RAZAO,
+        FANTASIA,
+        DOCUMENTO2,
+        INSCEST,
+        INSCMUN,
+        CONTATO1,
+        SUBSTRING(:EMAIL FROM 1 FOR  50),
+        ENDERECO,
+        NULL,
+        NULL,
+        BAIRRO,
+        CIDADE,
+        UF,
+        SUBSTRING(CEP FROM 1 FOR 5)||SUBSTRING(CEP FROM 7 FOR 3)   
+    FROM T_CADASTRO
+    WHERE NOT EXISTS
+    (SELECT * FROM CADASTROPARCEIROS WHERE CADASTROPARCEIROS.C_CODCLIENTEANTIGO=T_CADASTRO.CODIGO);
+    
+    FOR select 
+        CODIGO,
+        RAZAO,
+        FANTASIA,
+        VENDEDOR,
+        DOCUMENTO,
+        INSCEST,
+        INSCMUN,
+        ATIVEMPRESARIAL,
+        REPRESENTANTE,
+        NC,
+        CC,
+        CONTATO1,
+        DEPTO1,
+        CONTATO2,
+        DEPTO2,
+        FONE1,
+        FONE2,
+        REG,
+        CDFT,
+        SIMPLES,
+        ENDERECO,
+        BAIRRO,
+        CIDADE,
+        UF,
+        CEP,
+        CXPOST,
+        TELEFAX,
+        ENDCOBR,
+        BAIRROCOBR,
+        CIDADECOBR,
+        UFCOBR,
+        CEPCOBR,
+        CXPOSTCOBR,
+        EMAIL,
+        EMAILNFE,
+        DOCUMENTO2,
+        CADASTRO
+    from 
+        T_CADASTRO
+    INTO        
+        CODIGO,
+        RAZAO,
+        FANTASIA,
+        VENDEDOR,
+        DOCUMENTO,
+        INSCEST,
+        INSCMUN,
+        ATIVEMPRESARIAL,
+        REPRESENTANTE,
+        NC,
+        CC,
+        CONTATO1,
+        DEPTO1,
+        CONTATO2,
+        DEPTO2,
+        FONE1,
+        FONE2,
+        REG,
+        CDFT,
+        SIMPLES,
+        ENDERECO,
+        BAIRRO,
+        CIDADE,
+        UF,
+        CEP,
+        CXPOST,
+        TELEFAX,
+        ENDCOBR,
+        BAIRROCOBR,
+        CIDADECOBR,
+        UFCOBR,
+        CEPCOBR,
+        CXPOSTCOBR,
+        EMAIL,
+        EMAILNFE,
+        DOCUMENTO2,
+        CADASTRO DO BEGIN 
+        
+        ACAO = 'RECUPERAR CADASTRO';
+        SUSPEND;
+        
+        SELECT 
+            CADASTROPARCEIROS.CADASTRO
+        FROM 
+            CADASTROPARCEIROS
+        WHERE
+            CADASTROPARCEIROS.C_CODCLIENTEANTIGO = :CODIGO
+        INTO    
+            :CADASTRO;
+
+        ACAO = 'ATUALIZAR CADASTRO';
+        suspend;
+             
+        UPDATE 
+                CADASTROPARCEIROS
+        SET
+                CADASTROPARCEIROS.DOCUMENTO = :DOCUMENTO,
+                CADASTROPARCEIROS.INSCESTADUAL = :INSCEST,
+                CADASTROPARCEIROS.INSCMUNICIPAL = :INSCMUN,
+                CADASTROPARCEIROS.LOGRADOURO = :ENDERECO,
+                CADASTROPARCEIROS.BAIRRO = :BAIRRO,
+                CADASTROPARCEIROS.UF = :UF,                
+                CADASTROPARCEIROS.CEP = SUBSTRING(CEP FROM 1 FOR 5)||SUBSTRING(CEP FROM 7 FOR 3),                
+                CADASTROPARCEIROS.EMAIL = SUBSTRING(:EMAIL FROM 1 FOR 400),
+                CADASTROPARCEIROS.EMAILNFE = SUBSTRING(:EMAILNFE FROM 1 FOR 400),
+                CADASTROPARCEIROS.TELEFONE = :TELEFAX,
+                CADASTROPARCEIROS.TELEFONECOMERCIAL = :FONE1,
+                CADASTROPARCEIROS.CELULAR = :FONE2,
+                CADASTROPARCEIROS.OPTANTESIMPLES = :SIMPLES
+        WHERE
+                CADASTROPARCEIROS.CADASTRO = :CADASTRO;
+
+        SELECT 
+                  COUNT(CLIENTES.CADASTRO)
+               FROM
+                   CLIENTES
+               WHERE
+                  CLIENTES.CADASTRO=:CADASTRO
+        into :qtdcliente;
+
+        IF ( qtdcliente = 0) THEN BEGIN
+                   ACAO = 'INSERIR CADASTRO';
+                  suspend;
+                  
+                  INSERT INTO CLIENTES(
+                    CADASTRO,
+                    CLIENTES.LOGRADOUROCOBRANCA,
+                    CLIENTES.NUMEROCOBRANCA,
+                    CLIENTES.COMPLEMENTOCOBRANCA,
+                    CLIENTES.BAIRROCOBRANCA,
+                    CLIENTES.CIDADECOBRANCA,
+                    CLIENTES.UFCOBRANCA,
+                    CLIENTES.CEPCOBRANCA) 
+                VALUES (
+                    :CADASTRO,
+                    :ENDCOBR,
+                    NULL,
+                    NULL,
+                    :BAIRROCOBR,
+                    :CIDADECOBR,
+                    :UFCOBR,
+                    SUBSTRING(:CEPCOBR FROM 1 FOR 5)||SUBSTRING(:CEPCOBR FROM 7 FOR 3)
+                );
+        END
+   
+        ACAO = 'ATUALIZAR CLIENTE';
+        suspend;
+
+        UPDATE
+            CLIENTES
+         SET
+            CLIENTES.VENDEDOR = (SELECT cven.CADASTRO FROM CADASTROPARCEIROS cven WHERE cven.C_CODVENDEDORANTIGO = case :NC when '' then null else :nc end),
+            CLIENTES.ATENDENTE = (SELECT caten.CADASTRO FROM CADASTROPARCEIROS  caten WHERE caten.C_CODVENDEDORANTIGO =case :VENDEDOR when 0 then null else :vendedor end)
+        WHERE
+            CLIENTES.CADASTRO = :CADASTRO;                    
+    END
+
+ 
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_IMPORTARCADASTROCLIENTES TO  SYSDBA;
+

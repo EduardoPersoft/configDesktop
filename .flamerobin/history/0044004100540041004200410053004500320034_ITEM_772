@@ -1,0 +1,35 @@
+SELECT  DEST.CADASTRO,
+        DEST.NOME,
+        mercadoriasnota.FILIAL,
+        mercadoriasnota.IDNOTA,
+        mercadoriasnota.idmercadoria,       
+        NOTAFISCAL.NUMERONOTA,
+        NOTAFISCAL.DATAEMISSAO,
+        MERCADORIASNOTA.CODIGO,
+        ITEMESTOQUE.DESCRICAO,       
+        MERCADORIASNOTA.QUANTIDADE,
+        mercadoriasnota.precounitario,
+        MERCADORIASNOTA.VLRFINALMERCAD,
+        (select sum(materiallocal.saldototal) 
+         from MATERIALLOCAL
+         inner join local on materiallocal.idlocal=local.id
+         where materiallocal.filial=mercadoriasnota.filial AND
+         materiallocal.iditem=mercadoriasnota.codigo AND
+         local.disponivel = 'S') as saldo,
+         listaProdutoPadrao.preco as precoNormal,
+         listaProdutoDesconto.preco as precoDesconto
+         
+FROM NOTAFISCAL
+INNER JOIN MERCADORIASNOTA ON (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL AND
+NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+INNER JOIN CADASTROPARCEIROS DEST ON (NOTAFISCAL.DESTINATARIO = DEST.CADASTRO)
+INNER JOIN CADASTROPARCEIROS FILIAL ON (NOTAFISCAL.FILIAL = FILIAL.CADASTRO)
+INNER JOIN ITEMESTOQUE ON (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+left join listapreco listaPadrao on listapadrao.listapadrao='S'
+left join listaprecoproduto listaProdutoPadrao on (listaProdutoPadrao.lista=listapreco.LISTA)
+left join listapreco listaDesconto on listaDesconto.listaReferencia = listaPadrao.lista 
+left join listaprecoproduto listaProdutoDesconto on (listaProdutoDesconto.lista=listaDeconto.LISTA)
+
+WHERE NOTAFISCAL.FILIAL= :FILIAL
+and NOTAFISCAL.DESTINATARIO = :CLIENTE
+AND COALESCE (notafiscal.DATACANCELAMENTO,'') = '' 

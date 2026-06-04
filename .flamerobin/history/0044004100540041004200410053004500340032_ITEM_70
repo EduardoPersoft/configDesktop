@@ -1,0 +1,12 @@
+select
+    estrutura.codigo,
+    estrutura.descricao    
+from
+    itemestoque estrutura
+inner join
+    C_LAMINACAO on
+        c_laminacao.codigo=estrutura.codigo and 
+        C_LAMINACAO.SEQUENCIA=1
+        
+    
+    

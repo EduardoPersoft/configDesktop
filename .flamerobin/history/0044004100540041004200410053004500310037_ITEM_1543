@@ -1,0 +1,39 @@
+update 
+    notafiscal
+set
+    notafiscal.BASECOFINSMERC=(
+        select 
+            sum(mercadoriasnota.basecofins)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+    notafiscal.VALORCOFINS=(
+        select 
+            sum(mercadoriasnota.vlrcofins)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+
+    notafiscal.BASEPISPASEPMERC=(
+        select 
+            sum(mercadoriasnota.BASEPIS)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota),
+    notafiscal.valorpis=(
+        select 
+            sum(mercadoriasnota.VLRPISPASEP)
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filial=notafiscal.filial and
+            mercadoriasnota.idnota=notafiscal.idnota)
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406 

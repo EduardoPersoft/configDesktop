@@ -1,0 +1,16 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    local.descricao,
+    materiallocal.SALDOTOTAL
+from
+    materiallocal 
+inner join
+    local on
+        local.id=materiallocal.IDLOCAL
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.IDitem
+where
+    materiallocal.SALDOTOTAL>0 and
+    local.DESCRICAO like 'Z2-B%'

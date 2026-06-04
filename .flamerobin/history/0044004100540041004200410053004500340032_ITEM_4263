@@ -1,0 +1,7 @@
+create table c_conversaomp(
+codigo varchar(15) not null,
+descricao varchar(100),
+codigoNovo varchar(15),
+codigoBase varchar(15),
+constraint pk_c_conversaomp
+primary key(codigo))

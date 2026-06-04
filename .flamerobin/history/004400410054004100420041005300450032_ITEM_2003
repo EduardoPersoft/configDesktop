@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    TITULOREC
+WHERE
+    TITULOREC.CODRETORNO='03' AND
+    titulorec.baixa is null

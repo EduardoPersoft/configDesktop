@@ -1,0 +1,2 @@
+select CODIGO, ITEMESTOQUE.VALORULTIMACOMPRA from ITEMESTOQUE
+where itemestoque.codigo=   'PE-24832'

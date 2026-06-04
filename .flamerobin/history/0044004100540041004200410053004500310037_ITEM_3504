@@ -1,0 +1,11 @@
+select 
+    mercadoriasnota.SISTEMACALCULAII,
+    mercadoriasnota.BASEII,
+    mercadoriasnota.pii,
+    mercadoriasnota.VLRIMPOSTOIMPORT,
+    mercadoriasnota.SISTEMACALCULADESPESAADUANEIRA,
+    mercadoriasnota.VLRDESPADUANEIRAS,
+    mercadoriasnota.SISTEMACALCULASISCOMEX,
+    mercadoriasnota.VLRTAXASISCOMEX
+from 
+    mercadoriasnota

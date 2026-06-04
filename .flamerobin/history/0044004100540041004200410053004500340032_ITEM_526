@@ -1,0 +1,19 @@
+SELECT
+    movtobancariolancamentos.FILIAL,
+    contascontabeis.CONTACONTABIL,
+    contascontabeis.NIVEL,
+    contascontabeis.descricao,
+    movtobancariolancamentos.*
+FROM
+    movtobancariolancamentos(110,'01.09.2023','30.09.2023', 'PRIMEFLEX', 4)
+inner join 
+    ESTABELECIMENTO on 
+    movtobancariolancamentos.FILIAL=ESTABELECIMENTO.CADASTRO 
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=movtobancariolancamentos.codigo
+inner join 
+    CONTASCONTABEIS on
+    ESTABELECIMENTO.PLANOCONTAS=CONTASCONTABEIS.IDPLANO and 
+    movtobancariolancamentos.contacontabil = contascontabeis.CONTACONTABIL

@@ -1,0 +1,177 @@
+SET TERM ^ ;
+ALTER PROCEDURE TOTAISPERIODO
+RETURNS (
+    FILIAL integer,
+    RAZAOFILIAL varchar(60),
+    DATAINICIAL date,
+    DATAFINAL date,
+    DETALHE varchar(7),
+    VLRATE15 numeric(12,3),
+    PERCENTUALATE15 float,
+    VLRATE30 numeric(12,3),
+    PERCENTUALATE30 float,
+    VLRATE45 numeric(12,3),
+    PERCENTUALATE45 float,
+    VLRATE60 numeric(12,3),
+    PERCENTUALATE60 float,
+    VLRATE75 numeric(12,3),
+    PERCENTUALATE75 float,
+    VLRATE90 numeric(12,3),
+    PERCENTUALATE90 float,
+    VLR90MAIS numeric(12,3),
+    PERCENTUAL90MAIS float,
+    VLRFATURAS numeric(12,3),
+    MEDIADIAS numeric(12,3) )
+
+AS
+declare variable pvalorfatura numeric (12,3);
+declare variable pmediadias numeric (12,3);
+declare variable psomavalorfatura numeric (12,3);
+declare variable pdatavencimento date;
+declare variable pdataemissao date;
+declare variable ponderado numeric(12,3);
+
+begin
+
+     mediadias=0;
+     pmediadias=0;
+     pvalorfatura=0;
+     VLRATE15=0;
+     VLRATE30=0;
+     VLRATE45=0;
+     VLRATE60=0;
+     VLRATE75=0;
+     VLRATE90=0;
+     VLR90MAIS=0;
+     vlrfaturas=0;
+     percentualate15=0;
+     percentualate30=0;
+     percentualate45=0;
+     percentualate60=0;
+     percentualate75=0;
+     percentualate90=0;
+     PERCENTUAL90MAIS=0;
+
+
+    SELECT ESTSIN.Estabelecimento,
+           ESTSIN.Datainicial,
+           ESTSIN.Datafinal,
+           CADASTROPARCEIROS.Razaosocial
+    FROM ESTSIN
+    INNER JOIN CADASTROPARCEIROS ON (
+            CADASTROPARCEIROS.CADASTRO=ESTSIN.Estabelecimento)
+    INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.Cadastro=ESTSIN.ESTABELECIMENTO)
+    WHERE RELATORIO='TOTAISPERIODO'
+    INTO FILIAL,DATAINICIAL,DATAFINAL,razaofilial;
+
+detalhe = 'VENDAS';
+ponderado = 0;
+for select COALESCE(titulorec.VALORTITULO,0),
+           titulorec.VENCIMENTO,
+           titulorec.EMISSAO
+from titulorec
+where titulorec.filial=:filial and
+      coalesce(titulorec.baixa, '') not in ('C', 'E') and
+      titulorec.emissao between :datainicial and :datafinal      
+into :pvalorfatura, :pdatavencimento, :pdataemissao do begin
+
+      vlrfaturas = vlrfaturas + pvalorfatura; 
+      if (pdatavencimento  <= :pdataemissao+14) then
+            vlrate15=vlrate15+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+15 and :pdataemissao+29) then
+            vlrate30=vlrate30+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+30 and :pdataemissao+44) then
+            vlrate45=vlrate45+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+45 and :pdataemissao+59) then
+            vlrate60=vlrate60+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+60 and :pdataemissao+74) then
+            vlrate75=vlrate75+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+75 and :pdataemissao+89) then
+            vlrate90=vlrate90+pvalorfatura;
+      if (pdatavencimento  >:pdataemissao+89) then
+            vlr90mais= vlr90mais+pvalorfatura;
+      if (vlrfaturas>0) then 
+            ponderado=ponderado+((pdatavencimento-pdataemissao)*pvalorfaturas);
+    end
+    if (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS>0) then begin
+        PERCENTUALATE15 = (100 * VLRATE15 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUALATE30 = (100 * VLRATE30 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUALATE45 = (100 * VLRATE45 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUALATE60 = (100 * VLRATE60 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUALATE75 = (100 * VLRATE75 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUALATE90 = (100 * VLRATE90 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        PERCENTUAL90MAIS = (100 * VLR90MAIS / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+        mediaDias = ponderado / vlrFaturas;
+    end
+    suspend;
+
+     mediadias=0;
+     pmediadias=0;
+     pvalorfatura=0;
+     VLRATE15=0;
+     VLRATE30=0;
+     VLRATE45=0;
+     VLRATE60=0;
+     VLRATE75=0;
+     VLRATE90=0;
+     VLR90MAIS=0;
+     vlrfaturas=0;
+     percentualate15=0;
+     percentualate30=0;
+     percentualate45=0;
+     percentualate60=0;
+     percentualate75=0;
+     percentualate90=0;
+     PERCENTUAL90MAIS=0;
+
+detalhe = 'COMPRAS';
+
+vlrfaturas = 0;
+for select COALESCE (faturas.valorfatura,0),
+                     faturas.datavencimento,
+                     notafiscal.dataentrada
+    
+from  notacompra notafiscal
+inner join faturasnotacompra faturas on (notafiscal.filial=faturas.filial and notafiscal.idnota=faturas.idnota)
+where notafiscal.filial=:filial and
+      notafiscal.dataentrada between :datainicial and :datafinal and
+      notafiscal.entradasaida = 'E'
+      and faturas.valorfatura >0
+into :PVALORFATURA, :PDATAVENCIMENTO, :pdataemissao do begin
+      vlrfaturas = vlrfaturas + pvalorfatura; 
+      if (pdatavencimento  <= :pdataemissao+14) then
+            vlrate15=vlrate15+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+15 and :pdataemissao+29) then
+            vlrate30=vlrate30+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+30 and :pdataemissao+44) then
+            vlrate45=vlrate45+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+45 and :pdataemissao+59) then
+            vlrate60=vlrate60+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+60 and :pdataemissao+74) then
+            vlrate75=vlrate75+pvalorfatura;
+      if (pdatavencimento  between :pdataemissao+75 and :pdataemissao+89) then
+            vlrate90=vlrate90+pvalorfatura;
+      if (pdatavencimento  >:pdataemissao+89) then
+            vlr90mais= vlr90mais+pvalorfatura;
+    
+      if (vlrfaturas=0) then MEDIADIAS=MEDIADIAS; else
+            mediadias=mediadias+(pdatavencimento-pdataemissao)*pvalorfatura/vlrfaturas;
+ end
+
+    PERCENTUALATE15 = (100 * VLRATE15 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUALATE30 = (100 * VLRATE30 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUALATE45 = (100 * VLRATE45 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUALATE60 = (100 * VLRATE60 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUALATE75 = (100 * VLRATE75 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUALATE90 = (100 * VLRATE90 / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    PERCENTUAL90MAIS = (100 * VLR90MAIS / (VLRATE15+VLRATE30+VLRATE45+VLRATE60+VLRATE75+VLRATE90+VLR90MAIS));
+    suspend;
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE TOTAISPERIODO TO  SYSDBA;
+

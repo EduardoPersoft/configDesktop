@@ -1,0 +1,4 @@
+update
+    mercadoriasorc mercadoriasped
+set
+    mercadoriasped.QTDEVOLUME=mercadoriasped.quantidade

@@ -1,0 +1,30 @@
+select 
+    titulopag.titulo,
+    titulopag.fatura,
+    CADASTROPARCEIROS.CADASTRO,
+    cadastroparceiros.nome,
+    titulopag.vencimento,    
+    lantocontpag.contacontabil,
+    --contascontabeis.DESCRICAO,
+    lantocontpag.valor,
+    titulopag.CONTACORRENTE,
+    titulopag.tipopagamento
+from 
+    titulopag 
+inner join
+    CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO=TITULPAG.PARCEIRO
+inner join 
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+        /*
+inner join
+    contacontabil on
+        contacontabil.idplano=3 and
+        contacontabil.contacontabil=lantocontpag.contacontabil
+        */
+where 
+    titulopag.filial=5 and
+    titulopag.VENCIMENTO between '01.12.2022' and '31.12.2022' and
+    titulopag.baixa is null

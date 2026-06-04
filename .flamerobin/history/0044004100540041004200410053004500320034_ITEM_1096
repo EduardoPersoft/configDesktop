@@ -1,0 +1,3 @@
+--EXECUTE PROCEDURE IMPORTATITULOREC('05.01.2022')
+
+select * from titulorec where filial=5 and idtitulo=160151

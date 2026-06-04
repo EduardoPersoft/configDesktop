@@ -1,0 +1,1 @@
+select * from usuario  WHERE ID IN (181,194) ORDER BY USUARIO

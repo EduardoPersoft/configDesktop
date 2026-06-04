@@ -1,0 +1,16 @@
+select 
+    MERCADORIASORC.filial,
+    MERCADORIASORC.idnota,
+    MERCADORIASORC.idmercadoria,
+    MERCADORIASORC.codigo,
+    mercadoriasorc.quantidade,
+    MERCADORIASORC.precolista,
+    MERCADORIASORC.PRECOUNITARIO,
+    MERCADORIASORC.C_MOEDA,
+    MERCADORIASORC.C_QUANTIDADEMOEDA,
+    MERCADORIASORC.c_valormoeda,
+    mercadoriasorc.C_PRECOLISTA,
+    mercadoriasorc.C_PRECOLISTAORIGINAL
+from MERCADORIASORC
+where c_moeda=1
+order by filial, idnota desc, idmercadoria

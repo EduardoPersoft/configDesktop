@@ -1,0 +1,2 @@
+select filial,idnota,numeronota,chave from NOTAFISCAL
+where filial=5 and notafiscal.DATAEMISSAO='31.03.2022'

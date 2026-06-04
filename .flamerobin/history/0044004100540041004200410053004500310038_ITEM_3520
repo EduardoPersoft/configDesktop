@@ -1,0 +1,8 @@
+select 
+    substring(mercadoriasnota.DESREDUZIDA
+        from 1 for 100)
+from 
+    MERCADORIASNOTA
+where
+    filial=1 and
+    idnota=78666

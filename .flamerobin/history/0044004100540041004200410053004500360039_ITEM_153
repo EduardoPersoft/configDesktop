@@ -1,0 +1,3 @@
+select * from faturas
+where filial=1 and idnota>=318792
+order by idnota

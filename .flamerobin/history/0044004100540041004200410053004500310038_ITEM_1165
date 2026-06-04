@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where iditem like 'M-%' and concluido='N' and sinal=0

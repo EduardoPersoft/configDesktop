@@ -1,0 +1,7 @@
+update
+    MERCADORIASNOTACOMPRA
+set
+    lote='4137'
+where
+    filial=110 and
+    idnota=5136

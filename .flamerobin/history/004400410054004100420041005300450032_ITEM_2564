@@ -1,0 +1,7 @@
+SELECT
+    paises.codigopais,
+    paises.descricaopais
+FROM
+    paises
+ORDER by
+    descricaopais

@@ -1,0 +1,11 @@
+update
+    PEDIDO
+set
+    pedido.vendedor = (
+        select first 1
+            vendedoresped.VENDEDOR
+        from
+            VENDEDORESPED
+        where   
+            vendedoresped.filial=pedido.filial an
+            vendedoresped.idnota=pedido.idnota)

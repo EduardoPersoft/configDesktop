@@ -1,0 +1,3 @@
+select * from titulopag 
+where filial=5 and vencimento>='01.11.2021'
+and vencimento <> cast(vencimento as date)

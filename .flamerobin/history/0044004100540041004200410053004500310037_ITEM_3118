@@ -1,0 +1,1 @@
+select pedido.TIPODESCFINANCEIRO, pedido.* from pedido where filial=1 order by idnota desc

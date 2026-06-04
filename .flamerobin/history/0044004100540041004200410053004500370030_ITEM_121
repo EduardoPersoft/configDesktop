@@ -1,0 +1,3 @@
+select codigo, c_cliche
+from ITEMESTOQUE
+where codigo='I3-142R'

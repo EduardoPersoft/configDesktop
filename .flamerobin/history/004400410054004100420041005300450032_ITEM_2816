@@ -1,0 +1,1 @@
+select * from titulorec where codretorno is null and emissao='29.06.2021'

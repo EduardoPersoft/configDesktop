@@ -1,0 +1,8 @@
+
+update
+    PEDIDOCOMPRA
+SET
+    PEDIDOCOMPRA.DATAAPROVACAO = NULL
+WHERE
+    pedidocompra.filial=5 AND
+    pedidocompra.idnota=55762

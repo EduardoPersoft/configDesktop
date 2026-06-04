@@ -1,0 +1,2 @@
+update MATERIALLOTE
+set materiallote.QUANTIDADE=coalesce(materiallote.QUANTIDADE,0)

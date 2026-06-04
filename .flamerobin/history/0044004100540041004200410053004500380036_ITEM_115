@@ -1,0 +1,6 @@
+update 
+    LANTOCONTPAG
+set
+    centrocusto='25'
+where
+    coalesce(centrocusto,' ') = '25'

@@ -1,0 +1,7 @@
+select 
+    'P'||substring(MATERIALMOVIMENTOESTOQUE.iditem from 4 for 3),
+    materialmovimentoestoque.* 
+from 
+    materialmovimentoestoque
+where 
+    substring(materialmovimentoestoque.iditem from 1 for 1)='P'

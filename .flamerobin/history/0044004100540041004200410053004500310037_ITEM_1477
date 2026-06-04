@@ -1,0 +1,1 @@
+select * from materialmovimentoestoque where materialmovimentoestoque.IDITEM='6003219'

@@ -1,0 +1,13 @@
+select 
+    filial,
+    idtitulo,
+    contacorrente,
+    titulorec.TIPOTRANSACAO,
+    titulorec.codretorno,
+    titulorec.LINHADIGITAVEL,
+    titulorec.CODIGOBARRA
+FROM
+    TITULOREC
+WHERE
+    TITULOREC.CODRETORNO='03' AND
+    titulorec.baixa is null

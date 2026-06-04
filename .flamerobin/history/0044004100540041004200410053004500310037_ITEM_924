@@ -1,0 +1,1 @@
+update local set saldodisponivel='N' where id=8

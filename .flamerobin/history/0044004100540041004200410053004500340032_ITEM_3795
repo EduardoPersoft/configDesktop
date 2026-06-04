@@ -1,0 +1,7 @@
+select * from c_movfinanceiro mov 
+where mov.CONTAORIGINAL<>mov.CONTACORRENTEIMPORTADA
+and mov.contaoriginal in 
+ (select 
+    distinct movantigo.CONTACORRENTEIMPORTADA
+  from
+    C_MOVFINANCEIRO movantigo)

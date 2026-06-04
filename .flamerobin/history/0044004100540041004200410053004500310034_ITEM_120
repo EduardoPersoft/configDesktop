@@ -1,0 +1,14 @@
+update
+    MERCADORIASPEDCOMPRA
+set
+    mercadoriaspedcompra.CONTACONTABIL = '1120101'
+where   
+    NOT exists (
+        select
+            *
+        from
+            CONTASCONTABEIS
+        where
+            contascontabeis.CONTACONTABIL=mercadoriaspedcompra.contacontabil and
+            contascontabeis.idplano=4)
+        

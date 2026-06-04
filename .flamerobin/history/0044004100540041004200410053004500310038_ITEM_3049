@@ -1,0 +1,23 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    local.descricao,
+    locallote.LOTE,
+    locallote.quantidade,
+    materiallote.C_LOCAL,
+    materiallote.C_ROLO,
+    materiallote.c_largura,
+    materiallote.C_MEDIDAREAL    
+from
+    LOCALLOTE
+inner join
+    itemestoque on
+        locallote.IDITEM=itemestoque.codigo
+inner join
+    local on
+        local.id=locallote."LOCAL"
+where
+    cast(locallote.QUANTIDADE as decimal(12,2))<>0 and
+    substring(locallote.IDITEM from 1 for 2)='M-'
+        
+        

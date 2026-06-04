@@ -1,0 +1,6 @@
+CREATE TABLE QRCODENFCE(
+UUIDNFE CHAR(36) NOT NULL,
+QRCODETEXTO VaRCHAR(600),
+QRCODEIMAGEM BLOB SUBTYPE 0,
+urlChave varchar(85),
+constraint pk_qrcodenfce primary key (uuid))

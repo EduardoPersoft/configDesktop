@@ -1,0 +1,17 @@
+update
+    mercadoriasnotacompra
+SET
+    statusconferencia = null
+WHERE 
+    MERCADORIASNOTACOMPRA.STATUSCONFERENCIA IS not NULL AND
+    exists (
+        select 
+            * 
+        FROM
+            NOTACOMPRA
+        WHERE
+            notacompra.filial=mercadoriasnotacompra.filial and 
+            notacompra.idnota=mercadoriasnotacompra.idnota and
+            notacompra.DATAENTRADA='25.08.2021')
+order by
+    idnota desc

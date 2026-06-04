@@ -1,0 +1,3 @@
+select descricao,count(id) from c_fornecedorpeca
+group by descricao
+order by 2 desc

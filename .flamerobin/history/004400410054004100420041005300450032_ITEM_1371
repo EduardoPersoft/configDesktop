@@ -1,0 +1,10 @@
+select 
+    count(notafiscal.idnota),
+    notafiscal.NUMERONOTA
+WHERE   
+    notafiscal.filial=5 and notafiscal.DATAEMISSAO>='04.11.2021'
+group by 
+    notafiscal.numeronota    
+having 
+count(notafiscal.idnota)>1
+    

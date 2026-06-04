@@ -1,0 +1,1 @@
+delete from movimentoestoque where filial=5 and idmovimento between 398974 and 398993

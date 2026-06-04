@@ -1,0 +1,1 @@
+select * from t_cadastro where t_cadastro.FANTASIA like 'DA MATA%'

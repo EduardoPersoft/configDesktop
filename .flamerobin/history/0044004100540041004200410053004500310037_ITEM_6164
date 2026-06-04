@@ -1,0 +1,13 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.IDNOTAEXPEDICAO,
+    count(movimentoestoque.idmovimento)
+from
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.emissao>='01.01.2026'
+group by
+    movimentoestoque.filial,
+    movimentoestoque.IDNOTAEXPEDICAO
+having 
+count(movimentoestoque.idmovimento)>1

@@ -1,0 +1,4 @@
+select  
+    *
+from
+    C_I_MOVEST5

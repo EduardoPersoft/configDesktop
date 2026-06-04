@@ -1,0 +1,1 @@
+select filial,idtitulo,contacorrente, numbolbanco from titulorec where filial=5 and idtitulo=172345

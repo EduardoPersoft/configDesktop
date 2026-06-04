@@ -1,0 +1,2 @@
+select * from pedido
+where pedido.filial=1 and pedido.idnota in ( 77242,77228,77127)

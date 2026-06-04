@@ -1,0 +1,11 @@
+select
+    orcamento.DATACADASTRO,
+    orcamento.idnota,
+    orcamento.AOSCUIDADOS,
+    orcamento.VLRTOTALNOTA,
+    'https://erp.persoft.com.br/sm/impressao.html?d=orcamentosVenda&id='||orcamento.UUID
+from
+    ORCAMENTO
+where
+    orcamento.vlrtotalnota>150000 and
+    orcamento.DATACADASTRO>='18.09.2025'

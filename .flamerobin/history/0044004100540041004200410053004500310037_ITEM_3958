@@ -1,0 +1,14 @@
+select locallote.iditem,
+       itemestoque.descricao, 
+       itemestoque.referencia,
+       local.DESCRICAO
+from 
+    locallote 
+inner join
+    ITEMESTOQUE on
+        itemestoque.codigo=locallote.IDITEM
+inner join
+    local on
+        local.id=locallote.local
+where 
+    locallote.QUANTIDADE is null

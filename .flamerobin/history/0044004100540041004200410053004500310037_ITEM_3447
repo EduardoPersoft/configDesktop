@@ -1,0 +1,7 @@
+update
+    PEDIDO
+set 
+    vendedor = (select vendedoresped.vendedor from VENDEDORESPED
+                where vendedoresped.filial=pedido.filial and
+                vendedoresped.idnota=pedido.idnota)
+                

@@ -1,0 +1,24 @@
+select
+    estrutura.codigo,
+    estrutura.descricao    ,
+    mpprincipal.DESCRICAO,
+    mplaminado1.descricao,
+    mplaminado2.descricao
+from
+    itemestoque estrutura
+inner join
+    C_LAMINACAO on
+        c_laminacao.codigo=estrutura.codigo and 
+        C_LAMINACAO.SEQUENCIA=1
+inner join
+    itemestoque mpPrincipal
+        mpprincipal.codigo=estrutura.C_MATERIAPRIMABASE       
+inner join
+    itemestoque mpLaminado1
+        mpLaminado1.codigo=C_LAMINACAO.filme
+inner join
+    itemestoque mpLaminado2
+        mpLaminado2.codigo=C_LAMINACAO.FILME2
+        
+    
+    

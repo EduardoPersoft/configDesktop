@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.COLETADATA is not null
+and movimentoestoque.IDNOTAEXPEDICAO is null

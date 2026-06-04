@@ -1,0 +1,4 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where not exists (
+select * from LOCAL
+where local.id=MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO)

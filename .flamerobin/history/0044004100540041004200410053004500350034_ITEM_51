@@ -1,0 +1,6 @@
+update
+    ITEMCUSTODATA
+set
+    custounitario = custototal / quantidade 
+where
+    quantidade<>0

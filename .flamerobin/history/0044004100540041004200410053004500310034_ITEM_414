@@ -1,0 +1,7 @@
+select
+    itemestoque.codigo,
+    itemestoque.C_CLIENTE
+from
+    itemestoque
+where
+    itemestoque.codigo like 'PRO%'

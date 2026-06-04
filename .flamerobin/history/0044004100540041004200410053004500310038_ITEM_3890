@@ -1,0 +1,119 @@
+select
+    venPed.VENDEDOR indicador,
+    cadind.NOME,
+    cadind.datacadastro,
+    cadInd.c_datanascimento,
+    cadInd.dataalteracao,
+    cadven.nome,
+    cadloja.nome,
+    ramoatividade.descricao ramoatividade,
+    extract(year from det.DATAreferencia) as ano,
+    sum(det.vlrTotalNota*venPed.comissaoVenda/100*case det.idnota when coalesce(master.C_PEDIDOSUBSTITUIDO,-1) then -1 else 1 end) totalAnoAnterior,
+     count(case det.idnota when coalesce(master.C_PEDIDOSUBSTITUIDO,-1) then null else det.idnota end) as qtd
+    
+from  
+ PEDIDO MASTER 
+
+inner join 
+    pedido det on
+    det.filial=master.FILIAL and 
+    det.IDNOTA in (master.idnota,master.C_PEDIDOSUBSTITUIDO)
+
+inner join 
+    VENDEDORESPED venped on 
+    venPed.FILIAL=det.FILIAL and
+    venPed.idnota=det.idnota
+inner join  
+    CADASTROPARCEIROS cadind on 
+    cadind.CADASTRO=venPed.VENDEDOR
+
+inner join 
+    VENDEDOR indicador on 
+    venPed.vendedor=indicador.cadastro
+inner join 
+    vendedor vend on 
+    vend.cadastro=det.vendedor
+inner join 
+    CADASTROPARCEIROS cadven on 
+    cadven.CADASTRO=vend.cadastro 
+inner join 
+    VENDEDOR loja on 
+    loja.cadastro=det.c_loja
+inner join 
+    CADASTROPARCEIROS cadloja on 
+    loja.CADASTRO=cadloja.CADASTRO
+left join 
+    RAMOATIVIDADE on 
+    ramoatividade.ramoatividade=cadind.ramoatividade
+where 
+    MASTER.FILIAL = 1 and
+    indicador.TIPOVENDEDOR in (5,6) and
+    extract (year from MASTER.DATAreferencia) between 2021 and 2025 AND 
+    MASTER.c_tipo =0 and 
+    MASTER.DATAEMISSAO is not null and
+    MASTER.CANCELAMENTO ='N'  
+group by 
+    venPed.VENDEDOR,
+    cadind.NOME,
+    cadind.DATACADASTRO,
+    cadInd.c_datanascimento,
+    cadInd.dataalteracao,
+    cadven.nome,
+    cadloja.nome,
+    ramoatividade.descricao,
+    extract(year from det.DATAreferencia)
+union
+select
+    cadind.cadastro indicador,
+    cadind.NOME,
+    cadind.datacadastro,
+    cadInd.c_datanascimento,
+    cadInd.dataalteracao,
+    cadven.nome,
+    cadloja.nome,
+    ramoatividade.descricao ramoatividade,
+    2025 as ano,
+    0 totalAnoAnterior,
+    0 qtd
+    
+from  
+ 
+    CADASTROPARCEIROS cadind 
+
+inner join 
+    VENDEDOR indicador on 
+    cadind.cadastro=indicador.cadastro
+inner join 
+    vendedor vend on 
+    vend.cadastro=indicdador.canalrelacionado
+inner join 
+    CADASTROPARCEIROS cadven on 
+    cadven.CADASTRO=vend.cadastro 
+inner join 
+    VENDEDOR loja on 
+    loja.cadastro=vend.canalrelacionado
+inner join 
+    CADASTROPARCEIROS cadloja on 
+    loja.CADASTRO=cadloja.CADASTRO
+left join 
+    RAMOATIVIDADE on 
+    ramoatividade.ramoatividade=cadind.ramoatividade
+where 
+    
+    indicador.TIPOVENDEDOR in (5,6) and
+    not exists 
+    (select * from pedido master
+     inner join vendedoresped on
+        vendedoresped.filial=master.filial and
+        vendedoresped.idnota=master.idnota and
+        vendedoresped.VENDEDOR=master.cadastro
+     where 
+         MASTER.FILIAL = 1 and
+         indicador.TIPOVENDEDOR in (5,6) and
+         extract (year from MASTER.DATAreferencia) between 2021 and 2025 AND 
+         MASTER.c_tipo =0 and 
+         MASTER.DATAEMISSAO is not null and
+         MASTER.CANCELAMENTO ='N'  )
+
+     
+    

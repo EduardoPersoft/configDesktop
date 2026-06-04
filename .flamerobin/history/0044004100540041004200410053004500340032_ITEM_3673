@@ -1,0 +1,177 @@
+/*select
+    MERCADORIASPED.FILIAL,
+    MERCADORIASPED.IDNOTA IDPEDIDO,
+    MERCADORIASPED.IDMERCADORIA IDMERCADORIAPED,
+    PEDIDO.DATAREFERENCIA,
+    PEDIDO.ENTREGA,
+    MOVIMENTOESTOQUE.PREVISAOFIMPRODUCAO,
+    CADASTROPARCEIROS.NOME,
+
+    MERCADORIASPED.CODIGO,
+    ITEMESTOQUE.descricao DESCRICAOPRODUTO,
+    MERCADORIASPED.C_NOVOREPETICAOALTERADO NOVOREPETICAOALTERACAO,
+    COALESCE(MATERIALMOVIMENTOESTOQUE.quantidade, mercadoriasped.quantidade) quantidadeproduzir,
+
+    mercadoriasped.unidade,
+    coalesce(mercadoriasped.c_arte, 'N') C_ARTEOK,
+
+    mercadoriasped.C_DATAARTE DATAPREVISTAARTE,
+    itemestoque.C_CLICHE clicheok,
+
+    itemestoque.C_DATACLICHE DATAPREVISTACLICHE,
+    movimentoestoque.idmovimento OP,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOTEM,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOCONCLUIDO,
+    mercadoriasped.C_STATUSARTE ,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOID,
+    --C_PEDIDOSEMABERTOPRODUCAO.itemImpresso,
+    --C_PEDIDOSEMABERTOPRODUCAO.dtmpimpressao,
+    itemestoque. itembase ESTRUTURA,
+    ITEMESTOQUEXARQUIVO.NOMEARQUIVO ARQUIVO,
+    itemestoque.aprovado ITEMAPROVADO,
+    --C_PEDIDOSEMABERTOPRODUCAO.OPATRASADA,
+
+    servicospedcompra.C_FILIALPEDVEN FILIALPEDCLICHE,
+    servicospedcompra.C_IDPEDVEN IDPEDIDOCLICHE,
+    servicospedcompra.C_IDMERCVEN IDMERCPEDCLICHE,
+    servicospedcompra.VLRFINALSERVICO VALORCLICHE,
+    
+    servicosped.C_FILIALPEDVEN FILIALPEDCLICHEVEN,
+    servicosped.C_IDPEDVEN IDPEDIDOCLICHEVEN,
+    servicosped.C_IDMERCVEN IDMERCPEDCLICHEVEN,
+    servicosped.VLRFINALSERVICO VALORCLICHEVEN
+from 
+    SERVICOSPEDCOMPRA
+inner join
+    mercadoriasped on
+          MERCADORIASPED.filial=SERVICOSPEDCOMPRA.C_FILIALPEDVEN and
+          MERCADORIASPED.idnota=SERVICOSPEDCOMPRA.C_IDPEDVEN and
+          MERCADORIASPED.IDMERCADORIA=SERVICOSPEDCOMPRA.C_IDMERCVEN
+inner join
+    pedido on
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=pedido.destinatario
+
+inner join 
+    ITEMESTOQUE on 
+        MERCADORIASPED.CODIGO=ITEMESTOQUE.CODIGO
+left join
+    ITEMESTOQUEXARQUIVO on
+        ITEMESTOQUEXARQUIVO.CODIGO=itemestoque.codigo and
+        itemestoquexarquivo.ORDEM=0
+        
+left join 
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=mercadoriasped.filial and
+        MATERIALMOVIMENTOESTOQUE.IDPEDIDO=mercadoriasped.idnota and
+        MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=mercadoriasped.IDMERCADORIA and
+        MATERIALMOVIMENTOESTOQUE.PRODUTO=MATERIALMOVIMENTOESTOQUE.iditem 
+ 
+        
+left join 
+    MOVIMENTOESTOQUE on 
+    MOVIMENTOESTOQUE.filial=MATERIALmovimentoestoque.filial and
+    MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALmovimentoestoque.IDMOVIMENTO and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='12'
+ 
+left join 
+    servicosped on 
+    servicosped.c_filialpedven = mercadoriasped.filial and   
+    servicosped.c_idpedven = mercadoriasped.idnota and  
+    servicosped.c_idmercven = mercadoriasped.idmercadoria       
+    
+where 
+    SERVICOSPEDCOMPRA.FILIAL=110 and 
+    SERVICOSPEDCOMPRA.BAIXA='N' 
+union*/
+select
+    MERCADORIASPED.FILIAL,
+    MERCADORIASPED.IDNOTA IDPEDIDO,
+    MERCADORIASPED.IDMERCADORIA IDMERCADORIAPED,
+    PEDIDO.DATAREFERENCIA,
+    PEDIDO.ENTREGA,
+    MOVIMENTOESTOQUE.PREVISAOFIMPRODUCAO,
+    CADASTROPARCEIROS.NOME,
+
+    MERCADORIASPED.CODIGO,
+    ITEMESTOQUE.descricao DESCRICAOPRODUTO,
+    MERCADORIASPED.C_NOVOREPETICAOALTERADO NOVOREPETICAOALTERACAO,
+    COALESCE(MATERIALMOVIMENTOESTOQUE.quantidade, mercadoriasped.quantidade) quantidadeproduzir,
+
+    mercadoriasped.unidade,
+    coalesce(mercadoriasped.c_arte, 'N') C_ARTEOK,
+
+    mercadoriasped.C_DATAARTE DATAPREVISTAARTE,
+    itemestoque.C_CLICHE clicheok,
+
+    itemestoque.C_DATACLICHE DATAPREVISTACLICHE,
+    movimentoestoque.idmovimento OP,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOTEM,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOCONCLUIDO,
+    mercadoriasped.C_STATUSARTE ,
+    --C_PEDIDOSEMABERTOPRODUCAO.IMPRESSAOID,
+    --C_PEDIDOSEMABERTOPRODUCAO.itemImpresso,
+    --C_PEDIDOSEMABERTOPRODUCAO.dtmpimpressao,
+    itemestoque. itembase ESTRUTURA,
+    ITEMESTOQUEXARQUIVO.NOMEARQUIVO ARQUIVO,
+    itemestoque.aprovado ITEMAPROVADO,
+    --C_PEDIDOSEMABERTOPRODUCAO.OPATRASADA,
+
+    servicospedcompra.C_FILIALPEDVEN FILIALPEDCLICHE,
+    servicospedcompra.C_IDPEDVEN IDPEDIDOCLICHE,
+    servicospedcompra.C_IDMERCVEN IDMERCPEDCLICHE,
+    servicospedcompra.VLRFINALSERVICO VALORCLICHE,
+    
+    servicosped.C_FILIALPEDVEN FILIALPEDCLICHEVEN,
+    servicosped.C_IDPEDVEN IDPEDIDOCLICHEVEN,
+    servicosped.C_IDMERCVEN IDMERCPEDCLICHEVEN,
+    servicosped.VLRFINALSERVICO VALORCLICHEVEN
+from 
+    SERVICOSPEDven
+inner join
+    mercadoriasped on
+          MERCADORIASPED.filial=SERVICOSPEDCOMPRA.C_FILIALPEDVEN and
+          MERCADORIASPED.idnota=SERVICOSPEDCOMPRA.C_IDPEDVEN and
+          MERCADORIASPED.IDMERCADORIA=SERVICOSPEDCOMPRA.C_IDMERCVEN
+inner join
+    pedido on
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=pedido.destinatario
+
+inner join 
+    ITEMESTOQUE on 
+        MERCADORIASPED.CODIGO=ITEMESTOQUE.CODIGO
+left join
+    ITEMESTOQUEXARQUIVO on
+        ITEMESTOQUEXARQUIVO.CODIGO=itemestoque.codigo and
+        itemestoquexarquivo.ORDEM=0
+        
+left join 
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=mercadoriasped.filial and
+        MATERIALMOVIMENTOESTOQUE.IDPEDIDO=mercadoriasped.idnota and
+        MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=mercadoriasped.IDMERCADORIA and
+        MATERIALMOVIMENTOESTOQUE.PRODUTO=MATERIALMOVIMENTOESTOQUE.iditem 
+ 
+        
+left join 
+    MOVIMENTOESTOQUE on 
+    MOVIMENTOESTOQUE.filial=MATERIALmovimentoestoque.filial and
+    MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALmovimentoestoque.IDMOVIMENTO and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='12'
+ 
+left join 
+    servicosped on 
+    servicosped.c_filialpedven = mercadoriasped.filial and   
+    servicosped.c_idpedven = mercadoriasped.idnota and  
+    servicosped.c_idmercven = mercadoriasped.idmercadoria       
+    
+where 
+    SERVICOSPEDCOMPRA.FILIAL=110 and 
+    SERVICOSPEDCOMPRA.BAIXA='N' 

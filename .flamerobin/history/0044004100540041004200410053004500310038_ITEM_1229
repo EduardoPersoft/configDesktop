@@ -1,0 +1,20 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.DATAREFERENCIA,
+    pedido.DATAEMISSAO,
+    (select
+        min(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota),
+    pedido.C_DATACOMISSAO
+from
+    PEDIDO
+where 
+    pedido.datacadastro>='01.01.2020' and
+    (pedido.c_datacomissao is null and pedido.datareferencia<>
+    

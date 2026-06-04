@@ -1,0 +1,1 @@
+update C_LOGprodutoECOMMERCE set inclusao='S' where inclusao='N'

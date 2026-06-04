@@ -1,0 +1,3 @@
+select 
+titulop.cadastro, titulopag.datareferencia, titulopag.EMISSAO, titulopag.* from TITULOPAG
+where filial=1 and titulopag.CADASTRO is null is null

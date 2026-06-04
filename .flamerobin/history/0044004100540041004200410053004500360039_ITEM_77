@@ -1,0 +1,2 @@
+select * from notafiscal
+where filial=12826 and numeronota in (173206,173238,173251,173274,173290)

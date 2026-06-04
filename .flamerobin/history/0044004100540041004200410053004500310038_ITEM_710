@@ -1,0 +1,6 @@
+update
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.c_empenho = null
+where
+    movimentoestoque.c_empenho=160

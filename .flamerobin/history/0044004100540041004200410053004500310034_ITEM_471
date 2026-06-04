@@ -1,0 +1,7 @@
+select
+    * 
+from 
+    itemestoque
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO in (5,6)

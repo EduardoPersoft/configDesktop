@@ -1,0 +1,65 @@
+select 
+    itemestoque.CODIGO,
+    itemestoque.referencia,
+    itemestoque.DESCRICAO,    
+    itemestoque.unidade,
+    (select sum (locallote.QUANTIDADE) from LOCALLOTE
+        where locallote.FILIAL=MERCADORIASORC.filial and
+              locallote.IDITEM=mercadoriasorc.CODIGO) somalocal,
+    (select ( sum (mercadoriaspedcompra.QUANTIDADE - coalesce (mercadoriaspedcompra.QTDEENTREGUE,0))) 
+                from mercaDORIASPEDCOMPRA 
+                inner join 
+                    pedidocompra on 
+                        (pedidocompra.filial=mercadoriaspedcompra.filial and 
+                         pedidocompra.idnota=mercadoriaspedcompra.idnota)
+                WHERE mercadoriaspedcompra.filial=mercadoriasorc.filial and 
+                  mercadoriaspedcompra.CODIGO=mercadoriasorc.codigo AND 
+                  mercadoriaspedcompra.BAIXA='N' )
+     as qtdpedido,
+    sum (mercadoriasorc.QUANTIDADE) as qtdorc,
+    (select max (pedidocompra.DATAAPROVACAO )
+                from pedidocompra  
+                inner join mercaDORIASPEDCOMPRA
+                     on 
+                        (pedidocompra.filial=mercadoriaspedcompra.filial and 
+                         pedidocompra.idnota=mercadoriaspedcompra.idnota)
+                WHERE mercadoriaspedcompra.filial=mercadoriasorc.filial and 
+                  mercadoriaspedcompra.CODIGO=mercadoriasorc.codigo AND 
+                  mercadoriaspedcompra.BAIXA='N' ) as pedcompraaprovacao,
+    
+    materialfilial.CONSUMOMEDIO
+        
+from 
+    mercadoriasorc
+inner join
+    orcamento on
+        (mercadoriasorc.FILIAL=orcamento.filial and 
+         mercadoriasorc.IDNOTA=orcamento.idnota)
+inner join 
+    ITEMESTOQUE on 
+        (itemestoque.codigo=mercadoriasorc.codigo)
+inner join 
+    locallote on 
+        (locallote.FILIAL=MERCADORIASORC.filial and
+        locallote.IDITEM=mercadoriasorc.codigo)
+left join 
+    materialfilial on 
+        (materialfilial.FILIAL=mercadoriasorc.FILIAL and
+        materialfilial.IDITEM=mercadoriasorc.CODIGO)
+where
+    orcamento.filial=? and 
+    orcamento.DATACADASTRO between ? and ?  
+     and orcamento.MOTIVOPERDa =2
+    and coalesce (orcamento.baixa,'N')='N'
+    
+    
+group by 
+    mercadoriasorc.CODIGO,
+    mercadoriasorc.filial,   
+    itemestoque.CODIGO,
+    itemestoque.DESCRICAO,    
+    itemestoque.unidade,
+    orcamento.filial,
+    orcamento.DATACADASTRO ,
+    orcamento.MOTIVOPERDA,
+    materialfilial.CONSUMOMEDIO

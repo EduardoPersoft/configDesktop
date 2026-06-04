@@ -1,0 +1,267 @@
+SET TERM ^ ;
+ALTER PROCEDURE NOTAFISCALPAULISTA (
+    RELATORIO varchar(10) )
+RETURNS (
+    FILIAL integer,
+    RAZAOSOCIALFILIAL varchar(60),
+    CNPJ varchar(14),
+    DATAINICIO timestamp,
+    DATAFIM timestamp,
+    SEGMENTO varchar(20),
+    FUNCAO char(1),
+    XJUST varchar(255),
+    NATOP varchar(60),
+    SERIE integer,
+    NNF integer,
+    DEMI timestamp,
+    DSAIENT timestamp,
+    TPNF smallint,
+    CFOP varchar(4),
+    IEST varchar(14),
+    IM varchar(15),
+    CNPJCPF varchar(14),
+    XNOME varchar(70),
+    XLGR varchar(60),
+    NRO varchar(60),
+    XCPL varchar(60),
+    XBAIRRO varchar(60),
+    XMUN varchar(60),
+    UF varchar(2),
+    CEP varchar(8),
+    XPAIS varchar(60),
+    FONE varchar(10),
+    IE varchar(14),
+    CPROD varchar(60),
+    XPROD varchar(120),
+    NCM varchar(8),
+    UCOM varchar(6),
+    QCOM double precision,
+    VUNCOM double precision,
+    VPROD double precision,
+    CST varchar(4),
+    PICMS double precision,
+    PIPI double precision,
+    VIPI double precision,
+    VBC double precision,
+    VICMS double precision,
+    VBCST double precision,
+    VST double precision,
+    VPRODTOTAL double precision,
+    VFRETE double precision,
+    VSEG double precision,
+    VDESC double precision,
+    VIPITOTAL double precision,
+    VOUTRO double precision,
+    VNF double precision,
+    VSER double precision,
+    PISS double precision,
+    VISS double precision,
+    MODFRETE char(1),
+    CNPJCPFTRANSP varchar(14),
+    NOMETRANSP varchar(70),
+    IETRANSP varchar(14),
+    XMUNTRANSP varchar(60),
+    XLGRTRANSP varchar(60),
+    UFTRANSP char(2),
+    PLACA varchar(8),
+    UFPLACA varchar(2),
+    QVOL integer,
+    ESP varchar(60),
+    MARCA varchar(60),
+    NVOL varchar(60),
+    PESOL double precision,
+    PESOB double precision,
+    FATURA varchar(256),
+    INFADFISCO blob sub_type 0,
+    INFCPL varchar(256),
+    QUANTIDADEREGISTRO20 integer,
+    QUANTIDADEREGISTRO30 integer,
+    QUANTIDADEREGISTRO40 integer,
+    QUANTIDADEREGISTRO50 integer,
+    QUANTIDADEREGISTRO60 integer )
+
+AS
+declare variable v_modelo smallint;
+declare variable v_notaantes integer;
+declare variable v_maioritem smallint;
+declare variable v_idnota integer;
+declare variable v_idmercadoria smallint;
+declare variable v_cancelada char(1);
+declare variable v_xjust varchar(255);
+BEGIN
+
+  SELECT ESTSIN.datainicial,ESTSIN.DATAFINAL,ESTSIN.opcao,
+         CADASTROPARCEIROS.CADASTRO,CADASTROPARCEIROS.RAZAOSOCIAL,
+         cadastroparceiros.documento
+  FROM ESTSIN
+  INNER JOIN CADASTROPARCEIROS ON (CADASTROPARCEIROS.CADASTRO=
+                     ESTSIN.ESTABELECIMENTO)
+  WHERE ESTSIN.RELATORIO=:relatorio
+  INTO :datainicio,:DATAFIM,:V_MODELO,:filial,:razaosocialfilial,:cnpj;
+
+  QUANTIDADEREGISTRO20 = 0;
+  QUANTIDADEREGISTRO30 = 0;
+  QUANTIDADEREGISTRO40 = 0;
+  QUANTIDADEREGISTRO50 = 0;
+  QUANTIDADEREGISTRO60 = 0;
+  v_notaantes = -1;
+
+
+  FOR SELECT CASE NOTAFISCAL.cancelamento WHEN 'S' then 'C'
+              ELSE case NOTAFISCAL.tiponota WHEN 2 THEN 'R'
+              ELSE 'I' END END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN '' ELSE
+                       CASE COALESCE(NOTAFISCAL.motivocancelamento,'') WHEN ''
+                           THEN 'ERRO NA EMISSAO'
+                           ELSE NOTAFISCAL.motivocancelamento END END,
+              NOTAFISCAL.naturezaoperacao,
+              modelodocto.serie,
+              NOTAFISCAL.numeronota,
+              NOTAFISCAL.dataemissao,
+              cast( NOTAFISCAL.dataentradasaida as date),
+              CASE NOTAFISCAL.entradasaida when 'E' THEN 0 ELSE 1 enD,
+              NOTAFISCAL.cfop,
+              SUBSTRING(NOTAFISCAL.inscricaosubstituto FROM 1 FOR 14),
+              SUBSTRING(CADCLI.inscmunicipal FROM 1 FOR 15),
+              CADCLI.documento,
+              CADCLI.razaosocial,
+              CADCLI.logradouro,
+              CADCLI.numero,
+              CADCLI.complemento,
+             CADCLI.bairro,
+              CADCLI.cidade,
+              CADCLI.uf,
+              CADCLI.CEP,
+              '' AS PAIS,
+              SUBSTRING(CADCLI.telefone FROM 1 FOR 10),
+              SUBSTRING(CADCLI.inscestadual FROM 1 FOR 14),
+              mercadoriasnota.codigo,
+              SUBSTRING(MERCADORIASNOTA.descricao FROM 1 FOR 120),
+              CAST(SUBSTRING(classificacaofiscal.descricao FROM 1 FOR 8) AS VARCHAR(8)),
+              MERCADORIASNOTA.unidade,
+              mercadoriasnota.quantidade,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN MERCADORIASNOTA.precounitario ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN MERCADORIASNOTA.VLRTOTALMERCAD ELSE 0 END,
+              MERCADORIASNOTA.situacaotribut,
+              MERCADORIASNOTA.aliquotaicms,
+              MERCADORIASNOTA.pipi,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN MERCADORIASNOTA.valoripi ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.totbaseicms ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.totvaloricms ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN notafiscal.vlrbasesubstituto ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.VLRICMSRECOLHIDO ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.vlrtotalmercadorias ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.valorfrete ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.valorseguro ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN COALESCE(NOTAFISCAL.vlrdescmercadorias,0)+
+                       COALESCE(NOTAFISCAL.vlrdescindproduto,0)+
+                       case notafiscal.zonafranca when 'S' then coalesce(notafiscal.totvaloricms,0) else 0 end ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.valoripi ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN COALESCE(NOTAFISCAL.vlracrescmercad,0) +
+                                     COALESCE(NOTAFISCAL.vlroutdespacessoria,0)+
+                                     case notafiscal.embutiricms when 'S' then
+                                        COALESCE(NOTAFISCAL.vlrtaxasiscomex,0)+
+                                        COALESCE(NOTAFISCAL.vlrpispasepmerc,0)+
+                                        COALESCE(NOTAFISCAL.vlrcofinsmerc,0)+
+                                        COALESCE(NOTAFISCAL.totvaloricms,0)
+                                     else 0 end
+                                      ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.vlrtotalnota ELSE 0 END,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.vlrfinalservicos ELSE 0 END,
+              NOTAFISCAL.piss,
+              CASE NOTAFISCAL.cancelamento WHEN 'N' THEN NOTAFISCAL.iss ELSE 0 END,
+              CASE NOTAFISCAL.frete WHEN 'R' THEN 0 ELSE 1 END MODFRETE,
+              CADTRANSP.DOCUMENTO,
+              CADTRANSP.RAZAOSOCIAL,
+             SUBSTRING(CADTRANSP.inscestadual FROM 1 FOR 14),
+             SUBSTRING(CADTRANSP.logradouro|| ' '||COALESCE(CADTRANSP.numero,'')||' '||
+              COALESCE(CADTRANSP.complemento,'') FROM 1 FOR 60),
+              CADTRANSP.cidade,
+              CADTRANSP.uf,
+              NOTAFISCAL.placaveiculo,
+              NOTAFISCAL.ufplacaveiculo,
+              NOTAFISCAL.quantidadevolume,
+              NOTAFISCAL.especievolume,
+              NOTAFISCAL.marcavolume,
+              NOTAFISCAL.numerovolume,
+             NOTAFISCAL.pesoliquido,
+              NOTAFISCAL.pesobruto,
+              condicaopagamento.descricao,
+               ' ' AS MSGCLIE,notafiscal.idnota,mercadoriasnota.idmercadoria
+
+
+      FROM NOTAFISCAL
+      INNER JOIN CADASTROPARCEIROS CADCLI ON (
+              cadcli.cadastro=notafiscal.destinatario)
+      INNER JOIN  modelodocto ON (NOTAFISCAL.modelo=MODELODOCTO.id)
+      left JOIN mercadoriasnota ON (
+              MERCADORIASNOTA.FILIAL=NOTAFISCAL.filial AND
+              MERCADORIASNOTA.IDNOTA=NOTAFISCAL.IDNOTA)
+      left JOIN classificacaofiscal ON (CLASSIFICACAOFISCAL.cfiscal=MERCADORIASNOTA.classifiscal)
+      left JOIN cadastroparceiros CADTRANSP ON (
+              CADtransp.CADASTRO=NOTAFISCAL.codigotransp)
+      left JOIN condicaopagamento  ON (
+              condicaopagamento.id=NOTAFISCAL.condicaopagamento)
+
+      WHERE notafiscal.FILIAL=:filial
+      AND NOTAFISCAL.dataemissao BETWEEN :datainicio AND :datafim
+      AND NOTAFISCAL.modelo=:v_modelo
+      AND NOTAFISCAL.tiponota<>2
+      and notafiscal.vlrtotalmercadorias>0
+     /* AND NOTAFISCAL.embutiricms<>'S'*/
+   ORDER BY 5,4,66,67
+
+  INTO :v_cancelada,:v_XJUST,:NATOP,:SERIE,:NNF,:DEMI,:DSAIENT,:TPNF,:CFOP,:IEST,
+     :IM,:CNPJCPF,:XNOME,:XLGR,:NRO,:XCPL,:XBAIRRO,:XMUN,:UF,:CEP,:XPAIS,
+     :FONE,IE,:CPROD,:XPROD,:NCM,:UCOM,:QCOM,:VUNCOM,:VPROD,:CST,:PICMS,:pipi,
+     :VIPI,:VBC,:VICMS,:VBCST,:VST,:VPRODTOTAL,:VFRETE,:VSEG,:VDESC,:VIPITOTAL,
+     :VOUTRO,:VNF,:VSER,:PISS,:VISS,:MODFRETE,:CNPJCPFTRANSP,:NOMETRANSP,
+     :IETRANSP,:XLGRTRANSP,:XMUNTRANSP,:UFTRANSP,:PLACA,:UFPLACA,:QVOL,:ESP,:MARCA,:NVOL,
+     :PESOL,:PESOB,:FATURA,:INFCPL,:v_idnota,:v_idmercadoria     DO begin
+
+     if (coalesce(nro,0)=0) then
+        nro = 'S/N';
+
+     if (coalesce(xbairro,'')='') then
+        xbairro='.';
+
+     funcao = 'I';
+     xjust = null;
+     if (nnf<>v_notaantes) then begin
+        select coalesce(max(mercadoriasnota.idmercadoria),0) from mercadoriasnota
+        where mercadoriasnota.filial=:filial
+        and mercadoriasnota.idnota=:v_idnota
+        into :v_maioritem;
+        v_notaantes = nnf;
+        segmento = '2,';
+        quantidaderegistro20 = quantidaderegistro20 + 1;
+     end else
+        segmento = '';
+        quantidaderegistro30 = quantidaderegistro30 + 1;
+        if (v_maioritem=v_idmercadoria or v_maioritem=0 ) then begin
+           quantidaderegistro40 = quantidaderegistro40 + 1;
+           quantidaderegistro50 = quantidaderegistro50 + 1;
+           quantidaderegistro60 = quantidaderegistro60 +1;
+           segmento = segmento||'3,4,5,6';
+           suspend;
+           if (:v_cancelada='C') then begin
+             funcao='C';
+             segmento = '2,';
+             XJUST =v_XJUST;
+             quantidaderegistro20 = quantidaderegistro20 + 1;
+             suspend;
+           end
+        end else begin
+           SEGMENTO = segmento||'3';
+           SUSPEND;
+        end
+
+    END
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE NOTAFISCALPAULISTA TO  SYSDBA;
+

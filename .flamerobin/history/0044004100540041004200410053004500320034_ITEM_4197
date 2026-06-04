@@ -1,0 +1,17 @@
+select  
+    filial,
+    idtitulo,
+    movtitulorec.idmovimento,
+    titulo,
+    
+    fatura,
+    movtitulorec.CONTACORRENTE,
+    movtitulorec.NUMBOLBANCO,
+    movtitulorec.CODRETORNO,
+    movtitulorec.CODREMESSA,
+    movtitulorec.DTMOVTOBANCARIO
+from
+    MOVTITULOREC
+where
+    movtitulorec.filial=5 and
+    movtitulorec.titulo in ('9035388', '9035393')

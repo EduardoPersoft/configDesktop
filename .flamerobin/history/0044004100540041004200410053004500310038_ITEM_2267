@@ -1,0 +1,9 @@
+select
+    itemestoque.codigo,
+    itemestoque.grupo,
+    GRUPOMERCADORIA.DESCRICAO
+from
+    ITEMESTOQUE
+left join 
+    GRUPOMERCADORIA on
+        GRUPOMERCADORIA.grupo=itemestoque.grupo

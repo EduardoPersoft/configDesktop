@@ -1,0 +1,6 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.C_CONSIGNACAO
+from 
+    pedido

@@ -1,0 +1,6 @@
+update
+    INVENTARIOESTOQUEDATA
+set 
+    data = '31.03.2022'
+where
+    data = '01.04.2022'

@@ -1,0 +1,4 @@
+update mercadoriasped 
+set mercadoriasped.PRECOLISTA=cast(mercadoriasped.precolista/2 as decimal(12,2)),
+mercadoriasped.PRECOUNITARIO=cast(mercadoriasped.precounitario/2 as decimal(12,2))
+where filial=5 and idnota=197882

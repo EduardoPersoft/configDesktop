@@ -1,0 +1,8 @@
+update
+    CADASTROPARCEIROS
+set
+    tipopessoa = coalesce(tipoPessoa, 'J'),
+    CADASTROPARCEIROS.status = coalesce(CADASTROPARCEIROS.status,1),
+    tipoEmpresa=coalesce(tipoempresa,'N'),
+    contribuinte=(contribuinte, 'S'),
+    optanteSimples=(optanteSimples,'N')

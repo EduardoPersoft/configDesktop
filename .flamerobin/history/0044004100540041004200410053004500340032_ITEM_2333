@@ -1,0 +1,3 @@
+select * from MATERIAlmovimentoestoque
+where materialmovimentoestoque.quantidade is null
+order by idmovimento

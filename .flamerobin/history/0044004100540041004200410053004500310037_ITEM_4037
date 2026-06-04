@@ -1,0 +1,4 @@
+update 
+    configuracoesgerais
+set
+   ipspermitidos='201.28.215.138'

@@ -1,0 +1,18 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(mercadoriasnota.quantidade),
+    sum(mercadoriasnota.VLRFINALMERCAD),
+    count(mercadoriasnota.idnota)
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+group by
+    itemestoque.codigo,
+    itemestoque.descricao

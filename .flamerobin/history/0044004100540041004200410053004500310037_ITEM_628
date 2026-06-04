@@ -1,0 +1,31 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(materiallocal.saldototal),
+    itemestoque.unidade,
+    materialfilial.SALDOMINIMO,
+    materialfilial.saldomaximo - sum(materiallocal.saldototal) as qtd
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = materialfilial.IDITEM
+inner JOIN
+    materiallocal on
+        materiallocal.filial=materialfilial.filial AND
+        materiallocal.iditem=materialfilial.IDITEM
+inner JOIN
+    local on 
+      local.id=materiallocal.idlocal  
+WHERE
+    materialfilial.filial=:filial AND
+    substring(local.descricao from 1 for 2) = 'Z2'
+having 
+    sum(materiallocal.saldototal)<=materialfilial.saldomaximo
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    materialfilial.SALDOMINIMO,
+    materialfilial.saldomaximo
+        

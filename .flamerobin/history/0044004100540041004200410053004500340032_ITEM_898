@@ -1,0 +1,2 @@
+delete from customes where 
+filial=110 and ano=2023 and mes=11

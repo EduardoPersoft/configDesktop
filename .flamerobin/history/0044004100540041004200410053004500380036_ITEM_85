@@ -1,0 +1,39 @@
+select 
+    lantocontpag.centrocusto,
+    CENTROCUSTOs.descricao descricaocentro,
+    CONTASCONTABEIS.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO descricaoconta,
+    extract(month from titulopag.vencimento) ano,
+    extract(month from titulopag.vencimento) mes,
+    sum(lantocontpag.VALOR) valor    
+from 
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=TITULOPAG.FILIAL
+inner join
+    CONTASCONTABEIS on 
+        CONTASCONTABEIS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        lantocontpag.CONTACONTABIL like contascontabeis.CONTACONTABIL||'%'  and
+        CONTASCONTABEIS.C_MOSTRARFLUXOCAIXA='S'
+left join
+    CENTROCUSTOS on 
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCENTROCUSTOS and
+        CENTROCUSTOS.CENTROCUSTO=lantocontpag.CENTROCUSTO
+group by        
+    lantocontpag.centrocusto,
+    CENTROCUSTOs.descricao,
+    CONTASCONTABEIS.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    extract(month from titulopag.vencimento),
+    extract(month from titulopag.vencimento)    
+order by
+    CENTROCUSTOs.descricao,
+    CONTASCONTABEIS.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    extract(month from titulopag.vencimento),
+    extract(month from titulopag.vencimento)  

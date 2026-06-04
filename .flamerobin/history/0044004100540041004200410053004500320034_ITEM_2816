@@ -1,0 +1,18 @@
+select 
+    filial,
+    idnota,
+    notafiscal.operacao,
+    notafiscal.modelo,
+    notafiscal.VLRTOTALNOTA
+from 
+    NOTAFISCAL
+inner join 
+    modelodocto on 
+        (modelodocto.id = NOTAFISCAL.modelo)
+inner join 
+    NATUREZAOPERACAO on 
+        (NOTAFISCAL.cfop = NATUREZAOPERACAO.CFOP)
+    
+where
+    notafiscal.filial=5 and
+    notafiscal.DATAEMISSAO between '01.07.2022' and '31.07.2022'

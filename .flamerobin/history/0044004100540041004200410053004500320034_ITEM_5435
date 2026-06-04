@@ -1,0 +1,23 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(mercadoriasnota.quantidade) quantidade,
+    sum(mercadoriasnota.VLRFINALMERCAD) valor
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+where 
+    notafiscal.filial=5 and
+    notafiscal.DATAEMISSAO between '2022-01-01' AND '2022-12-31' 
+group by
+    itemestoque.codigo,
+    itemestoque.descricao
+order by
+    sum(mercadoriasnota.quantidade) desc,
+    itemestoque.codigo

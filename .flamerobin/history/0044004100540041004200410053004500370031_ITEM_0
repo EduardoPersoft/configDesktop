@@ -1,0 +1,1 @@
+alter table configuracoesgerais add  URL varchar(256)

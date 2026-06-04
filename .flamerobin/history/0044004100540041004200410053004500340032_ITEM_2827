@@ -1,0 +1,11 @@
+select * from PEDIDO
+where exists (
+    select  
+        *
+    from 
+        MERCADORIASPED
+    where
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota and
+        mercadoriasped.baixa='N') and
+    pedido.vendedor is null

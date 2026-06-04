@@ -1,0 +1,7 @@
+update
+    ITEMESTOQUE
+set
+    movimentoestoque.impresso = 'S'
+where
+    movimentoestoque.tipomovimento='13' and
+    movimentoestoque.IMPRESSO is null

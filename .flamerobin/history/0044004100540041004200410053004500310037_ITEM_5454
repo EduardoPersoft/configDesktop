@@ -1,0 +1,1 @@
+execute procedure RECALCULARTOTAISESTOQUE(1, '2662046', '2662046')

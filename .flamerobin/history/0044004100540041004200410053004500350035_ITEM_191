@@ -1,0 +1,2 @@
+select * from itemestoquexarquivo 
+where iditem in ('01240038','01240037')

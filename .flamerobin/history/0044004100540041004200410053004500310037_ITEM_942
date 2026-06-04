@@ -1,0 +1,15 @@
+UPDATE
+    MERCADORIASNOTACOMPRA
+SET
+    mercadoriasnotacompra.cstipi=49
+WHERE
+    mercadoriasnotacompra.filial=12826 and 
+    exists ( 
+        select 
+            * 
+        from 
+            notacompra 
+        where notacompra.filial=mercadoriasnotacompra.FILIAL
+        and notacompra.idnota=mercadoriasnotacompra.IDNOTA
+        and notacompra.DATAENTRADA>='01.09.2021')
+        

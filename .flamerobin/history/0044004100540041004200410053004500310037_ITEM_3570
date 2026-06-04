@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where idnotaexpedicao=172633

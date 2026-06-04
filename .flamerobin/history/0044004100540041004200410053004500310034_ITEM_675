@@ -1,0 +1,11 @@
+select 
+    IDPLANO, 
+    CENTROCUSTO, 
+    DESCRICAO, 
+    CUSTOPRODUCAO, 
+    C_PERDAPROCESSO, 
+    C_PERDAAJUSTE
+from 
+    CENTROCUSTOS 
+where
+    idplano=2

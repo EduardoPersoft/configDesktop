@@ -1,0 +1,31 @@
+select 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.GRUPO,
+    local.id,
+    local.descricao,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    0 as quantidade,
+    MATERIALLOTE.UUID,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    cast('S' as char(1)) as p_check
+ from 
+    ITEMESTOQUE
+inner join 
+    MATERIALLOTE on 
+    ITEMESTOQUE.CODIGO=MATERIALLOTE.IDITEM
+inner join
+    estabelecimento on
+    estabelecimento.cadastro=materiallote.filial
+inner join
+    local on
+        local.id=estabelecimento.localInventario
+left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO
+where
+    materiallote.codigoBarra = 33197

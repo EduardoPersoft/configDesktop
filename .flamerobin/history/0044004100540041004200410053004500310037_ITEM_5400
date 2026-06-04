@@ -1,0 +1,6 @@
+select
+    *
+from 
+    c_destinoavulso
+order by
+    datacoleta

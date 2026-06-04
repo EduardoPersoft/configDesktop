@@ -1,0 +1,8 @@
+SELECT
+    clientes.limiteCredito,
+    clientes.dataAvaliacao
+from
+    CLIENTES, estabelecimento
+WHERE
+    clientes.cadastro=5 and estabelecimento=5
+    

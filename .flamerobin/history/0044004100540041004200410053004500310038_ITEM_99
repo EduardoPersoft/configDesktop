@@ -1,0 +1,22 @@
+INSERT INTO C_ITEMREGIOESFIOS(
+   CODIGO,
+   REGIAO,
+   FIO)
+SELECT  
+    CODIGO,
+    REGIAO,
+    '01.12.6901'
+FROM
+    C_ITEMREGIOESFIOS I1
+WHERE
+    I1.CODIGO NOT LIKE '%PE-%' AND
+    I1.FIO IN ('01.12.1305') AND
+    NOT EXISTS (
+        SELECT 
+            *
+        FROM
+            C_ITEMREGIOESFIOS I2
+        WHERE 
+            I2.CODIGO=I1.CODIGO AND
+            I2.REGIAO=I1.REGIAO AND
+            I2.FIO='01.12.6901')

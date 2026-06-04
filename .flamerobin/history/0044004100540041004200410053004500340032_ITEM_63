@@ -1,0 +1,7 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao
+from
+    itemestoque 
+where
+    coalesce(itemestoque.C_ESTRUTURA, 'N')='S'

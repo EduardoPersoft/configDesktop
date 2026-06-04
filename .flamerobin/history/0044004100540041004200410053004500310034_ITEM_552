@@ -1,0 +1,1 @@
+alter table materiallote add localizacao varchar(40)

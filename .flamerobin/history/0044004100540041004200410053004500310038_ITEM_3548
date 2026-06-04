@@ -1,0 +1,3 @@
+select * from MERCADORIASPED
+where filial=1 and codigo=20004
+order by idnota desc

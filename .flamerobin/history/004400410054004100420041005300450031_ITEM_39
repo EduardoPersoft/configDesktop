@@ -1,0 +1,41 @@
+select   
+    mapaProducao.recurso,
+    mapaProducao.filial,
+    mapaProducao.idMovimento,
+    mapaProducao.idMovimentoMaterial,
+    materialMovimentoEstoque.tempo,
+    materialMovimentoEstoque.setup,
+    mapaProducao.inicio,
+    mapaProducao.fim,    
+
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    movimentoestoque.previsaofimproducao,
+    produto.codigo,
+    produto.descricao,
+    materialmovimentoestoque.quantidade,
+
+    itemestoque.C_CILINDRO,
+    itemestoque.c_ladoImpressao
+
+from
+    materialMovimentoEstoque
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join
+    mapaProducao on
+        materialMovimentoEstoque.filial = mapaProducao.filial and
+        materialMovimentoEstoque.idMovimento = mapaProducao.idMovimento and
+        materialMovimentoEstoque.idMovimentoMaterial = mapaProducao.idMovimentoMaterial
+left JOIN
+    ITEMEsTOQUE PRODUTO ON
+        produto.codigo = materialmovimentoestoque.PRODUTO
+where
+    materialMovimentoEstoque.filial = 1 and
+    materialMovimentoEstoque.concluido = 'N' and
+    mapaProducao.recurso = 1
+order by 
+    mapaProducao.inicio nulls last
+

@@ -1,0 +1,3 @@
+select * from materialMOVIMENTOESTOQUE
+where filial=1 and idpedido=199829 
+order by idmovimento

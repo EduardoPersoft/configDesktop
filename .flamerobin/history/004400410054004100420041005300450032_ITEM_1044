@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    C_I_REGISTROINVENTARIO
+WHERE
+    C_I_REGISTROINVENTARIO.codigo='13765'

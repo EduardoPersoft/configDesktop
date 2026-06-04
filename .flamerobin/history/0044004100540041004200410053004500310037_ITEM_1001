@@ -1,0 +1,15 @@
+update
+set
+    ls.preco =
+        coalesce((select 
+        sum(lc.preco*composicaoitem.QUANTIDADE)       
+    FROM      
+        COMPOSICAOITEM         
+    inner JOIN
+        listaprecoproduto lc on
+            lc.produto=composicaoitem.IDMATERIAL and
+            lc.lista=ls.lista
+    WHERE
+         composicaoitem.IDITEM=ls.PRODUTO),0)
+where 
+    ls.produto like '%s'

@@ -1,0 +1,2 @@
+select * from titulorec
+where dataenvio='03.04.2024'

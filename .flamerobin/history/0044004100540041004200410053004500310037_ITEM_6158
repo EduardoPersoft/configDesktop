@@ -1,0 +1,6 @@
+select 
+    *
+from
+    NOTAFISCAL
+where
+    notafiscal.NUMERONOTA=208875

@@ -1,0 +1,6 @@
+select 
+    filial,
+    idnota,
+    email,
+    telefone
+    from orcamento 

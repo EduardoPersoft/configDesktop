@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.EMISSAO='19.12.2025'
+and movimentoestoque.coleta in ('1956', '1957')

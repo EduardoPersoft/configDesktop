@@ -1,0 +1,5 @@
+update MOVIMENTOESTOQUE set emissao='31.01.2024'
+where filial=110
+and movimentoestoque.emissao>='01.02.2024'
+and movimentoestoque.tipomovimento<>'01'
+order by tipomovimento

@@ -1,0 +1,2 @@
+alter table contascontabeis 
+add c_mostrarFluxoCaixa char(1)

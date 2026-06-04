@@ -1,0 +1,1 @@
+select cadastro,nome, c_classarquiteto from CADASTROPARCEIROS where c_classarquiteto is not null

@@ -1,0 +1,9 @@
+select 
+    itemestoque.CODIGOBARRA,
+    count(itemestoque.codigo)
+from    
+    ITEMESTOQUE
+group by
+    itemestoque.CODIGOBARRA
+having
+    count(itemestoque.codigo)>1

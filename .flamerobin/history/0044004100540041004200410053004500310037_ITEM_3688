@@ -1,0 +1,3 @@
+select * from ORCAMENTO
+where orcamento.vendedor=252
+and orcamento.vendedor<>252

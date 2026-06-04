@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO
+where produto in ('PE-25207', '20011')

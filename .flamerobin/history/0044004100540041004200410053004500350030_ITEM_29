@@ -1,0 +1,12 @@
+select 
+        PEDIDONFE, 
+        PEDIDOCLINFE, 
+        VENDEDORDANFE, 
+        PEDIDONFEREGNUM, 
+        ITEMCODREFNFE, 
+        EANNFE, 
+        IBPTFONTE || ' ' || IBPTCHAVE,
+        MENSAGEMIPI,
+        NFENOMEFANTASIA
+  from 
+        CONFIGURACOESGERAIS

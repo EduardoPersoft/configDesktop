@@ -1,0 +1,7 @@
+select 
+    filial,
+    idmovimento,
+    up,
+    upporm2 
+    from MATERIALMOVIMENTOESTOQUE 
+where MATERIALMOVIMENTOESTOQUE.up is not null

@@ -1,0 +1,2 @@
+select * from VERSAOALTERACAO
+where id>1667

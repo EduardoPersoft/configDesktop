@@ -1,0 +1,14 @@
+UPDATE
+    TITULOREC
+SET
+    dataenvio = '31.12.2021'
+WHERE
+linhadigitavel is not null and dataenvio is null and baixa is null
+and codretorno is not null and cadastro='02.07.2021'
+    
+
+
+
+select * from titulorec 
+where linhadigitavel is not null and dataenvio is null and baixa is null
+and codretorno is not null and cadastro='31.07.2021'

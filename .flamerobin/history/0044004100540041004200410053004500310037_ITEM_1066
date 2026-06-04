@@ -1,0 +1,16 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    CLASSIFICACAOFISCAL.CFISCAL,
+    TRIBUTACAOICMS.DESCRICAO
+from
+    ITEMESTOQUE
+left join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+left join
+    TRIBUTACAOICMS on
+        tributacaoicms.ID=itemestoque.TRIBUTACAOICMS
+where 
+    codigo = '2205111'

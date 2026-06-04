@@ -1,0 +1,11 @@
+select 
+    * 
+from 
+    mercadoriasnota 
+inner join 
+    mercadoriasped on
+        mercadoriasped.filial=mercadoriasnota.filialped and
+        mercadoriasped.idnota=mercadoriasnota.idpedido and
+        mercadoriasped.IDMERCADORIA=mercadoriasnota.IDMERCPEDIDO
+where 
+    mercadoriasped.quantidade<>mercadoriasnota.quantidade

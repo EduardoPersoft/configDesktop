@@ -1,0 +1,7 @@
+insert into c_customedio(iditem,custo)
+
+SELECT RESUMOLANCAMENTOS.codigo
+       RESUMOLANCAMENTOS.custofinal/
+       RESUMOLANCAMENTOS.qtdfinal
+FROM RESUMOLANCAMENTOS
+where  RESUMOLANCAMENTOS.QTDFINAL>=0.009)

@@ -1,0 +1,6 @@
+select 
+    *
+from
+    MERCADORIASorc
+where
+    mercadoriasorc.codigo='2479408' 

@@ -1,0 +1,11 @@
+select 
+    lote,
+    quantidade,
+    c_largura,
+    C_GRAMATURA,
+    uuid,
+    codigobarra
+from 
+    materiallote
+
+    

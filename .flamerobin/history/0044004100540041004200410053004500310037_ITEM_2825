@@ -1,0 +1,7 @@
+select 
+    idplano,
+    contacontabil,
+    descricao,
+    NIVEL
+from CONTASCONTABEIS where idplano=2
+order by contacontabil

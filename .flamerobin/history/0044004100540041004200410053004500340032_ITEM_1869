@@ -1,0 +1,9 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.TIPOMOVIMENTO in ('10', '11', '17') and
+    movimentoestoque.emissao in ('04.03.2024', '05.03.2024')
+order by idmovimento

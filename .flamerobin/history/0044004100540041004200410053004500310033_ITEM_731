@@ -1,0 +1,2 @@
+select * from CONTACORRENTE
+where id=341

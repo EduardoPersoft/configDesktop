@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    ITEMESTOQUE
+WHERE
+    ITEMESTOQUE.CODIGO LIKE '01.12.%'

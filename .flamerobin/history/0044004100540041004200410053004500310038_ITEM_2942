@@ -1,0 +1,18 @@
+select 
+    principal.dataemissa,
+    principal.filial,
+    principal.idnota,
+    principal.c_status,
+    alternativo.filial,
+    alternativo.idnota,
+    alternativo.c_status
+
+from
+    orcamento principal
+inner join
+    orcamento alternativo on
+        alternativo.filial=principal.FILIAL and
+        alternativo.IDRELACAO=principal.IDNOTA
+where
+    principal.c_status<>alternativo.c_status
+    

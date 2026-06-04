@@ -1,0 +1,7 @@
+update
+    materiallote
+set
+    QUANTIDADE=0
+where
+    iditem='MPP03MAT2G18'
+    and quantidade is null

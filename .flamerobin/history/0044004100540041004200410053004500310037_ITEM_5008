@@ -1,0 +1,14 @@
+select distinct 
+        case 
+            (coalesce (notafiscal.INSCRICAOSUBSTITUTO,'')) when '' then 
+        CADASTROPARCEIROS.UF
+        else notafiscal.uf end
+    from
+        notafiscal
+   
+    inner join CADASTROPARCEIROS on 
+        (notafiscal.filial=CADASTROPARCEIROS.cadastro)
+            
+    where 
+        notafiscal.filial = 1 and 
+        notafiscal.DATAEMISSAO between '2025-06-01' and '2025-06-30'

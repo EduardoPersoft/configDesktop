@@ -1,0 +1,3 @@
+select codigo,itembase from ITEMESTOQUE
+where codigo like 'PE-%' and
+c_grupocomissao is null

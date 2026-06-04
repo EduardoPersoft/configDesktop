@@ -1,0 +1,5 @@
+delete from  
+    pedidocompra
+WHERE 
+    FILIAL=5 AND 
+    IDNOTA between 100 and 102

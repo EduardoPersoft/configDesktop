@@ -1,0 +1,7 @@
+update
+    PEDIDO
+set 
+    pedido.DATACADASTRO='31.05.2022' 
+where
+    pedido.datacadastro<='30.06.2022' and
+    pedido.dataemissao is null

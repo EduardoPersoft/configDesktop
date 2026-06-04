@@ -1,0 +1,3 @@
+update planilhaorc
+set idmercadoria=null
+where filial=5 and idnota=976

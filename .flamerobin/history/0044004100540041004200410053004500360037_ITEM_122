@@ -1,0 +1,2 @@
+select filial,idnota,notafiscal.TOTVALORICMS from NOTAFISCAL
+where filial=1 and idnota=30703

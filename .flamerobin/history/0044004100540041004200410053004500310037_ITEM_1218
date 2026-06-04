@@ -1,0 +1,10 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.PIPI = (SELECT 
+                            CLASSIFICACAOFISCAL.ALIQUOTA
+                        from
+                            CLASSIFICACAOFISCAL 
+                        WHERE    
+                            CLASSIFICACAOFISCAL.CFISCAL = ITEMESTOQUE.CLASSIFISCAL)
+    

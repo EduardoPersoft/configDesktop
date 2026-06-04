@@ -1,0 +1,137 @@
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop,
+    itemestoque.TIPOPRODUTO,
+
+    sum(mercadoriasnotacompra.vlrfinalmercad) as vlrfinalmercad ,
+    
+    sum(mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR) FRETE,
+    
+    sum(MERCADORIASNOTACOMPRA.VALORIPI) as valoripi,
+    sum(case itemestoque.tipoproduto when '1' then mercadoriasnotacompra.valoripi else 0 end) valoripiCredito,
+    
+    sum(mercadoriasnotacompra.vlrfinalmercad+
+    mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR+
+    MERCADORIASNOTACOMPRA.VALORIPI) TOTAL,
+   
+    sum(case when itemestoque.tipoproduto in ('1', '3') then mercadoriasnotacompra.valoricms else 0 end) as valoricms,
+    
+    sum(coalesce(MATERIALMOVIMENTOESTOQUE.valor,0)) as valorestoque,
+    'N' as devolucao
+       
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+left join
+    modelodocto on
+        modelodocto.id=notacompra.modelo
+left join
+    movimentoestoque on
+        movimentoestoque.filial=notacompra.filial and
+        movimentoestoque.IDNOTACOMPRA=notacompra.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadoriasnotacompra.idmercadoria
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '2023-08-01' and '2023-08-31'
+group by    
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    mercadoriasnotacompra.cfop,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO
+union
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    nota.modelo,
+    MODELODOCTO.MODELO,
+    nota.dataemissao,
+    cadpar.razaosocial,
+    nota.numeronota,
+    mercadorias.cfop,
+    itemestoque.TIPOPRODUTO,
+
+    sum(mercadorias.vlrfinalmercad)*(-1) as vlrfinalmercad ,
+    
+    sum(mercadorias.frete+
+    mercadorias.seguro+
+    mercadorias.OUTDESPACESSOR)*(-1) FRETE,
+    
+    sum(MERCADORIAS.VALORIPI)*(-1) as valoripi,
+    sum(case itemestoque.tipoproduto when '1' then mercadorias.valoripi else 0 end)*(-1) valoripiCredito,
+    
+    sum(mercadorias.vlrfinalmercad+
+    mercadorias.frete+
+    mercadorias.seguro+
+    mercadorias.OUTDESPACESSOR+
+    MERCADORIAS.VALORIPI)*(-1) TOTAL,
+   
+    sum(case when itemestoque.tipoproduto in ('1', '3') then mercadorias.valoricms else 0 end)*(-1) as valoricms,
+    
+    sum(coalesce(MATERIALMOVIMENTOESTOQUE.valor,0))*(-1) as valorestoque,
+    'S' as devolucao
+       
+from 
+    notafiscal nota
+inner join
+    MERCADORIASNOTA mercadorias on
+        mercadorias.filial=nota.filial and
+        mercadorias.idnota=nota.IDNOTA
+inner join
+    cadastroparceiros cadpar on
+        cadpar.cadastro=nota.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadorias.CODIGO
+left join
+    modelodocto on
+        modelodocto.id=nota.modelo
+left join
+    movimentoestoque on
+        movimentoestoque.filial=nota.filial and
+        movimentoestoque.IDNOTA=nota.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadorias.idmercadoria
+where
+    nota.filial=110 and
+    nota.dataemissao between '2023-08-01' and '2023-08-31' and
+    nota.ENTRADASAIDA = 'S' and
+    coalesce(nota.DEVOLUCAO, 'N') = 'S'
+group by    
+    nota.modelo,
+    MODELODOCTO.MODELO,
+    mercadorias.cfop,
+    nota.dataemissao,
+    cadpar.razaosocial,
+    nota.numeronota,    
+    itemestoque.TIPOPRODUTO
+order by 
+    1,2,3,4,5,6,7,8,9

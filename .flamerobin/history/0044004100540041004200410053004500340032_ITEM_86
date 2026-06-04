@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    ITEMESTOQUE
+where
+    itemestoque.C_CLIENTE is not null

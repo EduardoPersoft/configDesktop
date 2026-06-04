@@ -1,0 +1,17 @@
+select 
+    iditem,
+    lote,
+    quantidade
+from 
+    MATERIALLOTE
+
+where
+    materiallote.filial = 110 and
+    materiallote.iditem like 'MPP%' and
+    materiallote.quantidadE>0 and
+    not ((materiallote.lote like '62480%' and materiallote.iditem='MPP02TRACHH') or 
+         (materiallote.lote like '4637%' and materiallote.iditem='MPP01TRAQMG14') or
+         (materiallote.lote like '12738' and materiallote.iditem='MPP01TRAQMG17'))
+order by
+    materiallote.iditem,
+    materiallote.lote

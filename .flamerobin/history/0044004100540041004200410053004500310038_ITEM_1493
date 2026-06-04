@@ -1,0 +1,26 @@
+
+select 
+    case itemestoque.TIPOPRODUTO when '1' then 'Materia Prima'
+                                 when '2' then 'Revenda'
+                                 else '' end,
+    extract (YEAR from notacompra.DATAENTRADA) AS ANO,
+    extract (month from notacompra.DATAENTRADA) AS MES,
+    sum (COALESCE (mercadoriasnotacompra.VLRFINALMERCAD,0) + COALESCE ( mercadoriasnotacompra.VALORIPI,0)) valorcompra
+
+        
+from 
+    mercadoriasnotacompra
+inner join 
+    notacompra on 
+        (notacompra.filial=mercadoriasnotacompra.filial and 
+         notacompra.idnota=mercadoriasnotacompra.idnota)
+inner join 
+    itemestoque on 
+        (mercadoriasnotacompra.codigo=itemestoque.codigo)
+where 
+     substring (coalesce (notacompra.cfop,'') from 2 for 1) <> '9'
+     and itemestoque.tipoproduto in (1,3)
+     and notacompra.DATAEMISSAO>'01.01.2022'
+    
+GROUP BY 
+    1,2,3

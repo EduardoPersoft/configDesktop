@@ -1,0 +1,51 @@
+SELECT 
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.NUMERONOTA, 
+       notafiscal.idnota,
+       CP_VENDEDOR.CADASTRO VENDEDOR, 
+       NOTAFISCAL.DATAEMISSAO,
+       CP_CLIENTE.CADASTRO AS CADCLIENTE, 
+       CP_CLIENTE.RAZAOSOCIAL AS NOMECLIENTE,
+       VENDEDORESNOTA.VENDEDOR AS CADVENDEDOR, 
+       CP_VENDEDOR.razaosocial AS NOMEVENDEDOR, 
+       (coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) AS VALOR,
+       case when (CP_ATENDENTE.CADASTRO= CP_VENDEDOR.CADASTRO) then 
+            (((coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) * VENDEDORESNOTA.COMISSAOVENDA)/100) 
+       else (((coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) * VENDEDORESNOTA.COMISSAOVENDA)/100)/2      
+       end AS VALORCOMISSAO,
+       VENDEDORESNOTA.COMISSAOVENDA,
+       CP_ATENDENTE.razaosocial AS ATENDENTENOME,
+       CP_ATENDENTE.CADASTRO AS ATENDENTECADASTRO,
+       (select min(mercadoriasnota.idpedido) from mercadoriasnota
+        
+       where notafiscal.filial=mercadoriasnota.filial
+      and notafiscal.idnota=mercadoriasnota.idnota
+      plan index(RDB$PRIMARY31)) idPedido
+FROM 
+    NOTAFISCAL
+
+INNER JOIN 
+    VENDEDORESNOTA 
+        ON (VENDEDORESNOTA.FILIAL = NOTAFISCAL.FILIAL
+                          AND VENDEDORESNOTA.IDNOTA = NOTAFISCAL.IDNOTA)
+INNER JOIN 
+    CADASTROPARCEIROS CP_CLIENTE 
+        ON (NOTAFISCAL.DESTINATARIO = CP_CLIENTE.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CP_VENDEDOR 
+        ON (VENDEDORESNOTA.VENDEDOR = CP_VENDEDOR.CADASTRO)
+INNER JOIN 
+    NATUREZAOPERACAO 
+        ON (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS CP_EMPRESA 
+        ON (NOTAFISCAL.FILIAL = CP_EMPRESA.CADASTRO)
+left JOIN 
+    CADASTROPARCEIROS CP_ATENDENTE
+        ON (NOTAFISCAL.ATENDENTE = CP_ATENDENTE.CADASTRO)        
+WHERE
+     notafiscal.filial=1 and 
+     notafiscal.dataemissao between '2025-04-01' and '2025-04-30'
+ORDER BY 
+    NOTAFISCAL.FILIAL, VENDEDORESNOTA.VENDEDOR, NOTAFISCAL.DATAEMISSAO,
+    CP_CLIENTE.CADASTRO, notafiscal.NUMERONOTA

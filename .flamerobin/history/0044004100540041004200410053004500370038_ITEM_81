@@ -1,0 +1,5 @@
+update CADASTROPARCEIROS
+set CADASTROPARCEIROS.uf=(select first 1 cep.uf from cep where substring(cep.cep from 1 for 5)=substring(CADASTROPARCEIROS.cep from 1 for 5)),
+CADASTROPARCEIROS.cidade=(select first 1 cep.cidade from cep where substring(cep.cep from 1 for 5)=substring(CADASTROPARCEIROS.cep from 1 for 5))
+where CADASTROPARCEIROS.uf is null and
+exists (select * from cep where substring(cep.cep from 1 for 5)=substring(CADASTROPARCEIROS.cep from 1 for 5))

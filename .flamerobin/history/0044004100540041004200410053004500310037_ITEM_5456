@@ -1,0 +1,2 @@
+select * from PEDIDO
+where pedido.VENDEDOR=21562

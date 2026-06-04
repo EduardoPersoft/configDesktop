@@ -1,0 +1,7 @@
+update
+    LANTOCONTPAG
+set
+    contacontabil='11020117'
+where 
+    filial=1 and 
+    idmovtobanc between 274 and 293

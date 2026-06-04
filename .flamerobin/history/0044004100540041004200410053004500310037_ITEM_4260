@@ -1,0 +1,2 @@
+select * from NFECTRL
+where colaesce(nfectrl.idresultado,0)<>0

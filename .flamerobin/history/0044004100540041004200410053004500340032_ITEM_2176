@@ -1,0 +1,2 @@
+select * from C_LAMINACAO
+where c_laminacao.codigo='I3-1C1M2HR/23'

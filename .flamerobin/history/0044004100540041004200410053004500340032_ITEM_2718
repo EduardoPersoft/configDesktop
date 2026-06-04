@@ -1,0 +1,73 @@
+SELECT 
+distinct
+       MODELODOCTO.MODELO,
+       cast(NOTAFISCAL.DATAEMISSAO as date) AS DATA,
+       CAST(NOTAFISCAL.NUMERONOTA AS VARCHAR(10)) AS NUMERONOTA,
+       CLIENTES.CADASTRO,
+       CLIENTES.NOME,
+       notafiscal.VLRTOTALNOTA,
+       notafiscal.PESOliquido
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+INNER join 
+        mercadoriasnota  on
+           (mercadoriasnota.filial=notafiscal.filial and 
+             mercadoriasnota.idnota=notafiscal.idnota)
+INNER join 
+        itemestoque on 
+            (itemestoque.codigo=mercadoriasnota.codigo)
+            
+left join
+    pedido on
+        pedido.filial=mercadoriasnota.filialped and
+        pedido.idnota=mercadoriasnota.IDPEDIDO
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro = pedido.vendedor
+WHERE 
+    NOTAFISCAL.FILIAL=110 AND
+    NOTAFISCAL.DATAEMISSAO BETWEEN '01.07.2024' and '31.07.2024'
+    AND NOTAFISCAL.CANCELAMENTO = 'N'
+    
+AND case when   mercadoriasnota.cfop not in ('5922','6922') and
+                   (exists (select 
+                        * 
+                    from 
+                        faturas
+                    where notafiscal.filial=faturas.filial
+                    and notafiscal.idnota=faturas.idnota)  or 
+            mercadoriasnota.cfop in ('5116', '5117', '6116', '6117', '2201', '1201', '2202', '1202', '2203',
+                                     '2204', '1204', '1203'))
+          then 'S'
+            else 'N'
+       end = 'S'  
+and case when exists (select 
+                            * 
+                         from 
+                            ESTABELECIMENTO
+                         where estabelecimento.CADASTRO=clientes.cadastro) 
+        then 'S' else 'N' end = 'N'
+
+and coalesce(NOTAFISCAL.DEVOLUCAO,'N') ='N'
+
+
+order by
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.NUMERONOTA, 
+       mercadoriasnota.CFOP,
+       mercadoriasnota.idpedido
+
+
+

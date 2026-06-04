@@ -1,0 +1,2 @@
+select titulopag.IDCOMISSAO, titulopag.* from titulopag 
+where idtitulo=376874

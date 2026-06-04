@@ -1,0 +1,11 @@
+update
+    mercadoriasped
+set
+    baixa = 'N', minimo=quantidade
+where
+    mercadoriasped.filial=1 and 
+    mercadoriasped.idnota in (
+        71277,71234,71252,71235,
+        71237,71216,71222,71233,
+        71272,71270,71267,71248,
+        71244,71225)

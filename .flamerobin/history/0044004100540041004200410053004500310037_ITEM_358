@@ -1,0 +1,10 @@
+UPDATE
+    TITULOREC
+SET
+    DATAENVIO = '06.08.2021'
+WHERE
+    titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03' 
+	and titulorec.emissao<='03.08.2021' 

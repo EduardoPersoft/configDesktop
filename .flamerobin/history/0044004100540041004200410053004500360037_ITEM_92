@@ -1,0 +1,37 @@
+select 
+    movsaida.filial,
+    movsaida.idmovimento,
+    materialsaida.IDITEM,
+    produto.DESCRICAO,
+    produto.unidade,
+    materialsaida.QUANTIDADE,
+    op.IDMOVIMENTO as idop,
+    moventrada.idmovimento as idmoventrada
+    
+from 
+    movimentoestoque movsaida
+inner join 
+    MATERIALMOVIMENTOESTOQUE materialsaida on 
+        (movsaida.filial=materialsaida.filial and 
+         movsaida.IDMOVIMENTO=materialsaida.idmovimento)
+    inner join 
+        itemestoque produto on         
+            (produto.codigo=materialsaida.IDITEM  )
+inner join 
+        movimentoestoque op        
+    on 
+        (op.filial=movsaida.filial and 
+         op.IDMOVIMENTO=movsaida.idop and
+         movsaida.TIPOMOVIMENTO=9) 
+
+ inner join 
+        movimentoestoque moventrada on        
+            (op.filial=moventrada.filial and 
+            op.IDMOVIMENTO=moventrada.idop and 
+            moventrada.TIPOMOVIMENTO=4)      
+        
+where 
+    movsaida.filial=1 and
+    movsaida.EMISSAO between '01.03.2025' and '31.03.2025'
+order by 
+    movsaida.idmovimento desc

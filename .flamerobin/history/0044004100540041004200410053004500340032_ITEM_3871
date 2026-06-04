@@ -1,0 +1,16 @@
+SELECT CADASTROPARCEIROS.CADASTRO,
+       CADASTROPARCEIROS.NOME,
+       ITEMESTOQUE.CODIGO,
+       ITEMESTOQUE.DESCRICAO  ,
+       ITEMESTOQUE.c_fornecedorcilindrocliche,
+      mercadoriasped.filial,
+      mercadoriasped.idnota,
+      mercadoriasped.idmercadoria
+FROM mercadoriasped
+inner join itemestoque on 
+    itemestoque.codigo=mercadoriasped.codigo
+inner JOIN CADASTROPARCEIROS ON (ITEMESTOQUE.c_cliente=CADASTROPARCEIROS.CADASTRO)
+WHERE mercadoriasped.baixa = 'N'
+and (ITEMESTOQUE.c_cliche in ('2','3')  or
+mercadoriasped.C_NOVOREPETICAOALTERADO in ('N', 'R'))
+and filial=110

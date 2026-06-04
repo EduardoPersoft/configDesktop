@@ -1,0 +1,50 @@
+                                 
+update 
+    orcamento pedido
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from fatORC
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from fatORC
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0);
+                                 
+update 
+    PEDIDO
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0);
+                                
+update 
+    notafiscal pedido
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURAS fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURAS fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0);
+
+update 
+    notacompra pedido
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURASNOTACOMPRA fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURASNOTACOMPRA fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0);                                 
+                                 
+update 
+    PEDIDOCOMPRA pedido
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURASPEDCOMPRA fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from FATURASPEDCOMPRA fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0)                                                                  

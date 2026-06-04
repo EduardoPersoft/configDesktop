@@ -1,0 +1,1 @@
+select * from TURNODEFAULT where recurso = 1

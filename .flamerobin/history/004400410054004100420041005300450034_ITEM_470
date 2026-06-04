@@ -1,0 +1,26 @@
+SELECT
+    FILIAL,
+    IDNOTA,
+    IDSERVICO,
+    CODIGO,
+    DESCRICAO,
+    DESREDUZIDA,
+    
+    precoLista,
+    precoUnitario,
+    
+    
+    quantidade,
+    UNIDADE,    
+    
+    servicosorc.vlrTotalServico,
+    desconto,
+    acrescimo,
+    
+    vlrFinalServico,
+    
+    comissao,
+    baixa
+    
+FROM
+    SERVICOSORC

@@ -1,0 +1,10 @@
+select    
+    extract(weekday from orcamento.DATACADASTRO),
+    count(orcamento.idnota)    
+from
+    orcamento
+where
+    orcamento.datacadastro>cast('now' as date)-extract(weekday from cast('now' as date))
+group by
+    extract(weekday from orcamento.DATACADASTRO)
+    

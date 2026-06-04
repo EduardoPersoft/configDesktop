@@ -1,0 +1,34 @@
+select
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) AS QUANTIDADE,
+    sum(materialmovimentoestoque.VALOR*MATERIALMOVIMENTOESTOQUE.SINAL) as custo ,
+    case when sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)<>0 then
+    sum(materialmovimentoestoque.VALOR*MATERIALMOVIMENTOESTOQUE.SINAL) / 
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)
+    else 0 end precomedio,
+    CASE ITEMESTOQUE.TIPOPRODUTO
+        WHEN 1 THEN 'Matéria prima'
+        WHEN 2 THEN 'Consumo'
+        WHEN 3 THEN 'Revenda'
+        WHEN 4 THEN 'Industrializado'
+        WHEN 5 THEN 'Inativo'
+        ELSE itemestoque.TIPOPRODUTO
+    end TIPOPRODUTO     
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+inner join 
+    CLASSIFICACAOFISCAL on 
+    ITEMESTOQUE.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL = ? AND
+    MOVIMENTOESTOQUE.EMISSAO <= ? 
+group BY
+    itemestoque.tipoproduto
+having 
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) > 0

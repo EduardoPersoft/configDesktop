@@ -1,0 +1,1 @@
+select * from castroparceiros where CADASTROPARCEIROS.IDORIGINAL is not null

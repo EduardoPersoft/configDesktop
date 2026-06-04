@@ -1,0 +1,1 @@
+select codigo,descricao,unidade,itemestoque.CLASSIFISCAL from itemestoque where tipoproduto=1

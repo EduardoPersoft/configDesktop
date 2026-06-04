@@ -1,0 +1,3 @@
+select * from COMPOSICAOOP
+where composicaoop.filial=110
+and composicaoop.IDMOVIMENTO desc

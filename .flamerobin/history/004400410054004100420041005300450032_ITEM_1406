@@ -1,0 +1,1 @@
+select * from C_I_MOVESTX WHERE DATA='30.11.2020'

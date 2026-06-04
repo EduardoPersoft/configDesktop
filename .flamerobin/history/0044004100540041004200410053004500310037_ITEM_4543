@@ -1,0 +1,15 @@
+select 
+    filial,
+    idnota,
+    dataemissao,
+    datacadastro,
+    numeronota,
+    tipocobranca,
+    notafiscal.CONTACORRENTECOBRAN,
+    condicaopagamento 
+from 
+    NOTAFISCAL
+where 
+filial=1
+and dataemissao>='01.03.2025'
+order by dataemissao desc

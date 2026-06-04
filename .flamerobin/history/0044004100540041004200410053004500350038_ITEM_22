@@ -1,0 +1,26 @@
+select 
+    distinct 
+    NATUREZAOPERACAO.id,
+    NATUREZAOPERACAO.cfop,
+    naturezaoperacao.descricao,
+    naturezaoperacao.DESCRICAOOPERACAO,
+    NATUREZAOPERACAO.ENTRADASAIDA
+from    
+    NOTAFISCAL
+inner join
+    NATUREZAOPERACAO on
+        NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.id
+union
+select 
+    distinct 
+    NATUREZAOPERACAO.id,
+    NATUREZAOPERACAO.cfop,
+    naturezaoperacao.descricao,
+    naturezaoperacao.DESCRICAOOPERACAO,
+    NATUREZAOPERACAO.ENTRADASAIDA
+from    
+    notacompra NOTAFISCAL
+inner join
+    NATUREZAOPERACAO on
+        NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.id
+ order by cfop       

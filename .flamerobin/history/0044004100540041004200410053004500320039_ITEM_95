@@ -1,0 +1,8 @@
+update  
+    TITULOREC
+set
+    titulorec.NUMBOLBANCO=null,
+    titulorec.LINHADIGITAVEL=null,
+    titulorec.CODIGOBARRA=null
+where
+    TITULOREC.filial=1 and titulorec.EMISSAO0000>='01.10.2025'

@@ -1,0 +1,107 @@
+select
+    titulopag.filial,
+    titulopag.contaCorrente,
+    titulopag.tipoTransacao,
+    tipoPagamento.descricao,
+    --titulopag.PROGRAMACAO as vencimento,
+    coalesce(titulopag.baixa, titulopag.VENCIMENTO)  as vencimento,
+    'P' AS TIPO,
+    cadfor.razaosocial,
+    cadfor.documento as cnpjcpf,
+    titulopag.idtitulo,
+    titulopag.TITULO,
+    titulopag.fatura,
+    titulopag.emissao,    
+    lantocontpag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO as contacontabildesc,    
+    case when coalesce(titulopag.tipobaixa, '') = 'P' then null
+         when titulopag.vencimento<cast('now' as timestamp) then cast('now' as timestamp) - titulopag.vencimento
+         else null
+    end,
+    cast(0 as decimal(12,2)) as receber,
+    cast(lantocontpag.valor as decimal(12,2)) as pagar,    
+    cast(0 as decimal(12,2)) as saldo,
+    cast(lantocontpag.valor as decimal(12,2)) as pagar,    
+    case when coalesce(titulopag.tipobaixa, '') = 'P' then 'S' else 'N' end tipoBaixa,
+    cast('N' as char(1)) as p_char
+
+from 
+    TITULOPAG
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulopag.PARCEIRO
+inner join 
+    lantocontpag on 
+        (lantocontpag.FILIAL=titulopag.filial and 
+         lantocontpag.idmovtobanc=titulopag.idtitulo)
+inner join 
+    ESTABELECIMENTO on 
+        (ESTABELECIMENTO.cadastro = titulopag.filial)
+LEFT join 
+    contascontabeis on 
+        (estabelecimento.planocontas=contascontabeis.idplano
+        and lantocontpag.contacontabil = contascontabeis.contacontabil )            
+left join
+    tipoPagamento on
+        tipoPagamento.id=titulopag.tipoTransacao
+where    
+    titulopag.filial = 1 and 
+    titulopag.vencimento  between '01.10.2025' and '31.12.2025' and
+    coalesce(titulopag.tipobaixa, '') in ('', 'P') 
+
+
+UNION 
+
+select
+    titulorec.filial,
+    titulorec.contacorrente,
+    titulorec.tipoTransacao,
+    tipoCobranca.descricao,
+    --coalesce(titulorec.baixa, titulorec.PROVAVEL) as vencimento,
+    coalesce(titulorec.baixa, titulorec.vencimento) as vencimento,
+    'R' AS TIPO,
+    cadfor.razaosocial,
+    cadfor.documento as cnpjcpf,    
+    titulorec.idtitulo,
+    titulorec.TITULO,
+    titulorec.fatura,
+    titulorec.emissao,    
+    lantocontrec.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO as contacontabildesc,  
+    case when coalesce(titulorec.tipobaixa, '') = 'P' then null
+         when titulorec.vencimento<cast('now' as timestamp) then cast('now' as timestamp) - titulorec.vencimento
+         else null
+    end,
+    cast(lantocontrec.valor as decimal(12,2)) as receber,    
+    cast(0 as decimal(12,2)) as pagar,
+    cast(0 as decimal(12,2)) as saldo,
+    cast(lantocontrec.valor as decimal(12,2)) as receber,    
+    case when coalesce(titulorec.tipobaixa, '') = 'P' then 'S' else 'N' end tipoBaixa,
+    cast('N' as char(1)) as p_char
+
+    
+from 
+    titulorec
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulorec.PARCEIRO        
+left join
+    tipoCobranca on
+        tipoCobranca.tipoCobranca=titulorec.tipoTransacao
+inner join 
+    lantocontrec on 
+        (lantocontrec.FILIAL=titulorec.filial and 
+         lantocontrec.idmovtobanc=titulorec.idtitulo)
+inner join 
+    ESTABELECIMENTO on 
+        (ESTABELECIMENTO.cadastro = titulorec.filial)
+LEFT join 
+    contascontabeis on 
+        (estabelecimento.planocontas=contascontabeis.idplano
+        and lantocontrec.contacontabil = contascontabeis.contacontabil )   
+where    
+    titulorec.filial = 1 and
+    titulorec.vencimento between '01.10.2025' and '31.12.2025' and
+    coalesce(titulorec.tipobaixa, '') in ('', 'P') 
+
+order by 5, 6 desc, 7

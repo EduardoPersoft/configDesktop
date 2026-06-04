@@ -1,0 +1,11 @@
+update
+    TITULOREC
+set 
+    titulorec.BAIXA = null,
+    titulorec.DATAPAGAMENTO = null,
+    titulorec.TIPOBAIXA = null
+where
+    titulorec.filial=5 and
+    titulorec.VENCIMENTO>='27.03.2023' and
+    titulorec.CONTACORRENTE=10000
+

@@ -1,0 +1,1 @@
+select * from materiallocal where idlocal>=1790

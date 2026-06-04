@@ -1,0 +1,4 @@
+insert into listapreco(lista,uuid)
+values ((select coalesce(max(listapreco.lista),1)+1 
+         from listapreco),
+         'teste')

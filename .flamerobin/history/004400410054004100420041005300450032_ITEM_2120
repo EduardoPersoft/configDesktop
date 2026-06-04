@@ -1,0 +1,46 @@
+select 
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+
+    pedidocompra.datacadastro,
+    pedidocompra.DESTINATARIO,
+    forPed.nome forPedido,
+    
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao,
+    mercadoriaspedcompra.quantidade,
+    max(resumocompras.fornecedor) fornecedor,
+    max(forNota.nome) ForNota,
+    max(resumocompras.emissao) emissao,
+    sum(resumocompras.quantidade) as quantidade
+from    
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    pedidocompra on
+        pedidocompra.filial=MERCADORIASPEDCOMPRA.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.idnota
+inner JOIN
+    resumocompras on 
+        RESUMOCOMPRAS.item=mercadoriaspedcompra.codigo  AND
+        pedidocompra.DATACADASTRO<resumocompras.EMISSAO
+inner join 
+    CADASTROPARCEIROS forPed on
+        pedidocompra.destinatario=forPed.cadastro
+inner join 
+    CADASTROPARCEIROS forNota on
+        resumocompras.fornecedor=forNota.cadastro
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=MERCADORIASPEDCOMPRA.codigo
+WHERE
+    mercadoriaspedcompra.filial = 5 AND
+    mercadoriaspedcompra.baixa ='N'
+group by
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    pedidocompra.datacadastro,
+    pedidocompra.DESTINATARIO,
+    forPed.nome,
+    mercadoriaspedcompra.quantidade

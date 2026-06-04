@@ -1,0 +1,9 @@
+SELECT
+    itemestoque.referencia,
+    count(itemestoque.codigo)
+FROM
+    ITEMESTOQUE
+group by 
+    itemestoque.referencia
+HAVING
+    count(itemestoque.referencia)>1

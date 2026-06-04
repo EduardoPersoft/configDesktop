@@ -1,0 +1,2 @@
+delete form c_malote
+where c_malote.malote in (32750, 32753, 32752)

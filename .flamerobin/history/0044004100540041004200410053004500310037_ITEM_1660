@@ -1,0 +1,7 @@
+update
+    TITULOREC
+set
+    titulorec.DATAENVIO = null
+where
+    titulorec.filial=1 and
+    titulorec.DATAENVIO='22.08.2022'

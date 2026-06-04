@@ -1,0 +1,8 @@
+update
+    TITULOPAG
+set
+    emissao='27.07.2023'
+where 
+    titulopag.filial=110 and
+    titulopag.EMISSAO>'01.01.2023' and
+    titulopag.TITULO='0158'

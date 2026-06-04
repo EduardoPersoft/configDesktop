@@ -1,0 +1,7 @@
+select
+    orcamento.UUID
+from
+    ORCAMENTO
+where
+    orcamento.filial=12826 and
+    orcamento.idnota=181618

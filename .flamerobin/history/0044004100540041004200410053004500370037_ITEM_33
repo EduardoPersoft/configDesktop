@@ -1,0 +1,5 @@
+update 
+    ITEMESTOQUE
+set
+    itemestoque.C_RECURSOACABAMENTO=4,
+    itemestoque.c_recursocorte=5

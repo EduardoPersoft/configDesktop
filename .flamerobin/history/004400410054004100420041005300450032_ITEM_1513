@@ -1,0 +1,6 @@
+UPDATE
+    NOTAFISCAL
+SET
+    cancelamento='S'
+where 
+    cancelamento is null

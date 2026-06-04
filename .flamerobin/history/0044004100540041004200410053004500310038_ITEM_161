@@ -1,0 +1,1 @@
+select mercadoriasnota.idpedido,mercadoriasnota.IDMERCPEDIDO, mercadoriasnota.* from mercadoriasnota order by idnota desc

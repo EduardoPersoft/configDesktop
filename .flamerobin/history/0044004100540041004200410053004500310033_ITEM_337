@@ -1,0 +1,1 @@
+delete nfectrl.* from nfectrl where filial=1 and idnota=19483

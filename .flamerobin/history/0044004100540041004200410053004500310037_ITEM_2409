@@ -1,0 +1,13 @@
+SELECT 
+    case when exists (
+        select  
+            *
+        from
+            NOTACOMPRA
+        where 
+            notacompra.OPERACAO=NATUREZAOPERACAO.id
+    ) then '*' else '' end Terceiros,
+    NATUREZAOPERACAO.*
+        
+FROM 
+    NATUREZAOPERACAO

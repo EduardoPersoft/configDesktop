@@ -1,0 +1,6 @@
+select * from ITEMCUSTODATA
+
+where filial=110
+and datainventario='31.01.2024'
+and (CODIGO LIKE 'MI%' OR
+CODIGO LIKE 'MA%')

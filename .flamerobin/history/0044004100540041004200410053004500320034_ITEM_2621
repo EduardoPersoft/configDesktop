@@ -1,0 +1,55 @@
+SELECT DISTINCT
+        pedidocompra.filial,
+        PEDIDOCOMPRA.IDNOTA,
+        MERCADORIASPEDCOMPRA.IDMERCADORIA,
+        pedidocompra.datacadastro,
+        PEDIDOCOMPRA.DATAAPROVACAO,       
+        mercadoriaspedcompra.codigo,
+        ITEMESTOQUE.REFERENCIA,
+        mercadoriaspedcompra.desreduzida,
+        --substring ( mercadoriaspedcompra.descricao from 1 for 240),
+        mercadoriaspedcompra.quantidade,
+        mercadoriaspedcompra.unidade,
+        PEDIDOCOMPRA.destinatario,
+        mercadoriaspedcompra.qtdeentregue,
+        CADASTROPARCEIROS.nome,
+        CADASTROPARCEIROS.PRINCIPALCONTATO,
+        CADASTROPARCEIROS.telefone,
+        CADASTROPARCEIROS.EMAIL,
+        fornecedores.CONDICAOPAGAMENTO,
+        fornecedores.FATURAMENTOMINIMO,
+        mercadoriaspedcompra.vlrfinalmercad as valor,
+        pedidocompra.VLRTOTALNOTA,
+        pedidocompra.CONDICAOPAGAMENTO,
+        idpedven,
+        MATERIALFILIAL.CONSUMOMEDIOESTIMADO,
+        case when exists (
+            select 
+                * 
+            from 
+                LOGVIEW 
+            WHERE 
+                LOGVIEW.DOCUMENTO='pedidosCompra' AND
+                LOGVIEW.UUID=PEDIDOCOMPRA.UUID
+        ) THEN 'S' ELSE 'N' END,
+        MERCADORIASPEDCOMPRA.IDPEDVEN,
+        MERCADORIASPEDCOMPRA.IDMERCPEDVEN,
+        PEDIDOCOMPRA.UUID
+    FROM PEDIDOCOMPRA
+    inner JOIN MERCADORIASPEDCOMPRA ON
+        (PEDIDOCOMPRA.FILIAL=MERCADORIASPEDCOMPRA.FILIAL AND
+        PEDIDOCOMPRA.IDNOTA=MERCADORIASPEDCOMPRA.IDNOTA)
+    INNER JOIN CADASTROPARCEIROS ON
+        (CADASTROPARCEIROS.cadastro = PEDIDOCOMPRA.destinatario)
+    INNER JOIN ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO=MERCADORIASPEDCOMPRA.CODIGO
+    left join fornecedores on
+        fornecedores.cadastro = cadastroparceiros.cadastro
+    LEFT JOIN MATERIALFILIAL ON
+        MATERIALFILIAL.FILIAL=MERCADORIASPEDCOMPRA.FILIAL AND 
+        MATERIALFILIAL.IDITEM=MERCADORIASPEDCOMPRA.CODIGO
+    WHERE
+        PEDIDOCOMPRA.FILIAL=5 AND
+        NOT (PEDIDOCOMPRA.DATAAPROVACAO IS NULL) AND
+        PEDIDOCOMPRA.DATACANCELAMENTO IS NULL AND
+        MERCADORIASPEDCOMPRA.BAIXA='N'

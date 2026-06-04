@@ -1,0 +1,1 @@
+update titulopag set tipotransacao=2 where filial=5 and titulopag.emissao='26.12.2021'

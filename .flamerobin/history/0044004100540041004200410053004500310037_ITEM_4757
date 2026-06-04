@@ -1,0 +1,2 @@
+update  CLIENTES setclientes.limitecredito=0.01
+where clientes.LIMITECREDITO=0

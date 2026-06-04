@@ -1,0 +1,1 @@
+select filial,idtitulo,contacorrente,dataenvio from titulorec where filial=5 and dataenvio >'09.03.2022' and baixa is null and cast(dataenvio as date)<>dataenvio

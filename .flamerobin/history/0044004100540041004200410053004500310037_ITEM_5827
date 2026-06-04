@@ -1,0 +1,2 @@
+select * from NATUREZAOPERACAO
+where NATUREZAOPERACAO.CLASSTRIB is not null

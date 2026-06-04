@@ -1,0 +1,9 @@
+select * from pedidocompra 
+where 
+pedidocompra.filial=1 
+and exists (
+select * from mercadoriaspedcompra 
+where mercadoriaspedcompra.filial=pedidocompra.filial 
+and mercadoriaspedcompra.idnota=pedidocompra.idnota
+and mercadoriaspedcompra.baixa='N')
+order by uuid

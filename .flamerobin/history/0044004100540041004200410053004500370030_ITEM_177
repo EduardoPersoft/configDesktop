@@ -1,0 +1,2 @@
+select * from SERVICOSPED
+where filial=3941 and idnota=573

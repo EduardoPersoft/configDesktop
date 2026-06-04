@@ -1,0 +1,2 @@
+select * from usuario 
+where email like 'financeiro%' order by id

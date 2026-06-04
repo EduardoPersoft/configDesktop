@@ -1,0 +1,2 @@
+select * from c_comissaopedidopaga
+where id=769

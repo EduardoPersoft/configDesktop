@@ -1,0 +1,7 @@
+select 
+    *
+from
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial = 1 and
+    mercadoriasnota.idnota= 37589

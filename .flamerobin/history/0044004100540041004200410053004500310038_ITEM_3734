@@ -1,0 +1,10 @@
+select 
+   REGISTROCONTATO.fechamento,
+   registrocontato.assunto,
+   registrocontato.DESCRICAO
+from 
+    REGISTROCONTATO
+where
+    REGISTROCONTATO.PARCEIRO=12007
+order by 
+    registrocontato.fechamento desc

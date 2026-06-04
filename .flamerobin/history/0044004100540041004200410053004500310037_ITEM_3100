@@ -1,0 +1,7 @@
+update 
+    cadastroparceiros 
+set 
+    grupoempresarial=cadastro
+where 
+    grupoempresarial is null
+    and status=2

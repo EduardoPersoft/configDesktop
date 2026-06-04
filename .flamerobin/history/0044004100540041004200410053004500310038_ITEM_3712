@@ -1,0 +1,8 @@
+select 
+    filial,
+    idmovimento,
+    quantidade
+    c_up,
+    c_upporm2 
+    from MATERIALMOVIMENTOESTOQUE 
+where MATERIALMOVIMENTOESTOQUE.up is not null

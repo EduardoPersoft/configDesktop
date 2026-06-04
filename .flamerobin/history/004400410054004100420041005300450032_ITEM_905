@@ -1,0 +1,9 @@
+SELECT  
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAl.descricao
+from 
+    ITEMESTOQUE
+inner JOIN
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL

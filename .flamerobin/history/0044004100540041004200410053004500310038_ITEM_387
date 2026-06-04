@@ -1,0 +1,7 @@
+select 
+    *
+from
+    pedido
+where
+    filial=1 and
+    idnota=66065

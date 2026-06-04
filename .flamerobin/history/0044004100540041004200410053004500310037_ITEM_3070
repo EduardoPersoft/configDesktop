@@ -1,0 +1,15 @@
+SET TERM ^ ;
+create TRIGGER C_MOVESTQBLOQUEIAPEDIDO for movimentoestoque ACTIVE
+after insert POSITION 100
+
+
+AS
+BEGIN
+   if(new.tipomovimento='13' and new.idpedido is not null) then
+    update pedido set pedido.BLOQUEADOLOGISTICA='S' 
+    where pedido.filial=new.filial and
+    pedido.idnota=new.idpedido;
+   
+END
+^
+SET TERM ; ^

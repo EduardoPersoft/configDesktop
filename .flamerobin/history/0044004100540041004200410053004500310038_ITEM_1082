@@ -1,0 +1,1109 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_IMPORC2 (
+    RELATORIO varchar(20) )
+RETURNS (
+    FILIAL integer,
+    RAZAOFILIAL varchar(60),
+    NOMEFILIAL varchar(60),
+    DOCUMENTOFILIAL varchar(18),
+    INSCESTADUALFILIAL varchar(20),
+    INSCMUNICIPALFILIAL varchar(20),
+    LOGRADOUROFILIAL varchar(50),
+    NUMEROFILIAL integer,
+    COMPLEMENTOFILIAL varchar(20),
+    BAIRROFILIAL varchar(30),
+    CIDADEFILIAL varchar(30),
+    UFFILIAL varchar(2),
+    CEPFILIAL varchar(9),
+    TELEFONEFILIAL varchar(25),
+    TELEFONECOMERCIALFILIAL varchar(25),
+    FAXFILIAL varchar(20),
+    PRINCIPALCONTATOFILIAL varchar(60),
+    EMAILFILIAL varchar(50),
+    WEBFILIAL varchar(100),
+    AREAGEOGRAFICA smallint,
+    DESCRAREAGEOGR varchar(30),
+    NOMEUSUARIO varchar(50),
+    TELEFONEUSUARIO varchar(25),
+    FAXUSUARIO varchar(20),
+    EMAILUSUARIO varchar(50),
+    DEPARTAMENTOUSUARIO varchar(30),
+    CARGOUSUARIO varchar(20),
+    IDNOTA integer,
+    NUMEROPEDIDO varchar(20),
+    DATAEMISSAO timestamp,
+    DATACADASTRO timestamp,
+    DESTINATARIO integer,
+    RAZAO varchar(60),
+    NOME varchar(40),
+    LOGRADOURO varchar(50),
+    NUMERO integer,
+    BAIRRO varchar(30),
+    COMPLEMENTO varchar(20),
+    CIDADE varchar(30),
+    UF varchar(2),
+    CEP varchar(9),
+    DOCUMENTO varchar(18),
+    INSCESTADUAL varchar(40),
+    INSCMUNICIPAL varchar(20),
+    EMAIL varchar(50),
+    TELEFONE varchar(25),
+    TELEFONECOMERCIAL varchar(25),
+    CELULAR varchar(20),
+    FAX varchar(20),
+    PRINCIPALCONTATO varchar(40),
+    LOGRADOUROENTREGA varchar(50),
+    NUMEROENTREGA integer,
+    COMPLEMENTOENTREGA varchar(20),
+    BAIRROENTREGA varchar(30),
+    CIDADEENTREGA varchar(30),
+    UFENTREGA varchar(2),
+    CEPENTREGA varchar(9),
+    LOCALENTREGA varchar(400),
+    LOGRADOUROCOBRANCA varchar(50),
+    NUMEROCOBRANCA integer,
+    BAIRROCOBRANCA varchar(30),
+    COMPLEMENTOCOBRANCA varchar(20),
+    CIDADECOBRANCA varchar(30),
+    UFCOBRANCA varchar(2),
+    CEPCOBRANCA varchar(9),
+    LOCALCOBRANCA varchar(400),
+    NOMEUSUARIORELACIONADO varchar(50),
+    USUARIORELACIONADO varchar(20),
+    FAXUSUARIORELACIONADO varchar(20),
+    EMAILUSUARIORELACIONADO varchar(50),
+    DEPARTAMENTOUSUARIORELACIONADO varchar(20),
+    CARGOUSUARIORELACIONADO varchar(20),
+    NOMEUSUARIOAPROVACAO varchar(50),
+    TELEFONEUSUARIOAPROVACAO varchar(20),
+    FAXUSUARIOAPROVACAO varchar(20),
+    EMAILUSUARIOAPROVACAO varchar(50),
+    DEPARTAMENTOUSUARIOAPROVACAO varchar(20),
+    CARGOUSUARIOAPROVACAO varchar(20),
+    VENDEDOR integer,
+    RAZAOVENDEDOR varchar(60),
+    NOMEVENDEDOR varchar(40),
+    TELEFONEVENDEDOR varchar(20),
+    TELEFONECOMERCIALVENDEDOR varchar(20),
+    CELULARVENDEDOR varchar(20),
+    FAXVENDEDOR varchar(20),
+    EMAILVENDEDOR varchar(50),
+    CFOP integer,
+    NATUREZAOPERACAO varchar(30),
+    TIPOPAGTO varchar(30),
+    CONDICAOPAGTO varchar(240),
+    TIPOFRETE char(3),
+    VLRDESCONTO double precision,
+    MSGDESCMERCADORIAS varchar(180),
+    VLRDESCINDPRODUTO double precision,
+    MSGDESCPRODUTOS varchar(180),
+    VLRACRESCIMO double precision,
+    MSGACRESCMERCADORIA varchar(180),
+    VLRMERCADORIAS double precision,
+    VLRICMS double precision,
+    VLRZONAFRANCA double precision,
+    VLRSUBSTRIB double precision,
+    VLRIPITOTAL double precision,
+    VLRFRETE double precision,
+    VLRSEGURO double precision,
+    VLRDESPESAS double precision,
+    VLRSERVICO double precision,
+    VLRTOTAPEDIDO double precision,
+    CODTRANSP integer,
+    NOMETRANSP varchar(50),
+    RAZAOTRANSP varchar(60),
+    FONETRANSP varchar(30),
+    COMERCIALTRANSP varchar(20),
+    CELULARTRANSP varchar(20),
+    EMAILTRANSP varchar(50),
+    NOMECONTATOTRANSP varchar(40),
+    QTDEVOLUME double precision,
+    PESOLIQUIDO double precision,
+    PESOBRUTO double precision,
+    DETALHECF varchar(400),
+    DETALHEENTREGA varchar(400),
+    COMENTARIO blob sub_type 0,
+    C_MENSAGEM1 blob sub_type 0,
+    MSGADICIONAL varchar(600),
+    TIPODETALHE varchar(15),
+    ORDEM integer,
+    IDITEM integer,
+    CODIGO varchar(15),
+    DESCRICAO blob sub_type 0,
+    DESCRICAOREDUZIDA varchar(240),
+    DESCRICAODETALHE varchar(240),
+    DESCRICAOTOTAL varchar(240),
+    QUANTIDADE double precision,
+    UNIDADE varchar(3),
+    PRUNITARIO double precision,
+    PRLISTA double precision,
+    PIPIMERC double precision,
+    VLRIPIMERC double precision,
+    VLRTOTITEM double precision,
+    VALORTOTCOMIPI double precision,
+    PICMS double precision,
+    CF varchar(12),
+    CODCF char(3),
+    SEUNUMERO varchar(20),
+    DIAHOJE integer,
+    MESHOJEEXTENSO varchar(15),
+    ANOHOJE integer,
+    DATAVALIDADE varchar(10),
+    MSGDESCRMERCADORIAS varchar(180),
+    CODIGOFORNEC varchar(20),
+    DADOSENTREGA char(1),
+    CADASTRAR char(1),
+    C_LARGURA double precision,
+    C_COMPRIMENTO double precision,
+    C_M2 double precision,
+    C_MODELO integer,
+    C_ACABAMENTO integer,
+    C_QTDCORES integer,
+    C_ESPESSURA varchar(20),
+    TOTSUBTOT double precision,
+    TOTIPI double precision,
+    TOTPRECOTOT double precision,
+    SOMAPARCIAL double precision,
+    FILIALESTSIN integer,
+    C_PRAZO integer,
+    ENDERECOCOMPLETO varchar(400),
+    VLRDESCONTOFINAL double precision,
+    TODOSVENDEDORES varchar(240),
+    LOGO blob sub_type 0,
+    C_MENSAGEMSERVICO blob sub_type 0,
+    ITEMDESCRICAO varchar(255),
+    P_PRODUTOENCOMENDAACABADO char(1),
+    REFERENCIA varchar(50),
+    C_PRECODE decimal(10,2),
+    C_MENSAGEMERVORC varchar(2048) )
+
+AS
+DECLARE VARIABLE PDATAHOJE TIMESTAMP;
+DECLARE VARIABLE PQTDITEM INTEGER;
+DECLARE VARIABLE PIDINICIAL INTEGER;
+DECLARE VARIABLE PIDFINAL INTEGER;
+DECLARE VARIABLE PCF VARCHAR(12);
+DECLARE VARIABLE PCODCF CHAR(3);
+DECLARE VARIABLE PDIAS INTEGER;
+DECLARE VARIABLE PIDITEM INTEGER;
+DECLARE VARIABLE PQTD INTEGER;
+DECLARE VARIABLE PUNIDADE VARCHAR(3);
+DECLARE VARIABLE PQTDTOTAL VARCHAR(10);
+DECLARE VARIABLE PQTDPRAZOS VARCHAR(10);
+DECLARE VARIABLE PDIAANTERIOR INTEGER;
+DECLARE VARIABLE PVLRTOTAL DOUBLE PRECISION;
+DECLARE VARIABLE PPIPI DECIMAL(2,2);
+DECLARE VARIABLE TOTSUBTOT1 DOUBLE PRECISION;
+DECLARE VARIABLE TOTIPI1 DOUBLE PRECISION;
+DECLARE VARIABLE TOTPRECOTOT1 DOUBLE PRECISION;
+DECLARE VARIABLE TOTSUBTOT2 DOUBLE PRECISION;
+DECLARE VARIABLE TOTIPI2 DOUBLE PRECISION;
+DECLARE VARIABLE TOTPRECOTOT2 DOUBLE PRECISION;
+DECLARE VARIABLE VLRTOTALNOTA DOUBLE PRECISION;
+DECLARE VARIABLE VDESCFINANCEIRO DOUBLE PRECISION;
+DECLARE VARIABLE VDESCCOMERCIAL DOUBLE PRECISION;
+DECLARE VARIABLE VDESCMERCADORIAS DOUBLE PRECISION;
+DECLARE VARIABLE VDESCCOMITEM DOUBLE PRECISION;
+DECLARE VARIABLE VDESCPROMOCIONAL DOUBLE PRECISION;
+DECLARE VARIABLE P_ITEMDESCRICAO VARCHAR(255);
+DECLARE VARIABLE LOGINUSUARIO VARCHAR(20);
+BEGIN
+
+  totprecotot = 0;
+  totipi = 0;
+  totsubtot = 0;
+  somaparcial = 0;
+
+  totsubtot1 = 0;
+  totipi1 = 0 ;
+  totprecotot1 = 0 ;
+
+  totsubtot2  = 0;
+  totipi2 = 0;
+  totprecotot2 = 0 ;
+
+  pdatahoje = cast('now' as timestamp);
+  diahoje = extract(day from pdatahoje);
+  anohoje = extract(year from pdatahoje);
+  meshojeExtenso = case extract(month from pdatahoje)
+                when 1 then 'Janeiro'
+                WHEN 2 then 'Fevereiro'
+                WHEN 3 then 'Mar?o'
+                WHEN 4 then 'Abril'
+                WHEN 5 then 'Maio'
+                WHEN 6 then 'Junho'
+                WHEN 7 then 'Julho'
+                WHEN 8 then 'Agosto'
+                WHEN 9 then 'embro'
+                WHEN 10 then 'Outubro'
+                WHEN 11 then 'Novembro'
+                WHEN 12 then 'Dezembro' end;
+
+ --selecionando a loja do lar center
+
+select
+         cadastroparceiros.cadastro,
+         estsin.idnotainicial,
+         estsin.idnotafinal,
+         usuario.nomecompleto,
+         usuario.telefone,
+         usuario.fax,
+         usuario.email,
+         usuario.departamento,
+         usuario.cargo,
+         ESTABELECIMENTO.LOGO,
+         ESTABELECIMENTO.C_MENSAGEMERVORC,
+         USUARIO.USUARIO
+
+  from estsin
+
+  inner join cadastroparceiros on
+      (cadastroparceiros.cadastro=estsin.estabelecimento)
+
+  INNER JOIN ESTABELECIMENTO ON (
+    ESTABELECIMENTO.CADASTRO=CADASTROPARCEIROS.CADASTRO)
+
+
+  LEFT join usuario on
+      (usuario.usuario=estsin.usuario)
+  where estsin.relatorio=:relatorio
+
+  into
+
+       :filial,
+       :pidinicial,
+       :pidfinal,
+       :nomeusuario,
+       :telefoneusuario,
+       :faxusuario,
+       :emailusuario,
+       :departamentousuario,
+       :cargousuario,
+       :LOGO,
+       :C_MENSAGEMERVORC,
+       :LOGINUSUARIO;
+
+
+  insert into C_IMPRESSOES(DATAHORA,DOCUMENTO,USUARIO,FILIAL,IDNOTA)
+  values (cast('now' as timestamp),'ORCAMENTO',:LOGINUSUARIO,:FILIAL,:PIDINICIAL);
+
+
+--pegando a loja ao inv??s do estabelecimento
+ select 
+    orcamento.c_loja
+ from 
+    orcamento
+ where 
+    orcamento.idnota between :pidinicial and :pidfinal and 
+    orcamento.filial=:filial
+ into 
+    :filialestsin;
+
+select
+
+         cadastroparceiros.razaosocial,
+         cadastroparceiros.nome,
+         CASE WHEN (CADASTROPARCEIROS.DOCUMENTO<>'') AND
+                 (NOT CADASTROPARCEIROS.DOCUMENTO IS NULL) THEN
+            CASE CADASTROPARCEIROS.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 4 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 7 FOR 3)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+              WHEN 'J' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 2)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 3 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 6 FOR 3)||'/'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 9 FOR 4)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+         ELSE NULL END
+         ELSE NULL END AS DOCUMENTO,
+         cadastroparceiros.inscestadual,
+         cadastroparceiros.inscmunicipal,
+
+         cadastroparceiros.logradouro,
+         cadastroparceiros.numero,
+         cadastroparceiros.complemento,
+         cadastroparceiros.bairro,
+         cadastroparceiros.cidade,
+         cadastroparceiros.uf,
+         substring(cadastroparceiros.cep from 1 for 5)||'-'||
+         substring(cadastroparceiros.cep from 6 for 3),
+         cadastroparceiros.telefone,
+         cadastroparceiros.telefonecomercial,
+         cadastroparceiros.fax,
+         cadastroparceiros.principalcontato,
+         cadastroparceiros.email,
+         cadastroparceiros.web
+   from cadastroparceiros
+   inner join ORCAMENTO on  (cadastroparceiros.cadastro = ORCAMENTO.c_loja)
+   where orcamento.c_loja=:filialestsin
+   and  orcamento.idnota between :pidinicial and :pidfinal
+   into
+
+
+       :razaofilial,
+       :nomefilial,
+       :documentofilial,
+       :inscestadualfilial,
+       :inscmunicipalfilial,
+
+       :logradourofilial,
+       :numerofilial,
+       :complementofilial,
+       :bairrofilial,
+       :cidadefilial,
+       :uffilial,
+       :cepfilial,
+       :telefonefilial,
+       :telefonecomercialfilial,
+       :faxfilial,
+       :principalcontatofilial,
+       :emailfilial,
+       :webfilial;
+
+
+  FOR SELECT pedido.idnota,
+             pedido.numeronota,
+             pedido.dataemissao,
+             pedido.datacadastro,
+             cadastroparceiros.razaosocial,
+             cadastroparceiros.nome,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.logradouroref ELSE  cadastroparceiros.logradouro END LOGRADOURO,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.numeroref ELSE  cadastroparceiros.numero END NUMERO,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.COMPLEMENTOref ELSE  cadastroparceiros.complemento END COMPLEMENTO,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.BAIRROref ELSE  cadastroparceiros.bairro END BAIRRO,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.CIDADERef ELSE  cadastroparceiros.cidade END CIDADE,
+             CASE pedido.cadastrar WHEN 'S' THEN pedido.ufref ELSE  cadastroparceiros.UF END UF,
+             CASE pedido.cadastrar WHEN 'S' THEN
+                 substring(pedido.cepREF from 1 for 5)||'-'||
+                 substring(pedido.cepref from 6 for 3)
+             ELSE
+                 substring(cadastroparceiros.cep from 1 for 5)||'-'||
+                 substring(cadastroparceiros.cep from 6 for 3) END AS CEP,
+
+             CASE WHEN (CADASTROPARCEIROS.DOCUMENTO<>'') AND
+                   (NOT CADASTROPARCEIROS.DOCUMENTO IS NULL) THEN
+             CASE CADASTROPARCEIROS.TIPOPESSOA WHEN 'F' THEN
+             CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 3)||'.'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 4 FOR 3)||'.'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 7 FOR 3)||'-'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+               WHEN 'J' THEN
+             CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 2)||'.'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 3 FOR 3)||'.'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 6 FOR 3)||'/'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 9 FOR 4)||'-'||
+             SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+             ELSE NULL END
+             ELSE NULL END AS DOCUMENTO,
+
+             cadastroparceiros.inscestadual,
+             cadastroparceiros.inscmunicipal,
+
+             case when coalesce(pedido.email,'')<>'' then pedido.email
+             else cadastroparceiros.email end,
+             CASE CADASTRAR WHEN 'S' THEN pedido.telefone ELSE cadastroparceiros.telefone END,
+             cadastroparceiros.telefonecomercial,
+             cadastroparceiros.celular,
+             cadastroparceiros.fax,
+             case when coalesce(pedido.contato,'')<>'' then pedido.contato
+             else cadastroparceiros.principalcontato end,
+
+             pedido.logradouroentrega,
+             pedido.numeroentrega,
+             pedido.complementoentrega,
+             pedido.bairroentrega,
+             pedido.cidadeentrega,
+             pedido.ufentrega,
+             substring(pedido.cepentrega from 1 for 5)||'-'||
+             substring(pedido.cepentrega from 6 for 3),
+
+             usuario.nomecompleto,
+             usuario.telefone,
+             usuario.fax,
+             usuario.email,
+             usuario.departamento,
+             usuario.cargo,
+             pedido.cfop,
+             pedido.naturezaoperacao,
+             tipocobranca.descricao,
+             condicaopagamento.C_DESCRICAOCOMPLETA,
+             pedido.vlrdescmercadorias,
+             pedido.msgdescmercadorias,
+             pedido.vlrdescindproduto,
+             pedido.msgdescprodutos,
+             pedido.vlracrescmercad,
+             pedido.msgacrescmercadoria,
+             pedido.msgdescrmercadorias,
+             pedido.vlrfinalmercadorias,
+             case pedido.zonafranca when 'S' then 0 else pedido.totvaloricms end,
+             case pedido.zonafranca when 'N' then 0 else pedido.totvaloricms end,
+             pedido.valoripi,
+             pedido.vlricmsrecolhido,
+             pedido.valorfrete,
+             pedido.valorseguro,
+             pedido.vlroutdespacessoria,
+             pedido.vlrfinalservicos,
+             pedido.vlrtotalnota,
+             pedido.codigotransp,
+             pedido.quantidadevolume,
+             pedido.pesoliquido,
+             pedido.pesobruto,
+             case pedido.frete when '0' then 'FOB' ELSE 'CIF' END,
+             pedido.msgdadosadicionais,
+             /*
+             PEDIDO.datavalidade,
+             */
+             
+             extract (day from PEDIDO.datavalidade)||'/'||
+             extract (month from PEDIDO.datavalidade)||'/'||
+             extract (year from PEDIDO.datavalidade) as datavalidade,
+             
+             pedido.dadosentrega,
+             pedido.cadastrar,
+             pedido.vlrtotalnota,
+             pedido.c_mensagem1,
+             PEDIDO.c_mensagemservico,
+             pedido.c_prazo,
+             pedido.C_PRODUTOENCOMENDAACABADO
+
+      from ORCAMENTO pedido
+      inner join tipocobranca on (tipocobranca.tipocobranca=pedido.tipocobranca)
+      inner join cadastroparceiros on
+                (pedido.destinatario=cadastroparceiros.cadastro)
+      inner join condicaopagamento on
+                  (condicaopagamento.id=pedido.condicaopagamento)
+      left join usuario on (pedido.usuarioemissao=usuario.usuario)
+      where pedido.filial=:filial
+      and pedido.idnota between :pidinicial and :pidfinal
+      and (pedido.dataemissao is not null  )
+      and pedido.datacancelamento is null
+      into :idnota,
+           :numeropedido,
+           :dataemissao,
+           :datacadastro,
+
+           :razao,
+           :nome,
+           :logradouro,
+           :numero,
+           :complemento,
+           :bairro,
+           :cidade,
+           :uf,
+           :cep,
+
+           :documento,
+           :inscestadual,
+           :inscmunicipal,
+
+           :email,
+           :telefone,
+           :telefonecomercial,
+           :celular,
+           :fax,
+           :principalcontato,
+
+           :logradouroentrega,
+           :numeroentrega,
+           :complementoentrega,
+           :bairroentrega,
+           :cidadeentrega,
+           :ufentrega,
+           :cepentrega,
+
+           :nomeusuarioaprovacao,
+           :telefoneusuarioaprovacao,
+           :faxusuarioaprovacao,
+           :emailusuarioaprovacao,
+           :departamentousuarioaprovacao,
+           :cargousuarioaprovacao,
+
+           :cfop,
+           :naturezaoperacao,
+
+           :tipopagto,
+           :condicaopagto,
+
+           :vlrdesconto,
+           :msgdescmercadorias,
+           :vlrdescindproduto,
+           :msgdescprodutos,
+           :vlracrescimo,
+           :msgacrescmercadoria,
+           :msgdescrmercadorias,
+
+           :vlrmercadorias,
+
+           :vlricms,
+           :vlrzonafranca,
+           :vlripitotal,
+           :vlrsubstrib,
+           :vlrfrete,
+           :vlrseguro,
+           :vlrdespesas,
+           :vlrservico,
+           :vlrtotapedido,
+           :codtransp,
+           :qtdevolume,
+           :pesoliquido,
+           :pesobruto,
+           :TIPOFRETE,
+           :msgadicional,
+           :datavalidade,
+           :dadosentrega,
+           :cadastrar,
+           :vlrtotalnota,
+           :c_mensagem1,
+           :c_mensagemservico,
+           :c_prazo,
+           :P_PRODUTOENCOMENDAACABADO
+         do begin
+
+
+
+         ENDERECOCOMPLETO='';
+         if (LOGRADOURO IS NOT NULL) then
+             enderecocompleto = logradouro;
+         if (NUMERO IS NOT NULL) then
+            ENDERECOCOMPLETO = ENDERECOCOMPLETO||', '||NUMERO||' ';
+         if (COMPLEMENTO IS NOT NULL) then
+            ENDERECOCOMPLETO = ENDERECOCOMPLETO||COMPLEMENTO||' ';
+         if (COALESCE(cidade,'')<>'') then
+            enderecocompleto=enderecocompleto||cidade;
+         if (COALESCE(uf,'')<>'') then
+            enderecocompleto=enderecocompleto||' - '||uf;
+         if (COALESCE(cep,'')<>'') then
+            enderecocompleto=enderecocompleto||' - CEP: '||cep;
+         enderecocompleto=enderecocompleto||'
+';
+         if(COALESCE(telefone,'')<>'') then
+            enderecocompleto = enderecocompleto|| 'Telefone :'||Telefone;
+
+
+                if  (:dadosentrega='N') THEN BEGIN
+ localentrega='O MESMO';
+            logradouroentrega=logradouro;
+            numeroentrega=numero;
+            complementoentrega=complemento;
+            bairroentrega=bairro;
+            cidadeentrega=cidade;
+            ufentrega=uf;
+            cepentrega=cep;
+
+        end else
+            localentrega = UPPER('ENDERE??O: ' || logradouroentrega || ', ' ||
+                           numeroentrega|| ' '||
+                           COALESCE(complementoentrega, '') || ' ' ||
+                           bairroentrega || ' ' ||
+                           cidadeentrega || ' ' ||
+                           ufentrega || ' ' || COALESCE(Cepentrega,''));
+
+
+
+        --Selecionar o cadastro de cliente e endere??o de cobran??a
+        select clientes.logradourocobranca,
+               clientes.numerocobranca,
+               clientes.complementocobranca,
+               clientes.bairrocobranca,
+               clientes.cidadecobranca,
+               clientes.ufcobranca,
+               substring(clientes.cepcobranca from 1 for 5)||'-'||
+               substring(clientes.cepcobranca from 6 for 3)
+        from clientes
+        where clientes.cadastro=:destinatario
+        into :logradourocobranca,:numerocobranca,:complementocobranca,
+:bairrocobranca,:cidadecobranca,:ufcobranca,:cepcobranca;
+        if  (:dadosentrega ='N') THEN BEGIN
+ localentrega='O MESMO';
+            logradouroentrega=logradouro;
+            numeroentrega=numero;
+            complementoentrega=complemento;
+            bairroentrega=bairro;
+            cidadeentrega=cidade;
+            ufentrega=uf;
+            cepentrega=cep;
+        end else
+            localentrega = UPPER('ENDERE?O: ' || logradouroentrega || ', ' ||
+                           numeroentrega|| ' '||
+                           COALESCE(complementoentrega, '') || ' ' ||
+                           bairroentrega || ' ' ||
+                           cidadeentrega || ' ' ||
+                           ufentrega || ' ' || cepentrega);
+
+        if (:CADASTRAR='S') then  begin
+            select cast (ORCAMENTO.aoscuidados as varchar(50)) as AOSCUIDADOS,
+                   cast (ORCAMENTO.logradouroref as varchar(50))AS LOGRADOURO,
+                   cast (ORCAMENTO.numeroref as integer) AS NUMERO,
+                   cast (ORCAMENTO.complementoref as varchar(20)) AS COMPLEMENTO,
+                   cast (ORCAMENTO.bairroref as varchar(30)) AS BAIRRO,
+                   cast (ORCAMENTO.cepref as varchar(8)) AS CEP,
+                   cast (ORCAMENTO.ufref as varchar(2)) AS UF,
+                   cast (ORCAMENTO.cidaderef as varchar(30)) AS CIDADE,
+                   cast (SUBSTRING(orcamento.telefone FROM 1 FOR 20) as varchar(20)) AS TELEFONE ,
+                   cast (orcamento.fax as varchar (20)) as FAX,
+                   cast (SUBSTRING(ORCAMENTO.contato FROM 1 FOR 40) as varchar (40)) AS CONTATO,
+                   cast (orcamento.email as varchar (50)) AS EMAIL
+            FROM orcamento
+            where ORCAMENTO.filial=:FILIAL
+            AND orcamento.idnota=:idnota
+
+            into
+            :razao,
+            :logradouro,
+            :numero,
+            :complemento,
+            :bairro,
+            :cep,
+            :uf,
+            :cidade,
+            :telefone,
+            :fax,
+            :principalcontato,
+            :email;
+       end
+
+        --Selecionar o vendedor
+        todosvendedores = '';
+        FOR select vendedoresped.vendedor,
+                       cadastroparceiros.razaosocial,
+                       cadastroparceiros.nome,
+                       cadastroparceiros.telefone,
+                       cadastroparceiros.celular,
+                       cadastroparceiros.telefonecomercial,
+                       cadastroparceiros.fax,
+                       cadastroparceiros.email
+        from vendedoresorc vendedoresped
+        inner join cadastroparceiros on (cadastroparceiros.cadastro=vendedoresped.vendedor)
+        INNER JOIN vendedor ON (VENDEDOR.cadastro = vendedoresped.vendedor)
+        where vendedoresped.filial=:filial
+        and vendedoresped.idnota=:idnota
+        and vendedoresped.idnota=:idnota
+        AND vendedor.tipovendedor NOT IN (5, 6)
+        into :vendedor,:razaovendedor,:nomevendedor,:telefonevendedor,:celularvendedor,
+             :telefonecomercialvendedor,:faxvendedor,:emailvendedor DO begin
+
+             todosvendedores =  nomevendedor ||'; '|| todosvendedores;
+             end
+
+        --Selecionar o usu??rio relacionado
+         select usuario.nomecompleto,
+               usuario.telefone,
+               usuario.fax,
+               usuario.email,
+               usuario.departamento,
+               usuario.cargo
+        from vendedor
+        LEFT join usuario on (vendedor.usuariorelacionado=usuario.id)
+        where vendedor.cadastro=:vendedor
+        into :nomeusuarioaprovacao,:telefoneusuarioaprovacao,
+             :faxusuarioaprovacao,:emailusuarioaprovacao,
+             :departamentousuarioaprovacao,:cargousuarioaprovacao;
+
+        --Selecionar a transportadora
+        select cadastroparceiros.nome,
+               cadastroparceiros.razaosocial,
+               cadastroparceiros.telefone,
+               cadastroparceiros.telefonecomercial,
+               cadastroparceiros.celular,
+               cadastroparceiros.email,
+               cadastroparceiros.principalcontato
+        from cadastroparceiros
+        where cadastroparceiros.cadastro=:codtransp
+        into :nometransp,:razaotransp,:fonetransp,:comercialtransp,
+             :celulartransp,:emailtransp,:nomecontatotransp;
+
+        --Preparar prazo de entrega
+         detalheentrega= '';
+        select count(distinct prazomercped.dias)
+        from PRAZOMERCORC prazomercped
+        where prazomercped.filial=:filial and prazomercped.idnota=:idnota
+        into :pqtdprazos;
+
+        if (pqtdprazos=1) then begin
+            for select prazomercped.dias,
+                       prazomercped.iditem,
+                       prazomercped.qtde,
+                       mercadoriasped.unidade,
+
+                       mercadoriasped.quantidade
+            from PRAZOMERCORC prazomercped
+            inner join MERCADORIASORC mercadoriasped on
+(mercadoriasped.filial=prazomercped.filial
+                              and mercadoriasped.idnota=prazomercped.idnota
+                              and mercadoriasped.idmercadoria=prazomercped.iditem)
+            where prazomercped.filial=:filial
+            and prazomercped.idnota=:idnota
+            into :pdias,:piditem,:pqtd,:punidade,:pqtdtotal do begin
+               if (pdias=0) then
+                  detalheentrega = 'IMEDIATO ';
+               else
+                  detalheentrega = pdias || ' dias ';
+            end
+        end else begin
+            pdiaanterior=-1;
+            for select prazomercped.dias,
+                       prazomercped.iditem,
+                       prazomercped.qtde,
+                       mercadoriasped.unidade,
+                       mercadoriasped.quantidade
+            from prazomercorc prazomercped
+            inner join mercadoriasORC mercadoriasped on
+(mercadoriasped.filial=prazomercped.filial
+                              and mercadoriasped.idnota=prazomercped.idnota
+                              and mercadoriasped.idmercadoria=prazomercped.iditem)
+            where prazomercped.filial=:filial
+            and prazomercped.idnota=:idnota
+            order by prazomercped.dias,prazomercped.iditem
+            into :pdias,:piditem,:pqtd,:punidade,:pqtdtotal do begin
+               if (pdias<>pdiaanterior) then begin
+                  if (detalheentrega<>'') then
+                     detalheentrega=substring(detalheentrega||'
+' from 1 for 400);
+                  if (pdias=0) then
+                     detalheentrega='IMEDIATO: Item(s) ';
+                  else
+detalheentrega=substring(detalheentrega||pdias||' dias: Item(s) ' from 1 for 400);
+                  pdiaanterior=pdias;
+               end else
+                  detalheentrega=substring(detalheentrega||', ' from 1 for 400);
+               detalheentrega=substring(detalheentrega||piditem from 1 for 400);
+               if (pqtd<>pqtdtotal) then
+                  detalheentrega = substring(detalheentrega || ' (' ||pqtd || ' '||punidade||') ' from 1 for 400);
+            end
+        end
+
+        --PReparar clasifica????o fiscal
+        DetalheCf='';
+        for select distinct classificacaofiscal.cfiscal,
+                             classificacaofiscal.descricao,
+                             cast(classificacaofiscal.aliquota as decimal(2,2))
+
+        from MERCADORIASORC mercadoriasped
+        inner join classificacaofiscal on (mercadoriasped.classifiscal=
+                                classificacaofiscal.cfiscal)
+        where mercadoriasped.filial=:filial
+        and mercadoriasped.idnota=:idnota
+        into :pcodcf,:pcf,:ppipi do begin
+           if (detalhecf<>'') then
+              detalhecf=substring(detalhecf||'
+' from 1 for 400) ;
+           detalhecf=substring(detalhecf||pcodcf||' - '||pcf from 1 for 400);
+           if (ppipi>0) then
+              detalhecf=substring(detalhecf||' IPI '||ppipi||'%' from 1 for 400);
+        end
+
+        --Selecionar itens
+        ordem = 0;
+        pvlrtotal = 0;
+        pqtditem = 0;
+        vlrdescontofinal = 0;
+        for select mercadoriasped.idmercadoria,
+                   mercadoriasped.codigo,
+                   mercadoriasped.descricao,
+                   mercadoriasped.desreduzida,
+                   mercadoriasped.quantidade,
+                   mercadoriasped.unidade,
+                   mercadoriasped.precounitario,
+                   mercadoriasped.precolista,
+                   mercadoriasped.pipi,
+                   mercadoriasped.valoripi,
+                   mercadoriasped.vlrtotalmercad,
+                   (mercadoriasped.vlrtotalmercad+mercadoriasped.valoripi) as valortotcomipi,
+                   mercadoriasped.aliquotaicms,
+                   mercadoriasped.classifiscal,
+                   mercadoriasped.c_largura,
+                   mercadoriasped.c_comprimento,
+                   mercadoriasped.c_m2,
+                   mercadoriasped.c_acabamento,
+                   mercadoriasped.c_qtdcores,
+                   mercadoriasped.c_espessura,
+                   coalesce(MERCADORIASPED.C_Descfinanceiro, 0) ,
+                   coalesce(MERCADORIASPED.C_Desccomercial, 0) ,
+                   coalesce(MERCADORIASPED.C_Descmercadorias, 0) ,
+                   coalesce(MERCADORIASPED.C_Desccomitem, 0) ,
+                   coalesce(MERCADORIASPED.C_Descpromocional, 0),
+                   'REFER?NCIA: '||ITEMESTOQUE.REFERENCIA||'
+',
+                   (MERCADORIASPED.C_PRECODE*mercadoriasped.quantidade)*
+                   (1+mercadoriasped.pipi/100)
+        from 
+            MERCADORIASORC mercadoriasped
+        INNER JOIN 
+            ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MERCADORIASPED.CODIGO)
+        where 
+            mercadoriasped.filial=:filial and 
+            mercadoriasped.idnota=:idnota
+        order by 
+            mercadoriasped.idmercadoria
+        into :iditem, :codigo, :descricao, :descricaoreduzida,
+             :quantidade, :unidade,:prunitario,:prlista,:pipimerc,:vlripimerc,
+             :vlrtotitem, :valortotcomipi, :picms,:codcf,
+             :c_largura ,:c_comprimento, :c_m2, :c_acabamento,
+             :c_qtdcores, :c_espessura, :vdescfinanceiro, :vdesccomercial,
+             :vdescmercadorias, :vdesccomitem, :vdescpromocional,: REFERENCIA, :C_PRECODE
+        do begin
+
+           IF (P_PRODUTOENCOMENDAACABADO ='E') then
+           REFERENCIA=' ';
+
+           IF (COALESCE (C_PRECODE,0)<>0) THEN
+           ITEMDESCRICAO='
+'||'DE: '||C_PRECODE||' POR: '||CAST (valortotcomipi AS DECIMAL (10,2));
+           ELSE ITEMDESCRICAO=' ';
+
+           select 
+                classificacaofiscal.descricao
+           from 
+                classificacaofiscal
+           where 
+                classificacaofiscal.cfiscal=:codcf
+           into 
+                :cf;
+
+           pvlrtotal = pvlrtotal+vlrtotitem;
+           pqtditem = pqtditem+1;
+           VALORTOTCOMIPI=valortotcomipi;
+           totipi = :vlripimerc + totipi;
+           somaparcial = somaparcial + vlrtotitem;
+
+           select first 1 
+                fornecedoresitem.codigofornec
+           from 
+                fornecedoresitem
+           where 
+                fornecedoresitem.iditem=:codigo
+           into 
+                :codigofornec;
+
+           vlrdescontofinal = vlrdescontofinal + ((:vdescfinanceiro + :vdesccomercial +
+             :vdescmercadorias + :vdesccomitem + :vdescpromocional) * :quantidade);
+
+           suspend;
+
+
+
+
+       end
+
+       ITEMDESCRICAO=NULL;
+       REFERENCIA=NULL;
+
+          if (coalesce(vlripitotal,0)+
+           coalesce(vlrzonafranca,0)+
+           coalesce(vlrsubstrib,0)+
+           coalesce(vlrfrete,0)+
+           coalesce(vlrseguro,0)+
+           coalesce(vlrdespesas,0)+
+           coalesce(vlrservico,0)>0) then begin
+          ordem = 200;
+
+
+
+        if (vlrmercadorias>0) then  
+            begin:
+                descricaototal = 'TOTAL MERCADORIAS';
+                vlrtotitem = :somaparcial;
+                totsubtot = :somaparcial;
+                valortotcomipi=somaparcial+totipi;
+                VLRIPIMERC = totipi;
+                iditem = null;
+                codigo = null;
+                descricao = null;
+                ITEMDESCRICAO=NULL;
+                descricaoreduzida = null;
+                quantidade = null;
+                unidade = null;
+                c_largura = null;
+                c_comprimento = null;
+                c_m2 = null;
+                c_acabamento = null;
+                c_qtdcores = null;
+                c_espessura  = null;
+                prunitario = null;
+        
+                suspend;
+            end
+        end
+       
+
+       descricaototal = null;
+       c_largura = null;
+       c_comprimento = null;
+       c_m2 = null;
+       c_acabamento = null;
+       c_qtdcores = null;
+       c_espessura = null;
+       somaparcial = 0;
+
+        for select 
+                   SERVICOsped.idSERVICO,
+                   SERVICOsped.codigo,
+                   SERVICOsped.descricao,
+                   SERVICOsped.desreduzida,
+                   SERVICOsped.quantidade,
+                   SERVICOsped.unidade,
+                   SERVICOsped.precounitario,
+                   SERVICOsped.precolista,
+                   SERVICOsped.vlrtotservico
+
+        from 
+            SERVICOSORC SERVICOSPED
+        where 
+            SERVICOSPED.filial=:filial
+        and 
+            SERVICOSPED.idnota=:idnota
+        order by  
+            SERVICOSPED.IDSERVICO
+        into 
+             :iditem,
+             :codigo,
+             :descricao,
+             :descricaoreduzida,
+             :quantidade,
+             :unidade,
+             :prunitario,:prlista,
+             :vlrtotitem
+        do begin
+
+           vlripimerc=null;
+           pqtditem = pqtditem+1;
+           valortotcomipi=vlrtotitem;
+           somaparcial = :somaparcial + :vlrtotitem;
+
+           suspend;
+
+       end
+
+
+       totsubtot2 = pvlrtotal;
+       totprecotot2 = vlrtotapedido;
+       totipi2= vlripitotal;
+
+       iditem=null;
+       codigo = null;
+       descricao = null;
+       descricaoreduzida = null;
+       quantidade = null;
+       unidade = null;
+       prunitario = null;
+       prlista = null;
+       picms = null;
+       codcf = null;
+       cf = null;
+       codigofornec = null;
+       c_largura = null;
+       c_comprimento = null;
+       c_m2 = null;
+       c_acabamento = null;
+       c_qtdcores = null;
+       c_espessura = null;
+       vlrtotitem = null;
+
+          if (:vlrservico>0) then begin
+             descricaodetalhe = null;
+             descricaototal = 'TOTAL DE SERVI?OS';
+             valortotcomipi = :somaparcial;
+             vlripimerc = null;
+             vlrtotitem = null;
+             suspend;
+          end
+             vlrtotitem = null;
+             descricaototal = null;
+
+       ordem = ordem +1;
+       if (coalesce(:vlrdescindproduto,0)+
+           coalesce(:vlrdesconto,0)+
+           coalesce(vlracrescimo,0)>0) then begin
+
+
+          descricaototal = '';
+          ordem = 101;
+          if (vlrdescindproduto>0) then begin
+             if (COALESCE(msgdescprodutos,'')='') then
+                descricaodetalhe = 'DESCONTO INDIVIDUAL';
+             else
+                descricaodetalhe =msgdescprodutos;
+             valortotcomipi = vlrdescindproduto* (-1);
+             suspend;
+          end
+          if (vlrdesconto>0) then begin
+             if (COALESCE(msgdescmercadorias,'')='') then
+                descricaodetalhe = 'DESCONTO MERCADORIAS';
+             else
+                descricaodetalhe =msgdescmercadorias;
+             valortotcomipi = VLRDESCONTO * (-1);
+             suspend;
+          end
+          if (vlracrescimo>0) then begin
+             if (COALESCE(msgacrescmercadoria,'')='') then
+                descricaodetalhe = 'ACR?SCIMO MERCADORIAS';
+             else
+                descricaodetalhe =msgacrescmercadoria;
+             valortotcomipi = vlracrescimo;
+             suspend;
+          end
+          descricaodetalhe ='';
+       end
+
+       if (coalesce(vlripitotal,0)+
+           coalesce(vlrzonafranca,0)+
+           coalesce(vlrsubstrib,0)+
+           coalesce(vlrfrete,0)+
+           coalesce(vlrseguro,0)+
+           coalesce(vlrdespesas,0)+
+           coalesce(vlrservico,0)>0) then begin
+          ordem = 200;
+
+          descricaototal = '';
+          ordem = 201;
+
+          if (vlrzonafranca>0) then begin
+             descricaodetalhe = 'DESCONTO ZONA FRANCA';
+             valortotcomipi = vlrzonafranca * (-1);
+             suspend;
+          end
+          if (vlrsubstrib>0) then begin
+             descricaodetalhe = 'SUBSTITUI??O TRIBUT?RIA';
+             valortotcomipi = vlrsubstrib;
+             suspend;
+          end
+
+          if (VLRFRETE>0) then begin
+             descricaodetalhe = 'FRETE';
+             valortotcomipi = VLRFRETE;
+             suspend;
+          end
+          if (:vlrseguro>0) then begin
+             descricaodetalhe = 'SEGURO';
+             valortotcomipi = vlrseguro;
+             suspend;
+          end
+          if (:vlrdespesas>0) then begin
+             descricaodetalhe = 'OUTRAS DESPESAS ACESSORIAS';
+             valortotcomipi = vlrdespesas;
+             suspend;
+          end
+          descricaodetalhe ='';
+       end
+
+       if (vlrmercadorias>0) then
+          begin
+                DESCRICAOTOTAL = 'TOTAL:';
+                vlrtotitem = null;
+                VALORTOTCOMIPI = vlrtotalnota;
+                VLRIPIMERC = null ;
+                SUSPEND;
+                DESCRICAOTOTAL = '';
+          end
+     end
+
+ END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_IMPORC2A TO  SYSDBA WITH GRANT OPTION;
+

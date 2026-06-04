@@ -1,0 +1,10 @@
+UPDATE
+    C_I_MOVESTX
+SET
+    idnota = (select idnota from NOTAFISCAL
+              where filial=5 AND
+              coalesce(notafiscal.CANCELAMENTO, 'N') = 'N' and
+              notafiscal.NUMERONOTA = 
+                case when substring(c_i_movestx.docto from 6 for 1) = '/' 
+                then substring(c_i_movestx.docto from 1 for 5)
+                else substring(c_i_movestx.docto from 1 for 7) end) 

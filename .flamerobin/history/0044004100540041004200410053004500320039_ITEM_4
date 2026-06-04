@@ -1,0 +1,4 @@
+
+
+INSERT INTO ACESSOS (PATH) VALUES ('/registroContatos/');
+INSERT INTO ACESSOS (PATH) VALUES ('/registroContatos/ocorrencias');

@@ -1,0 +1,4 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    ordem = 0

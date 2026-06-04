@@ -1,0 +1,2 @@
+select * from C_COMISSAOpedidopaga
+where idnota=-75706

@@ -1,0 +1,1 @@
+SELECT * FROM C_I_REGISTROINVENTARIO where codigo='11862' order by codigo 

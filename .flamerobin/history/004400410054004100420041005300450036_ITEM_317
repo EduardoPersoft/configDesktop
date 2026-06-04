@@ -1,0 +1,12 @@
+select 
+    movimentoestoque.*
+FROM
+    materialmovimentoestoque 
+inner JOIN
+    movimentoestoque on 
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+WHERE
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='10' AND
+    materialmovimentoestoque.iditem='1977118' and
+    movimentoestoque.emissao>='28.03.2021'    

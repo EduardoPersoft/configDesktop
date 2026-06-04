@@ -1,0 +1,5 @@
+update 
+    PEDIDO
+set
+    pedido.uf = (select cadastroparceiros.uf from CADASTROPARCEIROS where CADASTROPARCEIROS.cadastro=peddio.destinatario)
+where coalesce(pedido.uf,'') = ''

@@ -1,0 +1,32 @@
+select
+    TIPOITEMESTOQUE.descricao,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL*C_CUSTOMEDIO.CUSTO)
+   
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+     materialfilial on
+        materialfilial.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materialfilial.iditem=materialmovimentoestoque.iditem 
+inner join
+    tipoItemEstoque on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+inner join
+     c_customedio on
+        C_CUSTOMEDIO.iditem=materialmovimentoestoque.iditem 
+
+where
+
+    MATERIALMOVIMENTOESTOQUE.IDITEM LIKE 'MPP%' and
+
+    movimentoestoque.emissao<='30.11.2023'
+group by 
+    TIPOITEMESTOQUE.descricao
+

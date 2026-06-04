@@ -1,0 +1,6 @@
+select
+    *
+from
+    ITEMCUSTODATA
+where
+    codigo='02.01.1010'

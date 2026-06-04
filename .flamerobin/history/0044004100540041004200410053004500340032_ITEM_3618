@@ -1,0 +1,2 @@
+select filial,idnota,idmercadoria,idpedido,idmercadoriaped from mercadoriasnota
+where filial=110 and idnota=5982

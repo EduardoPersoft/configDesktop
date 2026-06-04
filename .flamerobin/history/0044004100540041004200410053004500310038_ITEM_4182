@@ -1,0 +1,23 @@
+select 
+    NEGOCIACAO.FILIAL,
+    coalesce(NEGOCIACAO.IDRELACIONADO,
+              coalesce(orcamento.idrelacionado,
+                       orcamento.idnota)) idrelacionad,
+    coalesce(NEGOCIACAO.idprincipal,
+              coalesce(orcamento.idrelacionado,
+                       orcamento.idnota)) idrelacionad,
+    NEGOCIACAO.CHANCES,
+    NEGOCIACAO.PREVISAOFECHAMENTOMES,
+    NEGOCIACAO.PREVISAOFECHAMENTOANO,
+    NEGOCIACAO.PROXIMOCONTATO,
+    NEGOCIACAO.MOTIVOPERDA,
+    NEGOCIACAO.DATAPERDA
+ from 
+    orcamento
+inner join
+    negociacao on 
+        negociacao.filial=orcamento.filial and
+        negociacao.idnota=coalesce(orcamento.idrelacionado, 
+                                   orcamento.idnota)
+where
+    orcamento.uuid='1-4-205527'

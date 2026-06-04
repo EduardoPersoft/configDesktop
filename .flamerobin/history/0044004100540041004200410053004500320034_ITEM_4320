@@ -1,0 +1,8 @@
+select 
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.DESCRICAO
+from
+    itemestoque
+where
+    itemestoque.codigo >= '17966'

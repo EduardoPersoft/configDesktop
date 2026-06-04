@@ -1,0 +1,6 @@
+select
+    *
+from 
+    FORNECEDORESITEM
+where
+    fornecedoresitem.FORNECEDOR = 26624

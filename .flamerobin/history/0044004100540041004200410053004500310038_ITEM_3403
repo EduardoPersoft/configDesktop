@@ -1,0 +1,2 @@
+select * from VENDEDORESPED
+where idnota=74981

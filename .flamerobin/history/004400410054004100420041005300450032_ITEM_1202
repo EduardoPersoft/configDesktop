@@ -1,0 +1,11 @@
+SELECT
+    codigo,
+    descricao,
+    CLASSIFIscal,
+    tributacaoicms
+from 
+    itemestoque
+WHERE
+    itemestoque.CLASSIFISCAL=210
+order by
+    itemestoque.TRIBUTACAOICMS

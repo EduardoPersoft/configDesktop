@@ -1,0 +1,9 @@
+SELECT
+    itemestoque.codigo,   
+    itemestoque.descricao,    
+    itemestoque.referencia,   
+    itemestoque.codigobarra            
+FROM
+    itemestoque
+order by
+    itemestoque.referencia

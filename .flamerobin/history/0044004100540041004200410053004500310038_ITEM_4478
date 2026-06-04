@@ -1,0 +1,5 @@
+select * from MOVIMENTOESTOQUE
+where filial=1 and
+tipomovimento = '13' and 
+documento in ('61926', '61392', '75954', '75806', '75605', '61487') and
+IDNOTAEXPEDICAO IS NULL

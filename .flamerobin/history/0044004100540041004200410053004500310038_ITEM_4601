@@ -1,0 +1,8 @@
+select * from mercadoriasnota
+where
+    not exists
+    (select * from notafiscal 
+     where notafiscal.filial=mercadoriasnota.filial and 
+     notafiscal.idnota=mercadoriasnota.idnota and
+     notafiscal.modelo=16)
+     order by idnota desc

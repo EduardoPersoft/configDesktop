@@ -1,0 +1,11 @@
+select * from TITULOPAG
+where titulopag.filial=2098
+and titulopag.TIPOBAIXA='P'
+and not exists
+(select 
+    *
+from 
+    MOVTITULOpag
+where
+    movtitulopag.filial=titulopag.filial and
+    movtitulopag.idtitulo=titulopag.idtitulo)

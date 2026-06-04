@@ -1,0 +1,2 @@
+SELECT FIRST 1 MOEDA.MOEDA FROM MOEDA WHERE
+                     upper(MOEDA.DESCRICAO)=upper(:MOEDA)

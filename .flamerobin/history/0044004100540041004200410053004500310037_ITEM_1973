@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+order by movimentoestoque.id desc

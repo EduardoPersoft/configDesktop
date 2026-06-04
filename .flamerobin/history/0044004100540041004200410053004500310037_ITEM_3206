@@ -1,0 +1,9 @@
+select
+    LOCAL.EAN,
+    COUNT(LOCAL.ID)
+from
+    LOCAL 
+having
+    COUNT(LOCAL.ID)>1
+
+    

@@ -1,0 +1,3 @@
+alter table USUARIO
+drop ihorapermitido,
+drop fhorapermitido

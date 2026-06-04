@@ -1,0 +1,5 @@
+update
+    CADASTROPARCEIROS
+SET
+    CADASTROPARCEIROS.TIPOPESSOA='J'
+where tipopessoa=null    

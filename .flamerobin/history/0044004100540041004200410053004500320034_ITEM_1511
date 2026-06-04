@@ -1,0 +1,20 @@
+select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    materialfilial.consumomedio,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    materialfilial.consumomedio-materiallocal.saldototal
+from
+    materialfilial
+inner join
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+inner join
+    materiallocal on
+        materiallocal.filial=materialfilial.filial and
+        materiallocal.iditem=materialfilial.iditem        
+where
+    materialfilial.CONSUMOMEDIO>materiallocal.saldototal
+order by 
+    materialfilial.CONSUMOMEDIO desc

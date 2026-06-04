@@ -1,0 +1,2 @@
+insert into ITEMESTOQUECODIGOS(codigo,codigoalternativo) 
+select distinct C_ITEMESTQOUTCOD.* from C_ITEMESTQOUTCOD

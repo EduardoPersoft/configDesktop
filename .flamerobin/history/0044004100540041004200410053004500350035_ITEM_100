@@ -1,0 +1,16 @@
+select 
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.DESCRICAO,
+    ITEMESTOQUE.REFERENCIA,
+    C_LISTACUSTO.CUSTO
+from 
+    ITEMESTOQUE
+left join
+    c_listaCusto on
+        c_listaCusto.iditem=itemestoque.codigo and
+        c_listaCusto.id='0'
+where
+    ITEMESTOQUE.FABRICANTE=?
+    
+order by 
+    ITEMESTOQUE.REFERENCIA

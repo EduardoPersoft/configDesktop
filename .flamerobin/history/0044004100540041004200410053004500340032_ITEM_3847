@@ -1,0 +1,78 @@
+SELECT
+    TITULOPAG.FILIAL,
+    filial.nome,
+    TITULOPAG.IDTITULO id,
+    TITULOPAG.TITULO,
+    TITULOPAG.FATURA,
+    TITULOPAG.PARCEIRO idparceiro,
+    CADASTROPARCEIROS.NOME,
+    CADASTROPARCEIROS.RAZAOSOCIAL,
+    
+    sum(TITULOPAG.valorpago* 
+          case titulopag.tipomovto when 'D' then 1 else -1 end) valorpago,
+    sum((coalesce(titulopag.VALORDESCONTOMOVTO, 0) +
+        coalesce(titulopag.mvlrdescontoeletron, 0) +
+        coalesce(titulopag.moutrosdescontos, 0))* 
+          case titulopag.tipomovto when 'D' then 1 else -1 end) totaldescont0,
+
+    sum((coalesce(titulopag.valorjurosmovto, 0) +
+     coalesce(titulopag.mvlracrescimoeletron, 0))* 
+          case titulopag.tipomovto when 'D' then 1 else -1 end) TOTALJUROS,    
+    
+    sum((titulopag.VALORPAGO+
+    (coalesce(titulopag.valorjurosmovto, 0) +
+     coalesce(titulopag.mvlracrescimoeletron, 0)) - 
+    (coalesce(titulopag.VALORDESCONTOMOVTO, 0) +
+        coalesce(titulopag.mvlrdescontoeletron, 0) +
+        coalesce(titulopag.moutrosdescontos, 0))) *
+          case titulopag.tipomovto when 'D' then 1 else -1 end) totalPagamento,
+    TITULOPAG.EMISSAO,
+    TITULOPAG.VENCIMENTO,
+    TITULOPAG.PROGRAMACAO,
+    titulopag.DTMOVTOTITULO baixa,
+    TITULOPAG.TIPOTRANSACAO,
+    TIPOPAGAMENTO.DESCRICAO DESCRICAOCOBRANCA,    
+    TITULOPAG.CONTACORRENTE,
+    CONTACORRENTE.DESCRICAOCONTA,
+    'N' AS P_MARCA,
+    0 as p_statuscor
+  
+FROM 
+    MOVTOTITULOPAG titulopag
+INNER JOIN 
+    CADASTROPARCEIROS ON 
+        TITULOPAG.PARCEIRO = CADASTROPARCEIROS.CADASTRO
+inner join 
+     CADASTROPARCEIROS filial on
+        filial.cadastro=TITULOPAG.filial
+left JOIN CONTACORRENTE ON
+     TITULOPAG.FILIAL=CONTACORRENTE.FILIAL AND
+     TITULOPAG.CONTACORRENTE=CONTACORRENTE.CODIGO
+left JOIN TIPOPAGAMENTO ON 
+     TITULOPAG.TIPOTRANSACAO=TIPOPAGAMENTO.id
+
+
+where
+    TITULOPAG.FILIAL=110 and
+    TITULOPAG.TIPOMOVTO IN ('D', 'F') and 
+    titulopag.DTMOVTOTITULO between '01.04.2025' and '30.04.2025'
+group by
+    TITULOPAG.FILIAL,
+    filial.nome,
+    TITULOPAG.IDTITULO ,
+    TITULOPAG.TITULO,
+    TITULOPAG.FATURA,
+    TITULOPAG.PARCEIRO ,
+    CADASTROPARCEIROS.NOME,
+    CADASTROPARCEIROS.RAZAOSOCIAL,
+    TITULOPAG.EMISSAO,
+    TITULOPAG.VENCIMENTO,
+    TITULOPAG.PROGRAMACAO,
+    titulopag.DTMOVTOTITULO ,
+    TITULOPAG.TIPOTRANSACAO,
+    TIPOPAGAMENTO.DESCRICAO,    
+    TITULOPAG.CONTACORRENTE,
+    CONTACORRENTE.DESCRICAOCONTA,
+    TITULOPAG.CONTACORRENTE,
+    TITULOPAG.TIPOTRANSACAO
+ 

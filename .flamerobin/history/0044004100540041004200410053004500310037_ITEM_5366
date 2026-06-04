@@ -1,0 +1,9 @@
+select 
+    *
+from
+    MERCADORIASped
+where
+    mercadoriasped.codigo='2479408' and
+    filial>1
+order by
+    idnota desc

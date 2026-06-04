@@ -1,0 +1,1 @@
+update itemestoque set itembase = null where not itembase like'%ACP'

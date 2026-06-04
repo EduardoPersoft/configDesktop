@@ -1,0 +1,1 @@
+select filial,idtitulo,emissao,contacorrente, numbolbanco,codretorno from titulorec where filial=5 and contacorrente=707

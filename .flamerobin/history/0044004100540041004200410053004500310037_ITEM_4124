@@ -1,0 +1,2 @@
+select * from movtitulorec
+where movtitulorec.DATAPROCMOV='2025-01-23'

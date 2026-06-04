@@ -1,0 +1,3 @@
+select mercadoriasorc.REDUCAOICMS, 
+cast(mercadoriasorc.ALIQUOTAICMS*(1-mercadoriasorc.REDUCAOICMS/100) as decimal(12,2)) as aliqota, mercadoriasorc.* from MERCADORIASORC
+where filial=1 and idnota=126947

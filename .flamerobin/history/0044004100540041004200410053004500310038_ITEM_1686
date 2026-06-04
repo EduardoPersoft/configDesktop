@@ -1,0 +1,1 @@
+select * from titulopag where filial=1 and TITULOPAG.TIPOTRANSACAO is null

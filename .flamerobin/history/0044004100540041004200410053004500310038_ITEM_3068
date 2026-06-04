@@ -1,0 +1,4 @@
+select cadastro,
+nome,
+c_informativoclienteloja from CADASTROPARCEIROS
+where cadastro<=46

@@ -1,0 +1,27 @@
+select
+    first 50
+    itemestoque.codigo,
+    itemestoque.descricao,    
+    itemestoque.referencia,
+    classificacaofiscal.DESCRICAO as ncm,
+    listaprecoproduto.preco
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+where
+    notafiscal.filial=5 and
+    notafiscal.cancelamento is null and
+    notafiscal.DATAEMISSAO between '01.06.2021' and '31.05.2022'
+group by    
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.definicao
+order by
+    sum(mercadoriasnota.vlrfinalmercad) desc
+        

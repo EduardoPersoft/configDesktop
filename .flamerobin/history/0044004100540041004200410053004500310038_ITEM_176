@@ -1,0 +1,56 @@
+SET AUTODDL ON;
+
+--DROP VIEW FLCAIXAVENCIMENTO2;
+
+/**************** DROPPING COMPLETE ***************/
+
+CREATE VIEW FLCAIXAVENCIMENTO2 (FILIAL, RAZAOSOCIAL, SALDOANTERIOR, TIPO, 
+    RECEBIMENTOS, PAGAMENTOS, VENCIMENTO, DESCRICAO, DATAINICIAL, DATAFINAL)
+AS SELECT titulorec.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'R' as tipo,
+       sum(titulorec.valoremaberto) as recebimentos,
+       CAST(0 AS DOUBLE PRECISION) as pagamentos,
+       titulorec.vencimento ,
+       estsin.descricao,
+       estsin.datainicial ,
+       estsin.datafinal
+FROM titulorec
+INNER JOIN estsin on(estsin.estabelecimento = titulorec.filial and
+                     titulorec.vencimento between estsin.datainicial and estsin.datafinal and
+                     estsin.relatorio = 'FLUXOCAIXAA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = titulorec.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = titulorec.contacorrente and
+                              rcontacorrente.relatorio = 'FLUXOCAIXAA')
+INNER JOIN rtipocobranca on (rtipocobranca.tipotransacao = titulorec.tipotransacao and
+                             rtipocobranca.relatorio = 'FLUXOCAIXAA')
+WHERE titulorec.baixa is null
+GROUP BY filial, razaosocial, vencimento, descricao, datainicial, datafinal
+
+UNION
+
+SELECT titulopag.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'P' as tipo,
+       CAST(0 AS DOUBLE PRECISION) as recebimentos,
+       sum(titulopag.valoremaberto) as pagamentos,
+       titulopag.vencimento,
+       estsin.descricao,
+       estsin.datainicial,
+       estsin.datafinal
+FROM titulopag
+INNER JOIN estsin on(estsin.estabelecimento = titulopag.filial and
+                     titulopag.vencimento between estsin.datainicial and estsin.datafinal and
+                     estsin.relatorio = 'FLUXOCAIXAA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = titulopag.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = titulopag.contacorrente and
+                              rcontacorrente.relatorio = 'FLUXOCAIXAA')
+INNER JOIN rtipopagamento on (rtipopagamento.tipopagamento = titulopag.tipotransacao and
+                             rtipopagamento.relatorio = 'FLUXOCAIXAA')
+WHERE titulopag.baixa is null
+GROUP BY filial, razaosocial, vencimento, descricao, datainicial, datafinal;
+
+GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
+ ON FLCAIXAVENCIMENTO2 TO  SYSDBA WITH GRANT OPTION;

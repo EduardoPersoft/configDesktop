@@ -1,0 +1,2 @@
+select * from itemestoquexarquivo 
+where itemestoquexarquivo.CODIGO  in ('04240042','04240043')

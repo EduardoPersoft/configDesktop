@@ -1,0 +1,1 @@
+select itemestoque.denominacao from itemestoque WHERE ITEMESTOQUE.SISCOMEXid IS NOT NULL

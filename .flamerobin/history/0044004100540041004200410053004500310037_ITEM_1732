@@ -1,0 +1,21 @@
+
+
+select
+    materialfilial.filial,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.c_localimportacao,
+    itemestoque.C_LOCALIMPORTACAO,
+    itemestoque.DATAALTERACAO
+from
+    MATERIALFILIAL
+inner join
+    itemestoque on
+        materialfilial.iditem=itemestoque.codigo            
+        
+where
+    materialfilial.filial=1 and
+    itemestoque.codigo like '1%' and
+    materialfilial.C_LOCALIMPORTACAO<>itemestoque.C_LOCALIMPORTACAO
+order by
+    itemestoque.codigo

@@ -1,0 +1,22 @@
+ select 
+    orcLeitura.filial filial,
+    orcLeitura.idnota idnota,
+    orcRelacionado.idNota idNotaRelacionado,
+    orcRelacionado.uuid,
+    orcRelacionado.vlrtotalnota,
+    case when negociacao.idrelacionado is null and  orcRelacionado.idrelacao  is null then '*' 
+    when negociacao.idprincipal=orcleitura.idnota then '*' else '' end as principal
+from
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        (orcRelacionado.idrelacao=coalesce(orcleitura.idrelacao,orcLeitura.idnota) or
+         orcRelacionado.idnota=coalesce(orcleitura.idrelacao,orcLeitura.idnota))
+left join
+    NEGOCIACAO on
+        negociacao.filial = orcleitura.filial and
+        negociacao.IDRELACIONADO=coalesce(orcleitura.IDRELACAO, orcleitura.idnota)
+where 
+    orcleitura.filial=1 and
+    orcleitura.idnota=205983

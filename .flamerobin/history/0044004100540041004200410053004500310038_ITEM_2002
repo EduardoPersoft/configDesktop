@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO
+where produto between '60010' and '60013'

@@ -1,0 +1,4 @@
+update 
+    ITEMCUSTODATA
+set
+    custototal = quantidade * custounitario

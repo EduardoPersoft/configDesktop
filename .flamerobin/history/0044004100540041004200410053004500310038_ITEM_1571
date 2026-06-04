@@ -1,0 +1,1 @@
+update mercadoriasnota set idpedido = null, filialped=null where mercadoriasnota.idpedido=66999

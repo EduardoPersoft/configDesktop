@@ -1,0 +1,3 @@
+select * from MATERIALLOCAL
+where materiallocal.SALDOTOTAL>0
+and materiallocal.idlocal=3

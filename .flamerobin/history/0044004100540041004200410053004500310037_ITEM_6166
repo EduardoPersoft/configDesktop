@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    notafiscal.DATAEMISSAO,
+    numeronota
+from
+    NOTAFISCAL
+where
+    notafiscal.filial=1
+order by
+    notafiscal.numeronota

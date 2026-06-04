@@ -1,0 +1,18 @@
+select 
+    a.filial,
+    a.idcontaCorrente,
+    a.idMovtoBanc,
+    a.idLancamento,
+    a.contaContabil,
+    a.centroCusto,
+    a.VALOR
+from 
+    LANTOCONTBANC a
+inner join
+    estabelecimento on
+        estabelecimento.CADASTRO=LANTOCONTBANC.FILIAL
+where
+    a.filial = 1 and
+    a.idcontaCorrente = 3 and
+    a.idMovtoBanc = 3784
+    

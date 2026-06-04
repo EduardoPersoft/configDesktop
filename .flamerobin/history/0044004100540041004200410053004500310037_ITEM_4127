@@ -1,0 +1,12 @@
+
+
+select * from lantocontpag
+where exists (
+select * from titulopag where 
+titulorec.filial=lantocontpag.filial and
+titulorec.idtitulo=lantocontpag.IDMOVTOBANC
+and cadastro='2025-01-23')
+/*
+select * from movtitulorec
+where movtitulorec.DATAPROCMOV='2025-01-23'
+*/

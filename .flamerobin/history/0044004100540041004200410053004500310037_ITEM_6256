@@ -1,0 +1,1 @@
+select * from itemestoque WHERE ITEMESTOQue.descriminacao like '%OUTRAS%'

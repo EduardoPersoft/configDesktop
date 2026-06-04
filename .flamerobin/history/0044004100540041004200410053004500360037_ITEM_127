@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.TRIBUTACAOICMS=4
+where
+    itemestoque.CLASSIFISCAL='142'

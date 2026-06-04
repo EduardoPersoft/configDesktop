@@ -1,0 +1,6 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.referencia = itemestoque.C_MRFORNECEDOR
+where 
+    itemestoque.C_MRFORNECEDOR<>itemestoque.referencia

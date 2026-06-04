@@ -1,0 +1,9 @@
+update 
+    ITEMCUSTODATA
+set 
+    itemcustodata.CUSTOUNITARIO=
+        itemcustodata.CUSTOTOTAL/
+        itemcustodata.quantidade
+where 
+    quantidade<>0
+

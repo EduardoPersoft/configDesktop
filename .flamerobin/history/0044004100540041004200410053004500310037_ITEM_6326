@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where cast(movimentoestoque.coletadata as date)='19.12.2025'
+and movimentoestoque.coleta in ('1956', '1957')

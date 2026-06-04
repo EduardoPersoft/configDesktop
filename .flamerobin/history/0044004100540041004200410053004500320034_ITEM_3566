@@ -1,0 +1,2 @@
+SELECT * FROM SPEDFISCAL_0
+order by sequencia

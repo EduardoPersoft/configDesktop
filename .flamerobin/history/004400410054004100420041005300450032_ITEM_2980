@@ -1,0 +1,11 @@
+update 
+    listaprecoproduto l1
+SET
+    l1.CUSTOCONSIDERADO = (select 
+                                l2.CUSTOCONSIDERADO
+                           from 
+                                listaprecoproduto l2
+                           where 
+                                l2.LISTA=1 AND
+                                l2.PRODUTO=l1.produto)
+             

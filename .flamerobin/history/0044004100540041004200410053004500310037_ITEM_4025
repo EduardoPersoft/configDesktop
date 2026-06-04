@@ -1,0 +1,3 @@
+select * from PEDIDO
+where vendedoresped.filial=110 
+and vendedoresped.vendedor=14

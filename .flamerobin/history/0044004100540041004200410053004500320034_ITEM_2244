@@ -1,0 +1,7 @@
+SELECT
+    *
+from 
+    titulopag 
+where 
+    titulopag.filial=5 AND
+    titulopag.vencimento <> cast(titulopag.vencimento as date)

@@ -1,0 +1,4 @@
+select * from ITEMCUSTODATA 
+where datainventario='30.09.2025'
+and codigo='M000172'
+order by codigo

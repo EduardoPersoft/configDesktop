@@ -1,0 +1,12 @@
+select
+    MATERIALMOVIMENTOESTOQUE.*
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        movimentoestoque.TIPOMOVIMENTO='02'
+where 
+    SUBSTRING(MATERIALMOVIMENTOESTOQUE.IDITEM FROM 1 FOR 2) IN ('EM', 'MP') and
+    MATERIALMOVIMENTOESTOQUE.VALOR IS NULL

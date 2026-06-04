@@ -1,0 +1,3 @@
+select * from mercadoriasped
+where filial=1
+and idnota=20299

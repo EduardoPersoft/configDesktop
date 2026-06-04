@@ -1,0 +1,1 @@
+alter table itemestoque add ordem integer

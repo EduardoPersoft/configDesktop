@@ -1,0 +1,14 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.DESCRICAO
+FROM
+    ITEMESTOQUE
+inner JOIN
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+WHERE
+    itemestoque.TIPOPRODUTO=3 AND
+    itemestoque.itembase is null
+order by
+    codigo

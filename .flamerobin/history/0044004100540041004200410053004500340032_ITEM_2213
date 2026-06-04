@@ -1,0 +1,14 @@
+select 
+    * 
+from 
+    LANTOCONTbANC
+where 
+    lantocontpag.filial in (110,3941)
+and not exists (
+    select 
+        * 
+    from 
+        contascontabeis
+    where 
+        contascontabeis.idplano=5 and 
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL)

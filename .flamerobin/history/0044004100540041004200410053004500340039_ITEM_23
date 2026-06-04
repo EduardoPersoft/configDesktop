@@ -1,0 +1,4 @@
+select * from COMPOSICAOOP 
+where filial=1 and
+
+idmovimento=13393

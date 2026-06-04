@@ -1,0 +1,5 @@
+alter table 
+add acao smallint,
+add analise varchar(250),
+add processamento timestamp,
+add erro varchar(1000)

@@ -1,0 +1,8 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.CLASSIFISCAL
+FROM
+    ITEMESTOQUE
+where
+    itemestoque.classifiscal='52'

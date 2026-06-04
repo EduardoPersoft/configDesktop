@@ -1,0 +1,25 @@
+select  
+    movimentoestoque.EMISSAO,
+    movimentoestoque.coleta,
+    c_coletas.VALORMEDIO,
+    c_coletas.*
+from 
+    c_coletas
+inner join
+    MOVIMENTOESTOQUE on
+        movimentoestoque.COLETA=c_coletas.COLETA
+where
+    c_coletas.DATACOLETA between '29.09.2025' and '14.10.2025'
+union    
+select  
+    c_destinoavulso.DATASOLICITACAO,
+    c_destinoavulso.DATACOLETA,
+    c_coletas.VALORMEDIO,
+    c_coletas.*
+from 
+    c_coletas
+inner join
+    c_destinoavulso on
+        c_destinoavulso.COLETA=c_coletas.COLETA
+where
+    c_coletas.DATACOLETA between '29.09.2025' and '14.10.2025'

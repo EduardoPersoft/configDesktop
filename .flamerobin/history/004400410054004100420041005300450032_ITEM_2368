@@ -1,0 +1,32 @@
+select 
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    familia.id familia,
+    familia.descricao descricaoFamilia,
+    sum(mercadoriasnota.quantidade) as quantidade,
+    count(mercadoriasnota.idnota) as qtdvendas
+FROM
+    NOTAFISCAL
+inner join 
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial AND
+        notafiscal.idnota=mercadoriasnota.idnota
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+inner JOIN
+    familia on
+        familia.id=itemestoque.familia
+WHERE
+    notafiscal.filial=5 AND
+    notafiscal.DATAEMISSAO between '01.10.2020' and '31.12.2021' AND
+    itemestoque.descricao like '%PARAFUSOS%'
+group by
+        itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    familia.id,
+    familia.descricao
+order by
+    4, 6 desc

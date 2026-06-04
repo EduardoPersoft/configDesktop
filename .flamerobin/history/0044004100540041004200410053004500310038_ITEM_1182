@@ -1,0 +1,6 @@
+select 
+    filial,
+    idnota,
+    c_tipo
+from pedido
+and c_tipo<>0

@@ -1,0 +1,20 @@
+SELECT  NOTAFISCAL.FILIAL,
+                NOTAFISCAL.IDNOTA,
+                NOTAFISCAL.DATACADASTRO, 
+                NOTAFISCAL.DATAEMISSAO,
+                NOTAFISCAL.NUMERONOTA,
+                NOTAFISCAL.VLRTOTALNOTA,
+                NOTAFISCAL.DESTINATARIO,
+              condicaopagamento.descricao,
+              cadtrans.nome,
+             NOTAFISCAL.CFOP,NOTAFISCAL.NATUREZAOPERACAO
+FROM NOTAFISCAL
+INNER JOIN CADASTROPARCEIROS ON (CADASTROPARCEIROS.CADASTRO = NOTAFISCAL.DESTINATARIO)
+left join condicaopagamento on condicaopagamento.id=notafiscal.CONDICAOPAGAMENTO
+left join cadastroparceiros cadTrans on cadtrans.cadastro=notafiscal.CODIGOTRANSP
+WHERE  NOTAFISCAL.DESTINATARIO=:CLIENTE
+AND FILIAL=:FILIAL
+AND NOTAFISCAL.DATAEMISSAO BETWEEN :DATAINICIAL AND :DATAFINAL
+and exists (select 1 from faturas
+           where  notafiscal.filial=faturas.filial
+           and notafiscal.idnota=faturas.idnota)

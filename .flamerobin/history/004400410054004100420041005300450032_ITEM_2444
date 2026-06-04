@@ -1,0 +1,29 @@
+
+  UPDATE MERCADORIASPEDCOMPRA SET QTDEENTREGUE= coalesce((select sum(mercadoriasnotacompra.quantidade) FROM mercadoriasnotacompra
+                                                 where mercadoriasnotacompra.filial=mercadoriaspedcompra.filial and 
+                                                 mercadoriasnotacompra.IDPEDIDO=mercadoriaspedcompra.idnota AND
+                                                 mercadoriasnotacompra.IDMERCADORIA=mercadoriaspedcompra.IDMERCADORIA
+                                                 ) ,0)
+
+--select * from mercadoriaspedcompra
+where filial=5 and baixa = 'N'
+plan join (MERCADORIASNOTACOMPRA INDEX (I_MERCITEMSAIDA),
+            PLAN (MERCADORIASPEDCOMPRA INDEX (BAIXA_MERCADORIASPEDCOMPRA)))
+--order by filial, idnota                                         
+
+UPDATE
+    MERCADORIASPEDCOMPRA
+SET
+    mercadoriaspedcompra.MINIMOBAIXA=quantidade ,
+    mercadoriaspedcompra.qtdeentregue=0,
+    baixa='N'
+WHERE
+    filial=5 and exists (
+    select * from notacompra 
+    where notacompra.filial=mercadoriaspedcompra.filial AND
+    notacompra.idnota=mercadoriaspedcompra.idnota AND
+    notacompra.DATAEMISSAO between  '04.12.2020' and  '31.12.2020')
+    
+    
+    mercadoriaspedcompra.
+create index c_i_mercpedcompra on mercadoriasnotacompra(filial,idpedido,idmercpedido)

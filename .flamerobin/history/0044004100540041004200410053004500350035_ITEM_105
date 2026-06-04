@@ -1,0 +1,4 @@
+update 
+    FORNECEDORES
+set
+    ramoatividade = null

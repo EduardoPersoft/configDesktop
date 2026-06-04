@@ -1,0 +1,14 @@
+select 
+    (select 
+        first 1 
+     from
+        MERCADORIASNOTA
+     where 
+        mercadoriasnota.FILIALPED=movimentoestoque.filial  AND
+        mercadoriasnota.idpedido=movimentoestoque.documento)
+    movimentoestoque.*
+from 
+    MOVIMENTOESTOQUE
+WHERE   
+    movimentoestoque.filial=1 
+    and movimentoestoque.idmovimento between 102053 and 102059

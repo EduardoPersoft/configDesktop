@@ -1,0 +1,6 @@
+select
+    *
+from
+    materiallocal 
+where
+    materiallocal.saldototal<0

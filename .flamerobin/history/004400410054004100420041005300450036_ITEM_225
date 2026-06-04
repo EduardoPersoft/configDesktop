@@ -1,0 +1,1 @@
+DELETE from materialmovimentoestoque where filial=1 and idmovimento=299780

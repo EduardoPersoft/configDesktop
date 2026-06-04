@@ -1,0 +1,8 @@
+select * from MERCADORIASPED as m1
+where m1.baixa='N' and
+m1.minimo>0 and
+exists (
+select * from mecadoriasped m2
+where m2.filial=m1.filial and
+m2.idnota=m2.idnota and
+m2.baixa='S')

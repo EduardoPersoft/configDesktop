@@ -1,0 +1,35 @@
+select 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    count(materiallocal.iditem) 
+    
+from 
+    fornecedoresitem
+inner join
+    materialfilial on
+        materialfilial.filial=5 and
+        materialfilial.iditem=fornecedoresitem.iditem
+inner join 
+    materiallocal on 
+        (materiallocal.FILIAL=materialfilial.filial and 
+        materiallocal.IDITEM=materialfilial.IDITEM)
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.iditem
+where 
+    fornecedoresitem.FORNECEDOR=1082 and
+    materialfilial.filial=5 and
+    itemestoque.itembase is null and
+    not exists (
+        select * from MERCADORIASPEDCOMPRA
+        where MERCADORIASPEDCOMPRA.filial=materialfilial.filial and
+        mercadoriaspedcompra.codigo=materialfilial.iditem and
+        mercadoriaspedcompra.baixa='N')
+group by 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    materialfilial.filial
+having 
+    coalesce(materialfilial.saldomaximo, materialfilial.consumomedio)*0.4>SUM(materiallocal.saldototal)

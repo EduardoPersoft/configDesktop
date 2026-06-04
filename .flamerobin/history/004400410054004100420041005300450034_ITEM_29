@@ -1,0 +1,2 @@
+select * from MOVTOTITULOPAG
+where movtotitulopag.MOEDA = 0

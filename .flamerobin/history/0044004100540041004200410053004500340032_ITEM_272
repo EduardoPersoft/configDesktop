@@ -1,0 +1,18 @@
+select
+    inventarioestoquedata.CODIGO, 
+    ITEMESTOQUE.DESCRICAO,
+    inventarioestoquedata.LOTE,
+    MATERIALLOTE.*
+from 
+ inventarioestoquedata
+inner join 
+    ITEMESTOQUE on 
+    inventarioestoquedata.codigo=ITEMESTOQUE.codigo  
+inner join 
+    MATERIALLOTE ON 
+    INVENTARIOESTOQUEDATA.CODIGO=MATERIALLOTE.IDITEM and 
+    INVENTARIOESTOQUEDATA.LOTE=MATERIALLOTE.LOTE
+   
+where 
+    inventarioestoquedata.FILIAL=110 and 
+    inventarioestoquedata.DATA='26.09.2023'

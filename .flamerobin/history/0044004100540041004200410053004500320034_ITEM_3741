@@ -1,0 +1,11 @@
+select COALESCE (faturas.valorfatura,0),
+                     faturas.datavencimento,
+                     notafiscal.dataemissao
+    
+from  notacompra notafiscal
+inner join faturasnotacompra faturas on (notafiscal.filial=faturas.filial and notafiscal.idnota=faturas.idnota)
+where notafiscal.filial=5 and
+      notafiscal.DATAEMISSAO between '01.01.2022' and '31.12.2022' and
+      notafiscal.entradasaida = 'E'
+      and faturas.valorfatura >0 and
+      notafiscal.dataemissao>faturas.datavencimento

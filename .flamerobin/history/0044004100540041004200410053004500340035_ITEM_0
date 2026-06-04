@@ -1,0 +1,1 @@
+select notafiscal.simples,notafiscal.* from notafiscal

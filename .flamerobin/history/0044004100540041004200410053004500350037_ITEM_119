@@ -1,0 +1,2 @@
+select orcamento.C_ARQUITETO
+from orcamento

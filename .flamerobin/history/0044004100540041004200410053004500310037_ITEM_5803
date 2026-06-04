@@ -1,0 +1,7 @@
+select 
+nfectrl.protocolo,
+nfectrl.ENVIO,
+nfectrl.IDRESULTADO,
+nfectrl.resuotado
+from
+nfectrl

@@ -1,0 +1,10 @@
+SELECT
+    distinct
+    mercadoriasnota.codigo,
+    mercadoriasnota.desreduzida,
+    mercadoriasnota.cfop,
+    mercadoriasnota.SITUACAOTRIBUT
+from
+    mercadoriasnotacompra mercadoriasnota
+WHERE
+    mercadoriasnotacompra.VLRICMSRECOLHIDO = 0

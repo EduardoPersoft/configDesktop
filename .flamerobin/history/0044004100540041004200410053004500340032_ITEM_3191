@@ -1,0 +1,199 @@
+---C_ORDEMPRODUCAO1
+select 
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.idpedido,
+    pedido.datacadastro,
+    movimentoestoque.emissao,
+    movimentoestoque.documento,
+    cadcli.cadastro,
+    cadcli.nome,
+    materialmovimentoestoque.produto,
+    materialmovimentoestoque.quantidade,
+    produto.descricao descricaoproduto,
+    produto.c_ean,
+    produto.unidade as produtounidade,
+    processo.unidade as processounidade,
+    mercadoriasped.quantidade pedidoquantidade,
+    mercadoriasped.unidade,
+    movimentoestoque.previsaofimproducao,
+    produto.C_LARGURAMATERIAPRIMA,
+    (Produto.C_LARGURAMATERIAPRIMA - 10) AS LARGURALAMINACAO,
+    PRODUTO.C_LARGURAFINAL,
+    PRODUTO.C_PISTAS,
+    produto.C_SENTIDOBOBINAMENTOACABAMENTO,
+    materialmovimentoestoque.CENTROCUSTO,
+    C1.IDCOMPOSICAO,
+    centrocustos.descricao descricaoCentrocusto,
+    c1.codigo componente,
+    produto.C_DIAMETROBOBINA,
+    componente.descricao componentedescricao,
+    componente.unidade componenteunidade,
+    c1.gramatura componentegramatura,
+    c1.quantidade componentequantidade,
+    c1.perdaestimadap componenteperdaestimdap,
+    c1.perdaestimadaq componenteperdaestimdaq,
+    case (c1.gramatura)
+    when 0 then 0 else
+  CAST( ((c1.quantidade * 1000) / (c1.gramatura)) / (produto.c_larguramateriaprima/1000) AS DECIMAL(10,2)) end AS METROS ,
+ 
+  case when MATERIALMOVIMENTOESTOQUE.idcentrocusto='103' and EXISTS
+    (select * from composicaoop as c2
+     where c2.filial=materialmovimentoestoque.filial AND
+           c2.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+           c2.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL and
+           c2.codigo='I001') then 'Segunda ' else '' end as segundalaminacao,
+    centrocustos.centrocusto,
+/*
+    CASE PRODUTO.C_STATUSPRODUTO 
+    WHEN '0' THEN 'NOVO' 
+    WHEN '1' THEN 'REPETIÇÃO' 
+    WHEN '2' THEN 'REPETIÇÃO COM ALTERAÇÃO' 
+    ELSE ''
+*/    
+    CASE mercadoriasped.C_NOVOREPETICAOALTERADO
+    WHEN 'N' THEN 'NOVO' 
+    WHEN 'R' THEN 'REPETIÇÃO' 
+    WHEN 'A' THEN 'REPETIÇÃO COM ALTERAÇÃO' 
+    ELSE 'NOVO/REPETIÇÃO/ALTERAÇÃO NÃO INFORMADO NO PEDIDO'
+    END    
+    
+    AS C_NOVOREPETICAOALTERADO,
+----- LAMINACAO
+    CAST ( '100 metros + 2%' as varchar (50))   as perdaLAMINACAO,
+    c_laminacao.GRAMATURAFILME,
+    FILME2.DESCRICAO as DESCRICAOFILME2,
+	c_laminacao.FILME2,
+    c_laminacao.GRAMATURAFILME2,
+    c_laminacao.GRAMATURAFILME * 0.9 as gramaturafilmemin,
+    c_laminacao.GRAMATURAFILME * 1.1 as gramaturafilmemax,
+    c_laminacao.APLICACAOADESIVOMAXIMO,
+    c_laminacao.APLICACAOADESIVOMINIMO,
+    c_laminacao.LADOLAMINAR2,
+    c_laminacao.OBSERVACAO,
+    c_laminacao.LARGURAROLO,
+    c_laminacao.ITEMRIGOROSO,
+    c_laminacao.SAIDAREBOBINADEIRA,
+    c_laminacao.LADOLAMINAR,
+    c_laminacao.APLICARTRATADOR,
+    c_laminacao.GRAMATURAADESIVO,
+    ADESIVO.DESCRICAO DESCRICAOADESIVO,
+    FILME.DESCRICAO DESCRICAOFILME,
+	c_laminacao.FILME    ,
+	c1.c_bobinador,
+
+----impressao
+tintas.descricao AS C_TINTADESCRICAO,
+produto.C_GRAMATURATINTA,
+produto.C_CILINDRO,
+FORNECEDORCILINDRO.NOME FORNECEDORCILINDRONOME,
+produto.C_TUBETEIMPRESSAO,
+produto.C_SENTIDOBOBINAMENTOIMPRESSAO,
+produto.C_CORFOTOCELULA,
+produto.C_POSICIONAMENTO,
+produto.C_LADOIMPRESSAO,
+produto.C_TEMPERATURAFINAL,
+produto.C_TEMPERATURATINTA,
+produto.C_SETUPIMPRESSAO,
+CAST ( '200 metros + 2' as varchar (50))   as perdaimpressao, 
+         ITEMBASE.CODIGO AS ITEMBASECODIGO,
+         ITEMBASE.DESCRICAO AS ITEMBASEDESC,
+produto.C_LADOIMPRIMIRFILME,
+produto.C_LINEATURALAUDO,
+produto.C_VELOCIDADEIMPRESSAO,
+---- ACABAMENTO
+        CAST(CASE PRODUTO.c_revisao WHEN 'S'
+            THEN 'X' ELSE '' END AS CHAR(1)) AS REVISAO,
+PRODUTO.C_PESOBOBINA,
+PRODUTO.C_EMBALAGEM,
+PRODUTO.C_TUBETEACABAMENTO,
+PRODUTO.C_SETUPCORTE,
+PRODUTO.C_VELOCIDADECORTE,
+PRODUTO.C_CORTE1,
+PRODUTO.C_CORTE2,
+PRODUTO.C_CORTE3,
+PRODUTO.C_CORTE4,
+PRODUTO.C_OBSERVACAOACABAMENTO,
+PRODUTO.C_OBSERVACAOCORTE,
+PRODUTO.C_OBSERVACAOIMPRESSAO,
+      familia.DESCRICAO as familiadesc
+    
+----
+from 
+    materialmovimentoestoque 
+    
+inner join 
+        estabelecimento on 
+            estabelecimento.cadastro = materialmovimentoestoque.FILIAL
+    
+inner JOIN
+    centrocustos on
+        centrocustos.IDPLANO = estabelecimento.PLANOCENTROCUSTOS AND
+        centrocustos.centrocusto = materialMovimentoEstoque.IDCENTROCUSTO
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+
+inner JOIN
+        itemestoque produto on
+            produto.codigo=materialmovimentoestoque.produto
+
+inner join 
+        composicaoop c1 on
+            c1.filial=materialmovimentoestoque.filial AND
+            c1.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+            c1.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+
+inner JOIN
+        itemestoque componente on 
+            componente.codigo=c1.codigo
+            
+inner join itemestoque processo on
+        processo.codigo=materialmovimentoestoque.IDITEM
+
+left join 
+        pedido on
+            pedido.filial=materialmovimentoestoque.filial AND
+            pedido.idnota=materialmovimentoestoque.idpedido
+
+left JOIN
+    mercadoriasped on
+        mercadoriasped.filial=MATERIALMOVIMENTOESTOQUE.filial AND
+        mercadoriasped.idnota=materialmovimentoestoque.idpedido and 
+        mercadoriasped.idmercadoria=materialmovimentoestoque.idmercadoria
+left JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=produto.C_CLIENTE
+        
+left join 
+    c_laminacao on 
+     (produto.codigo=c_laminacao.codigo and 
+     c1.codigo=C_LAMINACAO.filme)
+left join
+         ITEMESTOQUE FILME on 
+         (FILME.CODIGO = C_LAMINACAO.FILME)
+left join
+         ITEMESTOQUE FILME2 on 
+         (FILME2.CODIGO = C_LAMINACAO.FILME2)
+left join
+         ITEMESTOQUE ADESIVO on 
+         (ADESIVO.CODIGO = C_LAMINACAO.ADESIVO)
+LEFT JOIN
+     ITEMESTOQUE TINTAS ON
+                 (TINTAS.CODIGO=PRODUTO.c_TINTA)      
+LEFT JOIN
+     CADASTROPARCEIROS FORNECEDORCILINDRO ON
+                       (FORNECEDORCILINDRO.CADASTRO=PRODUTO.c_fornecedorcilindrocliche)                    
+LEFT JOIN
+     ITEMESTOQUE ITEMBASE ON
+             (ITEMBASE.codigo=PRODUTO.ITEMBASE)  
+ left join 
+    familia on
+        (familia.ID=produto.FAMILIA)   
+
+where 
+    materialmovimentoestoque.filial= 110 and 
+    materialmovimentoestoque.idmovimento = 64687 and
+    materialmovimentoestoque.IDCENTROCUSTO <> '106'

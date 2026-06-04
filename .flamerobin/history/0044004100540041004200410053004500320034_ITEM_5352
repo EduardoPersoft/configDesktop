@@ -1,0 +1,6 @@
+update TITULOREC
+set codretorno = 'XX'
+where
+titulorec.CODRETORNO is null and 
+titulorec.filial=5 and
+titulorec.CONTACORRENTE=1342

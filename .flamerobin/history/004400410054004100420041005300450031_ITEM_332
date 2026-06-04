@@ -1,0 +1,18 @@
+SELECT
+    item.codigo,
+    item.descricao,
+    CADASTROPARCEIROS.nome,    
+    estrutura.codigo,
+    estrutura.descricao
+FROM
+    itemestoque item 
+left JOIN
+    cadastroparceiros on
+        CADASTROPARCEIROS.cadastro=item.C_CLIENTE
+left JOIN   
+    itemestoque estrutura on
+        estrutura.codigo=item.itembase
+WHERE
+    item.tipoproduto=4
+        
+        

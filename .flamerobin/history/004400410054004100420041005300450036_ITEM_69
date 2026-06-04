@@ -1,0 +1,6 @@
+update 
+    TITULOREC
+SET
+    titulorec.valorjuros=cast(titulorec.valortitulo*0.001667 as decimal(12,2))
+where   
+    titulorec.emissao betwee '01.03.2021' and '03.03.2021'

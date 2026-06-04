@@ -1,0 +1,1 @@
+select idplano, contacontabil, descricao, nivel from CONTASCONTABEIS where idplano=4 order by contacontabil

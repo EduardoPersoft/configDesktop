@@ -1,0 +1,30 @@
+select
+    LANTOCONTPAG.filial,
+    LANTOCONTPAG.IDMOVTOBANC,
+    LANTOCONTPAG.IDLANCAMENTO,
+    lantocontpag.CONTACONTABIL,
+    titulopag.parceiro,
+    CADASTROPARCEIROS.nome,
+    titulopag.TITULO,
+    titulopag.fatura,
+    titulopag.emissao,
+    titulopag.vencimento,
+    LANTOCONTPAG.VALOR
+from
+    TITULOPAG
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=titulopag.PARCEIRO
+inner join 
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO 
+where 
+    TITULOPAG.BAIXA IS NULL AND 
+    LANTOCONTPAG.CONTACONTABIL='112020207'
+order by
+    CADASTROPARCEIROS.nome,
+    titulopag.TITULO,
+    titulopag.fatura,
+    titulopag.emissao,
+    titulopag.vencimento

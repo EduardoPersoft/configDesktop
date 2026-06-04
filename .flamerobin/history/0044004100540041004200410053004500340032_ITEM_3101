@@ -1,0 +1,1 @@
+select * from LOGALTERACAO  where objeto='ESTOQUE' CHAVE='MPP02CPE/HTR'

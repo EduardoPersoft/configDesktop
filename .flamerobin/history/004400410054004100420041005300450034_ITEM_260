@@ -1,0 +1,33 @@
+select materialmovimentoestoque.filial,
+       cadfilial.razaosocial RAZAOFILIAL,
+       movimentoestoque.idmovimento,
+       movimentoestoque.documento,
+       materialmovimentoestoque.idpedido,
+       movimentoestoque.emissao,
+       materialmovimentoestoque.idmercadoria,
+       itemestoque.codigo,
+       itemestoque.descricao,
+       MATERIALMOVIMENTOESTOQUE.C_SUBGRUPo subgrupo,
+       C_SUBGRUPO.DESCRICAO subgrupodescricao,
+--       1 as quantidade,
+       estsin.datainicial, estsin.datafinal,
+       MATERIALMOVIMENTOESTOQUE.QUANTIDADE m2,
+(coalesce(materialmovimentoestoque.c_up,itemestoque.c_up) * materialmovimentoestoque.quantidade) UP,       
+(coalesce(materialmovimentoestoque.c_pesoconsumo,itemestoque.c_pesoconsumo) * materialmovimentoestoque.quantidade )  PESOCONSUMO,
+       (itemestoque.c_pencolhimentotela * materialmovimentoestoque.quantidade) pencolhimentotela,
+       (coalesce(materialmovimentoestoque.c_pesolatex,0)  * materialmovimentoestoque.quantidade) PESOLATEX,
+       MATERIALmovimentoestoque.c_valorfio,
+       MATERIALmovimentoestoque.c_valOrup,
+       MATERIALmovimentoestoque.c_valortela,
+       MATERIALmovimentoestoque.c_valorlatex,
+       MATERIALmovimentoestoque.C_CUSTOINDUSTRIAL ,
+       materialmovimentoestoque.valor
+from ESTSIN, MOVIMENTOESTOQUE
+inner join materialmovimentoestoque on (MATERIALMOVIMENTOESTOQUE.FILIAL = MOVIMENTOESTOQUE.FILIAL and
+           MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO = MOVIMENTOESTOQUE.IDMOVIMENTO)
+inner join ITEMESTOQUE on (itemestoque.codigo=materialmovimentoestoque.iditem)
+inner join cadastroparceiros cadfilial on (cadfilial.cadastro=movimentoestoque.filial)
+left join C_SUBGRUPO on (materialmovimentoestoque.C_SUBGRUPO=C_SUBGRUPO.ID)
+where MOVIMENTOESTOQUE.TIPOMOVIMENTO = '04' and
+      movimentoestoque.emissao between ESTSIN.DATAINICIAL and ESTSIN.DATAFINAL AND
+      ESTSIN.RELATORIO = 'C_CALCPRODUCAO'

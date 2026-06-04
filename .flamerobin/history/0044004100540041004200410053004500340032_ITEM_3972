@@ -1,0 +1,1 @@
+select * from mercadoriasnota where filial=101 and mercadoriasnota.IDPEDVENDEV=12609

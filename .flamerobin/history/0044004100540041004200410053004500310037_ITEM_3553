@@ -1,0 +1,2 @@
+select  first 5 *
+from INVENTARIOESTOQUEDATA

@@ -1,0 +1,132 @@
+select
+    cadven.cadastro,
+    cadven.nome,
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') qtdorc ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') qtditemorc ,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') valororc,
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') qtdPED ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') qtditemPED,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024') valorPED            
+from
+    VENDEDOR
+inner join
+    CADASTROPARCEIROS cadven  on
+        vendedor.cadastro=cadven.CADASTRO
+where
+    cadven.status=1 AND
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')+
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')+                
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')+                
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')+        
+        
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024')> 0

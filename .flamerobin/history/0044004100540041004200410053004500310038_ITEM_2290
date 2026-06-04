@@ -1,0 +1,12 @@
+insert itemcustodata(filial,datainventario,codigo,custounitario,quantidade,custototal)
+select 
+    itemcustodata.filial,
+    '31.03.2024',
+    itemcustodata.codigo,
+    itemcustodata.custounitario,
+    itemcustodata.quantidade,
+    itemcustodata.CUSTOTOTAL
+from 
+    ITEMCUSTODATA 
+where 
+    itemcustodata.DATAINVENTARIO='29.02.2024'

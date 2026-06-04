@@ -1,0 +1,5 @@
+update 
+    contacorrente
+set
+    saldoreal=0
+    

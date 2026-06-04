@@ -1,0 +1,16 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    materialmovimentoestoque.valor = MATERIALMOVIMENTOESTOQUE.quantidade*12.71
+where filial=110
+and iditem='MPP01METAL'
+and exists (
+    select 
+        *
+    from 
+        movimentoestoque
+    where
+        movimentoestoque.filial=materialmovimentoestoque.FILIAL and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and
+        movimentoestoque.emissao<='01.04.2023')
+        

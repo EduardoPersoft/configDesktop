@@ -1,0 +1,17 @@
+ select
+    u_usuario.id,
+    u_usuario.usuario,
+    u_usuario.nomeCompleto,
+    p_usuario.usuario perfil
+from
+   usuario u_usuario
+left join
+   usuario p_usuario on
+     u_usuario.perfil = p_usuario.id
+where
+    u_usuario.tipo = 'U' AND
+    u_usuario.ativo = 'S'
+    
+order by
+    u_usuario.usuario
+    

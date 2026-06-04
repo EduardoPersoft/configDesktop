@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    RESUMOCOMPRAS 
+where 
+    resumocompras.ITEM = '01730'
+order by
+    emissao desc

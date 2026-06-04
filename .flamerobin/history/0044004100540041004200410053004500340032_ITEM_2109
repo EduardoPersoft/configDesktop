@@ -1,0 +1,17 @@
+select 
+    materialmovimentoestoque.sinal*MATERIALMOVIMENTOESTOQUE.quantidade,
+    materialmovimentoestoque.*
+    
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.FILIAL
+        and movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.filial = 110 and
+    movimentoestoque.EMISSAO = '31.03.2024' and
+    movimentoestoque.processamento>='01.04.2024' and
+    movimentoestoque.TIPOMOVIMENTO=17 and
+    MATERIALMOVIMENTOESTOQUE.iditem like 'MPP%' and
+    materialmovimentoestoque.localarmazenamento not in (2,3) 

@@ -1,0 +1,78 @@
+SELECT
+       notafiscal.filial,
+       notafiscal.idnota idnotasaida,
+       cast(notafiscal.numeronota as varchar(10)) as numeronota,
+       notafiscal.dataemissao,
+       mercadoriasnota.codigo,
+       materialmovimentoestoque.lote,
+       mercadoriasnota.desreduzida,
+       mercadoriasnota.descricao,
+       mercadoriasnota.idmercadoria idmercadoriasaida,
+
+       mercadoriasnota.quantidade as  quantidadenota,
+       mercadoriasnota.quantidade as quantidade,
+
+       mercadoriasnota.precounitario AS PRECOLISTA,
+       mercadoriasnota.VLRTOTALMERCAD,
+       mercadoriasnota.SITUACAOTRIBUT,
+
+       'N' as SISTEMACALCULAIPI,
+       mercadoriasnota.classifiscal,
+       mercadoriasnota.PIPI,
+       mercadoriasnota.IPIBase,
+       mercadoriasnota.ValorIPI,
+       mercadoriasnota.IPIIsento,
+       mercadoriasnota.IPIOutros,
+
+       'N' as SISTEMACALCULAICMS,
+       mercadoriasnota.ALIQUOTAICMS,
+       mercadoriasnota.ICMSBase,
+       mercadoriasnota.VALORICMS,
+       mercadoriasnota.ICMSIsento,
+       mercadoriasnota.ICMSOutros,
+       MERCADORIASNOTA.ICMSORIGEMBASE, 
+       MERCADORIASNOTA.icmsorigemvalor,
+
+       'N' as SISTEMACALCULASUBSTITUICAO,
+       mercadoriasnota.VLRBASESUBST,
+       mercadoriasnota.VLRICMSSUBST,
+       mercadoriasnota.VLRICMSRECOLHIDO,
+       mercadoriasnota.plucro,
+       mercadoriasnota.aliquotasubstituto ,
+
+       'N' as SISTEMACALCULAPIS,
+       mercadoriasnota.ppis,
+       mercadoriasnota.basepis,
+       mercadoriasnota.VlrPisPasep,
+
+       'N' as SISTEMACALCULACOFINS,
+       mercadoriasnota.pcofins,
+       mercadoriasnota.basecofins,
+       mercadoriasnota.vlrcofins,
+
+      CAST( '0' as VARCHAR(12)) as ORIGEMNOTAREL,
+       CAST('NOSSA' AS VARCHAR(12)) AS ORIGEMDESCRICAO,
+
+      mercadoriasnota.idpedido as IDPEDVENDEV,
+      mercadoriasnota.idmercpedido as IDPEDVENMERCDEV,
+      MERCADORIASNOTA.ICMSSTFCP,
+      MERCADORIASNOTA.ICMSSTFCPVALOR,
+
+      cast('N' as char(1)) as P_MARCA
+
+from notafiscal
+inner join mercadoriasnota on (mercadoriasnota.filial=notafiscal.filial
+                   and mercadoriasnota.idnota=notafiscal.idnota)
+left join movimentoestoque on (movimentoestoque.filial=notafiscal.filial
+            and movimentoestoque.idnota=notafiscal.idnota
+            and movimentoestoque.tipomovimento<>'11')
+left join materialmovimentoestoque on (
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.Idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.Idmercadoria=mercadoriasnota.Idmercadoria)
+where
+notafiscal.filial=5
+and notafiscal.dataemissao between '01.01.2022 ' and '31.12.2022'
+and notafiscal.destinatario=1
+and notafiscal.cancelamento='N'
+and notafiscal.DATAemissao is not  null

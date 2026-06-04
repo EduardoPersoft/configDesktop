@@ -1,0 +1,3 @@
+select * from MERCADORIASPED
+where mercadoriasped.filial=110
+and mercadoriasped.idnota = 14717

@@ -1,0 +1,1 @@
+delete from locallote where idlocal>=1790

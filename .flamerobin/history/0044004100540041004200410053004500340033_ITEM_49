@@ -1,0 +1,3 @@
+select * from materialmovimentoestoque
+where materiallote.filial=110
+and materiallote.iditem='PRO1567FLI015'

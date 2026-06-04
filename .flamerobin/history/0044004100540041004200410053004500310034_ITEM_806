@@ -1,0 +1,11 @@
+select 
+    movbancarios.filial,
+    movbancarios.idcontacorrente,
+    movbancarios.idmovtobancario,
+    movbancarios.nrdocumento,
+    MOVBANCARIOS.movimentacao,
+    movbancarios.dataextrato
+from    
+    MOVBANCARIOS
+where 
+    movimentacao<>coalesce(dataextrato, cast('now' as timestamp))

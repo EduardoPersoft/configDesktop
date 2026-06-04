@@ -1,0 +1,1 @@
+select * from C_LOGSALDOECOMMERCE where coalesce(status_code, 500) <> 500

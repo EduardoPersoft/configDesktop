@@ -1,0 +1,2 @@
+select * from notafiscal 
+where filial=5 order by idnota desc

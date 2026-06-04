@@ -1,0 +1,2 @@
+select * from materialmovimentoestoque where filial=1 and iditem='PE-23205'
+'

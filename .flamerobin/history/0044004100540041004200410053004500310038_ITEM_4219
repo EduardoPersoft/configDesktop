@@ -1,0 +1,26 @@
+SELECT  
+    PLANCTOCONTABEISPAGOS.datamovimento,
+    PLANCTOCONTABEISPAGOS.contacontabil,
+    PLANCTOCONTABEISPAGOS.descricao,
+    planctocontabeispagos.origem,  
+    planctocontabeispagos.idcontacorrente,
+    planctocontabeispagos.registro,
+    planctocontabeispagos.movimento,       
+    planctocontabeispagos.lancamento,
+    PLANCTOCONTABEISPAGOS.debito,
+    PLANCTOCONTABEISPAGOS.credito,
+    cast(substring(titulopag.OBSERVACOES from 1 for 1000) as varchar(1000)) as observacoes
+FROM 
+    PLANCTOCONTABEISPAGOSA PLANCTOCONTABEISPAGOS
+left join
+    TITULOPAG on
+        titulopag.filial=PLANCTOCONTABEISPAGOS.FILIAL and
+        titulopag.idtitulo=PLANCTOCONTABEISPAGOS.REGISTRO
+WHERE 
+    PLANCTOCONTABEISPAGOS.contacontabil BETWEEN
+             PLANCTOCONTABEISPAGOS.contacontabili AND PLANCTOCONTABEISPAGOS.contacontabilf
+     AND PLANCTOCONTABEISPAGOS.centrocusto BETWEEN
+             PLANCTOCONTABEISPAGOS.centrocustoi AND PLANCTOCONTABEISPAGOS.centrocustof
+order by 
+    planctocontabeispagos.contacontabil, 
+    PLANCTOCONTABEISPAGOS.datamovimento

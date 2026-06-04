@@ -1,0 +1,13 @@
+select 
+    idplano,
+    contacontabil,
+    descricao,
+    codigoreduzido,
+    centrocustoobr,
+    tipoconta,
+    nivel,
+    contadestino
+from 
+    contascontabeis
+where
+    idplano=2

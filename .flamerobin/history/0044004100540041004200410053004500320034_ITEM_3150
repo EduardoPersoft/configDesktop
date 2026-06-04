@@ -1,0 +1,9 @@
+select
+    *
+from
+    MERCADORIASPED
+where
+    filial=5 and
+    (
+    mercadoriasPED.codigo='105866' or
+    mercadoriasPED.CODIGOESTOQUE='105866')

@@ -1,0 +1,11 @@
+ SELECT
+    orcamento.idnota,
+    orcamento.DESTINATARIO
+ FROM
+    ORCAMENTO
+ where  
+    ORCAMENTO.filial=:PFILIAL
+    and ORCAMENTO.DATACADASTRO between :DATAINICIAL and :datafinal
+    and ORCAMENTO.DATAEMISSAO IS NOT NULL
+
+    AND coalesce  (ORCAMENTO.CANCELAMENTO,'N')<>'S'

@@ -1,0 +1,10 @@
+select 
+    mercadoriaspedcompra.codigo
+FROM
+    mercadoriaspedcompra
+FROM 
+    mercadoriaspedcompra
+WHERE
+    mercadoriaspedcompra.FILIAL = 5 AND
+    mercadoriaspedcompra.IDNOTA BETWEEN 54007 AND 54037 AND
+    mercadoriaspedcompra.baixa = 'N'

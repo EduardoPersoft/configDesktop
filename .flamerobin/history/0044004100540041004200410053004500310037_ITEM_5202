@@ -1,0 +1,4 @@
+select * from COMPOSICAOMERCNOTA
+where filial=1 
+and idnota=364745
+and idmercadoria=160

@@ -1,0 +1,9 @@
+select
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATAREFERENCIA
+FROM
+    PEDIDO
+WHERE
+    pedido.filial=1 AND
+    pedido.idnota=63016C

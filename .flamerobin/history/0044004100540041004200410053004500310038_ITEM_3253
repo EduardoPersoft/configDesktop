@@ -1,0 +1,2 @@
+select * from VENDEDOR
+where canalrelacionado=208

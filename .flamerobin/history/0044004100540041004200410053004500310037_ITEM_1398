@@ -1,0 +1,1 @@
+select * from movimentoestoque where filial=1 and tipomovimento in (10,11)

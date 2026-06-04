@@ -1,0 +1,6 @@
+update 
+    ITEMESTOQUE
+SET
+    ordem = CODIGO
+where 
+    itemestoque.TIPOPRODUTO=3

@@ -1,0 +1,2 @@
+delete from C_MOVFINANCEIRO
+where c_movfinanceiro.contacorrenteimportada=2016 

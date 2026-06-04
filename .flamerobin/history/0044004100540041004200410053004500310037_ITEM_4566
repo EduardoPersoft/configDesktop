@@ -1,0 +1,3 @@
+select first 300 
+* from LOTESNFE order by
+lotesnfe.DATAHORA desc

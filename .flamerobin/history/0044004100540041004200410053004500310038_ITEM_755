@@ -1,0 +1,431 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_FATURAMENTOPERIODO (
+    RELATORIO varchar(20) )
+RETURNS (
+    SUBGRUPO integer,
+    SUBGRUPODESCRICAO varchar(30),
+    IDNOTA integer,
+    EMISSAO date,
+    NUMERONOTA integer,
+    QUANTIDADE numeric(12,2),
+    UP numeric(12,2),
+    PESO numeric(12,2),
+    FILIAL integer,
+    DESCRICAO varchar(50),
+    CODIGO varchar(15),
+    M2 numeric(12,2),
+    VALOR numeric(12,2),
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    IDPEDIDO integer,
+    MATERIALINICIAL varchar(15),
+    MATERIALFINAL varchar(15),
+    RAZAOFILIAL varchar(60),
+    QTDPROD integer,
+    FILIALPED integer,
+    IDMERCADORIA integer,
+    DESTINATARIO integer,
+    RAZAOCLI varchar(60),
+    C_TIPOPRODUTO smallint,
+    TIPO varchar(18),
+    ORIGEM double precision,
+    IDMODELO smallint,
+    FILIALNOTA integer,
+    C_LOJA integer,
+    VALORPIS numeric(12,2),
+    VALORCOFINS numeric(12,2),
+    VALORICMS numeric(12,2) )
+
+AS
+declare variable imprimiu smallint;
+declare variable C_TIPOPRODUTOPEDIDO SMALLINT;
+declare variable ORIGEMITEMPEDIDO double precision;
+begin
+
+  select ESTSIN.DATAINICIAL,
+         ESTSIN.DATAFINAL,
+         ESTSIN.ESTABELECIMENTO,
+         ESTSIN.MATERIALINICIAL,
+         ESTSIN.MATERIALFINAL
+
+  from ESTSIN
+  where ESTSIN.RELATORIO = :RELATORIO
+  into :DATAINICIAL, :DATAFINAL, :FILIAL, :MATERIALINICIAL, :MATERIALFINAL;
+
+  SELECT CADASTROPARCEIROS.RAZAOSOCIAL FROM CADASTROPARCEIROS
+  WHERE CADASTROPARCEIROS.CADASTRO=:FILIAL
+  INTO RAZAOFILIAL;
+
+
+  for select
+             mercadoriasnota.IDNOTA,
+             notafiscal.DATAEMISSAO,
+             notafiscal.numeronota,
+             cast (MERCADORIASPED.DESREDUZIDA as varchar (50)),
+             MERCADORIASNOTA.QUANTIDADE,
+             MERCADORIASNOTA.FILIAL,
+             (MERCADORIASNOTA.VLRFINALMERCAD+COALESCE (MERCADORIASNOTA.VALORIPI,0)+
+             coalesce(mercadoriasnota.frete,0)+coalesce(mercadoriasnota.seguro,0)+
+             coalesce(mercadoriasnota.OUTDESPACESSOR,0))-coalesce(MERCADORIASNOTA.DESCONTONOTA,0),
+             MERCADORIASPED.IDNOTA,
+             MERCADORIASPED.FILIAL,
+             --MERCADORIASPED.IDMERCADORIA,
+             MERCADORIASnota.IDMERCADORIA,
+             coalesce (itemestoque.C_UP,0)* coalesce (mercadoriasPED.C_M2,mercadoriasnota.QUANTIDADE),
+             coalesce (mercadoriasnota.quantidade,0),
+             coalesce (ITEMESTOQUE.PESOLIQUIDO,0)*coalesce (mercadoriasped.C_M2,mercadoriasnota.QUANTIDADE),
+             itemestoque.C_SUBGRUPO,
+             --C_SUBGRUPO.DESCRICAO,
+             mercadoriasnota.CODIGO,
+             pedido.destinatario,
+             itemestoque.c_tipoproduto,
+             itemestoque.codigotributacao,
+             notafiscal.modelo,
+             coalesce(pedido.c_loja, 1),
+             MERCADORIASNOTA.VLRPISPASEP,
+             MERCADORIASNOTA.VLRCOFINS,
+             MERCADORIASNOTA.VALORICMS
+
+      from 
+        NOTAFISCAL      
+      inner join 
+            MERCADORIASNOTA on 
+                (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL and
+                 NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+      inner join 
+            ITEMESTOQUE on
+             (mercadoriasnota.CODIGO=itemestoque.CODIGO)
+      left join 
+            MERCADORIASPED on (MERCADORIASPED.FILIAL = MERCADORIASNOTA.FILIALPED and
+            MERCADORIASPED.IDNOTA = MERCADORIASNOTA.IDPEDIDO AND 
+            MERCADORIASPED.IDMERCADORIA = MERCADORIASNOTA.IDMERCPEDIDO)
+
+      left join PEDIDO on 
+            (MERCADORIASPED.FILIAL = pedido.FILIAL and
+            MERCADORIASPED.IDNOTA = pedido.IDNOTA)
+      --LEFT join C_SUBGRUPO on (itemestoque.C_SUBGRUPO=C_SUBGRUPO.ID)
+      where
+            NOTAFISCAL.DATAEMISSAO between :DATAINICIAL and :DATAFINAL
+            and (NOT notafiscal.destinatario IN (1,2,3,4,5,6,7))
+            and notafiscal.DATACANCELAMENTO is null
+            and coalesce(pedido.C_TIPO,0) in (0,1)
+            and notafiscal.tiponota<>2
+            and coalesce(pedido.C_CONSIGNACAO,'N') ='N'
+            and (not (mercadoriasnota.cfop in ('5201', '6201', '5922', '6922', '5912', '6912','5913','6913', '5901' , '6901','5911','6911','7949','5916','6916' , '5923', '6923','6915','5915','5910', '6910','5924', '6924', '5921', '6921')))
+            AND  SUBSTRING(MERCADORIASNOTA.CFOP FROM 1 FOR 1) IN (5,6,7) 
+     PLAN JOIN (NOTAFISCAL INDEX (IDX_EMISSAO),
+                 MERCADORIASNOTA INDEX (RDB$PRIMARY31),
+                 ITEMESTOQUE INDEX (RDB$PRIMARY798),
+                 MERCADORIASPED INDEX (RDB$PRIMARY837),
+                 PEDIDO INDEX (RDB$PRIMARY855))
+     UNION
+
+      ---NOTA FISCAL COMPLEMENTAR RELACIONADA COM NOTA ORIGINAL E PEDIDO ORIGINAL
+      select
+             mercnotacomplementar.IDNOTA,
+             notafiscal.DATAEMISSAO,
+             notafiscal.numeronota,
+             cast (MERCADORIASPED.DESREDUZIDA as varchar (50)),
+             coalesce (mercnotacomplementar.QUANTIDADE,0),
+             mercnotacomplementar.FILIAL,
+             mercnotacomplementar.VLRFINALMERCAD+COALESCE (mercnotacomplementar.VALORIPI,0)+
+             coalesce(mercnotacomplementar.frete,0)+coalesce(mercnotacomplementar.seguro,0)+
+             coalesce(mercnotacomplementar.OUTDESPACESSOR,0),
+             MERCADORIASPED.IDNOTA as idpedido,
+             MERCADORIASPED.FILIAL as idfilial,
+             MERCADORIASPED.IDMERCADORIA as idmercped,
+             --coalesce (itemestoque.C_UP,0)* coalesce (mercadoriasPED.C_M2,mercnotacomplementar.QUANTIDADE),
+             CAST (0 AS DOUBLE PRECISION),
+             coalesce (mercnotacomplementar.quantidade,0),
+             --coalesce (ITEMESTOQUE.PESOLIQUIDO,0)*coalesce (mercadoriasped.C_M2,mercnotacomplementar.QUANTIDADE),
+             CAST (0 AS DOUBLE PRECISION),
+             itemestoque.C_SUBGRUPO,
+             --C_SUBGRUPO.DESCRICAO,
+             mercnotacomplementar.CODIGO,
+             pedido.destinatario,
+             itemestoque.c_tipoproduto,
+             itemestoque.codigotributacao,
+             notafiscal.modelo,
+             coalesce(pedido.c_loja, 1),
+             mercnotacomplementar.VLRPISPASEP,
+             mercnotacomplementar.VLRCOFINS,
+             mercnotacomplementar.VALORICMS
+
+
+
+      from NOTAFISCAL
+
+      inner join MERCADORIASNOTA mercnotacomplementar on
+            (NOTAFISCAL.FILIAL = mercnotacomplementar.FILIAL and
+             NOTAFISCAL.IDNOTA = mercnotacomplementar.IDNOTA)
+
+      inner join MERCADORIASNOTA mercnotaoriginal on
+            (mercnotaoriginal.FILIAL = mercnotacomplementar.FILIAL and
+             mercnotaoriginal.IDNOTA = mercnotacomplementar.idnotasaida and
+             mercnotaoriginal.idmercadoria = mercnotacomplementar.idmercadoriasaida)
+      inner join ITEMESTOQUE on (mercnotaoriginal.CODIGO=itemestoque.CODIGO)
+      
+      left join MERCADORIASPED on (MERCADORIASPED.FILIAL = mercnotaoriginal.FILIALPED and
+            MERCADORIASPED.IDNOTA = mercnotaoriginal.IDPEDIDO AND
+            MERCADORIASPED.IDMERCADORIA = mercnotaoriginal.IDMERCPEDIDO)
+
+      left join PEDIDO on (MERCADORIASPED.FILIAL = pedido.FILIAL and
+            MERCADORIASPED.IDNOTA = pedido.IDNOTA)
+      --LEFT join C_SUBGRUPO on (itemestoque.C_SUBGRUPO=C_SUBGRUPO.ID)
+      where
+            NOTAFISCAL.DATAEMISSAO between :DATAINICIAL and :DATAFINAL
+            and mercnotacomplementar.VLRFINALMERCAD <> 0
+            and notafiscal.tiponota=2
+            and pedido.destinatario<>1
+            and notafiscal.DATACANCELAMENTO is null
+            and pedido.C_TIPO in (0,1)
+            and coalesce(pedido.C_CONSIGNACAO,'N') ='N'
+      PLAN JOIN (NOTAFISCAL INDEX (IDX_EMISSAO),
+                 mercnotacomplementar INDEX (RDB$PRIMARY31),
+                 mercnotaoriginal INDEX (RDB$PRIMARY31),
+                 ITEMESTOQUE INDEX (RDB$PRIMARY798),
+                 MERCADORIASPED INDEX (RDB$PRIMARY837),
+                 PEDIDO INDEX (RDB$PRIMARY855))
+    UNION
+
+    select
+             CAST(NULL AS INTEGER) IDNOTA,             
+             pedido.DATAEMISSAO,
+             pedido.numeronota,
+             cast (MERCADORIASPED.DESREDUZIDA as varchar (50)) ,
+             MERCADORIASPED.QUANTIDADE,
+             MERCADORIASPED.FILIAL,
+             MERCADORIASPED.VLRFINALMERCAD+COALESCE (MERCADORIASPED.VALORIPI,0),
+             MERCADORIASPED.IDNOTA,
+             MERCADORIASPED.FILIAL,
+             MERCADORIASPED.IDMERCADORIA,
+             coalesce (itemestoque.C_UP,0)* coalesce (mercadoriasped.C_M2,mercadoriasped.QUANTIDADE),
+             coalesce (mercadoriasped.C_M2,0),
+             coalesce (ITEMESTOQUE.PESOLIQUIDO,0)*coalesce (mercadoriasped.C_M2,mercadoriasped.QUANTIDADE),
+             itemestoque.C_SUBGRUPO,
+             --C_SUBGRUPO.DESCRICAO,
+             mercadoriasped.CODIGO,
+             pedido.destinatario,
+             itemestoque.c_tipoproduto,
+             itemestoque.codigotributacao,
+             cast(35 as smallint),
+             coalesce(pedido.c_loja, 1),             
+             0,
+             0,
+             0
+
+             --cast(null as smallint)
+
+      from pedido
+      inner join mercadoriasped on 
+            (MERCADORIASPED.FILIAL = pedido.FILIAL and
+            MERCADORIASPED.IDNOTA = pedido.IDNOTA)
+      
+      inner join ITEMESTOQUE on 
+            (mercadoriasped.CODIGO=itemestoque.CODIGO)
+      --left join C_SUBGRUPO on (itemestoque.C_SUBGRUPO=C_SUBGRUPO.ID)
+
+      where
+            pedido.DATAREFERENCIA between :DATAINICIAL and :DATAFINAL
+            and pedido.C_TIPO in (0,1)
+            and coalesce(pedido.C_CONSIGNACAO,'N') ='N'
+            and MERCADORIASPED.baixa='S'
+            and mercadoriasped.CODIGO BETWEEN :MATERIALINICIAL and :MATERIALFINAL
+            and not exists (select mercadoriasnota.IDPEDIDO from MERCADORIASNOTA
+            where mercadoriasnota.FILIALped=MERCADORIASPED.Filial
+            AND MERCADORIASNOTA.IDPEDIDO=MERCADORIASPED.IDNOTA
+            AND MERCADORIASNOTA.IDMERCPEDIDO=MERCADORIASPED.IDMERCADORIA)
+     PLAN JOIN (PEDIDO INDEX (C_I_DATAREFERENCIA),
+                MERCADORIASPED INDEX (RDB$PRIMARY37),
+                ITEMESTOQUE INDEX (RDB$PRIMARY798))            
+            
+
+----------------
+
+  UNION
+
+    select
+                CAST(NULL AS INTEGER) AS IDNOTA,
+             pedido.dataemissao,
+             pedido.idnota,
+             cast (substring ( SERVICOSPED.DESREDUZIDA from 1 for 50) as varchar (50)),
+             SERVICOSPED.QUANTIDADE,
+             SERVICOSPED.FILIAL,
+             SERVICOSPED.VLRFINALSERVICO,
+             SERVICOSPED.IDNOTA,
+             SERVICOSPED.FILIAL,
+             SERVICOSPED.IDSERVICO, 
+              cast ('0' as double precision),
+              cast ('0' as double precision),
+              cast ('0' as double precision) ,
+              cast ('0' as integer) ,
+             --cast ( 'Servi??os' as VARCHAR (30)),
+             cast (SERVICOSPED.CODIGO as varchar (15)),
+             pedido.destinatario,
+             cast ('2' as smallint),
+             cast (9 as double precision),
+             --cast(35 as smallint)
+             cast(null as smallint),
+             coalesce(pedido.c_loja, 1),
+             0,
+             0,
+             0
+
+
+      from pedido
+      inner join SERVICOSPED on 
+            (SERVICOSPED.FILIAL = pedido.FILIAL and
+            SERVICOSPED.IDNOTA = pedido.IDNOTA)
+
+      where
+            pedido.DATAREFERENCIA between :DATAINICIAL and :DATAFINAL
+            and pedido.destinatario<>1
+            and pedido.C_TIPO in (0,1)
+            and coalesce(pedido.C_CONSIGNACAO,'N') ='N'
+            and SERVICOSPED.baixa='S'
+            and cast (SERVICOSPED.CODIGO as varchar (15)) BETWEEN :MATERIALINICIAL and :MATERIALFINAL
+            and not exists (select SERVICOSNOTA.IDPEDIDO from SERVICOSNOTA
+            where SERVICOSNOTA.FILIALPED=SERVICOSPED.FILIAL
+            AND SERVICOSNOTA.IDPEDIDO=SERVICOSPED.IDNOTA
+            AND SERVICOSNOTA.IDSERVPEDIDO=SERVICOSPED.IDSERVICO)
+       PLAN JOIN (PEDIDO INDEX (C_I_DATAREFERENCIA),
+                SERVICOSPED INDEX (RDB$PRIMARY40))            
+            
+
+-----------
+    union
+
+    select
+             servicosnota.idnota,
+             notafiscal.dataemissao,
+             notafiscal.numeronota,
+             cast (substring ( SERVICOSnota.DESREDUZIDA from 1 for 50) as varchar (50)),
+             servicosnota.QUANTIDADE,
+             servicosnota.FILIAL,
+             servicosnota.VLRFINALSERVICO,
+             servicosnota.IDPEDIDO,
+             servicosnota.FILIAL,
+             servicosnota.IDSERVICO,
+              cast ('0' as double precision),
+              cast ('0' as double precision),
+              cast ('0' as double precision) ,
+              cast ('0' as integer) ,
+             --cast ( 'Servi??os' as VARCHAR (30)),
+             cast (servicosnota.CODIGO as varchar (15)),
+             notafiscal.destinatario,
+             cast ('2' as smallint),
+             cast (9 as double precision),
+             notafiscal.modelo,
+             1,
+             0,
+             0,
+             0
+             
+      from NOTAFISCAL      
+      inner join servicosnota on (NOTAFISCAL.FILIAL = servicosnota.FILIAL and
+            NOTAFISCAL.IDNOTA = servicosnota.IDNOTA)
+      where NOTAFISCAL.DATAEMISSAO between :DATAINICIAL and :DATAFINAL
+            and notafiscal.DATACANCELAMENTO is null
+            and notafiscal.destinatario<>1
+      PLAN JOIN (NOTAFISCAL INDEX (IDX_EMISSAO),
+                SERVICOSNOTA INDEX (RDB$PRIMARY32))            
+                        
+-----------
+      into  :IDNOTA, :emissao, :numeronota, :DESCRICAO, :QUANTIDADE, :FILIAL, :VALOR, :IDPEDIDO, :FILIALPED, IDMERCADORIA,
+            :UP, :M2, :PESO, :subGRUPO, /*$$IBEC$$ :subgrupodescricao, $$IBEC$$*/ :codigo, :destinatario, :c_tipoproduto,
+            :ORIGEM, :idmodelo, :c_loja, :VALORPIS, :VALORCOFINS, :ValORICMS
+
+  do
+  begin
+    --filial=1;
+     subgrupodescricao=null;
+
+   select c_subgrupo.descricao from c_subgrupo
+    where c_subgrupo.id=:subgrupo
+    into:subgrupodescricao;
+
+    if (:subgrupo='0') then
+    subgrupodescricao='Servi?os';
+
+    select cadastroparceiros.razaosocial
+    from cadastroparceiros
+    where cadastroparceiros.cadastro=:destinatario
+    into :razaocli;
+
+
+    c_tipoprodutopedido=null;
+    origemitempedido=null;
+    if (exists(select 1 from servicosnota
+               where servicosnota.filial=:filial
+               and servicosnota.idpedido=:idpedido)
+               and :origem=9) then
+
+           for
+            select first 1 itemestoque.c_tipoproduto, itemestoque.codigotributacao
+            from itemestoque
+            inner join mercadoriasped on (itemestoque.codigo=mercadoriasped.codigo)
+            where mercadoriasped.filial=:filial
+            and mercadoriasped.idnota=:idpedido
+            and itemestoque.C_TIPOPRODUTO in (0,1)
+            PLAN JOIN (MERCADORIASPED INDEX (RDB$PRIMARY837),
+                       ITEMESTOQUE INDEX (RDB$PRIMARY798))
+            
+            ORDER BY MERCADORIASPED.IDMERCADORIA
+            into :c_tipoprodutopedido, :origemitempedido
+            do  begin
+                c_tipoproduto = :c_tipoprodutopedido;
+                origem = :origemitempedido;
+            end
+
+    tipo = case :c_tipoproduto when 0 then 'TAPETE '||
+                case when :origem is null then 'INDEFINIDO'
+                     when :origem in (0,3,4,5,8) then 'NACIONAL' 
+                     else 'IMPORTADO'
+                end
+            when 1 then 'CARPETE '||
+                case when :origem is null then 'INDEFINIDO'
+                     when :origem in (0,3,4,5,8) then 'NACIONAL' 
+                     else 'IMPORTADO'
+                end
+            when 2 then 'OUTROS'
+            else  'INDEFINIDO'
+            end;
+
+    imprimiu = 0;
+    /*
+    if (exists (select * from materialmovimentoestoque 
+                where materialmovimentoestoque.filial=:filialped
+                and materialmovimentoestoque.IDMOVIMENTO=:idpedido
+                and MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=:idmercadoria)) then
+    
+   
+        for select first 1 MATERIALMOVIMENTOESTOQUE.C_UP*MATERIALMOVIMENTOESTOQUE.QUANTIDADE,
+                   MATERIALMOVIMENTOESTOQUE.QUANTIDADE,
+                   COALESCE ( MATERIALMOVIMENTOESTOQUE.c_pesoconsumo, materialmovimentoestoque.PESOLIQUIDO),
+                   MATERIALMOVIMENTOESTOQUE.C_SUBGRUPO,
+                   MATERIALMOVIMENTOESTOQUE.IDITEM,
+                   C_SUBGRUPO.DESCRICAO
+            from MATERIALMOVIMENTOESTOQUE
+            inner join MOVIMENTOESTOQUE on (MATERIALMOVIMENTOESTOQUE.FILIAL = MOVIMENTOESTOQUE.FILIAL and
+              MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO = MOVIMENTOESTOQUE.IDMOVIMENTO)
+            LEFT join C_SUBGRUPO on (materialmovimentoestoque.C_SUBGRUPO=C_SUBGRUPO.ID)
+            where MATERIALMOVIMENTOESTOQUE.FILIAL = :FILIALPED and
+              MATERIALMOVIMENTOESTOQUE.IDPEDIDO = :IDPEDIDO and
+              MATERIALMOVIMENTOESTOQUE.IDMERCADORIA = :IDMERCADORIA and              
+              MOVIMENTOESTOQUE.TIPOMOVIMENTO = '12' 
+            into :UP, M2, PESO, subGRUPO, CODIGO, subgrupodescricao do begin
+                imprimiu = 1;
+                suspend;
+            end*/
+    if (imprimiu=0) then
+        suspend;
+  end
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_FATURAMENTOPERIODO TO  SYSDBA;
+

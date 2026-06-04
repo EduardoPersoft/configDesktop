@@ -1,0 +1,2 @@
+select * from 
+c_titulorec where importado is null

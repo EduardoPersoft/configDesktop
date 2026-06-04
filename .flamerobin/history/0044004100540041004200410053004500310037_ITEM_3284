@@ -1,0 +1,232 @@
+select 
+       notafiscal.filial, 
+       modelodocto.modelo,
+       notafiscal.dataemissao as data,
+       cast(notafiscal.numeronota as varchar(10)) as numeronota,
+       notafiscal.numeronota as ordemnota,
+       mercadoriasnota.cfop,
+       mercadoriasnota.idpedido,
+       clientes.cadastro,
+       clientes.nome,
+       notafiscal.cancelamento,
+       notafiscal.devolucao,
+       naturezaoperacao.fatura,       
+       
+       case when   (mercadoriasnota.cfop not in ('5922','6922') and
+                   exists (select 
+                        * 
+                    from 
+                        faturas
+                    where notafiscal.filial=faturas.filial
+                    and notafiscal.idnota=faturas.idnota) ) or mercadoriasnota.cfop in ('5116', '5117', '6116', '6117')
+                    
+            then 's'
+            else 'n'
+       end as receita,
+       
+       case when exists (select 
+                            * 
+                         from 
+                            estabelecimento
+                         where 
+                            estabelecimento.cadastro=clientes.cadastro) 
+        then 's' else 'n' end entrefiliais,
+
+ --      grupomercadoria.descricao,
+       sum (coalesce(mercadoriasnota.vlrtotalmercad,0)) +sum (coalesce(mercadoriasnota.valoripi,0)) + sum (coalesce(mercadoriasnota.vlricmsrecolhido,0)) +
+            sum (coalesce(mercadoriasnota.icmsstfcpvalor,0)) + sum(mercadoriasnota.frete) + sum(mercadoriasnota.seguro) +
+          sum(mercadoriasnota.outdespacessor)   as vlrtotalnota,
+            sum (coalesce(mercadoriasnota.valoripi,0)) as valoripi,
+            sum (coalesce(mercadoriasnota.vlrtotalmercad,0)) as vlrsemipi,
+       notafiscal.filial,
+       estab.razaosocial,
+       sum (mercadoriasnota.vlricmsrecolhido) as vlricmsrecolhido,
+
+       sum(mercadoriasnota.frete) + sum(mercadoriasnota.seguro) +
+          sum(mercadoriasnota.outdespacessor) as despacessorias,
+       
+        case notafiscal.zonafranca when 's' then
+        sum (mercadoriasnota.vlrtotalmercad) - sum (coalesce(mercadoriasnota.valoricms,0))
+        else sum (mercadoriasnota.vlrtotalmercad) end as vlrfinalmercadorias,
+         
+        case notafiscal.zonafranca 
+            when 's' then 0
+            else sum (mercadoriasnota.valoricms) end as totvaloricms,
+        case notafiscal.zonafranca 
+            when 's' then 0
+            else sum (mercadoriasnota.icmsorigemvalor) end as icmsorigemvalor,
+        case notafiscal.zonafranca 
+            when 's' then 0
+            else sum (mercadoriasnota.icmsdestinovalor) end as icmsdestinovalor,  
+
+        sum(mercadoriasnota.vlrpispasep) as pis,            
+        sum(mercadoriasnota.vlrcofins) as cofins,        
+            
+        (case notafiscal.simples 
+            when 's' then
+                sum(coalesce(mercadoriasnota.vlrfinalmercad,0))
+            else
+               (sum(coalesce(mercadoriasnota.vlrfinalmercad,0)) - sum(coalesce(mercadoriasnota.valoricms,0)))
+                 end)  
+        as valorliquido,
+       cast ('0' as numeric (12,2))as vlrfinalservicos,
+       cast ('0' as numeric (12,2)) as iss,
+       modelodocto.id,     
+     
+     'emissao' as emissaoentrada
+    
+from 
+    notafiscal
+inner join 
+    naturezaoperacao on 
+        (notafiscal.operacao=naturezaoperacao.id)
+inner join 
+    cadastroparceiros estab on 
+        (notafiscal.filial = estab.cadastro)
+inner join 
+    cadastroparceiros clientes 
+        on (notafiscal.destinatario=clientes.cadastro)
+inner join modelodocto on 
+    (notafiscal.modelo = modelodocto.id)
+inner join 
+        mercadoriasnota  on
+           ( mercadoriasnota.filial=notafiscal.filial and 
+             mercadoriasnota.idnota=notafiscal.idnota)
+inner join 
+        itemestoque on 
+            (itemestoque.codigo=mercadoriasnota.codigo)
+            
+
+where 
+    notafiscal.filial= ?
+    and dataemissao between ? and ?
+    and naturezaoperacao.entradasaida='s'
+    and not notafiscal.dataemissao is null
+    and notafiscal.cancelamento = 'n'
+        
+
+group by 
+       notafiscal.zonafranca , 
+       notafiscal.simples, 
+       modelodocto.modelo,
+       notafiscal.dataemissao,
+       notafiscal.numeronota ,
+       notafiscal.numeronota ,
+       mercadoriasnota.cfop,
+       mercadoriasnota.idpedido,
+       clientes.cadastro,
+       clientes.nome,
+       notafiscal.cancelamento,
+       notafiscal.devolucao,
+       naturezaoperacao.fatura,
+       notafiscal.vlrtotalnota,
+       notafiscal.valoripi,
+       notafiscal.filial,
+       notafiscal.idnota,
+       estab.razaosocial,
+       notafiscal.vlricmsrecolhido,
+       notafiscal.cancelamento,
+       notafiscal.iss,
+       modelodocto.id,
+       --notafiscal.valorfrete,
+       notafiscal.valorseguro,
+       notafiscal.vlroutdespacessoria
+
+union   
+select 
+       notafiscal.filial, 
+       modelodocto.modelo,
+       notafiscal.dataemissao as data,
+       cast(notafiscal.numeronota as varchar(10)) as numeronota,
+       notafiscal.numeronota as ordemnota,
+       coalesce (notafiscal.cfop,null) as cfop,
+       servicosnota.idpedido,
+       clientes.cadastro,
+       clientes.nome,
+       notafiscal.cancelamento,
+       notafiscal.devolucao,
+       naturezaoperacao.fatura,       
+       's' as receita,
+       case when exists (select 
+                            * 
+                         from 
+                            estabelecimento
+                         where 
+                            estabelecimento.cadastro=clientes.cadastro) 
+        then 's' else 'n' end entrefiliais,
+       
+       coalesce(notafiscal.vlrtotalnota, 0) as vlrtotalmercad,
+       cast ('0' as numeric (12,2)) as valoripi,
+       cast ('0' as numeric (12,2)) as vlrsemipi,
+       notafiscal.filial,
+       estab.razaosocial,
+	    cast ('0' as numeric (12,2)) vlricmsrecolhido,
+       cast(0 as numeric(12,2)) as despacessorias,
+       cast ('0' as numeric (12,2)) as vlrfinalmercadorias,
+       cast ('0' as numeric (12,2)) as totvaloricms,
+       cast ('0' as numeric (12,2)) as icmsorigemvalor,
+       cast ('0' as numeric (12,2)) as icmsdestinovalor,
+       sum(notafiscal.valorpis) as pis,            
+       sum(notafiscal.valorcofins) as cofins,        
+
+       sum(coalesce(servicosnota.vlrfinalservico,0)) - coalesce(notafiscal.iss, 0) as valorliquido,
+       coalesce(notafiscal.vlrfinalservicos, 0) as vlrfinalservicos,
+       coalesce(notafiscal.iss, 0) as iss,
+       modelodocto.id,     
+       'emissao' as emissaoentrada
+    
+    
+from 
+    notafiscal
+inner join 
+    naturezaoperacao on 
+        (notafiscal.operacao=naturezaoperacao.id)
+inner join 
+    cadastroparceiros estab on 
+        (notafiscal.filial = estab.cadastro)
+inner join 
+    cadastroparceiros clientes 
+        on (notafiscal.destinatario=clientes.cadastro)
+inner join modelodocto on 
+    (notafiscal.modelo = modelodocto.id)
+inner join 
+        servicosnota on 
+            (servicosnota.filial=notafiscal.filial and 
+             servicosnota.idnota=notafiscal.idnota)
+inner join 
+        servico on 
+            (cast (servico.codigo as varchar (15))=servicosnota.codigo)
+
+where 
+    notafiscal.filial= ?
+    and dataemissao between ? and ?
+    and naturezaoperacao.entradasaida='s'
+    and not notafiscal.dataemissao is null
+    and notafiscal.cancelamento = 'n'
+
+group by 
+       notafiscal.filial, 
+       notafiscal.zonafranca , 
+       notafiscal.simples, 
+       modelodocto.modelo,
+       notafiscal.dataemissao,
+       notafiscal.numeronota ,
+       notafiscal.numeronota ,
+       notafiscal.cfop,
+       servicosnota.idpedido,       
+       clientes.cadastro,
+       clientes.nome,
+       notafiscal.cancelamento,
+       notafiscal.devolucao,
+       naturezaoperacao.fatura,
+       notafiscal.vlrtotalnota,
+       notafiscal.valoripi,
+       notafiscal.filial,
+       notafiscal.idnota,
+       estab.razaosocial,
+       notafiscal.vlricmsrecolhido,
+       notafiscal.cancelamento,
+       notafiscal.vlrfinalservicos,
+       notafiscal.iss,
+       modelodocto.id
+

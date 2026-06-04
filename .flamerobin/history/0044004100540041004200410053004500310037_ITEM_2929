@@ -1,0 +1,27 @@
+SELECT
+    movtobancariolancamentos.FILIAL,
+    contascontabeis.CONTACONTABIL,
+    contascontabeis.NIVEL,
+    contascontabeis.descricao,
+    SUM(movtobancariolancamentos.VALORMOVIMENTO) AS VALORMOVIMENTO,
+    sum(case movtobancariolancamentos.contacontabil when contascontabeis.contacontabil then movtobancariolancamentos.valormovimento else 0 end) as valorlancado
+FROM
+    movtobancariolancamentos(1,'01.10.2023','31.10.2023', 'PRIMEFLEX', 4)
+inner join 
+    ESTABELECIMENTO on 
+    movtobancariolancamentos.FILIAL=ESTABELECIMENTO.CADASTRO 
+/*
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=movtobancariolancamentos.codigo
+*/
+inner join 
+    CONTASCONTABEIS on
+    ESTABELECIMENTO.PLANOCONTAS=CONTASCONTABEIS.IDPLANO and 
+    movtobancariolancamentos.contacontabil like contascontabeis.CONTACONTABIL||'%'
+GROUP BY
+    movtobancariolancamentos.FILIAL,
+    contascontabeis.CONTACONTABIL,
+    contascontabeis.DESCRICAO,
+    contascontabeis.NIVEL

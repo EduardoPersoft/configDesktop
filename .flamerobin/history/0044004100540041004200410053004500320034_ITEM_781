@@ -1,0 +1,198 @@
+SET TERM ^ ;
+ALTER PROCEDURE FOLLOWUPCOMPRAS (
+    PFILIAL INTEGER )
+RETURNS (
+    FILIAL INTEGER,
+    IDNOTA INTEGER,
+    IDMERCADORIA INTEGER,
+    DATACADASTRO date,
+    DATAAPROVACAO date,
+    CODIGO VARCHAR(15),
+    REFERENCIA VARCHAR(20),
+    DESREDUZIDA VARCHAR(240),
+    QUANTIDADE DOUBLE PRECISION,
+    UNIDADE VARCHAR(3),
+    DESTINATARIO INTEGER,
+    QTDEENTREGUE DOUBLE PRECISION,
+    SALDO DOUBLE PRECISION,
+    DATAENTREGA DATE,
+    DATAENTREGAORIGINAL DATE,
+    NOME VARCHAR(60),
+    CONTATO VARCHAR(60),
+    TELEFONE VARCHAR(20),
+    EMAIL VARCHAR(400),
+    PRECO DOUBLE PRECISION,
+    VALOR DOUBLE PRECISION,
+    VLRTOTALNOTA DOUBLE PRECISION,
+    IDPEDVEN INTEGER,
+    SALDOTOTAL DOUBLE PRECISION,
+    RESERVAPEDIDO DOUBLE PRECISION,
+    RESERVANOTA DOUBLE PRECISION,
+    RESERVAOP DOUBLE PRECISION,
+    RESERVATOTAL DOUBLE PRECISION,
+    ESTOQUELIQUIDO DOUBLE PRECISION,
+    RESERVATERCEIROS DOUBLE PRECISION,
+    CONDICAOPAGAMENTOFORNECEDOR INTEGER,
+    CONDICAOPAGAMENTOPEDIDO INTEGER,
+    FATURAMENTOMINIMO DECIMAL(12,2),
+    CONSUMO DOUBLE PRECISION,
+    VISUALIZADO CHAR(1),
+    IDPEDIDOVENDA INTEGER,
+    UUID VARCHAR(36),
+    COMENTARIO VARCHAR(256) )
+
+AS
+DECLARE VARIABLE V_QTDENTREGA DOUBLE PRECISION;
+DECLARE VARIABLE V_DIASENTREGA DOUBLE PRECISION;
+DECLARE VARIABLE V_DIASORIGINAL DOUBLE PRECISION;
+DECLARE VARIABLE V_PRAZO SMALLINT;
+begin
+    FOR SELECT DISTINCT
+        pedidocompra.filial,
+        PEDIDOCOMPRA.IDNOTA,
+        MERCADORIASPEDCOMPRA.IDMERCADORIA,
+        pedidocompra.datacadastro,
+        PEDIDOCOMPRA.DATAAPROVACAO,       
+        mercadoriaspedcompra.codigo,
+        ITEMESTOQUE.REFERENCIA,
+        mercadoriaspedcompra.desreduzida,
+        --substring ( mercadoriaspedcompra.descricao from 1 for 240),
+        mercadoriaspedcompra.quantidade,
+        mercadoriaspedcompra.unidade,
+        PEDIDOCOMPRA.destinatario,
+        mercadoriaspedcompra.qtdeentregue,
+        CADASTROPARCEIROS.nome,
+        CADASTROPARCEIROS.PRINCIPALCONTATO,
+        CADASTROPARCEIROS.telefone,
+        CADASTROPARCEIROS.EMAIL,
+        fornecedores.CONDICAOPAGAMENTO,
+        fornecedores.FATURAMENTOMINIMO,
+        mercadoriaspedcompra.vlrfinalmercad as valor,
+        pedidocompra.VLRTOTALNOTA,
+        pedidocompra.CONDICAOPAGAMENTO,
+        idpedven,
+        MATERIALFILIAL.CONSUMOMEDIOESTIMADO,
+        case when exists (
+            select 
+                * 
+            from 
+                LOGVIEW 
+            WHERE 
+                LOGVIEW.DOCUMENTO='pedidosCompra' AND
+                LOGVIEW.UUID=PEDIDOCOMPRA.UUID
+        ) THEN 'S' ELSE 'N' END,
+        MERCADORIASPEDCOMPRA.IDPEDVEN,
+        PEDIDOCOMPRA.UUID
+    FROM PEDIDOCOMPRA
+    inner JOIN MERCADORIASPEDCOMPRA ON
+        (PEDIDOCOMPRA.FILIAL=MERCADORIASPEDCOMPRA.FILIAL AND
+        PEDIDOCOMPRA.IDNOTA=MERCADORIASPEDCOMPRA.IDNOTA)
+    INNER JOIN CADASTROPARCEIROS ON
+        (CADASTROPARCEIROS.cadastro = PEDIDOCOMPRA.destinatario)
+    INNER JOIN ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO=MERCADORIASPEDCOMPRA.CODIGO
+    left join fornecedores on
+        fornecedores.cadastro = cadastroparceiros.cadastro
+    LEFT JOIN MATERIALFILIAL ON
+        MATERIALFILIAL.FILIAL=MERCADORIASPEDCOMPRA.FILIAL AND 
+        MATERIALFILIAL.IDITEM=MERCADORIASPEDCOMPRA.CODIGO
+    WHERE
+        PEDIDOCOMPRA.FILIAL=:pfilial AND
+        NOT (PEDIDOCOMPRA.DATAAPROVACAO IS NULL) AND
+        PEDIDOCOMPRA.DATACANCELAMENTO IS NULL AND
+        MERCADORIASPEDCOMPRA.BAIXA='N'
+     INTO :FILIAL,
+          :IDNOTA,
+          :IDMERCADORIA,
+          :DATACADASTRO,
+          :DATAAPROVACAO,
+          :CODIGO,
+          :REFERENCIA,
+          :DESREDUZIDA,
+          :QUANTIDADE, 
+          :UNIDADE,
+          :DESTINATARIO,          
+          :QTDEENTREGUE,
+          :NOME, 
+          :CONTATO, 
+          :TELEFONE,
+          :EMAIL,
+          :condicaopagamentofornecedor,
+          :faturamentoMinimo,
+          :VALOR,
+          :VLRTOTALNOTA,
+          :condicaopagamentoPedido,
+          :idpedven,
+          :CONSUMO,
+          :VISUALIZADO,
+          :IDPEDIDOVENDA,
+          :uuid  DO begin
+
+          --- ESTOQUE
+          select
+          sum(coalesce (materiallocal.SALDOTOTAL,0))
+          from materiallocal
+          where materiallocal.FILIAL = :FILIAL
+          AND materiallocal.IDITEM = :CODIGO
+          into :SALDOTOTAL;
+          
+          select
+            FORNECEDORESITEM.CODIGOFORNEC
+          from
+            FORNECEDORESITEM
+          WHERE 
+            FORNECEDORESITEM.IDITEM=:CODIGO and
+            FORNECEDORESITEM.FORNECEDOR=:DESTINATARIO
+          INTO :REFERENCIA;
+          
+
+          ---Reserva Total
+          reservatotal = (coalesce(RESERVAOP,0) + coalesce(RESERVAPEDIDO,0) + coalesce(RESERVANOTA,0) + coalesce(reservaterceiros,0));
+
+          ---Estoque L?quido
+          estoqueliquido = (coalesce(SALDOTOTAL,0) - coalesce(reservatotal,0));
+          
+          v_diasentrega = null;
+          
+          select 
+            PRAZOMERCPEDCOMPRA.DIAS,
+            COALESCE(PRAZOMERCPEDCOMPRA.DIASORIGINAL, PRAZOMERCPEDCOMPRA.DIAS),
+            PRAZOMERCPEDCOMPRA.QTDE
+          from 
+            PRAZOMERCPEDCOMPRA
+          WHERE 
+            PRAZOMERCPEDCOMPRA.FILIAL=:FILIAL
+            AND PRAZOMERCPEDCOMPRA.IDNOTA=:IDNOTA
+            AND PRAZOMERCPEDCOMPRA.IDITEM=:IDMERCADORIA
+          INTO V_DIASENTREGA,V_DIASORIGINAL ,V_QTDENTREGA;          
+          
+          DATAENTREGA = DATACADASTRO + v_diasentrega;
+          DATAENTREGAORIGINAL = DATACADASTRO + v_diasoriginal;          
+                
+          saldo = quantidade - qtdeentregue;
+          if(quantidade>0) then
+            PRECO = COALESCE(VALOR, 100) / QUANTIDADE;
+            
+          SELECT
+            first 1
+            COMENTARIOS.COMENTARIO
+          FROM
+            COMENTARIOS
+          WHERE
+            comentarios.uuid=:uuid AND
+            comentarios.documento = 'pedidosCompra'
+          order by comentarios.DATAHORA desc
+          into :comentario;            
+            
+          suspend;
+          
+     end       
+         
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE FOLLOWUPCOMPRAS TO  SYSDBA;
+

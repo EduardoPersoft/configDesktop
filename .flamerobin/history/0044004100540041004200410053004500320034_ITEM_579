@@ -1,0 +1,6 @@
+select 
+    *
+from
+    titulorec 
+where 
+    titulorec.TIPOBAIXA='E' and titulorec.VENCIMENTO='07.12.2021'

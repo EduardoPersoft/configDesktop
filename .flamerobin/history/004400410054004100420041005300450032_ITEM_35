@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    PRAZOMERCPED
+where
+    filial=5 and idnota=49410
+        

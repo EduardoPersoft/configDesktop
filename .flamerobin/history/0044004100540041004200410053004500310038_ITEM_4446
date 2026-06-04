@@ -1,0 +1,7 @@
+select MATERIALMOVIMENTOESTOQUE.* from MOVIMENTOESTOQUE
+left join MATERIALMOVIMENTOESTOQUE
+    on MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+    MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=movimentoestoque.IDMOVIMENTO
+where movimentoestoque.filial=1
+and movimentoestoque.emissao between '27.04.2026' and '27.04.2026'
+and movimentoestoque.tipomovimento='12'

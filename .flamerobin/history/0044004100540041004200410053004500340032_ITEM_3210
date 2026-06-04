@@ -1,0 +1,5 @@
+update 
+   itemestoque
+set 
+    itemestoque.C_SETUPPOUCHE=120,
+    itemestoque.C_VELOCIDADEPOUCHE=60

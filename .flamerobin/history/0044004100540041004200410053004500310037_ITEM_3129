@@ -1,0 +1,1 @@
+select * from ITEMESTOQUE where itemestoque.METATAG like '%|500|%'

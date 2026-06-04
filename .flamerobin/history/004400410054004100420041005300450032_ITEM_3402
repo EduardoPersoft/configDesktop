@@ -1,0 +1,45 @@
+select 
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    mercadoriaspedcompra.codigo,
+    itemestoque.codigo,
+    mercadoriaspedcompra.quantidade,
+    mercadoriaspedcompra.QTDEENTREGUE,
+    mercadoriaspedcompra.baixa,
+    mercadoriaspedcompra.MINIMOBAIXA, (
+        select 
+            sum(mercadoriasnotacompra.QUANTIDADE) 
+        from 
+            MERCADORIASnotaCOMPRA
+        inner JOIN
+            notacompra on
+                notacompra.filial=mercadoriasnotacompra.filial AND
+                notacompra.idnota=mercadoriasnotacompra.idnota                
+        where 
+            notacompra.operacao<>312 and
+            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA)
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa = 'N' AND
+    mercadoriaspedcompra.QTDEENTREGUE <= (
+        select 
+            sum(mercadoriasnotacompra.QUANTIDADE) 
+        from 
+            MERCADORIASnotaCOMPRA
+        inner JOIN
+            notacompra on
+                notacompra.filial=mercadoriasnotacompra.filial AND
+                notacompra.idnota=mercadoriasnotacompra.idnota                
+        where         
+            notacompra.operacao<>312 and        
+            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA)

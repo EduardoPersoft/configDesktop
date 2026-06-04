@@ -1,0 +1,19 @@
+select
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.TOTVALORICMS,
+    notafiscal.ICMSORIGEMVALOR
+from
+    notafiscal
+where
+    notafiscal.filial=1 and
+    notafiscal.idnota=9156
+
+update
+    NOTAFISCAL
+set
+    notafiscal.TOTVALORICMS=0,
+    notafiscal.ICMSORIGEMVALOR=0
+where
+    notafiscal.filial=1 and
+    notafiscal.idnota=9156    

@@ -1,0 +1,28 @@
+select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    materialfilial.consumomedio,
+    sum(materiallocal.quantidade) saldoatual
+from 
+    materiallocal
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and 
+        materialfilial.iditem=materiallocal.iditem
+inner join
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+left join
+    local on
+        local.id=materiallocal.idlocal
+where
+    materialfilial.filial=5  and
+    local.disponivel='S'
+group by
+    materialfilial.filial,
+    materialfilial.iditem,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    materialfilial.consumomedio

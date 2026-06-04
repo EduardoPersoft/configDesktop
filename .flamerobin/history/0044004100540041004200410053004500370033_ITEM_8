@@ -1,0 +1,73 @@
+UPDATE 
+    TITULOREC
+set
+    titulorec.TIPOBAIXA = NULL,
+    titulorec.DATAPAGAMENTO = NULL,
+    titulorec.baixa = NULL ,
+    titulorec.totalpago = titulorec.totalpago - (
+        select
+            TITULOSANEXADOS.VALORPAGO
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935) ,
+    titulorec.TOTALjuros = TITULOREC.TOTALJUROS - (
+        select
+            TITULOSANEXADOS.VALORJUROS+TITULOSANEXADOS.MVLRACRESCIMOELETRON
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935) 
+    TITULOREC.TOTALDESCONTO = titulorec.totalDESCONTO - (
+        select
+            TITULOSANEXADOS.VALORDESCONTO+TITULOSANEXADOS.MVLRDESCONTOELETRON+TITULOSANEXADOS.MOUTROSDESCONTOS
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935) 
+    TITULOREC.VALOREMABERTO = TITULOREC.VALOREMABERTO + (
+        select
+            TITULOSANEXADOS.VALORPAGO
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935) 
+select
+    titulorec.filial,
+    titulorec.idtitulo,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.TIPOBAIXA,
+    titulorec.DATAPAGAMENTO,
+    titulorec.baixa,
+    titulorec.VALORTITULO,
+    titulorec.totalpago,
+    titulorec.TOTALjuros,
+    titulorec.totalDESCONTO,
+    TITULOREC.VALOREMABERTO
+from
+    TITULOREC
+WHERE 
+    EXISTS (
+        select
+            * 
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935)
+    

@@ -1,0 +1,17 @@
+select 
+    c_foraListaOrcamento.filial,
+    c_foraListaOrcamento.idnota,
+    c_foradeLista.ID, 
+    c_foradeLista.CODIGO,
+    c_foradeLista.FABRICANTE,
+    c_fornecedorpeca.DESCRICAOFANTASIA,
+    c_foradeLista.APLICACAO,
+    c_foradeLista.CODIGOORIGINAL
+ from 
+    c_foraListaOrcamento
+inner join
+    c_foradeLista on
+        c_foraDeLista.id=c_foraListaOcamento.idForaDeLista
+inner join
+    c_fornecedorpeca on
+        c_fornecedorpeca.id=c_foradelista.fabricante

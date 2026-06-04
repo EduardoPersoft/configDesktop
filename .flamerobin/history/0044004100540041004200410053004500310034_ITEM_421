@@ -1,0 +1,30 @@
+select 
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.DESCRICAO,
+    'KG' unidade,
+    sum(mercadoriasnota.quantidade*coalesce(itemestoque.pesoliquido,1)),
+    sum(MERCADORIASNOTA.VLRFINALMERCAD) valortotal,
+    sum(mercadoriasnota.vlrfinalmercad)/ sum(mercadoriasnota.quantidade*coalesce(itemestoque.pesoliquido,1))
+ from 
+    ITEMESTOQUE
+inner join 
+    MERCADORIASNOTA on
+    ITEMESTOQUE.CODIGO=MERCADORIASNOTA.CODIGO
+inner join 
+    NOTAFISCAL on 
+    MERCADORIASNOTA.FILIAL=notafiscal.FILIAL and
+    mercadoriasnota.idnota=notafiscal.idnota
+inner join 
+      NATUREZAOPERACAO on 
+      notafiscal.operacao=naturezaoperacao.id
+where
+    NOTAFISCAL.FILIAL=110 and 
+    notafiscal.dataemissao between '2023-01-01' and '2023-01-31' and 
+    ITEMESTOQUE.CODIGO between '.' and 'Z' and
+    notafiscal.datacancelamento is null and
+    notafiscal.dataemissao is not null and
+    naturezaoperacao.FATURA='S'
+    
+group by 
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.DESCRICAO

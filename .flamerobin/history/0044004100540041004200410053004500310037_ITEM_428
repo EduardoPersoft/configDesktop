@@ -1,0 +1,1 @@
+select * from titulorec where titulorec.dataenvio='18.08.2021'

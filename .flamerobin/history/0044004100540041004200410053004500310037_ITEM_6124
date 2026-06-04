@@ -1,0 +1,8 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.tipomovimento='13'
+and movimentoestoque.emissao='14.04.2026'
+and movimentoestoque.TRANSPORTADORA <> 
+(select pedido.CODIGOTRANSP
+from PEDIDO
+where pedido.filial=movimentoestoque.FILIAL
+and pedido.idnota=movimentoestoque.idpedido)

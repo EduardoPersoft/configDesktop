@@ -1,0 +1,5 @@
+update 
+    C_LAMINACAO
+set 
+    C_LAMINACAO.C_SETUP=60,
+    c_laminacao.C_VELOCIDADE=150

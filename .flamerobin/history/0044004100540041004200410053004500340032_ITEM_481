@@ -1,0 +1,11 @@
+select 
+    iditem,
+    idlocal,
+    quantidade
+from 
+    MATERIALLOcal
+where
+    materiallocal.filial = 110 and
+    materiallocal.iditem like 'MPP%' and
+    materiallocal.saldototal<0
+    

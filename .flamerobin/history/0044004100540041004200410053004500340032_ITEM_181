@@ -1,0 +1,11 @@
+select
+    idplano,
+    contacontabil,
+    descricao,
+    CONTASCONTABEIS.C_MOSTRARFLUXOCAIXA
+from     
+    CONTASCONTABEIS
+where
+    idplano=4
+order by
+    contacontabil

@@ -1,0 +1,6 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.C_CODIGOANT= null 
+WHERE
+    itemestoque.c_codigoant = ''

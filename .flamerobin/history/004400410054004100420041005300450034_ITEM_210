@@ -1,0 +1,1 @@
+select * from ITINERARIOS where abastecimentolitros is not null order by placa, data desc

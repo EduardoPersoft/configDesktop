@@ -1,0 +1,10 @@
+update 
+    MATERIALMOVIMENTOESTOQUE 
+set 
+    MATERIALMOVIMENTOESTOQUE.idpedido=null,
+    MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=null
+where materialmovimentoestoque.idpedido = 66999 
+and exists (select * from MOVIMENTOESTOQUE
+      where movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+      movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and
+      movimentoestoque.TIPOMOVIMENTO='13')

@@ -1,0 +1,32 @@
+select
+    tipoproduto.descricao,   
+    itemcustodata.DATAINVENTARIO,
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) AS QUANTIDADE,
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL*ITEMCUSTODATA.CUSTOUNITARIO) AS decimal(12,3)) as custo
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+inner join
+    itemcustodata on
+        itemcustodata.filial=materialmovimentoestoque.filial and
+        itemcustodata.codigo=materialmovimentoestoque.iditem
+INNER JOIN
+    tipoItemEstoque ON
+        tipoitemestoque.ID= CASE  materialmovimentoestoque.localarmazenamento WHEN 1 THEN 
+                            itemestoque.tipoproduto else '3' end
+where 
+    itemcustodata.DATAINVENTARIO='31.12.2025'  and
+    MOVIMENTOESTOQUE.EMISSAO <= itemcustodata.datainventario and
+    itemestoque.TIPOPRODUTO in (1, 3, 4) AND 
+    itemcustodata.CUSTOUNITARIO>0 and
+    (not (itemestoque.tipoproduto = 4 and itemestoque.codigo between '00000' and '99999' or substring(itemestoque.codigo from 1 for 1)='X') ) and
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO in (1,3,4,5,7)
+group BY
+    itemestoque.tipoproduto,   
+    itemcustodata.DATAINVENTARIO

@@ -1,0 +1,3 @@
+select * from cadastroparceiros where razaosocial like 'ANDRESSA%'
+
+select * from CADASTROPARCEIROS where cadastro=

@@ -1,0 +1,2 @@
+select * from pedido where pedido.uf is null
+order by idnota desc

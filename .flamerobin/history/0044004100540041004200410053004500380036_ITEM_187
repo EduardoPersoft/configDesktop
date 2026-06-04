@@ -1,0 +1,16 @@
+SELECT 
+    r.CODIGO, 
+    r.DESCRICAO, 
+    r.CODIGONOVO, 
+    r.CODIGOBASE,
+    (select 
+        INVENTARIOESTOQUEDATA.VALOR
+     from
+        INVENTARIOESTOQUEDATA
+     where
+        INVENTARIOESTOQUEdata.CODIGO=r.CODIGO
+     order by
+        INVENTARIOESTOQUEDATA.DATA DESC)
+        
+FROM 
+    C_CONVERSAOMP r

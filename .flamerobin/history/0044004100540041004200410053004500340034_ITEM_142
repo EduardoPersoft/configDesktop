@@ -1,0 +1,2 @@
+select itemestoquexarquivo.nomesalvo
+from itemetoque

@@ -1,0 +1,13 @@
+select * from ITEMESTOQUE
+where 
+coalesce(cast(itemestoque.DATACADASTRO as date), cast(itemestoque.DATAALTERACAO as date)) <= '01.01.2019' 
+/*
+and not EXISTS
+(select 
+    *
+FROM
+    Materialmovimentoestoque
+WHERE
+    materialmovimentoestoque.filial=1 AND
+    materialmovimentoestoque.iditem=itemestoque.codigo)
+    */

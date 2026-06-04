@@ -1,0 +1,1 @@
+update vendedor set canalrelacionado=105 where canalrelacionado is null

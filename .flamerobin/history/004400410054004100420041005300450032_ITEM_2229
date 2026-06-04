@@ -1,0 +1,62 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    (select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=materiallocal.filial AND
+        materiallocal.iditem=materiallocal.iditem) as saldo,
+    materialfilial.CONSUMOMEDIO,
+    /*
+    (select
+        min(pedidocompra.datacadastro+PRAZOMERCPEDCOMPRA.dias)
+     FROM
+        MERCADORIASPEDCOMPRA
+     inner join 
+        pedidocompra on
+            mercadoriaspedcompra.filial=pedidocompra.filial AND
+            mercadoriaspedcompra.idnota=pedidocompra.IDNOTA
+     left join 
+        PRAZOMERCPEDCOMPRA on
+            prazomercpedcompra.filial=mercadoriaspedcompra.filial AND
+            prazomercpedcompra.idnota=mercadoriaspedcompra.idnota AND
+            prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+     where
+        mercadoriaspedcompra.filial=materialfilial.filial AND
+        mercadoriaspedcompra.codigo=materialfilial.iditem AND
+        mercadoriaspedcompra.baixa='N') as data,
+    */
+    0 as status
+from 
+    notafiscal
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+inner join
+    materialfilial on
+        materialfilial.filial=notafiscal.filial and
+        materialfilial.iditem=itemestoque.codigo
+where
+    notafiscal.filial=5 and 
+    notafiscal.dataemissao='13.05.2021' AND
+    ((select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=materiallocal.filial AND
+        materiallocal.iditem=materiallocal.iditem)<materialfilial.CONSUMOMEDIO*.4 or
+    (select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=materiallocal.filial AND
+        materiallocal.iditem=materiallocal.iditem)<materialfilial.CONSUMOMEDIO*.3)
+    

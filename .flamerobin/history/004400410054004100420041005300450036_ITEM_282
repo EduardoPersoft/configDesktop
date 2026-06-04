@@ -1,0 +1,16 @@
+select 
+    distinct idmovimento
+FROM
+    MATERIALMOVIMENTOESTOQUE
+WHERE
+    filial=1 and EXISTS
+    (select 
+        * 
+     from 
+        movimentoestoque 
+     where 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento AND
+        movimentoestoque.TIPOMOVIMENTO='02' AND
+        movimentoestoque.idnota is not null and
+        movimentoestoque.EMISSAO='23.03.2021')

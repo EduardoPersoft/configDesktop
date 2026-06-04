@@ -1,0 +1,2 @@
+select filial,idtitulo,totaldesconto from TITULOREC
+where filial=1 and idtitulo=889274 

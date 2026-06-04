@@ -1,0 +1,35 @@
+SELECT 
+    CADVEN.RAZAOSOCIAL vendedor,    
+    cadloja.NOME,
+    sum(PEDIDO.vlrtotalnota-coalesce(pedido.c_creditocliente,0)),
+    cast(sum(PEDIDO.vlrtotalnota-coalesce(pedido.c_creditocliente,0)) * 0.03 as decimal(12,2)) AS VLRCOMISSAO,
+    VENDEDORESPED.VENDEDOR
+FROM 
+    PEDIDO
+    
+inner join 
+    cadastroparceiros cadloja on 
+    cadloja.cadastro=pedido.c_loja
+left join  
+    VENDEDORESPED ON 
+        (VENDEDORESPED.FILIAL=PEDIDO.FILIAL AND 
+         VENDEDORESPED.IDNOTA=PEDIDO.IDNOTA)
+left JOIN 
+    CADASTROPARCEIROS CADVEN ON 
+        (CADVEN.CADASTRO = VENDEDORESPED.VENDEDOR)
+
+    
+ WHERE 
+    PEDIDO.FILIAL=184 AND    
+    PEDIDO.DATAREFERENCIA BETWEEN '01.10.2025' AND '31.10.2025' and
+    pedido.DATAEMISSAO is not null and 
+    pedido.DATACANCELAMENTO is null
+GROUP BY 
+    CADVEN.RAZAOSOCIAL,
+    cadloja.NOME,
+    VENDEDORESPED.VENDEDOR
+having
+    sum(PEDIDO.vlrtotalnota)>0
+    
+
+    

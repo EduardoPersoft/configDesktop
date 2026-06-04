@@ -1,0 +1,10 @@
+select 
+    locallote.*,
+    local.descricao
+from
+    locallote
+inner join
+    local on
+        local.id=locallote.loca
+where
+    locallote.quantidade>0

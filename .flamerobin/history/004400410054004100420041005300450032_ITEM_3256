@@ -1,0 +1,1 @@
+select * from cadastroparceiros where CADASTROPARCEIROS.C_CODFORNECEDORANTIGO=5484

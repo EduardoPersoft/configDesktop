@@ -1,0 +1,4 @@
+SELECT
+    *
+FROM
+    c_abastecimento('01.01.2021', '31.03.2021')

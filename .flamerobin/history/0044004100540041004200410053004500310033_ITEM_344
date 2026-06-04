@@ -1,0 +1,14 @@
+UPDATE
+    PEDIDO
+SET
+    uuid = filial||'-'||destinatario||'-'||idnota
+WHERE
+    uuid is null
+
+SELECT
+    pedido.filial,
+    pedido.idnota,
+    pedido.DESTINATARIO,
+    pedido.UUID
+FROM
+    pedido

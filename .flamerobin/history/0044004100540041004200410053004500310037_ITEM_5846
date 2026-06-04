@@ -1,0 +1,19 @@
+select 
+    materialmovimentoestoque.IDITEM,
+    MATERIALMOVIMENTOESTOQUE.quantidade,
+    local.DESCRICAO,
+    MATERIALMOVIMENTOESTOQUE.lote,
+    locallote.QUANTIDADE
+from
+    MATERIALMOVIMENTOESTOQUE
+left join
+    locallote on
+        locallote.IDITEM=MATERIALMOVIMENTOESTOQUE.iditem and
+        locallote.LOTE=MATERIALMOVIMENTOESTOQUE.lote and
+        locallote.local=MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO
+left join 
+    local on
+        local.id=locallote.local
+where
+    MATERIALMOVIMENTOESTOQUE.filial=12826 and
+    MATERIALMOVIMENTOESTOQUE.idmovimento=588499

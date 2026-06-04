@@ -1,0 +1,5 @@
+select * from NOTAFISCAL
+inner join
+    qrcodenfce on
+        qrcodenfce.UUIDNFE=notafiscal.uuid
+where modelo=43

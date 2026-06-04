@@ -1,0 +1,9 @@
+select 
+    * 
+from 
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=110
+    and movimentoestoque.emissao>='01.01.2024'
+    and movimentoestoque.TIPOMOVIMENTO in ('10', '11') 
+    and (movimentoestoque.LOCALARMAZENAMENTO=3 or movimentoestoque.LOCALTRANSFERENCIA=3)

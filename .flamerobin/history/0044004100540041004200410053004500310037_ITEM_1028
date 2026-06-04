@@ -1,0 +1,5 @@
+select 
+    *
+FROM 
+    CARRINHO
+order by id desc

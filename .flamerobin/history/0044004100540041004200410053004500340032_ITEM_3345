@@ -1,0 +1,13 @@
+select
+    filial,
+    idnota,
+    idmercadoria,
+    idpedido,
+    idmercpedido,
+    filialped
+    
+from
+    MERCADORIASPED
+where 
+    mercadoriasped.filial=110
+    and mercadoriasped.idnota=4511

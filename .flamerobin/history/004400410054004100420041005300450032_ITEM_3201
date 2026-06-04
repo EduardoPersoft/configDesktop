@@ -1,0 +1,11 @@
+SELECT  
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+WHERE
+    pedidocompra.filial=5 AND
+    pedidocompra.DATAcadastro>='01.04.2021'

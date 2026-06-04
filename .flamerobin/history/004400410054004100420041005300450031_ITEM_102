@@ -1,0 +1,1 @@
+select * from C_cores where not exists (select * from itemestoque where itemestoque.codigo=C_cores.codigo)

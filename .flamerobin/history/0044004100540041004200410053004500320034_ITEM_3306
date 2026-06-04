@@ -1,0 +1,9 @@
+SELECT 
+    * 
+FROM 
+    TITULOREC 
+WHERE 
+    TITULOREC.FILIAL=5 AND 
+    coalesce(titulorec.CODRETORNO,'') <> '' and 
+    coalesce(titulorec.LINHADIGITAVEL, '') = '' and
+    titulorec.baixa is null

@@ -1,0 +1,3 @@
+
+select * from VENDEDORESPED
+where  FILIAL = 1 and IDNOTA = 71336

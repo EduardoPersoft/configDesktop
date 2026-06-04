@@ -1,0 +1,2 @@
+select * from CADASTROPARCEIROS
+where CADASTROPARCEIROS.nome liKe '%P L P%'

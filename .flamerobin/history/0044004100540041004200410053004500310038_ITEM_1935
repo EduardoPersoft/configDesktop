@@ -1,0 +1,3 @@
+select * from materialmovimentoestoque
+where idmovimento=134192
+order by idnota desc

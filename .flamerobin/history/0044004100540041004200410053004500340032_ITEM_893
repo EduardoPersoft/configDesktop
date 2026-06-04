@@ -1,0 +1,2 @@
+select codigo,lote,quantidade from INVENTARIOESTOQUEDATA
+where data='06.12.2023' and local=1063

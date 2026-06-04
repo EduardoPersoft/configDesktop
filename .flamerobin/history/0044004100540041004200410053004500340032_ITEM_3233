@@ -1,0 +1,3 @@
+delete from turnos
+where extract(day from inicio) in (24,25, 31)
+and extract(month from inicio)=12

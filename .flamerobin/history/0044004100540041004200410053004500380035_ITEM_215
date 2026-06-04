@@ -1,0 +1,14 @@
+select
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    exists (
+        select 
+            *
+        from
+            MOVIMENTOESTOQUE
+        where
+            MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+            materialmovimentoestoque.IDMOVIMENTO=movimentoestoque.idmovimento and
+            movimentoestoque.TIPOMOVIMENTO='02')

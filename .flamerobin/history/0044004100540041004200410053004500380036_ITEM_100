@@ -1,0 +1,3 @@
+update LANTOCONTPAG set
+lantocontpag.CENTROCUSTO='25'
+where lantocontpag.centrocusto is null 

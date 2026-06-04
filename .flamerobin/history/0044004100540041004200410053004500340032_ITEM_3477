@@ -1,0 +1,6 @@
+create table c_pedidoItensEstimado(
+filial integer not null,
+idnota integer not null,
+idmercadoria integer not null
+constraint pk_c_pedidoItensEstimado
+primary (filial,idnota,idmercadoria))

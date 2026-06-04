@@ -1,0 +1,5 @@
+select materiallocal.* from MATERIALLOCAL
+where cast(materiallocal.saldototal as integer)<> 
+      cast((select sum(locallote.quantidade) from LOCALLOTE
+            where locallote.filial=materiallocal.filial
+            and locallote.iditem=materiallocal.iditem) as integer)

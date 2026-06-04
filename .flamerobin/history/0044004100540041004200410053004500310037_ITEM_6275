@@ -1,0 +1,73 @@
+ select
+    case coalesce(cadVendedor.cadastro, movimentoEstoque.filial) 
+    when movimentoEstoque.filial then 1 else cadVendedor.cadastro end,
+
+    case coalesce(cadVendedor.cadastro, movimentoEstoque.filial) 
+    when movimentoEstoque.filial then 'EURO BRAKE' else cadVendedor.nome end,
+
+    sum(coalesce(movimentoestoque.VALORFRETE,0)) as frete,
+    sum(case coalesce(movimentoestoque.valorfrete,0)
+        when 0 then 0 else 1 end) as qtdFrete,
+     0.0,
+    sum(case coalesce(movimentoestoque.valorFrete,0) 
+        when 0 then 0 
+        else coalesce(notafiscal.vlrTotalNota,0) end) fatFrete,
+     0.0,
+
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as coleta,
+    sum(case coalesce(c_coletas.valormedio,0)
+        when 0 then 0 else 1 end) as qtdColeta,
+     0.0,
+    sum(case coalesce(c_coletas.valorMedio,0) 
+        when 0 then 0 
+        else coalesce(notafiscal.vlrTotalNota,0) end) fatFrete,
+     0.0,
+
+    0.0,
+    0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    
+    cast(0 as decimal(12,3)) as valorImportadora,
+    cast(0 as decimal(12,3)) as valorDistribuidora,
+    cast(0 as decimal(12,3)) as valorFaturado,
+    
+    sum(case notaFiscal.filial when 1 then
+           coalesce(c_coletas.VALORMEDIO,0)+
+           coalesce(movimentoestoque.VALORFRETE,0) 
+        else 
+            0 
+        end) as custoImportadora,
+    0,
+
+    sum(case notaFiscal.filial when 1 then 0 
+        else
+            coalesce(c_coletas.VALORMEDIO,0)+
+            coalesce(movimentoestoque.VALORFRETE,0)
+        end) as custoDistribuidora,
+    0
+
+from
+    movimentoestoque
+left join 
+    c_coletas on
+        c_coletas.COLETA=movimentoestoque.COLETA
+left join
+    pedido on
+        movimentoestoque.filial=pedido.filial and
+        movimentoestoque.idpedido=pedido.idnota  
+        
+left join
+    CADASTROPARCEIROS cadvendedor on    
+        cadvendedor.cadastro=pedido.vendedor
+left join
+    notafiscal on
+        movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.idnotaexpedicao=notafiscal.idnota
+where
+     cast(movimentoestoque.coletadata as date) between '30.04.2026' and '14.05.2026' and
+     TIPOMOVIMENTO='13'
+group by
+   1, 2

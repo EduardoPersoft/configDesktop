@@ -1,0 +1,46 @@
+SELECT 
+       extract(year from notafiscal.DATAEMISSAO) as ano,
+       extract(MONTH from notafiscal.DATAEMISSAO) as mes,    
+        /*
+       ITEMESTOQUE.GRUPO,
+       grupomercadoria.DESCRICAO,
+        */
+
+       sum(notafiscal.VLRTOTALNOTA)   as VLRTOTALNOTA
+
+
+    
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+
+
+
+
+
+WHERE 
+    NOTAFISCAL.FILIAL = 3941
+    AND NOTAFISCAL.DATAEMISSAO BETWEEN '2024-01-01' and '2025-05-31'
+    AND NOTAFISCAL.CANCELAMENTO = 'N'
+    AND naturezaoperacao.receita='S'
+    AND NOTAFISCAL.ENTRADASAIDA='S'
+    AND NOTAFISCAL.DEVOLUCAO='N'
+    AND NOT exists (select 
+                            * 
+                         from 
+                            ESTABELECIMENTO
+                         where estabelecimento.CADASTRO=clientes.cadastro) 
+
+
+GROUP BY
+ 1,2

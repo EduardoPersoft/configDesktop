@@ -1,0 +1,35 @@
+ SELECT 
+    DISTINCT 
+    MOVIMENTOESTOQUE.filial,
+    MOVIMENTOESTOQUE.idmovimento,
+    MOVIMENTOESTOQUE.emissao,
+    PEDIDO.idnota,
+    PEDIDO.numeronota,
+    CADCLI.NOME, 
+    itemProduzido.codigo,
+    itemProduzido.descricao descricaoitem,
+    MATERIALMOVIMENTOESTOQUE.QUANTIDADE,
+    MATERIALMOVIMENTOESTOQUE.CONCLUIDO
+FROM 
+    MOVIMENTOESTOQUE
+INNER JOIN 
+    MATERIALMOVIMENTOESTOQUE ON 
+        (MATERIALMOVIMENTOESTOQUE.filial = MOVIMENTOESTOQUE.filial
+         AND MATERIALMOVIMENTOESTOQUE.idmovimento = MOVIMENTOESTOQUE.idmovimento)
+inner join 
+    itemestoque itemProduzido on 
+        materialmovimentoestoque.iditem=itemProduzido.codigo
+left join 
+    centrocustos on 
+        (materialmovimentoestoque.idcentrocusto=centrocustos.centrocusto)
+LEFT JOIN 
+    PEDIDO ON 
+        PEDIDO.filial = MATERIALMOVIMENTOESTOQUE.filial
+         AND PEDIDO.idnota = MATERIALMOVIMENTOESTOQUE.idpedido
+LEFT JOIN 
+    CADASTROPARCEIROS CADCLI ON
+        CADCLI.CADASTRO=PEDIDO.DESTINATNARIO
+WHERE 
+    MOVIMENTOESTOQUE.filial = ?  
+    AND MOVIMENTOESTOQUE.emissao BETWEEN ? AND ?  AND MOVIMENTOESTOQUE.tipomovimento = 12
+    AND MATERIALMOVIMENTOESTOQUE.IDITEM=MATERIALMOVIMENTOESTOQUE.PRODUTO

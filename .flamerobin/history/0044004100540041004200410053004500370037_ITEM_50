@@ -1,0 +1,3 @@
+select * from MERCADORIASNOTA
+where filial=223
+and idpedido in (55,56,57,58)

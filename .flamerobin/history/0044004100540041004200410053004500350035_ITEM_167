@@ -1,0 +1,6 @@
+select
+    idnota,
+    idrelacao
+from 
+    orcamento
+order by idnota

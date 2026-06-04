@@ -1,0 +1,6 @@
+UPDATE
+    lantocontrec
+SET
+    lantocontrec.contacontabil = '11'
+WHERE
+    lantocontrec.contacontabil = '000000'

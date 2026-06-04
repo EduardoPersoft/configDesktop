@@ -1,0 +1,9 @@
+select 
+    cast(0 as integer) qtd,
+    itemestoque.codigo,
+    itemestoque.DESCRICAO
+from 
+    consultas
+inner join
+    itemestoque on
+        consultas.UUIDSELECIONADO=itemestoque.CODIGO

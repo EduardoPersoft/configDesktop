@@ -1,0 +1,35 @@
+select
+    extract(month from orcamento.datacadastro) ano,
+    extract(year from orcamento.datacadastro) mes,
+    count(*) as qtdOrcamento,
+    sum(case when ORCAMENTO.C_ARQUITETO is null then 0 else 1 end) as qtdComArquiteto,
+    sum(orcamento.VLRTOTALNOTA) AS VALORORCAMENTO,
+    sum(case when pedido.idnota is null then 0 else 1 end) as qtdPedido,    
+    sum(coalesce(pedido.vlrtotalNota,0)) as valorpedido,
+    sum(coalesce(pedido.vlrtotalNota,0)) / sum(case when pedido.idnota is null then 0 else 1 end) ticketmedio,
+    sum(case when pedido.idnota is null then 0 else 1 end)/cast(count(*) as decimal(12,3))*100 taxaConversaoQtd,
+    sum(coalesce(pedido.vlrtotalNota,0)) / sum(orcamento.VLRTOTALNOTA)*100 taxaConversaoValor,
+    metas.valor,
+    case coalesce(metas.valor,0) when 0 then null else
+        sum(coalesce(pedido.vlrtotalNota,0))/metas.valor *100
+    end metaAtingida    
+    
+    
+from
+    ORCAMENTO
+left join
+    pedido on
+        pedido.filial=orcamento.filial and
+        pedido.IDORCAMENTO=orcamento.idnota
+left join
+    metasvendedor on
+        metasvendedor.mes = extract(month from orcamento.datacadastro) and
+        metasvendedor.ano = extract(year from orcamento.datacadastro) and
+        metasvendedor.vendedor = orcamento.vendedor
+where 
+    orcamento.filial = ? and 
+    orcamento.DATACADASTRO between ? and ? and
+    orcamento.vendedor = ?
+group by
+    extract(month from orcamento.datacadastro),
+    extract(year from orcamento.datacadastro)

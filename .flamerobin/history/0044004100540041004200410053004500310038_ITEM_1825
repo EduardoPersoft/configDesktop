@@ -1,0 +1,1 @@
+select * from servicosnota where filial=1 and idpedido=357

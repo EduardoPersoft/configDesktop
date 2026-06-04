@@ -1,0 +1,1 @@
+update itemestoque set tipoproduto='3' where tipoproduto is null

@@ -1,0 +1,19 @@
+select 
+    notafiscal.numeronota,
+    mercadoriasnota.CODIGO,
+    mercadoriasnota.descricao,
+    mercadoriasnota.quantidade,
+    mercadoriasnota.PRECOLISTA,
+    mercadoriasnota.quantidade,
+    mercadoriasnota.VLRFINALMERCAD,
+    mercadoriasnota.VLRICMSRECOLHIDO
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+where
+    notafiscal.filial=5 and
+    notafiscal.DESTINATARIO=2911 and
+    notafiscal.DATAEMISSAO='2022-01-18'

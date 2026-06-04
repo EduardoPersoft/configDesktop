@@ -1,0 +1,1 @@
+select * from lantocontpag where filial=1 and CONTACOntabil='3'

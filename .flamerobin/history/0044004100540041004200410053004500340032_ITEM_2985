@@ -1,0 +1,4 @@
+select
+    LANTOCONTPAG.*
+from 
+    lantocontpag

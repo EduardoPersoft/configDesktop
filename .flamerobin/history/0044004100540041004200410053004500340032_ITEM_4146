@@ -1,0 +1,2 @@
+select * from FATURAS
+where filial=110 and idtitulo=6832

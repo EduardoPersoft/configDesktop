@@ -1,0 +1,7 @@
+select * from MERCADORIASPED
+inner join 
+    pedido on 
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+where 
+    mercadoriasped.codigo='PRO4183FLI001'

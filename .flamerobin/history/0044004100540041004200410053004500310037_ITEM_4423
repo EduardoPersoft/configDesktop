@@ -1,0 +1,21 @@
+select 
+    c_estoque.codigo, 
+    c_estoque.c_original,
+    c_estoque.c_mrfornecedor,
+    c_estoque.FORNECEDOr,
+    c_estoque.descricao,
+    coalesce(c_estoque.estoqueimportadora,0)+
+    coalesce(c_estoque.estoquedistribuidora,0) total 
+from    
+    c_estoque(1)
+left 
+    c_itensselecaox on
+        c_itensSelecaox.codigo=c_estoque.codigo
+
+left join
+    locallote on
+        locallote.iditem=c_Estoque.codigo and
+        locallote.quantidade>0
+left join
+    local on
+        local.id=locallote.local

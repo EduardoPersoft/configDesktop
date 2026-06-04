@@ -1,0 +1,8 @@
+select
+    *
+from 
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=1 and
+    movimentoestoque.documento ='290079' and
+    movimentoestoque.tipomovimento<>'13'

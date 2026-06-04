@@ -1,0 +1,5 @@
+update 
+   ORCAMENTO
+set
+   indpres=1, frete=9
+where IDNOTA>=195690

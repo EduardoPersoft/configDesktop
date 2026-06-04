@@ -1,0 +1,5 @@
+update 
+    MATERIALFILIAL
+SET
+    materialfilial.st = 
+    (select c_st.quantidade from c_cst where c_st.CODIGO=materialfilial.iditem)

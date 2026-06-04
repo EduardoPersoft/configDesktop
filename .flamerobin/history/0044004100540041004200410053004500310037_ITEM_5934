@@ -1,0 +1,2 @@
+select filial, idnota, dataemissao, indpress
+where notafiscal.DATAEMISSAO>'01.02.2026'

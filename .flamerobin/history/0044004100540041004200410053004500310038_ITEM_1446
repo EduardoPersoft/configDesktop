@@ -1,0 +1,2 @@
+select * from PEDIDO
+where filial=1 and idnota=68658

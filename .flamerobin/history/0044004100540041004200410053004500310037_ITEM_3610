@@ -1,0 +1,6 @@
+SELECT
+5000+ROW_NUMBER() OVER (order by 1),
+CADASTROPARCEIROS.cadastro,
+CADASTROPARCEIROS.nome
+
+from cadastroparceiros

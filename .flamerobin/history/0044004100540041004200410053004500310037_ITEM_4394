@@ -1,0 +1,159 @@
+SET TERM ^ ;
+CREATE OR ALTER PROCEDURE MOVIMENTOBANCARIOCONTACORRENTE2 (
+    RELATORIO varchar(20) )
+RETURNS (
+    MODO smallint,
+    MOVIMENTACAO timestamp,
+    VALORMOVIMENTO double precision,
+    TIPOMOVIMENTO char(1),
+    FILIAL integer,
+    RAZAOSOCIAL varchar(60),
+    CODIGO smallint,
+    AGENCIA varchar(6),
+    DIGITOAGENCIA char(1),
+    NUMCCORRENTE varchar(10),
+    DIGITOCCORRENTE char(1),
+    BANCO smallint,
+    DESCRICAO varchar(130),
+    SALDOBLOQUEADO double precision,
+    SALDOEXTRATO double precision,
+    DEBITOSACOMP double precision,
+    HISTORICOEXTRATO varchar(300),
+    NRDOCUMENTO varchar(15),
+    IDMOVTOBANCARIO integer,
+    DATAEXTRATO timestamp,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    DESCRICAOCONTA varchar(30),
+    DEBITO double precision,
+    CREDITO double precision,
+    TITULOPAGMSG varchar(40) )
+
+AS
+declare variable transferencia char(1);
+declare variable contacorrentetransferencia integer;
+declare variable descricaocontatransferencia varchar(30);
+declare variable idplano smallint;
+declare variable contacontabil varchar(15);
+declare variable descricaocontacontabil varchar(50);
+declare variable idtitulo integer;
+declare variable documento varchar(13);
+declare variable fatura varchar(2);
+declare variable nomemovimento varchar(60);
+declare variable valorlancamento double precision;
+declare variable valortitulo double precision;
+declare variable phistoricoextrato varchar(150);
+declare variable vcontadescontofinanceiroreceber varchar(15);
+declare variable vcontadescontotaxapagamentoreceber varchar(15);
+declare variable vcontaoutrosdescontosreceber varchar(15);
+declare variable vcontajurosfinanceiroreceber varchar(15);
+declare variable vcontaacrescimotaxapagamentoreceber varchar(15);
+declare variable vcontadescontofinanceiropagar varchar(15);
+declare variable vcontadescontotaxapagamentopagar varchar(15);
+declare variable vcontaoutrosdescontospagar varchar(15);
+declare variable vcontajurosfinanceiropagar varchar(15);
+declare variable vcontaacrescimotaxapagamentopagar varchar(15);
+declare variable vdescricaodescontofinanceiroreceber varchar(50);
+declare variable vdescricaodescontotaxapagamentoreceber varchar(50);
+declare variable vdescricaooutrosdescontosreceber varchar(50);
+declare variable vdescricaojurosfinanceiroreceber varchar(50);
+declare variable vdescricaoacrescimotaxapagamentoreceber varchar(50);
+declare variable vdescricaodescontofinanceiropagar varchar(50);
+declare variable vdescricaodescontotaxapagamentopagar varchar(50);
+declare variable vdescricaooutrosdescontospagar varchar(50);
+declare variable vdescricaojurosfinanceiropagar varchar(50);
+declare variable vdescricaoacrescimotaxapagamentopagar varchar(50);
+declare variable vvalordescontofinanceiroreceber double precision;
+declare variable vvalordescontotaxapagamentoreceber double precision;
+declare variable vvaloroutrosdescontosreceber double precision;
+declare variable vvalorjurosfinanceiroreceber double precision;
+declare variable vvaloracrescimotaxapagamentoreceber double precision;
+declare variable vvalordescontofinanceiropagar double precision;
+declare variable vvalordescontotaxapagamentopagar double precision;
+declare variable vvaloroutrosdescontospagar double precision;
+declare variable vvalorjurosfinanceiropagar double precision;
+declare variable vvaloracrescimotaxapagamentopagar double precision;
+begin
+    SELECT ESTSIN.Estabelecimento,
+           ESTSIN.Datainicial,
+           ESTSIN.Datafinal,
+           ESTSIN.Idnotainicial,
+           CADASTROPARCEIROS.Razaosocial,
+           estabelecimento.Planocontas
+    FROM ESTSIN
+    INNER JOIN CADASTROPARCEIROS ON (
+            CADASTROPARCEIROS.CADASTRO=ESTSIN.Estabelecimento)
+    INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.Cadastro=ESTSIN.ESTABELECIMENTO)
+    WHERE RELATORIO='EXTRATO'
+    INTO FILIAL,DATAINICIAL,DATAFINAL,CODIGO,RAZAOSOCIAL,IDPLANO;
+
+    SELECT CONTACORRENTE.AGENCIA,
+           CONTACORRENTE.DIGITOAGENCIA,
+           CONTACORRENTE.NUMCCORRENTE,
+           CONTACORRENTE.DIGITOCCORRENTE,
+           contacorrente.descricaoconta,
+           CONTACORRENTE.BANCO,
+           BANCO.DESCRICAO, 
+           CONTACORRENTE.SALDOBLOQUEADO,
+           CONTACORRENTE.SALDOEXTRATO,
+           CONTACORRENTE.DEBITOSACOMP
+    FROM CONTACORRENTE
+    INNER JOIN BANCO ON (BANCO.BANCO = CONTACORRENTE.BANCO)
+    WHERE CONTACORRENTE.Filial=:Filial
+    AND CONTACORRENTE.Codigo=:CODIGO
+    INTO AGENCIA,DIGITOAGENCIA,NUMCCORRENTE,DIGITOCCORRENTE,descricaoconta,
+         BANCO,DESCRICAO,SALDOBLOQUEADO,SALDOEXTRATO,DEBITOSACOMP;
+
+
+    MOVIMENTACAO = DATAINICIAL;
+    MODO = 0;
+    DEBITO = NULL;
+    CREDITO = NULL;
+    NRDOCUMENTO = '';
+    HISTORICOEXTRATO = 'SALDO ANTERIOR';
+    IDMOVTOBANCARIO = 0;
+    DOCUMENTO='';
+
+    SELECT  SALDOANTERIOR.VALOR AS VALORMOVIMENTO,
+            CAST((CASE WHEN ( SALDOANTERIOR.VALOR >= 0) THEN 'C'
+            ELSE 'D' END ) AS CHAR(1)) AS TIPOMOVIMENTO
+     FROM SALDOANTERIOR
+     INTO VALORMOVIMENTO,
+          TIPOMOVIMENTO;
+
+    SUSPEND;
+
+    FOR SELECT movimentobancariolancamentos.modo,
+               movimentobancariolancamentos.movimentacao,
+               movimentobancariolancamentos.valormovimento,
+               movimentobancariolancamentos.tipomovimento,
+               movimentobancariolancamentos.historicoextrato,
+               movimentobancariolancamentos.nrdocumento,
+               movimentobancariolancamentos.idmovtobancario,
+               movimentobancariolancamentos.dataextrato,
+               movimentobancariolancamentos.debito ,
+               movimentobancariolancamentos.credito ,
+               movimentobancariolancamentos.titulopagmsg
+    FROM movimentobancariolancamentos(:filial,:datainicial,:DATAFINAL,:CODIGO,
+     :razaosocial,:IDPLANO)
+    INTO modo,
+         movimentacao,
+         valormovimento,
+         tipomovimento,
+         historicoextrato,
+         nrdocumento,
+         idmovtobancario,
+         dataextrato,
+         debito ,
+         credito ,
+         titulopagmsg   DO
+         SUSPEND;
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE MOVIMENTOBANCARIOCONTACORRENTE2 TO  SYSDBA;
+

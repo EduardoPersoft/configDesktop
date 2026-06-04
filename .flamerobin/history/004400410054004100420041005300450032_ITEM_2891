@@ -1,0 +1,1 @@
+select * from impped2('FATURAMENTO')

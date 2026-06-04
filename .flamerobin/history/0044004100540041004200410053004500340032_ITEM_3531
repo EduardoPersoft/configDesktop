@@ -1,0 +1,12 @@
+select 
+    NOTAFISCAL.filial,
+    NOTAFISCAL.idnota,
+    notafiscal.operacao,
+    cadcli.nome
+from 
+    NOTAFISCAL
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=notafiscal.destinatario
+where filial=110 and vendedor=474
+and notafiscal.DATAEMISSAO>='01.01.2025' 

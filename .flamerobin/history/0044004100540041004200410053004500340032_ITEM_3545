@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,mercadoriasnota.QTDBAIXA,quantidade from mercadoriasnota where filial=110 and idpedido=12450

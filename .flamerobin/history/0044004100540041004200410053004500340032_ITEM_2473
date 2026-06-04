@@ -1,0 +1,2 @@
+select * from locallote
+where quantidade < -0.009

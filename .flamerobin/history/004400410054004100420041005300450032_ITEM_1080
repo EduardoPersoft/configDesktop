@@ -1,0 +1,1 @@
+insert into transportadora(cadastro) select cadastro from cadastroparceiros where cadastro>=33424

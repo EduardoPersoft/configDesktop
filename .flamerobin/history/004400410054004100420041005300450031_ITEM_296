@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    ITEMESTOQUE
+where 
+    itemestoque.FAMILIA is not null

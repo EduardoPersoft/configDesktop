@@ -1,0 +1,5 @@
+SELECT
+rdb$get_context(‘USER_TRANSACTION’, ‘row#’) as NUMERO,
+CADASTROPARCEIROS.nome
+
+from cdastroparceiros

@@ -1,0 +1,1 @@
+select * from fornecedoresitem where fornecedoresitem.iditem='30759' order by id

@@ -1,0 +1,18 @@
+select 
+    mercadoriasped.QUANTIDADE,
+    mercadoriasnota.*
+from 
+    mercadoriasnota 
+inner join 
+    mercadoriasped on
+        mercadoriasped.filial=mercadoriasnota.filialped and
+        mercadoriasped.idnota=mercadoriasnota.idpedido and
+        mercadoriasped.IDMERCADORIA=mercadoriasnota.IDMERCPEDIDO
+inner join
+    notafiscal on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.idnota
+where 
+    notafiscal.DATAEMISSAO>='01.01.2025' and
+    mercadoriasped.quantidade<>mercadoriasnota.quantidade an
+    notafiscal.DATACANCELAMENTO is null

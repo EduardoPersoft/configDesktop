@@ -1,0 +1,6 @@
+select 
+    filial,
+    idnota,
+    numeronota
+from
+    pedido

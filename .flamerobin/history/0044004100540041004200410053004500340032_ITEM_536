@@ -1,0 +1,23 @@
+select
+    materiallote.filial,
+    materiallote.iditem,
+    materiallote.lote,
+    materiallote.quantidade,
+    materiallote.C_GRAMATURA,
+    materiallote.c_largura
+from
+    MATERIALLOTE
+where 
+    exists 
+        (select
+            *
+         from
+            t_lotes
+         where 
+            t_lotes.filial=materiallote.filial and
+            t_lotes.iditem=materiallote.iditem and
+            t_lotes.lote=materiallote.lote)
+order by
+    materiallote.filial,
+    materiallote.iditem,
+    materiallote.lote

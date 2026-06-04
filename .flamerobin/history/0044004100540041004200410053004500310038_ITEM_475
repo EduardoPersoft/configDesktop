@@ -1,0 +1,4 @@
+update MATERIALMOVIMENTOESTOQUE
+set valor = 186* quantidade
+where substring(materialmovimentoestoque.iditem from 1 for 3)='PE-' 
+and materialmovimentoestoque.valor=0 and sinal in (1, -1)

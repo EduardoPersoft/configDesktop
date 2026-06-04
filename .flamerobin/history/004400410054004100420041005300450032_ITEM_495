@@ -1,0 +1,15 @@
+select
+    itemestoque.codigo,
+    coalesce(preco1.preco, preco2.preco)
+from
+    ITEMESTOQUE
+left join
+    listaprecoproduto preco1 on
+        preco1.lista=1 and
+        preco1.PRODUTO=itemestoque.CODIGO
+left join
+    listaprecoproduto preco2 on
+        preco2.lista=2 and
+        preco2.PRODUTO=itemestoque.CODIGO
+where
+    coalesce(preco1.preco, preco2.preco) is null

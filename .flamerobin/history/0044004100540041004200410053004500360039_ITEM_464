@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=1
+and movimentoestoque.idmovimento=1350315

@@ -1,0 +1,7 @@
+update 
+    MATERIALFILIAL
+set
+    materialfilial.VALORTOTALESTOCADO=0,
+    materialfilial.CUSTOMEDIO=0
+where 
+filial=1 and iditem='01.12.0213'

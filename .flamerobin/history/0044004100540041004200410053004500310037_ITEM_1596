@@ -1,0 +1,11 @@
+    
+    
+update
+    MERCADORIASNOTA
+set 
+    mercadoriasnota.ppis=0
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406 and
+    mercadoriasnota.cstpi in (4,98);
+

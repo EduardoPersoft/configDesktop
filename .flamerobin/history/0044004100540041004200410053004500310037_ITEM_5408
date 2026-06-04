@@ -1,0 +1,22 @@
+select 
+coalesce((select count(movimentoestoque.IDMOVIMENTO) 
+ from movimentoestoque 
+ where movimentoestoque.coleta=c_coletas.COLETA),0),
+ coalesce((select count(C_DESTINOAVULSO.ID) 
+from c_destinoavulso
+where c_destinoavulso.coleta=c_coletas.COLETA),0),
+coalesce((select count(movimentoestoque.IDMOVIMENTO) 
+ from movimentoestoque 
+ where movimentoestoque.coleta=c_coletas.COLETA
+ wheremovimentoestoque.tipomovimento='13'),0)+
+coalesce((select count(C_DESTINOAVULSO.ID) 
+from c_destinoavulso
+where c_destinoavulso.coleta=c_coletas.COLETA),0),
+c_coletas.* from c_coletas
+where c_coletas.DATACOLETA between '31.07.2025' and '28.08.2025'
+and coalesce((select count(movimentoestoque.IDMOVIMENTO) 
+ from movimentoestoque 
+ where movimentoestoque.coleta=c_coletas.COLETA),0)+
+coalesce((select count(C_DESTINOAVULSO.ID) 
+from c_destinoavulso
+where c_destinoavulso.coleta=c_coletas.COLETA),0)<>c_coletas.QTDEXPEDICOES

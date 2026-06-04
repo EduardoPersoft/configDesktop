@@ -1,0 +1,7 @@
+select
+    *
+from
+    itemestoque
+left join
+    CLASSIFICACAOFISCAL c_base on
+        c_base.CFISCAL=ITEMESTOQUE.CLASSIFISCAL

@@ -1,0 +1,7 @@
+UPDATE
+    TITULOREC
+set 
+    titulorec.DATAENVIO='01.01.2022'
+WHERE
+    titulorec.filial=12826 AND
+    titulorec.idtitulo between '291781' and '291878'

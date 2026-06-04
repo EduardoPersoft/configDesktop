@@ -1,0 +1,6 @@
+select 
+    c_destinoavulso.*
+from 
+    c_destinoavulso
+where  
+    datasolicitacao between '01.06.2025' and '30.06.2025'

@@ -1,0 +1,6 @@
+SELECT
+    CLASSIFICACAOFISCAL.CFISCAL,
+    classificacaofiscal.descricao,
+    classificacaofiscal.CEST
+FROM
+    CLASSIFICACAOFISCAL

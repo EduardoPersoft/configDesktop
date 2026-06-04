@@ -1,0 +1,1 @@
+select * from PEDIDO where DESTINATARIO IN (1747, 1879)

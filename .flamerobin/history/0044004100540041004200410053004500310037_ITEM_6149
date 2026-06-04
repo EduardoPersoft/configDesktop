@@ -1,0 +1,60 @@
+select 
+    grupoempresarial.CADASTRO,
+    grupoempresarial.NOME,
+    grupoempresarial.razaosocial,
+    CADVEN.NOME AS VENDEDOR,
+    grupoempresarial.CIDADE,
+    grupoempresarial.UF,
+     CASE WHEN (grupoempresarial.DOCUMENTO<>'') AND
+          (NOT grupoempresarial.DOCUMENTO IS NULL) THEN
+          CASE grupoempresarial.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(grupoempresarial.DOCUMENTO FROM 1 FOR 3)||'.'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 4 FOR 3)||'.'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 7 FOR 3)||'-'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+        WHEN 'J' THEN
+            CAST(SUBSTRING(grupoempresarial.DOCUMENTO FROM 1 FOR 2)||'.'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 3 FOR 3)||'.'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 6 FOR 3)||'/'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 9 FOR 4)||'-'||
+                SUBSTRING(grupoempresarial.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+       ELSE NULL END
+    ELSE NULL END AS DOCUMENTO,
+    (select max(pedido.dataCadastro) from pedido
+    where pedido.destinatario=cadcli.cadastro
+    and pedido.dataCancelamento is null ) as ultimoPedido,
+    max(orcamento.datacadastro), 
+    RAMOATIVIDADE.DESCRICAO
+from
+    CADASTROPARCEIROS grupoEmpresarial
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.GRUPOEMPRESARIAL=grupoempresarial.grupoempresarial
+inner join 
+    CLIENTES on 
+    CLIENTES.cadastro=cadcli.cadastro
+inner join 
+    CADASTROPARCEIROS CADVEN ON 
+    clientes.vendedor=cadven.cadastro
+inner join
+    orcamento on
+        orcamento.destinatario=cadcli.cadastro
+left join 
+    RAMOATIVIDADE on
+    CADCLI.RAMOATIVIDADE=RAMOATIVIDADE.RAMOATIVIDADE
+where 
+    grupoempresarial.status = 1 and
+    grupoempresarial.cadastro=grupoempresarial.grupoempresarial
+group by
+    grupoempresarial.CADASTRO,
+    grupoempresarial.NOME,
+    grupoempresarial.razaosocial,
+    CADVEN.NOME,
+    grupoempresarial.CIDADE,
+    grupoempresarial.UF,
+    grupoempresarial.Documento,
+    grupoempresarial.tipopessoa,
+     RAMOATIVIDADE.DESCRICAO
+    
+having
+    max(orcamento.datacadastro)<='31.12,2024'

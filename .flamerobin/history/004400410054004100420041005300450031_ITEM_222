@@ -1,0 +1,15 @@
+select 
+    i1.CODIGO
+from 
+    ITEMESTOQUE i1
+WHERE
+    i1.C_CODIGO in (
+SELECT
+    count(i2.codigo) as qtd
+FROM
+    ITEMESTOQUE i2
+WHERE
+    i1.c_codigoant  = i2.c_Codigoant
+HAVING
+    count(i2.codigo)>1
+    )

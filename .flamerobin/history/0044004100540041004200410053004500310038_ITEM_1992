@@ -1,0 +1,20 @@
+select
+    itemestoque.codigo,
+    materiallocal.saldototal,
+    materialfilial.VALORTOTALESTOCADO
+from
+    ITEMESTOQUE
+inner join
+    materiallocal on 
+        materiallocal.filial=1 and
+        materiallocal.IDLOCAL=1 and
+        materiallocal.iditem=itemestoque.codigo
+inner join
+    materialfilial on 
+        materialfilial.filial=1 and
+        materialfilial.iditem=itemestoque.codigo
+where
+    itemestoque.codigo like 'PE-%' and
+    materiallocal.saldototal>0.009 and
+    materialfilial.VALORTOTALESTOCADO<0.01
+    

@@ -1,0 +1,6 @@
+
+select
+notafiscal.numeronota,
+'https://nfe.prefeitura.sp.gov.br/nfe.aspx?ccm=32415354&nf='||notafiscal.numeronota||'&cod='||notafiscal.cdverificacao as url
+from NOTAFISCAL
+where cdverificacao is not null

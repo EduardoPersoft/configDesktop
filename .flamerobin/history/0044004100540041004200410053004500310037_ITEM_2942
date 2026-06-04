@@ -1,0 +1,11 @@
+select 
+    itemestoque.CODIGOBARRA,
+    count(itemestoque.codigo)
+from    
+    ITEMESTOQUE
+where
+    itemestoque.TIPOPRODUTO<>5
+group by
+    itemestoque.CODIGOBARRA
+having
+    count(itemestoque.codigo)>1

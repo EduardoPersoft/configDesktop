@@ -1,0 +1,5 @@
+UPDATE
+    titulorec = null
+where 
+    titulorec.filial=5 and 
+    titulorec.DATAENVIO ='23.04.2022'

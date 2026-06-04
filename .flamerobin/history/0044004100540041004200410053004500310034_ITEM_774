@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set
+    pedido.REDUTORIMPOSTOS=0
+where
+    pedido.filial=110

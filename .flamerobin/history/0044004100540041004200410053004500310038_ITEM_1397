@@ -1,0 +1,1 @@
+select pedido.filial, pedido.idnota, pedido.C_CONDICAOMATERIAIS, pedido.C_CONDICAOSERVICOS from pedido where filial=1 and idnota=68977

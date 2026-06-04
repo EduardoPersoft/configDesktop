@@ -1,0 +1,35 @@
+ Select C_ESTOQUE.Codigo,
+       C_ESTOQUE.Descricao,
+       C_ESTOQUE.C_original,
+       C_ESTOQUE.Marca,
+       C_ESTOQUE.C_aplicacao,
+       c_estoque.TIPOPRODUTO,
+       C_ESTOQUE.Fornecedor,
+       C_ESTOQUE.C_mrfornecedor,
+       C_ESTOQUE.Precoa,
+       C_ESTOQUE.Precob,
+       C_ESTOQUE.PRECOC,
+       c_estoque.metatag,
+       --(C_ESTOQUE.Mlocal-C_ESTOQUE.Reservado) as Mlocal,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0) AS MLOCAL,
+       COALESCE ( c_estoque.ESTOQUEIMPORTADORA,0)  as ESTOQUEIMPORTADORA,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0) ESTOQUEDISTRIBUIDORA ,
+       C_ESTOQUE.Clocal,
+       c_estoque.descricaolocal,
+       c_estoque.DESCRICAO NCM,
+       c_estoque.DESCRICAO tributacaoIcms--,
+      (select
+        sum(mercadoriaspedcompra.quantidade)
+       from 
+          MERCADORIASPEDCOMPRA
+        where 
+            mercadoriaspedcompra.codigo=itemestoque.codigo and
+            mercadoriaspedcompra.baixa='N') as compra,
+      c_estoque.C_COR
+from
+    C_ESTOQUE(?)
+ORDER BY CODIGO
+/*
+WHERE 
+      ((COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0)>0))
+*/

@@ -1,0 +1,16 @@
+select
+    itemestoque.codigo,
+    GRUPOMERCADORIA.descricao GRUPO,
+    itemestoque.descricao,
+    c_especificacoes.DESCRICAO AS ESPECIFICACAO
+from 
+    ITEMESTOQUE
+INNER join
+    GRUPOMERCADORIA ON
+        GRUPOMERCADORIA.GRUPO=ITEMESTOQUE.GRUPO
+where
+    GRUPOMERCADORIA.grupo<90
+order by
+    GRUPOMERCADORIA.descricao,
+    ITEMESTOQUE.descricao
+        

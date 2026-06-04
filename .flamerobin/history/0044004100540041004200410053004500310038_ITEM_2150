@@ -1,0 +1,7 @@
+select
+    *
+from 
+    C_COMISSAOPEDIDOPAGA
+where
+    C_COMISSAOPEDIDOPAGA.filial=1 and
+    c_comissaopedidopaga.IDNOTA=70838

@@ -1,0 +1,5 @@
+execute procedure RECALCULARTOTAISESTOQUE(1, '1631499', '1631499')
+
+select * from MATERIALLOCAL
+where filial=1
+and iditem='1631499'

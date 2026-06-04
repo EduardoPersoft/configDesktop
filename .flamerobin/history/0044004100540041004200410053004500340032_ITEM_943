@@ -1,0 +1,7 @@
+select 
+    max(inventarioestoquedata.data) 
+from 
+    INVENTARIOESTOQUEDATA
+where
+    inventarioestoquedata.codigo='MPP02TRAC85G100' and
+    inventarioestoquedata.local=1

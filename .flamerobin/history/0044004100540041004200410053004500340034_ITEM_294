@@ -1,0 +1,50 @@
+select DISTINCT
+    movimentoestoque.coleta, 
+    movimentoestoque.COLETADATA, 
+    movimentoestoque.motorista,
+    COALESCE(MOVIMENTOESTOQUE.DATAENTREGA,
+      notafiscal.datahoraEntrega) as dataEntrega,
+    pedido.idnota as pedido,
+    notafiscal.numeronota,
+    CADASTROPARCEIROS.nome,
+    CADASTROPARCEIROS.BAIRRO||
+    ', '||CADASTROPARCEIROS.CIDADE||
+    ', '||CADASTROPARCEIROS.UF AS ENDERECO
+from 
+    movimentoestoque 
+inner join 
+    pedido on 
+        (movimentoestoque.filial=pedido.filial and
+         movimentoestoque.IDPEDIDO=pedido.idnota)
+inner join 
+    mercadoriasnota on 
+        (mercadoriasnota.filial=pedido.filial and
+         mercadoriasnota.IDPEDIDO=pedido.idnota)    
+inner join 
+    notafiscal on 
+        (mercadoriasnota.filial=notafiscal.filial and
+         mercadoriasnota.idnota=notafiscal.idnota)    
+inner join 
+    CADASTROPARCEIROS on 
+        (pedido.DESTINATARIO=CADASTROPARCEIROS.cadastro)
+              
+where 
+    movimentoestoque.TIPOMOVIMENTO=13 and 
+    coalesce(movimentoestoque.coleta, '') <> '' and
+    cast(movimentoestoque.COLETADATA as date) between '30.04.2026' and '30.04.2026'
+union
+select DISTINCT
+    C_DESTINOAVULSO.coleta, 
+    C_DESTINOAVULSO.DATAcoleta, 
+    C_DESTINOAVULSO.motorista,
+    cast(null as datetime) entrega,
+    cast(null as integer) as pedido,
+    cast(null as integer) as numeronota,
+    C_DESTINOAVULSO.observacao,
+    C_DESTINOAVULSO.localizacao
+from 
+    c_Destinoavulso 
+where 
+    cast(c_destinoavulso.dataColeta as date) between '30.04.2026' and '30.04.2026'
+
+

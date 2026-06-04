@@ -1,0 +1,2 @@
+select filial,idnota,numeronota,simples from NOTAFISCAL
+where numeronota is null 

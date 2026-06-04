@@ -1,0 +1,12 @@
+SELECT
+    clientes.cadastro,
+    coalesce(clientes.limiteCredito,
+             (select max(estabelecimento.limiteCredito)
+              from estabelecimento)) limiteCredito,
+    case coalesce((select max(estabelecimento.DIASAVALIACAO) from estabelecimento),0) when 0 
+    then null else cast(clientes.dataAvaliacao as date)+(select max(estabelecimento.DIASAVALIACAO) from estabelecimento) end
+    
+from
+    CLIENTES
+WHERE
+    clientes.cadastro=154

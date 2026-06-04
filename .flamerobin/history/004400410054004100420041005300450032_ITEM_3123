@@ -1,0 +1,1 @@
+update t_titulorec where importado ='S' where importado is null

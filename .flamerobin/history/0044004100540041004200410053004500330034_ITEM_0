@@ -1,0 +1,218 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ESTOQUE (
+    FILIAL integer )
+RETURNS (
+    CODIGO varchar(15),
+    DESCRICAO varchar(240),
+    DESCRICAOLOCAL varchar(30),
+    C_MRFORNECEDOR varchar(20),
+    C_ORIGINAL varchar(80),
+    MARCA varchar(20),
+    C_APLICACAO varchar(100),
+    FORNECEDOR varchar(30),
+    PRECOA double precision,
+    PRECOB double precision,
+    PRECOC double precision,
+    MLOCAL double precision,
+    CLOCAL double precision,
+    RESERVADO double precision,
+    GRUPO smallint,
+    ESTOQUEIMPORTADORA double precision,
+    ESTOQUEDISTRIBUIDORA double precision,
+    NCM varchar(30),
+    TRIBUTACAOICMS varchar(30),
+    COR varchar(30),
+    TIPOPRODUTO char(1),
+    METATAG varchar(400) )
+
+AS
+declare variable pRESERVADO1 DOUBLE PRECISION;
+declare variable pRESERVADO2 DOUBLE PRECISION;
+
+Begin
+  For Select itemestoque.codigo,itemestoque.descricao, c_localimportacao.descricao, itemestoque.c_mrfornecedor,
+             itemestoque.c_original, c_marca.descricao as marca, itemestoque.c_aplicacao,
+             c_fornecedorpeca.descricao as fornecedor,itemestoque.grupo,
+             CLASSIFICACAOFISCAL.DESCRICAO NCM,
+             TRIBUTACAOICMS.DESCRICAO tributacaoIcms,
+             grupoMercadoria.c_cor, itemestoque.tipoProduto,
+             itemestoque.METATAG
+      from itemestoque
+      left join 
+        CLASSIFICACAOFISCAL on 
+            itemestoque.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+      left join 
+        TRIBUTACAOICMS on 
+            itemestoque.TRIBUTACAOICMS=TRIBUTACAOICMS.ID
+      left join 
+            grupomercadoria on 
+                ITEMESTOQUE.GRUPO=grupomercadoria.GRUPO      
+      Left join c_marca on (itemestoque.c_marca=c_marca.idmarca)
+      left join c_fornecedorpeca on (c_fornecedorpeca.id=itemestoque.c_fornecedor)
+      left join c_localimportacao on (c_localimportacao.idlocal=itemestoque.C_LOCALIMPORTACAO)
+      where itemestoque.tipoproduto <> 5
+      Into :Codigo, :Descricao, :descricaolocal, :C_MrFornecedor, :C_Original, :Marca, :C_Aplicacao,
+           :Fornecedor, :grupo, ncm, tributacaoicms,cor, tipoProduto, metatag
+
+      Do Begin
+           PrecoA=0;
+           PrecoB=0;
+           MLocal=0;
+           CLocal=0;
+           Reservado=0;
+           PRESERVADO1=0;
+           PRESERVADO2=0;
+           ESTOQUEDISTRIBUIDORA=0;
+           ESTOQUEIMPORTADORA=0;
+
+        --   if (filial=1) then begin
+
+               select listaA.preco from listaprecoproduto listaa
+               where listaA.produto=:codigo and listaA.lista=2
+               into :precoA;
+               if (:precoa is null) then
+                  precoa=0;
+
+               select listaB.preco from listaprecoproduto listab
+               where listaB.produto=:codigo and listaB.lista=3
+               into :precob;
+               if (:precob is null) then
+                  precob=0;
+
+               select listaC.preco from listaprecoproduto listaC
+               where listaC.produto=:codigo and listaC.lista=4
+               into :precoc;
+               if (:precob is null) then
+                  precob=0;
+      --     end
+
+/*
+           if (filial=12826) then begin
+
+               select listaA.preco from listaprecoproduto listaa
+               where listaA.produto=:codigo and listaA.lista=7
+               into :precoA;
+               if (:precoa is null) then
+                  precoa=0;
+
+               select listaB.preco from listaprecoproduto listab
+               where listaB.produto=:codigo and listaB.lista=8
+               into :precob;
+               if (:precob is null) then
+                  precob=0;
+
+               select listaC.preco from listaprecoproduto listaC
+               where listaC.produto=:codigo and listaC.lista=9
+               into :precoc;
+               if (:precob is null) then
+                  precob=0;
+           end
+*/
+           select coalesce 
+                ( sum (COALESCE (MLocal.Saldototal,0)),0) 
+           From 
+                MaterialLocal MLocal
+           INNER JOIN 
+                LOCAL ON (MLOCAL.IDLOCAL=LOCAL.ID )
+           where 
+                 LOCAL.SALDODISPONIVEL='S' AND   
+                 Mlocal.filial=1 and
+                 Mlocal.iditem=:codigo 
+                 --and Mlocal.idlocal = 1
+           into :ESTOQUEIMPORTADORA;
+
+           select coalesce (sum (COALESCE (MLocal.Saldototal,0)),0) From MaterialLocal MLocal
+           INNER JOIN 
+                LOCAL ON (MLOCAL.IDLOCAL=LOCAL.ID )
+           where 
+                 LOCAL.SALDODISPONIVEL='S' AND   
+                 Mlocal.filial=12826 and
+                 Mlocal.iditem=:codigo
+                 -- and Mlocal.idlocal = 1
+           into :ESTOQUEDISTRIBUIDORA;
+
+
+/*
+           select coalesce (sum (COALESCE (MLocal.Saldototal,0)),0) From MaterialLocal MLocal
+           INNER JOIN 
+                LOCAL ON (MLOCAL.IDLOCAL=LOCAL.ID )
+           where 
+                 LOCAL.SALDODISPONIVEL='S' AND   
+                  Mlocal.filial=:Filial and
+                 Mlocal.iditem=:codigo
+                 --Mlocal.idlocal = 1
+           into :Mlocal;
+           If (:Mlocal Is Null) then
+              MLocal=0;
+
+           select coalesce (sum (COALESCE (clocal.saldototal,0)),0) from materiallocal clocal
+           INNER JOIN 
+                LOCAL ON (CLOCAL.IDLOCAL=LOCAL.ID )
+           where 
+                 LOCAL.SALDODISPONIVEL='S' AND   
+                 clocal.filial=:Filial and
+                 clocal.iditem=:codigo 
+                 --clocal.idlocal = 2
+           into :CLocal;
+           If (:CLocal Is Null) then
+              CLocal=0;
+*/
+           select sum(MercadoriasPed.Quantidade) from MercadoriasPed
+           Inner Join Pedido On (Mercadoriasped.Filial=Pedido.Filial And
+                                 Mercadoriasped.Idnota=Pedido.Idnota)
+           Inner Join Naturezaoperacao On (Pedido.Operacao=Naturezaoperacao.Id And
+                                           Naturezaoperacao.Estoque='S' And
+                                           Naturezaoperacao.Entradasaida='S')
+           Where
+                 mercadoriasped.filial=1 and
+                 mercadoriasped.Codigo=:Codigo and
+                 MercadoriasPed.Baixa='N'  And
+                 Pedido.Datacancelamento Is Null And
+                 Pedido.Entradasaida='S'
+           Having Not (sum(MercadoriasPed.Quantidade) is null)
+
+           Plan  (MERCADORIASPED INDEX (MERCADORIASPED_IDX1),
+                  PEDIDO INDEX (rdb$primary50),
+                  NATUREZAOPERACAO INDEX (rdb$primary25))
+
+           Into :pReservado1;
+           If (:pReservado1 Is Null) then
+              pReservado1=0;
+
+           select sum(MercadoriasPed.Quantidade) from MercadoriasPed
+           Inner Join Pedido On (Mercadoriasped.Filial=Pedido.Filial And
+                                 Mercadoriasped.Idnota=Pedido.Idnota)
+           Inner Join Naturezaoperacao On (Pedido.Operacao=Naturezaoperacao.Id And
+                                           Naturezaoperacao.Estoque='S' And
+                                           Naturezaoperacao.Entradasaida='S')
+           Where
+                 mercadoriasped.filial=12826 and
+                 mercadoriasped.Codigo=:Codigo and
+                 MercadoriasPed.Baixa='N'  And
+                 Pedido.Datacancelamento Is Null And
+                 Pedido.Entradasaida='S'
+           Having Not (sum(MercadoriasPed.Quantidade) is null)
+
+           Plan  (MERCADORIASPED INDEX (MERCADORIASPED_IDX1),
+                  PEDIDO INDEX (rdb$primary50),
+                  NATUREZAOPERACAO INDEX (rdb$primary25))
+
+           Into :pReservado2;
+
+           If (:pReservado2 Is Null) then
+              pReservado2=0;
+
+            ESTOQUEIMPORTADORA=ESTOQUEIMPORTADORA-PRESERVADO1;
+              ESTOQUEDISTRIBUIDORA=ESTOQUEDISTRIBUIDORA-preservado2;
+              reservado=:PRESERVADO1+:preservado2;
+
+       suspend;
+   end
+End
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ESTOQUE TO  SYSDBA;
+

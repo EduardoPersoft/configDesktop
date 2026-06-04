@@ -1,0 +1,2 @@
+select * from INVENTARIOESTOQUEDATA where filial=110 and data='31.01.2024' 
+order by codigo,lote,local

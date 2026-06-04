@@ -1,0 +1,21 @@
+select 
+    mercadoriasnota.filial,
+    mercadoriasnota.idnota,
+    mercadoriasnota.idmercadoria,
+    mercadoriasnota.cfop,
+    mercadoriasnota.FILIALPED,
+    mercadoriasnota.idpedido,
+    mercadoriasnota.IDMERCPEDIDO,
+    mercadoriasnota.COMISSAO
+from
+    MERCADORIASNOTA
+where
+    exists (
+        select * from NOTAFISCAL
+        where notafiscal.filial=mercadoriasnota.filial 
+        and notafiscal.idnota=mercadoriasnota.idnota
+        and notafiscal.DATAEMISSAO>='01.07.2024'
+        and notasfiscal.cancelada='N') and
+    coalesce(mercadoriasnota.comissao, 0)=0 and
+    mercadoriasnota.idpedido is not null
+        

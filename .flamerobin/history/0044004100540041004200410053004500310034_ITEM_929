@@ -1,0 +1,33 @@
+update
+    MERCADORIASNOTA
+set
+    mercadoriasnota.filialped = (select 
+                                        MATERIALMOVIMENTOESTOQUE.filial
+                                    from 
+                                        MATERIALMOVIMENTOESTOQUE
+                                    where 
+                                        MATERIALMOVIMENTOESTOQUE.filial=110 and 
+                                        materialmovimentoestoque.IDMOVIMENTO = 16422 ),
+    mercadoriasnota.idpedido = (select 
+                                        MATERIALMOVIMENTOESTOQUE.idpedido
+                                    from 
+                                        MATERIALMOVIMENTOESTOQUE
+                                    where 
+                                        MATERIALMOVIMENTOESTOQUE.filial=110 and 
+                                        materialmovimentoestoque.IDMOVIMENTO = 16422 ),
+    
+    mercadoriasnota.IDMERCPEDIDO = (select 
+                                        MATERIALMOVIMENTOESTOQUE.IDMERCADORIA
+                                    from 
+                                        MATERIALMOVIMENTOESTOQUE
+                                    where 
+                                        MATERIALMOVIMENTOESTOQUE.filial=110 and 
+                                        materialmovimentoestoque.IDMOVIMENTO = 16422 and
+                                        materialmovimentoestoque.IDMOVIMENTOMATERIAL = mercadoriasnota.idmercadoria),
+    MERCADORIASNOTA.QTDBAIXA = MERCADORIASNOTA.QUANTIDADE,
+    MERCADORIASNOTA.movimentoestoquefilial = 110,
+    MERCADORIASNOTA.IDMOVIMENTO = 16422
+
+where
+  mercadoriasnota.filial=110 and
+  mercadoriasnota.idnota = 1824 

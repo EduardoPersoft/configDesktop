@@ -1,0 +1,5 @@
+select * from TITULOREC
+where titulorec.filial=5
+and titulorec.baixa is null
+and titulorec.dataenvio is not null
+and titulorec.EMISSAO=titulorec.dataenvio

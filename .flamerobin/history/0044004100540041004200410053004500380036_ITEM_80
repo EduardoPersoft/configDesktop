@@ -1,0 +1,4 @@
+update 
+    contascontabeis
+set
+    c_mostrarfluxocaixa='S'

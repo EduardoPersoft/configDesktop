@@ -1,0 +1,1 @@
+select * from c_movfinanceiro where contacorrenteimportada=2024

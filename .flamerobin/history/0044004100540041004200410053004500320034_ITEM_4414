@@ -1,0 +1,8 @@
+select
+    *
+from
+    TITULOREC
+where
+    filial=5 and
+    emissao='30.11.2022' and
+    parceiro is null

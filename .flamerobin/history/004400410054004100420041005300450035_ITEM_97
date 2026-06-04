@@ -1,0 +1,16 @@
+select 
+    * 
+from 
+    materiallocal 
+where 
+    materialfilial.filial=1
+    and materiallocal.idlocal=1 
+    and materiallocal.saldototal<0
+    and exists (
+        SELECT 
+            *   
+        FROM    
+            MATERIALMOVIMENTOESTOQUE
+        where 
+            materialmovimentoestoque.filial=materiallocal.FILIAL
+            and materialmovimentoestoque.idmovimento between 386000 and 386360) 

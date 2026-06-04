@@ -1,0 +1,3 @@
+select * from lantocontrec
+where  lantocontrec.filial = 2098 and 
+    COALESCE (lantocontpag.CENTROCUSTO,'')='' 

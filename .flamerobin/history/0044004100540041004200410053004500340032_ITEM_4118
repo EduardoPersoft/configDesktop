@@ -1,0 +1,3 @@
+select * from movtotitulopag
+where filial=110
+and idtitulo=20413

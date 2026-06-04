@@ -1,0 +1,2 @@
+select * from SERVICOSped
+where IDnota=72041

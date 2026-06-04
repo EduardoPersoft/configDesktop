@@ -1,0 +1,1 @@
+select idplano,contacontabil,descricao,codigoreduzido,tipoconta,c_fluxo,c_tipocusto from CONTASCONTABEIS order by idplano desc, contacontabil

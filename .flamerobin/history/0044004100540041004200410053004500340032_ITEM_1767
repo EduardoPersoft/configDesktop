@@ -1,0 +1,33 @@
+update
+    ITEMCUSTODATA
+set
+    quantidade = quantidade + coalesce((select
+                    sum(materialmovimentoestoque.quantidade)
+                  from
+                    MOVIMENTOESTOQUE
+                  inner join
+                    MATERIALMOVIMENTOESTOQUE on
+                        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento 
+                  where
+                    movimentoestoque.filial=itemcustodata.filial and
+                    movimentoestoque.TIPOMOVIMENTO='01' and
+                    movimentoestoque.EMISSAO between '01.02.2024' and '29.02.2024' and
+                    MATERIALMOVIMENTOESTOQUE.iditem=itemcustodata.codigo),0),
+    custototal = custototal + coalesce((select
+                    sum(materialmovimentoestoque.valor)
+                  from
+                    MOVIMENTOESTOQUE
+                  inner join
+                    MATERIALMOVIMENTOESTOQUE on
+                        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento 
+                  where
+                    movimentoestoque.filial=itemcustodata.filial and
+                    movimentoestoque.TIPOMOVIMENTO='01' and
+                    movimentoestoque.EMISSAO between '01.02.2024' and '29.02.2024' and
+                    MATERIALMOVIMENTOESTOQUE.iditem=itemcustodata.codigo),0)
+where
+    itemcustodata.filial=110 and
+    itemcustodata.datainventario = '29.02.2024'
+                    

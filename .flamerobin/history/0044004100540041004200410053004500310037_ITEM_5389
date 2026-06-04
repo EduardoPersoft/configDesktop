@@ -1,0 +1,22 @@
+select c_coletas.COLETA,
+       c_coletas.DATACOLETA,
+       c_coletas.QTDEXPEDICOES,
+       c_coletas.VALORMEDIO,
+       c_coletas.VALOR,
+       count(movimentoestoque.idmovimento)
+from 
+    c_coletas
+inner join 
+    movimentoestoque on 
+        movimentoestoque.coleta=c_coletas.COLETA
+where
+    c_coletas.DATACOLETA between '31.07.2025' and '29.08.2025' and
+    movimentoestoque.TIPOMOVIMENTO='13'
+group by    
+c_coletas.COLETA,
+       c_coletas.DATACOLETA,
+       c_coletas.QTDEXPEDICOES,
+       c_coletas.VALORMEDIO,
+       c_coletas.VALOR
+having       
+    count(movimentoestoque.idmovimento)<>movimentoestoque.qtdexpedicoes

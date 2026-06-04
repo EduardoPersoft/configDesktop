@@ -1,0 +1,1 @@
+select * from RESUMOCOMPRAS where resumocompras.ITEM = '05562'

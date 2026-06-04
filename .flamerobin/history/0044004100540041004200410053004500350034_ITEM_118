@@ -1,0 +1,202 @@
+SET TERM ^ ;
+ALTER PROCEDURE PROC_RECALCULOESTOQUE
+
+AS
+declare variable vartipo smallint;
+declare variable varidmovto integer;
+declare variable varidmaterial integer;
+declare variable variditem varchar(15);
+declare variable varqtde double precision;
+declare variable varvalor double precision;
+declare variable vartmpqtde double precision;
+declare variable vartmpvalor double precision;
+declare variable varfilial integer;
+declare variable varsaldototal double precision;
+declare variable varvalortotal double precision;
+declare variable varsinal integer;
+declare variable vartotalproducao double precision;
+declare variable varlocal smallint;
+declare variable varmatant varchar(15);
+declare variable vardataant timestamp;
+declare variable vardata timestamp;
+declare variable vartipoant smallint;
+declare variable vcustomedio double precision;
+declare variable materialinicial varchar(15);
+declare variable materialfinal varchar(15);
+declare variable datainicial timestamp;
+declare variable varlote char(12);
+declare variable varloteant char(12);
+declare variable varnivel integer;
+declare variable varprioridadeabsoluta integer;
+declare variable vpermiteestoquenegativo varchar(1);
+BEGIN
+  SELECT ESTSIN.ESTABELECIMENTO,ESTSIN.materialinicial,ESTSIN.materialfinal,ESTSIN.datafinal
+  FROM ESTSIN
+  WHERE ESTSIN.RELATORIO='INICIORECALCULO'
+  INTO : VARFILIAL, :MATERIALINICIAL, :MATERIALFINAL, :DATAINICIAL;
+
+
+  SELECT ESTABELECIMENTO.permiteestoquenegativo
+  from estabelecimento
+  where estabelecimento.cadastro=:varfilial
+  into :vpermiteestoquenegativo;
+
+  update estabelecimento
+  set permiteestoquenegativo='S'
+  where estabelecimento.cadastro=:varfilial;
+
+
+  for select materialmovimentoestoque.iditem,
+       materialmovimentoestoque.localarmazenamento,
+       materialmovimentoestoque.lote,
+       sum(materialmovimentoestoque.valor*materialmovimentoestoque.sinal),
+       sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)
+  from movimentoestoque
+  inner join materialmovimentoestoque on (
+                  materialmovimentoestoque.filial=movimentoestoque.filial
+         and materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento)
+
+  inner join itemestoque on ( itemestoque.codigo = materialmovimentoestoque.iditem)
+
+  WHERE movimentoestoque.FILIAL=:VARFILIAL
+  AND   movimentoestoque.EMISSAO>=:DATAINICIAL
+
+--  and itemestoque.tipoproduto=4
+
+  AND   materialmovimentoestoque.iditem between :MATERIALINICIAL AND :MATERIALFINAL
+  group by materialmovimentoestoque.iditem, materialmovimentoestoque.localarmazenamento,
+           materialmovimentoestoque.lote
+  INTO :VARIDITEM, :VARLOCAL,:varlote, :VARVALOR, :VARQTDE do begin
+      UPDATE MATERIALFILIAL SET
+         MATERIALFILIAL.VALORTOTALESTOCADO=MATERIALFILIAL.VALORTOTALESTOCADO-:varvalor
+      WHERE  MATERIALFILIAL.FILIAL=:VARFILIAL
+      AND MATERIALFILIAL.iditem=:variditem;
+      UPDATE MATERIALLOCAL SET
+         MATERIALLOCAL.SALDOTOTAL=MATERIALLOCAL.SALDOTOTAL-:varqtde
+      WHERE  MATERIALLOCAL.FILIAL=:VARFILIAL
+      AND MATERIALLOCAL.idlocal=:varlocal
+      AND MATERIALLOCAL.iditem=:variditem;
+      UPDATE MATERIALLOTE SET
+         MATERIALLOTE.quantidade=MATERIALLOTE.quantidade-:varqtde,
+         MATERIALLOTE.valor=MATERIALLOTE.VALOR-:varvalor
+      WHERE  MATERIALLOte.FILIAL=:VARFILIAL
+      AND MATERIALLOTE.iditem=:variditem
+      AND MATERIALLOTE.lote=:varlote;
+  end
+  UPDATE MATERIALFILIAL SET
+      MATERIALFILIAL.customedio=MATERIALFILIAL.VALORTOTALESTOCADO/
+             (select coalesce(sum(materiallocal.saldototal),0) from materiallocal
+             where materialfilial.filial=materiallocal.filial
+             AND MATERIALFILIAL.iditem=MATERIALLOCAL.iditem)
+  WHERE  materialfilial.FILIAL=:VARFILIAL
+  AND   materialfilial.iditem between :MATERIALINICIAL AND :MATERIALFINAL
+  and (select coalesce(sum(materiallocal.saldototal),0) from materiallocal
+       where materialfilial.filial=materiallocal.filial
+       AND MATERIALFILIAL.iditem=MATERIALLOCAL.iditem)>0 ;
+
+  UPDATE MATERIALLOTE SET MATERIALLOTE.customedio=
+     CASE WHEN COALESCE(MATERIALLOTE.VALOR,0)>0
+           AND COALESCE(MATERIALLOTE.quantidade,0)>0 THEN MATERIALLOTE.valor / MATERIALLOTE.QUANTIDADE
+     ELSE 0 END;
+
+
+  varmatant='';
+  VARDATAANT='01.01.1900';
+  VARTIPOANT=0;
+  varloteant=null;
+  
+
+  FOR SELECT MOV.IDMOVIMENTO, MOV.TIPOMOVIMENTO, MAT.IDITEM, 
+             MAT.QUANTIDADE,MAT.VALOR, MAT.SINAL,
+             MAT.IDMOVIMENTOMATERIAL, MAT.LOCALARMAZENAMENTO,MOV.emissao,
+             MAT.lote, case mov.prioridade when 60 then 70 else mov.prioridade end,
+            -- case when mov.prioridade in (60,70) then (select nivelcomposicao.nivel from nivelcomposicao(mat.iditem))
+            -- else 0 end
+              0
+      FROM MATERIALMOVIMENTOESTOQUE MAT
+      INNER JOIN MOVIMENTOESTOQUE MOV ON (MAT.FILIAL=MOV.FILIAL
+                                      AND MAT.IDMOVIMENTO=MOV.IDMOVIMENTO)
+      INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.CADASTRO=MAT.FILIAL)
+--      inner JOIN ITEMESTOQUE ON (itemestoque.CODIGO=MATERIALMOVIMENTOESTOQUE.iditem)
+      WHERE MOV.FILIAL=:VARFILIAL
+      AND   MOV.EMISSAO>=:DATAINICIAL
+
+      AND   (NOT MOV.tipomovimento IN ('10','11','12','13'))
+--      AND   itemestoque.tipoproduto=4
+
+      AND   MAT.iditem between :MATERIALINICIAL AND :MATERIALFINAL
+      ORDER BY MOV.EMISSAO,  11, 12 desc, MOV.PRIORIDADE, MAT.IDITEM
+      INTO : VARIDMOVTO, :VARTIPO, :VARIDITEM, :VARQTDE, 
+           :VARVALOR, :VARSINAL, :VARIDMATERIAL, :VARLOCAL,:VARDATA,:varlote,:varprioridadeabsoluta,:varnivel
+       DO  BEGIN
+    IF ( (:VARTIPO=6) OR (:VARTIPO=7) OR (:VARTIPO=9) or (:VARTIPO=8) or (:VARTIPO=3) or (:VARTIPO=16)
+    ) THEN
+    BEGIN
+      IF (VARMATANT<>:VARIDITEM OR VARTIPOANT<>VARTIPO OR VARDATAANT<>VARDATA or varloteant<>varlote )  THEN BEGIN
+        VARMATANT=:VARIDITEM;
+
+        VARDATAANT=VARDATA;
+        VARTIPOANT=VARTIPO;
+        varloteant=varlote;
+/*        SELECT MATERIALLOTE.CUSTOMEDIO FROM MATERIALLOTE
+        WHERE MATERIALLOTE.FILIAL=:VARFILIAL
+        AND MATERIALLOTE.IDITEM=:VARIDITEM
+        AND MATERIALLOTE.LOTE=:VARLOTE
+        INTO :vcustomedio;*/
+        SELECT MATERIALFILIAL.CUSTOMEDIO FROM MATERIALFILIAL
+        WHERE MATERIALFILIAL.FILIAL=:VARFILIAL
+        AND MATERIALFILIAL.IDITEM=:VARIDITEM
+
+        INTO :vcustomedio;
+
+      END
+
+      VARVALOR=VCUSTOMEDIO*VARQTDE;
+
+      UPDATE MATERIALMOVIMENTOESTOQUE SET QUANTIDADE=:VARQTDE, 
+      VALOR=:VARVALOR, RECALCULO='S'
+      WHERE MATERIALMOVIMENTOESTOQUE.FILIAL=:VARFILIAL
+      AND   MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=:VARIDMOVTO
+      AND   MATERIALMOVIMENTOESTOQUE.idmovimentomaterial=:VARIDMATERIAL
+      AND   MATERIALMOVIMENTOESTOQUE.IDITEM=:VARIDITEM;
+    END ELSE IF (:VARTIPO=4) THEN BEGIN
+        SELECT   proc_ajustecomponente.r_valortotal FROM PROC_AJUSTECOMPONENTE (:VARFILIAL, :VARIDMOVTO, :VARIDMATERIAL)
+        INTO :VARTOTALPRODUCAO;    
+        UPDATE MATERIALMOVIMENTOESTOQUE SET  QUANTIDADE=:VARQTDE,
+        MATERIALMOVIMENTOESTOQUE.VALOR=:VARTOTALPRODUCAO, RECALCULO='S'
+        WHERE  MATERIALMOVIMENTOESTOQUE.FILIAL=:VARFILIAL
+        AND    MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=:VARIDMOVTO
+        AND    MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL=:VARIDMATERIAL;
+    END ELSE BEGIN
+      VARQTDE=:VARQTDE*:VARSINAL;
+      VARVALOR=:VARVALOR*:VARSINAL;
+      EXECUTE PROCEDURE PROC_ATUALIZAESTOQUE
+                        :VARFILIAL,
+                        :VARIDMOVTO,
+                        :VARIDITEM,
+                        :VARQTDE,
+                        :VARVALOR,
+                        :VARLOCAL,
+                        :VARLOTE,
+                        '',
+                        '';
+    END
+  END
+
+  EXECUTE PROCEDURE RECALCULARTOTAISESTOQUE(:VARFILIAL, :MATERIALINICIAL, :MATERIALFINAL);
+
+  EXECUTE PROCEDURE ULTIMACOMPRA (:DATAINICIAL);
+
+  update estabelecimento
+  set estabelecimento.permiteestoquenegativo=:vpermiteestoquenegativo
+  where estabelecimento.cadastro=:varfilial;
+
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE PROC_RECALCULOESTOQUE TO  SYSDBA;
+

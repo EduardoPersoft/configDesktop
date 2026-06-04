@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.emissao='01.07.2024'

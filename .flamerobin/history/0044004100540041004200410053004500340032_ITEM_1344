@@ -1,0 +1,10 @@
+insert into itemcustodata(filial,datainventario,codigo,custounitario)
+select 
+    materialfilial.filial,
+    '2024-01-31',
+    materialfilial.iditem,
+    materialfilial.customedio
+from 
+    materialfilial
+where
+    materialfilial.iditem like 'MPP%'

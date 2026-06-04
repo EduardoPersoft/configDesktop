@@ -1,0 +1,2 @@
+insert into regras(id,path,acesso)
+value(173,'/vendas/pedidos',1)

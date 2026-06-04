@@ -1,0 +1,4 @@
+select * from PEDIDO
+where pedido.filial=1 
+and pedido.DATAEMISSAO between '01.03.2024' and '31.03.2024'
+and pedido.c_tipo<>0

@@ -1,0 +1,4 @@
+select * from logalteracaO
+where objeto='ESTOQUE'
+
+AND CHAVE='37706-9959'

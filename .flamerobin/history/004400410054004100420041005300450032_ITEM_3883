@@ -1,0 +1,5 @@
+delete from  
+    MERCADORIASPEDCOMPRA
+WHERE 
+    FILIAL=5 AND 
+    IDNOTA between 54016 and 54034

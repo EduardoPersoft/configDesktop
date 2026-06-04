@@ -1,0 +1,2 @@
+select * from LOGALTERACAO where tipo='D' and OBJETO='LISTPRECO'
+order by data desc

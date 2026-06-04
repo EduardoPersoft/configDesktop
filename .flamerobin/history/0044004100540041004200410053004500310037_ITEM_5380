@@ -1,0 +1,11 @@
+update 
+    movimentoestoque
+set
+    c_coletafinanceira = (select
+                            c_coletas.DATACOLETA
+                          from
+                            c_coletas
+                          where
+                            c_coletas.coleta=movimentoestoque.COLETA)
+where
+    movimentoestoque.emissao>='01.01.2025'

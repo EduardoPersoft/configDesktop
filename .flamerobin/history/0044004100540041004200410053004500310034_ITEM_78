@@ -1,0 +1,6 @@
+select
+    *
+from
+    mercadoriasped
+where 
+    descricao<>'[BINARY]'

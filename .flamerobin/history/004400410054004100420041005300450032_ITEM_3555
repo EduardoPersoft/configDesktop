@@ -1,0 +1,26 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(mercadoriasnota.QUANTIDADE) as quantidade,
+    itemestoque.unidade,
+    sum(mercadoriasnota.vlrfinalmercad) as valor    
+FROM
+    NOTAFISCAL
+inner join 
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner JOIN
+    itemestoque on
+        mercadoriasnota.codigo=itemestoque.CODIGO
+WHERE
+    notafiscal.filial=5
+    and notafiscal.ENTRADASAIDA='S' 
+    and notafiscal.CANCELAMENTO is NULL
+    and notafiscal.DATAEMISSAO between '01.01.2021' and '31.12.2021'
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade
+order by 
+    4 desc

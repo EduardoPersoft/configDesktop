@@ -1,0 +1,6 @@
+select 
+    *
+from
+    INVENTARIOESTOQUEDATA
+where
+    data='20.09.2023'

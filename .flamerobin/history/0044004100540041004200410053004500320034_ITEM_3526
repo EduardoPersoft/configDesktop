@@ -1,0 +1,6 @@
+update 
+    MERCADORIASNOTACOMPRA
+set
+    mercadoriasnotacompra.SITUACAOTRIBUT = '060'
+where
+    mercadoriasnotacompra.cfop in ('1403', '2403')

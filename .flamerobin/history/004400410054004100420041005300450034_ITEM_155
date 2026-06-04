@@ -1,0 +1,9 @@
+select
+    placa,
+    data,
+    abastecimentokm,
+    abastecimentolitros 
+from 
+    itinerarios
+WHERE
+    abastecimentolistros is not null

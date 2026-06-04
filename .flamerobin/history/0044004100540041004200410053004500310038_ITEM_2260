@@ -1,0 +1,2 @@
+select * from itemestoque 
+where codigo in ('60002', '60005', '60007', '60011', '600012', '60013')

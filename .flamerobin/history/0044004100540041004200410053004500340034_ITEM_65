@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    local
+where
+    ean='2500000001093'

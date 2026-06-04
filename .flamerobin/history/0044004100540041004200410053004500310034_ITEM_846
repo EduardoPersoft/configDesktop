@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    ITEMESTOQUE 
+where 
+    substring(itemestoque.codigo from 1 for 1)=''

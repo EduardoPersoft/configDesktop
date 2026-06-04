@@ -1,0 +1,1 @@
+select * from C_FICHAPRODUTO5 ('PRO4716PO002')

@@ -1,0 +1,3 @@
+select * from logalteracao
+where  objeto='ESTOQUE' and
+substring(cast(alteracoes as varchar(2000)) from 1 for 200) like '%52000189%'

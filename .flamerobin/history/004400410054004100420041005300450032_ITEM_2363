@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    usuario
+WHERE
+    id in (221,220)

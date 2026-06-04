@@ -1,0 +1,28 @@
+select 
+            materialmovimentoestoque.idmovimento,
+            materialmovimentoestoque.IDMOVIMENTOmaterial,
+            materialmovimentoestoque.idcentrocusto,
+            materialmovimentoestoque.quantidade,
+            coalesce(materialmovimentoestoque.concluido, 'N'),
+            materialmovimentoestoque.tempo+materialmovimentoestoque.setup tempoestimado,
+            MAPAPRODUCAO.fim dataprogramada,
+            movimentoestoque.C_MATERIAPRIMA
+        from 
+            materialmovimentoestoque
+        inner join
+            movimentoestoque on
+                movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+        left join
+            MAPAPRODUCAO on
+                MAPAPRODUCAO.FILIAL=MATERIALMOVIMENTOESTOQUE.filial and
+                mapaproducao.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+                mapaproducao.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+        where
+            movimentoestoque.TIPOMOVIMENTO='12' and  
+            materialmovimentoestoque.filial=110 and 
+            materialmovimentoestoque.idpedido=12424 and 
+            materialmovimentoestoque.idmercadoria=1
+        order by
+            movimentoestoque.emissao,
+            MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL

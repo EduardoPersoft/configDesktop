@@ -1,0 +1,11 @@
+update 
+    NOTAFISCAL
+set
+    vendedor = (select distinct pedido.vendedor from PEDIDO
+                inner join mercadoriasnota on 
+                    mercadoriasnota.filial=pedido.filial and
+                    mercadoriasnota.idnota=pedido.idnota
+                where mercadoriasnota.filial=notafiscal.FILIAL
+                and mercadoriasnota.idnota=notafiscal.idnota)
+where
+    notafiscal.emissao>='01.06.2025'

@@ -1,0 +1,4 @@
+
+select * from locallote 
+where locallote.quantidade>0
+and filial=1

@@ -1,0 +1,4 @@
+update MATERIALMOVIMENTOESTOQUE
+set c_valor =0
+where substring(materialmovimentoestoque.iditem from 1 for 3)='PE-' 
+and materialmovimentoestoque.valor=0 and sinal in (1, -1)

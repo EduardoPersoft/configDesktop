@@ -1,0 +1,1 @@
+select filial,idnota, vendedor from pedido where filial=110 and datacadastro between '01.07.2024' and '31.07.2024'

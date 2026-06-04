@@ -1,0 +1,7 @@
+create table c_custoItemEstoqueReferencia(
+ano integer not null,
+mes integer not null,
+codigo varchar(15) not null,
+custo decimal(12,3),
+constraint pk_c_custoItemEstoqueReferencia
+primary key(ano, mes, codigo))

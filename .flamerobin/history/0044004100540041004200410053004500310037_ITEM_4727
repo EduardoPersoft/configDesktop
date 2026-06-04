@@ -1,0 +1,2 @@
+select * from faturas 
+where filial=12826 and idnota=353647

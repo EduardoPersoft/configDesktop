@@ -1,0 +1,6 @@
+select 
+    *
+from
+    VENDEDOR
+where
+    vendedor.CANALRELACIONADO=33501

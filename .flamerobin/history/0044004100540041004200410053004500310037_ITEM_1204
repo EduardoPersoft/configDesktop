@@ -1,0 +1,10 @@
+update 
+    mercadoriasnota
+set
+    mercadoriasnota.CSTCOFINS=50,
+    mercadoriasnota.CSTpis=50
+where 
+    MERCADORIASNOTA.filial=1 and 
+    mercadoriasnota.cstpis=2 and
+    mercadoriasnota.cfop in ('1915', '2915', '2202', '1202', '1411', '2411') and
+    mercadoriasnota.idnota>=302332

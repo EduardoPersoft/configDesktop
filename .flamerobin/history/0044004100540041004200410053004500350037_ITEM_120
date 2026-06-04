@@ -1,0 +1,8 @@
+update
+    VENDEDOR
+set 
+    vendedor.CANALRELACIONADO=105
+where
+    exists
+    
+    (select * from orcamento where orcamento.vendedor=105 and orcamento.C_ARQUITETO=vendedor.vendedor)

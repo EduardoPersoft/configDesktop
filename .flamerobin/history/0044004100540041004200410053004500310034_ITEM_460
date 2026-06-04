@@ -1,0 +1,7 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.pesoliquido=c_itemestoque.c_pesoporembalagem,
+    itemestoque.pesobruto=c_itemestoque.c_pesoporembalagem
+where
+    itemestoque.tipoproduto=4

@@ -1,0 +1,18 @@
+SET TERM ^ ;
+CREATE or alter TRIGGER C_DESTINOAVULSO_BI FOR C_DESTINOAVULSO ACTIVE
+BEFORE insert POSITION 0
+
+AS
+BEGIN
+    if (new.id is null) then
+        select
+            max(c_destinoavulso.id)+1
+        from
+            c_destinoavulso
+        into :new.id;
+    if (new.dataSolicitacao is null) then
+        new.dataSolicitacao = cast('now' as date);
+    /* enter trigger code here */ 
+END
+^
+SET TERM ; ^

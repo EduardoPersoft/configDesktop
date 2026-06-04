@@ -1,0 +1,8 @@
+select 
+    filial,
+    idnota,
+    datareferencia
+from 
+    santamonica
+where 
+    idnota in (401, 402)

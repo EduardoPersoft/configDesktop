@@ -1,0 +1,3 @@
+select * from RESUMOCOMPRAS
+where resumocompras.ITEM='16621'
+and resumocompras.FORNECEDOR=33841

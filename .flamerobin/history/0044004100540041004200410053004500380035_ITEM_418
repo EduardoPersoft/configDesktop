@@ -1,0 +1,3 @@
+update  MATERIALMOVIMENTOESTOQUE
+set quantidade =0
+where MATERIALMOVIMENTOESTOQUE.quantidade is null

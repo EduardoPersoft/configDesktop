@@ -1,0 +1,3 @@
+select filial, idnota, pedido.C_CREDITOCLIENTE, pedido.C_ADIANTAMENTOCLIENTE from pedido
+where filial=1 
+and idnota=69141

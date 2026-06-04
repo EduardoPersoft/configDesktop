@@ -1,0 +1,2 @@
+delete from contacorrente
+where codigo not in (237,1)

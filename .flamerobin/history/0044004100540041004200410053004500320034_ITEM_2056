@@ -1,0 +1,28 @@
+select  
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    case itemestoque.tipoproduto 
+    when 1 then 'Matéria Prima'
+    when 2 then 'Consumo'
+    when 3 then 'Revenda'
+    when 4 then 'Industrializado'
+    when 5 then 'Inativo'
+    end,
+    materialfilial.ULTIMACOMPRA,
+    resumocompras.QUANTIDADE,
+    resumocompras.custo,
+    resumocompras.preco
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        materialfilial.IDITEM=itemestoque.CODIGO
+left JOIN
+    resumocompras on
+        resumocompras.item=itemestoque.CODIGO and
+        resumocompras.EMISSAO=materialfilial.ULTIMACOMPRA
+where 
+    materialfilial.filial=?
+order by
+    itemestoque.codigo

@@ -1,0 +1,18 @@
+select    
+    1 as id,
+    CADASTROPARCEIROS.nome,
+    count(pedido.idnota)    
+from
+    pedido
+inner join
+    vendedoresped on 
+        VENDEDORESPED.filial=pedido.filial and
+        vendedoresped.idnota=pedido.IDNOTA
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=vendedoresped.vendedor
+where
+    pedido.datacadastro>cast('now' as date)-extract(day from cast('now' as date)) and
+    pedido.dataCancelamento is null
+group by
+    extract(day from pedido.DATACADASTRO) 

@@ -1,0 +1,8 @@
+select 
+    cast(substring(mercadoriasnota.DEScricao
+        from 1 for 100) as blob subtype 0 character set iso8859_1)
+from 
+    MERCADORIASNOTA
+where
+    filial=1 and
+    idnota=78666

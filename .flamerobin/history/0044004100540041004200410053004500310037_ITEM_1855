@@ -1,0 +1,38 @@
+select
+    i1.codigo,
+    i1.codigo as codchave
+from
+    itemestoque i1
+union     
+select
+    i1.referencia,
+    i1.codigo as codchave
+from
+    itemestoque i1
+where    
+    coalesce(i1.referencia, '')<>''
+    and i1.tipoproduto<>'5'
+union    
+select
+    i1.C_ORIGINAL,
+    i1.codigo as codchave
+from
+    itemestoque i1
+where    
+    coalesce(i1.c_original, '')<>''
+    and i1.tipoproduto<>'5'
+union     
+select
+    i1.referencia,
+    i2.codigo as codchave
+from
+    itemestoque i1
+inner join
+    itemestoque i2 on
+        i2.c_original=i1.c_original and
+        i2.codigo<>i1.codigo
+where    
+    coalesce(i1.referencia, '')<>'' 
+    and coalesce(i1.c_original,'')<>''
+    and i1.tipoproduto<>'5'
+    and i2.tipoproduto<>'5'

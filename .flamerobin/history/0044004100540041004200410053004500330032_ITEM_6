@@ -1,0 +1,6 @@
+update
+    CADASTROPARCEIROS
+set 
+    cidade='SAO BERNARDO DO CAMPO'
+where
+    cidade='SAO BERNARDO DO CAMP'

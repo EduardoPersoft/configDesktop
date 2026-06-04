@@ -1,0 +1,3 @@
+select * from materialmovimentoestoque
+where filial=1 and iditem='2507328' 
+order by idmovimento desc

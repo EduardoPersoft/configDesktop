@@ -1,0 +1,11 @@
+select 
+    sum(mercadoriasnota.CUSTO*
+    mercadoriasnota.QUANTIDADE),
+    sum(mercadoriasnota.VLRCOFINS),
+    sum(mercadoriasnota.VLRPISPASEP),
+    sum(mercadoriasnota.ICMSORIGEMVALOR)
+from
+    MERCADORIASNOTA
+where
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idnota=302090

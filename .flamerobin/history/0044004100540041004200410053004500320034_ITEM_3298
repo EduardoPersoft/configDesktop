@@ -1,0 +1,3 @@
+update t_titulorec 
+set t_titulorec.importado='S'
+where t_titulorec.importado is null

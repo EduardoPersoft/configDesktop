@@ -1,0 +1,7 @@
+update
+    MOVIMENTOESTOQUE
+set
+    MOVIMENTOESTOQUE.IDNOTAEXPEDICAO=36798
+where
+    movimentoestoque.filial=1 and 
+    movimentoestoque.idmovimento=141711

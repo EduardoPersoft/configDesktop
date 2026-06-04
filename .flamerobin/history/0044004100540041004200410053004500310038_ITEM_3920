@@ -1,0 +1,2 @@
+select * from movtotitulopag
+where idtitulo=366678

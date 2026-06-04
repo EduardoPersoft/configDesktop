@@ -1,0 +1,9 @@
+UPDATE
+    CLASSIFICACAOFISCAL
+SET
+    CLASSIFICACAOFISCAL.C_TRIBUTACAOICMS = 2
+WHERE
+    exists 
+    (select * from itemestoque 
+    where itemestoque.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+    and itemestoque.TRIBUTACAOICMS=2)

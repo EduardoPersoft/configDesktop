@@ -1,0 +1,2 @@
+select * from MATERIALlocal
+where iditem='AB0318003'

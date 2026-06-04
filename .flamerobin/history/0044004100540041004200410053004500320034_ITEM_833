@@ -1,0 +1,9 @@
+UPDATE
+    MERCADORIASNOTA m1
+SET
+    m1.precounitario=m1.precolista,
+    m1.vlrfinalmercad = m1.precolista*m1.quantidade,
+    m1.VLRTOTALMERCAD = m1.precolista*m1.quantidade
+WHERE
+    m1.filial=5 AND
+    m1.idnota=26010

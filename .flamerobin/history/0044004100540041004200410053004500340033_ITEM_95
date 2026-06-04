@@ -1,0 +1,24 @@
+SELECT
+    apontamentomat.filial,
+    apontamentomat.idmovimento,
+    apontamentomat.idmaterial,
+    apontamentomat.id,
+    apontamentomat.lote,
+    apontamentomat.quantidade
+FROM
+    apontamentomat
+    
+INNER JOIN
+    materialmovimentoestoque ON
+    apontamentomat.FILIAL = materialmovimentoestoque.FILIAL AND
+    apontamentomat.IDMOVIMENTO = materialmovimentoestoque.IDMOVIMENTO AND
+    apontamentomat.idmaterial = materialmovimentoestoque.IDMOVIMENTOMATERIAL
+left JOIN
+    materiallote ON
+    materiallote.filial = apontamentomat.filial AND
+    materiallote.iditem = materialmovimentoestoque.iditem AND
+    materiallote.lote = apontamentomat.lote
+
+WHERE
+    apontamentomat.filial = 110 AND
+    apontamentomat.idmovimento = 18634

@@ -1,0 +1,2 @@
+select * from TITULOREC
+where titulorec.baixa is null

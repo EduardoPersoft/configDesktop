@@ -1,0 +1,7 @@
+UPDATE
+    mercadoriaspedcompra 
+SET
+    mercadoriaspedcompra.descricao = mercadoraispedcompra.desreduzida
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.idnota=55762

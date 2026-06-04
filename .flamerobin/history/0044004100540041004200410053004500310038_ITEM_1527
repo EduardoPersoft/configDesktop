@@ -1,0 +1,5 @@
+select * from servicosped where codigo < 10 exists 
+(select * from pedido 
+where pedido.filial=servicosped.filial
+and pedido.idnota=servicosped.IDNOTA
+and pedido.c_loja=184 )

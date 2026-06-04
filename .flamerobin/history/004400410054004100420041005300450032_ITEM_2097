@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    MERCADORIASpedCOMPRA
+WHERE
+  codigo='11810'

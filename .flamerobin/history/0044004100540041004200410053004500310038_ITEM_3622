@@ -1,0 +1,3 @@
+select * from ORCAMENTO
+where orcamento.C_MENSAGEM2 is not null
+order by idnota desc

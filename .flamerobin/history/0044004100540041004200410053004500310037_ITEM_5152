@@ -1,0 +1,24 @@
+select
+    coalesce(cadvendedor.nome, 'EURO BRAKE') nome,
+    sum(coalesce(movimentoestoque.VALORFRETE,0)) as frete,
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as coleta,
+    sum(coalesce(movimentoestoque.VALORFRETE,0))+
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as total
+from
+    c_coletas
+inner join 
+    movimentoestoque on
+        c_coletas.COLETA=movimentoestoque.COLETA
+left join
+    pedido on
+        movimentoestoque.filial=pedido.filial and
+        movimentoestoque.idpedido=pedido.idnota  
+        
+left join
+    CADASTROPARCEIROS cadvendedor on    
+        cadvendedor.cadastro=pedido.vendedor
+where
+    c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025' 
+    and TIPOMOVIMENTO='13'
+group by
+    coalesce(cadvendedor.nome, 'EURO BRAKE')

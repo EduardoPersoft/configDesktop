@@ -1,0 +1,93 @@
+SELECT distinct    
+    TITULOREC.PARCEIRO,
+    TITULOREC.IDTITULO,
+    TITULOREC.TITULO,
+    TITULOREC.FATURA,
+    cadcli.NOME,
+    cadcli.RAZAOSOCIAL,
+    TITULOREC.VALORTITULO,
+    TITULOREC.FILIAL,
+    TITULOREC.VENCIMENTO,
+    TITULOREC.EMISSAO,
+    CONTACORRENTE.DESCRICAOCONTA,
+    TITULOREC.NUMBOLBANCO,
+    TIPOCOBRANCA.DESCRICAO,
+    'N' AS P_MARCA,
+    CASE WHEN TITULOREC.BAIXA IS NOT NULL THEN 8421504
+    WHEN TITULOREC.VENCIMENTO<CAST('NOW' AS DATE) THEN 255
+   ELSE 0 END AS P_STATUSCOR,
+
+   TITULOREC.CONTACORRENTE,
+   CASE TITULOREC.TIPOTITULO 
+   WHEN '2' THEN '2-DOC'
+   WHEN '3' THEN '3-DARF'
+   WHEN '4' THEN '4-GPS'
+   WHEN '5' THEN '5-ISS'
+   WHEN '6' THEN '6-IR'
+   WHEN '7' THEN '7-CRED'
+   ELSE '1-DUPL'   END AS  TIPOTITULO, 
+  CASE WHEN ( SELECT COUNT(IDTITULO) FROM TITULOSANEXADOSDOC 
+               WHERE TITULOSANEXADOSDOC.FILIAL=TITULOREC.FILIAL
+               AND TITULOSANEXADOSDOC.IDTITULO = TITULOREC.IDTITULO
+               AND TITULOSANEXADOSDOC.TIPOTITULO='R' 
+               AND EXISTS (SELECT * FROM doctobancarios
+               WHERE TITULOSANEXADOSDOC.FILIAL=DOCTOBANCARIOS.FILIAL
+               AND TITULOSANEXADOSDOC.IDCONTACORRENTE=DOCTOBANCARIOS.IDCONTACORRENTE
+               AND TITULOSANEXADOSDOC.IDMOVTOBANC=DOCTOBANCARIOS.IDMOVTOBANCARIO
+               AND DOCTOBANCARIOS.COMPENSACAO IS NULL
+               AND DOCTOBANCARIOS.CANCELAMENTO IS NULL)) > 0 THEN '*' ELSE ' ' END AS TITULOSANEXADOS, 
+case when COALESCE(titulorec.codretorno, '') ='' then 'N' ELSE 'S' END AS CODRETORNO,
+               COALESCE(titulorec.codretorno, '') as RETORNO,
+    cadven.NOME as nomevendedor,
+    GRUPOMERCADORIA.DESCRICAO as grupo
+      
+FROM 
+    TITULOREC
+
+INNER JOIN 
+    CADASTROPARCEIROS cadcli ON 
+        (TITULOREC.PARCEIRO = cadcli.CADASTRO)
+left JOIN 
+    CONTACORRENTE ON
+        (TITULOREC.FILIAL=CONTACORRENTE.FILIAL AND
+         TITULOREC.CONTACORRENTE=CONTACORRENTE.CODIGO)
+left JOIN 
+    TIPOCOBRANCA ON 
+        (TITULOREC.TIPOTRANSACAO=TIPOCOBRANCA.TIPOCOBRANCA)
+left join 
+    faturas on 
+        (faturas.filial=titulorec.filial and 
+         faturas.IDTITULO=titulorec.IDTITULO)
+left join 
+    notafiscal on 
+        (notafiscal.filial=faturas.filial and 
+         notafiscal.idnota=faturas.IDNOTA)
+left join 
+    vendedoresnota on 
+        (notafiscal.filial=vendedoresnota.filial and 
+         notafiscal.idnota=vendedoresnota.IDNOTA)
+
+left JOIN 
+    CADASTROPARCEIROS cadven ON 
+        (vendedoresnota.VENDEDOR = cadven.CADASTRO) 
+left join 
+        mercadoriasnota on 
+    (mercadoriasnota.filial=notafiscal.filial and 
+    mercadoriasnota.idnota=notafiscal.idnota )
+left join 
+    itemestoque on 
+        (itemestoque.CODIGO=mercadoriasnota.CODIGO)
+left join 
+    GRUPOMERCADORIA on 
+        (GRUPOMERCADORIA.GRUPO=itemestoque.GRUPO)
+/*
+WHERE
+    TITULOREC.FILIAL=:FILIAL AND
+    COALESCE(TITULOREC.TIPOBAIXA, 'S') <> 'E' AND
+    TITULOREC.EMISSAO BETWEEN  :DATAINICIAL AND :DATAFINAL
+    */
+    
+WHERE
+    TITULOREC.FILIAL=1 AND
+    COALESCE(TITULOREC.TIPOBAIXA, 'S') <> 'E' AND
+    TITULOREC.EMISSAO > '01.01.2025'

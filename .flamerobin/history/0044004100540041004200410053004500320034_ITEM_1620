@@ -1,0 +1,9 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao produto,
+    'Nr.Original: '||itemestoque.REFERENCIA||'. Aplicação: '||itemestoque.DEFINICAO descricao,
+    itemestoque.itembase,
+    cast('' as varchar(2)) as lado
+from 
+    itemestoque
+    

@@ -1,0 +1,6 @@
+select 
+    *
+from
+    MAPAPRODUCAO
+where
+    MAPAPRODUCAO.idmovimento=78142

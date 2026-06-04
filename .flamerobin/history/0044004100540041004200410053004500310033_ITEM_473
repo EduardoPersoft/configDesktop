@@ -1,0 +1,7 @@
+select mercadoriasped.codigo,MATERIALMOVIMENTOESTOQUE.* from MATERIALMOVIMENTOESTOQUE
+inner join mercadoriasped on
+    mercadoriasped.filial=MATERIALMOVIMENTOESTOQUE.filial and
+    mercadoriasped.idnota=MATERIALMOVIMENTOESTOQUE.idpedido and
+    mercadoriasped.idmercadoria=materialmovimentoestoque.IDMERCADORIA
+WHERE MATERIALMOVIMENTOESTOQUE.FILiAL=1 
+AND MATERIALMOVIMENTOESTOQUE.IDPEDIDO=17545

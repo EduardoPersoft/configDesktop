@@ -1,0 +1,15 @@
+select 
+    entrada,
+    dataPagamento,
+    contaCorrenteImportada,
+    documento,
+    fatura,
+    id,
+    contaOriginal,
+    tipoBaixa,
+    acao,
+    analise, 
+    processamento,
+    erro
+from 
+    c_movfinanceiro

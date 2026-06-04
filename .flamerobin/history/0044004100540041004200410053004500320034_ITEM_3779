@@ -1,0 +1,42 @@
+CREATE TABLE C_I_MOVESTY
+(
+  CODTIPOSAIDA smallint NOT NULL,
+  DESCRICAOTIPOSAIDA varchar(30),
+  TIPOMOVIMENTO varchar(30),
+  "DATA" date,
+  DOCTO varchar(20) NOT NULL,
+  CODPECA varchar(15) NOT NULL,
+  DESCRICAO varchar(240),
+  CODTIPOPECA smallint,
+  DESCRICAOTIPOPECA varchar(60),
+  USUARIO varchar(50),
+  QTDE decimal(12,4),
+  UNITLIQUIDO decimal(12,4),
+  VLRTOTAL decimal(12,2),
+  MEDTOTAL decimal(12,4),
+  REPOSICAO decimal(12,4),
+  VLRVENDA decimal(12,4),
+  VLRICMS decimal(12,4),
+  VLRATUAL decimal(12,4),
+  ALIQICMS decimal(12,4),
+  ALIQICMSST decimal(12,4),
+  LC decimal(12,4),
+  ORIGEM varchar(15),
+  CLIENTE varchar(60),
+  CODCLIENTE integer,
+  CODATIVIDADE smallint,
+  ATIVIDADE varchar(50),
+  NOMEVENDEDOR varchar(60),
+  CODIGOVENDEDOR integer,
+  EMAIL varchar(240),
+  CODLOCAL varchar(10),
+  DESCRLOCAL varchar(50),
+  TEXTOBAIXA varchar(50)
+);
+
+GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
+ ON C_I_MOVEST5 TO  SYSDBA WITH GRANT OPTION;
+
+
+
+

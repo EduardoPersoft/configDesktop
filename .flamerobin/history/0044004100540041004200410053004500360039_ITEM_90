@@ -1,0 +1,2 @@
+delete  from composicaomercped
+where filial=12826 and idnota>=172635

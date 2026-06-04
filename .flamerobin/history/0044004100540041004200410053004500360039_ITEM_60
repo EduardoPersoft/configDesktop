@@ -1,0 +1,1 @@
+delete from faturas where filial=1 and idnota=346164

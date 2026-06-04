@@ -1,0 +1,2 @@
+select * from contacorrente
+where not exists (select * from banco where banco.BANCO=contacorrente.codigo )

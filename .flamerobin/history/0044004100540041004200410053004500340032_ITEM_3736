@@ -1,0 +1,12 @@
+update MATERIALMOVIMENTOESTOQUE set concluido='S'
+where idpedido is not null and concluido='N'  and
+exists (select * from mercadoriasped
+        inner join pedido on
+            pedido.filial=mercadoriasped.filial and
+            pedido.idnota=mercadoriasped.idnota
+        where MERCADORIASPED.filial=materialmovimentoestoque.filial
+        and MERCADORIASPED.idnota=materialmovimentoestoque.idpedido
+        and mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA
+        
+        and pedido.CANCELAMENTO='S')
+        order by idpedido desc

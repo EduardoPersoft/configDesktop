@@ -1,0 +1,521 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_IMPORTARNOTASVENDAS
+AS
+declare variable codTipoSaida smallint;
+declare variable descricaoTipoSaida varchar(30);
+declare variable tipoMovimento varchar(30);
+declare variable data date;
+declare variable docto varchar(20);
+declare variable codPeca varchar(15);
+declare variable descricao varchar(240);
+declare variable codTipoPeca smallint;
+declare variable descricaoTipoPeca varchar(60);
+declare variable usuario varchar(50);
+declare variable qtde decimal(12,4);
+declare variable unitLiquido decimal(12,4);
+declare variable vlrTotal decimal(12,2);
+declare variable medTotal decimal(12,4);
+declare variable reposicao decimal(12,4);
+declare variable vlrVenda decimal(12,4);
+declare variable vlrICMS decimal(12,4);
+declare variable vlrAtual decimal(12,4);
+declare variable aliqIcms decimal(12,4);
+declare variable aliqIcmsSt decimal(12,4);
+declare variable lc decimal(12,4);
+declare variable origem varchar(15);
+declare variable cliente varchar(60);
+declare variable codCliente integer;
+declare variable codAtividade smallint;
+declare variable atividade varchar(50);
+declare variable nomeVendedor varchar(60);
+declare variable codigoVendedor integer;
+declare variable email varchar(240);
+declare variable codLocal varchar(20);
+declare variable descrLocal varchar(50);
+declare variable textoBaixa varchar(50);
+declare variable prioridade smallint;
+declare variable filial integer;
+declare variable idMovimento integer;
+declare variable idMovimentoMaterial integer;
+declare variable cadpersoft integer;
+
+declare variable a_idMovimento integer;
+declare variable a_filial integer;
+
+declare variable v_tipoMovimento char(2);
+declare variable v_fornecedor integer;
+declare variable v_prioridade integer;
+declare variable v_sinal smallint;
+
+declare variable v_VLRTOTALMERCADORIAS decimal(12,2); 
+declare variable v_VLRTOTALNOTA decimal(12,2);                           
+declare variable v_TOTVALORICMS decimal(12,2);
+declare variable v_VLRFINALMERCADORIAS decimal(12,2); 
+declare variable v_CUSTO decimal(12,2); 
+
+declare variable v_valorContabil decimal(12,2);
+declare variable v_valorMercadorias decimal(12,2);
+declare variable v_preco decimal(12,2);
+
+DECLARE VARIABLE V_NUMERONOTA INTEGER;
+DECLARE VARIABLE V_MODELO INTEGER;
+begin
+
+  a_idmovimento = -1;
+    
+  FOR
+    SELECT 
+        CODTIPOSAIDA,
+        DESCRICAOTIPOSAIDA,
+        TIPOMOVIMENTO,
+        DATA,
+        DOCTO,
+        CODPECA,
+        DESCRICAO,
+        CODTIPOPECA,
+        DESCRICAOTIPOPECA,
+        SUBSTRING(USUARIO FROM 1 FOR 50),
+        QTDE,
+        UNITLIQUIDO,
+        VLRTOTAL,
+        MEDTOTAL,
+        REPOSICAO,
+        VLRVENDA,
+        VLRICMS,
+        VLRATUAL,
+        ALIQICMS,
+        ALIQICMSST,
+        LC,
+        ORIGEM,
+        CLIENTE,
+        CODCLIENTE,
+        CODATIVIDADE,
+        ATIVIDADE,
+        NOMEVENDEDOR,
+        c_vemdedorpersoft,
+        EMAIL,
+        CODLOCAL,
+        DESCRLOCAL,
+        TEXTOBAIXA,
+        filial,
+        idmovimento,
+        idmovimentomaterial,
+        C_CADASTROPERSOFT
+    FROM
+        C_I_MOVEST3 c_i_movest
+    WHERE   
+--        c_data is null
+        data >= '05.11.2020'
+        and codtiposaida=2
+    order by 
+        filial,
+        idmovimento,
+        idmovimentomaterial
+    INTO
+        :CODTIPOSAIDA,
+        :DESCRICAOTIPOSAIDA,
+        :TIPOMOVIMENTO,
+        :DATA,
+        :DOCTO,
+        :CODPECA,
+        :DESCRICAO,
+        :CODTIPOPECA,
+        :DESCRICAOTIPOPECA,
+        :USUARIO,
+        :QTDE,
+        :UNITLIQUIDO,
+        :VLRTOTAL,
+        :MEDTOTAL,
+        :REPOSICAO,
+        :VLRVENDA,
+        :VLRICMS,
+        :VLRATUAL,
+        :ALIQICMS,
+        :ALIQICMSST,
+        :LC,
+        :ORIGEM,
+        :CLIENTE,
+        :CODCLIENTE,
+        :CODATIVIDADE,
+        :ATIVIDADE,
+        :NOMEVENDEDOR,
+        :CODIGOVENDEDOR,
+        :EMAIL,
+        :CODLOCAL,
+        :DESCRLOCAL,
+        :TEXTOBAIXA,
+        :filial,
+        :idmovimento,
+        :idmovimentomaterial,
+        :cadpersoft DO BEGIN
+    
+            
+        if(a_idmovimento <> idmovimento) then begin
+
+            if (a_idmovimento<>-1) then begin
+                UPDATE 
+                    NOTAFISCAL 
+                set
+                    VLRTOTALMERCADORIAS = :V_VLRTOTALMERCADORIAS, 
+                    VLRTOTALNOTA = :V_VLRTOTALNOTA,                           
+                    TOTVALORICMS = 0,
+                    VLRFINALMERCADORIAS = :V_VLRFINALMERCADORIAS, 
+                    CUSTO = :V_CUSTO
+                WHERE
+                    FILIAL = :a_FILIAL AND
+                    IDNOTA = :a_idmovimento;
+                
+                /*
+                insert into faturas(filial,idnota,IDFATURA,DATAVENCIMENTO,VALORFATURA)
+                values (:a_filial, :a_idmovimento, 1, :data, :v_vlrtotalnota);
+                */
+            end
+
+            a_idmovimento = idmovimento;
+            a_filial = filial;
+            v_VLRTOTALMERCADORIAS = 0; 
+            v_VLRTOTALNOTA = 0;
+            v_TOTVALORICMS = 0; 
+            v_VLRFINALMERCADORIAS = 0;
+            v_CUSTO = 0;
+
+            if(substring(DOCTO from 4 for 1)='/') THEN BEGIN
+                v_numeronota = cast(substring(DOCTO from 1 for 3) as integer);
+                v_modelo = cast(substring(DOCTO from 5 for 3) as integer); 
+            end
+            if(substring(DOCTO from 5 for 1)='/') THEN BEGIN
+                v_numeronota = cast(substring(DOCTO from 1 for 4) as integer);
+                v_modelo = cast(substring(DOCTO from 6 for 3) as integer); 
+            end
+            if(substring(DOCTO from 6 for 1)='/') THEN BEGIN
+                v_numeronota = cast(substring(DOCTO from 1 for 5) as integer);
+                v_modelo = cast(substring(DOCTO from 7 for 3) as integer); 
+            end
+            if(substring(DOCTO from 7 for 1)='/') THEN BEGIN
+                v_numeronota = cast(substring(DOCTO from 1 for 6) as integer);
+                v_modelo = cast(substring(DOCTO from 8 for 3) as integer); 
+            end
+            if(substring(DOCTO from 8 for 1)='/') THEN BEGIN
+                v_numeronota = cast(substring(DOCTO from 1 for 7) as integer);
+                v_modelo = cast(substring(DOCTO from 9 for 3) as integer); 
+            end
+            
+            if(v_modelo = 700) THEN 
+                v_modelo = 16;
+            ELSE
+                v_modelo = 1;
+            /*
+            INSERT INTO NOTAFISCAL (
+                 FILIAL, 
+                 IDNOTA, 
+                 DATACADASTRO, 
+                 SEQUENCIANR, 
+                 NUMERONOTA, 
+                 DATAEMISSAO, 
+                 DESTINATARIO, 
+                 MODELO, 
+                 ENTRADASAIDA, 
+                 OPERACAO, 
+                 LISTAPRECO, 
+                 PROPDESTINATARIO, 
+                 TIPONOTA, 
+                 DADOSENTREGA, 
+                 VLRTOTALMERCADORIAS, 
+                 VALORFRETE, 
+                 VALORSEGURO, 
+                 VLROUTDESPACESSORIA, 
+                 IPIBASE, 
+                 IPIOUTROS,  
+                 IPIISENTO, 
+                 VALORIPI, 
+                 VENDEDOR, 
+                 VLRTOTALNOTA, 
+                 FRETE, 
+                 TOTBASEICMS, 
+                 TOTOUTROSICMS, 
+                 TOTISENTOICMS, 
+                 TOTVALORICMS, 
+                 DATAREFERENCIA, 
+                 VLRENTRADA, 
+                 VLRICMSRECOLHIDO, 
+                 ICMS, 
+                 IPI, 
+                 ZONAFRANCA, 
+                 SUBSTRIBUTARIA, 
+                 DEVOLUCAO, 
+                 MAODEOBRA, 
+                 CALCULADA, 
+                 VLRFINALMERCADORIAS, 
+                 SIMPLES, 
+                 EMBUTIRICMS, 
+                 PCSLL, 
+                 PCOFINS, 
+                 PPIS, 
+                 VALORPIS, 
+                 DECIMAISPRECO, 
+                 ABATERDESCONTOICMS, 
+                 INCIDEICMS1, 
+                 INCIDEICMS2, 
+                 INCIDEICMS3, 
+                 PISCOFINS, 
+                 PADMINISTRATIVO, 
+                 PFINANCEIRO, 
+                 COMPLEMENTOBASEIPI, 
+                 COMPLEMENTOBASEICM, 
+                 COMPLEMENTOPIPI, 
+                 COMPLEMENTOPICM, 
+                 COMPLEMENTOVALOR, 
+                 TIPOFINANCEIRO, 
+                 CUSTO, 
+                 PDESPESAFINANCEIRA, 
+                 COMISSAO, 
+                 CLCTRANSP, 
+                 SUBSTITUTA, 
+                 IDMOVIMENTO, 
+                 CRT, 
+                 FRETEIPI, 
+                 ICMSDESTINOFCP, 
+                 ICMSORIGEMVALORINTERESTADUAL, 
+                 ICMSDESTINOVALOR, 
+                 ICMSDESTINOPARTILHA, 
+                 ICMSORIGEMVALOR, 
+                 ICMSORIGEMBASE, 
+                 UFESTABELECIMENTO, 
+                 MOVIMENTOESTOQUEFILIAL) 
+            VALUES(
+                :filial,
+                :idMOVIMENTO,
+                :DATA, 
+                0,
+                :v_numeronota, -- substring de docto
+                :DATA,
+                :cadpersoft, 
+                :v_modelo, -- subtring de docto
+                'S',
+                293,
+                1,
+                1,
+                1,
+                'N',
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                :CODIGOVENDEDOR, 
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                :DATA,
+                0,  
+                0, 
+                'S',
+                'S',
+                'N',
+                'S',
+                'N',
+                'N',
+                'N',
+                0,
+                'N',
+                'N',
+                0,
+                0,
+                0,
+                0,
+                2,
+                'S',
+                0,
+                0,
+                0,
+                '9.25',
+                0,
+                0,
+                'N',
+                'N',
+                'N',
+                'N',
+                'N',
+                1,
+                0,
+                0,
+                0,
+                'N',
+                'N',
+                :idmovimento,
+                3,
+                'N',
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                'SP',
+                :filial
+            );
+                    
+            if(codigovendedor is not null) then
+                INSERT INTO VENDEDORESNOTA (
+                    FILIAL, 
+                    IDNOTA, 
+                    VENDEDOR, 
+                    COMISSAOVENDA, 
+                    COMISSAORECEBIMENTO)
+                VALUES (
+                    :filial, 
+                    :idmovimento, 
+                    :codigovendedor, 
+                    0,
+                    0);            
+            */
+        end        
+
+        v_valorContabil = VLRTOTAL;
+        v_valorMercadorias = VLRTOTAL - coalesce(ALIQICMSST,0);
+        v_preco = v_valorMercadorias / qtde;
+
+        if(cast(codPeca as integer)<100000) then
+            codPeca = substring(cast(cast(codPeca as integer)+100000 as varchar(15)) from 2 for 14);    
+
+
+        INSERT INTO MERCADORIASNOTA (
+         FILIAL, 
+         IDNOTA, 
+         IDMERCADORIA, 
+         CODIGO, 
+         QUANTIDADE, 
+         UNIDADE, 
+         PRECOLISTA, 
+         PRECOUNITARIO, 
+         VLRTOTALMERCAD, 
+         PESOLIQUIDO, 
+         PESOBRUTO, 
+         PIPI, 
+         FRETE, 
+         SEGURO, 
+         OUTDESPACESSOR, 
+         ICMSBASE, 
+         ICMSOUTROS, 
+         ICMSISENTO, 
+         ALIQUOTAICMS, 
+         VALORICMS, 
+         IPIBASE, 
+         IPIOUTROS, 
+         IPIISENTO, 
+         VALORIPI, 
+         DESCRICAO,
+         DESREDUZIDA, 
+         ACRESCIMONOTA, 
+         DESCONTONOTA, 
+         ICMS, 
+         IPI, 
+         VLRFINALMERCAD, 
+         VLRTOTALCOMPOSICAO, 
+         VLRICMSRECOLHIDO, 
+         VLRIMPOSTOIMPORT, 
+         VLRPISPASEP, 
+         VLRCOFINS, 
+         VLRDESPADUANEIRAS, 
+         VLRTAXASISCOMEX, 
+         VALORDESPESASIMPORTACAO1, 
+         VALORDESPESASIMPORTACAO2, 
+         VALORDESPESASIMPORTACAO3, 
+         COMISSAO, 
+         CUSTO, 
+         PREDUCAO, 
+         REDUCAOICMS, 
+         ORIGEMNOTAREL, 
+         QUANTIDADEESTOQUE, 
+         FATORESTOQUE, 
+
+         ICMSORIGEMALIQUOTA, 
+         ICMSORIGEMBASE, 
+         ICMSORIGEMVALOR, 
+         ICMSORIGEMVALORINTERESTADUAL, 
+         ICMSDESTINOFCP, 
+         ICMSDESTINOALIQUOTA, 
+         ICMSDESTINOVALOR, 
+         ICMSDESTINOFCPVALOR, 
+         ESTOCADO )
+        values (
+            :filial,
+            :idmovimento,
+            :idmovimentomaterial,
+            :CODPECA, 
+            :QTDE, 
+            'PC',
+            :v_preco,
+            :v_preco,
+            :v_valorMercadorias,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            :ALIQICMS, 
+            :VLRICMS, 
+            0,
+            0,
+            0,
+            0,
+            :DESCRICAO,
+            SUBSTRING(:DESCRICAO FROM 1 FOR 50), 
+            0,
+            0,
+            'T',
+            'T',
+            :v_valorMercadorias,
+            :v_valorMercadorias,
+            coalesce(:ALIQICMSST,0), 
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            :MEDTOTAL/:qtde, 
+            0,
+            0,
+            0,
+            :qtde,
+            1,
+            0, 
+            0, 
+            0,
+            0,
+            0, 
+            0, 
+            0,
+            0,
+            'S');
+
+        v_VLRTOTALMERCADORIAS = v_VLRTOTALMERCADORIAS + v_valorMercadorias; 
+        v_VLRTOTALNOTA = v_VLRTOTALNOTA + v_valorContabil;
+   --     v_TOTVALORICMS = v_TOTVALORICMS + v_valorMercadorias;
+        v_VLRFINALMERCADORIAS = v_VLRFINALMERCADORIAS + v_valorMercadorias;
+        v_CUSTO = v_CUSTO + MEDTOTAL;
+        
+    END
+  
+
+END^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_IMPORTARNOTASVENDAS TO  SYSDBA;
+

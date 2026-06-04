@@ -1,0 +1,4 @@
+select * from LANCAMENTOMOVIMENTOESTOQUE(
+1, '01.', '09.09.9999', '01.12.2023',
+'31.12.2023', '.', 'zzz', 0, 32000, 'S',
+'S', 'S','N', 'N')

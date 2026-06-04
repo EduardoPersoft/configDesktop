@@ -1,0 +1,56 @@
+SELECT 
+    itemestoque.codigo,    
+    case itemestoque.tipoproduto     
+        when '1' then case coalesce(itemestoque.EMBALAGEM,'N') when 'S' then '02' else '01' END 
+        when '3' then '00'
+        when '4' then case coalesce(itemestoque.SEMIACABADO,'N') when 'S' then '03' else '04' END 
+    end as tipoitem,
+    classificacaofiscal.descricao alassificacaofiscal,
+    itemestoque.unidade,               
+    ITEMESTOQUE.CODIGO || '/' || itemestoque.descricao codigo_descricao,
+    cast(sum(SALDOINICIALESTOQUE.SALDOANTERIOR) as decimal(12,3)) as qtde,
+    cast(materialfilial.CUSTOMEDIO as decimal(12,3)) valor_unitario,
+    cast(sum(SALDOINICIALESTOQUE.SALDOANTERIOR)*materialfilial.customedio as decimal(12,2)) valor_total,    
+    
+    case when cadterceiros.documento  is null then 0 else 1 end indicador_propriedade,
+    cadterceiros.DOCUMENTO as cnpj_particip,
+    cadterceiros.INSCESTADUAL,    
+    LOCAL.DESCRICAO as local
+    
+FROM SALDOINICIALESTOQUElocal saldoinicialestoque
+INNER JOIN ESTSIN ON (ESTSIN.RELATORIO='SALDOANTERIORESTOQUE' )
+INNER JOIN ITEMESTOQUE ON (SALDOINICIALESTOQUE.IDITEM=ITEMESTOQUE.CODIGO)
+inner join
+    materialfilial on
+        materialfilial.filial=saldoinicialestoque.filial and
+        materialfilial.iditem=itemestoque.codigo
+LEFT JOIN LOCAL ON 
+    LOCAL.ID = SALDOINICIALESTOQUE.LOCAL
+left join cadastroparceiros cadterceiros on
+    cadterceiros.LOCALentrega = local.id and local.id<>1
+left join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+where 
+    itemestoque.TIPOPRODUTO in (1, 3, 4) AND
+    (not (itemestoque.tipoproduto = 4 and itemestoque.codigo between '00000' and '99999' or substring(itemestoque.codigo from 1 for 1)='X') )
+group by
+    
+    MATERIALFILIAL.filial,
+    itemestoque.codigo,
+    SALDOINICIALESTOQUE.LOCAL, 
+    cadterceiros.DOCUMENTO,
+    cadterceiros.nome,
+    local.descricao,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    itemestoque.TIPOPRODUTO,
+    itemestoque.embalagem,
+    itemestoque.SEMIACABADO,
+    materialfilial.customedio,
+    itemestoque.CLASSIFISCAL,
+    classificacaofiscal.descricao,
+    cadterceiros.INSCESTADUAL
+HAVING   
+   SUM(SALDOINICIALESTOQUE.SALDOANTERIOR) > 0.00009
+order by local,2,1

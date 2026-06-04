@@ -1,0 +1,8 @@
+select 
+    cadastro,
+    nome,
+    STATUS
+from 
+    CADASTROPARCEIROS
+where
+    nome like '%CONTRIBUINTE%'

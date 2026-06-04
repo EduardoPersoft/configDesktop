@@ -1,0 +1,15 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    mercadoriaspedcompra.quantidade,
+    mercadoriaspedcompra.QTDEENTREGUE,
+    mercadoriaspedcompra.quantidade/mercadoriaspedcompra.QTDEENTREGUE
+from 
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    itemestoque on
+        mercadoriaspedcompra.codigo=itemestoque.codigo
+WHERE
+    mercadoriaspedcompra.baixa='N' AND
+    coalesce(mercadoriaspedcompra.QTDEENTREGUE,0)>0

@@ -1,0 +1,21 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    materialfilial.CONSUMOMEDIO,
+    (materialfilial.consumomedio/20) mediadias,
+    materiallocal.saldototal/(materialfilial.consumomedio/20) diasprazerar
+FROM
+    materiallocal    
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial AND
+        materialfilial.iditem=materiallocal.iditem
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+WHERE
+    materialfilial.filial=5 and
+    materialfilial.CUSTOMEDIO>0
+order by 
+    materialfilial.consumomedio desc

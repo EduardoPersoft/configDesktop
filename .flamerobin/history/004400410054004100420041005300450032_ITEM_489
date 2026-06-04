@@ -1,0 +1,2 @@
+select * from locallote
+where iditem='AB0318003'

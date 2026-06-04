@@ -1,0 +1,3 @@
+update LANTOCONTPAG
+centrocustos.CENTROCUSTO='25'
+where centrocusto.centrocusto is null 

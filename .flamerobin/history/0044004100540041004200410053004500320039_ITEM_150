@@ -1,0 +1,7 @@
+update
+    SERVICOSNOTA
+set
+    nbs='115080000',
+    codigonfe='02800'
+where
+    filial = 1 and idnota>25835

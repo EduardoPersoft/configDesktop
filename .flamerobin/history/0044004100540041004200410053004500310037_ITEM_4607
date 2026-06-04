@@ -1,0 +1,2 @@
+select first 200 * from pedido
+order by datacadastro desc

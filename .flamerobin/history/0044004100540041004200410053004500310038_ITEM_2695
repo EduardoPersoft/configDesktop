@@ -1,0 +1,5 @@
+select * from NOTAFISCAL
+where NOTAFISCAL.modelo=16
+and notafiscal.idnota= 36786
+and notafiscal.dataemissao between '01.06.2024' and '30.06.2024'
+order by numeronota

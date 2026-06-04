@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    local
+where 
+    local.iditem like 'Z2-%'

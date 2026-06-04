@@ -1,0 +1,2 @@
+update PEDIDO set pedido.vendedor=21562
+where pedido.VENDEDOR=21083

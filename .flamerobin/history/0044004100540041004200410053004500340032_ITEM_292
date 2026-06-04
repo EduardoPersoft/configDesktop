@@ -1,0 +1,13 @@
+select notacompra.filial,
+notacompra.destinatario,
+notacompra.nrnotafornecedor,
+count(notacompra.idnota)
+from
+NOTACOMPRA
+
+group by
+notacompra.filial,
+notacompra.destinatario,
+notacompra.nrnotafornecedor
+having 
+count(notacompra.idnota)>1

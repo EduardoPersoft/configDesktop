@@ -1,0 +1,10 @@
+select
+    notafiscal.FILIAL,    
+    notafiscal.idnota,
+    notafiscal.numeronota,
+    notafiscal.DATAEMISSAO,
+    NOTAFISCAL.frete
+from
+    NOTAFISCAL
+where
+    notafiscal.DATAEMISSAO>='01.08.2023'

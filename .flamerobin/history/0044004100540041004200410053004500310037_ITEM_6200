@@ -1,0 +1,37 @@
+insert into c_consumo(codigo,consumo)
+select
+    materialmovimentoestoque.iditem,
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)
+from
+    MOVIMENTOESTOQUE
+inner join
+    tipomovimentoestoque on 
+        tipomovimentoestoque.id=movimentoestoque.TIPOMOVIMENTO
+inner join
+    notafiscal on
+        notafiscal.filial=movimentoestoque.filial and
+        notafiscal.idnota=movimentoestoque.IDNOTA
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=MOVIMENTOESTOQUE.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.EMISSAO >= cast('now' as date) - 84 and 
+    tipomovimentoestoque.id in ('06', '09') and
+    not exists (select * from ESTABELECIMENTO
+                where ESTABELECIMENTO.cadastro=NOTAFISCAL.DESTINATARIO)
+group by
+    materialmovimentoestoque.iditem
+having 
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)/12>(select sum(locallote.quantidade)
+                                                      from LOCALLOTE
+                                                      inner join 
+                                                        local local on
+                                                            local.id = locallote."LOCAL"
+                                                      where 
+                                                      locallote.iditem=materialmovimentoestoque.iditem and
+                                                      substring(local.descricao from 1 for 2) = 'Z2')
+        ;
+        

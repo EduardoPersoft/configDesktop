@@ -1,0 +1,2 @@
+select * from local 
+where descricao between 'C20' and 'C29'

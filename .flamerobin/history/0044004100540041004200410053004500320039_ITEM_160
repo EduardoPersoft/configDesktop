@@ -1,0 +1,2 @@
+update notafiscal set uuid=null 
+where filial=1 and idnota<25835

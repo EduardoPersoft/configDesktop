@@ -1,0 +1,6 @@
+select 
+materialmovimentoestoque.sinal*materialmovimentoestoque.quantidade,
+MATERIALMOVIMENTOESTOQUE.*
+from MATERIALMOVIMENTOESTOQUE
+where filial=110 and
+iditem='MPP01TRART'

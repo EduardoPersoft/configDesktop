@@ -1,0 +1,8 @@
+update 
+    MERCADORIASNOTA
+set 
+    mercadoriasnota.VLRFINALMERCAD=mercadoriasnota.PRECOLISTA*mercadoriasnota.quantidade,
+    mercadoriasnota.VLRTOTALMERCAD=mercadoriasnota.precolista*mercadoriasnota.quantidade
+where
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idnota=300072

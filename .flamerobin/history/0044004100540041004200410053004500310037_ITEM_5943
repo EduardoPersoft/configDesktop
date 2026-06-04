@@ -1,0 +1,1 @@
+select * from INVENTARIOESTOQUEDATA where quantidade<>quantidadeestoque and idmovimento is null

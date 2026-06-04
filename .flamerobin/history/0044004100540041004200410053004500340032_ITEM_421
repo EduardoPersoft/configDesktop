@@ -1,0 +1,6 @@
+SELECT 
+    *
+from
+    INVENTARIOESTOQUEDATA
+where
+    LOTE='700/1/1'

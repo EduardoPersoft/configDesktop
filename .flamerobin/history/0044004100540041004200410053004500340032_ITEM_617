@@ -1,0 +1,23 @@
+select 
+    contacorrente.CODIGO,
+    contacorrente.filial,
+    contacorrente.DESCRICAOCONTA,
+    contacorrente.SALDOREAL-
+    sum(coalesce(MOVBANCARIOS.VALORMOVIMENTO,0)*
+        case movbancarios.TIPOMOVIMENTO when 'D' then -1 else 1 end)   
+FROM 
+    CONTACORRENTE       
+inner join
+    RCONTACORRENTE on
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=contacorrente.codigo 
+left join
+    MOVBANCARIOS on 
+    contacorrente.filial=MOVBANCARIOS.FILIAL and 
+    contacorrente.CODIGO=MOVBANCARIOS.IDCONTACORRENTE and
+    MOVBANCARIOS.MOVIMENTACAO >= ?
+group by 
+    contacorrente.filial,
+    contacorrente.CODIGO,
+    contacorrente.DESCRICAOCONTA,
+    contacorrente.SALDOREAL

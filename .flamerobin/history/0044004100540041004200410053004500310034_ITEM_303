@@ -1,0 +1,10 @@
+select  
+    mercadoriasped.*
+from 
+    MERCADORIASPED
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.filial=110 and
+    mercadoriasped.idnota <= 9205
+order by
+    mercadoriasped.idnota desc

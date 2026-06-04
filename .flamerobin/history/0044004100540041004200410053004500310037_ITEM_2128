@@ -1,0 +1,4 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=12806
+order by
+movimentoestoque.idmovimento

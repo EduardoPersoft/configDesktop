@@ -1,0 +1,6 @@
+SELECT 
+    *
+FROM
+   cadatroparceiros
+WHERE
+    cadastro=34005

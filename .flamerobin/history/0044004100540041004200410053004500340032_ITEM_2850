@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where filial=110 and usuario='ADMPERSOFT'

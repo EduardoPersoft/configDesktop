@@ -1,0 +1,3 @@
+select * from CADASTROPARCEIROS
+inner join cliente on cliente.cadastro=CADASTROPARCEIROS.cadastro
+where grupoempresarial is null

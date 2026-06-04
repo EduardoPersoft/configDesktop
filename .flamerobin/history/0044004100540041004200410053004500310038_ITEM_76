@@ -1,0 +1,4 @@
+update 
+    configuracoesgerais
+SET
+    c_url = 'http://portal.stamonica.com.br/loja/'

@@ -1,0 +1,9 @@
+select 
+    codigo,
+    descricao,
+    referencia,
+    metatag
+from 
+    itemestoque 
+where 
+    metatag like '%|400 5549 20|%'

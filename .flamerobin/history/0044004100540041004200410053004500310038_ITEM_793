@@ -1,0 +1,38 @@
+select
+    DRE.CONTADRE,
+    DRE.DESCRICAO AS DREDESCRICAO,
+    C_PLANCTOCONTABEISPAGOS.CONTACONTABIL, 
+    CONTASCONTABEIS.descricao as descricaoconta,
+    C_PLANCTOCONTABEISPAGOS.CENTROCUSTO,
+    sum (C_PLANCTOCONTABEISPAGOS.SALDO)*(-1) as valor
+from
+    C_PLANCTOCONTABEISPAGOS ('RESUMOPERIODO')
+inner join 
+    DREXCONTACONTABIL on
+        C_PLANCTOCONTABEISPAGOS.CONTACONTABIL = DREXCONTACONTABIL.CONTACONTABIL AND
+        DREXCONTACONTABIL.CENTROCUSTO=C_PLANCTOCONTABEISPAGOS.CENTROCUSTO
+INNER JOIN 
+    DRE ON
+        DRE.CONTADRE=DREXCONTACONTABIL.DRE
+inner join 
+    CONTASCONTABEIS on
+        contascontabeis.idplano = (select estabelecimento.PLANOCONTAS
+                                   from ESTABELECIMENTO
+                                   where estabelecimento.cadastro=1) and
+        contascontabeis.CONTACONTABIL=C_PLANCTOCONTABEISPAGOS.CONTACONTABIL
+inner join 
+    CENTROCUSTOS on
+        CENTROCUSTOS.idplano = (select estabelecimento.PLANOCENTROCUSTOS
+                                   from ESTABELECIMENTO
+                                   where estabelecimento.cadastro=1) and
+        CENTROCUSTOS.CENTROCUSTO=C_PLANCTOCONTABEISPAGOS.CENTROCUSTO
+where 
+    dre.CONTADRE<>'0904'
+
+group by
+    DRE.CONTADRE,
+    DRE.DESCRICAO,
+    C_PLANCTOCONTABEISPAGOS.CONTACONTABIL, 
+    C_PLANCTOCONTABEISPAGOS.CENTROCUSTO,
+    CONTASCONTABEIS.descricao,
+    centrocustos.descricao     

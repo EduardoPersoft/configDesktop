@@ -1,0 +1,1 @@
+select pedido.C_LOJA,pedido.* from pedido where pedido.C_ADIANTAMENTOCLIENTE>0

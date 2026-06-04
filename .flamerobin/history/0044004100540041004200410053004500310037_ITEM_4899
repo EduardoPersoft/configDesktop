@@ -1,0 +1,9 @@
+update 
+    transportadora 
+set
+    transportadora.OBRIGARPESO='S',
+    transportadora.OBRIGARVOLUMES='S',
+    transportadora.COPIAS=2,
+    transportadora.PESOVOLUME=0,
+    TRANSPORTADORA.NOTAAUTOMATICA='S'
+where cadastro>=20905

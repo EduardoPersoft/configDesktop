@@ -1,0 +1,11 @@
+select
+    pedido.DATAREFERENCIA,
+    count(pedido.idnota)
+from
+    pedido
+where 
+    pedido.DATAreferencia>='10.07.2023'
+group by
+    pedido.DATAREFERENCIA
+    
+    

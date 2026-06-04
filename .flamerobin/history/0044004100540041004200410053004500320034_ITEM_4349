@@ -1,0 +1,21 @@
+select 
+    distinct
+    cadastroparceiros.razaoSocial,
+    cadastroparceiros.nome,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    fornecedoresitem.CODIGOFORNEC,
+    fornecedoresitem.preco
+from
+    cadastroparceiros
+inner join
+    FORNECEDORESITEM on
+        cadastroparceiros.cadastro=
+        fornecedoresitem.FORNECEDOR
+inner join
+    itemestoque on
+        itemestoque.codigo=fornecedoresitem.iditem
+where   
+    coalesce(email,'')<>''
+
+    

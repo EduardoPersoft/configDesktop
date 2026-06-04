@@ -1,0 +1,63 @@
+select 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.GRUPO,
+    local.id,
+    local.descricao,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal),
+    MATERIALLOTE.UUID,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    MATERIALFILIAL.CUSTOMEDIO,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal)*materialFilial.custoMedio as custoTotal,
+    cast('N' as char(1)) as p_check
+ from 
+    MOVIMENTOESTOQUE
+inner join 
+    MATERIALMOVIMENTOESTOQUE on 
+    MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and 
+    MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+inner join 
+    ITEMESTOQUE on 
+    MATERIALMOVIMENTOESTOQUE.IDITEM=ITEMESTOQUE.CODIGO
+inner join 
+    MATERIALLOTE on 
+    materialmovimentoestoque.iditem=MATERIALLOTE.IDITEM and
+    materialmovimentoestoque.lote=materiallote.lote
+inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+inner join
+    local on
+        local.id=locallote.local
+inner join 
+    MATERIALFILIAL on 
+    LOCALLOTE.FILIAL=MATERIALFILIAL.FILIAL and
+    LOCALLOTE.IDITEM=MATERIALFILIAL.IDITEM    
+left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO
+where
+    mmovimentoestoque.filial = 110 and
+    movimentoestoque.emissao<='2023-10-31'
+   
+group by 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.GRUPO,
+    local.id,
+    local.descricao,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    MATERIALLOTE.UUID,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    MATERIALFILIAL.CUSTOMEDIO

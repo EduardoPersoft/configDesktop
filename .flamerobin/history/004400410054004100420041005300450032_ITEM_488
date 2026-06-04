@@ -1,0 +1,2 @@
+select * from materiallote
+where iditem='AB0318003'

@@ -1,0 +1,4 @@
+select * from c_comissaopedidopaga
+where
+vendedor=165 and
+id=769

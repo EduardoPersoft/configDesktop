@@ -1,0 +1,16 @@
+select
+    sequencia,
+    segmento,
+    cod_part,
+    num_doc,
+    cfop,
+    cst_pis,
+    vl_pis,
+    cst_cofins,
+    vl_cofins
+from
+    SPEDFISCAL_C
+where
+    segmento in ('C100', 'C170', 'C190')
+order by
+    sequencia

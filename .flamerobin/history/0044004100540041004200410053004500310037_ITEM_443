@@ -1,0 +1,9 @@
+UPDATE
+    titulorec
+SET
+    titulorec.dataenvio = NULL
+--select * from titulorec    
+WHERE
+    titulorec.dataenvio='24.08.2021' AND
+    titulorec.filial=1
+    

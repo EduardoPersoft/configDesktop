@@ -1,0 +1,1 @@
+select * from cadatroparceiros order by cadastro desc

@@ -1,0 +1,14 @@
+select  
+    *
+from
+    C_I_MOVEST5
+WHERE 
+    EXISTS (
+        select
+            *
+        from
+            C_I_MOVESTY
+        WHERE
+            C_I_MOVEST5.CODTIPOSAIDA=C_I_MOVESTY.CODTIPOSAIDA and
+            C_I_MOVEST5.DOCTO=C_I_MOVESTY.DOCTO and
+            C_I_MOVEST5.CODPECA=C_I_MOVESTY.CODPECA)

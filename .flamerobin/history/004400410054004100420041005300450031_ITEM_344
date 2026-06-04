@@ -1,0 +1,1 @@
+select recurso,110,idmovimento,idmovimentomaterial,inicio,fim from mapaproducao

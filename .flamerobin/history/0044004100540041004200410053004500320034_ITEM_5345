@@ -1,0 +1,7 @@
+update
+    TITULOREC
+set
+    DATEENVIO=DATAMISSAO
+where
+    FILIAL=5 and
+    CONTACORRENTE<>1342

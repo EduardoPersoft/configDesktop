@@ -1,0 +1,3 @@
+select descricao,count(id) from moeda
+group by descricao
+order by 2 desc

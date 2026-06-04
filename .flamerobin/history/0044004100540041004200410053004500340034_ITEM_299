@@ -1,0 +1,45 @@
+SELECT
+      ITEMESTOQUE.CODIGO as IDITEM,
+      itemestoque.referencia as codfornec,
+      ITEMESTOQUE.DESCRICAO,
+      C_FORNECEDORPECA.DESCRICAO FORNECEDOR,
+      local_estocado.ID AS IDLOCAL,
+      local_estocado.DESCRICAO AS DESCLOCAL,
+      itemestoque.localizacao,
+      locallote_estocado.QUANTIDADE,
+      'N' as p_marca,
+      (select first 1
+        l1.descricao
+     from 
+        locallote m1 
+     inner join 
+        local l1 on
+            l1.id = m1.LOCAL
+     where
+        m1.filial=locallote_estocado.filial and
+        m1.iditem=locallote_estocado.iditem and
+       m1.local<>locallote_estocado.local and
+       m1.QUANTIDADE>0 and
+        substring(l1.descricao from 1 for 2) = 'Z2' 
+     order by
+        l1.descricao)  as destino,
+     c_consumo.consumo
+FROM
+    LOCALLOTE as locallote_estocado
+INNER JOIN
+      LOCAL as  local_estocado ON (locallote_estocado.LOCAL=local_estocado.ID)
+INNER JOIN
+      ITEMESTOQUE ON (locallote_estocado.IDITEM=ITEMESTOQUE.CODIGO)
+INNER JOIN
+    C_FORNECEDORPECA ON 
+        C_FORNECEDORPECA.ID=ITEMESTOQUE.C_FORNECEDOR
+LEFT JOIN
+    c_consumo on
+      c_consumo.codigo=itemestoque.codigo
+WHERE
+     locallote_estocado.FILIAL=1   AND
+     locallote_estocado.QUANTIDADE <> 0
+order by
+    local_estocado.descricao,
+    C_FORNECEDORPECA.DESCRICAO,
+ 

@@ -1,0 +1,7 @@
+select
+    *
+FROM
+    VENDEDORESPED
+WHERE
+    vendedoresped.filial=1 AND
+    vendedoresped.idnota=64399

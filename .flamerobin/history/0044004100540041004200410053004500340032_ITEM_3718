@@ -1,0 +1,7 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where idpedido is not null and concluido='N' and /*centrocusto in ('102', '104') and*/
+exists (select * from mercadoriasped
+        where MERCADORIASPED.filial=materialmovimentoestoque.filial
+        and MERCADORIASPED.idnota=materialmovimentoestoque.idpedido
+        and mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA
+        and mercadoriasped.baixa='S')

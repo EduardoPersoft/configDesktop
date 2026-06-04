@@ -1,0 +1,1 @@
+select * from TAXASCARTAO where modalidade=3

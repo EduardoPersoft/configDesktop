@@ -1,0 +1,1 @@
+select * from notafiscal where filial=5 and notafiscal.DATAEMISSAO='01.08.2022' order by NOTAFISCAL.HORAALTERACAO

@@ -1,0 +1,2 @@
+insert into regras(id, path, acesso)
+select 261, path, acesso from regras where id=172

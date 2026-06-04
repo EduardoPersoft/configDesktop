@@ -1,0 +1,6 @@
+update 
+    PEDIDO
+set
+    c_condicaomateriais = '23/05/2024 - R$4.392,00 - Cobrança Bancaria
+23/06/2024 - R$4.392,00 - Cobrança Bancaria'
+ where filial=1 and idnota=71757

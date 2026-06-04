@@ -1,0 +1,8 @@
+
+update
+    SERVICOSPEDCOMPRA
+set 
+    contacontabil='112030105'
+where
+    servicospedcompra.filial=110 and
+    servicospedcompra.codigo=1

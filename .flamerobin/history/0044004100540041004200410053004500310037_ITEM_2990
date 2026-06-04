@@ -1,0 +1,14 @@
+update
+    TITULOREC
+SET
+    titulorec.dataenvio='2023-12-10'
+WHERE
+    titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and titulorec.EMISSAO<='04.12.2023'
+	
+order by
+    titulorec.filial,
+    titulorec.titulo,
+    titulorec.fatura

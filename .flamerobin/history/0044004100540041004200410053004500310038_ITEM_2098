@@ -1,0 +1,1 @@
+select * from materiallote where materiallote.filial=1 and materiallote.iditem='01.12.1487'

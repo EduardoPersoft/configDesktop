@@ -1,0 +1,2 @@
+select * from materiallocal
+where materiallocal.filial=1

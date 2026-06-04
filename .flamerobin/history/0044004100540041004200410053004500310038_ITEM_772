@@ -1,0 +1,29 @@
+SELECT
+    centrocustos.CENTROCUSTO,
+    centrocustos.descricao,
+    coalesce(c_faturamentoperiodo.c_tipoProduto, 'x')||'.'||coalesce(cast(C_FATURAMENTOPERIODO.origem as integer) , '0'),
+    c_faturamentoperiodo.tipo,
+    SUM(C_FATURAMENTOPERIODO.VALOR) VALOR,
+    SUM(C_FATURAMENTOPERIODO.VALORCOFINS) VALORCOFINS,
+    SUM(C_FATURAMENTOPERIODO.VALORPIS) VALORPIS,
+    SUM(C_FATURAMENTOPERIODO.VALORICMS) VALORICMS
+FROM 
+    C_FATURAMENTOPERIODO ('C_FATURAMENTOPERIODO')
+left join
+    c_centrocustoxlocal on
+        c_Centrocustoxlocal.idlocal=c_faturamentoperiodo.c_loja
+left join
+    centrocustos on
+        centrocustos.idplano=(select estabelecimento.PLANOCENTROCUSTOS from ESTABELECIMENTO 
+                              where ESTABELECIMENTO.cadastro=1) and
+        centrocustos.CENTROCUSTO=C_CENTROCUSTOXLOCAL.CENTROCUSTO
+group BY
+    centrocustos.CENTROCUSTO,
+    centrocustos.descricao,
+    c_faturamentoperiodo.c_tipoProduto,
+    C_FATURAMENTOPERIODO.origem,
+    C_FATURAMENTOPERIODO.tipo
+ORDER BY 
+    centrocustos.CENTROCUSTO,
+    3
+

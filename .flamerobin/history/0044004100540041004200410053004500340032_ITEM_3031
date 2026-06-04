@@ -1,0 +1,252 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_PEDIDOSEMABERTOPRODUCAO (
+    PFILIAL integer )
+RETURNS (
+    FILIAL integer,
+    IDPEDIDO integer,
+    IDMERCADORIAPED integer,
+    DATAREFERENCIA timestamp,
+    PREVISAOVENDAS timestamp,
+    PREVISAOPRODUCAO timestamp,
+    CLIENTENOME varchar(60),
+    CODIGO varchar(15),
+    DESCRICAOPRODUTO varchar(100),
+    NOVOREPETICAOALTERACAO varchar(20),
+    QUANTIDADEPRODUZIR numeric(12,2),
+    ARTEOK varchar(1),
+    DATAPREVISTAARTE timestamp,
+    CLICHEOK varchar(1),
+    DATAPREVISTACLICHE timestamp,
+    MATERIAPRIMAOK varchar(1),
+    DATAPREVISTAMATERIAPRIMA timestamp,
+    OP integer,
+    IMPRESSAOTEM varchar(1),
+    IMPRESSAOQTDESTIMADA numeric(12,2),
+    IMPRESSAOTEMPOESTIMADO numeric(12,2),
+    IMPRESSAODATAPROGRAMADA timestamp,
+    IMPRESSAOCONCLUIDO varchar(1),
+    LAMINACAO1TEM varchar(1),
+    LAMINACAO1QTDESTIMADA numeric(12,2),
+    LAMINACAO1TEMPOESTIMADO numeric(12,2),
+    LAMINACAO1DATAPROGRAMADA timestamp,
+    LAMINACAO1CONCLUIDO varchar(1),
+    LAMINACAO2TEM varchar(1),
+    LAMINACAO2QTDESTIMADA numeric(12,2),
+    LAMINACAO2TEMPOESTIMADO numeric(12,2),
+    LAMINACAO2DATAPROGRAMADA timestamp,
+    LAMINACAO2CONCLUIDO varchar(1),
+    LAMINACAO3TEM varchar(1),
+    LAMINACAO3QTDESTIMADA numeric(12,2),
+    LAMINACAO3TEMPOESTIMADO numeric(12,2),
+    LAMINACAO3DATAPROGRAMADA timestamp,
+    LAMINACAO3CONCLUIDO varchar(1),
+    FORMATACAOTEM varchar(1),
+    FORMATACAOQTDESTIMADA numeric(12,2),
+    FORMATACAOTEMPOESTIMADO numeric(12,2),
+    FORMATACAODATAPROGRAMADA timestamp,
+    FORMATACAOCONCLUIDO varchar(1) )
+
+AS
+declare variable movimentoTEMPOESTIMADO integer;
+declare variable movimentoDATAPROGRAMADA timestamp;
+declare variable idMovtoLaminacao integer;
+declare variable idContadorLaminacao integer;
+declare variable idcentrocusto integer;
+declare variable quantidade decimal(12,2);
+declare variable opconcluida char(1);
+declare variable empenhados integer;
+declare variable naoempenhados integer;
+begin
+
+   FOR SELECT DISTINCT C_PEDIDOSEMABERTO.filial,
+                    C_PEDIDOSEMABERTO.idnota,
+                    C_PEDIDOSEMABERTO.idmercadoria,
+                    C_PEDIDOSEMABERTO.datareferencia,
+                    C_PEDIDOSEMABERTO.dataentrega ,
+                    c_pedidosemaberto.DATAPREVISTA as previsaoproducao,
+                    C_PEDIDOSEMABERTO.clientenome ,
+                    C_PEDIDOSEMABERTO.produto,
+                    C_PEDIDOSEMABERTO.descricaoproduto,
+                    c_pedidosemaberto.C_NOVOREPETICAOALTERADO                    
+                    
+    FROM 
+        C_PEDIDOSEMABERTO(:pFILIAL)
+    LEFT JOIN 
+        VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                            AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+    LEFT JOIN 
+        CADASTROPARCEIROS VENDEDOR ON 
+            (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+    ORDER BY 
+            c_pedidosemaberto.DATAPREVISTA,
+            C_PEDIDOSEMABERTO.IDNOTA,
+            C_PEDIDOSEMABERTO.IDCOMPOSICAO
+    INTO
+        :filial,:idpedido,:idmercadoriaped,:datareferencia,:previsaovendas ,                    
+        :previsaoproducao,:clientenome,:codigo,:descricaoproduto,:novorepeticaoalteracao
+        
+
+    DO BEGIN 
+    
+        :ARTEok = 'S'; 
+		:DATAPREVISTAARTE = NULL; 
+        :DATAPREVISTACLICHE = NULL; 
+		:DATAPREVISTAMATERIAPRIMA = NULL; 
+		:OP = NULL; 
+		
+        :IMPRESSAOTEM = NULL; 
+		:IMPRESSAOQTDESTIMADA = NULL; 
+		:IMPRESSAOTEMPOESTIMADO = NULL; 
+		:IMPRESSAODATAPROGRAMADA = NULL; 
+        :IMPRESSAOCONCLUIDO = NULL; 
+        
+		:LAMINACAO1TEM = NULL; 
+		:LAMINACAO1QTDESTIMADA = NULL; 
+		:LAMINACAO1TEMPOESTIMADO = NULL; 
+        :LAMINACAO1DATAPROGRAMADA = NULL; 
+        :LAMINACAO1CONCLUIDO = NULL;
+        
+		:LAMINACAO2TEM = NULL; 
+		:LAMINACAO2QTDESTIMADA = NULL; 
+		:LAMINACAO2TEMPOESTIMADO = NULL; 
+        :LAMINACAO2DATAPROGRAMADA = NULL; 
+        :LAMINACAO2CONCLUIDO = NULL;        
+        
+		:FORMATACAOTEM = NULL; 
+		:FORMATACAOQtdESTIMADA = NULL; 
+		:FORMATACAOTEMPOESTIMADO = NULL; 
+        :FORMATACAODATAPROGRAMADA  = NULL;
+        :FORMATACAOCONCLUIDO = NULL;
+        
+        :idMovtoLaminacao = 0;
+        
+        for select 
+            materialmovimentoestoque.idmovimento,
+            materialmovimentoestoque.idcentrocusto,
+            materialmovimentoestoque.quantidade,
+            materialmovimentoestoque.concluido,
+            materialmovimentoestoque.tempo+materialmovimentoestoque.setup tempoestimado,
+            MAPAPRODUCAO.fim dataprogramada,
+            movimentoestoque.c_cliche,
+            movimentoestoque.C_MATERIAPRIMA
+        from 
+            materialmovimentoestoque
+        inner join
+            movimentoestoque on
+                movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+        left join
+            MAPAPRODUCAO on
+                MAPAPRODUCAO.FILIAL=MATERIALMOVIMENTOESTOQUE.filial and
+                mapaproducao.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+                mapaproducao.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+        where
+            movimentoestoque.TIPOMOVIMENTO='12' and  
+            materialmovimentoestoque.filial=:filial and 
+            materialmovimentoestoque.idpedido=:idpedido and 
+            materialmovimentoestoque.idmercadoria=:idmercadoriaped
+        order by
+            movimentoestoque.emissao,
+            MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+        into        
+            :op,
+            :idcentrocusto,
+            :quantidade,
+            :opconcluida,
+            :movimentoTEMPOESTIMADO,
+            :movimentoDATAPROGRAMADA,
+            :clicheok,
+            :materiaPrimaok                    
+        do begin     
+
+            if (idmovtoLaminacao<>op) then begin
+                idContadorLaminacao = 1;
+                idmovtoLaminacao=op;
+            end
+
+            
+            if (idcentrocusto= 101) THEN 
+                BEGIN
+                    :IMPRESSAOTEM = 'S'; 
+                    :IMPRESSAOQTDESTIMADA = :quantidade; 
+                    :IMPRESSAOTEMPOESTIMADO = :movimentoTEMPOESTIMADO; 
+                    :IMPRESSAODATAPROGRAMADA = :movimentoDATAPROGRAMADA; 
+                    :IMPRESSAOCONCLUIDO = :opconcluida; 
+                END 
+                
+            if (idcentrocusto= 106) THEN 
+                BEGIN
+                    :FORMATACAOTEM = 'S'; 
+                    :FORMATACAOQTDESTIMADA = :quantidade; 
+                    :FORMATACAOTEMPOESTIMADO = :movimentoTEMPOESTIMADO; 
+                    :FORMATACAODATAPROGRAMADA = :movimentoDATAPROGRAMADA; 
+                    :FORMATACAOCONCLUIDO = :opconcluida; 
+                END 
+                           
+            if (:idcentrocusto= 103) THEN BEGIN
+                if(idContadorLaminacao=1) then begin
+                    :LAMINACAO1TEM = 'S'; 
+                    :LAMINACAO1QTDESTIMADA = :quantidade; 
+                    :LAMINACAO1TEMPOESTIMADO = :movimentoTEMPOESTIMADO; 
+                    :LAMINACAO1DATAPROGRAMADA = :movimentoDATAPROGRAMADA; 
+                    :LAMINACAO1CONCLUIDO = :opconcluida;                        
+                end
+                if(idContadorLaminacao=2) then begin
+                    :LAMINACAO2TEM = 'S'; 
+                    :LAMINACAO2QTDESTIMADA = :quantidade; 
+                    :LAMINACAO2TEMPOESTIMADO = :movimentoTEMPOESTIMADO; 
+                    :LAMINACAO2DATAPROGRAMADA = :movimentoDATAPROGRAMADA; 
+                    :LAMINACAO2CONCLUIDO = :opconcluida; 
+                end
+                if(idContadorLaminacao>2) then begin                
+                    :LAMINACAO3TEM = 'S'; 
+                    :LAMINACAO3QTDESTIMADA = :quantidade; 
+                    :LAMINACAO3TEMPOESTIMADO = :movimentoTEMPOESTIMADO; 
+                    :LAMINACAO3DATAPROGRAMADA = :movimentoDATAPROGRAMADA; 
+                    :LAMINACAO3CONCLUIDO = :opconcluida; 
+                end
+                
+                
+                idContadorLaminacao  = idContadorLaminacao  +1;
+            END                                
+        end
+        
+        DATAPREVISTAMATERIAPRIMA = null;
+        
+        select 
+            max(PEDIDOCOMPRA.datacadastro+PRAZOMERCPEDCOMPRA.dias)
+        from
+            MERCADORIASPEDCOMPRA
+        inner join
+            pedidocompra on
+                mercadoriaspedcompra.filial=pedido.filial and
+                mercadoriaspedcompra.idnota=pedido.idnota 
+        inner join
+            PRAZOMERCPEDCOMPRA on
+                PRAZOMERCPEDCOMPRA.filial=mercadoriaspedcompra.filial and
+                prazomercpedcompra.idnota=mercadoriaspedcompra.idnota and
+                prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+        where 
+            mercadoriaspedcompra.filial=:filial and
+            mercadoriaspedcompra.idnota=:idnota and
+            mercadoriaspedcompra.IDMERCADORIA=:idmercadoria and
+            mercadoriaspedcompra.baixa='N'
+        into 
+            :DATAPREVISTAMATERIAPRIMA;
+        
+        if(:dataprevistameteriaprima is not null) then
+            materiaprimaok = 'N';
+        
+            
+                
+        SUSPEND;
+
+    END        
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_PEDIDOSEMABERTOPRODUCAO TO  SYSDBA WITH GRANT OPTION;
+

@@ -1,0 +1,2 @@
+select * from T_TITULOREC
+where importado is null

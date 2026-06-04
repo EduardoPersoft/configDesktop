@@ -1,0 +1,2 @@
+update pedido set c_datacomissao=null
+where filial=1 and idnota=70061

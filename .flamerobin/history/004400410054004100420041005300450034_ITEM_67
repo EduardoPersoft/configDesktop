@@ -1,0 +1,1 @@
+select * from movtotitulopag where dtmovtotitulo='30.12.2020'

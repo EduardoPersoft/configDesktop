@@ -1,0 +1,4 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110
+where lote like '%97708%'
+

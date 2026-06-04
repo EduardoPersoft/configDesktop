@@ -1,0 +1,17 @@
+SELECT 
+    materialmovimentoestoque.IDCENTROCUSTO,
+    cast(sum(materialmovimentoestoque.tempo) as integer) tempo,
+    cast(sum(materialmovimentoestoque.setup) as integer) setup,
+    cast(sum(materialmovimentoestoque.tempo+materialmovimentoestoque.setup)
+         as integer) total
+FROM 
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    movimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    materialmovimentoestoque.concluido = 'N' AND
+    movimentoestoque.tipomovimento='12'
+group by
+    materialmovimentoestoque.IDCENTROCUSTO

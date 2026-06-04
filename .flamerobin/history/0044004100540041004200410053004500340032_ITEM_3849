@@ -1,0 +1,4 @@
+select * from SERVICOSPED
+where  servicosped.filial in (110,3941)
+and servicosped.baixa='N'
+and servicosped.C_ITEMESTOQUE is not null

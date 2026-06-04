@@ -1,0 +1,6 @@
+UPDATE
+    LISTAPRECOPRODUTO
+SET
+    listaprecoproduto.DESCONTOITEM=8
+WHERE
+    listaprecoproduto.lista=1

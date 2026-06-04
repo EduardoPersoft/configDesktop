@@ -1,0 +1,3 @@
+select * from  mapaproducao 
+where filial=1
+and recurso = 7

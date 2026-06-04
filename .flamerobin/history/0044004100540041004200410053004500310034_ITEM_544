@@ -1,0 +1,4 @@
+update
+    LOCALLOTE
+set 
+    locallote.QUANTIDADE=cast(0 as decimal(12,2)

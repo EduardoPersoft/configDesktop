@@ -1,0 +1,28 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    extract(month from MOVIMENTOESTOQUE.emissao) as mes/*,
+    sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal*(-1)) as qtd*/
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.IDITEM        
+inner join
+    TIPOMOVIMENTOESTOQUE on
+        tipomovimentoestoque.id=movimentoestoque.TIPOMOVIMENTO
+
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.01.2021' and '31.12.2021' /*and
+    MATERIALMOVIMENTOESTOQUE.iditem between '01.12.0000' and '01.12.9999'
+group by    
+    itemestoque.codigo,
+    itemestoque.descricao,
+    extract(month from MOVIMENTOESTOQUE.emissao)
+*/

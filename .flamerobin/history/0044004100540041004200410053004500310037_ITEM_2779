@@ -1,0 +1,11 @@
+select    
+    1 as id,
+    extract(day from pedido.DATACADASTRO) as qtd,
+    count(pedido.idnota)    
+from
+    pedido
+where
+    pedido.datacadastro>cast('now' as date)-extract(day from cast('now' as date)) and
+    pedido.dataCancelamento is null
+group by
+    extract(day from pedido.DATACADASTRO) 

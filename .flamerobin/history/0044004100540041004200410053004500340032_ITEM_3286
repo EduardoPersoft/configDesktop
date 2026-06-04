@@ -1,0 +1,1 @@
+create index i_APTCOMPLOTE apontamentocomp(filial,lote)

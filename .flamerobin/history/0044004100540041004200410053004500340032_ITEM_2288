@@ -1,0 +1,13 @@
+            select
+                    filial,idnota,idmercadoria,filialped,idpedido,idmercpedido
+            from
+                MERCADORIASNOTA
+            inner join
+                notafiscal on
+                    notafiscal.filial=mercadoriasnota.filial and
+                    notafiscal.idnota=mercadoriasnota.IDNOTA
+            where
+                
+                mercadoriasnota.IDPEDIDO=10766 and
+                --mercadoriasnota.IDMERCPEDIDO=1 and
+                notafiscal.CANCELAMENTO='N' 

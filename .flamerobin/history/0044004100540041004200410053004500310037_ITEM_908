@@ -1,0 +1,1 @@
+select * from titulorec where titulorec.dataenvio in ('27.10.2021', '28.10.2021')

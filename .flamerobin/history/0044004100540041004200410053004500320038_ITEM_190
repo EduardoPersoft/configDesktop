@@ -1,0 +1,9 @@
+UPDATE
+    ESTADO
+SET
+    NFCEURLCONSULTA = 'https://www.nfce.fazenda.sp.gov.br/consulta',
+    NFCEURLQRCODE = 'https://www.nfce.fazenda.sp.gov.br/qrcode',
+    NFCEURLCONSULTAHOM = 'https://www.homologacao.nfce.fazenda.sp.gov.br/consulta',
+    NFCEURLQRCODEHOM = 'https://www.homologacao.nfce.fazenda.sp.gov.br/qrcode'
+where
+    ESTADO='SP'

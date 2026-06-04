@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    VENDEDORESNOTA
+where
+    filial = 5 and 
+    idnota in (300279)

@@ -1,0 +1,1 @@
+select * from ITEMESTOQUECODIGOS where itemestoquecodigos.CODIGOALTERNATIVO = '06930'

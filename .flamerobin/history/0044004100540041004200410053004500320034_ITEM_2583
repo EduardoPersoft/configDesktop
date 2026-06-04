@@ -1,0 +1,20 @@
+select
+    itemestoque.familia,
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    itemestoque.definicao,
+    itemestoquexarquivo.NOMEARQUIVO
+from
+    itemestoquexarquivo
+inner join
+    itemestoque on
+        itemestoque.codigo=itemestoquexarquivo.CODIGO
+where
+    ITEMESTOQUEXARQUIVO.ordem=0 and
+    itemestoque.familia in  (2, 6, 8, 3, 4, 33, 9)
+order by 
+    itemestoque.familia,
+    itemestoque.referencia,
+    itemestoque.codigo
+    

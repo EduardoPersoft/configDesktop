@@ -1,0 +1,2 @@
+select * from MERCADORIASPED
+where filial=110 and codigo='PRO1569PO004'

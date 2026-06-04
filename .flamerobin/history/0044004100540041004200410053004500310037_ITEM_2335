@@ -1,0 +1,22 @@
+select
+    lantocontbanc.CONTACONTABIL,
+    
+    MOVBANCARIOS.HISTORICOEXTRATO,
+    movbancarios.TIPOMOVIMENTO
+from
+    lantocontbanc
+inner join
+    MOVBANCARIOS on
+        MOVBANCARIOS.filial=LANTOCONTBANC.filial and
+        movbancarios.IDCONTACORRENTE=lantocontbanc.IDCONTACORRENTE and
+        movbancarios.IDMOVTOBANCARIO=LANTOCONTBANC.IDMOVTOBANC
+where 
+    not exists(
+        select  
+            *
+        from
+            CONTASCONTABEIS
+        where 
+            CONTASCONTABEIS.IDPLANO=2 and
+            contascontabeis.CONTACONTABIL=LANTOCONTBANC.CONTACONTABIL)
+    

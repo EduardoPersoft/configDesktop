@@ -1,0 +1,6 @@
+select * from USUARIO
+where usuario.email in (
+'financeiro@fewpack.com.br',
+'financeiro1@fewpack.com.br',
+'financeiro2@fewpack.com.br',
+'pcp@fewpack.com.br')

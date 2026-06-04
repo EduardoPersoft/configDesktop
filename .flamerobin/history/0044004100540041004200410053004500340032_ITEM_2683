@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+where lote like '189952/1%'

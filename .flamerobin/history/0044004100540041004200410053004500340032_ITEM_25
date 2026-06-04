@@ -1,0 +1,5 @@
+select filial,idnota,idmercadoria, mercadoriasnota.QTDBAIXA,MERCADORIASNOTA.qua from MERCADORIASNOTA
+where --mercadoriasnota.cfop in ('5922', '6922') and
+mercadoriasnota.filial=110 and
+mercadoriasnota.idpedido is not null
+order by idnota desc

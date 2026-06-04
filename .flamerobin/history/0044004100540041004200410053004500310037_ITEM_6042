@@ -1,0 +1,9 @@
+select 
+    cadastro, 
+    CADASTROPARCEIROS.LOGRADOUROENTREGA,
+    cadastroparceiros.OBSENTREGARETIRA
+from
+    CADASTROPARCEIROS
+where
+    coalesce(CADASTROPARCEIROS.LOGRADOUROENTREGA,'')<>'' and
+    coalesce(CADASTROPARCEIROS.CIDADEENTREGA,'')=''

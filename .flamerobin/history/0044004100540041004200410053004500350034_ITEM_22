@@ -1,0 +1,30 @@
+select
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.iditem,
+    '.',
+    1,
+    sum(coalesce(materialmovimentoestoque.quantidade,0)*
+        materialmovimentoestoque.sinal)*
+     coalesce(itemestoque.VALORULTIMACOMPRA,
+     materialfilial.CUSTOMEDIO)
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.iditem
+inner join
+    materialfilial on
+        materialfilial.filial=1 and
+        materialfilial.iditem=itemestoque.codigo
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao <= '31.12.2024'
+group by
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.iditem,
+    itemestoque.VALORULTIMACOMPRA,
+    materialfilial.customedio

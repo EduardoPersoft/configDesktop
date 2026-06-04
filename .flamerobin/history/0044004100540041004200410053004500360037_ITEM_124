@@ -1,0 +1,620 @@
+SET TERM ^ ;
+ALTER PROCEDURE IMP_NFE_MERCADORIAS (
+    FILIAL integer,
+    IDNOTA integer,
+    INDFINAL smallint,
+    ITEMCODREFNFE char(1),
+    NCONTRIBUINTEINTER char(1),
+    SIMPLES varchar(1),
+    DEVOLUCAO char(1),
+    IDDEST smallint,
+    PTIPONOTA char(1),
+    UF varchar(2),
+    VRETPIS double precision,
+    VRETCOFINS double precision,
+    VRETCSLL double precision,
+    CFOP integer,
+    VEANNFE char(1),
+    VBCIRRF double precision,
+    VBCRETPREV double precision,
+    VIRRF double precision,
+    VLRZONAFRANCA double precision,
+    VREMONTADESCRICAO char(1),
+    VRETPREV double precision )
+RETURNS (
+    IDITEM integer,
+    CODIGO varchar(15),
+    DESCRICAO varchar(4596),
+    DESCRICAOREDUZIDA varchar(50),
+    QUANTIDADE double precision,
+    UNIDADE varchar(3),
+    PRUNITARIO double precision,
+    PIPIMERC double precision,
+    VLRIPIMERC double precision,
+    VLRTOTITEM double precision,
+    PICMS double precision,
+    PCREDSN double precision,
+    VCREDICMSSN double precision,
+    ICMSBASE double precision,
+    SITUACAOTRIBUT varchar(4),
+    VALORICMS_PROD double precision,
+    CFOP_PROD char(4),
+    EAN char(13),
+    NFCI char(36),
+    EANTRIBUTAVEL char(13),
+    UNIDADETRIBUTAVEL varchar(3),
+    QUANTIDADETRIBUTAVEL double precision,
+    VALORUNITARIOTRIBUTAVEL double precision,
+    FRETEPRODUTO double precision,
+    SEGUROPRODUTO double precision,
+    DESCONTOPRODUTO double precision,
+    VOUTRO double precision,
+    ORIGEM integer,
+    CTICMS varchar(3),
+    MODBC integer,
+    PREDBC double precision,
+    MODBCST integer,
+    PMVAST double precision,
+    PREDBCST double precision,
+    VBCST double precision,
+    PICMSST double precision,
+    VICMSST double precision,
+    IPIBASE_PROD double precision,
+    PISALIQUOTA double precision,
+    IPICST integer,
+    PISCST integer,
+    PISBASE double precision,
+    PISVALOR double precision,
+    COFINSCST integer,
+    COFINSBASECALCULO double precision,
+    COFINSALIQUOTA double precision,
+    COFINSVALOR double precision,
+    NDI varchar(12),
+    DDI timestamp,
+    XLOCDESEMB varchar(60),
+    UFDI varchar(2),
+    DDESEMB timestamp,
+    CEXPORTADOR varchar(60),
+    NADICAO integer,
+    CFABRICANTE varchar(60),
+    VDESCDI double precision,
+    VBASEIMPORTAMERC double precision,
+    VDESPADUMERC double precision,
+    VIMPORTOIMPORTACAOMERC double precision,
+    VIOFMERC double precision,
+    PREDIPI double precision,
+    IDMERCADORIAPEDIDO integer,
+    IDPEDIDO integer,
+    INFADPROD varchar(500),
+    VTOTTRIB decimal(10,2),
+    PFCUFDEST numeric(5,4),
+    PICMSUFDEST numeric(5,4),
+    PICMSINTER numeric(5,4),
+    VFCPUFDEST numeric(12,2),
+    VICMSUFDEST numeric(12,2),
+    VICMSUFREMET numeric(12,2),
+    VTOTTRIBEST decimal(12,2),
+    CENQ varchar(3),
+    INDESCALA varchar(1),
+    ORIGEMPRODUTO double precision,
+    CNPJFAB varchar(14),
+    ICMSORIGEMFCP numeric(6,3),
+    ICMSORIGEMFCPVALOR numeric(12,2),
+    ICMSSTFCP numeric(6,3),
+    ICMSSTFCPVALOR numeric(12,2),
+    ICMSALIQUOTACF numeric(6,3),
+    ICMSALIQUOTASIMPLES numeric(6,3),
+    ICMSVALORSIMPLES numeric(12,2),
+    PRLISTA double precision,
+    VBCUFDEST numeric(12,2),
+    CODCF char(3),
+    VTOTTRIBFED decimal(12,2),
+    VIPIDEVOLITEM numeric(12,2),
+    VIPIDEVOLTOT numeric(12,2),
+    PDEVOL numeric(6,3),
+    CBENEF varchar(10),
+    P_VALORRETIDO double precision,
+    CTICMSSIMPLES varchar(3),
+    NRE varchar(12),
+    NSEQADIC integer,
+    PICMSINTERESTADUAL double precision,
+    ORDEM integer,
+    XPED char(50),
+    CEST varchar(7),
+    CF varchar(12),
+    NVE varchar(8),
+    DETALHEITENS char(1),
+    NITEMPED integer,
+    VICMSDESONERADO double precision,
+    ICMSPART integer,
+    PST double precision,
+    VBCFCPST double precision,
+    PFCPST double precision,
+    VBCSTRET numeric(13,2),
+    VICMSSUBSTITUTO numeric(13,2),
+    VICMSSTRET numeric(13,2),
+    CPRODANP varchar(9),
+    DESCANP varchar(95),
+    PGLP double precision,
+    PGNN double precision,
+    PGNI double precision,
+    VPART numeric(13,2),
+    INDDEDUZDESON integer,
+    CSTIBSCBS varchar(3),
+    CCLASSTRIB char(6),
+    VBC decimal(15,2),
+    PIBSUF decimal(6,2),
+    PIBSUFREDALIQ decimal(7,4),
+    PIBSUFALIQEFET decimal(7,4),
+    VIBSUF decimal(15,2),
+    PIBSMUN decimal(6,2),
+    PIBSMUNREDALIQ decimal(7,4),
+    PIBSMUNALIQEFET decimal(7,4),
+    VIBSMUN decimal(15,2),
+    VIBS decimal(15,2),
+    PCBS decimal(6,2),
+    PCBSREDALIQ decimal(7,4),
+    PCBSALIQEFET decimal(7,4),
+    VCBS decimal(15,2),
+    CSTREG varchar(3),
+    CCLASSTRIBREG char(6),
+    PALIQEFETREGIBSUF decimal(7,4),
+    VTRIBREGIBSUF decimal(15,2),
+    PALIQEFETREGIBSMUN decimal(7,4),
+    VTRIBREGIBSMUN decimal(15,2),
+    PALIQEFETREGCBS decimal(7,4),
+    VTRIBREGCBS decimal(15,2),
+    VITEM decimal(12,2) )
+
+AS
+declare variable VLOTE varchar(4096);
+declare variable VLOTEDSC varchar(12);
+declare variable NSEQADICCONTAGEM integer;
+declare variable PQTDITEM integer;
+declare variable NADICAOANTES integer;
+declare variable PXPED char(50);
+declare variable PVLRTOTAL double precision;
+declare variable VQUANTIDADELOTE varchar(20);
+begin
+
+pdevol=0;
+PQTDITEM =0;
+NADICAOANTES=0;
+ORDEM=0;
+PVLRTOTAL=0;
+VICMSDESONERADO=null;
+icmspart=0;
+VIPIDEVOLtot=0;
+VIPIDEVOlitem=0;
+
+
+ for select
+     MERCADORIASNOTA.IDMERCADORIA,
+     MERCADORIASNOTA.CODIGO,
+     CAST (coalesce(substring(MERCADORIASNOTA.DESCRICAO from 1 for 4096), '')as blob sub_type 0 character set iso8859_1),	
+    -- coalesce(substring(MERCADORIASNOTA.DESCRICAO from 1 for 4096), ''),
+     MERCADORIASNOTA.DESREDUZIDA,
+     MERCADORIASNOTA.QUANTIDADE,
+     MERCADORIASNOTA.UNIDADE,
+     coalesce(MERCADORIASNOTA.PRECOLISTA,
+     MERCADORIASNOTA.PRECOUNITARIO),
+     MERCADORIASNOTA.PRECOLISTA,
+     case
+       when MERCADORIASNOTA.VALORIPI > 0 then MERCADORIASNOTA.PIPI
+       else 0
+     end,
+     MERCADORIASNOTA.VALORIPI,
+     MERCADORIASNOTA.VLRTOTALMERCAD,
+     case :NCONTRIBUINTEINTER
+       when 'N' then case
+             when :SIMPLES = 'S' and MERCADORIASNOTA.VLRICMSRECOLHIDO = 0 and :DEVOLUCAO = 'N' and substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 then 0
+             else MERCADORIASNOTA.icmsorigemaliquota
+           end
+       else MERCADORIASNOTA.ICMSORIGEMALIQUOTA
+     end,
+     case
+       when :SIMPLES = 'S' and substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 then MERCADORIASNOTA.ALIQUOTAICMS
+       else 0
+     end,
+     case
+       when :SIMPLES = 'S' and substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 then MERCADORIASNOTA.VALORICMS
+       else 0
+     end,
+     MERCADORIASNOTA.CLASSIFISCAL,
+     case :NCONTRIBUINTEINTER
+       when 'N' then case
+             when :SIMPLES = 'S' and MERCADORIASNOTA.VLRICMSRECOLHIDO = 0 and :DEVOLUCAO = 'N' and substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 then 0
+             else MERCADORIASNOTA.ICMSBASE
+           end
+       else MERCADORIASNOTA.ICMSORIGEMBASE
+     end,
+     MERCADORIASNOTA.SITUACAOTRIBUT,
+     case :NCONTRIBUINTEINTER
+       when 'N' then case
+             when :SIMPLES = 'S' and MERCADORIASNOTA.VLRICMSRECOLHIDO = 0 and :DEVOLUCAO = 'N' and substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 then 0
+             else MERCADORIASNOTA.icmsorigemvalor
+           end
+       else MERCADORIASNOTA.ICMSORIGEMVALOR
+     end,
+     MERCADORIASNOTA.CFOP,
+     ITEMESTOQUE.CODIGOBARRA,
+     ITEMESTOQUE.FCI,
+     case coalesce(ITEMESTOQUE.CEANTRIB, '')
+       when '' then ITEMESTOQUE.CODIGOBARRA
+       else ITEMESTOQUE.CEANTRIB
+     end,
+     coalesce(itemestoque.UNIDADEPADRAO, itemestoque.UNIDADE) as unidadetributavel,
+     
+     MERCADORIASNOTA.QUANTIDADE * coalesce(itemestoque.FATORUNIDADEPADRAO,1),
+
+     coalesce(MERCADORIASNOTA.PRECOLISTA, MERCADORIASNOTA.PRECOUNITARIO) / COALESCE(itemestoque.FATORUNIDADEPADRAO,1),
+
+     MERCADORIASNOTA.FRETE,
+     MERCADORIASNOTA.SEGURO,
+     coalesce(MERCADORIASNOTA.OUTDESPACESSOR, 0) + coalesce(MERCADORIASNOTA.ACRESCIMONOTA, 0)
+     +coalesce(MERCADORIASNOTA.JUROSMULTAIMPOSTOS, 0)
+     + coalesce(MERCADORIASNOTA.VLRDESPADUANEIRAS, 0) + coalesce(MERCADORIASNOTA.VLRTAXASISCOMEX, 0),
+     coalesce(MERCADORIASNOTA.VLRDESCPRODUTO, 0) + coalesce(MERCADORIASNOTA.DESCONTONOTA, 0),
+     substring(MERCADORIASNOTA.SITUACAOTRIBUT from 1 for 1),
+     substring(MERCADORIASNOTA.SITUACAOTRIBUT from 2 for 3),
+     case when (coalesce(mercadoriasnota.ICMSBASE,0)=0) and 
+               (coalesce(mercadoriasnota.VALORICMS,0)>0) 
+               and (NOTAFISCAL.TIPONOTA<>2) then 1 else 3 end,
+     MERCADORIASNOTA.REDUCAOICMS,
+     case
+       when (MERCADORIASNOTA.VLRICMSSUBST > 0) OR substring(mercadoriasnota.SITUACAOTRIBUT from 2 for 2) = '10' then 4
+       else null
+     end,
+     MERCADORIASNOTA.PLUCRO,
+     MERCADORIASNOTA.PREDUCAO,
+     MERCADORIASNOTA.VLRBASESUBST,
+     MERCADORIASNOTA.ALIQUOTASUBSTITUTO,
+     MERCADORIASNOTA.VLRICMSRECOLHIDO,
+     MERCADORIASNOTA.IPIBASE,
+     MERCADORIASNOTA.PPIS,
+     coalesce(MERCADORIASNOTA.CSTIPI, 0),
+     MERCADORIASNOTA.CSTPIS,
+     MERCADORIASNOTA.BASEPIS,
+     MERCADORIASNOTA.VLRPISPASEP,
+     MERCADORIASNOTA.PCOFINS,
+     MERCADORIASNOTA.CSTCOFINS,
+     MERCADORIASNOTA.BASECOFINS,
+     MERCADORIASNOTA.VLRCOFINS,
+     case coalesce(MERCADORIASNOTA.DI, '')
+       when '' then NOTAFISCAL.DI
+       else MERCADORIASNOTA.DI
+     end,
+     coalesce(MERCADORIASNOTA.DDI, NOTAFISCAL.DDI),
+     case coalesce(MERCADORIASNOTA.XLOCDESEMB, '')
+       when '' then NOTAFISCAL.XLOCDESEMB
+       else MERCADORIASNOTA.XLOCDESEMB
+     end,
+     case coalesce(MERCADORIASNOTA.UFDI, '')
+       when '' then NOTAFISCAL.UFDI
+       else MERCADORIASNOTA.UFDI
+     end,
+     coalesce(MERCADORIASNOTA.DATADESEMB, NOTAFISCAL.DATADESEMB),
+     case coalesce(MERCADORIASNOTA.CEXPORTADOR, '')
+       when '' then NOTAFISCAL.CEXPORTADOR
+       else MERCADORIASNOTA.CEXPORTADOR
+     end,
+     coalesce(MERCADORIASNOTA.NADICAO, 0),
+     MERCADORIASNOTA.NSEQADICAO,
+     MERCADORIASNOTA.CFABRICANTE,
+     coalesce(MERCADORIASNOTA.VDESCDI, 0),
+     MERCADORIASNOTA.BASEII,
+     coalesce(MERCADORIASNOTA.VLRDESPADUANEIRAS, 0),
+     MERCADORIASNOTA.VLRIMPOSTOIMPORT,
+     0,
+     NOTAFISCAL.PREDUCAOIPI,
+     MERCADORIASNOTA.IDMERCPEDIDO,
+     MERCADORIASNOTA.IDPEDIDO,
+     MERCADORIASNOTA.INFADPROD,
+     MERCADORIASNOTA.VTOTTRIB,
+     MERCADORIASNOTA.ICMSBASE,
+     MERCADORIASNOTA.ICMSDESTINOFCP,
+     MERCADORIASNOTA.ICMSDESTINOALIQUOTA,
+     MERCADORIASNOTA.ICMSORIGEMALIQUOTA,
+     MERCADORIASNOTA.ICMSDESTINOFCPVALOR,
+     MERCADORIASNOTA.ICMSDESTINOVALOR,
+     MERCADORIASNOTA.ICMSORIGEMVALORINTERESTADUAL,
+     MERCADORIASNOTA.VTOTTRIBFED,
+     MERCADORIASNOTA.VTOTTRIBEST,
+     coalesce(MERCADORIASNOTA.CENQ, '999'),
+     case(coalesce(ITEMESTOQUE.INDESCALA, ''))
+        when '' then null
+        else ITEMESTOQUE.INDESCALA END,
+     ITEMESTOQUE.CODIGOTRIBUTACAO,
+     case(coalesce(ITEMESTOQUE.INDESCALA, ''))
+       when 'N' then CADFAB.DOCUMENTO
+       else null
+     end,
+     MERCADORIASNOTA.ICMSORIGEMFCP,
+     MERCADORIASNOTA.ICMSORIGEMFCPVALOR,
+
+     MERCADORIASNOTA.ICMSSTFCP,
+     MERCADORIASNOTA.ICMSSTFCPVALOR,
+     MERCADORIASNOTA.ICMSALIQUOTACF,
+
+     case MERCADORIASNOTA.ICMSSTFCP
+          WHEN 0 then 0
+          else MERCADORIASNOTA.VLRBASESUBST end,
+     MERCADORIASNOTA.ICMSSTFCP,
+
+     MERCADORIASNOTA.ICMSALIQUOTASIMPLES,
+     MERCADORIASNOTA.ICMSVALORSIMPLES,
+     MERCADORIASNOTA.VIPIDEVOLVITEM,
+     itemestoque.cProdANP,
+     ProdANP.descANP,
+     MERCADORIASNOTA.pGLP,
+     MERCADORIASNOTA.pGNn,
+     MERCADORIASNOTA.pGNi,
+     MERCADORIASNOTA.vPart,
+     MERCADORIASNOTA.CSTIBSCBS,
+     MERCADORIASNOTA.cClassTrib,
+     MERCADORIASNOTA.vBC,
+     MERCADORIASNOTA.pIBSUF,
+     MERCADORIASNOTA.pIBSUFRedAliq,
+     MERCADORIASNOTA.pIBSUFaliqEfet,
+     MERCADORIASNOTA.vIBSUF,
+     MERCADORIASNOTA.pIBSMun,
+     MERCADORIASNOTA.pIBSMunRedAliq,
+     MERCADORIASNOTA.pIBSMunaliqEfet,
+     MERCADORIASNOTA.vIBSMun,
+     MERCADORIASNOTA.vIBS,
+     MERCADORIASNOTA.pCBS,
+     MERCADORIASNOTA.pCBSRedAliq,
+     MERCADORIASNOTA.pCBSaliqEfet,
+     MERCADORIASNOTA.vCBS,
+     MERCADORIASNOTA.CSTReg,
+     MERCADORIASNOTA.cClassTribReg,
+     MERCADORIASNOTA.paliqEfetRegIBSUF,
+     MERCADORIASNOTA.vTribRegIBSUF,
+     MERCADORIASNOTA.paliqEfetRegIBSMun,
+     MERCADORIASNOTA.vTribRegIBSMun,
+     MERCADORIASNOTA.paliqEfetRegCBS,
+     MERCADORIASNOTA.vTribRegCBS,
+     MERCADORIASNOTA.vItem
+
+     from
+         MERCADORIASNOTA
+     inner join
+           NOTAFISCAL
+                     on (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL
+                     and NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+     inner join
+           NATUREZAOPERACAO
+                           on (NATUREZAOPERACAO.ID = NOTAFISCAL.OPERACAO)
+     inner join
+           ESTABELECIMENTO
+                          on (NOTAFISCAL.FILIAL = ESTABELECIMENTO.CADASTRO)
+     left join
+          ITEMESTOQUE
+                     on (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+     left join
+          CADASTROPARCEIROS CADFAB
+                            on (CADFAB.CADASTRO = ITEMESTOQUE.FABRICANTE)
+     left join 
+            ProdANP on 
+                (ProdANP.CPRODANP = ITEMESTOQUE.CPRODANP)
+     where
+          MERCADORIASNOTA.FILIAL = :FILIAL and
+          MERCADORIASNOTA.IDNOTA = :IDNOTA
+    order by
+          MERCADORIASNOTA.IDMERCADORIA
+
+    into :IDITEM, :CODIGO, :DESCRICAO, :DESCRICAOREDUZIDA, :QUANTIDADE, :UNIDADE, :PRUNITARIO, :PRLISTA, :PIPIMERC,
+         :VLRIPIMERC, :VLRTOTITEM, :PICMS, :PCREDSN, :VCREDICMSSN, :CODCF, :ICMSBASE, :SITUACAOTRIBUT,
+         :VALORICMS_PROD, :CFOP_PROD, :EAN, :NFCI, :EANTRIBUTAVEL, :UNIDADETRIBUTAVEL, :QUANTIDADETRIBUTAVEL,
+         :VALORUNITARIOTRIBUTAVEL, :FRETEPRODUTO, :SEGUROPRODUTO, :VOUTRO, :DESCONTOPRODUTO, :ORIGEM, :CTICMS,
+         :MODBC, :PREDBC, :MODBCST, :PMVAST, :PREDBCST, :VBCST, :PICMSST, :VICMSST, :IPIBASE_PROD, :PISALIQUOTA,
+         :IPICST, :PISCST, :PISBASE, :PISVALOR, :COFINSALIQUOTA, :COFINSCST, :COFINSBASECALCULO, :COFINSVALOR, :NDI,
+         :DDI, :XLOCDESEMB, :UFDI, :DDESEMB, :CEXPORTADOR, :NADICAO, :NSEQADIC, :CFABRICANTE, :VDESCDI,
+         :VBASEIMPORTAMERC, :VDESPADUMERC, :VIMPORTOIMPORTACAOMERC, :VIOFMERC, :PREDIPI, :IDMERCADORIAPEDIDO,
+         :IDPEDIDO, :INFADPROD, :VTOTTRIB, :VBCUFDEST, :PFCUFDEST, :PICMSUFDEST, :PICMSINTER, :VFCPUFDEST,
+         :VICMSUFDEST, :VICMSUFREMET, :VTOTTRIBFED, :VTOTTRIBEST, :CENQ, :INDESCALA, :ORIGEMPRODUTO, :CNPJFAB,
+         :ICMSORIGEMFCP, :ICMSORIGEMFCPVALOR, :ICMSSTFCP, :ICMSSTFCPVALOR, :ICMSALIQUOTACF,
+         :vBCFCPST, :pFCPST ,
+         :ICMSALIQUOTASIMPLES, :ICMSVALORSIMPLES, :VIPIDEVOLITEM,
+         :cProdANP, :descANP, :pGLP, :pGNn, :pGNi, :vPart,
+         :CSTIBSCBS,:cClassTrib,:vBC,:pIBSUF,:pIBSUFRedAliq,:pIBSUFaliqEfet,:vIBSUF,:pIBSMun,
+         :pIBSMunRedAliq,:pIBSMunaliqEfet,:vIBSMun,:vIBS,:pCBS,:pCBSRedAliq,:pCBSaliqEfet,:vCBS,:CSTReg,
+         :cClassTribReg,:paliqEfetRegIBSUF,:vTribRegIBSUF,:paliqEfetRegIBSMun,:vTribRegIBSMun,:paliqEfetRegCBS,:vTribRegCBS,
+         :vItem
+    do begin
+
+      --if (:vicmsst>0 and :indfinal=1 and :iddest=2) then icmspart=1;
+        VIPIDEVOLtot=VIPIDEVOLTOT+VIPIDEVOLITEM;
+        
+      pDevol=PIPIMERC;
+     -- if (VIPIDEVOLITEM>0) then pDevol= (VIPIDEVOLITEM/VIPIDEVOLTOT)*100;
+
+      select CBENEF
+      from ITEMESTOQUE
+      inner join TRIBUTACAOICMS on (ITEMESTOQUE.TRIBUTACAOICMS = TRIBUTACAOICMS.ID)
+      inner join TRIBUTACAOICMSUF on (TRIBUTACAOICMSUF.ID = TRIBUTACAOICMS.ID)
+      where ITEMESTOQUE.CODIGO = :CODIGO and TRIBUTACAOICMSUF.UF = :UF
+      into :CBENEF;
+
+
+      if (:CTICMS IN ( '60', '500')) then begin
+         PST=NULL;
+         pst=COALESCE (PICMS,0)+ COALESCE ( PFCUFDEST,0);
+      END
+
+      if (:CTICMS = '60' and :VALORICMS_PROD = 0) then begin
+        PICMS = null;
+      end
+      P_VALORRETIDO = coalesce(VRETPIS, 0) + coalesce(VRETCOFINS, 0) + coalesce(VRETCSLL, 0) + coalesce(VBCIRRF, 0) + coalesce(VIRRF, 0) + coalesce(VBCRETPREV, 0) + coalesce(VRETPREV, 0);
+      if (substring(:CFOP from 1 for 1) = '7') then begin
+        NRE = NDI;
+        NDI = '';
+      end
+
+      select distinct coalesce(mercadoriasped.NUMPEDIDOCLIENTE, pedido.NUMPEDIDOCLIENTE)
+      from PEDIDO
+      inner join 
+        mercadoriasped on 
+            (pedido.filial=mercadoriasped.filial and 
+             pedido.idnota= mercadoriasped.idnota)
+      where mercadoriasped.FILIAL = :FILIAL and
+            mercadoriasped.IDNOTA = :IDPEDIDO and 
+            mercadoriasped.IDMERCADORIA=:IDMERCADORIAPEDIDO
+      into :PXPED;
+      XPED = substring(PXPED from 1 for 15);
+
+      select ITEMPEDCOMPRA
+      from MERCADORIASPED
+      where FILIAL = :FILIAL and IDNOTA = :IDPEDIDO and IDMERCADORIA = :IDMERCADORIAPEDIDO
+      into :NITEMPED;
+
+      CTICMSSIMPLES = '';
+      if (CTICMS in (102, 103, 300, 400)) then CTICMSSIMPLES = 102;
+      if (CTICMS in (202, 203)) then CTICMSSIMPLES = 202;
+
+      if (VLRZONAFRANCA > 0) then
+      begin
+        DESCONTOPRODUTO = DESCONTOPRODUTO /*+ VALORICMS_PROD*/;
+        VICMSDESONERADO = VALORICMS_PROD;
+        indDeduzDeson=1;
+        PICMS = NULL;
+        VALORICMS_PROD = NULL;
+        
+      end
+
+      if (VREMONTADESCRICAO = 'S') then
+      begin
+        VLOTE = '';
+        for select LOTE, cast(QUANTIDADE as decimal)
+            from COMPOSICAOMERCNOTA
+            where FILIAL = :FILIAL and
+                  IDNOTA = :IDNOTA and
+                  IDMERCADORIA = :IDITEM and
+                  LOTE <> '.'
+            into :VLOTEDSC, :VQUANTIDADELOTE
+        do
+        begin
+          VLOTEDSC = case VLOTEDSC
+                       when substring(VLOTEDSC from 1 for 1) then substring(VLOTEDSC from 1 for 1)
+                       when substring(VLOTEDSC from 1 for 2) then substring(VLOTEDSC from 1 for 2)
+                       when substring(VLOTEDSC from 1 for 3) then substring(VLOTEDSC from 1 for 3)
+                       when substring(VLOTEDSC from 1 for 4) then substring(VLOTEDSC from 1 for 4)
+                       when substring(VLOTEDSC from 1 for 5) then substring(VLOTEDSC from 1 for 5)
+                       when substring(VLOTEDSC from 1 for 6) then substring(VLOTEDSC from 1 for 6)
+                       when substring(VLOTEDSC from 1 for 7) then substring(VLOTEDSC from 1 for 7)
+                       when substring(VLOTEDSC from 1 for 8) then substring(VLOTEDSC from 1 for 8)
+                       when substring(VLOTEDSC from 1 for 9) then substring(VLOTEDSC from 1 for 9)
+                       when substring(VLOTEDSC from 1 for 10) then substring(VLOTEDSC from 1 for 10)
+                       when substring(VLOTEDSC from 1 for 11) then substring(VLOTEDSC from 1 for 11)
+                       else VLOTEDSC
+                     end;
+          VLOTE = VLOTE || substring(VLOTEDSC from 1 for 12) || '(' || VQUANTIDADELOTE || ') ';
+        end
+        if (VLOTE <> '') then
+          DESCRICAO = DESCRICAO || ' LOTE(s): ' || VLOTE;
+      end
+
+--      REFERENCIADESCRICAO = null;
+
+      if (PREDBC = 100) then
+      begin
+        PICMS = 0;
+        ICMSBASE = 0;
+        PREDBC = 0;
+        VALORICMS_PROD = 0;
+      end
+
+      if (PREDIPI = 100) then
+      begin
+        PIPIMERC = 0;
+        PREDIPI = 0;
+      end
+
+      if (coalesce(NADICAO, 0) = 0) then
+        NADICAO = 1;
+
+      if (NADICAO <> NADICAOANTES) then
+      begin
+        NSEQADICCONTAGEM = 1;
+        NADICAOANTES = NADICAO;
+      end
+      else
+        NSEQADICCONTAGEM = NSEQADICCONTAGEM + 1;
+
+      if (coalesce(NSEQADIC, 0) = 0) then begin
+        NSEQADIC = NSEQADICCONTAGEM;
+      end
+
+      if (not(coalesce(CFABRICANTE, '') > '')) then CFABRICANTE = :IDITEM;
+      if (coalesce(PISCST, 0) = 0) then PISCST = 1;
+      if (coalesce(COFINSCST, 0) = 0) then COFINSCST = 1;
+
+      if (VEANNFE = 'N' or EAN = CODIGO) then begin
+        -- EAN = null; EANTRIBUTAVEL = null;
+         EAN = 'SEM GTIN'; EANTRIBUTAVEL = 'SEM GTIN';
+      end
+
+      select DESCRICAO, CEST, NVE
+      from CLASSIFICACAOFISCAL
+      where CFISCAL = :CODCF
+      into :CF, :CEST, NVE;
+
+      PVLRTOTAL = PVLRTOTAL + VLRTOTITEM;
+      PQTDITEM = PQTDITEM + 1;
+      DETALHEITENS = 'S';
+      ORDEM = ORDEM + 1;
+
+      if (:SIMPLES = 'S') then
+      begin
+        if (:DEVOLUCAO = 'N') then
+        begin
+          if (substring(:CFOP from 1 for 1) <> 3) then
+          begin
+            PICMS = 0;
+            ICMSBASE = 0;
+            PREDBC = 0;
+            VALORICMS_PROD = 0;
+          end
+        end
+        --VBCUFDEST = 0;
+        --PFCUFDEST = 0;
+        --PICMSUFDEST = 0;
+        --VFCPUFDEST = 0;
+        --VICMSUFDEST = 0;
+        --VICMSUFREMET = 0;
+        PICMSINTER = 0;
+
+        select PICMSINTERESTADUAL
+        from ESTADO
+        where ESTADO = :UF
+        into :PICMSINTERESTADUAL;
+
+        if (:ORIGEMPRODUTO in (1, 2, 3, 8)) then
+          PICMSINTER = 4;
+        else
+          PICMSINTER = PICMSINTERESTADUAL;
+      end
+
+      if (cticms='60') then begin    
+        select  
+            VBCSTRET,
+            VICMSSUBSTITUTO,
+            VICMSSTRET 
+        from IMP_NFEITEMSTANTERIOR(:filial, :idnota, :iditem)
+        into VBCSTRET,
+            VICMSSUBSTITUTO,
+            VICMSSTRET ;
+ 
+      end 
+
+      
+      suspend;
+    end
+  end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE IMP_NFE_MERCADORIAS TO  SYSDBA;
+

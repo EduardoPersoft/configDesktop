@@ -1,0 +1,23 @@
+update MATERIALMOVIMENTOESTOQUE
+set valor = quantidade* 186
+where
+materialmovimentoestoque.iditem in (
+'PE-24371',
+'PE-24373',
+'PE-24412',
+'PE-24425')
+
+
+
+'',
+'PE-24364',
+'PE-24365',
+'PE-24367',
+'PE-24377',
+'PE-24378',
+'PE-24427',
+'PE-24428',
+'PE-24429',
+'PE-24430',
+'PE-24451',
+'PE-24456')

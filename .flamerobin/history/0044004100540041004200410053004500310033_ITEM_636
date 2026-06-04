@@ -1,0 +1,1 @@
+select * from SALDODOPEDIDOMATERIAL(1) where idnota=20256

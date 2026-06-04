@@ -1,0 +1,12 @@
+update 
+    CADASTROPARCEIROS
+set 
+    CADASTROPARCEIROS.EXIGIRLAUDO='S'
+where
+    exists (
+        select 
+            *
+        from
+            clientes
+        where
+            CADASTROPARCEIROS.cadastro=clientes.cadastro)

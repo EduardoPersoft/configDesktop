@@ -1,0 +1,5 @@
+select * from MOVTOTITULOPAG
+where filial=1
+and idtitulo=371967
+and movtotitulopag.DTMOVTOTITULO='07.10.2025'
+and MOVTOTITULOPAG.TIPOMOVTO in ('D','F')

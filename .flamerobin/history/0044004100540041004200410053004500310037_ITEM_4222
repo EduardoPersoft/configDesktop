@@ -1,0 +1,23 @@
+select 
+    sum(((mercadoriasped.VLRFINALMERCAD+
+          mercadoriasped.valoripi+
+          mercadoriasped.VLRICMSRECOLHIDO+        
+          mercadoriasped.ACRESCIMONOTA)-
+          mercadoriasped.DESCONTONOTA)*
+          ((mercadoriasped.quantidade-
+            mercadoriasped.QTDEENVIADA) /
+              mercadoriasped.quantidade)) 
+from 
+    mercadoriasped
+inner join
+    PEDIDO on
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+where
+    pedido.datacancelamento is null and 
+    pedido.dataemissao is not null and
+    mercadoriasped.baixa='N' and
+    pedido.destinatario=13987 
+    
+plan join (mercadoriasped index (I_MERCADORIASPEDBAIXA),   
+      pedido index  (RDB$PRIMARY50))

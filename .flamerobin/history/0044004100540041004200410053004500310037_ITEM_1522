@@ -1,0 +1,2 @@
+insert into c_fatores_anterior
+select * from C_FATORES

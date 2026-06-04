@@ -1,0 +1,2 @@
+delete from materialmovimentoestoque where filial=1 and 
+idmovimento in (303224, 303225, 303226, 303227)

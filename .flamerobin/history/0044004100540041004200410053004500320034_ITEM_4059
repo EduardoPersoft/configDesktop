@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    TITULOPAG
+where
+    titulopag.fiLial=6 and
+    titulopag.parceiro=19848

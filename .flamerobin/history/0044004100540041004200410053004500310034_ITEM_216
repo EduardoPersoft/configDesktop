@@ -1,0 +1,6 @@
+select
+*
+from
+COMPOSICAOOP where filial=110
+
+order by idmovimento desc

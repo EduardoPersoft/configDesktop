@@ -1,0 +1,10 @@
+select 
+            sum(materiallocal.saldototal)
+        from 
+            materiallocal 
+        inner join
+            local on
+                local.id=materiallocal.idlocal
+        where
+            materiallocal.iditem='6971709'
+            local.disponivel='S'

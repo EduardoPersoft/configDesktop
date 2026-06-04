@@ -1,0 +1,17 @@
+SELECT
+    pedidocompra.idnota,
+    pedidocompra.datacadastro,
+    cadastroparceiros.nome,
+    CONDICAOPAGAMENTO.DESCRICAO,
+    pedidocompra.VLRTOTALNOTA
+from
+    pedidocompra 
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=pedidocompra.DESTINATARIO
+left JOIN
+    CONDICAOPAGAMENTO on    
+        condicaopagamento.id=pedidocompra.CONDICAOPAGAMENTO
+where 
+    pedidocompra.filial=5 AND
+    pedidocompra.DATACADASTRO = '11.10.2021'

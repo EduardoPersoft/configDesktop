@@ -1,0 +1,2 @@
+update materialmovimentoestoque set valor = 23.382 * quantidade
+where iditem='PE-3325' 

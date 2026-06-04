@@ -1,0 +1,3 @@
+insert into materiallocal(filial, local, iditem, saldototal, saldoinicial)
+select 1,1,codigo,0,0 from ITEMESTOQUE
+where not exists (select * from materiallocal where filial=1 and iditem=codigo)

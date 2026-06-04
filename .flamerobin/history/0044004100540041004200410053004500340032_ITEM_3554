@@ -1,0 +1,151 @@
+SELECT 
+distinct
+       NOTAFISCAL.FILIAL, 
+       MODELODOCTO.MODELO,
+       notafiscal.entradaSaida,
+       cast(NOTAFISCAL.DATAEMISSAO as date) AS DATA,
+       CAST(NOTAFISCAL.NUMERONOTA AS VARCHAR(10)) AS NUMERONOTA,
+       NOTAFISCAL.NUMERONOTA AS ORDEMNOTA,
+       mercadoriasnota.cfop,
+       mercadoriasnota.idpedido,
+       CLIENTES.CADASTRO,
+       CLIENTES.NOME,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.DEVOLUCAO,
+       case when notafiscal.entradasaida = 'S' 
+            then NATUREZAOPERACAO.FATURA 
+            else NATUREZAOPERACAO.DEVOLUCAOFATURAMENTO 
+            end fatura,
+            
+       naturezaoperacao.receita,
+       case when exists (select 
+                            * 
+                         from 
+                            ESTABELECIMENTO
+                         where estabelecimento.CADASTRO=clientes.cadastro) 
+        then 'S' else 'N' end entreFiliais,
+
+       sum(COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)+
+           COALESCE(mercadoriasnota.VALORIPI,0)+
+           COALESCE(MERCADORIASNOTA.VLRICMSRECOLHIDO,0)+
+           COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0)+
+           mercadoriasnota.frete+
+           mercadoriasnota.seguro+
+           mercadoriasnota.OUTDESPACESSOR-
+           (coalesce(mercadoriasnota.DESCONTONOTA,0)+
+            coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+            case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end))   as VLRTOTALNOTA,
+       sum (COALESCE(mercadoriasnota.VALORIPI,0)) AS VALORIPI,
+       sum (COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)) AS VLRSEMIPI,
+       NOTAFISCAL.FILIAL,
+       ESTAB.RAZAOSOCIAL,
+       sum (MERCADORIASNOTA.VLRICMSRECOLHIDO) AS VLRICMSRECOLHIDO,
+
+       sum(mercadoriasnota.frete) + sum(mercadoriasnota.seguro) +
+          sum(mercadoriasnota.OUTDESPACESSOR) AS DESPACESSORIAS,
+       
+
+        sum (mercadoriasnota.VLRTOTALMERCAD-
+            (coalesce(mercadoriasnota.DESCONTONOTA,0)+
+             coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+             case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end))  AS VLRFINALMERCADORIAS,
+         
+        CASE NOTAFISCAL.ZONAFRANCA 
+            WHEN 'S' THEN 0
+            ELSE SUM (MERCADORIASNOTA.valoricms) end AS TOTVALORICMS,
+        CASE NOTAFISCAL.ZONAFRANCA 
+            WHEN 'S' THEN 0
+            ELSE SUM (mercadoriasnota.ICMSORIGEMVALOR) end AS ICMSORIGEMVALOR,
+        CASE NOTAFISCAL.ZONAFRANCA 
+            WHEN 'S' THEN 0
+            ELSE SUM (mercadoriasnota.ICMSDESTINOVALOR) end AS ICMSDESTINOVALOR,  
+
+        sum(mercadoriasnota.VLRPISPASEP) as pis,            
+        sum(mercadoriasnota.VLRCOFINS) as cofins,        
+            
+        (case notafiscal.simples 
+            WHEN 'S' THEN
+                sum(COALESCE(mercadoriasnota.VLRFINALMERCAD,0))
+            else
+               (sum(COALESCE(mercadoriasnota.VLRFINALMERCAD,0)) - sum(COALESCE(mercadoriasnota.VALORICMS,0)))
+                 end)  
+        AS VALORLIQUIDO,
+       CAST ('0' AS NUMERIC (12,2))AS VLRFINALSERVICOS,
+       CAST ('0' AS NUMERIC (12,2)) AS ISS,
+       CAST (coalesce(notafiscal.psimples, 0)* 
+             notafiscal.vlrtotalnota/100 AS NUMERIC (12,2)) AS simples,
+       MODELODOCTO.ID,     
+       coalesce(cadven.cadastro, -1),
+       coalesce(cadven.nome, 'SEM VENDEDOR'),     
+       'EMISSAO' as emissaoentrada
+    
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+INNER join 
+        mercadoriasnota  on
+           (mercadoriasnota.filial=notafiscal.filial and 
+             mercadoriasnota.idnota=notafiscal.idnota)
+INNER join 
+        itemestoque on 
+            (itemestoque.codigo=mercadoriasnota.codigo)
+            
+left join
+    pedido on
+        pedido.filial=mercadoriasnota.filialped and
+        pedido.idnota=mercadoriasnota.IDPEDIDO
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro = pedido.vendedor
+WHERE 
+    NOTAFISCAL.DATAEMISSAO BETWEEN '01.03.2025' and '31.03.2025'
+    AND NOTAFISCAL.CANCELAMENTO = 'N' and
+    mercadoriasnota.idpedido is null
+        
+
+group by 
+       NOTAFISCAL.ZONAFRANCA , 
+       notafiscal.simples, 
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.NUMERONOTA ,
+       NOTAFISCAL.entradaSaida,
+       mercadoriasnota.CFOP,
+       mercadoriasnota.idpedido,
+       CLIENTES.CADASTRO,
+       CLIENTES.NOME,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.DEVOLUCAO,
+       NATUREZAOPERACAO.FATURA,
+       NATUREZAOPERACAO.DEVOLUCAOFATURAMENTO,
+       NOTAFISCAL.VLRTOTALNOTA,
+       NOTAFISCAL.VALORIPI,
+       NOTAFISCAL.FILIAL,
+       notafiscal.idnota,
+       ESTAB.RAZAOSOCIAL,
+       NOTAFISCAL.VLRICMSRECOLHIDO,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.ISS,
+       NOTAFISCAL.psimples,
+       cadven.cadastro,
+       cadven.nome,     
+       MODELODOCTO.ID,
+       NATUREZAOPERACAO.receita
+order by
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.NUMERONOTA, 
+       mercadoriasnota.CFOP,
+       mercadoriasnota.idpedido
+
+

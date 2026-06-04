@@ -1,0 +1,282 @@
+SET TERM ^ ;
+ALTER PROCEDURE FOLLOWUPITEMVENDAS (
+    PFILIAL INTEGER)
+RETURNS (
+    FILIAL INTEGER,
+    IDNOTA INTEGER,
+    IDMERCADORIA INTEGER,
+    DATACADASTRO TIMESTAMP,
+    DATAAPROVACAO TIMESTAMP,
+    CODIGO VARCHAR(15),
+    DESREDUZIDA VARCHAR(240),
+    QUANTIDADE DOUBLE PRECISION,
+    UNIDADE VARCHAR(3),
+    DESTINATARIO INTEGER,
+    QTDEENTREGUE DOUBLE PRECISION,
+    SALDO DOUBLE PRECISION,
+    DATAENTREGA TIMESTAMP,
+    NOME VARCHAR(40),
+    TELEFONE VARCHAR(20),
+    VALOR DOUBLE PRECISION,
+    VLRTOTALNOTA DOUBLE PRECISION,
+    TIPOFRETE VARCHAR(3),
+    SALDOTOTAL NUMERIC(12,3),
+    POSSUICOMPRAS VARCHAR(1),
+    SOMACOMPRAS DOUBLE PRECISION,
+    NUMPEDIDOCLIENTE VARCHAR(20),
+    DATAMINIMA TIMESTAMP,
+    GRUPODESC VARCHAR(30),
+    RESERVADOPEDIDO DOUBLE PRECISION,
+    RESERVADONOTA DOUBLE PRECISION,
+    RESERVADOOP DOUBLE PRECISION,
+    RESERVADOPRODTERC DOUBLE PRECISION,
+    RESERVADOEXPEDICAO DOUBLE PRECISION,
+    TOTALRESERVADO DOUBLE PRECISION )
+
+AS
+DECLARE VARIABLE V_QTDENTREGA DOUBLE PRECISION;
+DECLARE VARIABLE V_DIASENTREGA DOUBLE PRECISION;
+
+begin
+
+    reservadopedido=0;
+    reservadonota=0;
+    reservadoop=0;
+    reservadoprodterc=0;
+    reservadoexpedicao =0;
+    TOTALRESERVADO =0;
+
+    FOR SELECT DISTINCT
+        pedido.filial,
+        pedido.IDNOTA,
+        mercadoriasped.IDMERCADORIA,
+        pedido.datacadastro,
+        pedido.DATAEMISSAO,
+        mercadoriasped.codigo,
+     -- mercadoriasped.desreduzida,
+        substring ( mercadoriasped.descricao from 1 for 240),
+        mercadoriasped.quantidade,
+        mercadoriasped.unidade,
+        pedido.destinatario,
+        mercadoriasped.QTDEENVIADA,
+        CADASTROPARCEIROS.nome,
+        CADASTROPARCEIROS.telefone,
+        mercadoriasped.vlrtotalmercad as valor,
+        pedido.VLRTOTALNOTA,
+        case pedido.frete when 'R' then 'CIF' ELSE 'FOB' END,
+        pedido.NUMPEDIDOCLIENTE
+    FROM pedido
+    inner JOIN mercadoriasped ON
+        (pedido.FILIAL=mercadoriasped.FILIAL AND
+        pedido.IDNOTA=mercadoriasped.IDNOTA)
+    INNER JOIN CADASTROPARCEIROS ON
+        (CADASTROPARCEIROS.cadastro = pedido.destinatario)
+    WHERE
+        pedido.FILIAL=:pfilial AND
+        NOT (pedido.DATAEMISSAO IS NULL) AND
+        pedido.DATACANCELAMENTO IS NULL AND
+        mercadoriasped.BAIXA='N'
+     INTO :FILIAL,
+          :IDNOTA,
+          :IDMERCADORIA,
+          :DATACADASTRO,
+          :DATAAPROVACAO,
+          :CODIGO,
+          :DESREDUZIDA,
+          :QUANTIDADE, 
+          :UNIDADE,
+          :DESTINATARIO,          
+          :QTDEENTREGUE,
+          :NOME, 
+          :TELEFONE,
+          :VALOR,
+          :VLRTOTALNOTA,
+          :TIPOFRETE,
+          :numpedidocliente
+
+           DO begin
+                 reservadopedido=0;
+                 reservadonota=0;
+                 reservadoop=0;
+                 reservadoprodterc=0;
+                 reservadoexpedicao =0;
+                 TOTALRESERVADO =0;
+
+
+                select 
+                        GRUPOMERCADORIA.DESCRICAO as grupodesc
+                from 
+                    ITEMESTOQUE
+                inner join 
+                            grupomercadoria on    
+                                    (itemestoque.grupo=grupomercadoria.GRUPO)
+                where 
+                        itemestoque.codigo = :codigo
+                into 
+                        grupodesc;                    
+                        
+                    
+                select 
+                    coalesce(
+                        sum(
+                            coalesce (mercadoriaspedcompra.QUANTIDADE,0)-
+                            coalesce(mercadoriaspedcompra.QTDEENTREGUE,0)))
+                from MERCADORIASpedcOMPRA
+                where MERCADORIASpedcOMPRA.FILIAL=:FILIAL
+                and MERCADORIASpedcOMPRA.CODIGO=:CODIGO
+                and MERCADORIASpedcOMPRA.BAIXA is not null
+                into somacompras;
+                
+                select 
+                    pedidocompra.datacadastro+max(prazomercpedcompra)
+                from 
+                    MERCADORIASpedcOMPRA
+                inner join 
+                    pedidocompra on
+                        pedidocompra.filial=mercadoriaspedcompra.filial AND
+                        pedidocompra.idnota=mercadoriaspedcompra.idnota
+                inner JOIN
+                    prazomercpedcompra on
+                        PRAZOMERCPEDCOMPRA.filial=mercadoriaspedcompra.filial AND
+                        PRAZOMERCPEDCOMPRA.idnota=mercadoriaspedcompra.idnota AND
+                        PRAZOMERCPEDCOMPRA.IDITEM=mercadoriaspedcompra.idmercadoria
+                where 
+                    MERCADORIASpedcOMPRA.FILIAL=:FILIAL
+                    and MERCADORIASpedcOMPRA.CODIGO=:CODIGO
+                    and MERCADORIASpedcOMPRA.BAIXA is not null
+                into datachegada;
+        
+                if (coalesce (somacompras,0)>0) then possuicompras='*';
+                else possuicompras='';
+                
+                select min (prazomercped.DIAS)+:DATACADASTRO
+                from prazomercped
+                WHERE prazomercped.FILIAL=:FILIAL
+                AND prazomercped.IDNOTA=:IDNOTA
+                AND prazomercped.IDITEM=:IDMERCADORIA          
+                INTO :dataminima;
+        
+                for select prazomercped.DIAS,prazomercped.QTDE
+                from prazomercped
+                WHERE prazomercped.FILIAL=:FILIAL
+                AND prazomercped.IDNOTA=:IDNOTA
+                AND prazomercped.IDITEM=:IDMERCADORIA          
+                INTO V_DIASENTREGA,V_QTDENTREGA DO BEGIN
+                               
+
+               ---- reserva pedido
+                SELECT sum  (COALESCE( saldodopedidocomposicao.quantidade,0))
+                FROM saldodopedidocomposicao (:filial)
+                INNER JOIN COMPOSICAOMERCPED ON (
+                    COMPOSICAOMERCPED.FILIAL=saldodopedidocomposicao.FILIAL AND
+                    COMPOSICAOMERCPED.IDNOTA=saldodopedidocomposicao.IDNOTA AND
+                    COMPOSICAOMERCPED.IDMERCADORIA=saldodopedidocomposicao.IDMERCADORIA)
+                inner join materialfilial on (materialfilial.filial=saldodopedidocomposicao.filial
+                        and materialfilial.iditem=saldodopedidocomposicao.iditem)
+                INNER JOIN PEDIDO ON (composicaomercped.FILIAL=PEDIDO.FILIAL
+                                        AND COMPOSICAOMERCPED.IDNOTA=PEDIDO.IDNOTA)
+                WHERE saldodopedidocomposicao.iditem=:CODIGO
+                and (coalesce(materialfilial.temporeposicao,0)=0 or
+                    saldodopedidocomposicao.dataentrega<=cast('now' as timestamp)+materialfilial.temporeposicao)
+                INTO :RESERVADOPEDIDO;
+
+                ----RESERVA NOTA FISCAL
+                SELECT SUM (COALESCE(COMPOSICAOMERCNOTA.QUANTIDADE,0))
+                FROM COMPOSICAOMERCNOTA
+                INNER JOIN NOTAFISCAL ON (NOTAFISCAL.FILIAL=COMPOSICAOMERCNOTA.FILIAL AND
+                                        NOTAFISCAL.IDNOTA=COMPOSICAOMERCNOTA.IDNOTA)
+                INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+                
+                WHERE COMPOSICAOMERCNOTA.FILIAL=:FILIAL AND
+                    COMPOSICAOMERCNOTA.IDITEM=:CODIGO AND
+                    NOTAFISCAL.DATAEMISSAO IS NULL AND
+                    NOTAFISCAL.DATACANCELAMENTO IS NULL AND
+                    NOTAFISCAL.ENTRADASAIDA='S' AND
+                    NOTAFISCAL.DEVOLUCAO='N' AND
+                    NATUREZAOPERACAO.ESTOQUE='S' AND
+                    NATUREZAOPERACAO.ENTRADASAIDA='S'
+               INTO :RESERVADONOTA;
+                ----
+                SELECT SUM (COALESCE (
+                    composicaoop.quantidade-
+                            coalesce(
+                                (select sum(materialmovimentoestoque.quantidade)
+                                from movimentoestoque
+                                inner join materialmovimentoestoque on (
+                                    movimentoestoque.filial=materialmovimentoestoque.filial
+                                    and movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+                                where movimentoestoque.filial=composicaoop.filial
+                                and movimentoestoque.idmovimento=composicaoop.idmovimento
+                                and movimentoestoque.idopitem=composicaoop.idmovimentomaterial
+                                and movimentoestoque.tipomovimento='09'
+                                and materialmovimentoestoque.iditem=composicaoop.codigo
+                                and materialmovimentoestoque.lote=composicaoop.lote),0),0))
+                FROM composicaoop
+                inner join materialmovimentoestoque on (
+                                    materialmovimentoestoque.filial=composicaoop.filial
+                            and materialmovimentoestoque.idmovimento=composicaoop.idmovimento
+                    and materialmovimentoestoque.idmovimentomaterial=composicaoop.idmovimentomaterial)
+                INNER JOIN MOVIMENTOESTOQUE ON (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL)
+                        AND MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+                WHERE composicaoop.filial=:filial
+                and composicaoop.codigo=:CODIGO
+                and materialmovimentoestoque.concluido='N'
+                PLAN JOIN (COMPOSICAOOP INDEX (I_COMPOSICAOOP_LOTE),MATERIALMOVIMENTOESTOQUE
+                           INDEX (RDB$PRIMARY199),MOVIMENTOESTOQUE INDEX (RDB$PRIMARY200))
+                INTO :RESERVADOOP;
+                ----  expedi??o
+
+                SELECT sum( coalesce (materialmovimentoestoque.quantidade, 0))
+                FROM materialmovimentoestoque
+                INNER JOIN MOVIMENTOESTOQUE ON (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL)
+                    AND MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+                WHERE     MOVIMENTOESTOQUE.FILIAL = :FILIAL AND
+                MOVIMENTOESTOQUE.TIPOMOVIMENTO = '13' AND
+                MATERIALMOVIMENTOESTOQUE.IDITEM = :CODIGO    and
+                movimentoestoque.idnotaexpedicao is null
+                INTO :RESERVADOEXPEDICAO;
+
+                ----
+                TOTALRESERVADO = coalesce (reservadopedido,0)
+                                + coalesce (reservadonota,0)
+                                + coalesce (reservadoop,0)
+                                + coalesce (reservadoprodterc,0)
+                                + coalesce (reservadoexpedicao,0);
+
+
+                ----        
+
+
+                select  SUM(MATERIALLOCAL.SALDOTOTAL) AS SALDOTOTAL
+                from MATERIALLOCAL 
+                where materiallocal.FILIAL=:FILIAL
+                and materiallocal.IDITEM=:CODIGO
+                into :saldototal;
+        
+                IF( V_QTDENTREGA<=QTDEENTREGUE) then begin
+                        QTDEENTREGUE=QTDEENTREGUE-v_qtdentrega;
+                        if (qtdeentregUE<0) then 
+                            qtdeentregue=0;
+                end else begin
+                        quantidade = v_qtdentrega;
+                        saldo=v_qtdentrega - qtdeentregue;                
+                        dataentrega = datacadastro+v_diasentrega;
+                        suspend;                   
+                        qtdeentregue = 0;
+
+        
+                        
+                end
+
+            END
+
+     end       
+         
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE FOLLOWUPVENDAS TO  SYSDBA;
+

@@ -1,0 +1,7 @@
+create table
+    c_centroCustoxLocal(
+        idLocal integer not null,
+        centroCusto varchar(15),
+        constraint pk_c_centroCustoxLocal 
+        primary key(idlocal)
+    ) 

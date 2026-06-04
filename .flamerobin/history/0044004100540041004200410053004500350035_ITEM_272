@@ -1,0 +1,2 @@
+delete from VERSAO
+where id>1667

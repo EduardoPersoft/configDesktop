@@ -1,0 +1,47 @@
+select
+    materialMovimentoEstoque.filial,
+    materialMovimentoEstoque.idMovimento,
+    materialMovimentoEstoque.idMovimentoMaterial,
+    cast(null as timestamp) inicio,
+    cast(null as timestamp) fim,
+    materialMovimentoEstoque.tempo,
+    materialMovimentoEstoque.setup,
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    movimentoestoque.previsaoFimProducao,
+    produto.codigo,
+    produto.descricao,
+    materialmovimentoestoque.quantidade    
+    
+from
+    materialMovimentoEstoque
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+left JOIN
+    ITEMEsTOQUE PRODUTO ON
+        produto.codigo = materialmovimentoestoque.PRODUTO
+
+where
+    materialMovimentoEstoque.filial = 1 and
+    materialMovimentoEstoque.concluido = 'N' and
+    not exists (
+        select 
+            *
+        from
+            mapaProducao
+        where
+            materialMovimentoEstoque.filial = mapaProducao.filial and
+            materialMovimentoEstoque.idMovimento = mapaProducao.idMovimento
+    ) and
+    exists (
+        select 
+            *
+        from 
+            recursosXCentroCustos
+        where
+            recursosXCentroCustos.id=3 and
+            recursosXCentroCustos.centroCusto = 
+                materialmovimentoEstoque.idCentroCusto
+    )

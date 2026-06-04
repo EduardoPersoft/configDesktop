@@ -1,0 +1,2 @@
+select * from TITULOSANEXADOS
+where idtitulo in (24454, 24454, 23565)

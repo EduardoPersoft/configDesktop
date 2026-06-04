@@ -1,0 +1,6 @@
+select
+    *
+from
+    TITULOREC
+where
+    titulorec.DATAENVIO='11.03.2022'

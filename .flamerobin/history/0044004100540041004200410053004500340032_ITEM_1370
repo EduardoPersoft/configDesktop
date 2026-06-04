@@ -1,0 +1,5 @@
+select * from MOVIMENTOESTOQUE
+where filial=110
+and (movimentoestoque.LOCALARMAZENAMENTO=2
+or movimentoestoque.LOCALTRANSFERENCIA=2)
+and movimentoestoque.emissao>='01.02.2024'

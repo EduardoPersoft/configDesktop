@@ -1,0 +1,14 @@
+update
+    LANTOCONTPAG
+set
+    contacontabil='112020207'
+where filial in (110,3941) 
+and not exists (
+    select 
+        * 
+    from 
+        CONTASCONTABEIS
+    where 
+        contascontabeis.idplano=5 
+        and contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL)
+        

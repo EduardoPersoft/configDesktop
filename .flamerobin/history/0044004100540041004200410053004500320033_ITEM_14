@@ -1,0 +1,20 @@
+select 
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.codigo
+FROM
+    mercadoriaspedcompra
+inner JOIN  
+    pedido on
+        pedido.filial=mercadoriasped.filial AND
+        pedido.idnota=mercadoriasped.idnota
+WHERE
+    mercadoriaspedcompra.FILIAL = 5 AND
+    mercadoriaspedcompra.IDNOTA BETWEEN 54007 AND 54037 AND
+    mercadoriaspedcompra.baixa = 'N' AND
+    exists (
+    select * from mercadoriasnota 
+    where mercadoriasnota.filial=mercadoriaspedcompra.filial
+    and mercadoriasnota.idpedido=mercadoriaspedcompra.idnota 
+    and mercadoriasnota.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA)
+order by
+    mercadoriaspedcompra.codigo

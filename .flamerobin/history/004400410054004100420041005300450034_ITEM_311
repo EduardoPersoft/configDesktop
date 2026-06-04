@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM   
+    servicosped
+where 
+    filial=1 and idnota=63869

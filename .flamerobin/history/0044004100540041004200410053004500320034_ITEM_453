@@ -1,0 +1,19 @@
+UPDATE
+    CLASSIFICACAOFISCAL
+SET
+    classificacaofiscal.ALIQUOTA = (
+        select 
+            max(mercadoriasnotacompra.pipi)
+        FROM    
+            MERCADORIASNOTACOMPRA
+        WHERE
+            mercadoriasnotacompra.CLASSIFISCAL=classificacaofiscal.cfiscal)
+WHERE
+    exists (
+        select 
+            max(mercadoriasnotacompra.pipi)
+        FROM    
+            MERCADORIASNOTACOMPRA
+        WHERE
+            mercadoriasnotacompra.CLASSIFISCAL=classificacaofiscal.cfiscal)
+    )

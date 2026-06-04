@@ -1,0 +1,1 @@
+alter table mercadoriaspedcompra drop c_qtdeenviada 

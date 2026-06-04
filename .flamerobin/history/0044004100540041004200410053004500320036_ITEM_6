@@ -1,0 +1,28 @@
+select 
+    C_MERCADORIASORCMPPRINCIPAL.codigo,
+    itemestoque.descricao,
+    C_MERCADORIASORCMPPRINCIPAL.KGMIL,
+    itemestoque.unidade,
+    c_mercadoriasorcmpprincipal.GRAMATURA,
+    mercadoriasorc.C_LARGURATOTAL,
+    mercadoriasorc.C_ALTURATOTAL,
+    mercadoriasorc.C_INVORDEMSANFLATERAL
+FROM
+    PEDIDO
+INNER JOIN 
+    C_MERCADORIASORCMPPRINCIPAL ON
+        C_MERCADORIASORCMPPRINCIPAL.FILIAL = PEDIDO.FILIAL AND
+        C_MERCADORIASORCMPPRINCIPAL.IDNOTA = PEDIDO.IDORCAMENTO
+inner JOIN
+    mercadoriasorc ON
+        mercadoriasorc.FILIAL = c_mercadoriasorcmpprincipal.FILIAL AND
+        mercadoriasorc.IDNOTA = c_mercadoriasorcmpprincipal.IDNOTA AND
+        mercadoriasorc.IDMERCADORIA=c_mercadoriasorcmpprincipal.IDMERCADORIA
+INNER JOIN
+    ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO = C_MERCADORIASORCMPPRINCIPAL.CODIGO
+WHERE
+    PEDIDO.FILIAL = 2 AND
+    PEDIDO.IDNOTA = 1172 AND
+    c_mercadoriasorcmpprincipal.IDMERCADORIA = 2 AND
+    ITEMESTOQUE.GRUPO = 1500

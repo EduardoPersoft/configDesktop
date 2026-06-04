@@ -1,0 +1,4 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.TIPOMOVIMENTO='13'
+and movimentoestoque.filial<>1
+orcer by idmovimento

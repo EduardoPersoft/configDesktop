@@ -1,0 +1,6 @@
+select 
+    *
+from
+    CADASTROPARCEIROS
+where
+    cadastroparceiros.cadastro>4109

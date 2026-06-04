@@ -1,0 +1,6 @@
+select 
+    *
+from
+    locallote
+where
+    locallote.quantidade>0

@@ -1,0 +1,10 @@
+select 
+    uuid,
+    count(idnota)
+FROM
+    pedidocompra
+group by
+    uuid
+having 
+    count(idnota)>1
+ 

@@ -1,0 +1,22 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(materialmovimentoestoque.quantidade),
+    sum(materialmovimentoestoque.valor)
+FROM
+    MOVIMENTOESTOQUE
+inner JOIN
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.iditem
+where 
+    movimentoestoque.filial=1 AND
+    movimentoestoque.TIPOMOVIMENTO='09' AND
+    movimentoestoque.emissao between '01.07.2021' and '31.12.2021'
+group by
+    itemestoque.codigo,
+    itemestoque.descricao
+    

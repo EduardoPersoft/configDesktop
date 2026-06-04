@@ -1,0 +1,4 @@
+--insert into c_itemestoquecodigos
+--select * from itemestoquecodigos
+
+delete from itemestoquecodigos

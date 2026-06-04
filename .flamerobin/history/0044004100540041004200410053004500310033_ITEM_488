@@ -1,0 +1,9 @@
+update 
+    ITEMESTOQUE
+set
+    familia= case 
+                when itemestoque.GRUPO = 7 then 3
+                when itemestoque.grupo in (1,2) then case when upper(itemestoque.DESCRICAO) like '%PP%' then 1 
+                                                          when upper(itemestoque.descricao) like '%PVC%'then 2
+                                                          else FAMILIA end
+                else familia end

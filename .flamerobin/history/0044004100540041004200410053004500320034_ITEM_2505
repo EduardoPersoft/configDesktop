@@ -1,0 +1,47 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    materialfilial.CONSUMOMEDIO,
+    (materialfilial.consumomedio/20) mediadias,
+    materiallocal.saldototal/(materialfilial.consumomedio/20) diasprazerar,
+    pedidocompra.idnota,
+    pedidocompra.datacadastro + (select
+                                    max(PRAZOMERCPEDCOMPRA.dias) 
+                                 from
+                                    PRAZOMERCPEDCOMPRA
+                                 where 
+                                    prazomercpedcompra.filial=pedidocompra.filial and
+                                    prazomercpedcompra.idnota=pedidocompra.idnota and
+                                    prazomercpedcompra.iditem=mercadoriaspedcompra.idmercadoria) as dataPedido,
+    CADASTROPARCEIROS.nome
+FROM
+    materiallocal    
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial AND
+        materialfilial.iditem=materiallocal.iditem
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+left JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=materialfilial.filial AND
+        mercadoriaspedcompra.codigo=materialfilial.iditem AND
+        mercadoriaspedcompra.baixa='N'
+left JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+left JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=pedidocompra.destinatario
+        
+WHERE
+    materialfilial.filial=5 and
+    materiallocal.idlocal=1 and
+    materialfilial.consumomedio>0 and consumomedio<10000 and
+    itemestoque.itembase is null and 
+    materiallocal.saldototal/(materialfilial.consumomedio/20)  <= 15
+order by 
+    materialfilial.consumomedio desc, 6, 1

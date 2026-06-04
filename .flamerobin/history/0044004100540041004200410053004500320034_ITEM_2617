@@ -1,0 +1,37 @@
+SELECT
+    cadven.cadastro Cadatro,
+    cadven.nome nomeVendedor,
+    sum(mercadoriasnota.vlrFinalMercad) valorVenda,
+    sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100) comissao,
+    cast(sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100)/ 
+         sum(mercadoriasnota.vlrFinalMercad)*100 as decimal(7,4)) pcomissao
+    
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= ? and
+    notafiscal.dataemissao between ? and ? and
+    notafiscal.dataCancelamento is null and
+    notafiscal.calculada = 'S' and 
+    notafiscal.vlrtotalNota >0
+group by                       
+    cadven.cadastro,
+    cadate.nome
+

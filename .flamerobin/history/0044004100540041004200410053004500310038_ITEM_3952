@@ -1,0 +1,2 @@
+select variavel,baixa from mercadoriasped 
+where filial=1 and idnota=76001

@@ -1,0 +1,45 @@
+SELECT 
+
+    FORNECEDORESITEM.ID,
+    FORNECEDORESITEM.FORNECEDOR, 
+    FORNECEDORESITEM.CODIGOFORNEC, 
+    FORNECEDORESITEM.INDUSTRIAOUIMPORTADOR,    
+    FORNECEDORESITEM.STATUS,    
+    CASE WHEN ITEMESTOQUE.FORNECEDORPADRAO = FORNECEDORESITEM.FORNECEDOR THEN 'S' ELSE 'N' END AS FORNECEDORPADRAO,
+    
+    FORNECEDORESITEM.IDITEM,
+    ITEMESTOQUE.DESCRICAO,
+
+    FORNECEDORESITEM.CUSTO,
+    FORNECEDORESITEM.PRECO,
+    FORNECEDORESITEM.IPI,
+    FORNECEDORESITEM.ST,    
+    
+
+    FORNECEDORESITEM.DATAATUALIZACAO,
+    FORNECEDORESITEM.APROVACAO,
+    FORNECEDORESITEM.USUARIOAPROVACAO,
+    FORNECEDORESITEM.IDUSUARIO,
+    TRIBUTACAOICMSUF.ALIQUOTA,
+    tributacaoicmsuf.uf,
+    estado.estado,
+    estado.PICMSINTERESTADUALCOMPRA
+    
+    
+
+FROM 
+    FORNECEDORESITEM
+INNER JOIN 
+    ITEMESTOQUE ON FORNECEDORESITEM.IDITEM = ITEMESTOQUE.CODIGO
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=fornecedoresitem.fornecedor
+inner join
+    estado on
+        estado.ESTADO=cadfor.UF
+inner join
+    tributacaoicmsuf on
+        tributacaoicmsuf.ID=fornecedoresitem.iditem and
+        tirubtacaoicmsuf.uf=(select cadastroparceiros.UF from cadastroparceiros where cadastro=?)
+where
+    FORNECEDORESITEM.FORNECEDOR = ?

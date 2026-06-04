@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    SPEDFISCAL_C
+WHERE
+        sequencia betwee 450 and 550

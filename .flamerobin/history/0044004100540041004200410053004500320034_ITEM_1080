@@ -1,0 +1,1 @@
+select * from titulorec where idtitulo>= 16000 and titulorec.EMISSAO='05.01.2021'

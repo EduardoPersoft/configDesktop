@@ -1,0 +1,10 @@
+select 
+    *
+from
+    PEDIDO
+where 
+    pedido.c_malote is null and
+    pedido.CANCELAMENTO='N' and
+    pedido.DATAEMISSAO is not null and 
+    pedido.dataemissao>'01.01.2025'
+    

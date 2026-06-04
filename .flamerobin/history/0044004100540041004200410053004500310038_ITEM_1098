@@ -1,0 +1,4 @@
+select * from locallote 
+where locallote.iditem between '01.12' and '01.99.9999'
+and locallote.quantidade<0
+order by quantidade

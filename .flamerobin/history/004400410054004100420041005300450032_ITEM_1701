@@ -1,0 +1,1 @@
+select * from IMPPEDCOM2('COMPRA')

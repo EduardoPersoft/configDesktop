@@ -1,0 +1,12 @@
+select 
+        filial,idnota,vendedor,vlrtotalnota,orcamento.VFCP,orcamento.VFCPST,orcamento.VFCPSTRET,orcamento.VLRICMSRECOLHIDO
+     from
+        PEDIDO ORCAMENTO
+     where
+        
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.vendedor is not null and
+        
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' 
+order by vlrtotalnota                    

@@ -1,0 +1,40 @@
+SELECT 
+    u_usuario.ID, 
+    u_usuario.USUARIOATIVO, 
+    u_usuario.USUARIO, 
+    u_usuario.TIPO, 
+    u_usuario.NOMECOMPLETO, 
+    u_usuario.PERFIL, 
+    p_usuario.usuario perfilUsuario,
+    u_usuario.EMAIL,     
+    u_usuario.SENHA,     
+
+    u_usuario.EMAILGERENCIADOR, 
+    u_usuario.RESPONSAVELPORENVIO,
+    u_usuario.SERNOTIFICADO, 
+
+    u_usuario.DEPARTAMENTO, 
+    u_usuario.CARGO,
+    u_usuario.TELEFONE, 
+    u_usuario.FAX, 
+
+    u_usuario.REMETENTEEMAIL,    
+    u_usuario.EMAILLOGIN, 
+    u_usuario.EMAILSENHA, 
+    u_usuario.EMAILSERVIDOR, 
+    u_usuario.EMAILAUTENTICADO,
+    u_usuario.EMAILSSL, 
+    u_usuario.EMAILPORTA, 
+    u_usuario.ASSINATURA,         
+    
+    u_usuario.USUARIOALT,
+    u_usuario.DATAALT, 
+    u_usuario.HORAALT 
+
+FROM 
+    USUARIO u_usuario
+left join
+    usuario p_usuario on
+        p_usuario.id=u_usuario.perfil
+WHERE
+    u_usuario.ID = 39

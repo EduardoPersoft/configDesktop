@@ -1,0 +1,13 @@
+insert into ITEMESTOQUECODIGOS(codigo,codigoalternativo)
+select
+    i2.codigo,
+    i1.REFERENCIA
+from 
+    ITEMESTOQUE i1
+inner join
+    itemestoque i2 on
+        i1.c_original=i2.c_original
+where 
+    i1.codigo<>i2.codigo
+
+

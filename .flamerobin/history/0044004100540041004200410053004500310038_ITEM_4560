@@ -1,0 +1,3 @@
+select * from CONTACORRENTE
+where idplano=4
+order by contacorrente

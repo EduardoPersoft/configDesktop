@@ -1,0 +1,12 @@
+update  
+    FORNECEDORESITEM
+set
+    fornecedoresitem.STATUS='H'
+where
+    FORNECEDORESITEM.FORNECEDOR = (
+        select 
+            itemestoque.FORNECEDORPADRAO
+        from 
+            ITEMESTOQUE
+        where
+            itemestoque.codigo=fornecedoresitem.iditem)

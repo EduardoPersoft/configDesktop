@@ -1,0 +1,2 @@
+update itemestoque set c_cliche='0'
+where itemestoque.C_CLICHE='S'

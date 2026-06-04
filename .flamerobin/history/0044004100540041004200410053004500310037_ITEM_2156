@@ -1,0 +1,9 @@
+insert into c_itemestoquecodigos
+select * from itemestoquecodigos
+
+
+CREATE TABLE c_ITEMESTOQUECODIGOS
+(
+  CODIGO varchar(15) NOT NULL,
+  CODIGOALTERNATIVO varchar(50) NOT NULL
+);

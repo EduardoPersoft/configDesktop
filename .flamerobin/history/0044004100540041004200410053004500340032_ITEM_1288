@@ -1,0 +1,2 @@
+select * from NOTACOMPRA
+where idnota=2413

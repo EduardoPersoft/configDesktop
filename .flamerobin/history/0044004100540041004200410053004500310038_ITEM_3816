@@ -1,0 +1,6 @@
+select * from VENDEDORESPED
+inner join pedido on
+    vendedoresped.filial=pedido.filial and
+    vendedoresped.idnota=pedido.idnota
+where vendedoresped.vendedor=10568 and
+UPPER(pedido.OBSENTREGARETIRA) like '%FREDERICO%'

@@ -1,0 +1,26 @@
+insert into 
+    itemCustoData(
+        filial, 
+        dataInventario, 
+        codigo, 
+        custoUnitario)
+select 
+    materialmovimentoestoque.FILIAL,
+    '31.12.2023',
+    materialmovimentoestoque.iditem,
+    case when sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)<>0 then
+        sum(materialmovimentoestoque.valor*materialmovimentoestoque.sinal)/
+        sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)
+    else 0 end
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    MOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.emissao <= '31.12.2023'
+group by
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.iditem

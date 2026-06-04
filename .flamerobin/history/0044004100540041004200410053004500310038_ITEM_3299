@@ -1,0 +1,2 @@
+select * from PEDIDO
+where datacadastro>'01.01.2023'

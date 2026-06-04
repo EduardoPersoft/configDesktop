@@ -1,0 +1,3 @@
+select * from SERVICOSNOTAcompra
+where filial=110
+and idpedido=2233

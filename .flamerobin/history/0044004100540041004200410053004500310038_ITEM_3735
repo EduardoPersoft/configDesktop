@@ -1,0 +1,79 @@
+SELECT cadcli.CADASTRO,
+       cadcli.NOME,
+       cadcli.RAZAOSOCIAL,
+       CASE WHEN (cadcli.DOCUMENTO<>'') AND
+                 (NOT cadcli.DOCUMENTO IS NULL) THEN
+          CASE cadcli.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(cadcli.DOCUMENTO FROM 1 FOR 3)||'.'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 4 FOR 3)||'.'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 7 FOR 3)||'-'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+          WHEN 'J' THEN
+            CAST(SUBSTRING(cadcli.DOCUMENTO FROM 1 FOR 2)||'.'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 3 FOR 3)||'.'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 6 FOR 3)||'/'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 9 FOR 4)||'-'||
+            SUBSTRING(cadcli.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+         ELSE NULL END
+       ELSE NULL END AS DOCUMENTO,
+       cadcli.TELEFONE,
+       cadcli.FAX,
+       cadcli.EMAIL,
+       cadcli.PRINCIPALCONTATO,
+       cadcli.LOGRADOURO,
+       cadcli.NUMERO,
+       cadcli.COMPLEMENTO,
+       cadcli.BAIRRO,
+       cadcli.CIDADE,
+       cadcli.UF,
+       SUBSTRING(cadcli.CEP FROM 1 FOR 5)||'-'||SUBSTRING(cadcli.CEP FROM 6 FOR 3) AS CEP,
+       CAST('CLIENTES' AS VARCHAR(20)) AS TIPO,
+       --CAST(' ' AS VARCHAR(40)) AS AOSCUIDADOS,
+       cadcli.principalcontato as AOSCUIDADOS,
+       'N' AS P_MARCA,
+       cadcli.DATACADASTRO,
+       cadcli.DATAALTERACAO, 
+       cadcli.INSCESTADUAL,
+       CASE cadcli.aprovado WHEN 'S' THEN 0 ELSE 255 END AS P_STATUSCOR,
+       coalesce(cadvendedor.razaosocial,'SEM VENDEDOR') razaovendedor,       
+    cadcli.DOCUMENTO AS DOCUMENTO2,
+       transportadora.RAZAOSOCIAL as transportadora,
+
+
+       CASE WHEN (transportadora.DOCUMENTO<>'') AND
+                 (NOT transportadora.DOCUMENTO IS NULL) THEN
+          CASE transportadora.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(transportadora.DOCUMENTO FROM 1 FOR 3)||'.'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 4 FOR 3)||'.'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 7 FOR 3)||'-'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+          WHEN 'J' THEN
+            CAST(SUBSTRING(transportadora.DOCUMENTO FROM 1 FOR 2)||'.'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 3 FOR 3)||'.'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 6 FOR 3)||'/'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 9 FOR 4)||'-'||
+            SUBSTRING(transportadora.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+         ELSE NULL END
+       ELSE NULL END AS DOCUMENTO documentoTrans,
+       transportadora.LOGRADOURO locardouroTrans,
+       transportadora.NUMERO numeroTrans,
+       transportadora.COMPLEMENTO complementoTrans,
+       transportadora.BAIRRO bairroTrans,
+       transportadora.CIDADE cidadeTrans,
+       transportadora.UF ufTrans,
+       SUBSTRING(transportadora.CEP FROM 1 FOR 5)||'-'||SUBSTRING(transportadora.CEP FROM 6 FOR 3) AS CEPTrans
+
+
+
+
+FROM CLIENTES
+inner join
+    cadastroparceiros cadcli on 
+            (clientes.cadastro=cadcli.cadastro)
+left join 
+    cadastroparceiros cadvendedor on 
+            (clientes.vendedor=cadvendedor.cadastro)
+left join 
+    CADASTROPARCEIROS TRANSPORTADORA on     
+            (cadcli.transportadora=transportadora.cadastro)
+WHERE cadcli.STATUS='1'

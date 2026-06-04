@@ -1,0 +1,2 @@
+select * from materialfilial where filial=1 and iditem='PE-24007'
+'

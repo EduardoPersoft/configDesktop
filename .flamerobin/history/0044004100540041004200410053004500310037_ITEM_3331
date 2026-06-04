@@ -1,0 +1,20 @@
+update
+    VENDEDORESNOTA
+set
+    vendedoresNOTA.comissaovenda=(select
+                                    vendedor.COMISSAOvenda 
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoresNOTA.vendedor),
+    vendedoresNOTA.COMISSAORECEBIMENTO=(select
+                                    vendedor.COMISSAORECEBIMENTO
+                                 from
+                                    VENDEDOR
+                                 where
+                                    vendedor.CADASTRO=vendedoreSNOTA.vendedor)
+where
+    VENDEDORESNOTA.COMISSAORECEBIMENTO IS NULL
+    
+                                    
+                                    

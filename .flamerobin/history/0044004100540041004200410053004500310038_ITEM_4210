@@ -1,0 +1,30 @@
+SELECT  PLANCTOCONTABEISPAGOS.contacontabil,
+       PLANCTOCONTABEISPAGOS.filial,
+       PLANCTOCONTABEISPAGOS.razaosocial,
+       PLANCTOCONTABEISPAGOS.datainicial,
+       PLANCTOCONTABEISPAGOS.datafinal,
+       PLANCTOCONTABEISPAGOS.descricao,
+       PLANCTOCONTABEISPAGOS.debito,
+       PLANCTOCONTABEISPAGOS.credito,
+       PLANCTOCONTABEISPAGOS.saldo ,
+       planctocontabeispagos.origem,  
+       planctocontabeispagos.idcontacorrente,
+       planctocontabeispagos.registro,
+       planctocontabeispagos.movimento,
+       planctocontabeispagos.lancamento,
+       PLANCTOCONTABEISPAGOS.debitoSOMA,
+       PLANCTOCONTABEISPAGOS.creditoSOMa,
+       PLANCTOCONTABEISPAGOS.saldoSOMA,
+       PLANCTOCONTABEISPAGOS.contacontabili,
+       PLANCTOCONTABEISPAGOS.contacontabilf,
+       PLANCTOCONTABEISPAGOS.centrocustoi,
+       PLANCTOCONTABEISPAGOS.centrocustof,
+       PLANCTOCONTABEISPAGOS.datamovimento
+
+FROM PLANCTOCONTABEISPAGOSA PLANCTOCONTABEISPAGOS
+WHERE PLANCTOCONTABEISPAGOS.contacontabil BETWEEN
+             PLANCTOCONTABEISPAGOS.contacontabili AND PLANCTOCONTABEISPAGOS.contacontabilf
+     AND PLANCTOCONTABEISPAGOS.centrocusto BETWEEN
+             PLANCTOCONTABEISPAGOS.centrocustoi AND PLANCTOCONTABEISPAGOS.centrocustof
+
+order by planctocontabeispagos.contacontabil, PLANCTOCONTABEISPAGOS.datamovimento

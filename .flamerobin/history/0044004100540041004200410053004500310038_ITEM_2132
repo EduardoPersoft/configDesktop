@@ -1,0 +1,2 @@
+SELECT VENDEDOR.cadastro,vendedor.canalrelacionado FROM VENDEDOR
+        WHERE VENDEDOR.usuariorelacionado=191

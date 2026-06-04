@@ -1,0 +1,8 @@
+SELECT
+    *
+FROM    
+    MERCADORIASNOTA
+WHERE
+    mercadoriasnota.filial = 7 AND
+    mercadoriasnota.idnota= 490
+    

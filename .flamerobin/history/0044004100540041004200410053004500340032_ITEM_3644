@@ -1,0 +1,7 @@
+select
+    *
+from
+    SERVICOSPEDCOMPRA
+where
+    SERVICOSPEDCOMPRA.baixa='N' and
+    servicospedcompra.filial=110

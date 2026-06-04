@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.baixa='N' and 
+    mercadoriaspedcompra.quantidade*mercadoriaspedcompra.PRECOLISTA<>mercadoriaspedcompra.VLRFINALMERCAD

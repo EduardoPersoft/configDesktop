@@ -1,0 +1,15 @@
+update
+    orcamento principal
+set 
+    principal.c_status=4
+where
+    principal.c_status<4 and
+    exists(select 
+        * 
+     from 
+        orcamento alternativo
+     where 
+        alternativo.filial=principal.FILIAL and
+        alternativo.IDRELACAO=principal.IDNOTA and
+        alternativo.c_status=4)
+ order by principal.idnota   

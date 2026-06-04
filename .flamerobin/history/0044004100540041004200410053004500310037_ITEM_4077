@@ -1,0 +1,7 @@
+select * from MERCADORIASNOTA
+where filial=12826  and exists (
+select * from NOTAFISCAL
+where notafiscal.filial=mercadoriasnota.filial
+and notafiscal.idnota=mercadoriasnota.IDNOTA
+and notafiscal.dataemissao>='2025-01-23'
+order by idnota

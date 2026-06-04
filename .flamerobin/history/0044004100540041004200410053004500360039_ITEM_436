@@ -1,0 +1,3 @@
+alter table USUARIO
+add ihorariopermitido time,
+add fhorariopermitido time

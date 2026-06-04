@@ -1,0 +1,6 @@
+update MATERIALMOVIMENTOESTOQUE set quantidade = 0 where quantidade is null
+and not exists 
+(select * from movimentoestoque 
+where movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.FILIAL
+and movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO 
+and movimentoestoque.TIPOMOVIMENTO='05')

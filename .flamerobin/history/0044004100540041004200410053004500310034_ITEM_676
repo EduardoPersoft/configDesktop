@@ -1,0 +1,2 @@
+update MATERIALLOCAL
+set materiallocal.SALDOTOTAL=coalesce(materiallocal.saldototal,0)

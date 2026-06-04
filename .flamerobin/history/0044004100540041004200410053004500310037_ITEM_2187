@@ -1,0 +1,9 @@
+Select itemestoque.codigo,itemestoque.descricao, c_localimportacao.descricao, itemestoque.c_mrfornecedor,
+             itemestoque.c_original, c_marca.descricao as marca, itemestoque.c_aplicacao,
+             c_fornecedorpeca.descricao as fornecedor,itemestoque.grupo
+      from itemestoque
+      Left join c_marca on (itemestoque.c_marca=c_marca.idmarca)
+      Inner join c_fornecedorpeca on (c_fornecedorpeca.id=itemestoque.c_fornecedor)
+      left join MATERIALFILIAL on (materialfilial.FILIAL=:filial and
+                             materialfilial.IDITEM=itemestoque.codigo)
+      left join c_localimportacao on (c_localimportacao.idlocal=itemestoque.C_LOCALIMPORTACAO)

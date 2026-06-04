@@ -1,0 +1,11 @@
+select 
+    sum(C_COLETAS.valormedio),
+    count(movimentoestoque.idmovimento)
+from 
+    C_COLETAS
+left join 
+    movimentoestoque on
+        c_coletas.COLETA=movimentoestoque.COLETA
+
+where
+    c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025' 

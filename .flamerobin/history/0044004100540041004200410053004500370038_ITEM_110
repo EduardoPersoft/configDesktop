@@ -1,0 +1,52 @@
+SET TERM ^ ;
+ALTER PROCEDURE MOVIMENTOINVENTARIO (
+    PDATA date,
+    PFILIAL integer )
+RETURNS (
+    FILIAL integer,
+    CODIGO varchar(15),
+    LOTE char(12),
+    "DATA" date,
+    "LOCAL" smallint,
+    QUANTIDADE double precision,
+    VALOR double precision,
+    QUANTIDADECONTADA numeric(12,2),
+    VALORNOVO numeric(12,2) )
+
+AS
+begin
+DATA = :PDATA;
+/*
+for select materialmovimentoestoque.filial,
+           materialmovimentoestoque.iditem,
+           materialmovimentoestoque.lote,
+           materialmovimentoestoque.localarmazenamento,
+           sum(materialmovimentoestoque.quantidade * materialmovimentoestoque.sinal ),
+           sum(materialmovimentoestoque.valor * materialmovimentoestoque.sinal )
+from materialmovimentoestoque
+inner join movimentoestoque on (movimentoestoque.filial = materialmovimentoestoque.filial
+                            and materialmovimentoestoque.idmovimento = movimentoestoque.idmovimento)
+where movimentoestoque.filial = :pfilial
+and movimentoestoque.emissao <= :pdata
+group by materialmovimentoestoque.filial,
+         materialmovimentoestoque.iditem,
+         materialmovimentoestoque.lote,
+        materialmovimentoestoque.localarmazenamento
+        */
+FOR SELECT 1, ITEMESTOQUE.CODIGO, '.', 1, 0, 0  FROM ITEMESTOQUE
+into :filial, :codigo, :lote, :local, :quantidade, :valor do begin
+  QUANTIDADECONTADA = NULL;  
+  VALORNOVO=NULL;
+  SELECT QUANTIDADE,valor FROM INVENTARIOESTOQUEDATA
+  WHERE FILIAL=:FILIAL AND CODIGO=:CODIGO AND LOTE=:LOTE AND LOCAL = :LOCAL AND DATA=:PDATA 
+  INTO :QUANTIDADECONTADA,:VALORNOVO;
+  suspend;
+  end
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE MOVIMENTOINVENTARIO TO  SYSDBA;
+

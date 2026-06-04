@@ -1,0 +1,2 @@
+select * from MATERIALlote
+where iditem='01.12.0595'

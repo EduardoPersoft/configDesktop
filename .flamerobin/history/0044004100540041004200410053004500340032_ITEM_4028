@@ -1,0 +1,13 @@
+select 
+    movtitulorec.*
+from
+    TITULOREC
+inner join
+    MOVTITULOREC on
+        titulorec.filial=MOVTITULOREC.filial and
+        titulorec.idtitulo=movtitulorec.idtitulo and
+        titulorec.IDMOVIMENTO-1=movtitulorec.IDMOVIMENTO and 
+        titulorec.CONTACORRENTE<>movtitulorec.CONTACORRENTE
+where
+    titulorec.TIPOBAIXA is null and 
+    titulorec.filial=110

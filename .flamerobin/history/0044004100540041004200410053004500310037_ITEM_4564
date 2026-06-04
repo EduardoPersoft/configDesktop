@@ -1,0 +1,2 @@
+select * from USUARIO where 
+USUARIO IN (40, 125, 154)

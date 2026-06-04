@@ -1,0 +1,4 @@
+--select * from pedido where not exists (select * from condicaopagamento where condicaopagamento.id=pedido.CONDICAOPAGAMENTO)
+update notafiscal pedido set pedido.CONDICAOPAGAMENTO=153 where 
+not exists (select * from condicaopagamento where condicaopagamento.id=pedido.CONDICAOPAGAMENTO)
+and pedido.dataemissao between '01.01.2019' and '31.12.2021'

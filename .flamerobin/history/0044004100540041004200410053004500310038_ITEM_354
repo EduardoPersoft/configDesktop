@@ -1,0 +1,7 @@
+select 
+    itemestoque.codigo,
+    itemestoque.DESCRICAO
+from
+    ITEMESTOQUE
+where
+    itemestoque.codigo between '01.12.0000' and '01.12.9999'

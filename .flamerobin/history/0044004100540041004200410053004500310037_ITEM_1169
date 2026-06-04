@@ -1,0 +1,17 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.filial=12826 and
+    (movimentoestoque.LOCALARMAZENAMENTO = 9 or
+     movimentoestoque.LOCALTRANSFERENCIA = 9) and
+    exists (select 
+        *
+     from
+        MATERIALMOVIMENTOESTOQUE
+     where 
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.iditem='217523')
+     

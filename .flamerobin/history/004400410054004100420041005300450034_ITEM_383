@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    envio,
+    resultado,
+    idresultado,
+    protocolo,
+    nroreciboi,
+    ambiente
+from nfectrl
+where envio between '01.01.2018' and '31.12.2019'

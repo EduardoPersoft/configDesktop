@@ -1,0 +1,2 @@
+create index i_localloteitem
+on locallote(iditem, lote, local, filial)

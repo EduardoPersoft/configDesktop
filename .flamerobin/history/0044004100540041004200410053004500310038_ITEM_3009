@@ -1,0 +1,1 @@
+select * from cadastroparceiros order by cadastro

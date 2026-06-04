@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MOVTOTITULOREC
+WHERE
+    filial=5
+    and idtitulo=111396

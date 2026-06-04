@@ -1,0 +1,1 @@
+select * from titulorec where not exists (select * from clientes where clientes.cadastro=titulorec.parceiro)

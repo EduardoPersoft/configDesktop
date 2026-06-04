@@ -1,0 +1,29 @@
+SELECT
+    fornecedoresitem.fornecedor,
+    cadastroparceiros.nome,
+    count(materiallocal.iditem)
+FROM
+    MATERIALLOCAL
+inner JOIN
+    fornecedoresitem on
+        fornecedoresitem.iditem=materiallocal.IDITEM
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=fornecedoresitem.FORNECEDOR
+WHERE
+    materiallocal.saldototal = 0 
+    and materiallocal.filial=5
+    and not exists (
+        select 
+            mercadoriaspedcompra.*
+        from 
+            MERCADORIASPEDCOMPRA
+        where 
+            mercadoriaspedcompra.filial=materiallocal.filial AND
+            mercadoriaspedcompra.codigo=materiallocal.iditem AND
+            mercadoriaspedcompra.baixa='N')
+group by
+    fornecedoresitem.fornecedor,
+    cadastroparceiros.nome  
+order by
+    3 desc

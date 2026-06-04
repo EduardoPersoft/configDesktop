@@ -1,0 +1,12 @@
+select 
+    m1.*
+from
+    movimentoestoque m1
+inner join
+    movimentoestoque m2
+        m2.filial=m1.filial and
+        m2.IDMOVIMENTO=m1.IDMOVIMENTO-1 and 
+        m2.TIPOMOVIMENTO='10' and
+        m2.IDMOVTOTRANSFERENCIA=m1.idmovimento
+where
+    m1.TIPOMOVIMENTO='11'

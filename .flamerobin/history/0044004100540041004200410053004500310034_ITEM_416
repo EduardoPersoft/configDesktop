@@ -1,0 +1,27 @@
+select 
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.DESCRICAO,
+    mercadoriasnota.idnota,
+    'KG' unidade,
+    mercadoriasnota.quantidade*coalesce(itemestoque.pesoliquido,1),
+    MERCADORIASNOTA.VLRFINALMERCAD valortotal,
+    mercadoriasnota.vlrfinalmercad/mercadoriasnota.quantidade*coalesce(itemestoque.pesoliquido,1)
+ from 
+    ITEMESTOQUE
+inner join 
+    MERCADORIASNOTA on
+    ITEMESTOQUE.CODIGO=MERCADORIASNOTA.CODIGO
+inner join 
+    NOTAFISCAL on 
+    MERCADORIASNOTA.FILIAL=notafiscal.FILIAL
+inner join 
+      NATUREZAOPERACAO on 
+      notafiscal.operacao=naturezaoperacao.id
+where
+    NOTAFISCAL.FILIAL=? and 
+    notafiscal.dataemissao between ? and ? and 
+    ITEMESTOQUE.CODIGO between ? and ? and
+    notafiscal.datacancelamento is null and
+    notafiscal.dataemissao is not null and
+    naturezaoperacao.FATURA='S'
+    

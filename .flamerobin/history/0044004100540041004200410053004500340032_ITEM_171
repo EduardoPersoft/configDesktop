@@ -1,0 +1,24 @@
+
+select
+    movtobancariolancamentos.FILIAL,
+    movtobancariolancamentos.CODIGO CONTACORRENTE,
+    movtobancariolancamentos.MOVIMENTACAO,
+    movtobancariolancamentos.HISTORICOEXTRATO,
+    movtobancariolancamentos.NRDOCUMENTO,
+    movtobancariolancamentos.CONTACONTABIL,
+    coalesce(movtobancariolancamentos.DESCRICAOCONTACONTABIL,movtobancariolancamentos.DESCRICAOCONTATRANSFERENCIA) Descricao,
+    movtobancariolancamentos.VALORMOVIMENTO
+    
+    
+    
+from
+    movtobancariolancamentos(?,?, ?,  'PRIMEFLEX', 4)
+where    
+    movtobancariolancamentos.codigo=?
+order by
+    filial,
+    contacorrente,
+    movimentacao,
+    documento,
+    contacontabil
+    

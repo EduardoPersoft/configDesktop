@@ -1,0 +1,10 @@
+update
+    mercadoriaspedcompra
+set 
+    mercadoriaspedcompra.CLASSIFISCAL=case substring(itemestoque.CODIGO from 1 for 4) when 'MPSV' then '1120102'
+                                                                                      when 'MPST' then '1120102'
+                                                                                      when 'MPSA' then '1120102'
+                                                                                      else null end 
+                                                                                      
+
+    

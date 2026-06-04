@@ -1,0 +1,1 @@
+select first 100 filial,idnota,cast(substring(notafiscal.VLRTOTNOTAEXTENso from 1 for 100) as varchar(200)) from notafiscal order by dataemissao desc

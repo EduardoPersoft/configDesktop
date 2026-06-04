@@ -1,0 +1,43 @@
+SELECT 
+       PROPDEFAULT.ASSUMIRPROPRDEST,
+       propdefault.modelo PROPDEFAULT_MODELO,
+       propdefault.operacao PROPDEFAULT_OPERACAO,
+       propdefault.listapreco PROPDEFAULT_LISTAPRECO,
+       propdefault.casasdecimais PROPDEFAULT_CASASDECIMAIS,
+       propdefault.tipoDocumento PROPDEFAULT_TIPODOCUMENTO,
+       coalesce(estabelecimento.simples,'N') SIMPLES,
+       coalesce(estabelecimento.regimetributario,0) ESTABELECIMENTO_REGIMETRIB,
+       coalesce(estabelecimento.simplesexcedido,'N') ESTABELECIMENTO_SIMPLESEXCEDIO,
+       COALESCE(MODELODOCTO.calcularpeso,'S') MODELODOCTO_CALCULARPESO,
+       listapreco.PADMINISTRATIVO        PEDIDO_PADMINISTRATIVO        ,
+       listapreco.PFINANCEIRO            PEDIDO_PFINANCEIRO            ,
+       listapreco.TIPOFINANCEIRO         PEDIDO_TIPOFINANCEIRO,
+       Coalesce(estabelecimento.psimples,0) ESTABELECIMENTO_PSIMPLES,
+       Coalesce(estabelecimento.aliquotasimples,0) ESTABELECIMENTO_ALIQUOTASIMPLES,
+       propdefault.prazoentrega PROPDEFAULT_DIASENTREGA,
+	   CADEMP.UF						 PEDIDO_UFESTABELECIMENTO,
+       COALESCE(MODELODOCTO.tipocobranca,0) MODELODOCTO_TIPOCOBRANCA,
+       COALESCE(MODELODOCTO.bancocobranca,0) MODELODOCTO_BANCOCOBRANCA,
+       COALESCE(MODELODOCTO.condicaopagto,0) MODELODOCTO_CONDICAOPAGTO,
+       CONDICAOPAGAMENTO.DESCRICAO MODELODOCTO_CONDICAOPAGTOD,
+       MODELODOCTO.DESCONTOMERCADORIA PEDIDO_MSGDESCMERCADORIAS,
+       MODELODOCTO.acrescimomercadoria PEDIDO_MSGACRESCMERCADORIA
+
+from 
+    propdefault
+
+inner join 
+    estabelecimento on 
+        (propdefault.filial=estabelecimento.cadastro)
+INNER JOIN 
+    modelodocto ON 
+        (MODELODOCTO.ID=PROPDEFAULT.modelo)
+LEFT JOIN 
+    listapreco ON 
+        (LISTAPRECO.LISTA=PROPDEFAULT.listapreco)
+LEFT JOIN 
+    CADASTROPARCEIROS CADEMP ON 
+        (CADEMP.CADASTRO=ESTABELECIMENTO.CADASTRO)
+LEFT JOIN 
+    CONDICAOPAGAMENTO ON 
+        CONDICAOPAGAMENTO.ID=modelodocto.CONDICAOPAGAMENTO

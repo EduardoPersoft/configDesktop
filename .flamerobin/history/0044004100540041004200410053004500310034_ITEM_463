@@ -1,0 +1,8 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.pesoliquido=case itemestoque.unidade when 'KG' then 1 else  itemestoque.C_PESOMPPOREMBALAGEM end,
+    itemestoque.pesobruto=case itemestoque.unidade when 'KG' then 1 else itemestoque.c_pesoporembalagem end
+where
+    itemestoque.tipoproduto=4
+    

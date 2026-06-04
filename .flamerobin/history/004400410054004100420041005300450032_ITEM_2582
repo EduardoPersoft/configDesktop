@@ -1,0 +1,8 @@
+UPDATE
+    mercadoriaspedcompra 
+set 
+    vlrfinalmercad = precounitario * quantidade,
+    vlrtotalmercad = precounitario * quantidade
+WHERE
+    mercadoriaspedcompra.baixa='N' and 
+    mercadoriaspedcompra.quantidade*mercadoriaspedcompra.PRECOLISTA<>mercadoriaspedcompra.VLRFINALMERCAD

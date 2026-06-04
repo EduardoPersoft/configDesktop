@@ -1,0 +1,4 @@
+select * from MATERIALLOTE
+wherer filial=110 and
+iditem='MPP05KRAMONO' and
+quantidade:0

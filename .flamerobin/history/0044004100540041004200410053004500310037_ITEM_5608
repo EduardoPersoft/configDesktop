@@ -1,0 +1,3 @@
+select * from mercadoriasped
+
+where idnota=195090

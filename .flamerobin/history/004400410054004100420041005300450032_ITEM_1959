@@ -1,0 +1,1 @@
+select codigo,descricao,referencia,itembase,familia from itemestoque where itemestoque.codigo='11986' or itemestoque.itembase='11986'

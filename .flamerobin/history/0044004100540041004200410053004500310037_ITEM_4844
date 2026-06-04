@@ -1,0 +1,7 @@
+create table c_coletas(
+coleta integer not null,
+dataColeta date,
+valor decimal(12,2),
+motorista varchar(60),
+localizacao varchar(1000),
+constraint pk_c_coletas primary key(coleta))

@@ -1,0 +1,24 @@
+update 
+    MATERIALFILIAL
+set
+    MATERIALFILIAL.CONSUMOMEDIOESTIMADO = COALESCE((select 
+                                                sum(CONSUMOITENSESTOQUE.QUANTIDADEESTIMADO)
+                                           from
+                                                CONSUMOITENSESTOQUE
+                                           where 
+                                                CONSUMOITENSESTOQUE.FILIAL=MATERIALFILIAL.FILIAL
+                                                AND CONSUMOITENSESTOQUE.CODIGO=MATERIALFILIAL.IDITEM
+                                                AND ( (CONSUMOITENSESTOQUE.ANO = 2021 AND CONSUOITENSESTOQUE.MES >= 3) 
+                                                        OR CONSUMOITENSESTOQUE.ANO = 2022))/12,0),
+                                                        
+    MATERIALFILIAL.CONSUMOMEDIO = COALESCE((select 
+                                                sum(CONSUMOITENSESTOQUE.QUANTIDADe)
+                                           from
+                                                CONSUMOITENSESTOQUE
+                                           where 
+                                                CONSUMOITENSESTOQUE.FILIAL=MATERIALFILIAL.FILIAL
+                                                AND CONSUMOITENSESTOQUE.CODIGO=MATERIALFILIAL.IDITEM
+                                                AND ( (CONSUMOITENSESTOQUE.ANO = 2021 AND CONSUOITENSESTOQUE.MES >= 3) 
+                                                        OR CONSUMOITENSESTOQUE.ANO = 2022))/12,0)
+
+                                                

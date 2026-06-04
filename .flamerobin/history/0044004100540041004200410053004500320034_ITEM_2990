@@ -1,0 +1,3 @@
+select * from mercadoriasped
+where filial=5 and codigo='107286'
+and baixa='N'

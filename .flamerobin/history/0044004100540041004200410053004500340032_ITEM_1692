@@ -1,0 +1,4 @@
+select * from Mercadoriasped 
+where filial=110 and 
+mercadoriasped.CLASSIFISCAL='150' and
+mercadoriasped.baixa='N'

@@ -1,0 +1,22 @@
+select
+    locallote.local,
+    locallote.filial,
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    TIPOITEMESTOQUE.DESCRICAO,
+    cast('N' as char(1)) as p_char 
+from
+    locallote
+inner join
+    itemestoque on
+        locallote.iditem=itemestoque.codigo
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+where
+    itemestoque.tipoProduto<>'5' and
+    locallote.quantidade>0
+order by
+    itemestoque.codigo

@@ -1,0 +1,10 @@
+update
+    cadastroparceiros
+set
+    CADASTROPARCEIROS.MUNICIPIO=(select municipio.MUNICIPIO
+                                 from MUNICIPIO
+                                 where municipio.uf=CADASTROPARCEIROS.uf and
+                                 municipio.MUNICIPIO_NOME=CADASTROPARCEIROS.CIDADE)
+    
+
+    

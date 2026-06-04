@@ -1,0 +1,17 @@
+SELECT 
+    c_foradeLista.ID, 
+    c_foradeLista.CODIGO,
+    c_foradeLista.descricao,
+    c_foradeLista.FABRICANTE,
+    c_fornecedorpeca.DESCRICAOFANTASIA,
+    c_foradeLista.APLICACAO,
+    c_foradeLista.CODIGOORIGINAL
+FROM 
+    c_foradeLista
+INNER JOIN
+    c_fornecedorpeca ON
+     c_fornecedorpeca.id = c_foradeLista.FABRICANTE
+
+
+order by
+    c_foraDelista.id

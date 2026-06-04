@@ -1,0 +1,133 @@
+SELECT 
+    MATERIALLOCAL.IDITEM,
+    FORNECEDORESITEM.CODIGOFORNEC,
+    ITEMESTOQUE.DESCRICAO,
+    ITEMESTOQUE.REFERENCIA,
+    ITEMESTOQUE.ITEMBASE, 
+    ITEMESTOQUE.definicao,
+    ITEMESTOQUE.DESCRIMINACAO,
+    GRUPOMERCADORIA.DESCRICAO,
+    FAMILIA.DESCRICAO,
+       
+    MATERIALLOCAL.SALDOTOTAL,
+    CAST(MATERIALFILIAL.CONSUMOMEDIO AS INTEGER),
+    CAST(coalesce(MATERIALFILIAL.CONSUMOMEDIOESTIMADO,0) AS INTEGER),
+    CAST(MATERIALFILIAL.DIASZERADOS AS INTEGER),
+    MATERIALFILIAL.SALDOMAXIMO,
+    ITEMESTOQUE.UNIDADE,
+    CAST(0 AS DECIMAL(12,2)) AS COMPRAR,    
+
+    coalesce((select sum(case when mercadoriaspedcompra.quantidade -
+                         coalesce(mercadoriaspedcompra.QTDEENTREGUE,0) <= 0 then 0 else
+                         mercadoriaspedcompra.quantidade -
+                         coalesce(mercadoriaspedcompra.QTDEENTREGUE,0) end) 
+              from mercadoriaspedcompra 
+              where mercadoriaspedcompra.filial=materiallocal.filial 
+              and mercadoriaspedcompra.codigo = materiallocal.iditem
+              and mercadoriaspedcompra.baixa = 'N'),0 )    as compra,
+
+    FORNECEDORESITEM.FORNECEDOR,
+    CADFOR.NOME,
+
+    CASE WHEN (CADFOR.DOCUMENTO<>'') AND
+          (NOT CADFOR.DOCUMENTO IS NULL) THEN
+          CASE CADFOR.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(CADFOR.DOCUMENTO FROM 1 FOR 3)||'.'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 4 FOR 3)||'.'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 7 FOR 3)||'-'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+        WHEN 'J' THEN
+            CAST(SUBSTRING(CADFOR.DOCUMENTO FROM 1 FOR 2)||'.'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 3 FOR 3)||'.'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 6 FOR 3)||'/'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 9 FOR 4)||'-'||
+                SUBSTRING(CADFOR.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+       ELSE NULL END
+    ELSE NULL END AS DOCUMENTO,
+
+    CADFOR.PRINCIPALCONTATO,
+    CONDICAOPAGAMENTO.ID,
+    CONDICAOPAGAMENTO.DESCRICAO,
+    COALESCE(FORNECEDORESITEM.PRECO,0) CUSTO,    
+    CADFOR.EMAIL,
+    CADFOR.TELEFONE,
+    fornecedoresitem.PERCENTUALTRIBUTADO TRIBUTAVEL, 
+    FORNECEDORES.FATURAMENTOMINIMO,
+    LISTAPRECOPRODUTO.PRECO * MATERIALFILIAL.CONSUMOMEDIO PRECOTOTAL,
+    cast(0 as decimal(12,2)) as PRECOTOTAL,
+    (SELECT COUNT(COMPOSICAOITEM.IDMATERIAL) 
+     FROM COMPOSICAOITEM 
+     WHERE COMPOSICAOITEM.IDITEM=ITEMESTOQUE.CODIGO) qtdComponentes,
+    (SELECT COUNT(COMPOSICAOITEM.IDITEM) 
+     FROM COMPOSICAOITEM 
+     WHERE COMPOSICAOITEM.IDMATERIAL=ITEMESTOQUE.CODIGO) qtdProdutos,
+    COALESCE(ITEMESTOQUE.COMPRARSOBDEMANDA, 'N'),
+    case
+    when        
+        coalesce(MATERIALFILIAL.SALDOMAXIMO,0)+coalesce(MATERIALFILIAL.CONSUMOMEDIOESTIMADO,0)<1 then 2
+    when
+        MATERIALLOCAL.SALDOTOTAL +
+        coalesce((select sum(case when mercadoriaspedcompra.quantidade-
+                             coalesce(mercadoriaspedcompra.QTDEENTREGUE,0) <0 then 0 else mercadoriaspedcompra.quantidade-
+                             coalesce(mercadoriaspedcompra.QTDEENTREGUE,0) end ) 
+                  from mercadoriaspedcompra 
+                  where mercadoriaspedcompra.filial=materiallocal.filial 
+                  and mercadoriaspedcompra.codigo = materiallocal.iditem
+                  and mercadoriaspedcompra.baixa = 'N'),0 )
+        <
+            CASE WHEN 
+               coalesce(MATERIALFILIAL.SALDOMAXIMO,0)> 0 
+            THEN 
+                COALESCE(MATERIALFILIAL.SALDOMAXIMO,0) * .4
+            ELSE 
+                coalesce(MATERIALFILIAL.CONSUMOMEDIOESTIMADO,0) * .3
+            END 
+    then    
+        case when MATERIALLOCAL.SALDOTOTAL <= 0.1 then 0  else 1 end          
+    else 2 end,
+    case coalesce(itemestoque.itembase, itemestoque.codigo) when itemestoque.codigo
+    then 0 else 1 end
+FROM 
+    MATERIALFILIAL
+INNER JOIN 
+    MATERIALLOCAL ON 
+        MATERIALLOCAL.FILIAL = MATERIALFILIAL.FILIAL 
+        AND MATERIALLOCAL.IDITEM = MATERIALFILIAL.IDITEM
+INNER JOIN
+    ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO = MATERIALFILIAL.IDITEM
+LEFT JOIN GRUPOMERCADORIA ON (GRUPOMERCADORIA.GRUPO=ITEMESTOQUE.GRUPO)
+LEFT JOIN FAMILIA ON (FAMILIA.ID=ITEMESTOQUE.FAMILIA)
+
+LEFT JOIN
+    LISTAPRECOPRODUTO ON
+        LISTAPRECOPRODUTO.LISTA = (SELECT LISTAPRECO.LISTA FROM LISTAPRECO
+                                   WHERE LISTAPRECO.LISTA = 1)
+        AND LISTAPRECOPRODUTO.PRODUTO = MATERIALFILIAL.IDITEM
+LEFT JOIN 
+    FORNECEDORESITEM ON
+        FORNECEDORESITEM.FORNECEDOR = ITEMESTOQUE.FORNECEDORPADRAO AND
+        FORNECEDORESITEM.IDITEM = ITEMESTOQUE.CODIGO
+LEFT JOIN 
+    CADASTROPARCEIROS CADFOR ON
+        CADFOR.CADASTRO = FORNECEDORESITEM.FORNECEDOR
+LEFT JOIN
+    FORNECEDORES ON 
+        FORNECEDORES.CADASTRO = CADFOR.CADASTRO
+LEFT JOIN
+    CONDICAOPAGAMENTO ON
+        CONDICAOPAGAMENTO.ID = FORNECEDORES.CONDICAOPAGAMENTO
+WHERE 
+    MATERIALFILIAL.FILIAL = coalesce(?, 5) AND
+    MATERIALLOCAL.IDLOCAL = 1 AND
+	ITEMESTOQUE.TIPOPRODUTO IN (1, 3, 4) AND
+	MATERIALLOCAL.IDITEM='77647'
+	
+ORDER BY 
+    35,
+    17,
+    coalesce(ITEMESTOQUE.COMPRARSOBDEMANDA, 'N'),
+    34,    
+    MATERIALFILIAL.CONSUMOMEDIOESTIMADO desc,
+    MATERIALLOCAL.SALDOTOTAL,
+	ITEMESTOQUE.CODIGO

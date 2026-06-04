@@ -1,0 +1,8 @@
+update 
+    titulorec 
+set 
+    codretorno = null, contacorrente=9999, tipotransacao=8,
+    numbolbanco=null, codigobarra=null, linhadigitavel=null,
+    dataenvio=null
+where 
+    titulorec.DATAENVIO>'06.07.2021' and emissao='05.07.2021'

@@ -1,0 +1,40 @@
+SELECT
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.nome nomeClientes,
+    cadven.nome nomeVendedor,
+    cadate.nome nomeAtendente,
+    sum(mercadoriasnota.vlrFinalMercad) valorVenda,
+    sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100) comissao
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= 1 and
+    notafiscal.dataemissao between '01.05.2022' and '31.05.2022'
+    notafiscal.dataCancelamento is null and
+    notafiscal.calculada = 'S'          
+group by
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.nome nomeClientes,
+    cadven.nome nomeVendedor,
+    cadate.nome nomeAtendente
+order by
+    min(mercadoriasnota.idmercadoria)

@@ -1,0 +1,8 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    quantidade,
+    QTddenviada
+    from MERCADORIASPED
+where filial=1 and idnota=50582

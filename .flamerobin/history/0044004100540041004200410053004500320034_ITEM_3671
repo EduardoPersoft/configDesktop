@@ -1,0 +1,19 @@
+select
+    movimentoestoque.DOCUMENTO,
+    movimentoestoque.emissao,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovimentoestoque.LOCALARMAZENAMENTO,
+    materialmovimentoestoque.QUANTIDADE,
+    count(movimentoestoque.idmovimento)
+from
+    movimentoestoque 
+where
+    movimentoestoque.filal=12826 and
+    movimentoestoque.TIPOMOVIMENTO='10'
+group by    
+    movimentoestoque.DOCUMENTO,
+    movimentoestoque.emissao,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovimentoestoque.LOCALARMAZENAMENTO,
+    materialmovimentoestoque.QUANTIDADE,
+

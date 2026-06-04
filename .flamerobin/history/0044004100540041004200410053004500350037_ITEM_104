@@ -1,0 +1,15 @@
+select 
+    cadven.cadastro,
+    cadven.nome,
+    'Pedido' as tipo,
+    pedido.datacadastro
+from    
+    pedido
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.destinatario=pedido.vendedor      
+where
+    pedido.filial=1 and 
+    pedido.DATACADASTRO between '01.01.2024' and '31.12.2024' and
+    pedido.cancelado='N' and
+    pedido.vendedor=105

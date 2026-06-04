@@ -1,0 +1,3 @@
+alter table c_laminacao
+add c_filme1bobinadors char(1),
+add c_filme2bobinadors char(1)

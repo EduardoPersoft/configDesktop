@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.COLETA=11699

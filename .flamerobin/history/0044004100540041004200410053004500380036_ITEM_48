@@ -1,0 +1,3 @@
+select * from LANTOCONTPAG
+where filial=1
+and iditulo between 274 and 293

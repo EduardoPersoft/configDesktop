@@ -1,0 +1,15 @@
+SELECT  
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    itemestoque.tipoproduto=3 AND
+    itemestoque.DATACADASTRO<='01.01.2021' and
+    ITEMESTOQUE.FAMILIA IS NOT NULL AND
+    NOT EXISTS
+        (SELECT 
+            *
+        FROM   
+            C_LOGPRODUTOECOMMERCE
+        WHERE 
+            C_LOGPRODUTOECOMMERCE.CODIGO=ITEMESTOQUE.CODIGO)

@@ -1,0 +1,17 @@
+select itemestoque.CODIGO
+from 
+    ITEMESTOQUE
+WHERE
+itemestoque.C_CODIGOANT in (
+SELECT
+    count(itemestoque.codigo) as qtd,
+    itemestoque.C_CODIGOANT
+FROM
+    ITEMESTOQUE
+WHERE
+    itemestoque.c_codigoant  is not null
+group by
+    itemestoque.C_CODIGOANT
+HAVING
+    count(itemestoque.codigo)>1
+    )

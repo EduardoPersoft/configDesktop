@@ -1,0 +1,15 @@
+update
+    C_REQUISICAOMATERIALITEM
+set 
+    codigo = case CODIGO
+                  when '60005' then '04.01.0001'
+                  when '60004' then '04.01.0002'
+                  when '60007' then '04.01.0010'
+                  when '60013' then '04.01.0050'
+                  when '60012' then '04.01.0040'
+                  when '60011' then '04.01.0030'
+                  when '60010' then '04.01.0020'
+                  when '60002' then '04.01.0005'
+             else CODIGO end                
+where
+    C_REQUISICAOMATERIALitem.QUANTIDADEATENDIDA>=C_REQUISICAOMATERIALitem.QUANTIDADE

@@ -1,0 +1,28 @@
+select
+    itemestoque.codigo,
+    itemestoque.REFERENCIA
+from
+    itemestoque
+where
+    coalesce(ITEMESTOQUE.referencia,'')<>''
+union
+select
+    itemestoque.codigo,
+    itemestoque.C_ORIGINAL
+from 
+    itemestoque
+where
+    coalesce(ITEMESTOQUE.c_original,'')<>''
+    
+union
+select
+    i2.codigo,
+    i1.referencia
+from
+    itemestoque i1
+inner join
+    itemestoque i2 on
+        i1.c_original=i2.C_ORIGINAL and
+        i1.codigo<>i2.codigo
+where
+    coalesce(i1.referencia,'')<>''

@@ -1,0 +1,24 @@
+select
+C_COMISSAORECIBO.ID,
+c_comissaorecibo.loja,
+loja.nome nomeloja,
+C_COMISSAORECIBO.FILIAL,
+coalesce(substituto.idnota,C_COMISSAORECIBO.IDNOTA) as idnota,
+C_COMISSAORECIBO.DATALIMITE,
+C_COMISSAORECIBO.RAZAOVENDEDOR,
+sum (C_COMISSAORECIBO.VALORCOMISSAO) as VALORCOMISSAO,
+sum (C_COMISSAORECIBO.BASECOMISSAO)  as BASECOMISSAO
+from C_COMISSAORECIBO ('C_CAPACOMISSAO')
+inner join cadastroparceiros loja on (c_comissaorecibo.loja = loja.cadastro)
+left join 
+    pedido substituto on
+        pedido.filial=c_comissaorecibo.filial and
+        pedido.C_PEDIDOSUBSTITUIDO=c_comissaorecibo.idnota
+group by
+C_COMISSAORECIBO.ID,
+c_comissaorecibo.loja,
+loja.nome,
+C_COMISSAORECIBO.FILIAL,
+5,
+C_COMISSAORECIBO.DATALIMITE,
+C_COMISSAORECIBO.RAZAOVENDEDOR

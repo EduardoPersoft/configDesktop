@@ -1,0 +1,2 @@
+SELECT first 1 xped FROM IMP_NFE('NFE')
+WHERE IMP_NFE.detalheitens='S'

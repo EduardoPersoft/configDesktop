@@ -1,0 +1,23 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao
+from 
+    C_ITENSAZERO
+where
+    not exists (
+    select 
+        *
+    from 
+        mercadoriaspedcompra
+    where
+        mercadoriaspedcompra.codigo=itemestoque.codigo and
+        mercadoriaspedcompra.baixa='N')
+and 
+    (select 
+        materiallocal.SALDOTOTAL
+    from
+        materiallocal
+     where
+        materiallocal.filial=5 and
+        materiallocal.iditem=itemestoque.codigo and
+        materiallocal.IDLOCAL=1) <= 0.009

@@ -1,0 +1,7 @@
+select
+    *
+from
+    TITULOREC
+where
+    titulorec.emissao=titulorec.dataenvio and
+    titulorec.baixa is null

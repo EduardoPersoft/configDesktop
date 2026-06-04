@@ -1,0 +1,4 @@
+select * from SERVICOSPEDCOMPRA
+where  SERVICOSPEDCOMPRA.filial in (110,3941)
+and SERVICOSPEDCOMPRA.baixa='N'
+and SERVICOSPEDCOMPRA.C_CODIGO  is not null

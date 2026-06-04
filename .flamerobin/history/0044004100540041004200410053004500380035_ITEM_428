@@ -1,0 +1,5 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    quantidade=coalesce(quantidade,0),
+    valor=coalesce(valor,0)

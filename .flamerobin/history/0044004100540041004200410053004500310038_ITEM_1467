@@ -1,0 +1,2 @@
+select * from c_faturasped 
+where pedido.filial=1 and pedido.idnota in (68974, 68977)

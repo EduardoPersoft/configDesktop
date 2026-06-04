@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where DOCUMENTO='328670'

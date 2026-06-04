@@ -1,0 +1,7 @@
+update 
+    materiallocal
+SET
+    saldototal=0
+WHERE
+    MATERIALLOCAL.filial=5 AND
+    materiallocal.idlocal<>1

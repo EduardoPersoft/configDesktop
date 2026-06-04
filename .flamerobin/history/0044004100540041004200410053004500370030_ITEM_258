@@ -1,0 +1,4 @@
+select  filial,idnota,c_arte, c_statusarte,
+c_novorepeticaoalteracao
+from MERCADORIASPED
+where filial=110 and idnota=11350

@@ -1,0 +1,16 @@
+select 
+            first 1
+            notafiscal.NUMERONOTA,
+            notafiscal.CHAVE,
+            notafiscal.VLRTOTALNOTA,
+            extract(day from notafiscal.DATAEMISSAO) as diaNota,
+            extract(month from notafiscal.DATAEMISSAO) as mesNota,
+            extract(year from notafiscal.DATAEMISSAO) as anoNota
+        from 
+            notafiscal
+        where 
+            notafiscal.filial=5 and
+            notafiscal.DATAEMISSAO='13.05.2022' and
+            notafiscal.destinatario=21497 AND
+            notafiscal.chave is not null
+        

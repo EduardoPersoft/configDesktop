@@ -1,0 +1,2 @@
+select filial,idnota,pesoliquido,pesobruto from NOTAFISCAL
+where filial=7 and idnota=655

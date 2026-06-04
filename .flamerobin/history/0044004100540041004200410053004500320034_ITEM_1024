@@ -1,0 +1,6 @@
+UPDATE
+    titulorec
+SET
+    TITULOREC.contacontabil = '11'
+WHERE
+    titulorec.contacontabil = '000000'

@@ -1,0 +1,1 @@
+select codigo, inclusao, enviado, status_code, cast(content as varchar(400)) from C_LOGPRODUTOECOMMERCE where enviado > '21.07.2021'

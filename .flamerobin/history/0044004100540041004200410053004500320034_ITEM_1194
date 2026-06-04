@@ -1,0 +1,5 @@
+delete from
+    mercadoriasped
+where
+    filial=5 and
+    idnota in (56685, 56686)

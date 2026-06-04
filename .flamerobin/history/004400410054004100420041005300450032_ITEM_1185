@@ -1,0 +1,6 @@
+SELECT
+    *
+from 
+    itemestoque
+WHERE
+    itemestoque.CLASSIFISCAL=372

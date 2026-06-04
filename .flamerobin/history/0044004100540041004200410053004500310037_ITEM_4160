@@ -1,0 +1,3 @@
+select * from
+CADASTROPARCEIROS
+where dataalteracao='2025-01-23'

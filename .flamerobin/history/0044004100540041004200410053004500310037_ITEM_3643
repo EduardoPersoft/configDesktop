@@ -1,0 +1,9 @@
+select
+    filial,
+    idnota,
+    idorcamento
+from 
+    PEDIDO
+where 
+    pedido.vendedor = 629 and
+    pedido.DATACADASTRO >='01.09.2024'

@@ -1,0 +1,2 @@
+select filial,idnota,datacadastro,orcamento.IDRELACAO from orcamento
+order by datacadastro desc

@@ -1,0 +1,1 @@
+select * from C_LOGSALDOECOMMERCE where status_code is not null

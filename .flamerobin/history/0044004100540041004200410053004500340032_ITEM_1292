@@ -1,0 +1,2 @@
+select * from APONTAMENTOMAT
+where filial=110 and idmovimento=28700

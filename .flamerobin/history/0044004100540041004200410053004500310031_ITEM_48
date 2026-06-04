@@ -1,0 +1,32 @@
+SELECT PLANCTOCUSTOPAGOS.filial,
+              PLANCTOCUSTOPAGOS.razaosocial,
+              PLANCTOCUSTOPAGOS.datainicial,
+              PLANCTOCUSTOPAGOS.datafinal,
+              PLANCTOCUSTOPAGOS.centrocusto,
+              PLANCTOCUSTOPAGOS.descricao, 
+              PLANCTOCUSTOPAGOS.contacontabili,
+              PLANCTOCUSTOPAGOS.contacontabilf,
+              PLANCTOCUSTOPAGOS.centrocustoi,
+              PLANCTOCUSTOPAGOS.centrocustof,
+    SUM(PLANCTOCUSTOPAGOS.debito) DEBITO,
+    SUM(PLANCTOCUSTOPAGOS.credito) CREDITO,
+    SUM(PLANCTOCUSTOPAGOS.saldo) SALDO,
+    SUM(PLANCTOCUSTOPAGOS.debitoSOMA) DEBITOSOMA,
+    SUM(PLANCTOCUSTOPAGOS.creditoSOMA) CREDITOSOMA,
+    SUM(PLANCTOCUSTOPAGOS.saldoSOMA) SALDOSOMA
+
+FROM PLANCTOCUSTOPAGOS
+WHERE PLANCTOCUSTOPAGOS.contacontabil BETWEEN
+             PLANCTOCUSTOPAGOS.contacontabili AND PLANCTOCUSTOPAGOS.contacontabilf
+AND PLANCTOCUSTOPAGOS.centrocusto BETWEEN
+        PLANCTOCUSTOPAGOS.centrocustoi AND PLANCTOCUSTOPAGOS.centrocustof
+GROUP BY PLANCTOCUSTOPAGOS.filial,
+       PLANCTOCUSTOPAGOS.razaosocial,
+       PLANCTOCUSTOPAGOS.datainicial,
+       PLANCTOCUSTOPAGOS.datafinal,
+       PLANCTOCUSTOPAGOS.centrocusto,
+       PLANCTOCUSTOPAGOS.descricao, 
+       PLANCTOCUSTOPAGOS.contacontabili,
+       PLANCTOCUSTOPAGOS.contacontabilf,
+       PLANCTOCUSTOPAGOS.centrocustoi,
+       PLANCTOCUSTOPAGOS.centrocustof

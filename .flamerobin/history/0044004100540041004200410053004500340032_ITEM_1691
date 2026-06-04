@@ -1,0 +1,2 @@
+select * from SERVICOSNOTAcompra
+where idpedido=2026

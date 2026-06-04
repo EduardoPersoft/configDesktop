@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    mercadoriasnota 
+WHERE
+    mercadoriasnota.IDPEDIDO=65141

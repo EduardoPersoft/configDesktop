@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE between '29.10.2023' and '31.10.2023'
+where tipomovimento='12'

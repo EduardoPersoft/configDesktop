@@ -1,0 +1,13 @@
+select
+         sum (mercadoriasnota.QUANTIDADE)
+   from
+       MERCADORIASNOTA
+   inner join notafiscal on (mercadoriasnota.filial=notafiscal.filial
+                   and mercadoriasnota.idnota=notafiscal.idnota)
+   WHERE
+        mercadoriasnota.filial= 5 AND
+        mercadoriasnota.IDNOTASAIDA=1 AND
+        mercadoriasnota.IDMERCADORIASAIDA=1
+        and mercadoriasnota.ORIGEMNOTAREL = 0
+        and notafiscal.cancelamento='N'
+        and notafiscal.DATAemissao is not  null

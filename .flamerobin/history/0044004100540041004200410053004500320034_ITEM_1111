@@ -1,0 +1,12 @@
+select 
+    PLANILHAORC.*,
+    mercadoriasorc.IDMERCADORIA 
+from 
+    PLANILHAORC 
+inner join 
+    mercadoriasorc on
+        mercadoriasorc.filial=PLANILHAORC.filial AND
+        mercadoriasorc.idnota=PLANILHAORC.idnota AND
+        mercadoriasorc.codigo=PLANILHAORC.codigo
+
+where filial=5 and idnota=346

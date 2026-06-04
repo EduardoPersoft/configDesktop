@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    itemestoque
+WHERE
+    itemestoque.codigo like '%s'

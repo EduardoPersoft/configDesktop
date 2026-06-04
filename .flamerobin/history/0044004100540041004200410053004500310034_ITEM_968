@@ -1,0 +1,8 @@
+select
+    pedido.ENTREGA,
+    coalesce(pedido.C_NAOPERMITEANTECIPAR, 'N') as c_naoPermiteAntecipar
+from
+    PEDIDO
+where
+    pedido.filial=110 and
+    pedido.idnota=1

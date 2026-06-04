@@ -1,0 +1,9 @@
+delete
+from 
+    materialmovimentoestoque 
+where 
+    materialmovimentoestoque.filial=110 and
+        exists (select movimentoestoque.IDMOVIMENTO 
+            from movimentoestoque 
+            where materialmovimentoestoque.IDMOVIMENTO=movimentoestoque.IDMOVIMENTO and 
+                  movimentoestoque.filial=233);

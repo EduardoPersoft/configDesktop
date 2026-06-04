@@ -1,0 +1,2 @@
+select * from NOTAFISCAL
+where notafiscal.TIPOCOBRANCA=8

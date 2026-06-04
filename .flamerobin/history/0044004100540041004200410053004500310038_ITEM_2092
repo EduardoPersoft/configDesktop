@@ -1,0 +1,15 @@
+        SELECT Filial,
+            Codigo,
+            cast(SUM(QuantidadeSaldoINICIAL) as decimal(12,3)) QUANTIDADEINICIAL,
+            cast(SUM(CustoSaldoINICIAL) as decimal(12,3)) CUSTOINICIAL,
+            cast(SUM(Quantidadeentrada) as decimal(12,3)) QUANTIDADENTRADA,
+            cast(SUM(Custoentrada) as decimal(12,3)) CUSTOENTRADA,
+            cast(SUM(Quantidadesaida) as decimal(12,3)) QUANTIDADESAIDA,
+            cast(SUM(Custosaida) as decimal(12,3)) AS CUSTOSAIDA,
+            cast(SUM(QuantidadeSaldoINICIAL)+SUM(Quantidade) as decimal(12,3)) QUANTIDADEFINAL,
+            cast(SUM(CustoSaldoINICIAL)+SUM(Custo) as decimal(12,3))  AS CUSTOFINAL
+        FROM Lancamentomovimentoestoque(1,'01.12.1487','01.12.1487',
+            '01.12.2023','31.12.2023','.','zzzz',0,
+            32000,'S','S','S','S','S')
+        GROUP BY Filial ,
+                 Codigo

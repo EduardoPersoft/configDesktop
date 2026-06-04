@@ -1,0 +1,9 @@
+insert into fornecedores (cadastro)
+select vendedores from cadastro 
+where not exists 
+(select
+    *
+ from 
+    vendedor
+ where
+    fornecedores.cadastro=vendedor.cadastro)

@@ -1,0 +1,1 @@
+create table c_itemlocalimp(codigo varchar(15), local varchar(10))

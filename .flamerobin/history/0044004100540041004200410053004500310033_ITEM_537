@@ -1,0 +1,15 @@
+select
+    mercadoriasnota.codigo,
+    mercadoriasnota.idmercadoria,
+    mercadoriasnota.quantidade as qtd,
+    materiallocal.SALDOTOTAL
+from
+    MERCADORIASNOTA
+inner join
+    materiallocal on
+    materiallocal.filial=mercadoriasnota.filial and
+    materiallocal.iditem=mercadoriasnota.codigo
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota=23017 and
+    mercadoriasnota.codigo='37721-1103'

@@ -1,0 +1,4 @@
+update
+    PEDIDO
+set 
+    orcamento.CLCTRANSP='N'

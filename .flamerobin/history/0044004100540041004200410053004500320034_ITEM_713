@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    RESUMOCOMPRAS 
+where 
+    resumocompras.ITEM = '05562'
+order by
+    emissao desc

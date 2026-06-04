@@ -1,0 +1,9 @@
+select 
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    materialmovimentoestoque.filial=1 and
+    materialmovimentoestoque.iditem='1048905'
+order by
+    idmovimento desc

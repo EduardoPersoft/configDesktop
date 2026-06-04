@@ -1,0 +1,71 @@
+SELECT 
+       ITEMESTOQUE.CODIGO ITEMESTOQUE_CODIGO,
+
+       cast(COALESCE(LP2.PRECO, LP1.preco)/
+            (1+(case when coalesce(estabelecimento.comercialsomente ,'S') = 'N' 
+                          and itemestoque.codigotributacao = 1 
+                          and coalesce(l0.ipiEmbutido, 'N') = 'S'
+                then CLASSIFICACAOFISCAL.aliquota
+                else 0 end / 100)) as decimal(12,3)) LISTAPRECO_PRECO,  
+	
+       cast(COALESCE(LP2.PRECO, LP1.preco)/
+            (1+(case  when coalesce(estabelecimento.comercialsomente ,'S') = 'N' 
+                          and itemestoque.codigotributacao = 1 
+                          and coalesce(l0.ipiEmbutido, 'N') = 'S' 
+                then CLASSIFICACAOFISCAL.aliquota
+                else 0 end / 100)) as decimal(12,3)) LISTAPRECO_PRECOORIGINAL,  
+    
+       case when lp3.preco is not null then
+  	    cast(LP3.PRECO/
+            (1+(case  when coalesce(estabelecimento.comercialsomente ,'S') = 'N' 
+                          and itemestoque.codigotributacao = 1 
+                          and coalesce(l0.ipiEmbutido, 'N') = 'S' 
+                then CLASSIFICACAOFISCAL.aliquota
+            else 0 end / 100)) as decimal(12,3)) end LISTAPRECO_PRECOMINIMO,  
+       COALESCE(ESTABELECIMENTO.LDESCVENDAS,0) MERCPED_PDESCCOMALPERMITIDO,
+       COALESCE(COALESCE(LP2.DESCONTOITEM, LP1.DESCONTOITEM), 0) MERCPED_PDESCPRPERMITIDO,
+
+       COALESCE(LP2.COMISSAO, LP1.COMISSAO)               MERCPED_COMISSAO               ,
+       COALESCE(LP2.MARGEMLUCRO, LP1.MARGEMLUCRO)            MERCPED_MARGEMLUCRO            ,
+       COALESCE(LP2.MARGEMCONTRIBUICAO, LP1.MARGEMCONTRIBUICAO)     MERCPED_MARGEMCONTRIBUICAO     ,
+       case coalesce(l1.Precovariavel, l0.precoVariavel) when '0' then 0 else cast(coalesce(COALESCE(LP2.VARIAVEL, LP1.VARIAVEL),0) as integer) end MERCPED_VARIAVEL,
+       COALESCE(LP2.CUSTOCONSIDERADO,LP1.CUSTOCONSIDERADO)        MERCPED_CUSTO                  ,	
+       
+       case when lp2.produto is null 
+       then COALESCE(l0.ALTERAPRECO, 'S') 
+       else COALESCE(l1.ALTERAPRECO, 'S')
+       end as ALTERARPRECO, 
+
+       COALESCE(ESTABELECIMENTO.aliquotasimples,0) ESTABELECIMENTO_ALIQUOTASIMPLES,
+       COALESCE(ESTABELECIMENTO.pis,0) ESTABLECIMENTO_PIS,
+       COALESCE(ESTABELECIMENTO.cofins,0) ESTABLECIMENTO_COFINS,
+       coalesce(ESTABELECIMENTO.comercialSomente, 'N') comercialSomente,
+       ITEMESTOQUE.tributacaoicms ITEMESTOQUE_TRIBUTACAOICMS,
+       E_CADASTROPARCEIROS.UF E_CADASTROPARCEIROS_UF,
+       COALESCE(E_TRIBUTACAOICMS.ALIQUOTA,0) E_TRIBUTACAOICMS_ALIQUOTA,
+       COALESCE(E_TRIBUTACAOICMS.FCP,0) E_TRIBUTACAOICMS_FCP,
+       E_TRIBUTACAOICMS.TIPOSUBSTITUICAO E_ICMS_TIPOST,
+       COALESCE(E_TRIBUTACAOICMS.LUCROSUBSTITUICAO,0) E_ICMS_IVAST,
+       E_TRIBUTACAOICMS.IVAAJUSTADO,       
+       E_TRIBUTACAOICMS.CONSUMIDORFINAL,
+       E_TRIBUTACAOICMS.AJUSTARBASESTCONSUMIDORFINAL
+FROM itemestoque
+
+INNER JOIN cadastroparceiros E_CADASTROPARCEIROS ON (E_CADASTROPARCEIROS.CADASTRO=1)
+
+LEFT JOIN CLASSIFICACAOFISCAL ON (ITEMESTOQUE.classifiscal=CLASSIFICACAOFISCAL.cfiscal)
+left JOIN TRIBUTACAOICMSUF E_TRIBUTACAOICMS ON (E_TRIBUTACAOICMS.ID=ITEMESTOQUE.tributacaoicms
+        AND E_TRIBUTACAOICMS.UF=E_CADASTROPARCEIROS.UF)
+LEFT JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.CADASTRO=E_CADASTROPARCEIROS.cadastro)
+
+LEFT JOIN LISTAPRECOPRODUTO LP1 ON (LP1.LISTA=1
+								AND LP1.PRODUTO=itemestoque.codigo)
+LEFT JOIN LISTAPRECO L0 ON L0.LISTA=LP1.LISTA
+LEFT JOIN LISTAPRECO L1 ON L1.LISTAREFERENCIA=LP1.LISTA
+LEFT JOIN LISTAPRECOPRODUTO LP2 ON (LP2.LISTA=L1.LISTA
+								AND LP2.PRODUTO=itemestoque.codigo)
+LEFT JOIN LISTAPRECOPRODUTO LP3 ON (LP3.LISTA=(select listapreco.lista from listapreco
+                                               where coalesce(listapreco.listaprecominimo,'N')='S')
+								AND LP3.PRODUTO=itemestoque.codigo)
+WHERE ITEMESTOQUE.CODIGO='1186406'
+

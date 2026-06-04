@@ -1,0 +1,7 @@
+update 
+    MATERIALMOVIMENTOESTOQUE
+set
+    MATERIALMOVIMENTOESTOQUE.lote='I230930/'||MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+where
+    materialmovimentoestoque.filial=110 and
+    materialmovimentoestoque.IDMOVIMENTO=17738

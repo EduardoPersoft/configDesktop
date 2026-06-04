@@ -1,0 +1,1 @@
+select * from C_LAMINACAO where not exists (select * from itemestoque where itemestoque.codigo=C_LAMINACAO.codigo)

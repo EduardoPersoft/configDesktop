@@ -1,0 +1,25 @@
+select 
+    extract(month from titulopag.emissao) ano,
+    extract(month from titulopag.emissao) mes,
+    lantocontpag.centrocusto,
+    lantocontpag.CONTACONTABIL,
+    lantocontpag.VALOR
+from 
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=TITULOPAG.FILIAL
+inner join
+    CONTASCONTABEIS on 
+        CONTASCONTABEIS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+inner join
+    CENTROCUSTOS on 
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        CENTROCUSTOS.CONTACONTABIL=lantocontpag.CONTACONTABIL
+        
+

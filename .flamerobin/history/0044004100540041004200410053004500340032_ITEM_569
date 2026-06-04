@@ -1,0 +1,6 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110 and
+iditem='MPP01TRAQMG17' and
+lote='138921/1/1'
+order by
+idmovimento

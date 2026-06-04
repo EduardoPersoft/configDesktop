@@ -1,0 +1,2 @@
+select count(itemestoque.codigo) from ITEMESTOQUE
+where itemestoque.tipoproduto=3

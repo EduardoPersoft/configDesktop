@@ -1,0 +1,15 @@
+update 
+    notafiscal 
+set 
+    notafiscal.VBRUTOFATURA = 
+        coalesce((select sum(faturas.VALORFATURA) from FATURAS
+                 where faturas.filial=notafiscal.filail and
+                 faturas.idnota=notafiscal.idnota),0), 
+
+    notafiscal.VLIQUIDOFATURA = 
+        coalesce((select sum(faturas.VALORFATURA) from FATURAS
+                 where faturas.filial=notafiscal.filail and
+                 faturas.idnota=notafiscal.idnota),0)
+where 
+    notafiscal.DATAEMISSAO is null 
+    

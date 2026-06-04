@@ -1,0 +1,21 @@
+select 
+   movbancarios.idcontacorrente,
+   movbancarios.nrdocumento,
+   movbancarios.movimentacao,
+   contacontabil.tipoconta,
+   lantocontbanc.*
+from 
+    movbancarios
+inner join
+    LANTOCONTBANC on
+        LANTOCONTbanc.filial=movbancarios.filial and
+        lantocontbanc.IDCONTACORRENTE=MOVBANCARIOS.IDCONTACORRENTE and
+        lantocontbanc.IDMOVTOBANc=MOVBANCARIOS.IDMOVTOBANCARIO
+left join
+    CONTASCONTABEIS on
+        contascontabeis.IDPLANO=4 and
+        contascontabeis.CONTACONTABIL=lantocontbanc.CONTACONTABIL
+where
+    MOVBANCARIOS.filial=1 and
+    MOVBANCARIOS.MOVIMENTACAO between '01.01.2024' and '31.12.2024' and
+    coalesce(CONTASCONTABEIS.TIPOCONTA, 'S')='S'

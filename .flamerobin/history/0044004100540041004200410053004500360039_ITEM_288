@@ -1,0 +1,15 @@
+select 
+    c_paradascoleta.coleta + c_paradascoleta.id,
+    c_paradascoleta.datacoleta,
+    (select first 1
+        movimentoestoque.MOTORISTA
+     from   
+        MOVIMENTOESTOQUE
+     where
+        movimentoestoque.COLETA=c_paradascoleta.coleta),
+    c_paradascoleta.datacoleta,
+    c_paradascoleta.TIPOPARADA,
+    c_paradascoleta.OBSERVACAO,
+    c_paradascoleta.localizacao,
+    c_paradascoleta.valor
+from c_paradascoleta

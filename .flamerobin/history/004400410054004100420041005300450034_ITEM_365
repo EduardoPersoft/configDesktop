@@ -1,0 +1,8 @@
+select
+    *
+FROM
+    MERCADORIASPED
+where
+    filial=1 and 
+    baixa='N' AND
+    idnota <= 63331

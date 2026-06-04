@@ -1,0 +1,16 @@
+update
+    LOCALLOTE
+set 
+    locallote.quantidade=
+(select 
+    sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.filial=1 and 
+    materialmovimentoestoque.iditem='1243823' and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=8)
+where 
+    locallote.filial=1 and 
+    locallote.iditem='1243823' and
+    locallote.LOCAL=8

@@ -1,0 +1,18 @@
+select 
+    pedido.FILIAL,
+    pedido.IDNOTA,
+    MOVIMENTOESTOQUE.IDMOVIMENTO,
+     coalesce(movimentoestoque.permitireditarpedido, 'N') as permitireditarpedido
+ from 
+    PEDIDO
+inner join 
+    MOVIMENTOESTOQUE on 
+    pedido.FILIAL=MOVIMENTOESTOQUE.FILIAL and
+    pedido.IDNOTA=MOVIMENTOESTOQUE.IDPEDIDO
+where
+    pedido.FILIAL=1 and 
+    pedido.IDNOTA=1 and 
+    movimentoEstoque.tipoMovimento='13'
+    
+    
+

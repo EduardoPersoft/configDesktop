@@ -1,0 +1,143 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_FICHAPRODUTO5 (
+    PCODIGO varchar(15) )
+RETURNS (
+    ORDEM integer,
+    CODIGO varchar(15),
+    C_MATERIAPRIMABASEDESCRICAO varchar(240),
+    C_GRAMATURA double precision )
+AS
+declare variable codigoFilme2 varchar(15);
+declare variable descricaoFilme2 varchar(240);
+declare variable gramatura2 double precision;
+declare variable tipoProduto1 char(1);
+declare variable tipoProduto2 char(1);
+begin 
+    ordem = 0;
+    for SELECT        
+        materiaprima.codigo,
+        materiaprima.descricao AS  C_MATERIAPRIMABASEDESCRICAO,
+        produto.c_gramatura
+    FROM
+        ITEMESTOQUE PRODUTO
+    LEFT JOIN
+        CADASTROPARCEIROS dono
+                        ON (DONO.CADASTRO=PRODUTO.C_CLIENTE)
+    LEFT JOIN
+        ITEMESTOQUE MATERIAPRIMA
+                    ON (MATERIAPRIMA.CODIGO=PRODUTO.c_materiaprimabase)
+    WHERE
+        PRODUTO.codigo = :pCODIGO
+    into 
+        :CODIGO, :C_MATERIAPRIMABASEDESCRICAO, :C_GRAMATURA
+    do begin     
+        ordem = ordem + 1; 
+        suspend; 
+    end 
+    
+    
+    for SELECT
+        C_LAMINACAO.filme,
+        FILME.DESCRICAO DESCRICAOFILME,
+        C_LAMINACAO.gramaturafilme,
+        filme.TIPOPRODUTO,
+        C_LAMINACAO.filme2,
+        FILME2.DESCRICAO DESCRICAOFILME,
+        C_LAMINACAO.gramaturafilme2,
+        filme2.TIPOPRODUTO        
+    FROM
+        C_LAMINACAO
+    INNER JOIN
+        ITEMESTOQUE FILME ON (FILME.CODIGO=C_LAMINACAO.FILME)
+    INNER JOIN
+        ITEMESTOQUE FILME2 ON (FILME2.CODIGO=C_LAMINACAO.FILME)
+        
+    WHERE
+        C_LAMINACAO.codigo=:pCODIGO        
+    into 
+        :CODIGO, :C_MATERIAPRIMABASEDESCRICAO, :C_GRAMATURA, :tipoProduto1,
+        :codigoFilme2, :descricaoFilme2, gramatura2, tipoProduto2
+    do begin     
+        if(tipoProduto1='1') then begin
+            ordem = ordem + 1;
+            suspend; 
+        end    
+        if(tipoProduto2='1') then begin
+            ordem = ordem + 1;
+            codigo=codigofilme2;
+            c_materiaprimabasedescricao=descricaofilme2;
+            c_Gramatura = gramatura2;            
+            suspend; 
+        end    
+    end        
+        
+        /*
+    for SELECT
+        CAST(c_LAMINACAO.sequencia+1 AS INTEGER) AS ORDEM,
+        C_LAMINACAO.filme2,
+        FILME.DESCRICAO DESCRICAOFILME,
+        C_LAMINACAO.gramaturafilme2
+    FROM
+        C_LAMINACAO
+    INNER JOIN
+        ITEMESTOQUE FILME ON (FILME.CODIGO=C_LAMINACAO.FILME2)
+    WHERE
+        C_LAMINACAO.codigo=:pCODIGO
+        and filme.TIPOPRODUTO = '1'   
+   -- order by 1 desc     
+    into 
+        :ORDEM, :CODIGO, :C_MATERIAPRIMABASEDESCRICAO, :C_GRAMATURA
+    do begin     
+        suspend; 
+    end   
+    */
+    
+    
+    for SELECT
+      cast(1000 as integer) as ordem,
+      MATERIAPRIMA.codigo,
+      materiaprima.descricao AS  C_MATERIAPRIMABASEDESCRICAO,
+      --MATERIAPRIMA.c_gramatura,
+      produto.C_GRAMATURATINTA
+    FROM
+        ITEMESTOQUE PRODUTO
+    INNER JOIN
+        ITEMESTOQUE MATERIAPRIMA
+                    ON (MATERIAPRIMA.CODIGO=PRODUTO.c_TINTA)
+    LEFT JOIN
+        CADASTROPARCEIROS dono
+                        ON (DONO.CADASTRO=PRODUTO.C_CLIENTE)
+    WHERE                       
+    PRODUTO.codigo = :pCODIGO
+        into 
+        :ORDEM, :CODIGO, :C_MATERIAPRIMABASEDESCRICAO, :C_GRAMATURA
+    do begin     
+        suspend; 
+    end 
+    
+    for SELECT
+        CAST(1001+c_LAMINACAO.sequencia AS INTEGER) AS ORDEM,
+        C_LAMINACAO.ADESIVO,
+        ADESIVO.DESCRICAO DESCRICAOFILME,
+        C_LAMINACAO.GRAMATURAADESIVO
+    FROM
+        C_LAMINACAO
+    INNER JOIN
+        ITEMESTOQUE ADESIVO ON (ADESIVO.CODIGO=C_LAMINACAO.ADESIVO)
+    WHERE
+        C_LAMINACAO.codigo=:pCODIGO
+    into 
+        :ORDEM, :CODIGO, :C_MATERIAPRIMABASEDESCRICAO, :C_GRAMATURA
+    do begin     
+        suspend; 
+    end         
+
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_FICHAPRODUTO5 TO  SYSDBA WITH GRANT OPTION;
+

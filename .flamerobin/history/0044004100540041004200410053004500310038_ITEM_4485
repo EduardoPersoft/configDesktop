@@ -1,0 +1,8 @@
+update
+    PEDIDO
+set 
+    vliquidofatura=vlrtotalnota,
+    vbrutofatura=vlrtotalnota
+where
+    filial=1 and
+    idnota=1

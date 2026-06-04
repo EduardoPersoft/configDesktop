@@ -1,0 +1,2 @@
+insert into INVENTARIOESTOQUEDATA(filial, codigo, lote, local, data, quantidade, quantidadeEstoque) 
+values (1, '1246101', '.', 100, '2025-08-06', 1, 2)

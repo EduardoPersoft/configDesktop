@@ -1,0 +1,10 @@
+SELECT
+    filial,
+    idmovimento,
+    idmovimentomaterial,
+    c_descricao 
+from 
+    materialmovimentoestoque
+where
+    materialmovimentoestoque.filial=1 and 
+    MATERIALMOVIMENTOESTOQUE.idmovimento=101773

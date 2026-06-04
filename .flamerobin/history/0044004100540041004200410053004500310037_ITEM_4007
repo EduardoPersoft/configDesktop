@@ -1,0 +1,1 @@
+select first 100 filial,idnota,notafiscal.VLRTOTNOTAEXTENSO from notafiscal order by dataemissao desc

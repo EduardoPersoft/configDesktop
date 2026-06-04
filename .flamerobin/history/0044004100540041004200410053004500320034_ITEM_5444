@@ -1,0 +1,13 @@
+insert into prazomercpedcompra(filial, idnota, iditem, dias, qtde)
+select 
+    MERCADORIASNOTACOMPRA.filial,
+    mercadoriasnotacompra.idnota,
+    mercadoriasnotacompra.idmercadoria,
+    0,
+    mercadoriasnotacompra.QUANTIDADE
+from
+    mercadoriasnotacompra
+where 
+    filial=5 
+    and idnota= 67280
+

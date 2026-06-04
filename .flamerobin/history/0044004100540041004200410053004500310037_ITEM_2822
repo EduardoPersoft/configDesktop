@@ -1,0 +1,11 @@
+
+update
+    CONTASCONTABEIS
+set     
+    nivel = case when substring(contacontabil from 1 for 1)=contacontabil then 1
+                 when substring(contacontabil from 1 for 3)=contacontabil then 2
+                 when substring(contacontabil from 1 for 5)=contacontabil then 3
+                 when substring(contacontabil from 1 for 7)=contacontabil then 4
+                 when substring(contacontabil from 1 for 9)=contacontabil then 5
+                 when substring(contacontabil from 1 for 11)=contacontabil then 6
+                 else 7 end

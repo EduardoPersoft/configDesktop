@@ -1,0 +1,1 @@
+select tipocobranca,descricao,modoliberacaocredito,presencial from TIPOCOBRANCA

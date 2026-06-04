@@ -1,0 +1,13 @@
+select
+    cadven.cadastro,
+    cadven.nome,
+    (select 
+        count(orcamento.id) 
+     from
+        ORCAMENTO
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.08.2024' and '24.08.2024') qtdorc
+      
+from
+    CADASTROPARCEIROS cadven 

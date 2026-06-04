@@ -1,0 +1,1 @@
+select * from C_RESERVARMATERIALLOTE where tipo='O' and idnota in (171593, 173947, 170037)

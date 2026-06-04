@@ -1,0 +1,5 @@
+delete
+FROM
+    locallote
+WHERE
+    idlocal>=1790

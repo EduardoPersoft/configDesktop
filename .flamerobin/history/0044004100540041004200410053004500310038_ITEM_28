@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    MATERIALLOTE
+WHERE
+    materiallote.filial=1
+    and materiallote.iditem='01.12.7529'

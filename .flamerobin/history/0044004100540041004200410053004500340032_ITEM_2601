@@ -1,0 +1,602 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_DADOSFATURAMENTO (
+    PFILIAL integer,
+    PDATAINICIAL timestamp,
+    PDATAFINAL timestamp )
+RETURNS (
+    FILIAL integer,
+    RAZAOFILIAL varchar(60),
+    IDNOTA integer,
+    IDMERCSERV smallint,
+    ANO smallint,
+    MES smallint,
+    CODCLIENTE integer,
+    VALOR double precision,
+    CODMERC varchar(15),
+    GRUPO smallint,
+    DESCR varchar(240),
+    ITEMBASE varchar(15),
+    ITEMBASEDESC varchar(240),
+    CLIENTE varchar(40),
+    TIPO varchar(10),
+    QUANTIDADE double precision,
+    QUANTIDADEUNIDADE double precision,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    MATERIALINICIAL varchar(15),
+    MATERIALFINAL varchar(15),
+    CONSOLIDADO char(1),
+    DESCRICAO_ESTSIN varchar(85),
+    NOME varchar(40),
+    SERVICOINICIAL smallint,
+    SERVICOFINAL smallint,
+    DESCRGRUPO varchar(40),
+    COMIPI char(1),
+    FATURADA char(1),
+    SINAL smallint,
+    DATAINICIO1 timestamp,
+    DATAFIM1 timestamp,
+    VALOR1 double precision,
+    OPCAO smallint,
+    IDITEMCOMP varchar(15),
+    QUANTCOMP double precision,
+    TOTALCOMP double precision,
+    QUANTCOMPUNIDADE double precision,
+    VALORCOMP double precision,
+    DESCRCOMP varchar(240),
+    DETALHADOPOR varchar(40),
+    SEPARADOPOR varchar(40),
+    VENDEDOR integer,
+    CFOP varchar(4),
+    UF varchar(2),
+    NUMERONOTA integer,
+    DATAEMISSAO timestamp,
+    ORIGEM varchar(3),
+    FAMILIA integer,
+    FAMILIADESCRICAO varchar(30),
+    CANALRELACIONADO integer,
+    IDNOTASAIDA integer,
+    PDEVOLUCAOFATURAMENTO varchar(1),
+    MODELO varchar(30),
+    CANCELAMENTO char(1),
+    FATURA char(1),
+    OPERACAO smallint,
+    DATACANCELAMENTO timestamp,
+    ZN char(1),
+    ISS numeric(12,3),
+    SIMPLES char(1),
+    PESOLIQUIDO double precision,
+    DATANOTA timestamp,
+    DEVOLUCAONOTA char(1),
+    VALORDEVOLUCAO numeric(12,3),
+    REFATURAMENTO char(1),
+    VALORREFATURADO numeric(12,3),
+    VALORFATURADO numeric(12,3) )
+
+AS
+--declare variable datanota timestamp;
+declare variable valorretorna double precision;
+declare variable status integer;
+declare variable subustituicao char(1);
+declare variable ipi double precision;
+declare variable ipinota double precision;
+declare variable icmssubst double precision;
+declare variable icms double precision;
+declare variable movimentaestoque char(1);
+
+declare variable valoricmsrecolhido double precision;
+declare variable filialnaoentra char(1);
+declare variable qtdfilial integer;
+declare variable consumo char(1);
+declare variable valorfrete double precision;
+declare variable valorseguro double precision;
+declare variable vlroutdespacessoria double precision;
+declare variable piteminicial varchar(15);
+declare variable pitemfinal varchar(15);
+
+
+
+BEGIN
+
+     separadopor='';
+     filial = :pfilial;
+     datainicial = :pdatainicial;
+     DATAFINAL = :pdatafinal;
+     datainicio1 = DATAINICIAL;
+     datafim1 = DATAFINAL;
+     valordevolucao=0;
+     valorrefaturado=0;
+     valorfaturado=0;
+
+FOR  SELECT
+      NOTAFISCAL.FILIAL,
+      NOTAFISCAL.IDNOTA,
+      notafiscal.numeronota,
+      notafiscal.dataemissao,
+      'NFE' as origem,
+      cast(mercadoriasnota.cfop as varchar(4)),
+      MERCADORIASNOTA.IDMERCADORIA AS IDMERCSERV,
+      EXTRACT(YEAR FROM NOTAFISCAL.DATAEMISSAO) ANO, 
+      EXTRACT(MONTH FROM NOTAFISCAL.DATAEMISSAO) MES,
+      NOTAFISCAL.DESTINATARIO,
+      ((MERCADORIASNOTA.VLRFINALMERCAD+MERCADORIASNOTA.ACRESCIMONOTA)-MERCADORIASNOTA.DESCONTONOTA) VLRFINALMERCAD,
+      MERCADORIASNOTA.CODIGO,
+      ITEM.GRUPO,
+      ITEM.familia, 
+       item.itembase,
+       (select item2.descricao from itemestoque item2 where item2.codigo=item.itembase) as itembasedesc, 
+      CAST(ITEM.DESCRICAO AS VARCHAR(240)) AS DESCRICAO,
+      CLIENTE.NOME, 'PRODUTO' AS TIPO,
+      MERCADORIASNOTA.quantidadeestoque,
+      MERCADORIASNOTA.quantidadeestoque*ITEM.QUANTIDADEUNIDADE,
+      :datainicial,:datafinal,
+      1 AS consolidado,
+      '' AS DESCRICAO,
+      ESTAB.NOME,
+      'S' AS CONSUMO,
+    mercadoriasnota.frete,
+    mercadoriasnota.seguro,
+    mercadoriasnota.outdespacessor,
+      NOTAFISCAL.VALORIPI,
+      MERCADORIASNOTA.VALORIPI,
+      MERCADORIASNOTA.VALORICMS,
+      NOTAFISCAL.ZONAFRANCA,
+      MERCADORIASNOTA.VLRICMSSUBST,
+      'N' AS COMIPI , NOTAFISCAL.DATAEMISSAO,
+       0 AS OPCAO,
+       'D' AS FATURADA,
+      NATUREZAOPERACAO.estatisticaestoque,notafiscal.substributaria,MERCADORIASNOTA.VLRICMSRECOLHIDO,
+      NATUREZAOPERACAO.FATURA, 1 AS SINAL,
+      NULL AS AOSCUIDADOS ,
+      'N' AS FILIALNAOENTRA, notafiscal.uf,
+      mercadoriasnota.IDNOTASAIDA,
+      'N' AS DEVOLUCAOFATURAMENTO,
+      notafiscal.modelo,
+      NOTAFISCAL.CANCELAMENTO,
+      notafiscal.operacao,
+      notafiscal.datacancelamento,
+      coalesce(notafiscal.iss,0),
+      notafiscal.simples,
+      notafiscal.pesoliquido,
+      notafiscal.devolucao,
+      naturezaoperacao.c_refaturamento
+
+FROM  NOTAFISCAL
+INNER JOIN MERCADORIASNOTA ON (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL
+                           AND   NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+INNER JOIN ITEMESTOQUE ITEM ON (MERCADORIASNOTA.CODIGO = ITEM.CODIGO)
+INNER JOIN CADASTROPARCEIROS CLIENTE ON (NOTAFISCAL.DESTINATARIO = CLIENTE.CADASTRO)
+INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO = NATUREZAOPERACAO.ID)
+INNER JOIN CADASTROPARCEIROS ESTAB ON (ESTAB.CADASTRO = :pfilial)
+
+WHERE   NOTAFISCAL.DATAEMISSAO BETWEEN :pdatainicial and :pdatafinal
+AND   notafiscal.filial = :pfilial
+AND   (NATUREZAOPERACAO.FATURA = 'S' or naturezaoperacao.estatisticaestoque='S')
+AND  ((NOTAFISCAL.CANCELAMENTO = 'N') OR (NOTAFISCAL.CANCELAMENTO IS NULL))
+AND (NATUREZAOPERACAO.ENTRADASAIDA='S') AND (NOT NOTAFISCAL.DEVOLUCAO='S')
+AND  MERCADORIASNOTA.CFOP NOT IN ('5949','6949','5922','6922','5902','6902','5903','6903' )
+
+UNION
+
+SELECT  NOTAFISCAL.FILIAL,
+      --CAST(CASE WHEN MERCADORIASNOTA.idnotasaida IS NULL THEN  NOTAFISCAL.IDNOTA ELSE MERCADORIASNOTA.idnotasaida END AS INTEGER) AS IDNOTA,
+      NOTAFISCAL.IDNOTA AS IDNOTA,
+      notafiscal.numeronota,
+      notafiscal.dataemissao,
+      'NFE' as origem,
+      cast(mercadoriasnota.cfop as varchar(4)),
+      --CAST(CASE WHEN MERCADORIASNOTA.idmercadoriasaida IS NULL THEN   MERCADORIASNOTA.IDMERCADORIA ELSE MERCADORIASNOTA.idmercadoriasaida END AS SMALLINT) AS IDMERCSERV,
+      MERCADORIASNOTA.IDMERCADORIA AS IDMERCSERV,
+      EXTRACT(YEAR FROM NOTAFISCAL.DATAEMISSAO) ANO, 
+      EXTRACT(MONTH FROM NOTAFISCAL.DATAEMISSAO) MES,
+      NOTAFISCAL.DESTINATARIO,
+      ((MERCADORIASNOTA.VLRFINALMERCAD+MERCADORIASNOTA.ACRESCIMONOTA)-MERCADORIASNOTA.DESCONTONOTA) as VLRFINALMERCAD,
+      MERCADORIASNOTA.CODIGO, ITEM.GRUPO,
+      ITEM.familia,
+      item.itembase,
+       (select item2.descricao from itemestoque item2 where item2.codigo=item.itembase) as itembasedesc, 
+      CAST(ITEM.DESCRICAO AS VARCHAR(240)) AS DESCRICAO,
+      CLIENTE.NOME, 'PRODUTO' AS TIPO,
+      MERCADORIASNOTA.quantidadeestoque, MERCADORIASNOTA.quantidadeestoque*ITEM.QUANTIDADEUNIDADE,
+      :datainicial, :datafinal,
+      1 AS CONSOLIDADO,
+      '' AS DESCRICAO,
+      ESTAB.NOME,
+      'S' AS CONSUMO ,
+    mercadoriasnota.frete,
+    mercadoriasnota.seguro,
+    mercadoriasnota.outdespacessor,
+    NOTAFISCAL.VALORIPI,MERCADORIASNOTA.VALORIPI,MERCADORIASNOTA.VALORICMS,
+      NOTAFISCAL.ZONAFRANCA, MERCADORIASNOTA.VLRICMSSUBST,'N' AS COMIPI , NOTAFISCAL.DATAEMISSAO,
+      0 AS OPCAO,
+      'D' as faturada,
+      NATUREZAOPERACAO.estatisticaestoque,notafiscal.substributaria,MERCADORIASNOTA.VLRICMSRECOLHIDO,
+      NATUREZAOPERACAO.devolucaofaturamento, -1 AS SINAL,
+      NULL AS AOSCUIDADOS,
+       'N' AS FILIALNAOENTRA  , notafiscal.uf,
+      mercadoriasnota.IDNOTASAIDA,
+      NATUREZAOPERACAO.devolucaofaturamento,
+      notafiscal.modelo,
+      NOTAFISCAL.CANCELAMENTO,
+      notafiscal.operacao,
+      notafiscal.datacancelamento,
+      coalesce(notafiscal.iss,0),
+      notafiscal.simples,
+      notafiscal.pesoliquido,
+      notafiscal.devolucao,
+      naturezaoperacao.c_refaturamento
+FROM  NOTAFISCAL
+INNER JOIN MERCADORIASNOTA ON (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL
+                           AND   NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+INNER JOIN ITEMESTOQUE ITEM ON (MERCADORIASNOTA.CODIGO = ITEM.CODIGO)
+INNER JOIN CADASTROPARCEIROS CLIENTE ON (NOTAFISCAL.DESTINATARIO = CLIENTE.CADASTRO)
+INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO = NATUREZAOPERACAO.ID)
+INNER JOIN CADASTROPARCEIROS ESTAB ON (ESTAB.CADASTRO = :pfilial)--ESTSIN.ESTABELECIMENTO)
+WHERE
+   NOTAFISCAL.DATAEMISSAO BETWEEN :pdatainicial AND :pdatafinaL
+AND   notafiscal.filial = :pfilial
+AND  ((NOTAFISCAL.CANCELAMENTO = 'N') OR (NOTAFISCAL.CANCELAMENTO IS NULL))
+AND (NOT NOTAFISCAL.DATAEMISSAO IS NULL)
+AND NATUREZAOPERACAO.ENTRADASAIDA='E' 
+AND NATUREZAOPERACAO.devolucaofaturamento = 'S'
+AND  MERCADORIASNOTA.CFOP NOT IN ('5949','6949','5922','6922','5902','6902','5903','6903' )
+
+UNION
+SELECT       NOTAFISCAL.FILIAL,
+      --CAST(CASE WHEN MERCADORIASNOTA.idnotasaida IS NULL THEN  NOTAFISCAL.IDNOTA ELSE MERCADORIASNOTA.idnotasaida END AS INTEGER) AS IDNOTA,
+      NOTAFISCAL.IDNOTA AS IDNOTA,
+      cast (notafiscal.nrnotafornecedor as integer),
+      notafiscal.dataemissao,
+      'NFC' as origem,
+      cast(mercadoriasnota.cfop as varchar(4)),
+      --CAST(CASE WHEN MERCADORIASNOTA.idmercadoriasaida IS NULL THEN   MERCADORIASNOTA.IDMERCADORIA ELSE MERCADORIASNOTA.idmercadoriasaida END AS SMALLINT) AS IDMERCSERV,
+      MERCADORIASNOTA.IDMERCADORIA AS IDMERCSERV,
+      EXTRACT(YEAR FROM NOTAFISCAL.DATAEMISSAO) ANO, 
+      EXTRACT(MONTH FROM NOTAFISCAL.DATAEMISSAO) MES,
+      NOTAFISCAL.DESTINATARIO,
+      ((MERCADORIASNOTA.VLRFINALMERCAD+MERCADORIASNOTA.ACRESCIMONOTA)-MERCADORIASNOTA.DESCONTONOTA) as VLRFINALMERCAD,
+      MERCADORIASNOTA.CODIGO, ITEM.GRUPO,
+      ITEM.familia,
+      item.itembase,
+       (select item2.descricao from itemestoque item2 where item2.codigo=item.itembase) as itembasedesc, 
+      CAST(ITEM.DESCRICAO AS VARCHAR(240)) AS DESCRICAO,
+      CLIENTE.NOME, 'PRODUTO' AS TIPO,
+      MERCADORIASNOTA.quantidadeestoque, MERCADORIASNOTA.quantidadeestoque*ITEM.QUANTIDADEUNIDADE,
+      :datainicial, :datafinal,
+
+      1 AS consolidado,
+      '' AS DESCRICAO,
+      ESTAB.NOME,
+
+      'S' AS CONSUMO,
+    mercadoriasnota.frete,
+    mercadoriasnota.seguro,
+    mercadoriasnota.outdespacessor,
+   NOTAFISCAL.VALORIPI,MERCADORIASNOTA.VALORIPI,MERCADORIASNOTA.VALORICMS,
+      NOTAFISCAL.ZONAFRANCA, MERCADORIASNOTA.VLRICMSSUBST,'N' AS COMIPI , NOTAFISCAL.dataentrada, 0 AS OPCAO,
+      'D' AS FATURADA,
+      NATUREZAOPERACAO.estatisticaestoque,notafiscal.substributaria,MERCADORIASNOTA.VLRICMSRECOLHIDO,
+      NATUREZAOPERACAO.devolucaofaturamento, -1 AS SINAL,
+      NULL as AOSCUIDADOS,
+      'N' as FILIALNAOENTRA , notafiscal.uf,
+      mercadoriasnota.IDNOTASAIDA,
+      NATUREZAOPERACAO.devolucaofaturamento,
+      notafiscal.modelo,
+      'N' AS CANCELAMENTO,
+      notafiscal.operacao,
+      cast(null as timestamp) as datacancelamento,
+      coalesce(notafiscal.iss,0),
+      'N' AS SIMPLES,
+      cast(0 as double precision) as pesoliquido ,
+      notafiscal.devolucao,
+      naturezaoperacao.c_refaturamento
+FROM  NOTACOMPRA NOTAFISCAL
+INNER JOIN MERCADORIASNOTACOMPRA MERCADORIASNOTA ON (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL
+                           AND   NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+INNER JOIN ITEMESTOQUE ITEM ON (MERCADORIASNOTA.CODIGO = ITEM.CODIGO)
+INNER JOIN CADASTROPARCEIROS CLIENTE ON (NOTAFISCAL.DESTINATARIO = CLIENTE.CADASTRO)
+INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO = NATUREZAOPERACAO.ID)
+INNER JOIN CADASTROPARCEIROS ESTAB ON (ESTAB.CADASTRO = :pfilial)
+WHERE   NOTAFISCAL.DATAENTRADA BETWEEN :pdatainicial AND :pdatafinal
+AND   notafiscal.filial = :pfilial
+AND (NOT NOTAFISCAL.DATAEMISSAO IS NULL)
+AND NATUREZAOPERACAO.ENTRADASAIDA='E' 
+AND NATUREZAOPERACAO.devolucaofaturamento = 'S'
+AND  MERCADORIASNOTA.CFOP NOT IN ('5949','6949','5922','6922','5902','6902','5903','6903' )
+
+INTO :FILIAL,:IDNOTA,
+:numeronota, :dataemissao, origem,
+:CFOP,:IDMERCSERV,:ANO,:MES,:CODCLIENTE,:VALOR,:CODMERC,:GRUPO, :familia,
+:itembase, :itembasedesc, :DESCR,
+:CLIENTE,:TIPO,:QUANTIDADE,:QUANTIDADEUNIDADE,:DATAINICIAL,:DATAFINAL,
+:CONSOLIDADO,:detalhadopor,:NOME,
+:consumo,   :valorfrete, :valorseguro, :vlroutdespacessoria,
+:IPINOTA,:IPI,:ICMS,:ZN,:ICMSSUBST,:COMIPI,:DATANOTA,:OPCAO,:FATURADA,
+:MOVIMENTAESTOQUE,:subustituicao,:VALORICMSRECOLHIDO,:FATURA,:SINAL,
+:separadopor,:FILIALNAOENTRA, :uf, :IDNOTASAIDA, :PDEVOLUCAOFATURAMENTO,
+:modelo, :cancelamento, operacao, :datacancelamento, :iss, :simples, :pesoliquido, :devolucaonota,
+:refaturamento  DO BEGIN
+
+   SELECT CADASTROPARCEIROS.razaosocial FROM CADASTROPARCEIROS
+   WHERE CADASTROPARCEIROS.CADASTRO=:filial into :razaofilial;
+
+   descricao_estsin = detalhadopor;
+   if (:separadopor<>'Sem Separaçăo') then
+       descricao_estsin = descricao_estsin||' '||' por '||separadopor;
+
+   descrgrupo = NULL;
+   SELECT GRUPOMERCADORIA.descricao FROM GRUPOMERCADORIA
+   WHERE GRUPOMERCADORIA.grupo=:grupo
+   INTO :descrgrupo;
+
+   familiadescricao = NULL;
+   if (:familia IS NULL ) then
+   familiadescricao='SEM FAMÍLIA';
+   ELSE
+   select coalesce ( FAMILIA.descricao,'SEM FAMÍLIA') FROM FAMILIA
+   WHERE FAMILIA.id=:FAMILIA
+   INTO :familiadescricao;
+
+   if (:PDEVOLUCAOFATURAMENTO='S') then
+      if (:IDNOTASAIDA is not null) then
+            select clientes.VENDEDOR from clientes
+            inner join notafiscal on (notafiscal.DESTINATARIO=clientes.CADASTRO)
+            where notafiscal.FILIAL=:filial and notafiscal.IDNOTA=:IDNOTASAIDA
+            into :vendedor;
+      else
+           vendedor = null;
+   ELSE
+       SELECT  FIRST 1 VENDEDORESNOTA.vendedor from VENDEDORESNOTA
+       WHERE VENDEDORESNOTA.FILIAL=:filial
+       AND VENDEDORESNOTA.IDNOTA=:idnota
+       INTO :vendedor;
+
+   SELECT vendedor.canalrelacionado from VENDEDOR
+   WHERE VENDEDOR.cadastro=:vendedor
+   INTO :canalrelacionado;
+
+   IDITEMCOMP = :CODMERC;
+   QUANTCOMP = :QUANTIDADE;
+   QUANTCOMP = :QUANTIDADE;
+   TOTALCOMP = :VALOR;
+   QUANTCOMPUNIDADE = :QUANTIDADEUNIDADE;
+   DESCRCOMP = :DESCR;
+
+   STATUS=1;
+   if (:opcao<>0 and :MOVIMENTaESTOQUE='N') then
+      STATUS=0;
+
+   if (:opcao=0 and :FATURA='N') then
+      STATUS=0;
+
+   IF(STATUS>0 AND :filialnaoentra='S') THEN BEGIN
+       QTDFILIAL=0;
+       SELECT COUNT(CADASTRO) FROM ESTABELECIMENTO WHERE ESTABELECIMENTO.CADASTRO=:codcliente
+       INTO QTDFILIAL;
+       if (COALESCE(QTDFILIAL,0)>0) then
+         STATUS=0;
+   END
+
+
+
+   IF (:STATUS>0) THEN BEGIN
+      VALOR=:VALOR+COALESCE(:IPI,0);
+
+      IF (ZN='S' /*OR ((:subustituicao='S') AND (COMIPI='S') )*/ ) THEN
+        VALOR=:VALOR-COALESCE(:ICMS,0);
+      IF ((:subustituicao='S') AND (COMIPI='S') AND (VALORICMSRECOLHIDO>0)) THEN
+         VALOR=:VALOR+COALESCE(VALORICMSRECOLHIDO,0);
+
+      VALOR=:VALOR+coalesce(valorfrete,0)+coalesce(valorseguro,0)+coalesce(vlroutdespacessoria,0);
+
+
+/*          IF (:FATURADA='D') THEN BEGIN*/
+
+              IF (:OPCAO = 0) THEN
+                 VALORRETORNA =:VALOR*:SINAL;
+              IF (:OPCAO = 1) THEN
+                 VALORRETORNA =:QUANTIDADEUNIDADE*:SINAL;
+              IF (:OPCAO = 2) THEN
+                VALORRETORNA =:QUANTIDADE*:SINAL;
+
+/*          END ELSE BEGIN
+
+              IF (:OPCAO = 0) THEN
+                 VALORRETORNA =:VALOR;
+              IF (:OPCAO = 1) THEN
+                 VALORRETORNA =:QUANTIDADEUNIDADE;
+              IF (:OPCAO = 2) THEN
+                VALORRETORNA =:QUANTIDADE;
+
+          END*/
+
+      VALOR1=0;
+
+      IF (:DATANOTA >= :DATAINICIO1 AND :DATANOTA <= :DATAFIM1) THEN
+         VALOR1=:VALORRETORNA;
+
+      VALORCOMP=:VALORCOMP+:IPI;
+
+
+      VALOR=:VALOR-:ICMS;
+
+      IF (COMIPI='S') THEN
+         VALORCOMP=:VALORCOMP+coalesce(ICMSSUBST,0);
+
+
+      VALORCOMP=:VALORCOMP+coalesce(valorfrete,0)+coalesce(valorseguro,0)+coalesce(vlroutdespacessoria,0);
+
+      IF (:OPCAO = 0) THEN
+      VALORRETORNA =:VALORCOMP;
+
+      IF (:OPCAO = 1) THEN
+      VALORRETORNA =:QUANTCOMPUNIDADE;
+
+      IF (:OPCAO = 2) THEN
+      VALORRETORNA =:QUANTCOMP;
+
+      if(:consolidado='2') then begin
+        filial=0;
+        razaofilial='Consolidado';
+        nome='Consolidado';
+      end
+
+      if (coalesce(:refaturamento,'N')= 'S' or COALESCE(:pdevolucaofaturamento,:devolucaonota) = 'S')  then
+         valorfaturado = 0;
+      else
+         valorfaturado = :valor1;
+
+      if (coalesce(:pdevolucaofaturamento,:devolucaonota)= 'S') then
+         valordevolucao = :valor1;
+      else
+         valordevolucao = 0;
+
+      if (coalesce(:refaturamento,'N')= 'S') then
+         valorrefaturado = :valor1;
+      else
+         valorrefaturado = 0;
+
+      SUSPEND;
+      vendedor = NULL;
+   END
+
+END
+
+IDITEMCOMP=NULL;
+QUANTCOMP=NULL;
+TOTALCOMP=NULL;
+QUANTCOMPUNIDADE=NULL;
+DESCRCOMP=NULL;
+itembase=NULL;
+itembasedesc=null;
+valordevolucao=0;
+valorrefaturado=0;
+valorfaturado=0;
+
+FOR SELECT
+
+      NOTAFISCAL.filial,  NOTAFISCAL.IDNOTA,
+      notafiscal.numeronota,
+      notafiscal.dataemissao,
+      'NFE' as origem,
+      CAST(NATUREZAOPERACAO.cfop AS VARCHAR(4)),
+      SERVICOSNOTA.IDSERVICO AS IDMERCSERV,
+      EXTRACT(YEAR FROM NOTAFISCAL.DATAEMISSAO) ANO, 
+      EXTRACT(MONTH FROM NOTAFISCAL.DATAEMISSAO) MES,
+      NOTAFISCAL.DESTINATARIO, (SERVICOSNOTA.VLRFINALSERVICO+SERVICOSNOTA.ACRESCIMONOTA-SERVICOSNOTA.DESCONTONOTA) VLRFINALSERVICO,
+      CAST(SERVICOSNOTA.CODIGO AS VARCHAR(8)),
+      SERVICO.GRUPOSERVICO AS GRUPO,
+      CAST(SERVICO.DESCRICAO  AS VARCHAR(240)) AS DESCRICAO,
+      CLIENTE.NOME, 'SERVICO' AS TIPO,
+      SERVICOSNOTA.QUANTIDADE, SERVICOSNOTA.QUANTIDADE,
+      :datainicial,  :DATAFINAL, 1 AS CONSOLIDADO,
+      '' AS DESCRICAO,
+      ESTAB.NOME,
+       NOTAFISCAL.DATAEMISSAO, 0 AS OPCAO,
+       null AS AOSCUIDADOS,
+      '' AS descricao_estsin,
+       'N' AS filialnaoentra, notafiscal.uf ,
+      notafiscal.modelo,
+      NOTAFISCAL.CANCELAMENTO , notafiscal.operacao, notafiscal.datacancelamento,
+      coalesce(notafiscal.iss,0), notafiscal.simples, notafiscal.pesoliquido , notafiscal.devolucao,
+      naturezaoperacao.devolucaofaturamento, naturezaoperacao.c_refaturamento
+FROM  NOTAFISCAL
+INNER JOIN SERVICOSNOTA ON (NOTAFISCAL.FILIAL = SERVICOSNOTA.FILIAL
+                        AND NOTAFISCAL.IDNOTA = SERVICOSNOTA.IDNOTA)
+INNER JOIN SERVICO ON (SERVICOSNOTA.CODIGO = SERVICO.CODIGO)
+INNER JOIN CADASTROPARCEIROS CLIENTE ON (NOTAFISCAL.DESTINATARIO = CLIENTE.CADASTRO)
+INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO = NATUREZAOPERACAO.ID)
+INNER JOIN CADASTROPARCEIROS ESTAB ON (ESTAB.CADASTRO = :pfilial)
+WHERE NOTAFISCAL.DATAEMISSAO BETWEEN :pdatainicial AND :pdatafinal
+AND notafiscal.filial = :pfilial
+AND NATUREZAOPERACAO.FATURA = 'S'
+AND ((NOTAFISCAL.CANCELAMENTO = 'N') OR (NOTAFISCAL.CANCELAMENTO IS NULL))
+INTO :FILIAL,:IDNOTA,
+:numeronota, :dataemissao, :origem,:CFOP,:IDMERCSERV,:ANO,:MES,:CODCLIENTE,:VALOR,:CODMERC,
+:GRUPO,
+:DESCR,
+:CLIENTE,:TIPO,:QUANTIDADE,:QUANTIDADEUNIDADE,:DATAINICIAL,:DATAFINAL,
+:CONSOLIDADO,:DESCRICAO_ESTSIN,:NOME,
+ :DATANOTA, :OPCAO, :separadopor, :detalhadopor,:FILIALNAOENTRA,:uf,
+ :MODELO, :CANCELAMENTO, :operacao, :datacancelamento, :iss, :simples, :pesoliquido,
+ :devolucaonota, :pdevolucaofaturamento, :refaturamento  DO BEGIN
+
+   STATUS=1;
+
+      descricao_estsin = detalhadopor;
+   if (:separadopor<>'Sem Separaçăo') then
+       descricao_estsin = descricao_estsin||' '||' por '||separadopor;
+
+   select CADASTROPARCEIROS.razaosocial FROM cadastroparceiros
+   WHERE CADASTROPARCEIROS.CADASTRO=:filial INTO:razaofilial;
+
+   SELECT  FIRST 1 VENDEDORESNOTA.vendedor from VENDEDORESNOTA
+   WHERE VENDEDORESNOTA.FILIAL=:filial
+   AND VENDEDORESNOTA.IDNOTA=:idnota
+   INTO :vendedor;
+
+   descrgrupo = NULL;
+   SELECT GRUPOSERVICO.descricao FROM GRUPOSERVICO
+   WHERE GRUPOSERVICO.grupo=:grupo
+   INTO :descrgrupo;
+
+   familiadescricao = NULL;
+   familiadescricao='Serviço';
+
+   IF (:OPCAO = 0) THEN
+      VALORRETORNA= :VALOR;
+   IF (:OPCAO = 1) THEN
+      VALORRETORNA = :QUANTIDADEUNIDADE;
+   IF (:OPCAO = 2) THEN
+      VALORRETORNA = :QUANTIDADE;
+
+   IF(STATUS>0 AND :filialnaoentra='S') THEN BEGIN
+       QTDFILIAL=0;
+       SELECT COUNT(CADASTRO) FROM ESTABELECIMENTO WHERE ESTABELECIMENTO.CADASTRO=:codcliente
+       INTO QTDFILIAL;
+       if (COALESCE(QTDFILIAL,0)>0) then
+         STATUS=0;
+   END
+
+
+   VALOR1=0;
+
+
+   IF (:DATANOTA >= :DATAINICIO1 AND :DATANOTA <= :DATAFIM1) THEN
+         VALOR1=:VALORRETORNA;
+
+
+   if(:consolidado='2') then begin
+        filial=0;
+        razaofilial='Consolidado';
+        nome='Consolidado';
+   end
+
+      if (coalesce(:refaturamento,'N')= 'S' or COALESCE(:pdevolucaofaturamento,:devolucaonota) = 'S')  then
+         valorfaturado = 0;
+      else
+         valorfaturado = :valor1;
+
+      if (coalesce(:pdevolucaofaturamento,:devolucaonota)= 'S') then
+         valordevolucao = :valor1;
+      else
+         valordevolucao = 0;
+
+      if (coalesce(:refaturamento,'N')= 'S') then
+         valorrefaturado = :valor1;
+      else
+         valorrefaturado = 0;
+
+
+   IF (:STATUS>0) THEN
+      SUSPEND;
+      vendedor = NULL;
+   END
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_DADOSFATURAMENTO TO  SYSDBA;
+

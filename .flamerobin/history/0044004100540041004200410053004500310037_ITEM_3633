@@ -1,0 +1,46 @@
+select 
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome vendedor,
+    count(mercadoriasorc.idnota) qtdOrcamento,
+    sum(case when mercPedConvertido.idnota is null then 0 else 1 end) qtdConversao,
+    sum(case when pedConvertido.idnota is null then 0 else 1 end)  / count(ORCAMENTO.idnota)  * 100 as pConversao
+from 
+    orcamento
+inner join
+    mercadoriasorc on
+        orcamento.filial=mercadoriasorc.filial and
+        orcamento.idnota=mercadoriasorc.idnota 
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=orcamento.destinatario
+inner join
+    clientes on 
+        cadcli.cadastro=clientes.CADASTRO
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=clientes.vendedor
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasorc.CODIGO
+inner join
+    C_FORNECEDORPECA on
+        C_FORNECEDORPECA.id=itemestoque.C_FORNECEDOR
+left join
+    pedido pedConvertido on
+        pedConvertido.filial=orcamento.filial and
+        pedConvertido.idorcamento=orcamento.idnota and
+        pedConvertido.CANCELAMENTO='N'
+left join
+    mercadoriasped mercPedConvertido on
+        pedconvertido.filial=mercPedConvertido.filial and
+        pedConvertido.idnota=mercPedconvertido.idnota and
+        mercadoriasOrc.codigo=mercPedconvertido.codigo
+where 
+    orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+    orcamento.CANCELAMENTO='N'
+group by    
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome
+order by 5 desc,4 desc

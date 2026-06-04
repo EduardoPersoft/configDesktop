@@ -1,0 +1,1 @@
+select CODIGO,DESCRICAO,C_LARGURA,C_COMPRIMENTO,C_M2 from itemestoque where codigo='PE-19663'    

@@ -1,0 +1,2 @@
+select * from SERVICOSnota
+where filial>110 and idnota in (184,188)

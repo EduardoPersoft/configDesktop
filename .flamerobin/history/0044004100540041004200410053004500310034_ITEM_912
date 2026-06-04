@@ -1,0 +1,6 @@
+select * from MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where filial=110 and idpedido=10026 and idmercadoria=1

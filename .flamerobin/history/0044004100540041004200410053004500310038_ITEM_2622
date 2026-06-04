@@ -1,0 +1,35 @@
+select 
+    movimentoestoque.filial,
+    movimentoestoque.emissao,
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.quantidade
+    
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.06.2024' and '30.06.2024' and
+    ( movimentoestoque.TIPOMOVIMENTO in ('06', '07', '03', 17 ) or
+      (movimentoestoque.tipomovimento = '17' and 
+      (materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)<0) or
+     (movimentoestoque.tipomovimento = '09' and not exists 
+       (select
+           *
+        from
+            DOCUMENTOSASSOCIADOS
+        where
+            DOCUMENTOSASSOCIADOS.filial=movimentoestoque.filial and
+            DOCUMENTOSASSOCIADOS.IDMOVIMENTOSAIDA=movimentoestoque.idmovimento)))
+order by 
+    movimentoestoque.filial,
+    movimentoestoque.emissao,
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL

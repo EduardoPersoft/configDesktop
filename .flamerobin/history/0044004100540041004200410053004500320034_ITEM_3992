@@ -1,0 +1,15 @@
+
+update
+    TITULOREC
+set 
+    titulorec.contacorrente=9999,
+    titulorec.TIPOTRANSACAO=1,
+    titulorec.NUMBOLBANCO = null,
+    titulorec.LINHADIGITAVEL=null,
+    titulorec.CODIGOBARRA=null
+
+where titulorec.filial=5 and
+titulorec.EMISSAO='18.10.2022' and 
+titulorec.contacorrente=1 and
+titulorec.TIPOTRANSACAO=94
+

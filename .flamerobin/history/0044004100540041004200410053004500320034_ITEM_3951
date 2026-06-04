@@ -1,0 +1,4 @@
+update
+    contacorrente
+set
+    contacorrente.SALDOREAL=0

@@ -1,0 +1,42 @@
+select  c_etiquetascaixas4.*,
+        cliente.razaosocial,
+        cliente.logradouro,
+        cliente.numero,
+       cliente.cidade,
+         cliente.uf,
+       mercadoriasnota.descricao,
+       mercadoriasnota.codigo,
+       transportadora.nome as nometrans ,
+       mercadoriasnota.codigo||' '||cast(substring (itemestoque.descricao from 1 for 30) as varchar (30)) as c_descricao1,
+       cast(substring (itemestoque.descricao  from 31 for 30) as varchar (30)) as c_descricao2,
+       cast(substring (itemestoque.descricao  from 61 for 30) as varchar (30)) as c_descricao3,
+       
+       substring (cliente.logradouro||' '||cliente.numero from 1 for 40) as c_logradouro1,
+       substring (cliente.logradouro||' '||cliente.numero from 40 for 70) as c_logradouro2,
+       cliente.cidade||' - '|| cliente.uf||' '||cliente.cep as c_cidade,
+       c_etiquetascaixas4.caixa||' de '||c_etiquetascaixas4.quantidadevolume as c_quantidade,
+       substring ( cliente.razaosocial from 1 for 40) as c_nome1,
+       substring ( cliente.razaosocial from 41 for 42) as c_nome2
+from 
+    c_etiquetascaixas4 (1, 62087)
+inner join 
+    cadastroparceiros cliente on 
+        (cliente.cadastro=c_etiquetascaixas4.destinatario)
+inner join 
+    mercadoriasnota on 
+        ( c_etiquetascaixas4.idmercadoria=mercadoriasnota.idmercadoria      and
+          mercadoriasnota.filial=c_etiquetascaixas4.filial and
+          mercadoriasnota.idnota=c_etiquetascaixas4.idnota)
+inner join
+    notafiscal on  
+        (notafiscal.filial=c_etiquetascaixas4.filial
+      and notafiscal.idnota=c_etiquetascaixas4.idnota)
+left join 
+    cadastroparceiros transportadora  on 
+        (transportadora.cadastro=notafiscal.codigotransp)
+inner join 
+    itemestoque on 
+        (itemestoque.codigo=mercadoriasnota.codigo)
+     
+order by 
+    c_etiquetascaixas4.idnota,c_etiquetascaixas4.idmercadoria

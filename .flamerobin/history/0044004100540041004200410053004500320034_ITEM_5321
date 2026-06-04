@@ -1,0 +1,2 @@
+delete from vendedorestitulorec where not exists(select * from VENDEDOR
+where vendedor.CADASTRO=VENDEDORESTITULOREC.VENDEDOR)

@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    SPEDFISCAL_D
+where 
+    substring(segmento from 1 for 1)='E'

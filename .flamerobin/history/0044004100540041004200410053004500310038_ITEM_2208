@@ -1,0 +1,20 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.custototal = (select 
+                                    sum(materialmovimentoestoque.valor*
+                                        materialmovimentoestoque.sinal)
+                                from
+                                    MOVIMENTOESTOQUE
+                                inner join
+                                    MATERIALMOVIMENTOESTOQUE on     
+                                        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+                                        MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.IDMOVIMENTO
+                                where
+                                    MOVIMENTOESTOQUE.filial=1 and
+                                    movimentoestoque.emissao<'31.01.2024' and
+                                    MATERIALMOVIMENTOESTOQUE.IDITEM=itemcustodata.codigo)
+where
+    ITEMCUSTODATA.filial=1 and
+    itemcustodata.codigo in ('01.12.0595', '01.12.7518', '01.12.7529') and
+    itemcustodata.DATAINVENTARIO='31.01.2024'

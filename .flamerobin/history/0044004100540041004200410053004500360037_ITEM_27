@@ -1,0 +1,29 @@
+select
+    movimentoestoque.documento,
+    materialmovimentoestoque.quantidade,
+    itemestoque.QUANTIDADEVOLUME,
+    case when MATERIALMOVIMENTOESTOQUE.quantidade < 
+              itemestoque.QUANTIDADEVOLUME then 0
+    else 
+        cast(materialmovimentoestoque.QUANTIDADE / 
+            itemestoque.QUANTIDADEVOLUME as integer) end as pacote,
+    case when MATERIALMOVIMENTOESTOQUE.quantidade < 
+              itemestoque.QUANTIDADEVOLUME then MATERIALMOVIMENTOESTOQUE.QUANTIDADE
+    else
+    materialmovimentoestoque.quantidade -
+    (itemestoque.quantidadevolume *
+    cast(materialmovimentoestoque.QUANTIDADE / 
+         itemestoque.QUANTIDADEVOLUME as integer)) end as inteiro
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao>'01.01.2025'
+    

@@ -1,0 +1,14 @@
+update
+    MERCADORIASNOTACOMPRA
+set
+    mercadoriasnotacompra.CFOP='1101'
+where
+    mercadoriasnotacompra.filial=110 and
+    mercadoriasnotacompra.cfop='1102' and
+   exists (select
+        *
+     from
+        ITEMESTOQUE
+     where
+        ITEMESTOQUE.codigo=mercadoriasnotacompra.codigo and
+        itemestoque.tipoproduto='1')

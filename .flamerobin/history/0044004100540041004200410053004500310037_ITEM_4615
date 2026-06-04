@@ -1,0 +1,12 @@
+
+SELECT CADASTROPARCEIROS.CADASTRO,
+       CADASTROPARCEIROS.NOME,
+       ITEMESTOQUE.CODIGO,
+       ITEMESTOQUE.DESCRICAO  ,
+       ITEMESTOQUE.c_fornecedorcilindrocliche
+FROM mercadoriasped
+inner join itemestoque on 
+    itemestoque.codigo=mercadoriasped.codigo
+inner JOIN CADASTROPARCEIROS ON (ITEMESTOQUE.c_cliente=CADASTROPARCEIROS.CADASTRO)
+WHERE mercadoriasped.baixa = 'N'
+and ITEMESTOQUE.c_cliche in ('2','3') 

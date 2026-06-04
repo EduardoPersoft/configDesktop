@@ -1,0 +1,26 @@
+select
+    MATERIALMOVIMENTOESTOQUE.filial,
+    '2023',
+    '11',
+    itemestoque.codigo,
+    case when sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)<>0 then
+    sum(materialmovimentoestoque.VALOR*MATERIALMOVIMENTOESTOQUE.SINAL) / 
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)
+    else 0 end precomedio
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL = 110 AND
+    MOVIMENTOESTOQUE.EMISSAO <= '30.11.2023'
+group BY
+    materialmovimentoestoque.filial,1,2,
+    itemestoque.codigo
+having 
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) > 0

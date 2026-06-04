@@ -1,0 +1,6 @@
+select
+    *
+from
+    ITEMESTOQUE
+where
+    itemestoque.itembase is not null

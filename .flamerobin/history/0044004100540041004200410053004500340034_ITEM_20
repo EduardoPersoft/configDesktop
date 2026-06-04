@@ -1,0 +1,2 @@
+delete from INVENTARIOESTOQUEDATA
+where invetnarioestoquedata.data='17.09.2023'

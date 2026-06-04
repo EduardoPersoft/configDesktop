@@ -1,0 +1,39 @@
+select 
+    cast(MOVBANCARIOS.MOVIMENTACAO as date) as movimentacao,
+    'W',
+    'Transferencias',
+    'W',
+    1,
+    'S',
+    sum(movbancarios.VALORMOVIMENTO*case movbancarios.tipomovimento when 'D' then -1 else 1 end),
+    case movbancarios when 'D' then principal.descricao||'>'||transferencia.descricao 
+    else transferencia.descricao||'>'||principal.descricao end,
+    MOVBANCARIOS.NRDOCUMENTO,
+    CAST('EXTRATO' AS VARCHAR(10))
+from 
+    MOVBANCARIOS
+INNER JOIN 
+      ESTABELECIMENTO ON
+      LANTOCONTBANC.FILIAL= ESTABELECIMENTO.CADASTRO 
+Inner join 
+    contacorrente principal on 
+    MOVBANCARIOS.FILIAL=principal.FILIAL and
+    MOVBANCARIOS.IDCONTACORRENTE=principal.CODIGO
+Inner join 
+    contacorrente transferencia on 
+    MOVBANCARIOS.FILIAL=transferencia.FILIAL and
+    MOVBANCARIOS.CONTACORRENTEDEST=transferencia.CODIGO
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    (rcontacorrente.contacorrente=principal.codigo or
+     rcontacorrente.contacorrente=transferencia.codigo)
+where
+    MOVBANCARIOS.FILIAL=110 and
+    MOVBANCARIOS.MOVIMENTACAO between '2023-09-01' and '2023-09-30'
+group by 
+    MOVBANCARIOS.MOVIMENTACAO,
+    principal.descricao,
+    transferencia.descricao,
+    MOVBANCARIOS.NRDOCUMENTO
+

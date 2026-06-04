@@ -1,0 +1,9 @@
+select * from ITEMESTOQUE
+inner join
+    materiallocal on 
+        materiallocal.filial=1 and
+        itemestoque.codigo=materiallocal.IDITEM
+where 
+    itemestoque.CODIGOBARRA is not null and
+    itemestoque.codigobarra<>itemestoque.codigo and
+    materiallocal.saldototal>0

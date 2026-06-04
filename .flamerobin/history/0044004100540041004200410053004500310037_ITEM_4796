@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where filial=12826
+and idnota in (182135, 185136)

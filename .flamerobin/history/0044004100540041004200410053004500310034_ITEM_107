@@ -1,0 +1,3 @@
+select * from movimento 
+where filial=5
+and idmovimento=304013

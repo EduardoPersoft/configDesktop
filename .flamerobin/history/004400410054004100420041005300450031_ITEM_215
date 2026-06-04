@@ -1,0 +1,10 @@
+SELECT
+    count(itemestoque.codigo) as qtd,
+    itemestoque.C_CODIGOANT
+FROM
+    ITEMESTOQUE
+group by
+    itemestoque.C_CODIGOANT
+HAVING
+    count(itemestoque.codigo)>1
+    

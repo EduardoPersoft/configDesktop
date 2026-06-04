@@ -1,0 +1,14 @@
+select 
+    lantocontpag.filial,
+    lantocontpag.idmovtobanc,
+    lantocontpag.idlancamento,
+    lantocontpag.contacontabil,
+    contascontabeis.DESCRICAO 
+from 
+    LANTOCONTpag
+inner join 
+    contascontabeis on
+        contascontabeis.idplano=3 and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+where  lantocontpag.filial = 2098 and 
+COALESCE (lantocontpag.CENTROCUSTO,'')='' 

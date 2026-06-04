@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+where quantidade<0
+and filial=110

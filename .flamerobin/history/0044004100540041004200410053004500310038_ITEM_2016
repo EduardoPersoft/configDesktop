@@ -1,0 +1,1 @@
+select * from c_requisicaomaterial order by id desc

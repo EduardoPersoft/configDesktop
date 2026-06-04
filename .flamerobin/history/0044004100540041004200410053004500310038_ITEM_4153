@@ -1,0 +1,3 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.FILIALPED=1
+and mercadoriasnota.IDPEDido in (76187,76214,76177)

@@ -1,0 +1,8 @@
+update 
+    MERCADORIASPED
+set
+    mercadoriasped.QTDEENVIADA=0,
+    mercadoriasped.baixa='N' 
+where
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=66999

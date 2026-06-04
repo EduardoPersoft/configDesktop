@@ -1,0 +1,3 @@
+select sum(contacorrente.saldoreal)
+from CONTACORRENTE
+where contacorrente.filial=2098

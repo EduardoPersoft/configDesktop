@@ -1,0 +1,9 @@
+update
+    CADASTROPARCEIROS
+set
+    CADASTROPARCEIROS.OBSENTREGARETIRA=CADASTROPARCEIROS.logradouro,
+    CADASTROPARCEIROS.logradouroentrega = null
+where
+    coalesce(CADASTROPARCEIROS.LOGRADOUROENTREGA,'')<>'' and
+    coalesce(CADASTROPARCEIROS.cidadeentrega,'')=''
+    

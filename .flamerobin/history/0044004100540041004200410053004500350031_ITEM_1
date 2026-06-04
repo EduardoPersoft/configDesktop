@@ -1,0 +1,1 @@
+select * from movimentoestoque where colesce(filial,-1)<>1

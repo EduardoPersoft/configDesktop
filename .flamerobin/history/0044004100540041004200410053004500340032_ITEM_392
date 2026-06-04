@@ -1,0 +1,22 @@
+select 
+    distinct
+    itemestoque.codigo,
+    itemestoque.descricao,
+    ITEMESTOQUE.VALORULTIMACOMPRA,
+    resumocompras.custo
+from    
+    INVENTARIOESTOQUEDATA
+inner join
+    itemestoque on
+        itemestoque.codigo=INVENTARIOESTOQUEDATA.codigo
+left join
+    materialfilial on
+        materialfilial.filial=inventarioestoquedata.filial and
+        materialfilial.iditem=inventarioestoquedata.codigo 
+left join
+    RESUMOCOMPRAS on
+        resumocompras.item=materialfilial.iditem and
+        resumocompras.EMISSAO=materialfilial.ULTIMACOMPRA
+where
+    INVENTARIOESTOQUEDATA.filial=110 and
+    inventarioestoquedata."DATA"='30.09.2023'

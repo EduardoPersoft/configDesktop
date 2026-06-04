@@ -1,0 +1,12 @@
+SELECT
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao
+FROM
+    MERCADORIASPEDCOMPRA
+INNER JOIN
+    itemestoque on
+        mercadoriaspedcompra.codigo=itemestoque.codigo
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa='N'

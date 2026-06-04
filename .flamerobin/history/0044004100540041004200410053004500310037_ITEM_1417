@@ -1,0 +1,1 @@
+select * from itemestoque where CODIGOBARRA='4030776046342'

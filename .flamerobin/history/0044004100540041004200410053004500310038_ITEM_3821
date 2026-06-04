@@ -1,0 +1,4 @@
+select * from PEDIDO
+where pedido.DESTINATARIO in (
+select cadastro from ENDERECOENTREGA
+where UPPER(logradouro) liKe '%FREDERICO%' and numero = 215)

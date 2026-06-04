@@ -1,0 +1,24 @@
+select
+    orcamento.filial,
+    orcamento.idnota,
+    orcamento.contacorrente,
+    orcamento.tipocobranca,
+    orcamento.vlrtotalnota
+from 
+    ORCAMENTO
+where
+    orcamento.DATAEMISSAO='27.03.2024' and
+    orcamento.TIPOCOBRANCA<>(select
+                                clientes.TIPOCOBRANCA
+                             from
+                                CLIENTES
+                             where
+                                clientes.cadastro=orcamento.DESTINATARIO) and
+    exists (select
+                                clientes.TIPOCOBRANCA
+                             from
+                                CLIENTES
+                             where
+                                clientes.cadastro=orcamento.DESTINATARIO and
+                                clientes.tipocobranca is not null)
+    

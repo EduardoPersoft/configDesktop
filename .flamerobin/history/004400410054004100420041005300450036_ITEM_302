@@ -1,0 +1,11 @@
+SELECT
+    *
+FROM
+    PEDIDO
+WHERE
+    pedido.DATACADASTRO>='01.02.2021' and
+    EXISTS
+    (select * from mercadoriasped 
+     where mercadoriasped.filial=pedido.filial AND
+     mercadoriasped.idnota=pedido.idnota and
+     mercadoriasped.baixa='N') 

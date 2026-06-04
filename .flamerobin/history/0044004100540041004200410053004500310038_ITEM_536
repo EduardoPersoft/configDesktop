@@ -1,0 +1,15 @@
+UPDATE 
+    TITULOREC
+set
+    titulorec.vencimento=(select 
+                            c_faturasped."DATA"
+                          from  
+                            C_FATURASPED 
+                          where
+                            c_faturasped.filial=titulorec.filial AND
+                            c_faturasped.IDTITULO=titulorec.idtitulo)
+where 
+    titulorec.filial=1 
+    and titulorec.baixa is null 
+    and titulorec.VENCIMENTO<>c_faturasped."DATA" 
+    and titulorec.TIPOTRANSACAO in (43, 31, 6, 35, 57, 34)

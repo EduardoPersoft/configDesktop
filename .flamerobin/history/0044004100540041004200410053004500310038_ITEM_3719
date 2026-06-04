@@ -1,0 +1,2 @@
+select * from VENDEDORESPED
+order by vendedoresped.idnota desc

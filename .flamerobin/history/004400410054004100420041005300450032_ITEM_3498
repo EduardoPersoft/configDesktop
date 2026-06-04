@@ -1,0 +1,12 @@
+select
+    mercadoriaspedcompra.codigo,
+    sum(mercadoriaspedcompra.quantidade)
+FROM
+    notacompra
+INNER JOIN
+    mercadoriasnotacompra on 
+        mercadoriasnotacompra.filial=notacompra.filial AND 
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA 
+WHERE
+    notacompra.filial=5 AND
+    notacompra.DATAEntrada='17.08.2021'

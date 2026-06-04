@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    VENDEDORESPED
+WHERE
+    filial=1 AND
+    idnota=64399

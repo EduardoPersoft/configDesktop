@@ -1,0 +1,11 @@
+SET TERM ^;
+
+CREATE TRIGGER C_listaPrecoEcommerce FOR LISTAPRECOPRODUTO
+ACTIVE AFTER INSERT OR UPDATE OR DELETE POSITION 0
+AS
+BEGIN
+    /* enter trigger code here */ 
+    execute procedure C_LOGECOMMERCE(new.PRODUTO);
+END^
+
+SET TERM ;^

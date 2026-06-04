@@ -1,0 +1,1 @@
+update lantocontrec set lantocontrec.centrocusto = '10197' where lantocontrec.CONTACONTABIL='20533'

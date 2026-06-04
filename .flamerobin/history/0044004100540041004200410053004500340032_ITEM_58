@@ -1,0 +1,53 @@
+select
+    notacompra.dataemissao,
+    notacompra.dataentrada,
+    notacompra.NRNOTAFORNECEDOR,
+    cadfor.razaosocial,
+    mercadoriasnotacompra.cfop,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.tipoproduto,
+    sum(mercadoriasnotacompra.vlrfinalmercad) mercadorias,
+    
+    sum(mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR) FRETE,
+    
+    sum(MERCADORIASNOTACOMPRA.VALORIPI) ipi,
+    
+    sum(mercadoriasnotacompra.vlrfinalmercad+
+    mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR+
+    MERCADORIASNOTACOMPRA.VALORIPI) TOTAL
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+left join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+where
+    notacompra.filial=110 and
+    notacompra.DATAENTRADA between '01.08.2023' and '31.08.2023' --and
+    --mercadoriasnotacompra.cfop not in ('1101', '2101') 
+group by
+    notacompra.dataemissao,
+notacompra.dataentrada,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop,
+        itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.tipoproduto
+having
+    sum(mercadoriasnotacompra.valoripi)>0
+ORDER BY 
+notacompra.dataemissao,
+notacompra.dataentrada,
+notacompra.NRNOTAFORNECEDOR

@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    ITEMESTOQUECODIGOS
+WHERE
+    substring(codigo from 1 for 1)='0'

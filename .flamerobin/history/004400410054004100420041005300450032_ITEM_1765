@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and valortitulo=1912.13

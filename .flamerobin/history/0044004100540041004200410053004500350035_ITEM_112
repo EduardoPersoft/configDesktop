@@ -1,0 +1,6 @@
+select 
+    *
+from
+    c_listacusto
+where
+    c_listacusto.iditem like '02%'

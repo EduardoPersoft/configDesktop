@@ -1,0 +1,2 @@
+create index i_itemmovmat
+on materialmovimentoestoque(iditem,lote,LOCALARMAZENAMENTO)

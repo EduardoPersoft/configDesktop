@@ -1,0 +1,6 @@
+select 
+    *
+FROM    
+    ITEMESTOQUECODIGOS
+WHERE
+    itemestoquecodigos.codigo='109129'

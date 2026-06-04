@@ -1,0 +1,3 @@
+update 
+NOTAFISCAL
+set iss=0 where modelo=16

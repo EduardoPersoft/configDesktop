@@ -1,0 +1,60 @@
+select 
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    cadcli.nome,
+    produto.descricao,
+    mercadoriasped.quantidade,
+    
+    
+    composicaoop.codigo,
+    mp.descricao
+from
+    mercadoriasped 
+inner join
+    pedido on
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota
+inner join 
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    itemestoque produto on
+        produto.codigo=mercadoriasped.codigo
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=mercadoriasped.filial and
+        materialmovimentoestoque.idpedido=mercadoriasped.idnota and
+        materialmovimentoestoque.IDMERCADORIA=mercadoriasped.IDMERCADORIA
+inner join 
+    composicaoop on
+        composicaoop.filial=materialmovimentoestoque.filial and
+        composicaoop.idmovimento=materialmovimentoestoque.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+inner join
+    itemestoque mp on
+        mp.codigo=composicaoop.CODIGO
+where
+    mercadoriasped.filial=110 and
+    mercadoriasped.baixa='N' and
+    mp.TIPOPRODUTO = 1 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+

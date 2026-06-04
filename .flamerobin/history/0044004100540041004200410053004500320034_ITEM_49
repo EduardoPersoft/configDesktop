@@ -1,0 +1,1 @@
+select * from materiallote where filial=1 and iditem='01.12.7259'

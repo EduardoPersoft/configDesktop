@@ -1,0 +1,6 @@
+select
+    *
+from
+    ITEMESTOQUECODIGOS
+where   
+    codigo='1145105'

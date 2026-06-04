@@ -1,0 +1,44 @@
+CREATE PROCEDURE C_RECALCULOLISTAPRECO 
+
+AS
+DECLARE VARIABLE P_CODIGO VARCHAR(8);
+DECLARE VARIABLE P_PRECOA DOUBLE PRECISION;
+DECLARE VARIABLE P_PRECOB DOUBLE PRECISION;
+DECLARE VARIABLE P_PRECOC DOUBLE PRECISION;
+DECLARE VARIABLE P_PRECOD DOUBLE PRECISION;
+DECLARE VARIABLE P_PRECOE DOUBLE PRECISION;
+begin
+  for select itemestoque.codigo,
+         (c_fatores.fatora*listaG.preco) as PrecoA,
+         (c_fatores.fatorb*listaG.preco) as Precob,
+         (c_fatores.fatorc*listaG.preco) as Precoc,
+         (c_fatores.fatord*listaG.preco) as Precod,
+         (c_fatores.fatore*listaG.preco) as Precoe
+
+
+     from itemestoque
+     inner join c_fatores on (itemestoque.classifiscal=c_fatores.cfiscal and
+                              itemestoque.c_localimportacao=c_fatores.idlocal)
+     inner join listaprecoproduto listaG on (listaG.produto=itemestoque.codigo and
+                                             listaG.lista=1)
+     
+     into :P_Codigo, :P_PrecoA, :P_PrecoB, :P_PrecoC, :P_precod, :P_precoe do begin
+
+
+        update listaprecoproduto listaA set listaA.preco=:P_PrecoA
+              where listaA.lista=2 and listaA.produto=:P_Codigo AND LISTAa.QUANTIDADE=0;
+
+        update listaprecoproduto ListaB set ListaB.preco=:P_PrecoB
+              where ListaB.lista=3 and ListaB.produto=:P_Codigo AND LISTAB.QUANTIDADE=0;
+
+        update listaprecoproduto ListaC set ListaC.preco=:P_PrecoC
+              where ListaC.lista=4 and ListaC.produto=:P_Codigo AND LISTAC.QUANTIDADE=0;
+
+        update listaprecoproduto ListaD set ListaD.preco=:P_PrecoD
+              where ListaD.lista=5 and ListaD.produto=:P_Codigo AND LISTAD.QUANTIDADE=0;
+
+        update listaprecoproduto ListaE set ListaE.preco=:P_PrecoE
+              where ListaE.lista=6 and ListaE.produto=:P_Codigo AND LISTAe.QUANTIDADE=0 ;
+
+  end
+end

@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    dataemissao, 
+    idmovimento
+from
+    NOTAFISCAL
+where
+    idmovimento is not null
+order by 
+    NOTAFISCAL.DATAEMISSAO desc

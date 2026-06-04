@@ -1,0 +1,12 @@
+select 
+    * 
+from 
+    materialmovimentoestoque
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where 
+    materilamovimentoestoque.iditem='01730'
+order by
+    emissao desc

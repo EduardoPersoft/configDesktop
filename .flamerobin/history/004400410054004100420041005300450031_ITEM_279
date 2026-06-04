@@ -1,0 +1,7 @@
+select MATERIALMOVIMENTOESTOQUE.*,
+--(materialmovimentoestoque.quantidade / (itemestoque.C_MATERIAPRIMABASE/1000) / (itemestoque.C_LARGURAMATERIAL/1000)) as
+MATERIALMOVIMENTOESTOQUE.quantidade,
+itemestoque.C_GRAMATURA as metro
+ from MATERIALMOVIMENTOESTOQUE
+inner join itemestoque on itemestoque.codigo=materialmovimentoestoque.produto
+where MATERIALMOVIMENTOESTOQUE.IDCENTROCUSTO='101'

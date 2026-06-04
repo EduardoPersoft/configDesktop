@@ -1,0 +1,16 @@
+
+
+SELECT
+    mercadoriasnota.*
+FROM
+    MERCADORIASNOTA
+inner JOIN
+    NOTAFISCAL on
+        notaFISCAL.filial=mercadoriasnota.filial AND
+        notaFISCAL.idnota=mercadoriasnota.idnota
+WHERE
+    notaFISCAL.filial=1 AND
+    notaFISCAL.DATAEMISSAO between '01.08.2021' and '31.08.2021' and
+    mercadoriasNOTA.cstPIS=0 AND
+    NOTAFISCAL.ENTRADASAIDA='E'
+    AND MERCADORIASNOTA.VLRPISPASEP >0

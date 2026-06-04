@@ -1,0 +1,2 @@
+create unique index c_notacomra_numero  
+on notacompra(filial,destinatario,NRNOTAFORNECEDOR,serie) 

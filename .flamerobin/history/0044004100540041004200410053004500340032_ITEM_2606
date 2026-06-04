@@ -1,0 +1,3 @@
+update materiallote
+set materiallote.QUANTIDADE=0
+where quantidade is null

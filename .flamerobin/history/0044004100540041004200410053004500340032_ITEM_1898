@@ -1,0 +1,2 @@
+select filial,idnota,idmercadoria,baixa,minimo,quantidade from MERCADORIASPED
+where filial=110 and idnota=10658

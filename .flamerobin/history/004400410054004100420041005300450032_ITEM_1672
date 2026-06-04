@@ -1,0 +1,14 @@
+    SELECT
+    c_i_movest3.MEDTOTAL,
+    c_i_movest3.filial,
+    c_i_movest3.IDMOVIMENTO,
+    c_i_movest3.IDMOVIMENTOMATERIAL
+from
+    c_i_movest3
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=c_i_movest3.filial AND
+        movimentoestoque.DOCUMENTO=c_i_movest3.DOCTO
+WHERE
+    c_i_movest3.codtiposaida = 2 and
+    c_i_movest3.data>='01.04.2021'

@@ -1,0 +1,1 @@
+update lotesnfe set liberado='2025-03-11' LOTESNFE where datahora>'2025-03-11'  and liberado is null

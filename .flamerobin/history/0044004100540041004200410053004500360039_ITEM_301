@@ -1,0 +1,16 @@
+SET TERM ^;
+
+CREATE TRIGGER C_DESTINOAVULSO_BI FOR C_DESTINOAVULSO
+ACTIVE BEFORE INSERT POSITION 0
+AS
+BEGIN
+    if value.id is null then
+        select
+            max(c_destinoavulso.id)+1
+        from
+            c_destinoavulso
+        into :c_destinoavulso.id
+    /* enter trigger code here */ 
+END^
+
+SET TERM ;^

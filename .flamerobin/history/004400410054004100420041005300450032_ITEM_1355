@@ -1,0 +1,1 @@
+select * from C_I_MOVEST where C_I_MOVEST.DATA between '05.11.2021' and '17.02.2021'

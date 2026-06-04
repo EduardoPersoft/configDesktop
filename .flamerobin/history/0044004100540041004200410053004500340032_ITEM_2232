@@ -1,0 +1,25 @@
+select 
+    contascontabeis.IDPLANO,
+    contascontabeis.CONTACONTABIL,
+    contascontabeis.DESCRICAO,
+    contascontabeis.CODIGOREDUZIDO,
+    contascontabeis.CENTROCUSTOOBR,
+    contascontabeis.TIPOCONTA,
+    contascontabeis.INC,
+    contascontabeis.USUARIO,
+    contascontabeis.DATAALTERACAO,
+    contascontabeis.HORAALTERACAO,
+    contascontabeis.CONTADESTINO,
+    contascontabeis.CONTASINTETICA,
+    contascontabeis.NIVEL,
+    contascontabeis.NATUREZA
+from 
+    estabelecimento
+inner join
+    contascontabeis on
+        contascontabeis.idplano=
+            estabelecimento.planoContas
+where
+    estabelecimento.cadastro=110
+order by
+    contasContabeis.contacontabil

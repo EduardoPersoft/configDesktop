@@ -1,0 +1,6 @@
+select 
+    *
+from
+    NOTAFISCAL
+where
+    notafiscal.NUMERONOTA in (208875, 208874, 208876)

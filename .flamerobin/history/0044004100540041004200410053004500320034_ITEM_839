@@ -1,0 +1,34 @@
+SELECT
+    m1.codigo,
+    m1.precolista,
+    m2.precolista,
+    mp2.precolista,
+    (select 
+        mp.precolista-morigin.precolista
+     from 
+        mercadoriasnota morigin 
+    inner JOIN
+        mercadoriasped mp on
+            mp.filial=morigin.filial AND
+            mp.idnota=morigin.IDPEDido AND
+            mp.IDMERCADORIa=morigin.IDMERCADORIA
+    where 
+        morigin.filial = m1.filial AND
+        morigin.idnota=26009 AND
+        morigin.idmercadoria=m1.idmercadoria) as preconovo
+FROM
+    mercadoriasnota m1
+inner JOIN
+    mercadoriasnota m2 on
+        (m2.filial=m1.filial AND
+         m2.idnota=26009 AND
+         m2.idmercadoria=m1.idmercadoria)
+inner JOIN
+    mercadoriasped mp2 on
+        mp2.filial=m1.filial AND
+        mp2.idnota=m1.IDPEDido AND
+        mp2.IDMERCADORIa=m1.IDMERCADORIA
+
+WHERE
+    m1.filial=5 AND
+    m1.idnota=26009

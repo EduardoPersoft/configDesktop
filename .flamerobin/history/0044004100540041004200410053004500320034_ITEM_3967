@@ -1,0 +1,33 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO
+from
+    ITEMESTOQUE
+inner join
+    materiallocal on
+        itemestoque.codigo=materiallocal.IDITEM and
+        materiallocal.filial=5  and
+        materiallocal.idlocal=1
+inner join
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and
+        materialfilial.iditem=materiallocal.iditem
+where
+    materiallocal.saldototal=0 and
+    itemestoque.itembase is null and
+    itemestoque.tipoproduto='3' /*and
+    not exists (
+        select 
+            *
+        from 
+            MERCADORIASPEDCOMPRA
+        where
+            mercadoriaspedcompra.filial=materiallocal.filial and
+            mercadoriaspedcompra.codigo=itemestoque.codigo and
+            mercadoriaspedcompra.baixa='N'
+    )*/
+order by
+    4 desc
+

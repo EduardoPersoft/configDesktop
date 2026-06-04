@@ -1,0 +1,1 @@
+select * from mercadoriasnota where filial=110 and idnota=2494

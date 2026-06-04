@@ -1,0 +1,1 @@
+select filial,idnota,dataemissao,datahora from notafiscal order by idnota desc

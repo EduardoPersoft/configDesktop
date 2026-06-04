@@ -1,0 +1,12 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    desreduzida,
+    quantidade,
+    pesoliquido,
+    pesobruto,
+    quantidadeestoque
+from MERCADORIASNOTA
+where filial=1 and idnota=77890

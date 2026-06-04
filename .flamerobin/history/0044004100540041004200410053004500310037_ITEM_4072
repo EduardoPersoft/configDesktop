@@ -1,0 +1,3 @@
+select * from notafiscal 
+where notafiscal.DATAEMISSAO='2025-01-23'
+order by filial,idnota

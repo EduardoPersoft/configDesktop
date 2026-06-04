@@ -1,0 +1,6 @@
+select
+    *
+from
+    LISTAPRECOPRODUTO
+order by 
+    quantidade

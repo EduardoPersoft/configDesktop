@@ -1,0 +1,1 @@
+select * from orcamento where orcamento.C_STATUS=1 order by datacadastro

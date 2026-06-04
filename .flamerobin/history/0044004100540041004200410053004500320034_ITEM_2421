@@ -1,0 +1,1 @@
+update mercadoriasped set baixa='S', mercadoriasped.minimo=mercadoriasped.QTDEENVIADA 

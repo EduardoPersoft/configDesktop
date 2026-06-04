@@ -1,0 +1,10 @@
+update
+    PEDIDO
+set
+    pedido.tiponota=3
+where
+    pedido.DESTINATARIO=18157 and
+    exists (select * from MERCADORIASped
+            where mercadoriasnota.filial=pedido.filial 
+            and mercadoriasped.idnota=pedido.IDNOTA
+            and mercadoriasped.baixa='N')

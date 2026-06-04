@@ -1,0 +1,5 @@
+update
+    MATERIALLOTE
+set
+    materiallote.quantidade = 
+    cast(materiallote.quantidade as decimal(12,2))

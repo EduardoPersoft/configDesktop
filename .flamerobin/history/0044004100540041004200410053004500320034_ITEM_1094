@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and idtitulo between 160500 and 165500

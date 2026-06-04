@@ -1,0 +1,10 @@
+update
+    CLIENTES
+set
+    clientes.NOTAAUTOMATICA='N'
+where
+    exists (
+        select * from CADASTROPARCEIROS
+        where CADASTROPARCEIROS.cadastro=clientes.cadastro
+        and CADASTROPARCEIROS.STATUS=0)
+    

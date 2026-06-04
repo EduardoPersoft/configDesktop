@@ -1,0 +1,2 @@
+select * from CLIENTES
+where clientes.DATAAVALIACAO is not null

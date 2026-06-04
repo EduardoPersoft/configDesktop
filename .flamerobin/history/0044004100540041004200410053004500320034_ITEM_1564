@@ -1,0 +1,19 @@
+select
+    notafiscal.DATAEMISSAO,
+    notafiscal.DESTINATARIO,
+    CADASTROPARCEIROS.Nome,
+    sum(notafiscal.VLRTOTALNOTA) as vlrTotalNota
+from
+    NOTAFISCAL
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro = NOTAFISCAL.DESTINATARIO
+where 
+    notafiscal.filial=5 and
+    notafiscal.DATAEMISSAO between '13.03.2022' and '14.03.2022'
+group by
+    notafiscal.DATAEMISSAO,
+    notafiscal.DESTINATARIO,
+    CADASTROPARCEIROS.Nome    
+order by
+    CADASTROPARCEIROS.nome

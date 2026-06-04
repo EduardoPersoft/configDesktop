@@ -1,0 +1,5 @@
+select 
+    estsin.CENTROCUSTOI,
+    estsin.CENTROCUSTOF
+    from ESTSIN
+where relatorio='PMOVPAGOS'

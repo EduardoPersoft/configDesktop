@@ -1,0 +1,1 @@
+delete from materialfilial where filial<>110

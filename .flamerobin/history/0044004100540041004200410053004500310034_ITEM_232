@@ -1,0 +1,19 @@
+select 
+    cast(0 as integer) qtd,
+    cast(1 as integer) total,
+    itemestoque.codigo,    
+    itemestoque.DESCRICAO,
+    materiallote.lote,
+    materiallote.c_largura as largura,
+    materiallote.QUANTIDADE,
+    materiallote.FILIAL
+from   
+    itemestoque
+inner join 
+    materiallote on 
+        (materiallote.IDITEM=itemestoque.codigo) 
+inner join
+    consultas on
+         (consultas.UUIDSELECIONADO=materiallote.lote)
+where 
+    consultas.uuid=?

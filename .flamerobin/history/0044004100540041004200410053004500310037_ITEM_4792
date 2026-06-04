@@ -1,0 +1,1 @@
+select * from pedido where cep='22390000'

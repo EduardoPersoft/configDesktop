@@ -1,0 +1,3 @@
+create table c_movfinanceirod(
+documento varchar(10),
+fatura varchr(2))

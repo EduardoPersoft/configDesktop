@@ -1,0 +1,13 @@
+select 
+    cadfor.cadastro,
+    cadfor.nome,
+    itemestoque.codigo,
+    itemestoque.descricao
+from
+    ITEMESTOQUE
+inner join 
+    FORNECEDORESITEM on
+        fornecedoresitem.IDITEM=itemestoque.codigo
+inner join
+    CADASTROPARCEIROS cadfor on
+        FORNECEDORESITEM.FORNECEDOR=cadfor.cadastro

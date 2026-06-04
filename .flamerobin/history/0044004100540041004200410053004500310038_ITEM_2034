@@ -1,0 +1,2 @@
+select * from c_requisicaomaterialitem
+where c_requisicaomaterial.id=17992

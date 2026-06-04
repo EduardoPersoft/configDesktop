@@ -1,0 +1,8 @@
+update
+    PEDIDO
+set 
+    pedido.NUMERONOTA=pedido.IDNOTA
+where
+    coalesce(pedido.numeronota,0) <>
+    pedido.idnota and
+    pedido.DATAEMISSAO is not null

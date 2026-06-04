@@ -1,0 +1,1 @@
+select * from fatura where idnota=30

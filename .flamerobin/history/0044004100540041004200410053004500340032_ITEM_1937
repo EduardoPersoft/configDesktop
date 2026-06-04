@@ -1,0 +1,18 @@
+select 
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.lote,
+    materialmovimentoestoque.LOCALARMAZENAMENTO,
+    sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner join 
+    MOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.emissao <= '07.03.2024'
+group by    
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.lote,
+    materialmovimentoestoque.LOCALARMAZENAMENTO

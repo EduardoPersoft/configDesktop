@@ -1,0 +1,11 @@
+insert into customes(filial,ano,mes,iditem,customedio)
+select 
+    materialfilial.filial,
+    2024,
+    1,
+    materialfilial.iditem,
+    materialfilial.preco
+from 
+    materialfilial
+where
+    materialfilial.iditem like 'MPP%'

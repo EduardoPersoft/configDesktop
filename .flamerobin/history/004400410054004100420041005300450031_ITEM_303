@@ -1,0 +1,93 @@
+select   
+    mapaProducao.recurso,
+    mapaProducao.filial,
+    mapaProducao.idMovimento,
+    mapaProducao.idMovimentoMaterial,
+    materialMovimentoEstoque.tempo,
+    materialMovimentoEstoque.setup,
+    mapaProducao.inicio,
+    mapaProducao.fim,    
+
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    movimentoestoque.previsaofimproducao,
+    produto.codigo,
+    produto.descricao,
+    materialmovimentoestoque.quantidade,
+    produzido.unidade,
+    
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.NOME,
+    PRODUTO.C_LARGURAMATERIAPRIMA,
+    COALESCE(PRODUTO.C_CLICHE,'N')  as cliche,
+    COALESCE(materialmovimentoEstoque.c_mp, 'N') as mp,
+
+    materialmovimentoestoque.idcentrocusto,
+    produto.C_CILINDRO,
+    produto.c_ladoImpressao,
+    (select  first 1
+        c_laminacao.LARGURAROLO 
+     from 
+        c_laminacao 
+     where 
+        c_laminacao.codigo=produto.codigo
+     order by 
+        c_laminacao.SEQUENCIA),
+    (select first 1 materiaPrima.descricao from COMPOSICAOOP
+     inner join itemestoque materiaprima on materiaprima.codigo=composicaoop.codigo
+     where composicaoop.filial=materialmovimentoestoque.filial AND
+     composicaoop.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+     composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL AND
+     materiaprima.grupo=2
+     order by composicaoop.IDCOMPOSICAO) as mp1,
+    (select first 1 skip 1 materiaPrima.descricao from COMPOSICAOOP
+     inner join itemestoque materiaprima on materiaprima.codigo=composicaoop.codigo
+     where composicaoop.filial=materialmovimentoestoque.filial AND
+     composicaoop.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+     composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL AND
+     materiaprima.grupo=2
+     order by composicaoop.IDCOMPOSICAO) as mp2,
+    (select
+        max(coalesce(composicaoop.metragem,0))
+     from
+        composicaoop
+     WHERE
+        composicaoop.filial=materialmovimentoestoque.filial AND
+        composicaoop.idmovimento=materialmovimentoestoque.idmovimento AND
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+     ) as metragem
+from
+    materialMovimentoEstoque
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join
+    mapaProducao on
+        materialMovimentoEstoque.filial = mapaProducao.filial and
+        materialMovimentoEstoque.idMovimento = mapaProducao.idMovimento and
+        materialMovimentoEstoque.idMovimentoMaterial = mapaProducao.idMovimentoMaterial
+left JOIN
+    ITEMEsTOQUE PRODUTO ON
+        produto.codigo = materialmovimentoestoque.PRODUTO
+left JOIN
+    ITEMEsTOQUE PRODUZIDO ON
+        produzido.codigo = materialmovimentoestoque.PRODUTO
+LEFT JOIN
+    PEDIDO ON
+        PEDIDO.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        PEDIDO.IDNOTA=MATERIALMOVIMENTOESTOQUE.IDPEDIDO 
+LEFT JOIN
+    CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO = PEDIDO.DESTINATARIO
+where
+    materialMovimentoEstoque.filial = 1 and
+    materialMovimentoEstoque.concluido = 'N' and
+    mapaProducao.recurso = 1
+order by 
+    mapaProducao.inicio nulls last
+
+
+
+
+

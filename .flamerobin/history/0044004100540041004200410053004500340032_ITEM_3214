@@ -1,0 +1,9 @@
+select
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MATERIALMOVIMENTOESTOQUEidcentrocusto='101'
+    

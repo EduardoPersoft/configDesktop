@@ -1,0 +1,2 @@
+select filial,
+    idnota, pedido.C_DATACOMISSAO from pedido

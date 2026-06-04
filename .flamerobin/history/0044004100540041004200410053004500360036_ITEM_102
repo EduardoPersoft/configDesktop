@@ -1,0 +1,110 @@
+SET TERM ^ ;
+ALTER PROCEDURE SPEDAPURACAO (
+    FILIAL integer,
+    DT_INI date,
+    DT_FIM date )
+RETURNS (
+    PFILIAL integer,
+    ORIGEM char(2),
+    UF varchar(2),
+    ENTRADASAIDA char(1),
+    CFOP varchar(4),
+    DEVOLUCAO char(1),
+    ACRESCIMONOTA double precision,
+    DESCONTONOTA double precision,
+    VLRDESCPRODUTO double precision,
+    FRETE double precision,
+    SEGURO double precision,
+    OUTDESPACESSOR double precision,
+    VLRICMSRECOLHIDO double precision,
+    CSTIPI integer,
+    IPIBASE double precision,
+    VALORIPI double precision,
+    VLRFINALMERCAD double precision,
+    ST_JA_RECOLHIDO char(1),
+    ICMSDESTINOVALOR double precision )
+
+AS
+BEGIN 
+
+    FOR SELECT :filial,
+               CAST('NV' AS CHAR(2)) AS origem,
+               notafiscal.uf AS uf,
+               notafiscal.entradasaida,
+               CAST(mercadoriasnota.cfop AS VARCHAR(4)),
+               notafiscal.devolucao,
+               COALESCE(mercadoriasnota.acrescimonota,0),
+               COALESCE(mercadoriasnota.descontonota,0),
+               COALESCE(mercadoriasnota.vlrdescproduto,0),
+               COALESCE(mercadoriasnota.frete,0),
+               COALESCE(mercadoriasnota.seguro,0),
+               COALESCE(mercadoriasnota.outdespacessor,0),
+               COALESCE(mercadoriasnota.vlricmsrecolhido,0)+COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0),
+               mercadoriasnota.cstipi,
+               COALESCE(mercadoriasnota.ipibase, 0),
+               COALESCE(mercadoriasnota.valoripi,0),
+               COALESCE(mercadoriasnota.icmsdestinovalor,0),
+               mercadoriasnota.vlrfinalmercad,
+               'N'
+         FROM notafiscal
+         INNER JOIN mercadoriasnota ON (
+               notafiscal.filial=mercadoriasnota.filial AND
+               notafiscal.idnota=mercadoriasnota.idnota)
+         INNER JOIN modelodocto ON (notafiscal.modelo=modelodocto.id)
+         WHERE notafiscal.filial=:filial
+         and notafiscal.dataemissao between :dt_ini and :dt_fim
+         AND notafiscal.cancelamento<>'S'
+         AND modelodocto.blocosped='C'
+         AND cast(modelodocto.codmodelofiscal as char(2)) IN ('55','1','1B','4','5')
+         INTO :pfilial,  :origem, :uf,  :entradasaida,:cfop,:devolucao,
+              :acrescimonota, :descontonota, :vlrdescproduto, :frete, :seguro,
+              :outdespacessor, :vlricmsrecolhido, :cstipi, :ipibase, :valoripi,
+              :icmsdestinovalor,
+              :vlrfinalmercad, ST_JA_RECOLHIDO do begin SUSPEND; end
+
+
+       for  SELECT :filial,
+               CAST('NC' AS CHAR(2)) AS origem,
+               CASE COALESCE(NOTAFISCAL.ST_JA_RECOLHIDO, 'N') WHEN 'S' THEN CADASTROPARCEIROS.UF ELSE notafiscal.uf END AS uf,
+               notafiscal.entradasaida,
+               mercadoriasnota.cfop,
+               notafiscal.devolucao,
+               COALESCE(mercadoriasnota.acrescimonota,0),
+               COALESCE(mercadoriasnota.descontonota,0),
+               COALESCE(mercadoriasnota.vlrdescproduto,0),
+               COALESCE(mercadoriasnota.frete,0),
+               COALESCE(mercadoriasnota.seguro,0),
+               COALESCE(mercadoriasnota.outdespacessor,0),
+              
+               case when mercadoriasnota.SITUACAOTRIBUT in ('060', '160', '260')
+               then 0 else COALESCE(mercadoriasnota.vlricmsrecolhido,0)+COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0) end,
+              
+               mercadoriasnota.cstipi,
+               COALESCE(mercadoriasnota.ipibase, 0),
+               COALESCE(mercadoriasnota.valoripi,0),
+               0,
+               COALESCE(mercadoriasnota.vlrfinalmercad,0),               
+               COALESCE(NOTAFISCAL.ST_JA_RECOLHIDO, 'N')
+         FROM notacompra notafiscal
+         INNER JOIN mercadoriasnotacompra mercadoriasnota ON (
+               notafiscal.filial=mercadoriasnota.filial AND
+               notafiscal.idnota=mercadoriasnota.idnota)
+         inner join cadastroparceiros on CADASTROPARCEIROS.CADASTRO=notafiscal.filial
+         INNER JOIN modelodocto ON (notafiscal.modelo=modelodocto.id)
+         WHERE notafiscal.filial=:pfilial
+         and notafiscal.dataentrada between :dt_ini and :dt_fim
+         AND modelodocto.blocosped='C'
+         AND cast(modelodocto.codmodelofiscal as char(2)) IN ('55','1','1B','4','5','22')
+         INTO :pfilial,  :origem, :uf,  :entradasaida,:cfop,:devolucao,
+              :acrescimonota, :descontonota, :vlrdescproduto, :frete, :seguro,
+              :outdespacessor, :vlricmsrecolhido, :cstipi, :ipibase, :valoripi,
+              :icmsdestinovalor,
+              :vlrfinalmercad, ST_JA_RECOLHIDO do begin SUSPEND; end
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE SPEDAPURACAO TO  SYSDBA;
+

@@ -1,0 +1,10 @@
+select 
+    distinct
+    codigo,
+    mercadoriasnotacompra.pipi
+from 
+    mercadoriasnotacompra 
+where 
+    filial=5 and coalesce(pipi,0)<>0
+order by
+    codigo

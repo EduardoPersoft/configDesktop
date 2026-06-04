@@ -1,0 +1,9 @@
+UPDATE
+    titulorec
+SET
+    titulorec.dataenvio = NULL
+WHERE
+    titulorec.dataenvio='24.08.2021' AND
+    titulorec.emissao='19.08.2021'
+order by
+    titulorec.titulo

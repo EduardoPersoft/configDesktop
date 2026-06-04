@@ -1,0 +1,42 @@
+select 
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.NOME,
+    C_LISTAXCADASTRO.LISTA,
+    C_LISTAXCADASTRO.PRIORIDADE,
+    C_LISTAXCADASTRO.DATAINICIAL,
+    C_LISTAXCADASTRO.DATAFINAL
+
+from 
+    CADASTROPARCEIROS 
+    
+left join
+    C_LISTAXCADASTRO ON
+        CADASTROPARCEIROS.CADASTRO=C_LISTAXCADASTRO.CADASTRO and  
+        C_LISTAXCADASTRO.LISTA= 107 
+where 
+    
+    cadastroparceiros.status = 1 and
+    (exists (select * from estabelecimento where estabelecimento.cadastro=cadastroparceiros.cadastro)
+     or exists (select * from vendedor where vendedor.cadastro=cadastroparceiros.cadastro and tipovendedor=1))
+
+     union
+
+select 
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.NOME,
+    C_LISTAXCADASTRO.LISTA,
+    C_LISTAXCADASTRO.PRIORIDADE,
+    C_LISTAXCADASTRO.DATAINICIAL,
+    C_LISTAXCADASTRO.DATAFINAL
+
+from 
+     C_LISTAXCADASTRO
+    
+inner join
+     CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO=C_LISTAXCADASTRO.CADASTRO    
+where 
+    C_LISTAXCADASTRO.LISTA= 107 and 
+    cadastroparceiros.status = 1 and not
+    (exists (select * from estabelecimento where estabelecimento.cadastro=cadastroparceiros.cadastro)
+     or exists (select * from vendedor where vendedor.cadastro=cadastroparceiros.cadastro and tipovendedor=1))

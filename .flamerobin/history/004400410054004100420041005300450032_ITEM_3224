@@ -1,0 +1,27 @@
+UPDATE
+    MERCADORIASPEDCOMPRA
+SET
+    mercadoriaspedcompra.C_QTDEENTREGUE=
+    (select
+        sum(mercadoriasnotacompra.quantidade)
+    from
+        MERCADORIASNOTACOMPRA
+    WHERE
+        mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+        mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+        mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.idmercadoria)
+WHERE
+    pedidocompra.filial=5 AND
+    pedidocompra.DATAcadastro>='01.01.2021' AND
+    mercadoriaspedcompra.baixa='N' and
+    mercadoriaspedcompra.QTDEENTREGUE < (select
+                                            sum(mercadoriasnotacompra.quantidade)
+                                         from
+                                            MERCADORIASNOTACOMPRA
+                                         WHERE
+                                            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+                                            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+                                            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.idmercadoria)
+order by 
+    mercadoriaspedcompra.idnota
+                                        

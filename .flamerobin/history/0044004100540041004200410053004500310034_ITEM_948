@@ -1,0 +1,21 @@
+SELECT DISTINCT COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME,
+                sum(C_PEDIDOSEMABERTO.quantidadeproduzir) quantidadeproduzir,
+                sum(C_PEDIDOSEMABERTO.qtdeenviada qtdEnviada,
+                sum(C_PEDIDOSEMABERTO.qtdsaldo) qtdSaldo,
+                sum(C_PEDIDOSEMABERTO.qtdpedido) qtdPedido,                
+                sum(C_PEDIDOSEMABERTO.vlrtotalmercad,
+                sum(case coalesce (c_pedidosemaberto.VALORIPI,0)
+                    when 0 then C_PEDIDOSEMABERTO.valorsaldo else 
+                    C_PEDIDOSEMABERTO.valorsaldo * (1+(coalesce (C_PEDIDOSEMABERTO.pipi,0)/100)))end as valorsaldo,   
+                sum(c_pedidosemaberto.vlrabertosemicms)
+FROM C_PEDIDOSEMABERTO(110)
+LEFT JOIN VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                           AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+LEFT JOIN CADASTROPARCEIROS VENDEDOR ON (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+where c_pedidosemaberto.dataprevista between '01.09.2023' and '30.09.2023'
+AND C_PEDIDOSEMABERTO.DATAEMISSAO IS NOT NULL
+group by
+COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME
+ORDER BY c_pedidosemaberto.DATAPREVISTA,
+         C_PEDIDOSEMABERTO.IDNOTA,
+         C_PEDIDOSEMABERTO.IDCOMPOSICAO

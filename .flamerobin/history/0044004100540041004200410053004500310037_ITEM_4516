@@ -1,0 +1,4 @@
+select * from INVENTARIOESTOQUEDATA 
+where 
+INVENTARIOESTOQUEDATA.CODIGO='1009527' 
+order by data

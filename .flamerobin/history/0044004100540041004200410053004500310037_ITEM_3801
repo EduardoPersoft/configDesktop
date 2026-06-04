@@ -1,0 +1,19 @@
+select 
+        *
+     from
+        PEDIDO ORCAMENTO
+     where
+        
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.vendedor is not null and
+        
+        orcamento.datareferencia between '01.10.2024' and '01.10.2024' and
+        exists (select 
+                    * 
+                from 
+                    fatped
+                where
+                    fatped.filial=orcamento.filial and
+                    fatped.idnota=orcamento.idnota)
+order by vlrtotalnota                    

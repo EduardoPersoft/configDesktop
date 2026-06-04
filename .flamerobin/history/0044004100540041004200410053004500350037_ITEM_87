@@ -1,0 +1,31 @@
+select
+    orcamento.idnota,
+    orcamento.DATAREFERENCIA,
+    cadcli.nome,
+    cadespecificador.nome,
+    orcamento.VLRTOTALNOTA as valorOrcamento,
+    ORCCHANCESFECHAMENTO.descricao chances
+from
+    ORCAMENTO
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro = orcamento.DESTINATARIO
+left join
+    CADASTROPARCEIROS cadespecificador on
+        cadespecificador.cadastro = orcamento.C_ARQUITETO
+left join
+    ORCCHANCESFECHAMENTO on
+        ORCCHANCESFECHAMENTO.id=orcamento.CHANCES
+        
+where
+    orcamento.filial=1 and
+    orcamento.DATAREFERENCIA < '30.06.2024' and
+    orcamento.DATAPERDA is null and
+    not exists (select * from PEDIDO
+                where pedido.filial=orcamento.filial
+                and pedido.IDORCAMENTO=orcamento.idnota)
+    
+
+    
+    
+    

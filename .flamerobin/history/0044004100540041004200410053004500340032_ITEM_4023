@@ -1,0 +1,1 @@
+select * from pedido where pedido.c_fomento is not null

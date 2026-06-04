@@ -1,0 +1,18 @@
+SELECT  
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.NUMERONOTA,
+    notafiscal.VLRTOTALNOTA,
+    mercadoriasnota.codigo,
+    mercadoriasnota.quantidade,
+    mercadoriasnota.precolista
+FROM    
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota= notafiscal.idnota
+WHERE
+    notafiscal.filial=1 AND
+    notafiscal.idnota=108
+    

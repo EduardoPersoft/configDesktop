@@ -1,0 +1,4 @@
+select * from INVENTARIOESTOQUEDATA
+where filial=1 
+and codigo='1587821'
+and INVENTARIOESTOQUEDATA."DATA"='03.07.2024'

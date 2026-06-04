@@ -1,0 +1,3 @@
+select * from MATERIALLOCAL
+inner join local on materiallocal.IDLOCAL=local.id
+where materiallocal.iditem='2422305' and materiallocal.saldototal>0

@@ -1,0 +1,4 @@
+select filial,idnota,numeronota, dataemissao,uf from NOTAFISCAL
+where filial=12826
+and notafiscal.DATAEMISSAO between '01.05.2025' and '31.05.2025'
+and notafiscal.ICMSORIGEMVALORINTERESTADUAL>0 

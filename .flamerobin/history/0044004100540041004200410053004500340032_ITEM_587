@@ -1,0 +1,2 @@
+select * from MERCADORIASNOTA
+where filial=110 and idpedido=10031

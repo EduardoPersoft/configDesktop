@@ -1,0 +1,6 @@
+update
+    transportadora
+set
+    cadastro =cadastro-354214
+where
+    cadastro>35000

@@ -1,0 +1,1 @@
+insert into turnos(1,'08:00', '18:00')

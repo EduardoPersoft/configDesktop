@@ -1,0 +1,5 @@
+select * from TITULOREC
+where titulorec.filial=12826 and
+titulorec.baixa is null and
+titulorec.CONTACORRENTE=20 and
+titulorec.TIPOTRANSACAO=13

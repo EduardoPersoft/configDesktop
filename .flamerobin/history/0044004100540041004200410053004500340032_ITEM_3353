@@ -1,0 +1,15 @@
+select 
+    usu.id,
+    usu.usuario as usuario,
+    usu.perfil,
+    perfil.usuario as nomePerfil
+from
+    usuario USU 
+left join
+    usuario perfil on
+        usu.perfil=perfil.ID
+where
+ usu.USUARIOATIVO='S' and
+ usu.tipo='G'
+    
+    

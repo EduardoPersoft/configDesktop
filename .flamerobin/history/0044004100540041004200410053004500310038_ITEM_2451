@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE i1
+set
+    i1.C_GRUPOCOMISSAO = (select i2.c_grupocomissao from itemestoque i2 where i2.codigo=i1.itembase)
+where i1.codigo like 'PE-%' and
+i1.c_grupocomissao is null

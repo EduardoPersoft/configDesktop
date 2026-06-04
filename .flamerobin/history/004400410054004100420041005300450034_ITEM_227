@@ -1,0 +1,13 @@
+select 
+   itinerarios.PLACA ,
+   cast (itinerarios.DATA as timestamp),
+   COALESCE (itinerarios.ABASTECIMENTOKM, 0),
+   COALESCE (itinerarios.ABASTECIMENTOLITROS, 0)/1000
+from 
+   itinerarios 
+where 
+
+
+   itinerarios.DATA between '01.02.2021'  and '31.12.2021'
+order by 
+   itinerarios.placa, itinerarios.data   

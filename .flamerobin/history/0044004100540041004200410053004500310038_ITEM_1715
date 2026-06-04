@@ -1,0 +1,9 @@
+select * from PEDIDO
+left join  
+    VENDEDORESPED ON 
+        (VENDEDORESPED.FILIAL=PEDIDO.FILIAL AND 
+         VENDEDORESPED.IDNOTA=PEDIDO.IDNOTA)
+where 
+PEDIDO.DATAREFERENCIA BETWEEN '01.07.2023' and '31.07.2023' and 
+pedido.filial=184 and
+vendedoresped.vendedor=185

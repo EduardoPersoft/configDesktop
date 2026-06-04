@@ -1,0 +1,1 @@
+delete from CONDICAOPAGAMENTOITEM where not exists (select * from condicaopagamento where condicaopagamento.ID=CONDICAOPAGAMENTOITEM.CODIGO)

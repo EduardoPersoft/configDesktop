@@ -1,0 +1,2 @@
+insert into materialfilial(filial,iditem)
+select filialpadrao, codigo from itemestoque

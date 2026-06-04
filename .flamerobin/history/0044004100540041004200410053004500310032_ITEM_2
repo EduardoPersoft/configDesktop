@@ -1,0 +1,6 @@
+UPDATE
+    OBJETO
+SET
+    objeto.VERSAO='L.5.1.0'
+where   
+    coalesce(objeto.versao, '')= ''

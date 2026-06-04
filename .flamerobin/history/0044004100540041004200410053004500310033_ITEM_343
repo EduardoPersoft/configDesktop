@@ -1,0 +1,7 @@
+SELECT
+    pedido.filial,
+    pedido.idnota,
+    pedido.DESTINATARIO,
+    pedido.UUID
+FROM
+    pedido

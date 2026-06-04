@@ -1,0 +1,64 @@
+update 
+    MERCADORIASPED
+set
+    filial=233
+where
+    filial=110 and 
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            pedido.filial=233 and
+            pedido.idnota=mercadoriasped.idnota);
+
+
+update 
+    composicaomercped
+set
+    filial=233
+where
+    filial=110 and 
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            pedido.filial=233 and
+            pedido.idnota=mercadoriasped.idnota);
+            
+            
+
+
+update 
+    faturasped as a
+set
+    filial=233
+where
+    filial=110 and 
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            pedido.filial=233 and
+            pedido.idnota=a.idnota);
+
+
+update 
+    vendedoresped as a
+set
+    filial=233
+where
+    filial=110 and 
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            pedido.filial=233 and
+            pedido.idnota=a.idnota);

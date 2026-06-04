@@ -1,0 +1,16 @@
+UPDATE  
+    TITULOREC
+SET
+    dataenvio='27.10.2021'
+WHERE    
+    titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+	and coalesce(COALESCE(CLIENTES.EMAILCOBRANCA,COALESCE(CADCLI.EMAILNFE, CADCLI.EMAIL)),'') <> ''
+	and titulorec.filial=12826 
+	aND TITULOREC.IDTITULO BETWEEN 245236 AND 245455
+order by
+    titulorec.filial,
+    titulorec.titulo,
+    titulorec.fatura

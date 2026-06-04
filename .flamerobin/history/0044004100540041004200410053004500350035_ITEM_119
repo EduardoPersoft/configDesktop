@@ -1,0 +1,6 @@
+update 
+    c_opcoes 
+set
+    descricao = 'Fornecido'
+where
+    descricao in ('Fornecedor', 'Fornecedores')

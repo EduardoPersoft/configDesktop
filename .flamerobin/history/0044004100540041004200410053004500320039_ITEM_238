@@ -1,0 +1,2 @@
+select simples from notafiscal 
+where notafiscal.idnota=25894 order by idnota desc

@@ -1,0 +1,15 @@
+select
+    lista,
+    produto,
+    preo,
+    variavel,
+    custoconsiderado,
+    comissao,
+    margemlucro,
+    margemcontribuicao,
+    descontoitem,
+    quantidade
+from
+    listaprecoproduto
+where
+    produto='60001'

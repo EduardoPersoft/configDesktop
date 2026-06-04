@@ -1,0 +1,2 @@
+select materiallocal.* from MATERIALLOCAL
+where materiallocal.saldototal > 0

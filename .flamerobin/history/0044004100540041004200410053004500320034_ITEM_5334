@@ -1,0 +1,6 @@
+update
+    titulorec
+set
+    titulorec.dataenvio=null
+where 
+    titulorec.CONTACORRENTE=1342

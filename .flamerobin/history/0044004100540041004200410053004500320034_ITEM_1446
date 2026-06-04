@@ -1,0 +1,3 @@
+delete from pedidocompra
+where filial=5 
+and idnota=57233

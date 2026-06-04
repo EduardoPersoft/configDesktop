@@ -1,0 +1,6 @@
+select 
+    *
+from
+    TITULOREC
+where
+    titulorec.TIPOBAIXA is null

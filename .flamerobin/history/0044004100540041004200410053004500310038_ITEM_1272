@@ -1,0 +1,38 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.DATAREFERENCIA,
+    pedido.DATAEMISSAO,
+    (select
+        min(fatped."DATA")
+     from
+        c_faturasped FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota),
+    pedido.C_DATACOMISSAO,
+    coalesce(pedido.c_datacomissao,
+       cast((select
+        min(fatped.data)
+     from
+        c_faturasped FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota) as date)),
+    pedido.C_PEDIDOSUBSTITUIDO
+    
+from
+    PEDIDO
+where 
+    pedido.filial=1 and
+    pedido.dataemissao is not null and 
+    pedido.datacadastro >= '01.01.2020' and
+    pedido.DATAREFERENCIA<>coalesce(pedido.c_datacomissao,
+       cast((select
+        min(fatped.DATA)
+     from
+        c_faturasped FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota) as date))

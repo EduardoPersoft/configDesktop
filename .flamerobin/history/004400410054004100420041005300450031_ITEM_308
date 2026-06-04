@@ -1,0 +1,2 @@
+SELECT * FROM MATERIALMOVIMENTOESTOQUE
+where materialmovimentoestoque.concluido is null

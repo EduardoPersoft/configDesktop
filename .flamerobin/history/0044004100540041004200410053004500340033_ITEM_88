@@ -1,0 +1,1 @@
+select * from APONTAMENTOMAT order by idmovimento desc

@@ -1,0 +1,7 @@
+select 
+    *
+from
+    mercadoriasped 
+where
+    filial=1 and
+    idnota=65065

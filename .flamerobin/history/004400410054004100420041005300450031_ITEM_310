@@ -1,0 +1,11 @@
+SELECT 
+    materialmovimentoestoque.*
+FROM 
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    movimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    materialmovimentoestoque.concluido = 'N' AND
+    movimentoestoque.tipomovimento='12'

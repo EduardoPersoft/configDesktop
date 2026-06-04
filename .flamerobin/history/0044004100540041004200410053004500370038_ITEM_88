@@ -1,0 +1,4 @@
+update 
+    CONFIGURACOESGERAIS
+set
+    nc2tp='S'

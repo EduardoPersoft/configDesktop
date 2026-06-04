@@ -1,0 +1,87 @@
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.cfop,
+    TIPOITEMESTOQUE.DESCRICAO tipomaterial,
+    sum(mercadoriasnotacompra.vlrfinalmercad) as vlrfinalmercad,
+    
+    sum(mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR) FRETE,
+    
+    sum(MERCADORIASNOTACOMPRA.VALORIPI) as valoripi,
+    sum(mercadoriasnotacompra.valoripi) valoripiCredito,
+    
+    sum(mercadoriasnotacompra.vlrfinalmercad+
+    mercadoriasnotacompra.frete+
+    mercadoriasnotacompra.seguro+
+    mercadoriasnotacompra.OUTDESPACESSOR+
+    MERCADORIASNOTACOMPRA.VALORIPI) TOTAL,
+   
+    sum(mercadoriasnotacompra.valoricms)  as valoricms,
+    sum(mercadoriasnotacompra.VLRPISPASEP) vlrPisPasep,
+    sum(mercadoriasnotacompra.VLRCOFINS) vlrCofins,
+    
+    sum(coalesce(MATERIALMOVIMENTOESTOQUE.valor,0)) as valorestoque,
+    'S' as devolucao
+       
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+inner join
+    naturezaoperacao on
+        naturezaoperacao.id=notacompra.OPERACAO and
+        naturezaoperacao.DEVOLUCAOFATURAMENTO='S'
+left join
+    modelodocto on
+        modelodocto.id=notacompra.modelo
+left join
+    movimentoestoque on
+        movimentoestoque.filial=notacompra.filial and
+        movimentoestoque.IDNOTACOMPRA=notacompra.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadoriasnotacompra.idmercadoria
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.12.2023' and '31.12.2023'
+group by    
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    notacompra.operacao,
+    mercadoriasnotacompra.cfop,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO,
+    TIPOITEMESTOQUE.DESCRICAO
+order by 
+    1,2,notacompra.modelo,
+    MODELODOCTO.MODELO,
+    mercadoriasnotacompra.cfop,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO    
+
+

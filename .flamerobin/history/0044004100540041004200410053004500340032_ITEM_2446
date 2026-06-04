@@ -1,0 +1,1 @@
+delete materialmovimentoestoque where MATERIALMOVIMENTOESTOQUE.quantidade is null

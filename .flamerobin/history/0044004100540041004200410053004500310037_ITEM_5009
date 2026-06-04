@@ -1,0 +1,1121 @@
+SET TERM ^ ;
+ALTER PROCEDURE SPEDFISCALEFD (
+    FILIAL integer )
+
+AS
+DECLARE VARIABLE AJUSTEE111 INTEGER;
+declare variable v_qtd0 integer;
+declare variable v_qtda integer;
+declare variable v_qtdc integer;
+declare variable v_qtdf integer;
+declare variable v_qtdd integer;
+declare variable v_qtdm integer;
+declare variable v_cnpjbase varchar(14);
+declare variable v_filialbasea integer;
+declare variable v_filialbasec integer; 
+declare variable sequencia0 integer;
+declare variable sequenciaa integer;
+declare variable sequenciaB integer;
+declare variable sequenciac integer;
+declare variable sequenciad integer;
+declare variable sequenciae integer;
+declare variable sequenciah integer;
+declare variable segmento char(4);
+declare variable ind_mov smallint;
+declare variable ind_mov_ST smallint;
+declare variable qtd_lin integer;
+declare variable ordem smallint;
+declare variable nivel smallint;
+declare variable cod_ver smallint;
+declare variable ind_sit_esp char(1);
+declare variable tipo_escrit smallint;
+declare variable num_rec_anterior varchar(41);
+declare variable dt_ini date;
+declare variable dt_fim date;
+declare variable nome varchar(100);
+declare variable nomefantasia varchar(100);
+declare variable cnpj varchar(14);
+declare variable ie varchar(20);
+declare variable im varchar(20);
+declare variable uf varchar(2);
+declare variable cod_mun integer;
+declare variable cod_pais integer;
+declare variable suframa varchar(9);
+declare variable cpf varchar(12);
+declare variable crc varchar(15);
+declare variable cep varchar(8);
+declare variable endereco varchar(60);
+declare variable num varchar(10);
+declare variable compl varchar(20);
+declare variable bairro varchar(30);
+declare variable fone varchar(10);
+declare variable fax varchar(10);
+declare variable email varchar(120);
+declare variable ind_nat_pj smallint;
+declare variable ind_ativ smallint;
+declare variable ind_perfil char(1);
+declare variable cod_inc_trib smallint;
+declare variable ind_apro_cre smallint;
+declare variable cod_tipo_cont smallint;
+declare variable rec_bru_ncum_trib_mi decimal(12,2);
+declare variable rec_bru_ncum_nt_mi decimal(12,2);
+declare variable rec_bru_cum decimal(12,2);
+declare variable rec_br_total decimal(12,2);
+declare variable rec_bru_ncum_exp decimal(12,2);
+declare variable cod_part integer;
+declare variable cod_item varchar(15);
+declare variable unid varchar(6);
+declare variable descr varchar(20);
+declare variable descr_item varchar(240);
+declare variable cod_barrra varchar(13);
+declare variable cod_ant_item varchar(60);
+declare variable unid_inv varchar(6);
+declare variable tipo_item smallint;
+declare variable cod_ncm varchar(15);
+declare variable exp_ipi varchar(3);
+declare variable cod_gen smallint;
+declare variable cod_lst smallint;
+declare variable aliq_icms decimal(12,2);
+declare variable cnpj_cpf_part varchar(14);
+declare variable ind_oper smallint;
+declare variable ind_emit smallint;
+declare variable cod_mod char(2);
+declare variable cod_sit smallint;
+declare variable ser varchar(3);
+declare variable num_doc varchar(10);
+declare variable chv_nfe varchar(44);
+declare variable dt_doc date;
+declare variable dt_e_s date;
+declare variable vl_doc decimal(12,2);
+declare variable ind_pgto char(1);
+declare variable vl_desc decimal(12,2);
+declare variable vl_abat_nt decimal(12,2);
+declare variable vl_merc decimal(12,2);
+declare variable ind_frt char(1);
+declare variable vl_frt decimal(12,2);
+declare variable vl_seg decimal(12,2);
+declare variable vl_out_da decimal(12,2);
+declare variable vl_pis_st decimal(12,2);
+declare variable vl_cofins_st decimal(12,2);
+declare variable vl_red_base decimal(12,2);
+declare variable cod_doc_imp char(1);
+declare variable num_doc_imp varchar(12);
+declare variable vl_pis_imp decimal(12,2);
+declare variable vl_cofins_imp decimal(12,2);
+declare variable num_acdr_aw varchar(20);
+declare variable num_item smallint;
+declare variable descr_compl varchar(50);
+declare variable qtd decimal(12,2);
+declare variable vl_item decimal(12,2);
+declare variable ind_mov_est char(1);
+declare variable cfop smallint;
+declare variable cst_icms varchar(4);
+declare variable cod_nat integer;
+declare variable vl_bc_icms decimal(12,2);
+declare variable vl_icms decimal(12,2);
+declare variable vl_bc_icms_st decimal(12,2);
+declare variable aliq_st decimal(12,2);
+declare variable vl_icms_st decimal(12,2);
+declare variable ind_apur char(1);
+declare variable cst_ipi char(2);
+declare variable cod_enq char(3);
+declare variable vl_bc_ipi decimal(12,2);
+declare variable aliq_ipi decimal(12,2);
+declare variable vl_ipi decimal(12,2);
+declare variable cst_pis smallint;
+declare variable vl_bc_pis decimal(12,2);
+declare variable aliq_pis decimal(8,2);
+declare variable quant_bc_pis decimal(12,2);
+declare variable aliq_pis_quant decimal(12,2);
+declare variable vl_pis decimal(12,2);
+declare variable cst_cofins smallint;
+declare variable vl_bc_cofins decimal(12,2);
+declare variable aliq_cofins decimal(8,2);
+declare variable vl_cofins decimal(12,2);
+declare variable dt_doc_ini date;
+declare variable dt_doc_fim date;
+declare variable vl_tot_item decimal(12,2);
+declare variable nat_bc_cred varchar(2);
+declare variable cod_cta varchar(60);
+declare variable v_idnota integer;
+declare variable v_filialprimeiravez smallint;
+declare variable v_ufestabelecimento varchar(2);
+declare variable vl_tot_cont_nc_dev decimal(12,2);
+declare variable vl_ret_nc decimal(12,2);
+declare variable vl_out_ded_nc decimal(12,2);
+declare variable vl_cont_nc_rec decimal(12,2);
+declare variable vl_tot_cont_cum_per decimal(12,2);
+declare variable vl_ret_cum decimal(12,2);
+declare variable vl_out_ded_cum decimal(12,2);
+declare variable vl_cont_cum_rec decimal(12,2);
+declare variable vl_tot_cont_rec decimal(12,2);
+declare variable vl_pis_ret double precision;
+declare variable vl_cofins_ret double precision;
+declare variable vl_iss double precision;
+declare variable vl_cred_ipi decimal(12,2);
+declare variable vl_deb_ipi decimal(12,2);
+declare variable vl_tot_debitos decimal(12,2);
+declare variable vl_tot_creditos decimal(12,2);
+declare variable vl_tot_debitos_c decimal(12,2);
+declare variable vl_tot_creditos_c decimal(12,2);
+declare variable vl_tot_debitos_d decimal(12,2);
+declare variable vl_tot_creditos_d decimal(12,2);
+declare variable vl_sld_apurado decimal(12,2);
+declare variable vl_icms_recolher decimal(12,2);
+declare variable vl_sld_credor_transportar decimal(12,2);
+declare variable vl_retencao_st decimal(12,2);
+declare variable vl_devol_st decimal(10,2);
+declare variable vl_sld_dev_ant_st decimal(12,2);
+declare variable vl_icms_recol_st decimal(12,2);
+declare variable vl_sld_cred_st_transportar decimal(12,2);
+declare variable origem char(2);
+declare variable vl_unit_h double precision;
+declare variable dt_inv date;
+declare variable cod_rec varchar(8);
+declare variable vl_fcp_uf_dest decimal(12,2);
+declare variable vl_icms_uf_dest decimal(12,2);
+declare variable vl_icms_uf_rem decimal(12,2);
+declare variable vl_fcp_uf_dest_cred decimal(12,2);
+declare variable vl_icms_uf_dest_cred decimal(12,2);
+declare variable vl_icms_uf_rem_cred decimal(12,2);
+declare variable ind_mov_difal smallint;
+declare variable vl_sld_cred_ant_difal decimal(12,2);
+declare variable vl_tot_debitos_difal decimal(12,2);
+declare variable vl_out_deb_difal decimal(12,2);
+declare variable vl_tot_deb_fcp decimal(12,2);
+declare variable vl_tot_creditos_difal decimal(12,2);
+declare variable vl_tot_cred_fcp decimal(12,2);
+declare variable vl_out_cred_difal decimal(12,2);
+declare variable vl_sld_dev_ant_difal decimal(12,2);
+declare variable vl_deducoes_difal decimal(12,2);
+declare variable vl_recol decimal(12,2);
+declare variable vl_sld_cred_transportar decimal(12,2);
+declare variable deb_esp_difal decimal(12,2);
+declare variable vl_out_cred_st decimal(12,2);
+declare variable sequenciak integer;
+declare variable cod_or char(3);
+declare variable vl_or decimal(12,2);
+declare variable dt_vcto date;
+declare variable num_proc varchar(15);
+declare variable ind_proc char(1);
+declare variable proc varchar(50);
+declare variable txt_compl varchar(50);
+declare variable mes_ref numeric(6,0);
+declare variable cod_aj_apur varchar(8);
+declare variable descr_compl_aj varchar(256);
+declare variable vl_aj_apur decimal(12,2);
+declare variable vl_sld_dev_ant_fcp decimal(12,2);
+declare variable v_devolucao char(1);
+declare variable vl_aj_debitos decimal(12,2);
+declare variable vl_aj_creditos decimal(12,2);
+declare variable vl_aj_debitos_c decimal(12,2);
+declare variable vl_aj_creditos_c decimal(12,2);
+declare variable vl_aj_debitos_d decimal(12,2);
+declare variable  VL_AJ_DEBITOS_c500 decimal(12,2);
+declare variable  VL_TOT_CREDITOS_c500 decimal(12,2);
+declare variable  VL_TOT_DEBITOS_c500 decimal(12,2);
+declare variable  VL_AJ_DEBITOS_D500 decimal(12,2);
+declare variable  VL_TOT_CREDITOS_D500 decimal(12,2);
+declare variable  VL_TOT_DEBITOS_D500 decimal(12,2);
+declare variable P_DIFAL VARCHAR (1);
+declare variable P_TESTEDIFAL VARCHAR (4);
+declare variable vl_aj_creditos_st decimal(12,2); 
+declare variable vl_aj_debitos_st decimal(12,2);
+declare variable ITEMCODREFNFE char(1);
+declare variable codigoC110 CHAR (6);
+declare variable descricaoC110 CHAR (60);
+declare variable UF_ST VARCHAR (2);
+declare variable ie_st VARCHAR (14);
+
+begin
+
+
+P_DIFAL='N';
+
+select
+      CONFIGURACOESGERAIS.ITEMCODREFNFE
+from
+    CONFIGURACOESGERAIS
+into
+    :ITEMCODREFNFE;
+
+  execute procedure spedFiscalDelete;
+
+  V_QTD0 = 0;
+  select SPEDFISCAL.ESTABELECIMENTO, SPEDFISCAL.COD_VER, SPEDFISCAL.TIPO_ESCRIT, SPEDFISCAL.IND_SIT_ESP,
+         SPEDFISCAL.NUM_REC_ANTERIOR, SPEDFISCAL.DT_INI, SPEDFISCAL.DT_FIM, SPEDFISCAL.IND_NAT_PJ, SPEDFISCAL.IND_ATIV,
+         SPEDFISCAL.COD_INC_TRIB, SPEDFISCAL.IND_APRO_CRE, SPEDFISCAL.COD_TIPO_CONT, SPEDFISCAL.REC_BRU_NCUM_TRIB_MI,
+         SPEDFISCAL.REC_BRU_NCUM_NT_MI, SPEDFISCAL.REC_BRU_CUM, SPEDFISCAL.REC_BR_TOTAL, SPEDFISCAL.REC_BRU_NCUM_EXP,
+         SPEDFISCAL.IND_PERFIL, CADASTROPARCEIROS.DOCUMENTO, CADASTROPARCEIROS.RAZAOSOCIAL, CADASTROPARCEIROS.UF,
+         MUNICIPIO.UF || MUNICIPIO.MUNICIPIO, CLIENTES.INSCSUFRAMA, CADASTROPARCEIROS.NOME,
+         substring ( CADASTROPARCEIROS.LOGRADOURO from 1 for 60), CADASTROPARCEIROS.NUMERO, SUBSTRING (CADASTROPARCEIROS.COMPLEMENTO from 1 for 20),
+         substring (CADASTROPARCEIROS.BAIRRO from 1 for 30), CADASTROPARCEIROS.UF, CADASTROPARCEIROS.CEP, CADASTROPARCEIROS.DOCUMENTO, CADASTROPARCEIROS.INSCESTADUAL
+  from SPEDFISCAL
+  inner join CADASTROPARCEIROS on (CADASTROPARCEIROS.CADASTRO = SPEDFISCAL.ESTABELECIMENTO)
+  left join MUNICIPIO on (CADASTROPARCEIROS.UF = MUNICIPIO.UF_SIGLA and
+        upper(CADASTROPARCEIROS.CIDADE) = upper(MUNICIPIO.MUNICIPIO_NOME))
+  left join CLIENTES on (CADASTROPARCEIROS.CADASTRO = CLIENTES.CADASTRO)
+  where SPEDFISCAL.ESTABELECIMENTO = :FILIAL
+  into V_FILIALBASEA, COD_VER, TIPO_ESCRIT, IND_SIT_ESP, NUM_REC_ANTERIOR, DT_INI, DT_FIM, IND_NAT_PJ, IND_ATIV,
+       COD_INC_TRIB, IND_APRO_CRE, COD_TIPO_CONT, REC_BRU_NCUM_TRIB_MI, REC_BRU_NCUM_NT_MI, REC_BRU_CUM, REC_BR_TOTAL,
+       REC_BRU_NCUM_EXP, IND_PERFIL, V_CNPJBASE, NOME, UF, COD_MUN, SUFRAMA, :NOMEFANTASIA, :ENDERECO, :NUM, :COMPL,
+       :BAIRRO, :UF, :CEP, :CNPJ, :IE;
+
+  COD_VER = '019';
+  V_FILIALBASEC = V_FILIALBASEA;
+  CNPJ = V_CNPJBASE;
+
+  SEQUENCIA0 = 1;
+  SEQUENCIAA = 1;
+  SEQUENCIAB = 1;  
+  SEQUENCIAD = 1;
+  SEQUENCIAE = 1;
+  SEQUENCIAC = 1;
+  SEQUENCIAH = 1;
+
+  insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_VER, TIPO_ESCRIT, IND_SIT_ESP, NUM_REC_ANTERIOR,
+                            DT_INI, DT_FIM, NOME, CNPJ, IE, UF, COD_MUN, SUFRAMA, IND_NAT_PJ, IND_ATIV, IND_PERFIL)
+  values (:SEQUENCIA0, '0000', 1, 0, :COD_VER, :TIPO_ESCRIT, :IND_SIT_ESP, :NUM_REC_ANTERIOR, :DT_INI, :DT_FIM, :NOME,
+          :CNPJ, :IE, :UF, :COD_MUN, :SUFRAMA, :IND_NAT_PJ, :IND_ATIV, :IND_PERFIL);
+
+  V_QTD0 = V_QTD0 + 1;
+  SEQUENCIA0 = SEQUENCIA0 + 1;
+
+  insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (:SEQUENCIA0, '0001', 2, 1, 0);
+
+  if (:IND_ATIV=0) then begin
+  V_QTD0 = V_QTD0 + 1;
+  SEQUENCIA0 = SEQUENCIA0 + 1;
+  insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, CLAS_ESTAB_IND)
+  values (:SEQUENCIA0, '0002', :SEQUENCIA0, 1, '05');
+  end
+
+  NOME = '';
+
+  V_QTD0 = V_QTD0 + 1;
+  SEQUENCIA0 = SEQUENCIA0 + 1;
+
+  insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, ENDERECO, NUM, COMPL, CEP, FONE, FAX, BAIRRO, NOME)
+  values (:SEQUENCIA0, '0005', :SEQUENCIA0, 2, :ENDERECO, :NUM, :COMPL, :CEP, :FONE, :FAX, :BAIRRO, :NOMEFANTASIA);
+  
+  for select distinct 
+        notafiscal.uf,
+        notafiscal.INSCRICAOSUBSTITUTO
+    from
+        notafiscal
+   
+    inner join CADASTROPARCEIROS on 
+        (notafiscal.filial=CADASTROPARCEIROS.cadastro)
+            
+    where 
+        notafiscal.filial = :filial and 
+        notafiscal.DATAEMISSAO between :DT_INI and :DT_FIM and 
+        coalesce (notafiscal.INSCRICAOSUBSTITUTO,'') <>'' and 
+        notafiscal.uf <> :uf
+    into :UF_ST, IE_ST
+     do begin 
+        SEQUENCIA0 = SEQUENCIA0 +1;
+        insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL,UF_ST, IE_ST )
+        values (:SEQUENCIA0, '0015', :SEQUENCIA0, 1, :UF_ST, :IE_ST);   
+     end
+  
+  
+
+  select ESTABELECIMENTO.NOMECONTADOR, ESTABELECIMENTO.CPFCONTADOR, ESTABELECIMENTO.CNPJCONTADOR,
+         ESTABELECIMENTO.LOGRADOUROCONTADOR, ESTABELECIMENTO.NUMEROCONTADOR, ESTABELECIMENTO.COMPLEMENTOCONTADOR,
+         ESTABELECIMENTO.BAIRROCONTADOR, ESTABELECIMENTO.CEPCONTADOR, MUNICIPIO.UF || MUNICIPIO.MUNICIPIO,
+         ESTABELECIMENTO.CRC, ESTABELECIMENTO.EMAILCONTADOR
+  from ESTABELECIMENTO
+  inner join MUNICIPIO on (MUNICIPIO.UF_SIGLA = ESTABELECIMENTO.UFCONTADOR and
+        upper(MUNICIPIO.MUNICIPIO_NOME) = upper(ESTABELECIMENTO.CIDADECONTADOR))
+  where ESTABELECIMENTO.CADASTRO = :FILIAL
+  into NOME, CPF, CNPJ, ENDERECO, NUM, COMPL, BAIRRO, CEP, COD_MUN, CRC, EMAIL;
+
+
+  if (coalesce(NOME, '') <> '') then
+  begin
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+    V_QTD0 = V_QTD0 + 1;
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, NOME, CPF, CNPJ, ENDERECO, NUM, COMPL, BAIRRO, CEP,
+                              COD_MUN, CRC, EMAIL)
+    values (:SEQUENCIA0, '0100', :SEQUENCIA0, 2, :NOME, :CPF, :CNPJ, :ENDERECO, :NUM, :COMPL, :BAIRRO, :CEP, :COD_MUN, :CRC, :EMAIL);
+  end
+
+  V_UFESTABELECIMENTO = UF;
+  VL_TOT_DEBITOS = 0;
+  VL_TOT_CREDITOS = 0;
+  vl_aj_debitos = 0;
+
+
+  select SPEDFISCALEFD1.VL_AJ_DEBITOS,SPEDFISCALEFD1.VL_AJ_CREDITOS,SPEDFISCALEFD1.VL_TOT_CREDITOS,
+         SPEDFISCALEFD1.VL_TOT_DEBITOS, SPEDFISCALEFD1.SEQUENCIAC
+  from  SPEDFISCALEFD1 (:FILIAL,  :DT_INI, :dt_fim)
+  into :VL_AJ_DEBITOS_c, VL_AJ_CREDITOS_c, VL_TOT_CREDITOS_c, VL_TOT_DEBITOS_c, SEQUENCIAC;
+
+
+  select SPEDFISCALEFD_C500.VL_AJ_DEBITOS,SPEDFISCALEFD_C500.VL_TOT_CREDITOS,
+  SPEDFISCALEFD_C500.VL_TOT_DEBITOS, SPEDFISCALEFD_C500.SEQUENCIAC
+  from  SPEDFISCALEFD_C500 (:FILIAL,  :DT_INI, :dt_fim, :SEQUENCIAC)
+  into :VL_AJ_DEBITOS_c500, VL_TOT_CREDITOS_c500, VL_TOT_DEBITOS_c500, SEQUENCIAC;
+
+  insert into SPEDFISCAL_C (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (1, 'C001', 0, 1, case :SEQUENCIAC when 1 then 1 else 0 end);
+
+  select SPEDFISCALEFD2.VL_AJ_DEBITOS,SPEDFISCALEFD2.VL_TOT_CREDITOS, SPEDFISCALEFD2.VL_TOT_DEBITOS,
+         SPEDFISCALEFD2.SEQUENCIAd from  SPEDFISCALEFD2(:FILIAL,  :DT_INI, :dt_fim)
+  into :VL_AJ_DEBITOS_d, VL_TOT_CREDITOS_d, VL_TOT_DEBITOS_d, SEQUENCIAD;
+
+
+   select SPEDFISCALEFD_D500.VL_AJ_DEBITOS,SPEDFISCALEFD_D500.VL_TOT_CREDITOS, SPEDFISCALEFD_D500.VL_TOT_DEBITOS,
+         SPEDFISCALEFD_D500.SEQUENCIAd from  SPEDFISCALEFD_D500(:FILIAL,  :DT_INI, :dt_fim, :sequenciad)
+  into :VL_AJ_DEBITOS_d500, VL_TOT_CREDITOS_d500, VL_TOT_DEBITOS_d500, SEQUENCIAD;
+
+
+  insert into SPEDFISCAL_D (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (1, 'D001', 0, 1, case :SEQUENCIAd when 1 then 1 else 0 end);
+
+  VL_AJ_DEBITOS = VL_AJ_DEBITOS_c + VL_AJ_DEBITOS_c500 + VL_AJ_DEBITOS_d + VL_AJ_DEBITOS_d500 ;
+  VL_AJ_creditos = VL_AJ_creditos_c;
+  VL_TOT_CREDITOS =coalesce ( VL_TOT_CREDITOS_c,0) + coalesce (VL_TOT_CREDITOS_c500,0) + coalesce (VL_TOT_CREDITOS_d,0) +coalesce (VL_TOT_CREDITOS_d500,0);
+  VL_TOT_DEBITOS = VL_TOT_DEBITOS_c + VL_TOT_CREDITOS_c500 + VL_TOT_DEBITOS_d+ VL_TOT_DEBITOS_d500;
+
+  for select distinct SPEDFISCAL_C.COD_PART,
+                      case
+                        when coalesce(CADASTROPARCEIROS.CODIGOPAIS, '') = '' then 1058
+                        else CADASTROPARCEIROS.CODIGOPAIS
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'F' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then case upper(CADASTROPARCEIROS.INSCESTADUAL)
+                                        when 'ISENTA' then ''
+                                        when 'ISENTO' then ''
+                                        else CADASTROPARCEIROS.INSCESTADUAL
+                                      end
+                        else ''
+                      end,
+                      MUNICIPIO.UF || MUNICIPIO.MUNICIPIO, CLIENTES.INSCSUFRAMA, CADASTROPARCEIROS.RAZAOSOCIAL,
+                      substring ( CADASTROPARCEIROS.LOGRADOURO from 1 for 60), CADASTROPARCEIROS.NUMERO,
+                      SUBSTRING ( CADASTROPARCEIROS.COMPLEMENTO from 1 for 20),
+                      substring ( CADASTROPARCEIROS.BAIRRO from 1 for 30)
+      from SPEDFISCAL_C
+      inner join CADASTROPARCEIROS on (SPEDFISCAL_C.COD_PART = CADASTROPARCEIROS.CADASTRO)
+      left join MUNICIPIO on (CADASTROPARCEIROS.UF = MUNICIPIO.UF_SIGLA and
+            upper(CADASTROPARCEIROS.CIDADE) = upper(MUNICIPIO.MUNICIPIO_NOME))
+      left join CLIENTES on (CADASTROPARCEIROS.CADASTRO = CLIENTES.CADASTRO)
+      where SPEDFISCAL_C.SEGMENTO in ( 'C100', 'C500') and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0150' and
+                             SPEDFISCAL_0.COD_PART = CADASTROPARCEIROS.CADASTRO)
+      into :COD_PART, COD_PAIS, CNPJ, CPF, IE, COD_MUN, SUFRAMA, NOME, ENDERECO, NUM, COMPL, BAIRRO
+  do
+  begin
+    if (COD_PAIS <> '1058') then
+      COD_MUN = '9999999';
+
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_PART, NOME, COD_PAIS, CNPJ, CPF, IE, COD_MUN,
+                              SUFRAMA, ENDERECO, NUM, COMPL, BAIRRO)
+    values (:SEQUENCIA0, '0150', 0, 2, :COD_PART, :NOME, :COD_PAIS, :CNPJ, :CPF, :IE, :COD_MUN, :SUFRAMA, :ENDERECO,
+            :NUM, :COMPL, :BAIRRO);
+  end
+
+
+  for select distinct spedfiscal_d.COD_PART,
+                      case
+                        when coalesce(CADASTROPARCEIROS.CODIGOPAIS, '') = '' then 1058
+                        else CADASTROPARCEIROS.CODIGOPAIS
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'F' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then case upper(CADASTROPARCEIROS.INSCESTADUAL)
+                                        when 'ISENTA' then ''
+                                        when 'ISENTO' then ''
+                                        else CADASTROPARCEIROS.INSCESTADUAL
+                                      end
+                        else ''
+                      end,
+                      MUNICIPIO.UF || MUNICIPIO.MUNICIPIO, CLIENTES.INSCSUFRAMA, CADASTROPARCEIROS.RAZAOSOCIAL,
+                      substring ( CADASTROPARCEIROS.LOGRADOURO from 1 for 60), CADASTROPARCEIROS.NUMERO,
+                      SUBSTRING ( CADASTROPARCEIROS.COMPLEMENTO from 1 for 20),
+                      substring ( CADASTROPARCEIROS.BAIRRO from 1 for 30)
+      from spedfiscal_d
+      inner join CADASTROPARCEIROS on (spedfiscal_d.COD_PART = CADASTROPARCEIROS.CADASTRO)
+      left join MUNICIPIO on (CADASTROPARCEIROS.UF = MUNICIPIO.UF_SIGLA and
+            upper(CADASTROPARCEIROS.CIDADE) = upper(MUNICIPIO.MUNICIPIO_NOME))
+      left join CLIENTES on (CADASTROPARCEIROS.CADASTRO = CLIENTES.CADASTRO)
+      where spedfiscal_d.SEGMENTO = 'D100' and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0150' and
+                             SPEDFISCAL_0.COD_PART = CADASTROPARCEIROS.CADASTRO)
+      into :COD_PART, COD_PAIS, CNPJ, CPF, IE, COD_MUN, SUFRAMA, NOME, ENDERECO, NUM, COMPL, BAIRRO
+  do
+  begin
+    if (COD_PAIS <> '1058') then
+      COD_MUN = '9999999';
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_PART, NOME, COD_PAIS, CNPJ, CPF, IE, COD_MUN,
+                              SUFRAMA, ENDERECO, NUM, COMPL, BAIRRO)
+    values (:SEQUENCIA0, '0150', 0, 2, :COD_PART, :NOME, :COD_PAIS, :CNPJ, :CPF, :IE, :COD_MUN, :SUFRAMA, :ENDERECO,
+            :NUM, :COMPL, :BAIRRO);
+  end
+
+  SEQUENCIAH = 1;
+  VL_TOT_ITEM = 0;
+
+  DT_INV = :DT_FIM;
+  
+  if (extract(month from :DT_FIM) = 2) then
+  begin
+    DT_INV = '31.' || '12.' ||(extract(year from :DT_FIM) - 1);
+  
+    update ESTSIN
+    set ESTABELECIMENTO = :FILIAL,
+      DATAINICIAL = :DT_INV, 
+      DATAFINAL = :DT_INV,   
+      MATERIALINICIAL = '',
+      MATERIALFINAL = 'zzzzzzzz'
+    where RELATORIO = 'SALDOANTERIORESTOQUE';
+  
+    SEQUENCIAH = SEQUENCIAH + 1; 
+
+    for select distinct ITEMESTOQUE.CODIGO, ITEMESTOQUE.UNIDADE, SALDOINICIALESTOQUE.VALORANTERIOR,
+                      SALDOINICIALESTOQUE.SALDOANTERIOR,
+                      (SALDOINICIALESTOQUE.VALORANTERIOR / SALDOINICIALESTOQUE.SALDOANTERIOR)
+      FROM SALDOINICIALESTOQUE
+      INNER JOIN ITEMESTOQUE ON (SALDOINICIALESTOQUE.IDITEM=ITEMESTOQUE.CODIGO)
+      inner join ESTSIN on (ESTSIN.RELATORIO = 'SALDOANTERIORESTOQUE' and
+            ESTSIN.ESTABELECIMENTO = :FILIAL and
+
+            (ITEMESTOQUE.CODIGO between ESTSIN.MATERIALINICIAL and ESTSIN.MATERIALFINAL))
+      INNER JOIN TRIBUTACAOICMSUF ON (TRIBUTACAOICMSUF.ID=ITEMESTOQUE.TRIBUTACAOICMS AND
+                                TRIBUTACAOICMSUF.UF=:v_ufestabelecimento)
+      LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=ITEMESTOQUE.CLASSIFISCAL)
+      WHERE (ITEMESTOQUE.TIPOPRODUTO in ('1' , '3', '4') and (SALDOINICIALESTOQUE.SALDOANTERIOR > 0.0009) and (SALDOINICIALESTOQUE.valoranterior > 0))
+      into :COD_ITEM, :UNID, :VL_ITEM, :QTD, :VL_UNIT_H
+    do
+    begin
+        VL_TOT_ITEM = VL_TOT_ITEM + VL_ITEM; --ok
+
+      SEQUENCIAH = SEQUENCIAH + 1;
+      insert into SPEDFISCAL_H (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_ITEM, UNID, QTD, VL_UNIT, VL_ITEM, IND_PROP)
+      values (:SEQUENCIAH, 'H010', 3, 3, :COD_ITEM, :UNID, :QTD, :VL_UNIT_H, :VL_ITEM, 0);
+     end
+
+    insert into SPEDFISCAL_H (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, DT_INV, VL_INV, MOT_INV)
+    values (2, 'H005', 0, 2, :DT_INV, :VL_TOT_ITEM, '01');
+  end
+
+  insert into SPEDFISCAL_H (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (1, 'H001', 0, 1, CASE :SEQUENCIAH WHEN 1 THEN 1 ELSE 0 END);
+
+  SEQUENCIAH = SEQUENCIAH + 1;
+  insert into SPEDFISCAL_H (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+  values (:SEQUENCIAH, 'H990', 0, 1, :SEQUENCIAH);
+
+  --ok
+     DT_INV = :DT_FIM;
+      update ESTSIN
+    set ESTABELECIMENTO = :FILIAL,
+      DATAINICIAL = :DT_INV, --:dt_fim,
+      DATAFINAL = :DT_INV, --:dt_fim,
+      MATERIALINICIAL = '',
+      MATERIALFINAL = 'zzzzzzzz'
+    where RELATORIO = 'SALDOANTERIORESTOQUE';
+
+    SEQUENCIAK = 1;
+
+      insert into SPEDFISCAL_K (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+        values (1, 'K001', 0, 1, 0);
+  
+  SEQUENCIAK = SEQUENCIAK +1;
+  
+  
+    insert into SPEDFISCAL_K (SEQUENCIA, SEGMENTO, ORDEM, NIVEL)
+        values (1, 'K010', 0, 2 );
+  
+  SEQUENCIAK = SEQUENCIAK +1;
+
+     insert into SPEDFISCAL_K (SEQUENCIA, SEGMENTO, dt_INI, dt_fin, IND_MOV, QTD_LIN)
+        values (:SEQUENCIAK, 'K100', :DT_INI, :DT_FIM, '0', :SEQUENCIAK);
+  
+
+    for select distinct ITEMESTOQUE.CODIGO,
+                        SALDOINICIALESTOQUE.SALDOANTERIOR
+
+      FROM SALDOINICIALESTOQUE
+      INNER JOIN ITEMESTOQUE ON (SALDOINICIALESTOQUE.IDITEM=ITEMESTOQUE.CODIGO)
+      inner join ESTSIN on (ESTSIN.RELATORIO = 'SALDOANTERIORESTOQUE' and
+            ESTSIN.ESTABELECIMENTO = :FILIAL and
+            (ITEMESTOQUE.CODIGO between ESTSIN.MATERIALINICIAL and ESTSIN.MATERIALFINAL))
+      INNER JOIN TRIBUTACAOICMSUF ON (TRIBUTACAOICMSUF.ID=ITEMESTOQUE.TRIBUTACAOICMS AND
+                                TRIBUTACAOICMSUF.UF=:v_ufestabelecimento)
+      LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=ITEMESTOQUE.CLASSIFISCAL)
+      WHERE (ITEMESTOQUE.TIPOPRODUTO in ('1' , '3', '4') and (SALDOINICIALESTOQUE.SALDOANTERIOR > 0.0009) and (SALDOINICIALESTOQUE.valoranterior > 0))
+      into :COD_ITEM, :QTD
+    do
+    begin
+
+      SEQUENCIAK = SEQUENCIAK + 1;
+
+      insert into
+             SPEDFISCAL_K
+             (SEQUENCIA, SEGMENTO, IND_MOV, QTD_LIN, REG, DT_EST, COD_ITEM, QTD, IND_EST, COD_PART)
+      values
+             (:SEQUENCIAK, 'K200', '0', :SEQUENCIAK, 'K200', :DT_INV, :COD_ITEM, :QTD, 0 , ' ' );
+
+    end
+    SEQUENCIAK = SEQUENCIAK +1;
+---
+
+  for select distinct ITEMESTOQUE.CODIGO, 
+                      --cast(ITEMESTOQUE.DESCRICAO as varchar(240)), 
+                      case (coalesce (itemestoque.referencia,'') )
+                      when '' then cast(ITEMESTOQUE.DESCRICAO as varchar(240)) else 
+                      coalesce (ITEMESTOQUE.referencia,'') ||' - '||cast(ITEMESTOQUE.DESCRICAO as varchar(240)) end ,
+                      ITEMESTOQUE.CODIGOBARRA,
+                      ITEMESTOQUE.UNIDADE, cast(
+                      case ITEMESTOQUE.TIPOPRODUTO
+                        when 1 then case ITEMESTOQUE.EMBALAGEM
+                                      when 'S' then 2
+                                      else 1
+                                    end
+                        when 2 then 7
+                        when 3 then 0
+                        when 4 then case ITEMESTOQUE.SEMIACABADO
+                                      when 'S' then 3
+                                      else 4
+                                    end
+                        else 99
+                      end as smallint),
+                                            --CLASSIFICACAOFISCAL.DESCRICAO, 
+                      case ITEMESTOQUE.TIPOPRODUTO 
+                      when 2 then '' else
+                      CLASSIFICACAOFISCAL.DESCRICAO end, CLASSIFICACAOFISCAL.EXTIP, CLASSIFICACAOFISCAL.GENERO,
+                      TRIBUTACAOICMSUF.ALIQUOTA
+      from SPEDFISCAL_C
+      inner join ITEMESTOQUE on (SPEDFISCAL_C.COD_ITEM = ITEMESTOQUE.CODIGO)
+      left join TRIBUTACAOICMSUF on (TRIBUTACAOICMSUF.ID = ITEMESTOQUE.TRIBUTACAOICMS and
+            TRIBUTACAOICMSUF.UF = :V_UFESTABELECIMENTO)
+      left join CLASSIFICACAOFISCAL on (CLASSIFICACAOFISCAL.CFISCAL = ITEMESTOQUE.CLASSIFISCAL)
+      where SPEDFISCAL_C.SEGMENTO = 'C170' and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0200' and
+                             SPEDFISCAL_0.COD_ITEM = ITEMESTOQUE.CODIGO)
+
+
+      union
+      select distinct ITEMESTOQUE.CODIGO, 
+                      -- cast(ITEMESTOQUE.DESCRICAO as varchar(240)),
+                      case (coalesce (itemestoque.referencia,'') )
+                      when '' then cast(ITEMESTOQUE.DESCRICAO as varchar(240)) else 
+                      coalesce (ITEMESTOQUE.referencia,'') ||' - '||cast(ITEMESTOQUE.DESCRICAO as varchar(240)) end ,
+                      ITEMESTOQUE.CODIGOBARRA,
+                      ITEMESTOQUE.UNIDADE, cast(
+                      case ITEMESTOQUE.TIPOPRODUTO
+                        when 1 then case ITEMESTOQUE.EMBALAGEM
+                                      when 'S' then 2
+                                      else 1
+                                    end
+                        when 2 then 7
+                        when 3 then 0
+                        when 4 then case ITEMESTOQUE.SEMIACABADO
+                                      when 'S' then 3
+                                      else 4
+                                    end
+                        else 99
+                      end as smallint),
+                      --CLASSIFICACAOFISCAL.DESCRICAO, 
+                      case ITEMESTOQUE.TIPOPRODUTO 
+                      when 2 then '' else
+                      CLASSIFICACAOFISCAL.DESCRICAO end, CLASSIFICACAOFISCAL.EXTIP, CLASSIFICACAOFISCAL.GENERO,
+                      TRIBUTACAOICMSUF.ALIQUOTA
+      from SPEDFISCAL_H SPEDFISCAL_C
+      inner join ITEMESTOQUE on (SPEDFISCAL_C.COD_ITEM = ITEMESTOQUE.CODIGO)
+      left join TRIBUTACAOICMSUF on (TRIBUTACAOICMSUF.ID = ITEMESTOQUE.TRIBUTACAOICMS and
+            TRIBUTACAOICMSUF.UF = :V_UFESTABELECIMENTO)
+      left join CLASSIFICACAOFISCAL on (CLASSIFICACAOFISCAL.CFISCAL = ITEMESTOQUE.CLASSIFISCAL)
+      where SPEDFISCAL_C.SEGMENTO = 'H010' and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0200' and
+                             SPEDFISCAL_0.COD_ITEM = ITEMESTOQUE.CODIGO)
+
+  union
+      select distinct ITEMESTOQUE.CODIGO,
+                      case (coalesce (itemestoque.referencia,'') )
+                      when '' then cast(ITEMESTOQUE.DESCRICAO as varchar(240)) else 
+                      coalesce (ITEMESTOQUE.referencia,'') ||' - '||cast(ITEMESTOQUE.DESCRICAO as varchar(240)) end  ,    
+                      ITEMESTOQUE.CODIGOBARRA,
+                      ITEMESTOQUE.UNIDADE, cast(
+                      case ITEMESTOQUE.TIPOPRODUTO
+                        when 1 then case ITEMESTOQUE.EMBALAGEM
+                                      when 'S' then 2
+                                      else 1
+                                    end
+                        when 2 then 7
+                        when 3 then 0
+                        when 4 then case ITEMESTOQUE.SEMIACABADO
+                                      when 'S' then 3
+                                      else 4
+                                    end
+                        else 99
+                      end as smallint),
+                      --CLASSIFICACAOFISCAL.DESCRICAO, 
+                      case ITEMESTOQUE.TIPOPRODUTO 
+                      when 2 then '' else
+                      CLASSIFICACAOFISCAL.DESCRICAO end, 
+                      
+                      CLASSIFICACAOFISCAL.EXTIP, CLASSIFICACAOFISCAL.GENERO,
+                      TRIBUTACAOICMSUF.ALIQUOTA
+      from  SPEDFISCAL_K
+      inner join ITEMESTOQUE on (SPEDFISCAL_K.COD_ITEM = ITEMESTOQUE.CODIGO)
+      left join TRIBUTACAOICMSUF on (TRIBUTACAOICMSUF.ID = ITEMESTOQUE.TRIBUTACAOICMS and
+            TRIBUTACAOICMSUF.UF = :V_UFESTABELECIMENTO)
+      left join CLASSIFICACAOFISCAL on (CLASSIFICACAOFISCAL.CFISCAL = ITEMESTOQUE.CLASSIFISCAL)
+      where SPEDFISCAL_K.SEGMENTO = 'K200' and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0200' and
+                             SPEDFISCAL_0.COD_ITEM = ITEMESTOQUE.CODIGO)
+      into COD_ITEM, DESCR_ITEM, COD_BARRRA, UNID_INV, TIPO_ITEM, COD_NCM, EXP_IPI, COD_GEN, ALIQ_ICMS
+  do
+  begin
+    if (COD_BARRRA = COD_ITEM) then
+      COD_BARRRA = '';
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_ITEM, DESCR_ITEM, COD_BARRRA, UNID_INV, TIPO_ITEM,
+                              COD_NCM, EXP_IPI, COD_GEN, ALIQ_ICMS)
+    values (:SEQUENCIA0, '0200', 0, 2, :COD_ITEM, :DESCR_ITEM, :COD_BARRRA, :UNID_INV, :TIPO_ITEM, :COD_NCM, :EXP_IPI,
+            :COD_GEN, :ALIQ_ICMS);
+  end
+
+  for select distinct SPEDFISCAL_0.UNID_inv, UNIDADE.DESCRICAOUNIDADE
+      from SPEDFISCAL_0
+      inner join UNIDADE on (SPEDFISCAL_0.UNID_inv = UNIDADE.UNIDADE)
+      where SPEDFISCAL_0.SEGMENTO = '0200'
+      
+      into UNID, DESCR
+  do
+  begin
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, UNID, DESCR)
+    values (:SEQUENCIA0, '0190', 0, 2, :UNID, :DESCR);
+  end
+---
+  for select distinct SPEDFISCAL_C.COD_NAT, substring(NATUREZAOPERACAO.DESCRICAO from 1 for 20)
+      from SPEDFISCAL_C
+      left join NATUREZAOPERACAO on (SPEDFISCAL_C.COD_NAT = NATUREZAOPERACAO.ID)
+      where SPEDFISCAL_C.SEGMENTO = 'C170'
+      into :COD_NAT, :DESCR
+  do
+  begin
+    SEQUENCIA0 = SEQUENCIA0 + 1;
+    insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_NAT, DESCR)
+    values (:SEQUENCIA0, '0400', 0, 2, :COD_NAT, :DESCR);
+  end
+
+  FOR SELECT DISTINCT 
+        SPEDFISCAL_C.CODIGOC110 
+     FROM 
+        SPEDFISCAL_C
+    where SPEDFISCAL_C.SEGMENTO = 'C110'
+     
+     INTO :CODIGOC110 DO BEGIN
+        IF(CODIGOC110 IS NOT NULL) THEN BEGIN
+           SEQUENCIA0 = SEQUENCIA0 + 1;
+           insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, codigo450, descricao450)
+           values (:SEQUENCIA0, '0450', 0, 2, :CODIGOC110, 'DEVOLUCAO DE NOTA FISCAL DE VENDA' );
+        END
+  END
+
+   --if (SEQUENCIAD = 1) then
+   SEQUENCIAD = SEQUENCIAD + 1;
+  insert into SPEDFISCAL_D (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+  values (:SEQUENCIAD, 'D990', 0, 1, :SEQUENCIAD);
+  
+  insert into SPEDFISCAL_B (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (1, 'B001', 0, 1, case :SEQUENCIAB when 1 then 1 else 0 end);
+  SEQUENCIAB = SEQUENCIAB + 1;
+
+  insert into SPEDFISCAL_B (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+  values (:SEQUENCIAB, 'B990', 0, 1, :SEQUENCIAB);
+
+  SEQUENCIAC = SEQUENCIAC + 1;
+  insert into SPEDFISCAL_C (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+  values (:SEQUENCIAC, 'C990', 0, 1, :SEQUENCIAC);
+
+ SEQUENCIAE = 1;
+  insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV)
+  values (:SEQUENCIAE, 'E001', 0, 1, 0);
+
+  SEQUENCIAE = SEQUENCIAE + 1;
+  insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, DT_INI, DT_FIM)
+  values (:SEQUENCIAE, 'E100', 1, 2, 0, :DT_INI, :DT_FIM);
+
+  VL_SLD_APURADO = 0;
+  VL_SLD_CREDOR_TRANSPORTAR = 0;
+  if ((coalesce ( VL_TOT_DEBITOS,0) + coalesce (vl_aj_debitos,0)) > (coalesce (VL_TOT_CREDITOS,0)+coalesce (vl_aj_CREDITOS,0))) then
+    VL_SLD_APURADO = (coalesce (VL_TOT_DEBITOS,0) + coalesce (vl_aj_debitos,0)) - (coalesce (VL_TOT_CREDITOS,0)+coalesce (vl_aj_CREDITOS,0));
+  else
+    VL_SLD_CREDOR_TRANSPORTAR = (coalesce (VL_TOT_CREDITOS,0)+coalesce (vl_aj_CREDITOS,0)) - (coalesce (VL_TOT_DEBITOS,0)+coalesce (vl_aj_debitos,0));
+  
+  VL_ICMS_RECOLHER = VL_SLD_APURADO;
+
+
+  SEQUENCIAE = SEQUENCIAE + 1;
+  
+  insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, VL_TOT_DEBITOS, VL_TOT_CREDITOS, VL_SLD_APURADO,
+                            VL_ICMS_RECOLHER, VL_SLD_CREDOR_TRANSPORTAR, VL_AJ_DEBITOS, VL_AJ_CREDITOS)
+  values (:SEQUENCIAE, 'E110', 2, 3, 0, :VL_TOT_DEBITOS, :VL_TOT_CREDITOS, :VL_SLD_APURADO, :VL_ICMS_RECOLHER,
+          :VL_SLD_CREDOR_TRANSPORTAR, :VL_AJ_DEBITOS, :VL_AJ_CREDITOS);
+  
+  SEQUENCIAE = SEQUENCIAE + 1;   
+ 
+  if (VL_ICMS_RECOLHER > 0) then
+  begin
+    SEQUENCIAE = SEQUENCIAE + 1;    
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, VL_ICMS_RECOLHER, DT_INI, REF)
+    values (:SEQUENCIAE, 'E116', 4, 5, 0, :VL_ICMS_RECOLHER, :DT_FIM,
+            extract(month from :DT_FIM) || extract(year from :DT_FIM));
+  end
+
+  for select SPEDAPURACAO.UF, 
+             sum(
+             case
+               when SPEDAPURACAO.ENTRADASAIDA = 'E' and (SPEDAPURACAO.DEVOLUCAO = 'S' and spedapuracao.CFOP not in ('1949','2949') ) then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ENTRADASAIDA = 'S'  then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when (SPEDAPURACAO.ENTRADASAIDA = 'E' and SPEDAPURACAO.CFOP IN ('1949', '2949'))   then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ST_JA_RECOLHIDO = 'S' then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ST_JA_RECOLHIDO = 'S' then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end)
+      from SPEDAPURACAO(:FILIAL, :DT_INI, :DT_FIM)
+      where ((SPEDAPURACAO.VLRICMSRECOLHIDO > 0) or (SPEDAPURACAO.ICMSDESTINOVALOR>0))
+      group by SPEDAPURACAO.UF
+      into UF, VL_DEVOL_ST, VL_RETENCAO_ST, :vl_out_cred_st, vl_aj_creditos_st, vl_aj_debitos_st
+  do
+  begin
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, UF, DT_INI, DT_FIM)
+    values (:SEQUENCIAE, 'E200', 4, 2, :UF, :DT_INI, :DT_FIM);
+
+    VL_SLD_CRED_ST_TRANSPORTAR = 0;
+    VL_ICMS_RECOL_ST = 0;
+    if ((coalesce(VL_DEVOL_ST, 0)+coalesce(vl_out_cred_st, 0)+COALESCE(vl_aj_creditos_st,0)) > (coalesce(VL_RETENCAO_ST, 0)+COALESCE(vl_aj_debitos_st,0))) then
+    begin
+      VL_SLD_CRED_ST_TRANSPORTAR = (coalesce(VL_DEVOL_ST, 0) + coalesce(vl_out_cred_st, 0)+COALESCE(vl_aj_creditos_st,0)) - (coalesce(VL_RETENCAO_ST, 0)+COALESCE(vl_aj_debitos_st,0));
+    end
+    else
+    begin
+      VL_ICMS_RECOL_ST = (coalesce(VL_RETENCAO_ST, 0)+COALESCE(vl_aj_debitos_st,0)) - (coalesce(VL_DEVOL_ST, 0) + coalesce(vl_out_cred_st, 0)+COALESCE(vl_aj_creditos_st,0));
+    end
+    
+    ind_mov_st = 0;
+    if( VL_ICMS_RECOL_ST>0 ) THEN   
+        ind_mov_st = 1;
+    if( VL_SLD_CRED_ST_TRANSPORTAR>0 ) THEN   
+        ind_mov_st = 1;
+    
+    
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, ind_mov_st, VL_DEVOL_ST, VL_RETENCAO_ST,
+                              VL_SLD_CRED_ST_TRANSPORTAR, VL_ICMS_RECOL_ST, VL_SLD_DEV_ANT_ST, 
+                              vl_aj_out_cred_st, VL_AJ_CREDITOS_st,  vl_aj_debitos_st)
+    values (:SEQUENCIAE, 'E210', 5, 3, :ind_mov_st, :VL_DEVOL_ST, :VL_RETENCAO_ST, :VL_SLD_CRED_ST_TRANSPORTAR, :VL_ICMS_RECOL_ST,
+            :VL_ICMS_RECOL_ST, :vl_out_cred_st, :VL_AJ_CREDiTOS_st, :vl_aj_debitos_st);
+
+    COD_REC = '046-2';
+    COD_OR = '002';
+    if (:UF <> :V_UFESTABELECIMENTO) then
+    begin
+      COD_REC = '100099';
+      COD_OR = '999';
+    end
+
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, VL_ICMS_RECOLHER, DT_INI, REF, COD_REC,
+                              COD_OR)
+    values (:SEQUENCIAE, 'E250', 3, 4, 0, :VL_ICMS_RECOL_ST, :DT_FIM,
+            extract(month from :DT_FIM) || extract(year from :DT_FIM), :COD_REC, :COD_OR);
+  end
+  
+  AJUSTEE111 = 1;  
+
+  VL_TOT_DEBITOS_DIFAL = 0;
+  VL_TOT_CREDITOS_DIFAL = 0;
+  for select COALESCE(SPEDFISCAL_C.UF,'SP') ,
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_FCP_UF_DEST ELSE 0 END), 
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_ICMS_UF_DEST ELSE 0 END),
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_ICMS_UF_REM ELSE 0 END),
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_FCP_UF_DEST ELSE 0 END), 
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_ICMS_UF_DEST ELSE 0 END),
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_ICMS_UF_REM ELSE 0 END)
+      from SPEDFISCAL_C      
+      group by 1
+      having sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_FCP_UF_DEST ELSE 0 END) >0 or
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_ICMS_UF_DEST ELSE 0 END) >0 or
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 1 THEN SPEDFISCAL_C.VL_ICMS_UF_REM ELSE 0 END) >0 or
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_FCP_UF_DEST ELSE 0 END) >0 or
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_ICMS_UF_DEST ELSE 0 END) >0 or
+             sum(CASE WHEN SPEDFISCAL_C.IND_OPER = 0 THEN SPEDFISCAL_C.VL_ICMS_UF_REM ELSE 0 END) >0 
+
+      into UF, VL_FCP_UF_DEST, VL_ICMS_UF_DEST, VL_ICMS_UF_REM, vl_fcp_uf_dest_cred,  vl_icms_uf_rem_cred, vl_icms_uf_dest_cred
+  do
+  begin
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, UF, DT_INI, DT_FIM)
+    values (:SEQUENCIAE, 'E300', 1, 2, :UF, :DT_INI, :DT_FIM);
+
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV_DIFAL, 
+                              VL_TOT_DEBITOS_DIFAL, VL_TOT_CREDITOS_DIFAL, VL_SLD_DEV_ANT_DIFAL,                              
+                              VL_TOT_DEB_FCP, VL_TOT_CRED_FCP, VL_RECOL_FCP)
+    values (:SEQUENCIAE, 'E310', 2, 3, 1, 
+             :VL_ICMS_UF_DEST, :VL_ICMS_UF_DEST_CRED, :VL_ICMS_UF_DEST - :VL_ICMS_UF_DEST_CRED,             
+             :VL_FCP_UF_DEST, :vl_fcp_uf_dest_cred, :VL_FCP_UF_DEST - :vl_fcp_uf_dest_cred);
+
+
+    VL_TOT_DEBITOS_DIFAL = VL_TOT_DEBITOS_DIFAL + :VL_ICMS_UF_REM;
+    VL_TOT_CREDITOS_DIFAL = coalesce (VL_TOT_CREDITOS_DIFAL,0) + coalesce (:VL_ICMS_UF_REM_CRED,0);
+    VL_RECOL = :VL_ICMS_UF_DEST + :VL_FCP_UF_DEST;
+
+--    if (vl_fcp_uf_dest_cred >0) then  P_DIFAL='S';
+
+    MES_REF = extract(month from :DT_FIM) || extract(year from :DT_FIM);
+    
+   -- SEQUENCIAE = SEQUENCIAE + 1;
+
+    IF (:UF = 'SP') THEN
+        begin
+            SEQUENCIAE = SEQUENCIAE + 1;
+            insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_OR, VL_OR, DT_VCTO, COD_REC, MES_REF)
+            values (:SEQUENCIAE, 'E316', 3, 4, '003', :VL_ICMS_UF_DEST-:VL_ICMS_UF_DEST_CRED,  :dt_fim + 20, '101-6', :MES_REF);
+
+        end
+    else 
+    IF (:UF = 'DF') THEN
+        BEGIN 
+             SEQUENCIAE = SEQUENCIAE + 1;
+            insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_OR, VL_OR, DT_VCTO, COD_REC, MES_REF)
+            values (:SEQUENCIAE, 'E316', 3, 4, '003', :VL_ICMS_UF_DEST-:VL_ICMS_UF_DEST_CRED,  :dt_fim + 20, '100048', :MES_REF);    
+
+        END                       
+    ELSE
+        BEGIN
+            SEQUENCIAE = SEQUENCIAE + 1;
+            insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_OR, VL_OR, DT_VCTO, COD_REC, MES_REF)
+            values (:SEQUENCIAE, 'E316', 3, 4, '003', :VL_ICMS_UF_DEST-:VL_ICMS_UF_DEST_CRED,  :dt_fim + 20, '100048', :MES_REF);
+            
+        end            
+     
+    if ((:VL_FCP_UF_DEST > 0) and (:UF <>  'SP'))  then
+    begin
+      SEQUENCIAE = SEQUENCIAE + 1;
+      insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_OR, VL_OR, DT_VCTO, COD_REC, MES_REF)
+      values (:SEQUENCIAE, 'E316', 3, 4, '006', :vl_fcp_uf_dest-:VL_FCP_UF_DEST_CRED, :dt_fim + 20, '100102', :MES_REF);
+    end
+  end
+
+  if (VL_TOT_DEBITOS_DIFAL > 0) then
+  begin
+
+   
+for    select distinct 
+        case 
+            (coalesce (notafiscal.INSCRICAOSUBSTITUTO,'')) when '' then 
+        CADASTROPARCEIROS.UF
+        else notafiscal.uf end
+    from
+        notafiscal
+   
+    inner join CADASTROPARCEIROS on 
+        (notafiscal.filial=CADASTROPARCEIROS.cadastro)
+            
+    where 
+        notafiscal.filial = :filial and 
+        notafiscal.DATAEMISSAO between :DT_INI and :DT_FIM
+    into :UF
+    
+    DO BEGIN
+    
+       -- if (:UF = 'SP') then
+       -- begin
+    
+        
+        AJUSTEE111 = 0;
+    
+        insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_AJ_APUR, DESCR_COMPL_AJ, VL_AJ_APUR)
+        values (4, 'E111', 3, 4, 'SP000287',
+                'Debito referente ao saldo devedor recebido da apuracao do ICMS Diferencial de Aliquota da UF origem - EC 87/2015',
+                coalesce (:VL_TOT_DEBITOS_DIFAL,0)-coalesce (:VL_TOT_CREDITOS_DIFAL,0));
+    
+        update spedfiscal_e set
+                VL_TOT_AJ_DEBITOS = coalesce ((:VL_TOT_DEBITOS_DIFAL ),0)-coalesce (:VL_TOT_CREDITOS_DIFAL,0) ,
+                vl_sld_apurado = coalesce (:vl_sld_apurado,0) + coalesce (:vl_tot_debitos_difal,0)-coalesce (:VL_TOT_CREDITOS_DIFAL,0),
+                vl_icms_recolher = coalesce (:vl_icms_recolher,0) + coalesce (:vl_tot_debitos_difal,0)-coalesce (:VL_TOT_CREDITOS_DIFAL,0)
+        WHERE spedfiscal_e.segmento = 'E110';
+        update spedfiscal_e set
+                vl_icms_recolher = coalesce (:vl_sld_apurado,0) + coalesce (:vl_tot_debitos_difal,0)-coalesce (:VL_TOT_CREDITOS_DIFAL,0)
+        WHERE spedfiscal_e.segmento = 'E116';
+        end
+    
+        SEQUENCIAE = SEQUENCIAE + 1;
+        insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, UF, DT_INI, DT_FIM)
+        values (:SEQUENCIAE, 'E300', 1, 2, :UF, :DT_INI, :DT_FIM);
+    
+        VL_RECOL = coalesce (:VL_TOT_DEBITOS_DIFAL,0) - coalesce (:VL_TOT_CREDITOS_DIFAL,0);
+        SEQUENCIAE = SEQUENCIAE + 1;
+        insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV_DIFAL, VL_TOT_DEBITOS_DIFAL, VL_TOT_DEB_FCP,
+                                VL_SLD_DEV_ANT_DIFAL, VL_RECOL, VL_DEDUCOES_DIFAL, VL_TOT_CREDITOS_DIFAL)
+        values (:SEQUENCIAE, 'E310', 2, 3, 1, :VL_TOT_DEBITOS_DIFAL, 0, :VL_RECOL, :vl_recol, 0,:VL_TOT_CREDITOS_DIFAL);
+        
+        SEQUENCIAE = SEQUENCIAE + 1;
+        insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_OR, VL_OR, DT_VCTO, COD_REC, MES_REF)
+        values (:SEQUENCIAE, 'E316', 3, 4, '003', :VL_RECOL,  :dt_fim + 20, '100102', :MES_REF);
+        VL_RECOL = :VL_TOT_DEBITOS_DIFAL + 0;
+        MES_REF = extract(month from :DT_FIM) || extract(year from :DT_FIM);
+    --end
+ END
+  --  if (P_DIFAL='S')  then
+  for select
+      first 1
+      spedfiscal_C.SEGMENTO
+  FROM
+      SPEDFISCAL_C
+  WHERE
+       SPEDFISCAL_C.SEGMENTO='C195' and 
+       SPEDFISCAL_C.COD_OBS = 1 
+  INTO 
+       :P_TESTEDIFAL
+
+       DO begin
+        SEQUENCIA0 = SEQUENCIA0 + 1;
+        INSERT INTO SPEDFISCAL_0(SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_NAT, DESCR)
+        VALUES(:SEQUENCIA0, '0460', 0, 2, 1, 'DIFAL');
+       end
+
+  for select
+    first 1
+      spedfiscal_C.SEGMENTO
+  FROM
+      SPEDFISCAL_C
+  WHERE
+       SPEDFISCAL_C.SEGMENTO='C195' and 
+       SPEDFISCAL_C.COD_OBS = 2 
+  INTO 
+       :P_TESTEDIFAL
+
+       DO begin
+        SEQUENCIA0 = SEQUENCIA0 + 1;
+        INSERT INTO SPEDFISCAL_0(SEQUENCIA, SEGMENTO, ORDEM, NIVEL, COD_NAT, DESCR)
+        VALUES(:SEQUENCIA0, '0460', 0, 2, 2, 'ST REC.');
+       end
+
+
+  SEQUENCIA0 = SEQUENCIA0 + 1;
+  insert into SPEDFISCAL_0 (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+  values (:SEQUENCIA0, '0990', 9999, 1, :SEQUENCIA0);
+
+  if (ind_ativ=0) then begin
+  SEQUENCIAE = SEQUENCIAE + 1;
+  insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, IND_APUR, DT_INI, DT_FIM)
+  values (:SEQUENCIAE, 'E500', 1, 2, 0, 0, :DT_INI, :DT_FIM);
+
+  VL_DEB_IPI = 0;
+  VL_CRED_IPI = 0;
+  for select sum((SPEDAPURACAO.VLRFINALMERCAD + coalesce(SPEDAPURACAO.ACRESCIMONOTA, 0) +
+               coalesce(SPEDAPURACAO.FRETE, 0) + coalesce(SPEDAPURACAO.SEGURO, 0) + coalesce(SPEDAPURACAO.OUTDESPACESSOR, 0) + coalesce(SPEDAPURACAO.VALORIPI, 0) + coalesce(SPEDAPURACAO.VLRICMSRECOLHIDO, 0)) -
+               (coalesce(SPEDAPURACAO.VLRDESCPRODUTO, 0) + coalesce(SPEDAPURACAO.DESCONTONOTA, 0))), SPEDAPURACAO.CFOP,
+               SUBSTRING ( CAST (SPEDAPURACAO.CSTIPI as varchar (3)) from 1 for 2) ,
+               sum(
+               case
+                 when SPEDAPURACAO.CSTIPI in (0, 50) then SPEDAPURACAO.IPIBASE
+                 else 0
+               end),
+               sum(
+               case
+                 when SPEDAPURACAO.CSTIPI in (0, 50) then SPEDAPURACAO.VALORIPI
+                 else 0
+               end)
+        from SPEDAPURACAO(:FILIAL, :DT_INI, :DT_FIM)
+        group by SPEDAPURACAO.CFOP, SPEDAPURACAO.CSTIPI 
+        into :VL_ITEM, :CFOP, :CST_IPI, :VL_BC_IPI, :VL_IPI
+    do
+    begin
+      if (:CST_IPI = 0) then
+        VL_CRED_IPI = VL_CRED_IPI + VL_IPI;
+      if (:CST_IPI = 50) then
+        VL_DEB_IPI = VL_DEB_IPI + VL_IPI;
+
+      SEQUENCIAE = SEQUENCIAE + 1;
+      insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, VL_CONT_IPI, CFOP, CST_IPI, VL_BC_IPI, VL_IPI)
+      values (:SEQUENCIAE, 'E510', 1, 3, :VL_ITEM, :CFOP, :CST_IPI, :VL_BC_IPI, :VL_IPI);
+    end
+
+    SEQUENCIAE = SEQUENCIAE + 1;
+
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, IND_MOV, VL_DEB_IPI, VL_CRED_IPI, VL_SD_IPI, VL_SC_IPI)
+    values (:SEQUENCIAE, 'E520', 4, 3, 0, :VL_DEB_IPI, :VL_CRED_IPI,
+            case when (:VL_DEB_IPI - :VL_CRED_IPI) > 0 then (:VL_DEB_IPI - :VL_CRED_IPI) else 0 end,
+            case when (:VL_DEB_IPI - :VL_CRED_IPI) < 0 then (:VL_DEB_IPI - :VL_CRED_IPI) * (-1) else 0 end);
+    end
+
+    SEQUENCIAE = SEQUENCIAE + 1;
+    insert into SPEDFISCAL_E (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+    values (:SEQUENCIAE, 'E990', 4, 1, :SEQUENCIAE-:AJUSTEE111);
+
+
+
+  DT_INV = :DT_FIM;
+  
+
+
+    insert into SPEDFISCAL_K (SEQUENCIA, SEGMENTO, ORDEM, NIVEL, QTD_LIN)
+    values (:SEQUENCIAK, 'K990', 0, 1, :SEQUENCIAK);
+
+    execute procedure spedFiscalTotaliza;
+
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE SPEDFISCALEFD TO  SYSDBA;
+

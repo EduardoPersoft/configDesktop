@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where filial=1 and emissao='31.12.2023'

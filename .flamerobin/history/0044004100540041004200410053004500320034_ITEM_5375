@@ -1,0 +1,21 @@
+update
+    titulorec
+set
+    codretorno=null,
+    codremessa='01'
+where 
+    titulorec.CONTACORRENTE=1342 and
+    titulorec.filial=5 and 
+    titulorec.CODretorno <> '02'
+    
+order by
+    titulorec.vencimento
+    
+    
+    
+    
+    
+    
+    
+    
+    

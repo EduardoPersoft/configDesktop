@@ -1,0 +1,51 @@
+select
+    'Recebido' tipo,
+    sum(movtitulorec.VALORPAGO*
+           case movtitulorec.TIPOMOVTO when 'D'
+           then 1 else -1 end )
+from 
+    movtitulorec
+where
+    movtitulorec.dtmovtotitulo between '01.05.2024' and '31.05.2024' and
+    movtitulorec.TIPOMOVTO in ('D', 'F') and
+    not exists (
+        select 
+            *
+        from
+            ESTABELECIMENTO
+        where
+            estabelecimento.cadastro=MOVTITULOREC.Parceiro)
+union        
+select
+    'Pagos' tipo,
+    sum(movtitulorec.VALORPAGO*
+           case movtitulorec.TIPOMOVTO when 'D'
+           then 1 else -1 end )
+from 
+    movtotitulopag movtitulorec
+where
+    movtitulorec.dtmovtotitulo between '01.05.2024' and '31.05.2024' and
+    movtitulorec.TIPOMOVTO in ('D', 'F') and
+    not exists (
+        select 
+            *
+        from
+            ESTABELECIMENTO
+        where
+            estabelecimento.cadastro=MOVTITULOREC.Parceiro)
+union            
+select
+    'aReceber' tipo,
+    sum(titulorec.VALOREMABERTO)
+from
+    TITULOREC
+where
+    titulorec.provavel between '01.05.2024' and '31.05.2024'    
+union            
+select
+    'aPagar' tipo,
+    sum(titulorec.VALOREMABERTO)
+from
+    TITULOPAG
+where
+    tituloPAG.PROGRAMACAO between '01.05.2024' and '31.05.2024'        

@@ -1,0 +1,14 @@
+SELECT
+    idmercadoria,
+    codigo,
+    quantidade,
+    precolista,
+    vlrfinalmercad,
+    recolhido
+from
+    MERCADORIASPED
+WHERE
+    filial=5 AND
+    idnota=198695
+
+    

@@ -1,0 +1,6 @@
+insert INTO C_LOGPRODUTOECOMMERCE(CODIGO,INCLUSAO)
+select codigo,'S' from ITEMESTOQUE
+where itemestoque.TIPOPRODUTO=3
+and not EXISTS
+(select * from C_LOGPRODUTOECOMMERCE
+where C_LOGPRODUTOECOMMERCE.codigo=itemestoque.codigo)

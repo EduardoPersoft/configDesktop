@@ -1,0 +1,32 @@
+select 
+    movimentoestoque.filial,
+    movimentoestoque.documento,
+    materialmovimentoestoque.iditem codSaida,
+    saida.descricao as descricaoSaida,
+    produto.codigo codProduto,    
+    produto.descricao desProduto
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+inner join
+    itemestoque saida on
+        saida.codigo=MATERIALMOVIMENTOESTOQUE.iditem
+inner join
+    pedido on
+        pedido.filial=materialmovimentoestoque.filial and
+        pedido.idnota=materialmovimentoestoque.idpedido
+inner join
+    mercadoriasped on
+        mercadoriasped.filial=materialmovimentoestoque.filial and
+        mercadoriasped.idnota=materialmovimentoestoque.idpedido and
+        mercadoriasped.idmercadoria=materialmovimentoestoque.IDMERCADORIA
+inner join
+    itemestoque produto on
+        produto.codigo=mercadoriasped.codigo
+where 
+    movimentoestoque.filial=110 and
+    movimentoestoque.tipomovimento='12' and 
+    materialmovimentoestoque.concluido='N'

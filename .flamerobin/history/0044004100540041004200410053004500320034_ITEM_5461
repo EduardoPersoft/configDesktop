@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where lote='230930/38/20'

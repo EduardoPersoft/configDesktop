@@ -1,0 +1,2 @@
+select * from customes where filial=110 and mes=11 and ano=2023
+and iditem like 'MPP%'

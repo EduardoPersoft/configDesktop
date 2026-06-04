@@ -1,0 +1,2 @@
+select filial,idnota,codigo,codigoestoque from MERCADORIASPED
+order by idnota desc

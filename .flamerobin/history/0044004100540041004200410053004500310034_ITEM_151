@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    MAPAPRODUCAO
+where
+    filial=110 and
+    idmovimento = 5191

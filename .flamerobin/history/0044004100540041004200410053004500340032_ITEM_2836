@@ -1,0 +1,28 @@
+select 
+    MATERIALLOTE.IDITEM,
+    itemestoque.descricao,
+    MATERIALLOTE.LOTE,
+    locallote.QUANTIDADE,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    local.ID,
+    LOCAL.DESCRICAO    
+from 
+    MATERIALLOTE
+inner join 
+    LOCALLOTE on 
+    MATERIALLOTE.FILIAL=LOCALLOTE.FILIAL and 
+    materiallote.IDITEM=LOCALLOTE.IDITEM and
+    MATERIALLOTE.LOTE=LOCALLOTE.LOTE
+inner join
+    itemeestoque on 
+        itemestoque.codigo=locallote.iditem
+inner join 
+    local on 
+    LOCALLOTE.local=LOCAL.ID
+where 
+    materiallote.filial=110 and 
+    locallote.QUANTIDADE > 0.01 
+order by 
+    materiallote.lote

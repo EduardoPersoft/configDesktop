@@ -1,0 +1,5 @@
+update MOVIMENTOESTOQUE
+set movimentoestoque.LOCALARMAZENAMENTO=2
+where 
+movimentoestoque.TIPOMOVIMENTO in ('04', '09','12')
+and MOVIMENTOESTOQUE.LOCALARMAZENAMENTO=1

@@ -1,0 +1,1 @@
+select * from mercadoriasNOTACOMPRA WHERE FILIAL=5 AND IDNOTA=121388

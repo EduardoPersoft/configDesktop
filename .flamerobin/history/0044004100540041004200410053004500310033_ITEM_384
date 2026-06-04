@@ -1,0 +1,6 @@
+select
+    *
+from 
+    usuario
+order by    
+ usuario    

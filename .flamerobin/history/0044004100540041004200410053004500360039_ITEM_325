@@ -1,0 +1,2 @@
+select * from ORCAMENTO
+where idnota=56082

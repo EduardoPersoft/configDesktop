@@ -1,0 +1,327 @@
+SET TERM ^ ;
+CREATE OR ALTER PROCEDURE C_PEDIDOSCADATRADOS (
+    PFILIAL integer,
+    PDATAINICIAL date,
+    PDATAFINAL date )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    IDMOVIMENTOESTOQUE integer,
+    IDMOVIMENTOMATERIAL integer,
+    IDCOMPOSICAO integer,
+    FILIALNOME varchar(60),
+    DATACADASTRO timestamp,
+    DATAENTREGA timestamp,
+    CLIENTECADASTRO integer,
+    CLIENTENOME varchar(60),
+    SERVICO varchar(100),
+    ORDEMPRODUCAO integer,
+    DATAORDEMPRODUCAO timestamp,
+    PRODUTO varchar(15),
+    DESCRICAOPRODUTO varchar(240),
+    QUANTIDADEPRODUZIR double precision,
+    QTDEENVIADA double precision,
+    MATERIAPRIMA varchar(15),
+    DESCRICAOMATERIAPRIMA varchar(240),
+    QUANTIDADEMATERIAPRIMA double precision,
+    LOTE varchar(12),
+    IMPRESSAO char(1),
+    LAMINACAO integer,
+    REVISAO char(1),
+    CORTE char(1),
+    POUCHE char(1),
+    VLRTOTALMERCAD double precision,
+    PRECOUNITARIO double precision,
+    LARGURAMATERIAPRIMA numeric(12,3),
+    GRAMATURAMATERIAPRIMA decimal(7,3),
+    DESCRICAOREDUZIDAMP varchar(30),
+    VALORSALDO double precision,
+    QTDPEDIDO double precision,
+    QTDSALDO double precision,
+    DATAINICIAL date,
+    DATAFINAL date,
+    ENTREGA date,
+    ENTREGAORIGINAL date )
+
+AS
+declare variable v_diasentrega integer;
+declare variable pqtdsaldo double precision;
+declare variable pVALORsaldo double precision;
+
+
+BEGIN
+
+DATAINICIAL = :pdatainicial;
+DATAFINAL = :pdatafinal;
+
+    FOR SELECT MERCADORIASPED.filial,
+               MERCADORIASPED.idnota,
+               MERCADORIASPED.idmercadoria,
+               MERCADORIASPED.codigo,
+               MERCADORIASPED.quantidade - MERCADORIASPED.qtdeenviada,
+               coalesce (MERCADORIASPED.qtdeenviada,0),
+               MERCADORIASPED.precounitario,
+               MERCADORIASPED.vlrtotalmercad,
+               (MERCADORIASPED.quantidade - MERCADORIASPED.qtdeenviada)*MERCADORIASPED.precounitario as valorsaldo,
+               PEDIDO.datacadastro,
+               PEDIDO.destinatario,
+               MERCADORIASPED.quantidade,
+               /*COALESCE ( PEDIDO.entrega, cast ('NOW' as timestamp)+
+                        MATERIALFILIAL.TEMPOREPOSICAO) , */
+               COALESCE ( PEDIDO.entrega, case
+                                              when (mercadoriasped.baixa='S' or pedido.cancelamento='S')  then
+                                              pedido.datacadastro + coalesce((SELECT MAX(PRAZOMERCPED.dias) FROM PRAZOMERCPED
+                                                                                    WHERE PRAZOMERCPED.filial=mercadoriasped.filial
+                                                                                    AND PRAZOMERCPED.idnota=mercadoriasped.idnota
+                                                                                    AND prazomercped.iditem=mercadoriasped.idmercadoria),0)
+                                              else
+                                              cast ('NOW' as timestamp)+MATERIALFILIAL.TEMPOREPOSICAO
+                                           end ) ,
+               PEDIDO.entregaoriginal
+        FROM MERCADORIASPED
+        INNER JOIN PEDIDO ON (PEDIDO.filial = MERCADORIASPED.filial
+                             AND PEDIDO.idnota = MERCADORIASPED.idnota)
+        left join materialfilial ON
+                         (materialfilial.FILIAL=MERCADORIASPED.filial and
+                          materialfilial.IDITEM=MERCADORIASPED.CODIGO)
+
+        WHERE MERCADORIASPED.filial = :PFILIAL
+        AND PEDIDO.datacadastro between :pdatainicial and :pdatafinal
+        --AND PEDIDO.dataemissao IS NOT NULL
+        --AND PEDIDO.cancelamento <> 'S'
+        --AND MERCADORIASPED.baixa = 'N'
+       -- AND mercadoriasped.cfop NOT in ('5902', '5925', '5903','6902', '6925', '6903')
+        INTO :filial,
+             :idnota,
+             :idmercadoria,
+             :produto,
+             :pqtdsaldo,
+             :qtdeenviada,
+             :precounitario,
+             :vlrtotalmercad,
+             :pvalorsaldo,
+             :datacadastro,
+             :clientecadastro,
+             :qtdpedido,
+             :entrega,
+             :entregaoriginal
+
+             DO BEGIN
+
+            IF(PQTDSALDO<0) then BEGIN   
+                PQTDSALDO = 0;
+                pvalorsaldo=0;
+           END         
+                     
+
+              SELECT CADASTROPARCEIROS.nome FROM CADASTROPARCEIROS
+           WHERE CADASTROPARCEIROS.cadastro = :filial
+            INTO :filialnome;
+
+            SELECT CADASTROPARCEIROS.nome FROM CADASTROPARCEIROS
+            WHERE CADASTROPARCEIROS.cadastro = :clientecadastro
+            INTO :clientenome;
+
+            SELECT ITEMESTOQUE.descricao,
+                   CASE ITEMESTOQUE.c_impressao WHEN 'S' THEN 'X' ELSE ' ' END,
+                   CASE ITEMESTOQUE.c_revisao WHEN 'S' THEN 'X' ELSE ' ' END,
+                   CASE ITEMESTOQUE.c_corte WHEN 'S' THEN 'X' ELSE ' ' END,
+                   CASE ITEMESTOQUE.c_pouche WHEN 'S' THEN 'X' ELSE ' ' END,
+                   ITEMESTOQUE.c_larguramateriaprima,
+                   ITEMESTOQUE.c_gramatura
+            FROM ITEMESTOQUE
+            WHERE ITEMESTOQUE.codigo = :produto
+            INTO :descricaoproduto,
+                 :impressao,
+                 :revisao,
+                 :corte,
+                 :pouche,
+                 :larguramateriaprima,
+                 :gramaturamateriaprima;
+
+           SELECT COUNT(C_LAMINACAO.sequencia)
+            FROM C_LAMINACAO
+            WHERE C_LAMINACAO.codigo = :produto
+            INTO :laminacao;
+
+             SELECT MAX(PRAZOMERCPED.dias) FROM PRAZOMERCPED
+            WHERE PRAZOMERCPED.filial = :filial
+            AND PRAZOMERCPED.idnota = :idnota
+            AND PRAZOMERCPED.iditem = :idmercadoria
+            INTO :v_diasentrega;
+
+            --DATAENTREGA = DATACADASTRO + COALESCE(V_DIASENTREGA, 0); /*antes dos campos entrega e entregaoriginal*/
+            dataentrega = entrega;
+
+            IDMOVIMENTOESTOQUE = NULL;
+            IDMOVIMENTOMATERIAL = NULL;
+
+
+            IDCOMPOSICAO = NULL ;
+            MATERIAPRIMA = NULL;
+            LOTE = NULL;
+            QUANTIDADEMATERIAPRIMA = NULL;
+            DESCRICAOMATERIAPRIMA = NULL;
+
+            SELECT FIRST 1 MATERIALMOVIMENTOESTOQUE.idmovimento,
+                           MATERIALMOVIMENTOESTOQUE.idmovimentomaterial,
+                           MATERIALMOVIMENTOESTOQUE.quantidade
+            FROM MATERIALMOVIMENTOESTOQUE
+            WHERE MATERIALMOVIMENTOESTOQUE.filial = :filial
+            AND MATERIALMOVIMENTOESTOQUE.idpedido = :idnota
+            AND MATERIALMOVIMENTOESTOQUE.idmercadoria = :idmercadoria
+            INTO :idmovimentoestoque,
+                 :idmovimentomaterial,
+                 :quantidadeproduzir;
+           /*
+            VLRTOTALMERCAD=quantidadeproduzir*PRECOUNITARIO;
+            qtdsaldo=quantidadeproduzir-qtdeenviada;
+            valorsaldo=(quantidadeproduzir-qtdeenviada)*PRECOUNITARIO;
+           */
+            VLRTOTALMERCAD=qtdpedido*PRECOUNITARIO;
+            qtdsaldo=PQTDSALDO;
+            valorsaldo=PVALORSALDO;
+            quantidadeproduzir = qtdpedido;
+
+           
+           IF (IDMOVIMENTOESTOQUE IS  NULL) THEN
+               begin 
+                  qtdsaldo=pqtdsaldo;
+                  quantidadeproduzir=qtdpedido;
+                  vlrtotalmercad=pvalorsaldo;
+                  valorsaldo=pvalorsaldo;
+                SUSPEND;
+                   end
+            ELSE BEGIN
+
+                FOR SELECT COMPOSICAOOP.idcomposicao,
+                           COMPOSICAOOP.codigo,
+                           COMPOSICAOOP.lote,
+                           COMPOSICAOOP.quantidade,
+                           ITEMESTOQUE.descricao,
+                           ITEMESTOQUE.c_descricaoreduzida
+                FROM COMPOSICAOOP
+                INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.codigo = COMPOSICAOOP.codigo)
+                WHERE COMPOSICAOOP.filial = :filial
+                AND COMPOSICAOOP.idmovimento = :idmovimentoestoque
+                AND COMPOSICAOOP.idmovimentomaterial = :idmovimentomaterial
+/* */--           AND ITEMESTOQUE.c_tipomateriaprima = 'F'
+                INTO :idcomposicao,
+                     :materiaprima,
+                     :lote,
+                     :quantidademateriaprima,
+                     :descricaomateriaprima,
+                     :descricaoreduzidamp
+
+                     DO BEGIN
+
+                    IF (IDCOMPOSICAO > 1) THEN
+                        SELECT C_LAMINACAO.gramaturafilme
+                        FROM C_LAMINACAO
+                        WHERE C_LAMINACAO.codigo = :produto
+                        AND C_LAMINACAO.sequencia = :idcomposicao - 1
+                        INTO :gramaturamateriaprima;
+
+                     SUSPEND;
+
+              END
+
+           END
+
+        END
+ -----
+
+
+   FOR SELECT servicosped.filial,
+               servicosped.idnota,
+               servicosped.idservico,
+               servicosped.codigo,
+            --   servicosped.quantidade - servicosped.qtdeenviada,
+               coalesce (servicosped.qtdeenviada,0),
+               servicosped.precounitario,
+               servicosped.vlrtotservico,
+            --   (servicosped.quantidade - servicosped.qtdeenviada)*servicosped.precounitario as valorsaldo,
+               PEDIDO.datacadastro,
+               PEDIDO.destinatario,
+               servicosped.quantidade ,
+               substring ( servicosped.desreduzida from 1 for 50),
+               --PEDIDO.entrega,
+               COALESCE ( PEDIDO.entrega, pedido.datacadastro + coalesce((SELECT MAX(prazoservped.dias) FROM prazoservped
+                                                                                    WHERE prazoservped.filial=servicosped.filial
+                                                                                    AND prazoservped.idnota=servicosped.idnota
+                                                                                    AND prazoservped.iditem=servicosped.idservico),0)
+                         ),
+               PEDIDO.entregaoriginal
+
+        FROM servicosped
+        INNER JOIN PEDIDO ON (PEDIDO.filial = servicosped.filial
+                             AND PEDIDO.idnota = servicosped.idnota)
+        WHERE servicosped.filial = :PFILIAL
+        AND PEDIDO.datacadastro between :pdatainicial and :pdatafinal
+        --AND PEDIDO.dataemissao IS NOT NULL
+        --AND PEDIDO.cancelamento <> 'S'
+        --AND servicosped.baixa = 'N'
+       -- AND servicosped.cfop NOT in ('5902', '5925', '5903','6902', '6925', '6903')
+        INTO :filial,
+             :idnota,
+             :idmercadoria,
+             :produto,
+          --   :qtdsaldo,
+             :qtdeenviada,
+             :precounitario,
+             :vlrtotalmercad,
+          --   :valorsaldo,
+             :datacadastro,
+             :clientecadastro,
+             :qtdpedido,
+             :descricaoproduto,
+             entrega, 
+             entregaoriginal
+             do begin
+
+
+            SELECT CADASTROPARCEIROS.nome FROM CADASTROPARCEIROS
+            WHERE CADASTROPARCEIROS.cadastro = :filial
+            INTO :filialnome;
+
+            SELECT CADASTROPARCEIROS.nome FROM CADASTROPARCEIROS
+            WHERE CADASTROPARCEIROS.cadastro = :clientecadastro
+            INTO :clientenome;
+       /*
+            SELECT servico.descricao
+            FROM servico
+            WHERE servico.codigo = :produto
+            INTO :descricaoproduto;
+         */
+            SELECT MAX(prazoservped.dias) FROM prazoservped
+            WHERE prazoservped.filial = :filial
+            AND prazoservped.idnota = :idnota
+            AND prazoservped.iditem = :idmercadoria
+            INTO :v_diasentrega;
+
+            --DATAENTREGA = DATACADASTRO + COALESCE(V_DIASENTREGA, 0); /*antes dos campos entrega e entregaoriginal*/
+            dataentrega = entrega;
+
+            IDMOVIMENTOESTOQUE = NULL;
+            IDMOVIMENTOMATERIAL = NULL;
+
+
+            IDCOMPOSICAO = NULL ;
+            MATERIAPRIMA = NULL;
+            LOTE = NULL;
+            QUANTIDADEMATERIAPRIMA = NULL;
+            DESCRICAOMATERIAPRIMA = NULL;
+
+       suspend;
+
+end
+------------------
+
+END
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE C_PEDIDOSCADATRADOS TO  SYSDBA;
+

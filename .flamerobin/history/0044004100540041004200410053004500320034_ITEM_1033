@@ -1,0 +1,7 @@
+SELECT 
+    mercadoriasnota.*
+FROM
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial=5 
+    and mercadoriasnota.idnota=26011

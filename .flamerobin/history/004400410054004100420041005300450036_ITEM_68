@@ -1,0 +1,6 @@
+update 
+    TITULOREC
+SET
+    titulorec.valorjuros=titulorec.valortitulo*0.001667
+where   
+    titulorec.emissao='04.03.2021'

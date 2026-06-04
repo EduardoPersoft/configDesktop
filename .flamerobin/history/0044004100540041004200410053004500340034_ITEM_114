@@ -1,0 +1,2 @@
+select pedido.TIPODESCFINANCEIRO, pedido.* from pedido 
+where pedido.TIPODESCFINANCEIRO is null

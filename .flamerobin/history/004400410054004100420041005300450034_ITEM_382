@@ -1,0 +1,10 @@
+select 
+    filial,
+    idnota,
+    envio,
+    resultado,
+    idresultado,
+    protocolo,
+    nroreciboi,
+    ambiente
+from nfectrl

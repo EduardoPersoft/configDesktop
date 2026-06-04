@@ -1,0 +1,20 @@
+select
+    movimentoestoque.emissao,
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.VALOR,
+    CAST(MATERIALMOVIMENTOESTOQUE.VALOR/MATERIALMOVIMENTOESTOQUE.QUANTIDADE AS DECIMAL(12,3)) AS UNITARIO
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MATERIALMOVIMENTOESTOQUE.iditem like 'MPP%' and
+    movimentoestoque.filial=110 and
+    movimentoestoque.TIPOMOVIMENTO='01' and
+    movimentoestoque.emissao<'01.04.2023'
+order by
+    movimentoestoque.emissao,
+    materialmovimentoestoque.iditem

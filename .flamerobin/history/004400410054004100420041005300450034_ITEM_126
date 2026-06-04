@@ -1,0 +1,7 @@
+UPDATE
+    TITULOREC
+SET
+    titulorec.EMISSAO=titulorec.cadastro
+WHERE
+    titulorec.filial=1 AND
+    titulorec.titulo='P63016'

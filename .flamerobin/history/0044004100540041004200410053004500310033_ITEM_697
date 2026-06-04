@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set
+    pedido.CLCTRANSP='N'
+where
+    filial=1 and idnota=25339

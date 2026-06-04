@@ -1,0 +1,20 @@
+select
+    notacompra.idnota,
+    CADASTROPARCEIROS.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    notacompra.DATAEMISSAO,
+    notacompra.DATAENTRADA
+    
+from 
+    notacompra 
+inner join
+    cadastroparceiros on 
+        cadastroparceiros.CADASTRO=NOTACOMPRA.DESTINATARIO
+
+where 
+    notacompra.DATAEMISSAO<'01.09.2022' and 
+    notacompra.DATAENTRADA>='01.09.2022'
+order by 
+    notacompra.dataemissao,
+    cadastroparceiros.razaosocial,
+    notacompra.nrfnotafornecedor

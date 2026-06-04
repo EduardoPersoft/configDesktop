@@ -1,0 +1,1 @@
+select * from C_LOGsaldoECOMMERCE where C_LOGsaldoECOMMERCE.codigo='2341403'

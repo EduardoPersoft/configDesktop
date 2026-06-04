@@ -1,0 +1,55 @@
+SELECT
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.documento documento,
+    cadcli.nome nomeClientes,
+    cadcli.RAZAOSOCIAL razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome nomeVendedor,
+    cadate.nome nomeAtendente,
+    itemestoque.codigo,
+    itemestoque.nome,
+    mercadoriasnota.vlrFinalMercad) valorVenda,
+    mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100) comissao,
+    mercadoriasnota.comissao
+    
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+inner join 
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= ? and
+    notafiscal.dataemissao between ? and ? and
+    notafiscal.dataCancelamento is null and
+    notafiscal.calculada = 'S' and 
+    notafiscal.vlrtotalNota >0
+group by                       
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.documento,
+    cadcli.nome,
+    cadcli.razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome,
+    cadate.nome
+

@@ -1,0 +1,47 @@
+SELECT 
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.NUMERONOTA, 
+       CP_VENDEDOR.CADASTRO VENDEDOR, 
+       NOTAFISCAL.DATAEMISSAO,
+       CP_CLIENTE.CADASTRO AS CADCLIENTE, 
+       CP_CLIENTE.RAZAOSOCIAL AS NOMECLIENTE,
+       VENDEDORESNOTA.VENDEDOR AS CADVENDEDOR, 
+       CP_VENDEDOR.razaosocial AS NOMEVENDEDOR, 
+       (coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) AS VALOR,
+       (((coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) * VENDEDORESNOTA.COMISSAOVENDA)/100) AS VALORCOMISSAO,
+       VENDEDORESNOTA.COMISSAOVENDA,
+       CP_EMPRESA.RAZAOSOCIAL,
+       ESTSIN.CONSOLIDADO,
+       ESTSIN.DATAINICIAL,
+       ESTSIN.DATAFINAL, 
+       ESTSIN.ESTABELECIMENTO,
+       CP_EMPRESA.NOME,
+       (select first 1  pedido.dataemissao from mercadoriasnota
+        inner join pedido  on (pedido.filial=mercadoriasnota.filial
+                                     and pedido.idnota=mercadoriasnota.idpedido)
+       where notafiscal.filial=mercadoriasnota.filial
+      and notafiscal.idnota=mercadoriasnota.idnota
+     order by pedido.idnota desc)  as emissaopedido,
+       (select first 1  pedido.numeronota from mercadoriasnota
+        inner join pedido  on (pedido.filial=mercadoriasnota.filial
+                                     and pedido.idnota=mercadoriasnota.idpedido)
+       where notafiscal.filial=mercadoriasnota.filial
+      and notafiscal.idnota=mercadoriasnota.idnota 
+     order by pedido.idnota desc) as numeropedido
+FROM NOTAFISCAL
+inner join estsin on
+                   (estsin.ESTABELECIMENTO=notafiscal.FILIAL)
+INNER JOIN VENDEDORESNOTA ON (VENDEDORESNOTA.FILIAL = NOTAFISCAL.FILIAL
+                          AND VENDEDORESNOTA.IDNOTA = NOTAFISCAL.IDNOTA)
+INNER JOIN CADASTROPARCEIROS CP_CLIENTE ON (NOTAFISCAL.DESTINATARIO = CP_CLIENTE.CADASTRO)
+INNER JOIN CADASTROPARCEIROS CP_VENDEDOR ON (VENDEDORESNOTA.VENDEDOR = CP_VENDEDOR.CADASTRO)
+INNER JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN CADASTROPARCEIROS CP_EMPRESA ON (NOTAFISCAL.FILIAL = CP_EMPRESA.CADASTRO)
+
+
+AND ESTSIN.RELATORIO='FATURAMENTO'
+AND ((ESTSIN.CONSOLIDADO = 2) OR (NOTAFISCAL.FILIAL = ESTSIN.ESTABELECIMENTO)) 
+AND NOTAFISCAL.DATAEMISSAO BETWEEN ESTSIN.DATAINICIAL AND ESTSIN.DATAFINAL
+WHERE (NOTAFISCAL.CANCELAMENTO='N') AND (NATUREZAOPERACAO.FATURA='S')
+AND NOTAFISCAL.CFOP NOT IN (5116,6116)
+order by CP_VENDEDOR.CADASTRO

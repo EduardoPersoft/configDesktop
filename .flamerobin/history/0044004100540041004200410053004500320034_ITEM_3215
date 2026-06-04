@@ -1,0 +1,7 @@
+select 
+    *
+from
+    materiallocal 
+where  
+    materiallocal.filial=5 and
+    materiallocal.iditem='06713'

@@ -1,0 +1,16 @@
+SELECT 
+    mercadoriasped.CODIGO,
+    sum(mercadoriasped.QUANTIDADE-mercadoriasped.qtdenviada)
+FROM 
+    MERCADORIASPED
+INNER JOIN  
+    PEDIDO ON 
+    MERCADORIASPED.FILIAL=PEDIDO.FILIAL AND 
+    MERCADORIASPED.IDNOTA=PEDIDO.IDNOTA
+
+WHERE 
+    MERCADORIASPED.BAIXA='N' AND 
+    MERCADORIASPED.CODIGO=? and 
+    PEDIDO.DATACANCELAMENTO is null 
+group by
+    mercadoriasped.codigo

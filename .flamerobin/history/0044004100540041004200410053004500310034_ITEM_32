@@ -1,0 +1,12 @@
+update 
+    MATERIALMOVIMENTOESTOQUE
+set
+    materialmovimentoestoque.idpedido=
+        (select 
+            idpedido
+         from 
+            MOVIMENTOESTOQUE
+         where
+            MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+            materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento)
+            

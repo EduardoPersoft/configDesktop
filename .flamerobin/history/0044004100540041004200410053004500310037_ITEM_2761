@@ -1,0 +1,43 @@
+SELECT
+    
+    itemestoque.codigo,
+    
+    itemestoque.descricao,
+    
+    itemestoque.referencia,
+    
+    sum(case when local.descricao like 'Z1%' then m2.saldototal else 0 end) z1,
+    
+    sum(case when local.descricao like 'Z2%' then m2.saldototal else 0 end) z2
+        
+    
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = materialfilial.IDITEM
+inner join
+    materiallocal m2 on
+        m2.filial=materialfilial.filial and
+        m2.iditem=materialfilial.iditem  and
+       m2.saldototal>0
+inner join
+    local on
+        local.id=m2.IDLOCAL
+       
+WHERE
+
+
+    materialfilial.filial=? AND
+    coalesce(materialfilial.saldominimo, 0) = 0 and
+    m2.SALDOTOTAL>0
+group by    
+    itemestoque.codigo,
+    
+    itemestoque.descricao,
+    
+    itemestoque.referencia
+having     
+sum(case when local.descricao like 'Z1%' then m2.saldototal else 0 end)>0
+order by
+    itemestoque.referencia

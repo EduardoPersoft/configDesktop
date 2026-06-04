@@ -1,0 +1,3 @@
+select * from MOVTOTITULOPAG
+where MOVTOTITULOPAG.filial=110
+and MOVTOTITULOPAG.idtitulo=1285

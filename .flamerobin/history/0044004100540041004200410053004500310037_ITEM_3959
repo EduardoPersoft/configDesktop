@@ -1,0 +1,1 @@
+select * from notafiscal where idnota=7922

@@ -1,0 +1,2 @@
+select filial, idnota, notafiscal.PRAZOPROTESTO from NOTAFISCAL
+where filial=12826 and idnota=347644

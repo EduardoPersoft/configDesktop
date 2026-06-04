@@ -1,0 +1,4 @@
+select *
+from saldoanteriorestoquelocal SALDOANTERIORESTOQUE
+where iditem='PE-18101'
+group by filial,iditem, LOCAL

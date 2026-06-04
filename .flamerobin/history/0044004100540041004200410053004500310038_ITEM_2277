@@ -1,0 +1,8 @@
+update
+    lantocontpag
+set
+    lantocontpag.IDMOVTOBANC=363165
+where
+    filial=1 and 
+    lantocontpag.IDMOVTOBANC=363164
+    

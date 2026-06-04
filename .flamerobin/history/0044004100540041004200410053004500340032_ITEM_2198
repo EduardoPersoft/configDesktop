@@ -1,0 +1,4 @@
+select filial,idcontacorrente,idmovtobancario,processamento,dataextrato,movimentacao,valormovimento from MOVBANCARIOS
+where movbancarios.filial=110
+and movbancarios.IDCONTACORRENTE=341
+and movbancarios.processamento>='17.04.2024' 

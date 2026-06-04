@@ -1,0 +1,18 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    local.dascricao,
+    locallote.DATALOCACAO,
+    locallote.quantidade
+from
+    locallote
+inner join 
+    itemestoque on
+        itemestoque.CODIGO
+inner join
+    local on
+        local.ID=locallote.local
+where 
+    locallote.QUANTIDADE>0 
+order by
+    locallote.DATALOCACAO

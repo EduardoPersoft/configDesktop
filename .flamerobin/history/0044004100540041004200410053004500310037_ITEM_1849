@@ -1,0 +1,16 @@
+select
+    i1.referencia,
+    i2.codigo as codchave
+from
+    itemestoque i1
+inner join
+    itemestoque i2 on
+        i2.c_original=i1.c_original and
+        i2.codigo<>i1.codigo
+where    
+    coalesce(i1.referencia, '')<>'' 
+    and coalesce(i1.c_original,'')<>''
+    and i1.tipoproduto<>'5'
+    and i2.tipoproduto<>'5'
+order by 1    
+    

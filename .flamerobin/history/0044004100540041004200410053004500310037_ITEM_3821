@@ -1,0 +1,10 @@
+select 
+    * 
+from 
+    MERCADORIASORC
+inner join 
+    itemestoque on
+        itemestoque.codigo=mercadoriasorc.CODIGO
+where 
+    itemestoque.nomecomercial is not null
+order by idnota desc    

@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO
+where produto='20003'

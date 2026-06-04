@@ -1,0 +1,5 @@
+update 
+    ORCAMENTO
+set
+    orcamento.UFENTREGA='SP',
+    orcamento.UFREF='SP'

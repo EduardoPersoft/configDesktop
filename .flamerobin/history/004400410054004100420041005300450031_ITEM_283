@@ -1,0 +1,11 @@
+update
+    materialmovimentoestoque
+set 
+tempo = MATERIALMOVIMENTOESTOQUE.quantidade / 
+        ((select itemestoque.C_GRAMATURA from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto)/1000) / 
+        ((select itemestoque.C_LARGURAMATERIAPRIMA from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto)/1000)/130/60 as metros
+ 
+
+where MATERIALMOVIMENTOESTOQUE.IDCENTROCUSTO='101'

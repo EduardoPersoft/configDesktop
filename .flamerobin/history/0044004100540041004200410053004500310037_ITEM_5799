@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where filial=1 and pedido=199829 
+order by idmovimento

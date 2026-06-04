@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    C_FATURASPED
+WHERE
+    c_faturasped.filial=1 and c_faturasped.idnota=65028

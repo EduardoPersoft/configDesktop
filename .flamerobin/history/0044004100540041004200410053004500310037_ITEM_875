@@ -1,0 +1,13 @@
+SELECT
+    materialmovimentoestoque.*
+FROM
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+where 
+    materialmovimentoestoque.filial=12826 AND
+    materialmovimentoestoque.iditem <='6' AND
+    movimentoestoque.documento=cast(movimentoestoque.idmovimento as varchar(10))
+    

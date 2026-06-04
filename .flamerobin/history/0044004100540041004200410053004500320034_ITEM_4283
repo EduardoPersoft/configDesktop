@@ -1,0 +1,5 @@
+select * from TITULOREC
+where titulorec.filial=5
+and titulorec.baixa is null
+and titulorec.DATAENVIO>'16.11.2022'
+order by dataenvio

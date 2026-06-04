@@ -1,0 +1,5 @@
+update 
+    local
+set
+    disponivel='S',
+    saldoDisponivel = 'S'

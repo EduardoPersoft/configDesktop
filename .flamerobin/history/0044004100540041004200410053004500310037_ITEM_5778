@@ -1,0 +1,12 @@
+update 
+    PEDIDO
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0)
+where exists (select * from mercadoriasped where mercadoriasped.filial=pedido.FILIAL
+and mercadoriasped.idnota=pedido.idnota 
+and mercadoriasped.baixa='N')

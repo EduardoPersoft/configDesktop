@@ -1,0 +1,17 @@
+select 
+    * 
+from 
+    LOCALLOTE
+where 
+    locallote.IDITEM like 'PE-%'
+    AND LOCALLOTE.QUANTIDADE>0
+    AND NOT EXISTS (
+        SELECT 
+            * 
+        FROM 
+            ITEMCUSTODATA
+        WHERE 
+            ITEMCUSTODATA.FILIAL=LOCALLOTE.FILIAL
+            AND ITEMCUSTODATA.CODIGO=LOCALLOTE.IDITEM
+            AND ITEMCUSTODATA.DATAINVENTARIO='30.06.2024')
+            

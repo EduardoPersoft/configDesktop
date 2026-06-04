@@ -1,0 +1,11 @@
+select
+    CADASTROPARCEIROS.nome,
+    count(orcamento.idnota) qtd
+from 
+    orcamento
+left join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=ORCAMENTO.ATENDENTE
+where
+    orcamento.DATACADASTRO between '01.07.2025' and '31.07.2025' and
+    orcamento.vendedor<>orcamento.ATENDENTE

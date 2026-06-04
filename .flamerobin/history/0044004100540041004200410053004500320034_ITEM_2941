@@ -1,0 +1,2 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.codigo in ('50654','05319')

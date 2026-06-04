@@ -1,0 +1,7 @@
+select 
+    cadastroparceiros.cadastro,
+    cadastroparceiros.nome
+from 
+    cadastroparceiros
+where 
+    cadastroparceiros.colaborador = 'S'

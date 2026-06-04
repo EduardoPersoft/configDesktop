@@ -1,0 +1,6 @@
+select * from mercadoriasped where filial=1 
+and exists 
+(select * from pedido 
+where pedido.filial=mercadoriasped.filial
+and pedido.idnota=mercadoriasped.IDNOTA
+and pedido.c_loja=184)

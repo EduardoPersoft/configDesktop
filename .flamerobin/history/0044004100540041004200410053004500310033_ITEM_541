@@ -1,0 +1,4 @@
+select distinct NUMPEDIDOCLIENTE
+      from PEDIDO
+      where FILIAL = 1 and
+            IDNOTA = 18874

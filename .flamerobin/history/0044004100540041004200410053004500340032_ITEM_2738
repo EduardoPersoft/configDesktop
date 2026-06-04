@@ -1,0 +1,13 @@
+select
+    *
+from
+    MERCADORIASNOTA   
+where
+    exists (select
+                *
+            from
+                NOTAFISCAL
+            where   
+                notafiscal.filial=MERCADORIASNOTA.filial and
+                notafiscal.idnota=mercadoriasnota.idnota and
+                notafiscal.operacao=1061)

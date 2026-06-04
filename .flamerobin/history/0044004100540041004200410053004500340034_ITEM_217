@@ -1,0 +1,8 @@
+update 
+    MERCADORIASPED
+set
+    mercadoriasped.cst = '260'
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.cst='160'
+    

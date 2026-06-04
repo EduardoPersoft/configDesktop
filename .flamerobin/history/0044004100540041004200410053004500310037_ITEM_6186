@@ -1,0 +1,7 @@
+update
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.coleta = '2025'||'/'||coleta
+where movimentoestoque.EMISSAO<'01.01.2026'
+and MOVIMENTOestoque.TIPOMOVIMENTO='13'
+and movimentoestoque.coleta is not null

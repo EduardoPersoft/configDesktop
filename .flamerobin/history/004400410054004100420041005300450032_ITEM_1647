@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    C_I_MOVEST3 
+where 
+    c_i_movest3.data>='01.04.2021' and 
+    c_i_movest3.CODTIPOSAIDA<>1 
+    and c_i_movest3.DOCTO='9027572/70'

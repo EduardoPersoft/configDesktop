@@ -1,0 +1,1 @@
+select * from logalteracao where alteracao not is null order by log 

@@ -1,0 +1,17 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    materialmovimentoestoque.setup = 
+            coalesce((
+                select 
+                    itemestoque.C_SETUPPOUCHE
+                from
+                    ITEMESTOQUE
+                where
+                    itemestoque.CODIGO=MATERIALMOVIMENTOESTOQUE.produto),1)/60, 
+    MATERIALMOVIMENTOESTOQUE.tempo= materialmovimentoestoque.quantidade*1000/75/60
+
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.idmovimento in (66879, 66880, 66881, 66884, 66885, 66886, 66887)
+     

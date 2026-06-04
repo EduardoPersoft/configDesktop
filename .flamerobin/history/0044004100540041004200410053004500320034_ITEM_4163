@@ -1,0 +1,53 @@
+ select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    materialfilial.SALDOMINIMO,
+    materialfilial.consumomedio,
+    sum(materiallocal.saldototal) saldoatual,    
+    case coalesce(materialfilial.consumoMedio, 0) when 0 then 0 else
+        sum(materiallocal.saldototal)/materialfilial.consumoMedio/20 end diasDisponivel,    
+    (SELECT 
+        sum(coalesce(mercadoriaspedcompra.quantidade,0)-
+            coalesce(mercadoriaspedcompra.QTDEENTREGUE,0))
+     FROM
+        mercadoriaspedcompra
+     WHERE
+        mercadoriaspedcompra.filial=materialfilial.FILIAL
+        and mercadoriaspedcompra.codigo=materialfilial.iditem
+        and mercadoriaspedcompra.baixa='N') as compras,
+    (select
+        listaprecoproduto.PRECO
+     from
+        LISTAPRECOPRODUTO
+     where
+        listaprecoproduto.lista=1 and
+        listaprecoproduto.produto=materiallocal.iditem) as preco
+from 
+    materiallocal
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and 
+        materialfilial.iditem=materiallocal.iditem
+inner join
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+left join
+    local on
+        local.id=materiallocal.idlocal
+where
+    materialfilial.filial=5  and
+    local.disponivel='S' AND
+    coalesce(itemestoque.itembase, '')='' AND
+    itemestoque.TIPOPRODUTO = 3
+group by
+    materialfilial.filial,
+    materialfilial.iditem,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    materialfilial.saldominimo,
+    materialfilial.consumomedio,
+    10
+order by
+    materialfilial.consumomedio desc

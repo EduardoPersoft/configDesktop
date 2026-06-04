@@ -1,0 +1,2 @@
+select * from OCORRENCIAS
+where upper(substring(cast OCORRENCIAS.DESCRICAO as varchar(1000)) from 1 for 1000) as like '%AUTOEXEC.NT%'

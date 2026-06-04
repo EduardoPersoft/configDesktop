@@ -1,0 +1,23 @@
+select 
+    SALDOINICIALESTOQUE.*
+from 
+    saldoinicialestoquelocal SALDOINICIALESTOQUE
+INNER JOIN ESTSIN ON (ESTSIN.RELATORIO='SALDOANTERIORESTOQUE' )
+INNER JOIN ITEMESTOQUE ON (SALDOINICIALESTOQUE.IDITEM=ITEMESTOQUE.CODIGO)
+inner join
+    materialfilial on
+        materialfilial.filial=saldoinicialestoque.filial and
+        materialfilial.iditem=itemestoque.codigo
+LEFT JOIN LOCAL ON 
+    LOCAL.ID = case when SALDOINICIALESTOQUE.LOCAL in (1, 2, 9999, 46,  89, 600, 100) 
+                    then 1 else SALDOINICIALESTOQUE.LOCAL end
+left join cadastroparceiros cadterceiros on
+    cadterceiros.LOCALentrega = local.id and local.id not in (1, 2, 9999, 46,  89, 600, 100) 
+left join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+where 
+    itemestoque.TIPOPRODUTO in (1, 3, 4) AND 
+    local.id <> 88 and 
+    (not (itemestoque.tipoproduto = 4 and itemestoque.codigo between '00000' and '99999' or substring(itemestoque.codigo from 1 for 1)='X') )
+    

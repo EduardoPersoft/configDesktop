@@ -1,0 +1,29 @@
+select SPEDAPURACAO.UF, 
+             sum(
+             case
+               when SPEDAPURACAO.ENTRADASAIDA = 'E' and (SPEDAPURACAO.DEVOLUCAO = 'S' and spedapuracao.CFOP not in ('1949','2949') ) then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ENTRADASAIDA = 'S'  then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when (SPEDAPURACAO.ENTRADASAIDA = 'E' and SPEDAPURACAO.CFOP IN ('1949'))   then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ST_JA_RECOLHIDO = 'S' then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end),
+             sum(
+             case
+               when SPEDAPURACAO.ST_JA_RECOLHIDO = 'S' then SPEDAPURACAO.VLRICMSRECOLHIDO
+               else 0
+             end)
+      from SPEDAPURACAO(5, '01.08.2022', '31.08.2022')
+      where SPEDAPURACAO.VLRICMSRECOLHIDO > 0
+      group by SPEDAPURACAO.UF

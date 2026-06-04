@@ -1,0 +1,6 @@
+update 
+    ITEMESTOQUE
+SET
+    tributacaoicms=2
+where 
+    itemestoque.CLASSIFISCAL='301'

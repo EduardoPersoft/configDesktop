@@ -1,0 +1,2 @@
+alter table CONFIGURACOESGERAIS
+add webmail varchar(100)

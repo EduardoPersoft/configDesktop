@@ -1,0 +1,16 @@
+select
+    c_consumo.codigo,
+    itemestoque.descricao,
+    c_consumo.consumo,
+    c_saldoz2.saldo,
+    cast(c_consumo.consumo/12 as integer) + 1 saldominimo,
+    cast(c_consumo.consumo/3 as integer) + 1 saldomaximo,
+    (cast(c_consumo.consumo/3 as integer) + 1)-c_saldoz2.saldo
+from
+    C_CONSUMO
+inner join
+    c_saldoz2 on
+        c_saldoz2.codigo=c_consumo.codigo
+left join
+    itemestoque on
+        itemestoque.codigo=C_CONSUMO.codigo

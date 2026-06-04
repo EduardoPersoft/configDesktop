@@ -1,0 +1,2 @@
+update inventarioestoquedata 
+set data = '31.01.2021' where data='29.01.2021'

@@ -1,0 +1,17 @@
+SELECT
+    cadastroparceiros.cadastro,
+    cadastroparceiros.NOME,
+    sum(notafiscal.VLRFINALMERCADORIAS) as VALOR,
+    count(mercadoriasnota.codigo)
+FROM
+    NOTACOMPRA NOTAFISCAL
+inner JOIN
+    mercadoriasnotacompra mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and 
+        notafiscal.idnota=mercadoriasnota.IDNOTA
+inner JOIN
+    cadastroparceiros on
+            cadastroparceiros.cadastro=notafiscal.DESTINATARIO
+WHERE
+    notafiscal.filial=5
+    and notafiscal.dataemissao>='01.01.2021'

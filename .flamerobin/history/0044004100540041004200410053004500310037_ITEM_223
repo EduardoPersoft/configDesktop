@@ -1,0 +1,16 @@
+--UPDATE
+--    TITULOREC
+--SET
+--    titulorec.dataenvio = null
+    
+SELECT
+    distinct titulorec.emissao
+FROM
+    titulorec
+WHERE
+    titulorec.DATAENVIO = '31.12.2021'
+    and titulorec.cadastro='14.07.2021'
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+

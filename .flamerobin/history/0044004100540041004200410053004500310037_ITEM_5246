@@ -1,0 +1,5 @@
+
+select C_COLETAS.*, movimentoestoque.idmovimento, movimentoestoque.coletadata from C_COLETAS
+inner join movimentoestoque on
+    movimentoestoque.COLETA between c_coletas.COLETA
+where c_coletas.DATACOLETA between '30.06.2025' and '31.07.2025'

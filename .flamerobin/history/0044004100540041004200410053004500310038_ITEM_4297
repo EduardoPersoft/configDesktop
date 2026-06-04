@@ -1,0 +1,5 @@
+select * from MOVIMENTOESTOQUE
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.LOCALARMAZENAMENTO=7 and
+    movimentoestoque.EMISSAO between '01.11.2025' and '30.11.2025'

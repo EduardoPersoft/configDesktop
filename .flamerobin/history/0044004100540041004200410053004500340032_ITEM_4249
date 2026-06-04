@@ -1,0 +1,1 @@
+select * from mercadoriasnota where idnota=7470

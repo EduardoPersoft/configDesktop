@@ -1,0 +1,2 @@
+alter table INVENTARIOESTOQUEDATA
+add c_qtd decimal(12,3)

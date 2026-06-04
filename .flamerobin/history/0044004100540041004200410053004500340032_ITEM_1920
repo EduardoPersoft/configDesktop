@@ -1,0 +1,2 @@
+select * from movimentoestoque where movimentoestoque.TIPOMOVIMENTO in ('10', '11')
+order by idnota desc

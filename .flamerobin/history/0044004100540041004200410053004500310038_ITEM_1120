@@ -1,0 +1,23 @@
+update  
+    ITEMESTOQUE
+set
+    itemestoque.VALORULTIMACOMPRa=(select first 1
+                                       materialmovimentoestoque.valor/
+                                       materialmovimentoestoque.quantidade
+                                   from
+                                       materialmovimentoestoque
+                                   inner join
+                                        movimentoestoque on
+                                            MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+                                            materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+                                   where
+                                        MATERIALMOVIMENTOESTOQUE.filial=1 and
+                                        materialmovimentoestoque.iditem=itemestoque.codigo and
+                                        MATERIALMOVIMENTOESTOQUE.VALOR>0 AND 
+                                        MATERIALMOVIMENTOESTOQUE.QUANTIDADE>0 AND
+                                        movimentoestoque.TIPOMOVIMENTO in ('01', '02', '04', '15', '02')
+                                   order by
+                                        movimentoestoque.EMISSAO desc)
+    
+
+

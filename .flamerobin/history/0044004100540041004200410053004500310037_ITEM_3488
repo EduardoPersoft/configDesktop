@@ -1,0 +1,7 @@
+select mercadoriasped.* from mercadoriasped 
+where filial=1 and baixa='N' and
+exists (select * from pedido
+where pedido.filial=mercadoriasped.filial and
+pedido.idnota=mercadoriasped.idnota and
+pedido.idmercadoria=mercadoriasped.idmercadoria and
+pedido.CANCELAMENTO='N')

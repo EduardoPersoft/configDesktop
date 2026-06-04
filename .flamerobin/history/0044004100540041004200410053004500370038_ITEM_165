@@ -1,0 +1,6 @@
+select  
+    *
+from
+    itemcustodata
+where
+    itemcustodata.codigo='M000097'

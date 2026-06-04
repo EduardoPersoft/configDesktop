@@ -1,0 +1,5 @@
+select 
+    c_tipopadraocoleta.ID,
+    c_tipopadraocoleta.DESCRICAO
+from
+   c_tipopadraocoleta 

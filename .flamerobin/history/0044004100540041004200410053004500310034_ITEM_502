@@ -1,0 +1,10 @@
+select 
+    codigo,
+    descricao,
+    referenecia
+from
+    ITEMESTOQUE
+where
+    codigo like 'MPP%'
+order by
+    codigo

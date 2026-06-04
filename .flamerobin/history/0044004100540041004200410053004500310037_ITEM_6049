@@ -1,0 +1,8 @@
+select
+    filial,idnota,datacadastro,logradouroentrega,pedido.OBSENTREGARETIRA
+from
+    PEDIDO
+where
+    pedido.LOGRADOUROENTREGA is not null and
+    pedido.CIDADEENTREGA is null and
+    pedido.DATACADASTRO>='23.03.2026'

@@ -1,0 +1,67 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao produto,
+    itemestoque.DEFINICAO as descricao,
+    itemestoque.referencia,
+    listaprecoproduto.preco,
+    itemestoque.itembase,
+    grupomercadoria.descricao,    
+    familia.descricao,
+    cast('' as varchar(2)) as lado,
+    'http://erp.persoft.com.br/falma/files/'||itemestoque.codigo||'/'||coalesce(arq1.NOMEARQUIVO, 'foto_0.jpg'),
+    materialfilial.customedio,
+    materiallocal.SALDOTOTAL,
+    tributacaoicmsuf.LUCROSUBSTITUICAO,
+    CLASSIFICACAOFISCAL.descricao,
+    'Troca', 
+    1,
+    'ano',
+    ITEMESTOQUE.DISPONIVELECOMMERCE,
+    ITEMESTOQUE.PESOBRUTO,
+    '*' qtd,
+    cast('N' as char(1)) as p_marca
+from
+    itemestoque 
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=?
+inner join
+    listaprecoproduto on
+        listaprecoproduto.lista=1 and
+        listaprecoproduto.produto=itemestoque.codigo
+left join 
+    materiallocal on
+        materiallocal.filial=estabelecimento.cadastro and
+        materiallocal.iditem=coalesce(itemestoque.itembase, itemestoque.codigo) and
+        materiallocal.IDLOCAL=1
+inner join
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and
+        materialfilial.iditem=materiallocal.IDITEM       
+left join
+    CADASTROPARCEIROS cadest on
+        cadest.cadastro=ESTABELECIMENTO.CADASTRO
+left join
+    itemestoquexarquivo arq1 on
+        arq1.CODIGO=itemestoque.codigo and
+        arq1.ORDEM = (Select
+                        min(arq2.ordem)
+                      from
+                        itemestoquexarquivo arq2
+                      where
+                        arq1.codigo=arq2.codigo)
+                        
+left join
+    TRIBUTACAOICMSUF on
+        tributacaoicmsuf.ID=itemestoque.TRIBUTACAOICMS and
+        tributacaoicmsuf.uf=cadest.uf
+        
+left join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL   
+left join
+    GRUPOMERCADORIA on
+        grupomercadoria.GRUPO = itemestoque.GRUPO
+left join
+    familia on
+        familia.id=itemestoque.FAMILIA

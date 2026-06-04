@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    itemestoque.referencia='a' or itemestoque.itembase='a'

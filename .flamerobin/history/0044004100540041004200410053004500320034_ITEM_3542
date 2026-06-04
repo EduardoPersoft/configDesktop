@@ -1,0 +1,15 @@
+update
+    mercadoriasnota
+set
+    cfop = '1' || substring(cfop from 2 for 3)
+where    
+    SUBSTRING(mercadoriasnotaFROM 1 FOR 1) = '2' and
+    (select        
+        CADASTROPARCEIROS.uf
+     from
+        notacompra
+    inner join on
+        CADASTROPARCEIROS.cadastro=notacompra.destinatario
+     where
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.idnota)='SP';

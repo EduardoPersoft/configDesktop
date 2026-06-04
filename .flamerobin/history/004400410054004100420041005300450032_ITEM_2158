@@ -1,0 +1,14 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    materialfilial.CONSUMOMEDIO
+from 
+    ITEMESTOQUE
+INNER JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        itemestoque.codigo=materialfilial.IDITEM
+order by
+    materialfilial.CONSUMOMEDIO desc
+    

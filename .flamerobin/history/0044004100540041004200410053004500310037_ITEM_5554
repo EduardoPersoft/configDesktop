@@ -1,0 +1,21 @@
+select
+    extract(month from pedido.DATACADASTRO) mes,
+    extract(year from pedido.DATACADASTRO) ano,
+    count(distinct pedido.idnota) pedidos,
+    count(mercadoriasped.idnota) as ITENS,
+    count(mercadoriasped.idnota)/count(distinct pedido.idnota) as mediaItem,
+    SUM(MERCADORIASPED.VLRTOTALMERCAD) AS VALOR,
+    SUM(MERCADORIASPED.VLRTOTALMERCAD)/count(distinct pedido.idnota) ticketPed,
+    SUM(MERCADORIASPED.VLRTOTALMERCAD)/count(mercadoriasped.idnota) ticketItem 
+from
+    PEDIDO
+INNER join
+    MERCADORIASPED ON
+        PEDIDO.FILIAL=MERCADORIASPED.FILIAL and
+        PEDIDO.IDNOTA=MERCADORIASPED.IDNOTA
+WHERE  
+    PEDIDO.DATACADASTRO BETWEEN '01.01.2022' AND '31.12.2025'
+    AND PEDIDO.CANCELAMENTO = 'N'
+    AND PEDIDO.DESTINATARIO NOT IN (1,12826)
+GROUP BY 
+    1,2

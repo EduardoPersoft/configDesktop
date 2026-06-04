@@ -1,0 +1,1 @@
+select * from movimentoestoque WHERE COLETA = '14132'

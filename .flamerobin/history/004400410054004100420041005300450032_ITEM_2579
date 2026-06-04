@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.quatidade*mercadoriaspedcompra.PRECOLISTA<>mercadoriaspedcompra.VLRFINALMERCAD

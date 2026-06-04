@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where MATERIALMOVIMENTOESTOQUE.quantidade is null

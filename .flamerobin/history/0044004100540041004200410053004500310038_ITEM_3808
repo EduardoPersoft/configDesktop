@@ -1,0 +1,2 @@
+select * from ENDERECOENTREGA
+where logradouro lile '%FREDERICO%'

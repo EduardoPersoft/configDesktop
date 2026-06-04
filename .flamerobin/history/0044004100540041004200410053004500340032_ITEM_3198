@@ -1,0 +1,6 @@
+select
+    *
+from
+    itemesoque
+where
+    codigo='PRO4183FLI004'

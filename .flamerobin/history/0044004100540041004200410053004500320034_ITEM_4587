@@ -1,0 +1,6 @@
+update 
+    T_CADASTRODOCTITULO
+set 
+    importado='S'
+where
+    importado is null

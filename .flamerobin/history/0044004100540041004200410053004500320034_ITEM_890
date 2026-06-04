@@ -1,0 +1,10 @@
+update 
+    T_CADASTRO
+SET
+    t_cadastro.cadastro = (select cadastroparceiros.CADASTRO
+                  from CADASTROPARCEIROS
+                  where cadastroparceiros.C_CODCLIENTEANTIGO=t_cadastro.CODIGO),
+    t_cadastro.documento2 = (select cadastroparceiros.DOCUMENTO
+                  from CADASTROPARCEIROS
+                  where cadastroparceiros.C_CODCLIENTEANTIGO=t_cadastro.CODIGO)              
+                  

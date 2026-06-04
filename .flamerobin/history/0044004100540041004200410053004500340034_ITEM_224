@@ -1,0 +1,23 @@
+Select itemestoque.codigo,itemestoque.descricao, c_localimportacao.descricao, itemestoque.c_mrfornecedor,
+             itemestoque.c_original, c_marca.descricao as marca, itemestoque.c_aplicacao,
+             c_fornecedorpeca.descricao as fornecedor,itemestoque.grupo,
+             CLASSIFICACAOFISCAL.DESCRICAO NCM,
+             CLASSIFICACAOFISCAL.ALIQUOTA ipi,
+             TRIBUTACAOICMS.DESCRICAO tributacaoIcms,
+             grupoMercadoria.c_cor, itemestoque.tipoProduto,
+             itemestoque.METATAG,ITEMESTOQUE.NOMECOMERCIAL
+      from itemestoque
+
+      inner join c_fornecedorpeca on (c_fornecedorpeca.id=itemestoque.c_fornecedor)
+      left join c_marca on (itemestoque.c_marca=c_marca.idmarca)
+      left join 
+        CLASSIFICACAOFISCAL on 
+            itemestoque.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+      left join 
+        TRIBUTACAOICMS on 
+            itemestoque.TRIBUTACAOICMS=TRIBUTACAOICMS.ID
+      left join 
+            grupomercadoria on 
+                ITEMESTOQUE.GRUPO=grupomercadoria.GRUPO      
+      left join c_localimportacao on (c_localimportacao.idlocal=itemestoque.C_LOCALIMPORTACAO)
+      where itemestoque.tipoproduto <> 5

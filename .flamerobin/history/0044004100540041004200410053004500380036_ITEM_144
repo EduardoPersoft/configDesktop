@@ -1,0 +1,1 @@
+select filial,iditem,lote, quantidade, materiallote.C_LARGURA, materiallote.C_GRAMATURA from materiallote

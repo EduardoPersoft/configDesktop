@@ -1,0 +1,7 @@
+delete  from lantocontpag where filial=1 and lantocontpag.IDMOVTOBANC in (
+376869,
+376870,
+376871,
+376875
+)
+

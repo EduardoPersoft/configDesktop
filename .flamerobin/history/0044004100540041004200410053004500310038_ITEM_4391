@@ -1,0 +1,3 @@
+select 
+titulopag.datareferencia, titulopag.* from TITULOPAG
+where filial=1 and titulopag.datareferencia is null

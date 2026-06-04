@@ -1,0 +1,30 @@
+SELECT 
+    c_foradeLista.ID, 
+    c_foradeLista.CODIGO,
+    c_foradeLista.descricao,
+    c_foradeLista.FABRICANTE,
+    c_fornecedorpeca.DESCRICAOFANTASIA,
+    c_foradeLista.APLICACAO,
+    c_foradeLista.CODIGOORIGINAL,
+    orcamento.datacadastro,
+    cadatendente.nome
+    
+FROM 
+    c_foradeLista
+INNER JOIN
+    c_fornecedorpeca ON
+     c_fornecedorpeca.id = c_foradeLista.FABRICANTE
+left join
+    c_foralistaorcamento on
+        c_foralistaorcamento.IDFORADELISTA=c_foradelista.id
+left join
+    orcamento on
+        orcamento.filial=c_foralistaorcamento.FILIAL and
+        orcamento.idnota=c_foralistaorcamento.IDNOTA
+left join
+    CADASTROPARCEIROS cadatendente on
+        cadatendente.cadastro=orcamento.atendente
+
+
+order by
+    c_foraDelista.id

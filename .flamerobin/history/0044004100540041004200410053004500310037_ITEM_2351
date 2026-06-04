@@ -1,0 +1,6 @@
+update
+    LANTOCONTREC
+set
+    contacontabil='1010104'
+where
+    lantocontrec.IDLANCAMENTO=2 and LANTOCONTREC.CONTACONTABIL='101010201'

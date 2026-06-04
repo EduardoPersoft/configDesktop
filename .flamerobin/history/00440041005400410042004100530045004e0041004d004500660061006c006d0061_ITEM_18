@@ -1,0 +1,26 @@
+UPDATE
+    PRAZOMERCPEDCOMPRA
+set
+    prazomercpedcompra.qtde =
+    (select
+        mercadoriaspedcompra.QUANTIDADE
+     FROM
+        MERCADORIASPEDCOMPRA
+     where 
+        mercadoriaspedcompra.filial=prazomercpedcompra.filial AND
+        mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+        mercadoriaspedcompra.IDMERCADORIA=prazomercpedcompra.IDITEM
+    )
+WHERE 
+    EXISTS (select
+        mercadoriaspedcompra.QUANTIDADE
+     FROM
+        MERCADORIASPEDCOMPRA
+     where 
+        mercadoriaspedcompra.filial=prazomercpedcompra.filial AND
+        mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+        mercadoriaspedcompra.IDMERCADORIA=prazomercpedcompra.IDITEM AND
+        mercadoriaspedcompra.baixa='N' AND
+        mercadoriaspedcompra.quantidade<>prazomercpedcompra.qtde
+    )
+    

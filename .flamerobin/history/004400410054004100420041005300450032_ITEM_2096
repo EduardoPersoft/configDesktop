@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    MERCADORIASnotaCOMPRA
+WHERE
+  codigo='11810'

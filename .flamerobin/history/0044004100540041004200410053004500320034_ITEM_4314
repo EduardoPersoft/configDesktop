@@ -1,0 +1,2 @@
+select * from CADASTROPARCEIROS
+orer by cadastro desc

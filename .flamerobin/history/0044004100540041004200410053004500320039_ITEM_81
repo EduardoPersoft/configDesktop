@@ -1,0 +1,3 @@
+select filial,idtitulo,idmovimento,valorpago from movtitulorec
+
+where filial=1 and idtitulo=21795

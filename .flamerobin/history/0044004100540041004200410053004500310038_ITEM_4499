@@ -1,0 +1,2 @@
+select * from c_faturasped
+where c_faturasped.c_malote in (32749, 32750, 32753, 32752, 32751)

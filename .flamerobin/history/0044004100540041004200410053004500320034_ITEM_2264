@@ -1,0 +1,1 @@
+select filial, idnota, calculada, numeronota, dataemissao from notafiscal order by idnota desc

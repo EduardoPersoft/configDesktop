@@ -1,0 +1,7 @@
+select 
+    * 
+from 
+    titulorec 
+where 
+    titulorec.filial=5 and 
+    titulorec.DATAENVIO between '19.04.2022' and '23.04.2022'

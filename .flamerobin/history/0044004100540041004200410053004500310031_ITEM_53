@@ -1,0 +1,29 @@
+SELECT  PLANCTOCUSTOPAGOSA.centrocusto,
+               PLANCTOCUSTOPAGOSA.filial,
+               PLANCTOCUSTOPAGOSA.razaosocial,
+               PLANCTOCUSTOPAGOSA.datainicial,
+               PLANCTOCUSTOPAGOSA.datafinal,
+               PLANCTOCUSTOPAGOSA.descricao,
+               PLANCTOCUSTOPAGOSA.debito,
+               PLANCTOCUSTOPAGOSA.credito,
+               PLANCTOCUSTOPAGOSA.saldo ,
+               PLANCTOCUSTOPAGOSA.origem,
+               PLANCTOCUSTOPAGOSA.idcontacorrente,
+               PLANCTOCUSTOPAGOSA.registro,
+               PLANCTOCUSTOPAGOSA.movimento,
+               PLANCTOCUSTOPAGOSA.lancamento,
+               PLANCTOCUSTOPAGOSA.debitoSOMA,
+               PLANCTOCUSTOPAGOSA.creditoSOMa,
+               PLANCTOCUSTOPAGOSA.saldoSOMA,
+               PLANCTOCUSTOPAGOSA.contacontabili,
+               PLANCTOCUSTOPAGOSA.contacontabilf,
+               PLANCTOCUSTOPAGOSA.centrocustoi,
+               PLANCTOCUSTOPAGOSA.centrocustof
+FROM PLANCTOCUSTOPAGOSA
+
+WHERE PLANCTOCUSTOPAGOSA.contacontabil BETWEEN
+             PLANCTOCUSTOPAGOSA.contacontabili AND PLANCTOCUSTOPAGOSA.contacontabilf
+AND PLANCTOCUSTOPAGOSA.centrocusto BETWEEN
+             PLANCTOCUSTOPAGOSA.centrocustoi AND PLANCTOCUSTOPAGOSA.centrocustof
+
+ORDER BY PLANCTOCUSTOPAGOSA.centrocusto

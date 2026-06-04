@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    C_I_MOVEST3 
+where 
+    c_i_movest3.data>='01.04.2021' 

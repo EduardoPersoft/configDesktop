@@ -1,0 +1,7 @@
+SELECT
+    distinct emissao
+FROM
+    RESUMOCOMPRAS
+
+order by
+    emissao desc

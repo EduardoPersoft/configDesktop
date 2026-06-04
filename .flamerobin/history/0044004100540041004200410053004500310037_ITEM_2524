@@ -1,0 +1,6 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.COLETADATA='19.07.2023'

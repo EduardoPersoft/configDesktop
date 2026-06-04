@@ -1,0 +1,35 @@
+select
+    cadesp.cadastro,
+    cadesp.nome,
+    orcamento.DATACADASTRO,
+    orcamento.idnota,
+    'O' as tipo
+from
+    vendedor
+inner join
+    cadastroparceiros cadesp on
+        vendedor.cadastro=cadesp.CADASTRO
+inner join
+    orcamento on
+        orcamento.C_ARQUITETO=cadesp.cadastro
+where
+    vendedor.CANALRELACIONADO=105
+union    
+select
+    cadesp.cadastro,
+    cadesp.nome,
+    orcamento.DATACADASTRO,
+    orcamento.idnota,
+    'P' as tipo
+from
+    vendedor
+inner join
+    cadastroparceiros cadesp on
+        vendedor.cadastro=cadesp.CADASTRO
+inner join
+    pedido orcamento on
+        orcamento.C_ARQUITETO=cadesp.cadastro
+where
+    vendedor.CANALRELACIONADO=105
+  
+    

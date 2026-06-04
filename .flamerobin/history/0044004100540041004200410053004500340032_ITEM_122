@@ -1,0 +1,4 @@
+select *  
+from MOVTOBANCARIOLANCAMENTOS(
+    110, '01.08.2023', '31.08.2023',
+    'PRIMFLEX', 4) 

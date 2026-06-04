@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    MERCADORIASPED
+where
+    baixa='N' and qtdeenviada>0

@@ -1,0 +1,6 @@
+select
+    *
+from 
+    ITEMESTOQUE
+where
+    codigo in ('MPP6CPPW-HTG60', 'MPP06CPPW-HTG60')

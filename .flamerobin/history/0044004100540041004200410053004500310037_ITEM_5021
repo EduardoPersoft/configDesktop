@@ -1,0 +1,9 @@
+select 
+    orcamento.DATACADASTRO,
+    count(orcamento.idnota)
+from   
+    orcamento
+where  
+    orcamento.DATACADASTRO between '01.04.2025' and '31.0542025'
+group by
+    ORCAMENTO.DATACAdastro

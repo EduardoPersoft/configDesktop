@@ -1,0 +1,1 @@
+select * from titulopag where titulopag.vencimento <> cast(vencimento as date)

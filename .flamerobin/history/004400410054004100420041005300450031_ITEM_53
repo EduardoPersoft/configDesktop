@@ -1,0 +1,1 @@
+select * from mapaproducao where filial=1 and imovimento=5969

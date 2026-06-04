@@ -1,0 +1,12 @@
+select
+    composicaomercnota.*,
+    locallote.*
+from 
+    COMPOSICAOMERCNOTA
+inner join
+    locallote on
+        locallote.filial=COMPOSICAOMERCNOTA.filial and
+        locallote."LOCAL"=composicaomercnota.IDLOCAL and
+        locallote.lote=COMPOSICAOMERCNOTA.LOTE
+where 
+    composicaomercnota.filial=1 and composicaomercnota.idnota=82389

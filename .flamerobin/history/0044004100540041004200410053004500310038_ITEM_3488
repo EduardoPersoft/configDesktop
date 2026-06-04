@@ -1,0 +1,11 @@
+select 
+    orcRelacionado.*
+from 
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        orcRelacionado.idrelacionado=orcLeitura.idnota
+where 
+    orcleitura.filial=1 and
+    orcleitura.idnota=201649

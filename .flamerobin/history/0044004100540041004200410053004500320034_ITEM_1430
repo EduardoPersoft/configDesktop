@@ -1,0 +1,8 @@
+select
+    *
+from
+    CADASTROPARCEIROS
+where 
+        c_codfornecedorantigo=5565
+order by
+    cadastro desc

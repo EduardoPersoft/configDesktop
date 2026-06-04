@@ -1,0 +1,45 @@
+select sum(coalesce(mercadoriasnota.vlrfinalmercad,0)+
+                    COALESCE(mercadoriasnota.acrescimonota,0)+coalesce(mercadoriasnota.frete, 0)+coalesce(mercadoriasnota.seguro,0)+
+                    coalesce(mercadoriasnota.outdespacessor,0)+coalesce(mercadoriasnota.vlricmsrecolhido,0)+
+                    coalesce(mercadoriasnota.valoripi,0)+coalesce(mercadoriasnota.icmsstfcpvalor,0)+
+                     case substring(mercadoriasnota.cfop from 1 for 1) when 3 then
+                     coalesce(mercadoriasnota.vlrtaxasiscomex,0)+coalesce(mercadoriasnota.vlrmarinhamerc,0)+
+                     coalesce(mercadoriasnota.vlrdespaduaneiras,0)+coalesce(mercadoriasnota.vlrpispasep,0)+
+                     coalesce(mercadoriasnota.vlrcofins,0)+(
+                        case MERCADORIASNOTA.ICMSORIGEMBASE
+                          when 0 then MERCADORIASNOTA.VALORICMS
+                          else MERCADORIASNOTA.ICMSORIGEMVALOR
+                        end) else 0 end)- sum(coalesce(MERCADORIASNOTA.DESCONTONOTA, 0)),
+                        
+                 sum(coalesce(MERCADORIASNOTA.VLRDESCPRODUTO, 0) + coalesce(MERCADORIASNOTA.DESCONTONOTA, 0)) as DESCONTOS,
+                 
+                 case substring(MERCADORIASNOTA.SITUACAOTRIBUT from 4 for 1)
+                   when '' then MERCADORIASNOTA.SITUACAOTRIBUT
+                   else substring(MERCADORIASNOTA.SITUACAOTRIBUT from 2 for 3)
+                 end,
+                 MERCADORIASNOTA.CFOP,
+                 sum(
+                 case MERCADORIASNOTA.ICMSORIGEMBASE
+                   when 0 then MERCADORIASNOTA.ICMSBASE
+                   else MERCADORIASNOTA.ICMSORIGEMBASE
+                 end),
+                 case MERCADORIASNOTA.ICMSORIGEMBASE
+                   when 0 then MERCADORIASNOTA.ALIQUOTAICMS
+                   else MERCADORIASNOTA.ICMSORIGEMALIQUOTA
+                 end,
+                 sum(
+                 case MERCADORIASNOTA.ICMSORIGEMBASE
+                   when 0 then MERCADORIASNOTA.VALORICMS
+                   else MERCADORIASNOTA.ICMSORIGEMVALOR
+                 end),
+                 sum(MERCADORIASNOTA.VLRBASESUBST) as VLRBASESUBST, 
+                 sum(MERCADORIASNOTA.VLRICMSRECOLHIDO+coalesce(mercadoriasnota.icmsstfcpvalor,0)), 
+                 sum(case when MERCADORIASNOTA.CSTIPI in (0, 50, 99) then MERCADORIASNOTA.VALORIPI else 0 end),
+                 sum(case when MERCADORIASNOTA.CSTIPI in (0, 50, 99) then 0 else MERCADORIASNOTA.VALORIPI end),
+                 SUM(MERCADORIASNOTA.ICMSORIGEMFCPVALOR),
+                 SUM(MERCADORIASNOTA.ICMSSTFCPVALOR),
+                 0
+          from MERCADORIASNOTA
+          inner join ITEMESTOQUE on (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+          where MERCADORIASNOTA.FILIAL = 1 and
+                MERCADORIASNOTA.IDNOTA = 20616

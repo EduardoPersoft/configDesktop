@@ -1,0 +1,2 @@
+select * from MERCADORIASORC
+where codigo='1964521' order by idnota desc

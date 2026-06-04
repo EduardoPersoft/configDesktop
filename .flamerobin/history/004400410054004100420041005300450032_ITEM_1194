@@ -1,0 +1,8 @@
+SELECT
+    *
+from 
+    itemestoque
+WHERE
+    itemestoque.CLASSIFISCAL=302
+order by
+    itemestoque.TRIBUTACAOICMS

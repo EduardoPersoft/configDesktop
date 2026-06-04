@@ -1,0 +1,6 @@
+select 
+    codigo, 
+    tipoproduto, 
+    valorULTIMACOMPRA
+from    
+    itemestoque

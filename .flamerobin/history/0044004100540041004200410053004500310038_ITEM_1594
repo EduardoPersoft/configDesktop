@@ -1,0 +1,2 @@
+select * from LANTOCONTBANC
+where lantocontbanc.CONTACONTABIL='9'

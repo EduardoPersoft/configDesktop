@@ -1,0 +1,10 @@
+select
+    itemestoque.filialdefault,
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao
+from
+    itemestoque
+order by
+    itemestoque.codigo

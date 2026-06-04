@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    C_LISTAXCADASTRO
+WHERE 
+    DATAFINAL < CAST('NOW' AS DATE)

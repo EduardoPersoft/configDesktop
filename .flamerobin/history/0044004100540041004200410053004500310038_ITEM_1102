@@ -1,0 +1,7 @@
+update  
+    ITEMESTOQUE
+set
+    itemestoque.VALORULTIMACOMPRa=null
+    
+
+

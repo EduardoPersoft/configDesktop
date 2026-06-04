@@ -1,0 +1,3 @@
+delete from turnos
+where extract(day from inicio) =1
+and extract(month from inicio)=1

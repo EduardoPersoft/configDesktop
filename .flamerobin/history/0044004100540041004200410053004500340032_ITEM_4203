@@ -1,0 +1,15 @@
+update  
+    INVENTARIOESTOQUEDATA
+set
+    quantidade = (select 
+                    MATERIALMOVIMENTOESTOQUE.QUANTIDADE
+                  from 
+                    MATERIALMOVIMENTOESTOQUE
+                  where 
+                    materialmovimentoestoque.filial=INVENTARIOESTOQUEDATA.FILIAL
+                    and MATERIALMOVIMENTOESTOQUE.IDMOVIMENTo=80597
+                    and materialmovimentoestoque.iditem=INVENTARIOESTOQUEDATA.CODIGO
+                    and MATERIALMOVIMENTOESTOQUE.lote=INVENTARIOESTOQUEDATA.lote)
+where
+    INVENTARIOESTOQUEDATA.data='22.12.2025'
+

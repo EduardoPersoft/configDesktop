@@ -1,0 +1,4 @@
+delete from
+    CARRINHO
+WHERE
+    substring(numeropedidocliente from 1 for 4) ='c1b8'

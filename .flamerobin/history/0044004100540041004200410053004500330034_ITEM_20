@@ -1,0 +1,14 @@
+CREATE TABLE VOLUMES
+(
+  ID smallint NOT NULL,
+  DESCRICAO VARCHAR(30),
+  QUANTIDADE numeric(12,3),
+  PESOLIQUIDO numeric(12,3),
+  PESOBRUTO numeric(12,3),
+  ALTURA numeric(12,3),
+  LARGURA numeric(12,3),
+  COMPRIMENTO numeric(12,3),
+  DIAMETRO numeric(12,3),
+  FORMATO smallint,
+  CONSTRAINT PK_VOLUMES PRIMARY KEY (ID)
+);

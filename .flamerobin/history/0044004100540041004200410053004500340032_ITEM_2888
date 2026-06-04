@@ -1,0 +1,28 @@
+select 
+    cast(0 as integer) qtd,
+    cast(1 as integer) total,
+    itemestoque.codigo,    
+    materiallote.lote,
+    SUBSTRING (itemestoque.DESCRICAO FROM 1 FOR 40) AS DESCRICAO1,
+    SUBSTRING (itemestoque.DESCRICAO FROM 40 FOR 40) AS DESCRICAO2,
+    materiallote.c_largura as largura,
+    cast(materiallote.QUANTIDADE as decimal(12,3)),
+    200000000000+materiallote.codigobarra,
+    materiallote.c_gramatura as gramatura,
+    materiallote.FILIAL,
+    materiallote.uuid
+from   
+    itemestoque
+inner join 
+    materiallote on 
+        (materiallote.IDITEM=itemestoque.codigo)      
+left join
+    consultas on
+         (consultas.UUIDSELECIONADO=materiallote.uuid)
+--where 
+  --  consultas.uuid=?
+order by
+    materiallote.c_largura,
+    materiallote.c_gramatura,
+    itemestoque.codigo
+

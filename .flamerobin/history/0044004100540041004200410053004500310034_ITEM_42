@@ -1,0 +1,11 @@
+select
+    movimentoestoque.documento,
+    count(movimentoestoque.idmovimento)
+from
+    movimentoestoque
+where
+    movimentoestoque.filial=110
+group by
+    movimentoestoque.DOCUMENTO
+having
+    count(movimentoestoque.idmovimento)>1

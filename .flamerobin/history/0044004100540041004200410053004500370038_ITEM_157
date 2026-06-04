@@ -1,0 +1,8 @@
+update
+    itemcustodata
+set
+    custounitario = coalesce((select max(cast(MATERIALMOVIMENTOESTOQUE.valor/materialmovimentoestoque.quantidade decimal(10,2))
+                              from MATERIALMOVIMENTOESTOQUE
+                              where MATERIALMOVIMENTOESTOQUE.iditem=itemcustodata.codigo),0)
+where 
+    datainventario = '30.09.2025'

@@ -1,0 +1,1 @@
+select * from materiallocal where saldototal>0 order by idlocal

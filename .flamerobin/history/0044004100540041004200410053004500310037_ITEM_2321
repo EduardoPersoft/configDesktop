@@ -1,0 +1,12 @@
+ALTER TABLE MERCADORIASORC ADD
+c_tipoProduto smallint,
+c_bocaAltura decinal(12,2),
+c_alturaPainel decimal(12,2),
+c_sanfona decimal(12,2),
+c_soldaDorso decimal(12,2),
+c_passo decimal(12,2),
+c_faixas smallint,
+c_largura decinal(12,2),
+c_larguraMP decinal(12,2),
+c_descricaoProduto varchar(120)
+

@@ -1,0 +1,47 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    precoProduto.custoconsiderado as custoPreco,
+    precoPromocao.preco as promocao,
+    materialfilial.CONSUMOMEDIO,
+    max(notacompra.DATAEMISSAO)
+FROM
+    ITEMESTOQUE
+inner join
+    MATERIALLOCAL on
+        materiallocal.filial=5 and
+        itemestoque.codigo=materiallocal.IDITEM
+inner JOIN
+    listaprecoproduto precoProduto on
+        precoProduto.lista=1 AND
+        precoProduto.produto=itemestoque.CODIGO
+inner JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo
+left JOIN
+    listaprecoproduto precoPromocao on
+        precoPromocao.lista=2 AND
+        precoPromocao.produto=itemestoque.CODIGO
+left JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.codigo=itemestoque.CODIGO
+left JOIN
+    notacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+WHERE
+    materiallocal.saldototal>0
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    precoProduto.custoconsiderado ,
+    precoPromocao.preco
+
+HAVING
+    max(notacompra.DATAEMISSAO) <= '01.03.2020'
+order by
+    6
+            

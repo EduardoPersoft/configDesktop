@@ -1,0 +1,12 @@
+update MERCADORIASNOTA
+set  MERCADORIASNOTA.ipibase=0
+where mercadoriasnota.IPIBASE>0
+and mercadoriasnota.filial=12826
+and mercadoriasnota.idnota>10000
+/*
+update NOTAFISCAL
+set notafiscal.ipibase=0
+where NOTAFISCAL.IPIBASE>0
+and NOTAFISCAL.filial=12826
+and NOTAFISCAL.idnota>10000
+*/

@@ -1,0 +1,10 @@
+select 
+    first 1000
+    composicaomercnota.*
+from
+    COMPOSICAOMERCNOTA
+where 
+    filial=1
+order by
+    idnota desc
+    

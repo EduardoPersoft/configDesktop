@@ -1,0 +1,1 @@
+select SPEDFISCAL_C.vl_opr-SPEDFISCAL_C.VL_BC_ICMS, SPEDFISCAL_C.* from SPEDFISCAL_C where segmento = 'C190' and substring(cst_icms from 2 for 2)='20' 

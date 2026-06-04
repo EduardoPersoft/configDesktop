@@ -1,0 +1,7 @@
+select
+    *
+from 
+    titulorec
+where 
+    titulorec.CONTACORRENTE=1342 and
+    titulorec.filial=5 

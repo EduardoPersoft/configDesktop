@@ -1,0 +1,1 @@
+delete from vendedoresnota where filial=1 and idnota=346164

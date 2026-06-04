@@ -1,0 +1,20 @@
+select
+    pedido.idnota,
+    pedido.datareferencia,
+    cadcli.nome,
+    count(mercadoriasped.idmercadoria)
+from
+    PEDIDO
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.DESTINATARIO
+inner join
+    mercadoriasped on
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.IDNOTA
+where
+    pedido.filial=110
+group by    
+    pedido.idnota,
+    pedido.datareferencia,
+    cadcli.nome,

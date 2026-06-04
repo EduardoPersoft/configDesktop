@@ -1,0 +1,13 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where materialmovimentoestoque.filial=5 and
+MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+exists (
+    select 
+        * 
+    from 
+        movimentoestoque 
+    where 
+        materialmovimentoestoque.filial=movimentoestoque.filial and 
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        movimentoestoque.TIPOMOVIMENTO='13'
+        )

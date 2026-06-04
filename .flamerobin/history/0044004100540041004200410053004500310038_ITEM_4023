@@ -1,0 +1,3 @@
+select * from NOTAFISCAL
+where filial=1 and idnota=41336
+order by idnota desc

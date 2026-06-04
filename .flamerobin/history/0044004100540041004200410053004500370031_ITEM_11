@@ -1,0 +1,48 @@
+Select situacaosaldodopedido.Idnota,
+           situacaosaldodopedido.Idmercadoria,
+           situacaosaldodopedido.Dataentrega,
+           situacaosaldodopedido.Quantidade,
+           Estab.Razaosocial,
+           Pedido.Numeronota,
+           Pedido.Dataemissao,
+           Mercadoriasped.Codigo,
+           itemestoque.Descricao,
+           Itemestoque.Unidade As Compunid,
+           Mercadoriasped.Desreduzida,
+           Mercadoriasped.Unidade,
+           Pedido.Comentario,
+           --Pedido.Quantidadevolume,
+           mercadoriasped.qtdevolume,
+           Pedido.Pesobruto,
+           Pedido.Pesoliquido,
+           Pedido.Datacadastro,
+           Cliente.Cadastro,
+           Cliente.Nome, Cliente.Documento, Cliente.Logradouro, 
+           Cliente.Numero,
+           Cliente.Bairro, Cliente.Cep, Cliente.Cidade, Cliente.Uf,
+           Cliente.Telefone, Cliente.Fax,
+           mercadoriasped.pesobruto,
+           mercadoriasped.pesoliquido,
+           'INICIAR-'||pedido.FILIAL||'/'||pedido.idnota as codbarrapedido,
+           'ITEM-'||mercadoriasped.idmercadoria as codbarraitem,
+           'TERMINAR-'||pedido.FILIAL||'/'||pedido.idnota as codbarrapedido,
+           itemestoque.volume,
+           cadtrans.CADASTRO,
+           cadtrans.NOME,
+           cast ( substring (pedido.OBSERVACAo from 1 for 500) as varchar (500)) ,
+           cast ( substring (pedido.MSGDADOSADICIONAIS from 1 for 500) as varchar (500)),
+           itemestoque.LOCALIZACAO
+From situacaosaldodopedido(:filial,:datainicial,:datafinal)
+Inner Join Pedido On (situacaosaldodopedido.Filial=Pedido.Filial And
+                      situacaosaldodopedido.Idnota=Pedido.Idnota)
+Inner Join Mercadoriasped On  (situacaosaldodopedido.Filial = Mercadoriasped.Filial And
+                               situacaosaldodopedido.Idnota = Mercadoriasped.Idnota And
+                               situacaosaldodopedido.Idmercadoria=Mercadoriasped.Idmercadoria)
+Inner Join Itemestoque On (Mercadoriasped.Codigo=Itemestoque.Codigo)
+Inner Join Estabelecimento On (situacaosaldodopedido.Filial=Estabelecimento.Cadastro)
+Inner Join Cadastroparceiros Estab On (estab.Cadastro = Estabelecimento.Cadastro)
+Inner Join Cadastroparceiros Cliente On (Pedido.Destinatario = Cliente.Cadastro)
+left join CADASTROPARCEIROS cadtrans on (pedido.CODIGOTRANSP = cadtrans.CADASTRO)
+where /*situacaosaldodopedido.Idnota*/ pedido.IDNOTA Between :Idnotainicial And :Idnotafinal
+/*and situacaosaldodopedido.fisica >= situacaosaldodopedido.reservado */
+Order By situacaosaldodopedido.Filial, Pedido.Numeronota, Mercadoriasped.Idmercadoria

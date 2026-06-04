@@ -1,0 +1,2 @@
+select * from COMPOSICAOITEM 
+where iditem='PA0028'

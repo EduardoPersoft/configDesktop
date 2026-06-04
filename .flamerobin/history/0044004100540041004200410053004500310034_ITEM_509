@@ -1,0 +1,18 @@
+select
+    movimentoestoque.emissao,
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.VALOR
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MATERIALMOVIMENTOESTOQUE.iditem like 'MPP%' and
+    movimentoestoque.filial=110 and
+    movimentoestoque.TIPOMOVIMENTO='01'
+order by
+    movimentoestoque.emissao,
+    materialmovimentoestoque.iditem

@@ -1,0 +1,2 @@
+select filial,idnota,datacadastro,datareferencia from PEDIDO
+where idnota in (442,448)

@@ -1,0 +1,7 @@
+update
+    PEDIDO
+set
+    pedido.DATAEMISSAO = null
+where 
+    pedido.filial=110 and
+    pedido.idnota in (12404,12405,12610,12611,12617,12708)

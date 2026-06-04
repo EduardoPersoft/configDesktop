@@ -1,0 +1,9 @@
+select * from COMPOSICAOOP
+where filial=110
+and exists (
+select * from MATERIALMOVIMENTOESTOQUE
+where materialmovimentoestoque.filial=COMPOSICAOOP.filial 
+and materialmovimentoestoque.idmovimento=composicaoop.IDMOVIMENTO
+and materialmovimentoestoque.IDMOVIMENTOMATERIAL=composicaoop.IDMOVIMENTOMATERIAL
+and materialmovimentoestoque.iditem='I001')
+order by composicaoop.IDMOVIMENTO desc,idmovimentomaterial,idcomposicao 

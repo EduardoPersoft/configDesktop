@@ -1,0 +1,1 @@
+select * from notafiscal where filial=3941 and uuid='{EB146FF0-B8FB-458A-855E-2BD8218E0B1' order by idnota desc

@@ -1,0 +1,3 @@
+select * from SERVICOSPEDCOMPRA
+where filial=110 and
+idnota BETWEEN 1494 AND 1495

@@ -1,0 +1,11 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    itemestoque.PESOLIQUIDO,
+    itemestoque.pesobruto,
+    itemestoque.C_PESOPOREMBALAGEM
+from 
+    ITEMESTOQUE
+where
+    itemestoque.tipoproduto=4

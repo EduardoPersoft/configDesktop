@@ -1,0 +1,6 @@
+insert into itemestoqueFoto (
+codigo ,
+imagem )
+select itemestoque.codigo, itemestoque.FOTO
+from ITEMESTOQUE
+where itemestoque.foto is not null

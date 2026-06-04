@@ -1,0 +1,8 @@
+select
+    *
+from
+    TITULOREC
+where
+    filial=5 and
+    titulorec.EMISSAO='04.02.2022' and
+    titulorec.PARCEIRO is null

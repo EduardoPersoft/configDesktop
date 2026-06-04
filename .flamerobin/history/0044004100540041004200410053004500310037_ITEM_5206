@@ -1,0 +1,9 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where exists 
+(select * from movimentoestoque
+inner join mercadoriasnota on
+    mercadoriasnota.filial=MATERIALMOVIMENTOESTOQUE.FILIAL
+and mercadoriasnota.idnota=movimentoestoque.idnota
+and mercadoriasnota.IDMERCADORIA=MATERIALMOVIMENTOESTOQUE.IDMERCADORIA
+where movimentoestoque.filial=materialmovimentoestoque.filial
+and movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento)

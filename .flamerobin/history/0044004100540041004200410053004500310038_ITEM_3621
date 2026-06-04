@@ -1,0 +1,10 @@
+select 
+    filial,
+    idnota,
+    uuid
+from
+    PEDIDO ORCAMENTO
+where 
+    orcamento.uuid is not null
+order by
+    orcamento.idnota desc

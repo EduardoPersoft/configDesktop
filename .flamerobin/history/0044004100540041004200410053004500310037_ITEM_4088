@@ -1,0 +1,1 @@
+select * from cliente where cadastro=20626

@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where iditem='2662046'

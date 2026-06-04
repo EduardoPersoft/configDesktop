@@ -1,0 +1,1 @@
+select codigo, descricao, c_tipo from itemestoque where itemestoque.codigo='36007'

@@ -1,0 +1,4 @@
+select 
+    max(coalesce(CONDICAOPAGAMENTO.id),0)+1
+from
+    condicaoPagamento

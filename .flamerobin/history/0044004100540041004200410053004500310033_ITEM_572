@@ -1,0 +1,10 @@
+select
+    mercadoriasnota.codigo,
+    sum(mercadoriasnota.quantidade)
+from 
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota=24112
+group by
+    mercadoriasnota.codigo

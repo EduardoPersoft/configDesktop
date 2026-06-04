@@ -1,0 +1,8 @@
+update 
+    MERCADORIASPED
+set
+    mercadoriasped.SITUACAOTRIBUT = '260'
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.SITUACAOTRIBUT='160'
+    

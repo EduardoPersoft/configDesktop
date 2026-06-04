@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFICACAOCONTABIL='1120103'
+where
+    substring(itemestoque.CODIGO from 1 for 4)='MPSA'

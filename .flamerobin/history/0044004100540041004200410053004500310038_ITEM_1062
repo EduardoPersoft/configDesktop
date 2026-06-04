@@ -1,0 +1,3 @@
+select filial,idnota,idmovimento from NOTAFISCAL
+where idnota=31911
+order by idnota desc

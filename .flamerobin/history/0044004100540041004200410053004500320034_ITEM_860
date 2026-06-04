@@ -1,0 +1,27 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    mercadoriasnota.unidade,
+    sum(mercadoriasnota.quantidade) quantidade,
+    sum(mercadoriasnota.vlrFinalMercad) / 
+         sum(mercadoriasnota.quantidade),
+    sum(mercadoriasnota.vlrfinalMercad) as valor
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on 
+        itemestoque.codigo=mercadoriasnota.codigo
+where
+    notafiscal.filial=5 and
+    notafiscal.destinatario = 4436 and
+    notafiscal.dataemissao = '2021-12-21'
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    mercadoriasnota.unidade
+order by
+    cast(itemestoque.codigo as integer)

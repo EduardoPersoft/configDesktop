@@ -1,0 +1,3 @@
+select * from SERVICOSNOTA
+where servicosped.filial=1
+and servicosped.idnota=68337

@@ -1,0 +1,6 @@
+update 
+    NOTACOMPRA
+set
+    notacompra.DATAENTRADA=notacompra.DATAEMISSAO
+where 
+    notacompra.dataemissao>='01.10.2023'

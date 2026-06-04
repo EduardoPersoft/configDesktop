@@ -1,0 +1,7 @@
+update
+    servicospedcompra
+set 
+    servicospedcompra.CONTACONTABIL='1120401'                                                                                      
+where filial=110                                                                                      
+
+    

@@ -1,0 +1,11 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.CLASSIFISCAL='1'
+where
+    itemestoque.codigo in ('PRO4425FLI001',
+'PRO4425FLI002',
+'PRO4425FLI003',
+'PRO4425FLI004',
+'PRO4425FLI005',
+'PRO4425FLI006')

@@ -1,0 +1,16 @@
+select 
+    materiallocal.*,
+    local.ean,
+    itemestoque.CODIGOBARRA,
+    itemestoque.descricao
+from 
+    materiallocal 
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.iditem
+inner join
+    local on
+        local.id=materiallocal.IDLOCAL
+where 
+    saldototal>0 
+order by idlocal

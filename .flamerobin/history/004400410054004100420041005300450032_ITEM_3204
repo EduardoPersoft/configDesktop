@@ -1,0 +1,22 @@
+SELECT  
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+WHERE
+    pedidocompra.filial=5 AND
+    pedidocompra.DATAcadastro>='01.04.2021' AND
+    mercadoriaspedcompra.QTDEENTREGUE < (select
+                                            sum(mercadoriasnotacompra.quantidade)
+                                         from
+                                            MERCADORIASNOTACOMPRA
+                                         WHERE
+                                            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+                                            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+                                            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.idmercadoria
+order by 
+    idnota
+                                        

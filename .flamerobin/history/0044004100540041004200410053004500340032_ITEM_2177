@@ -1,0 +1,2 @@
+select * from LOGALTERACAO
+where codigo='MPP02CPE/HR'

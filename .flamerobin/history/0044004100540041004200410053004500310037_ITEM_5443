@@ -1,0 +1,60 @@
+ select
+    movimentoestoque.filial,
+    movimentoestoque.idmovimento,
+    pedido.idnota,
+    movimentoestoque.COLETADATA,
+    cadcliente.nome,
+    case coalesce(cadVendedor.cadastro, movimentoEstoque.filial) 
+    when movimentoEstoque.filial then 1 else cadVendedor.cadastro end,
+
+    case coalesce(cadVendedor.cadastro, movimentoEstoque.filial) 
+    when movimentoEstoque.filial then 'EURO BRAKE' else cadVendedor.nome end,
+
+    coalesce(movimentoestoque.VALORFRETE,0)as frete,
+    case coalesce(movimentoestoque.valorFrete,0) 
+        when 0 then 0 
+        else coalesce(notafiscal.vlrTotalNota,0) end fatFrete,
+
+    coalesce(c_coletas.VALORMEDIO,0) as coleta,
+    case coalesce(c_coletas.valorMedio,0) 
+        when 0 then 0 
+        else coalesce(notafiscal.vlrTotalNota,0) end fatColeta,
+ 
+    case notaFiscal.filial when 1 then
+           coalesce(c_coletas.VALORMEDIO,0)+
+           coalesce(movimentoestoque.VALORFRETE,0) 
+        else 
+            0 
+        end as custoImportadora,
+ 
+    case notaFiscal.filial when 1 then 0 
+        else
+            coalesce(c_coletas.VALORMEDIO,0)+
+            coalesce(movimentoestoque.VALORFRETE,0)
+        end as custoDistribuidora
+
+from
+    movimentoestoque
+left join 
+    c_coletas on
+        c_coletas.COLETA=movimentoestoque.COLETA
+left join
+    pedido on
+        movimentoestoque.filial=pedido.filial and
+        movimentoestoque.idpedido=pedido.idnota  
+left join
+    CADASTROPARCEIROS cadcliente on    
+        cadcliente.cadastro=pedido.destinatario
+        
+
+left join
+    CADASTROPARCEIROS cadvendedor on    
+        cadvendedor.cadastro=pedido.vendedor
+left join
+    notafiscal on
+        movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.idnotaexpedicao=notafiscal.idnota
+where
+     cast(movimentoestoque.coletadata as date) between '01.07.2025' and '31.07.2025' and
+     TIPOMOVIMENTO='13'
+

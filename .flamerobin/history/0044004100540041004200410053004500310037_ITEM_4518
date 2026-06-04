@@ -1,0 +1,2 @@
+select * from materiallocal
+where materiallocal.iditem='1009527' 

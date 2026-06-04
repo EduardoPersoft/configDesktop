@@ -1,0 +1,4 @@
+UPDATE
+    LISTAPRECOPRODUTO
+SET
+    listaprecoproduto.DESCONTOITEM=25

@@ -1,0 +1,14 @@
+select 
+    *
+from
+    LANTOCONTBANC
+where
+    LANTOCONTBANC.filial=110 and
+    not exists (
+        select
+            *
+        from
+            CONTASCONTABEIS
+        where
+            contascontabeis.IDPLANO=5 and
+            contascontabeis.CONTACONTABIL=LANTOCONTBANC.CONTACONTABIL)

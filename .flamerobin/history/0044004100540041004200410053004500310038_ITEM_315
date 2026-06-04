@@ -1,0 +1,2 @@
+update INVENTARIOESTOQUEDATA set data = '28.02.2022' 
+where data='03.03.2022'

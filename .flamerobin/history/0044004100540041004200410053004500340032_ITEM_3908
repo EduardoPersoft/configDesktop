@@ -1,0 +1,2 @@
+select filial,idmovimento,pesoliquido,pesobruto from MOVIMENTOESTOQUE
+where filial=110 and idmovimento=74834

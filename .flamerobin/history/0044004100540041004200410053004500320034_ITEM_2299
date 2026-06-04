@@ -1,0 +1,1 @@
+select * from mercadoriasped where filial=5 and codigo='101132' 

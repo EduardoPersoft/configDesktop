@@ -1,0 +1,20 @@
+
+update 
+     ORCAMENTO
+set
+orcamento.uuid = orcamento.filial||'-'||orcamento.DESTINATARIO||'-'||orcamento.idnota
+    
+where
+    ORcamento.datacadastro > '01.01.2025';
+    --and orcamento.uuid is null ;
+    
+    
+    
+update 
+    pedido ORCAMENTO
+set
+    orcamento.uuid = orcamento.filial||'-'||orcamento.DESTINATARIO||'-'||orcamento.idnota
+where
+    ORcamento.datacadastro > '01.01.2026'; 
+    --and orcamento.uuid is null;
+    

@@ -1,0 +1,4 @@
+SELECT
+    filial,codigo,contacorrente.DESCRICAOCONTA,saldoreal
+FROM
+    CONTACORRENTE

@@ -1,0 +1,2 @@
+select filial, idnota, idmercadoria, qtdevolume from MERCADORIASPED
+where filial=1 and idnota=24698

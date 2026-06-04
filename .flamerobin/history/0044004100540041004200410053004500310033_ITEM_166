@@ -1,0 +1,158 @@
+SET TERM ^ ;
+alter PROCEDURE C_POSICAOESTOQUERESERVACONITEM (
+    FILIAL INTEGER,
+    DATAINICIAL DATE,
+    DATAFINAL DATE )
+RETURNS (
+    CODIGO VARCHAR(15),
+    SALDOTOTAL DOUBLE PRECISION,
+    VALORTOTALESTOCADO DOUBLE PRECISION,
+    CUSTOMEDIO DOUBLE PRECISION,
+    RESERVAPEDIDO DOUBLE PRECISION,
+    RESERVANOTA DOUBLE PRECISION,
+    RESERVAOP DOUBLE PRECISION,
+    RESERVAPEDIDOCOMPRA DOUBLE PRECISION,
+    ESTABELECIMENTO INTEGER,
+    RAZAOSOCIAL VARCHAR(60),
+    CONSUMO DOUBLE PRECISION,
+    MESES INTEGER,
+    SEMANAS DECIMAL(12,2),
+    DESCRICAO VARCHAR(250),
+    GRUPODESCRICAO VARCHAR(100),
+    UNIDADE VARCHAR(3),
+    TIPOPRODUTO VARCHAR(20))
+AS
+begin
+
+  consumo = 0;
+  meses = (extract(year from datafinal)*12);
+  meses = meses + extract(month from datafinal);
+  meses = meses - (extract(year from datainicial)*12);
+  meses = meses - extract(month from datainicial);
+  meses = meses + 1 ;
+  semanas = meses * 4.2;
+
+  for SELECT
+    coalesce (itembase.codigo, POSICAOESTOQUERESERVA2.CODIGO) as codigo,  
+    coalesce (GRUPOMERCADORIAbase.DESCRICAO, grupomercadoriaitem.descricao) as GRUPODESCRICAO,
+    cast( coalesce (itembase.DESCRICAO, item.descricao) as varchar (250)) AS DESCRICAO,
+    coalesce (itembase.UNIDADE, item.unidade) as unidade,
+        case item.TIPOPRODUTO
+        when '1' then 'MATERIAPRIMA'
+        when '2' then 'CONSUMO'
+        when '3' then 'REVENDA'
+        when '4' then 'INDUSTRIALIZADO'
+        when '5' then 'INATIVO'
+        else ''
+    end as TIPOPRODUTO,
+    SALDOTOTAL,
+    VALORTOTALESTOCADO,
+    CUSTOMEDIO,
+    RESERVAPEDIDO,
+    RESERVANOTA,
+    RESERVAOP,
+    RESERVAPEDIDOCOMPRA,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL
+  FROM 
+    POSICAOESTOQUERESERVA2(:FILIAL)
+  inner join 
+    itemestoque item on (item.codigo=POSICAOESTOQUERESERVA2.CODIGO)
+
+  LEFT join
+     itemestoque itembase on (itembase.codigo=item.itembase)
+  LEFT join 
+     grupomercadoria grupomercadoriaitem on (grupomercadoriaitem.grupo=item.grupo)    
+  LEFT join 
+     grupomercadoria grupomercadoriabase on (grupomercadoriabase.grupo=itembase.grupo)
+
+  WHERE coalesce(item.itembase,'') <> ''
+    and item.itembase is not null     
+             
+  INTO
+    CODIGO,
+    GRUPODESCRICAO,
+    DESCRICAO,
+    UNIDADE,
+    TIPOPRODUTO,
+    SALDOTOTAL,
+    VALORTOTALESTOCADO,
+    CUSTOMEDIO,
+    RESERVAPEDIDO,
+    RESERVANOTA,
+    RESERVAOP,
+    RESERVAPEDIDOCOMPRA,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL do
+        suspend;
+    
+  
+  SALDOTOTAL = 0;
+  VALORTOTALESTOCADO = 0;
+  CUSTOMEDIO = 0;
+  RESERVAPEDIDO = 0;
+  RESERVANOTA = 0;
+  RESERVAOP = 0;
+  RESERVAPEDIDOCOMPRA = 0;
+  
+  for select 
+    --materialmovimentoestoque.iditem,
+    coalesce (itembase.codigo,materialmovimentoestoque.iditem),
+    coalesce (GRUPOMERCADORIAbase.DESCRICAO, grupomercadoriaitem.descricao) as GRUPODESCRICAO,
+    cast( coalesce (itembase.DESCRICAO, item.descricao) as varchar (250)) AS DESCRICAO,
+       coalesce (itembase.UNIDADE, item.unidade) as unidade,
+        case item.TIPOPRODUTO
+        when '1' then 'MATERIAPRIMA'
+        when '2' then 'CONSUMO'
+        when '3' then 'REVENDA'
+        when '4' then 'INDUSTRIALIZADO'
+        when '5' then 'INATIVO'
+        else ''
+    end as TIPOPRODUTO,
+    sum(coalesce (materialmovimentoestoque.quantidade,0) * materialmovimentoestoque.sinal) * (-1) as consumo , 
+    cadastrofilial.cadastro,
+    cadastrofilial.razaosocial
+ from 
+    MOVIMENTOESTOQUE
+ inner JOIN
+    materialmovimentoestoque on 
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+ inner join 
+    TIPOMOVIMENTOESTOQUE on  
+       movimentoestoque.TIPOMOVIMENTO = TIPOMOVIMENTOESTOQUE.ID  
+ inner JOIN
+    cadastroparceiros cadastrofilial on
+        cadastrofilial.cadastro=movimentoestoque.filial
+  left join 
+    itemestoque item on (item.codigo=materialmovimentoestoque.iditem)
+  LEFT join
+     itemestoque itembase on (itembase.codigo=COALESCE(item.itembase, item.codigo) )   
+  LEFT join 
+     grupomercadoria grupomercadoriaitem on (grupomercadoriaitem.grupo=item.grupo)    
+  LEFT join 
+     grupomercadoria grupomercadoriabase on (grupomercadoriabase.grupo=itembase.grupo)          
+ where 
+    movimentoestoque.filial=:filial AND
+    tipomovimentoestoque.tipomovimento='S' and
+    movimentoestoque.emissao between :datainicial and :datafinal 
+
+ group by
+    1,2,3,4,5,
+    cadastrofilial.cadastro,
+    cadastrofilial.razaosocial
+ INTO
+    CODIGO,    
+    GRUPODESCRICAO,
+    DESCRICAO,
+    UNIDADE,
+    TIPOPRODUTO,
+    consumo,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL
+  do
+    suspend;
+
+end
+^
+SET TERM ; ^

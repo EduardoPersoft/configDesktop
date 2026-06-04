@@ -1,0 +1,7 @@
+update
+    LANTOCONTREC
+set
+    lantocontrec.CONTACONTABIL = '1010104'
+when
+    lantocontrec.CONTACONTABIL = '101010301'
+

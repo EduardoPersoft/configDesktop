@@ -1,0 +1,40 @@
+select  
+    'P' as origem,
+    cast(movimentoestoque.EMISSAO as date),
+    movimentoestoque.idmovimento,
+    movimentoestoque.COLETADATA,
+    c_coletas.VALORMEDIO,
+    c_coletas.*,
+    cadven.nome as nomevendedor
+from 
+    c_coletas
+inner join
+    MOVIMENTOESTOQUE on
+        movimentoestoque.COLETA=c_coletas.COLETA
+left join
+    pedido on
+        pedido.FILIAL=movimentoestoque.filial and
+        pedido.idnota=movimentoestoque.idpedido 
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=pedido.vendedor
+where
+    c_coletas.DATACOLETA between '14.11.2025' and '27.11.2025'
+    and movimentoestoque.TIPOMOVIMENTO='13'
+union    
+select  
+    'A' as origem,
+    cast(c_destinoavulso.DATASOLICITACAO as date),
+    c_destinoavulso.id,
+    c_destinoavulso.DATACOLETA,
+    c_coletas.VALORMEDIO,
+    c_coletas.*,
+    '' as nomevendedor
+from 
+    c_coletas
+inner join
+    c_destinoavulso on
+        c_destinoavulso.COLETA=c_coletas.COLETA
+where
+    c_coletas.DATACOLETA between '14.11.2025' and '27.11.2025'
+order by 5

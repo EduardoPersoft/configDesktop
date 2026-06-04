@@ -1,0 +1,8 @@
+update  
+    contrato
+set
+    simples='S'
+where 
+    contrato.DATATERMINO is null
+
+    

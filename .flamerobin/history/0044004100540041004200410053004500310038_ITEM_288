@@ -1,0 +1,42 @@
+select
+    MOVBANCARIOS.filial,
+    MOVBANCARIOS.idcontacorrente as contacorrente,
+    ccMovto.DESCRICAOCONTA,
+    movbancarios.DATAEXTRATO,
+    movbancarios.HISTORICOEXTRATO,
+    movbancarios.VALORMOVIMENTO*case movbancarios.TIPOMOVIMENTO when 'C' then 1 else -1 end as valor,
+    movbancarios.tipomovimento cd,
+    case 
+        when movbancarios.TRANSFERENCIA = 'S' then 'Transferencia' 
+        when contascontabeis.CONTACONTABIL is not null then 'lancamento' 
+        else '' 
+    end as tipo,
+    coalesce(ccTransf.DESCRICAOCONTA, contascontabeis.descricao) as contrapartida
+    
+    
+from
+    MOVBANCARIOS
+inner join
+    estabelecimento on
+        estabelecimento.cadastro = MOVBANCARIOS.FILIAL
+inner join
+    contacorrente ccMovto on 
+        ccMovto.filial=movbancarios.filial and
+        ccMovto.codigo=movbancarios.idcontacorrente
+left join
+    contacorrente ccTransf on 
+        ccTransf.filial=movbancarios.filial and
+        ccTransf.codigo=movbancarios.CONTACORRENTEDEST
+left join
+     LANTOCONTBANC on
+            LANTOCONTBANC.FILIAL=MOVBANCARIOS.filial and
+            LANTOCONTBANC.IDCONTACORRENTE=MOVBANCARIOS.IDCONTACORRENTE and
+            LANTOCONTBANC.IDMOVTOBANC=MOVBANCARIOS.IDMOVTOBANCARIO
+left join 
+    CONTASCONTABEIS on
+        CONTASCONTABEIS.IDPLANO=estabelecimento.PLANOCONTAS and
+        contascontabeis.CONTACONTABIL = lantocontbanc.CONTACONTABIL
+where 
+    MOVBANCARIOS.filial=1 and
+    MOVBANCARIOS.IDCONTACORRENTE = 341 and
+    MOVBANCARIOS.DATAEXTRATO between '01.01.2022' and '31.01.2022'

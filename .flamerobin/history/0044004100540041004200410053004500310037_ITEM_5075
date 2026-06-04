@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+left join local on local.id=locallote."LOCAL"
+where locallote.IDITEM='2154905'

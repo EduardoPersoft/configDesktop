@@ -1,0 +1,2 @@
+select * from lantocontbanc
+order by contacontabil

@@ -1,0 +1,67 @@
+SELECT
+       I1.CODIGO,
+       I1.REFERENCIA,
+       I1.DESCRICAO,
+       I1.unidade,
+       ARQ1.NOMESALVO,
+       GRUPOMERCADORIA.DESCRICAO GRUPO,
+       FAMILIA.DESCRICAO FAMILIA, 
+        I1.DEFINICAO,
+        coalesce(I1.metatag, '') as metatag,
+
+       cast(coalesce((select 
+            sum(locallote.quantidade)
+        from 
+            locallote
+        inner JOIN
+            local on
+                local.ID=locallote.local
+        where
+            locallote.IDITEM=case i1.estocado when 'N'
+                                 then coalesce(i1.itembase, i1.codigo)
+                                 else i1.codigo end and
+            local.DISPONIVEL='S'),0)  -
+        coalesce((select
+                sum(mercadoriasped.quantidade)
+              from
+                MERCADORIASPED
+              inner join
+                pedido on
+                    mercadoriasped.filial=pedido.filial and
+                    mercadoriasped.idnota=pedido.idnota
+              where 
+                mercadoriasped.codigo=case i1.estocado when 'N'
+                                 then coalesce(i1.itembase, i1.codigo)
+                                 else i1.codigo end and
+                mercadoriasped.baixa='N' and
+                pedido.DATACANCELAMENTO is null and
+                pedido.DATAEMISSAO is not null),0) as decimal(12,3)) saldo ,
+
+       (SELECT  
+          FIRST 1 LISTAPRECOPRODUTO.preco 
+            FROM 
+              LISTAPRECOPRODUTO
+           inner join c_listaxcadastro on 
+              LISTAPRECOPRODUTO.LISTA=c_listaxcadastro.lista
+           where 
+              c_listaxcadastro.cadastro=1 and 
+              (cast ('NOW' as timestamp)) between c_listaxcadastro.datainicial and c_listaxcadastro.DATAFINAL
+              AND LISTAPRECOPRODUTO.PRODUTO=I1.CODIGO
+              order by c_listaxcadastro.prioridade, c_listaxcadastro.lista,quantidade) AS PRECO
+      
+        
+      
+        
+FROM itemestoque i1
+LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=I1.CLASSIFISCAL)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ1 ON (ARQ1.CODIGO=I1.CODIGO AND ARQ1.ORDEM=0)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ2 ON (ARQ2.CODIGO=I1.CODIGO AND ARQ2.ORDEM=0)
+LEFT JOIN UNIDADE ON (UNIDADE.UNIDADE=CASE COALESCE(I1.UNIDADE2, '') WHEN ''
+                                      THEN I1.UNIDADE
+                                      ELSE I1.UNIDADE2 END)  
+LEFT JOIN 
+    GRUPOMERCADORIA ON 
+        GRUPOMERCADORIA.GRUPO=I1.GRUPO
+LEFT JOIN 
+    FAMILIA ON 
+     FAMILIA.ID=I1.FAMILIA

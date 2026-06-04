@@ -1,0 +1,1 @@
+select * from notafiscal where notafiscal.codtransp is not null

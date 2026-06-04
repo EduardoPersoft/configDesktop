@@ -1,0 +1,3 @@
+select * from MAPAPRODUCAO
+where filial=110 and 
+idmovimentoa=15457

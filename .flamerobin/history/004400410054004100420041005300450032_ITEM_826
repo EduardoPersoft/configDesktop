@@ -1,0 +1,1 @@
+update itemestoque set itemestoque.CODIGOTRIBUTACAO=0 where itemestoque.CODIGOTRIBUTACAO is null

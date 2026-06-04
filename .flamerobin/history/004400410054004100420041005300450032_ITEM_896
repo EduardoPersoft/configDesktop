@@ -1,0 +1,1 @@
+select filial,idnota,emissao from pedidocompra where filial=5 and idnota=50745

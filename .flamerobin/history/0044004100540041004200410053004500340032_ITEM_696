@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where MATERIALLOTE.LOTE LIKE '63134%'

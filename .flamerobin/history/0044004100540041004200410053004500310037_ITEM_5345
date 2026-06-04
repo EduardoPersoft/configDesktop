@@ -1,0 +1,3 @@
+select descricao,count(grupo) from GRUPOMERCADORIA
+group by descricao
+order by 2 desc

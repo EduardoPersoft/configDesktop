@@ -1,0 +1,1 @@
+alter table pedido add c_indicador char(1)

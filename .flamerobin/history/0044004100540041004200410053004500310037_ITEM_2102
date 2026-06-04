@@ -1,0 +1,9 @@
+select
+    *
+from
+    TITULOREC
+where
+    titulorec.filial=12826 
+    and titulorec.CONTACORRENTE=21
+    and titulorec.TIPOBAIXA = 'P'
+    and titulorec.BAIXA = '16.02.2023'

@@ -1,0 +1,8 @@
+select * from MERCADORIASPED
+inner join PEDIDO
+    on pedido.filial=mercadoriasped.filial and
+    pedido.idnota=mercadoriasped.idnota
+where mercadoriasped.filial=1
+and pedido.c_loja=7
+and mercadoriasped.codigo like 'PE-%'
+order by idntoa desc

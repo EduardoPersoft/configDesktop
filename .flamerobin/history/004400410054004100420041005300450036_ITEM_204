@@ -1,0 +1,6 @@
+SELECT
+    codigo, descricao, referencia
+FROM
+    itemestoque
+WHERE
+    itemestoque.codigo like '%s'

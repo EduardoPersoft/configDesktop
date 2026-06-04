@@ -1,0 +1,11 @@
+
+
+select * from lantocontbanc
+
+where exists (
+select * from MOVBANCARIOS
+where movbancarios.filial=lantocontbanc.filial and
+MOVBANCARIOS.IDCONTACORRENTE=lantocontbanc.idcontacorrente and
+movbancarios.IDMOVTOBANCARIO=lantocontbanc.IDMOVTOBANC
+and MOVBANCARIOS.PROCESSAMENTO='2025-01-23')
+

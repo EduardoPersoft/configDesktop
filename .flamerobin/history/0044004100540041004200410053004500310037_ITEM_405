@@ -1,0 +1,1 @@
+select C_LOGsaLdoecommerce.*, cast(substring(C_LOGsaLdoecommerce.content from 1 for 100) as varchar(100)) from C_LOGsaLdoecommerce 

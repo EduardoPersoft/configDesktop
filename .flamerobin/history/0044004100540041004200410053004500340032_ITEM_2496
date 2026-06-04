@@ -1,0 +1,8 @@
+select contacorrente.DESCRICAOCONTA,
+movbancarios.* from MOVBANCARIOS
+inner join contacorrente on
+    contacorrente.filial=MOVBANCARIOS.filial and
+    contacorrente.codigo=MOVBANCARIOS.IDCONTACORRENTE
+where MOVBANCARIOS.PROCESSAMENTO>='01.06.2024'
+and (MOVBANCARIOS.DATAEXTRATO<='31.12.2023'  or
+MOVBANCARIOS.MOVIMENTACAO<='31.12.2023')

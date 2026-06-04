@@ -1,0 +1,20 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    count(mercadoriasorc.idnota)
+from 
+    orcamento
+inner join
+    mercadoriasorc on
+        orcamento.filial=mercadoriasorc.filial and
+        orcamento.idnota=mercadoriasorc.idnota and
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasorc.CODIGO
+where 
+    orcamento.DATACADASTRO between '01.08.2023' and '31.08.2023' and
+    orcamento.CANCELAMENTO='N'
+group by    
+    itemestoque.codigo,
+    itemestoque.descricao    
+    

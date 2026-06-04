@@ -1,0 +1,2 @@
+select * from TITULOPAG
+where idtitulo=366677

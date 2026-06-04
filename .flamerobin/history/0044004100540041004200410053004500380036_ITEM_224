@@ -1,0 +1,2 @@
+select * from pedcompra where filial=1
+and idnota=85

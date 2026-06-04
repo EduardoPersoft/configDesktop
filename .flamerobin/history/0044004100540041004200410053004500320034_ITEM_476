@@ -1,0 +1,36 @@
+select 
+    itemestoque.codigo as fp,
+    itemestoque.referencia as original,
+    itemestoque.descricao,
+    familia.DESCRICAO,
+    (select first 1 
+        RESUMOCOMPRAS.preco 
+     FROM 
+        resumocompras
+     where
+        resumocompras.item=itemestoque.codigo 
+     order by RESUMOCOMPRAS.EMISSAO desc),
+    materiallocal.SALDOTOTAL,
+    materialfilial.CONSUMOMEDIO
+
+from 
+    itemestoque 
+
+inner join
+    materiallocal on
+        materiallocal.filial=5 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.idlocal=1
+
+inner join
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo    
+left JOIN
+    familia on
+        familia.id=itemestoque.familia
+where 
+
+    itemestoque.descricao like 'PORCA%'
+order by
+    4, 1

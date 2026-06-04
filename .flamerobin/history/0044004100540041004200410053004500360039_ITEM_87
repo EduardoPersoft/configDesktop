@@ -1,0 +1,2 @@
+delete  from fatped
+where filial=1 and idnota>=318792

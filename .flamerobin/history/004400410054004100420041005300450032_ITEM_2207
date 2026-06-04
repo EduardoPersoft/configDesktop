@@ -1,0 +1,28 @@
+--UPDATE
+--    mercadoriaspedcompra
+--SET
+--    minimo = quantidade
+    
+SELECT
+    mercadoriaspedcompra.*,
+    (select 
+        sum(mercadoriasnotacompra.quantidade)
+     FROM   
+        MERCADORIASNOTACOMPRA
+     where 
+        mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+        mercadoriasnotacompra.idnota=mercadoriaspedcompra.idnota AND
+        mercadoriasnotacompra.idmercadoria=mercadoriaspedcompra.IDMERCADORIA)
+    
+FROM
+    mercadoriaspedcompra
+WHERE   
+    exists 
+        (select
+            *
+         FROM
+            T_MERCADORIABAIXA 
+         where 
+            t_mercadoriabaixa.filial=mercadoriaspedcompra.filial AND
+            t_mercadoriabaixa.idnota=mercadoriaspedcompra.idnota AND
+            t_mercadoriabaixa.idmercadoria=mercadoriaspedcompra.IDMERCADORIA)

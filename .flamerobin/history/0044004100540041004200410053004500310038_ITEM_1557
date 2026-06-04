@@ -1,0 +1,8 @@
+select * from C_COMISSAOPEDIDOPAGA
+where not exists (
+select * from vendedoresped 
+where c_comissaopedidopaga.filial=vendedoresped.FILIAL
+and C_COMISSAOPEDIDOPAGA.IDNOTA=vendedoresped.IDNOTA
+and C_COMISSAOPEDIDOPAGA.VENDEDOR=VENDEDORESPED.vendedor
+and c_comissaopedidopaga.id=vendedoresped.C_IDCOMISSAO)
+order by id desc

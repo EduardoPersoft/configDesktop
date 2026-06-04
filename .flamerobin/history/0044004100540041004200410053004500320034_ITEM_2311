@@ -1,0 +1,12 @@
+select 
+    cadastro, 
+    comissaoVenda,
+    comissaoRecebimento,
+    notificarVendedor,
+    usuarioRelacionado,    
+    tipoVendedor,
+    canalRelacionado
+from 
+    VENDEDOR
+WHERE
+    vendedor.cadastro = 1007

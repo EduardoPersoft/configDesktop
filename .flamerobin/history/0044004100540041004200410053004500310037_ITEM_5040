@@ -1,0 +1,50 @@
+SELECT 
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.NUMERONOTA, 
+       
+      (select min(mercadoriasnota.idpedido) from mercadoriasnota       
+      where notafiscal.filial=mercadoriasnota.filial
+      and notafiscal.idnota=mercadoriasnota.idnota
+      plan join (mercadoriasnota index (RDB$PRIMARY31))) idPedido,
+             
+       NOTAFISCAL.DATAEMISSAO,
+       CP_CLIENTE.CADASTRO AS CADCLIENTE, 
+       CP_CLIENTE.RAZAOSOCIAL AS NOMECLIENTE,
+
+       VENDEDORESNOTA.VENDEDOR AS CADVENDEDOR, 
+       CP_VENDEDOR.razaosocial AS NOMEVENDEDOR, 
+       CP_ATENDENTE.CADASTRO AS ATENDENTECADASTRO,
+       CP_ATENDENTE.razaosocial AS ATENDENTENOME,
+       
+       (coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) AS VALOR,
+       VENDEDORESNOTA.COMISSAOVENDA,
+       (((coalesce(notafiscal.vlrfinalmercadorias, 0) + coalesce(notafiscal.vlrfinalservicos, 0)) * VENDEDORESNOTA.COMISSAOVENDA)/100) VALORCOMISSAO
+
+FROM 
+    NOTAFISCAL
+
+INNER JOIN 
+    VENDEDORESNOTA 
+        ON (VENDEDORESNOTA.FILIAL = NOTAFISCAL.FILIAL
+                          AND VENDEDORESNOTA.IDNOTA = NOTAFISCAL.IDNOTA)
+INNER JOIN 
+    CADASTROPARCEIROS CP_CLIENTE 
+        ON (NOTAFISCAL.DESTINATARIO = CP_CLIENTE.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CP_VENDEDOR 
+        ON (VENDEDORESNOTA.VENDEDOR = CP_VENDEDOR.CADASTRO)
+INNER JOIN 
+    NATUREZAOPERACAO 
+        ON (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS CP_EMPRESA 
+        ON (NOTAFISCAL.FILIAL = CP_EMPRESA.CADASTRO)
+left JOIN 
+    CADASTROPARCEIROS CP_ATENDENTE
+        ON (NOTAFISCAL.ATENDENTE = CP_ATENDENTE.CADASTRO)        
+WHERE
+--     notafiscal.filial=? and 
+     notafiscal.dataemissao between '22.05.2025' and '21.06.2025'
+ORDER BY 
+    NOTAFISCAL.FILIAL, VENDEDORESNOTA.VENDEDOR, NOTAFISCAL.DATAEMISSAO,
+    CP_CLIENTE.CADASTRO, notafiscal.NUMERONOTA

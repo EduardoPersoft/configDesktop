@@ -1,0 +1,12 @@
+
+update
+    MATERIALFILIAL
+set 
+    c_localimportacao = (select 
+                            itemestoque.C_LOCALIMPORTACAO 
+                         from 
+                            ITEMESTOQUE
+                         where  
+                            itemestoque.codigo=materialfilial.iditem)
+where
+    not exists (select * from c_localimportacao where c_localimportacao.idlocal=materialfilial.C_LOCALIMPORTACAO)

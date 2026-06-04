@@ -1,0 +1,6 @@
+SELECT * FROM titulorec 
+where  titulorec.CONTACORRENTE=2019
+not exists (
+select * from C_MOVFINANCEIRO
+where C_MOVFINANCEIRO.id=titulorec.IDTITULO
+)

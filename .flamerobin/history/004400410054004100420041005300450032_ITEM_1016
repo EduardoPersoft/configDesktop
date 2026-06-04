@@ -1,0 +1,13 @@
+SELECT
+    idmercadoria,
+    codigo,
+    quantidade,
+    precolista,
+    vlrfinalmercad,
+    VLRICMSRECOLHIDO
+from
+    MERCADORIASnota
+WHERE
+    mercadoriasnota.CLASSIFISCAL=68
+
+    

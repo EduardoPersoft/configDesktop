@@ -1,0 +1,6 @@
+select * from C_COMISSAOPEDIDOPAGA
+where id =597
+and vendedor=175
+and filial=1 
+and idnota=69402
+and idmercadoria=1

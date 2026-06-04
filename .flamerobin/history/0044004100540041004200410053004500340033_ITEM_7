@@ -1,0 +1,7 @@
+alter table C_LAMINACAO
+add c_filmeSalvo varchar(15),
+add c_filme2Salvo varchar(15),
+add c_gramaturaFilmeS decimal(12,3),
+add c_gramatura2FilmeS decimal(12,3)
+
+

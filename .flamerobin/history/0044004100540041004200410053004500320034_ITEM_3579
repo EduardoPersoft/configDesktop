@@ -1,0 +1,6 @@
+select
+    CIDADE
+from
+    CADASTROPARCEIROS
+where
+    CADASTRO=1208

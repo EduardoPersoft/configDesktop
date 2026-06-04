@@ -1,0 +1,1 @@
+select * from titulopag where idtitulo in (376861, 376862, 376863)

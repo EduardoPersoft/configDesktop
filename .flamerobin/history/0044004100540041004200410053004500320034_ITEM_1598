@@ -1,0 +1,4 @@
+select 
+* 
+from
+materiallocal.iditem='12608'

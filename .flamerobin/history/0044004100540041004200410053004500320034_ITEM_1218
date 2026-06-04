@@ -1,0 +1,8 @@
+select 
+    CADASTROPARCEIROS.cadastro, 
+    CADASTROPARCEIROS.nome, 
+    CADASTROPARCEIROS.C_CODFORNECEDORANTIGO 
+from 
+    cadastroparceiros 
+order by 
+    cadastro desc

@@ -1,0 +1,34 @@
+SELECT 
+    a.FILIAL, 
+    a.IDCONTACORRENTE, 
+    a.IDMOVTOBANC, 
+    a.IDTITULO,
+    cadcli.cadastro,
+    cadcli.nome,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.emissao,
+    titulorec.vencimento, 
+    a.VALOR,
+    a.IDMOVTOTITULO, 
+    a.TIPOTITULO, 
+    a.VALORDESCONTO, 
+    a.VALORJUROS, 
+    a.VALORPAGO,
+    a.MVLRDESCONTOELETRON, 
+    a.MVLRACRESCIMOELETRON, 
+    a.MOUTROSDESCONTOS,
+    a.IDMOVTORELACIONADO
+FROM 
+    TITULOSANEXADOS a 
+inner join
+    titulorec on
+        titulorec.filial=a.filial and
+        titulorec.idtitulo=a.idtitulo
+inner join
+    CADASTROPARCEIROS cacli on
+        cadcli.cadastro=titulorec.PARCEIRO
+WHERE
+    a.FILIAL = ? AND 
+    a.IDCONTACORRENTE = ? AND 
+    a.IDMOVTOBANC = ? 

@@ -1,0 +1,4 @@
+select * from ITEMCUSTODATA
+where filial=1
+AND DATAINVENTARIO='30.06.2024'
+and CODIGO IN ('PE-24944', 'PE-24997')

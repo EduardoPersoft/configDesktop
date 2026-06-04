@@ -1,0 +1,32 @@
+select pedido.idnota pedido,
+       CADASTROPARCEIROS.nome,
+       pedido.DATACADASTRO,        
+       pedido.CANCELAMENTO,
+       ENDERECOENTREGA.LOGRADOURO,
+       ENDERECOENTREGA.NUMERO,
+       ENDERECOENTREGA.COMPLEMENTO
+from PEDIDO
+INNER JOIN 
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=pedido.destinatario
+inner join 
+    ENDERECOENTREGA ON
+        ENDERECOENTREGA.CADASTRO=PEDIDO.DESTINATARIO
+where (pedido.destinatario=29096 and pedido.APELIDOENTREGA='Gi') or 
+    (pedido.destinatario=33279 and pedido.APELIDOENTREGA='VANESSA')
+and exists (
+select * from vendedoresped 
+where vendedoresped.filial=pedido.filial and
+vendedoresped.idnota=pedido.idnota and
+vendedoresped.vendedor in (10568,14917))
+
+/*
+where pedido.DESTINATARIO in (
+select cadastro from ENDERECOENTREGA
+where UPPER(logradouro) liKe '%FREDERICO%' and numero = 215) 
+and exists (
+select * from vendedoresped 
+where vendedoresped.filial=pedido.filial and
+vendedoresped.idnota=pedido.idnota and
+vendedoresped.vendedor in (10568,14917))
+*/

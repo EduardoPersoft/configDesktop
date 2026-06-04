@@ -1,0 +1,1 @@
+delete from itemcustodata where data='31.05.2024'

@@ -1,0 +1,4 @@
+update
+   materiallote
+set 
+   materiallote.saldototal=cast(saldototal as decimal(12,2))

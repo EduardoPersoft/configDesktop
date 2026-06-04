@@ -1,0 +1,158 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_PEDIDOEMABERTOCOMPOSICAO (
+    PFILIAL integer )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    IDMOVIMENTOESTOQUE integer,
+    IDMOVIMENTOMATERIAL integer,
+    IDCOMPOSICAO integer,
+    FILIALNOME varchar(60),
+    DATACADASTRO timestamp,
+    DATAENTREGA timestamp,
+    CLIENTECADASTRO integer,
+    CLIENTENOME varchar(60),
+    SERVICO varchar(100),
+    ORDEMPRODUCAO integer,
+    DATAORDEMPRODUCAO timestamp,
+    PRODUTO varchar(15),
+    DESCRICAOPRODUTO varchar(240),
+    QUANTIDADEPRODUZIR double precision,
+    MATERIAPRIMA varchar(15),
+    DESCRICAOMATERIAPRIMA varchar(240),
+    QUANTIDADEMATERIAPRIMA double precision,
+    LOTE varchar(12),
+    IMPRESSAO char(1),
+    LAMINACAO integer,
+    REVISAO char(1),
+    CORTE char(1),
+    POUCHE char(1),
+    VLRTOTALMERCAD double precision,
+    PRECOUNITARIO double precision,
+    LARGURAMATERIAPRIMA numeric(12,3),
+    GRAMATURAMATERIAPRIMA decimal(7,3),
+    DESCRICAOREDUZIDAMP varchar(240),
+    CUSTO double precision )
+
+AS
+declare variable v_diasentrega integer;
+BEGIN
+
+
+    FOR SELECT MERCADORIASPED.FILIAL,
+               MERCADORIASPED.IDNOTA,
+               MERCADORIASPED.idmercadoria,
+               MERCADORIASPED.codigo,
+               MERCADORIASPED.QUANTIDADE,
+               MERCADORIASPED.precounitario,
+               MERCADORIASPED.vlrtotalmercad,
+               pedido.datacadastro,
+               pedido.destinatario
+        from mercadoriasped
+        inner join pedido on (mercadoriasped.filial=pedido.filial
+                and mercadoriasped.idnota=pedido.idnota)
+        where MERCADORIASPED.FILIAL=:pFILIAL
+        and pedido.dataemissao is not null
+        and pedido.cancelamento<>'S'
+        and MERCADORIASPED.BAIXA='N'
+        into :filial,idnota,idmercadoria,produto,:quantidadeproduzir,
+                precounitario, vlrtotalmercad, datacadastro,clientecadastro
+             do begin
+
+            select cadastroparceiros.nome from cadastroparceiros
+            where cadastroparceiros.cadastro=:filial
+            into :filialnome;
+
+            select cadastroparceiros.nome from cadastroparceiros
+            where cadastroparceiros.cadastro=:clientecadastro
+            into :clientenome;
+
+            select itemestoque.descricao, 
+                   case itemestoque.c_impressao when 'S' then 'X' else ' ' end,
+                   case itemestoque.c_revisao when 'S' then 'X' else ' ' end,
+                   case itemestoque.c_corte when 'S' then 'X' else ' ' end,
+                   case itemestoque.c_pouche when 'S' then 'X' else ' ' end,
+                   itemestoque.c_larguramateriaprima,
+                   itemestoque.c_gramatura
+            from itemestoque
+            where itemestoque.codigo=:produto
+            into :descricaoproduto,impressao,revisao,corte,pouche,
+                 :larguramateriaprima,:gramaturamateriaprima;
+
+            select count(c_laminacao.sequencia)
+            from c_laminacao
+            where c_laminacao.codigo=:produto
+            into :laminacao;
+
+            select max(prazomercped.dias) from prazomercped
+            where prazomercped.filial=:filial
+            and prazomercped.idnota=:idnota
+            and prazomercped.iditem=:idmercadoria
+            into :v_diasentrega;
+
+            dataentrega = datacadastro + coalesce(v_diasentrega,0);
+
+            idmovimentoestoque = null;
+            idmovimentomaterial = null;
+
+
+            idcomposicao = null ;
+            materiaprima = null;
+            lote = null;
+            quantidademateriaprima = null;
+            descricaomateriaprima = null;
+
+            FOR select  materialmovimentoestoque.idmovimento,
+                   materialmovimentoestoque.idmovimentomaterial,
+                   materialmovimentoestoque.quantidade
+            from materialmovimentoestoque
+            where materialmovimentoestoque.filial=:filial
+            and materialmovimentoestoque.idpedido=:idnota
+            and materialmovimentoestoque.idmercadoria=:idmercadoria
+            into :idmovimentoestoque,:idmovimentomaterial,:quantidadeproduzir DO BEGIN
+
+                if (idmovimentoestoque is null) then
+                    suspend;
+                else begin
+                    for select composicaoop.idcomposicao,
+                        composicaoop.codigo,
+                           composicaoop.lote,
+                           composicaoop.quantidade,
+                           itemestoque.descricao,
+                         /*  CASE COALESCE(itemestoque.c_descricaoreduzida,'')
+                           when '' then itemestoque.descricao
+                           else itemestoque.c_descricaoreduzida end,
+                           */
+                           itemestoque.descricao,
+                           itemestoque.c_custo
+                    from composicaoop
+                    inner join itemestoque on (itemestoque.codigo=composicaoop.codigo)
+                    where composicaoop.filial=:filial
+                    and composicaoop.idmovimento=:idmovimentoestoque
+                    and composicaoop.idmovimentomaterial=:idmovimentomaterial
+                    and itemestoque.c_tipomateriaprima='F'
+                    order by composicaoop.idcomposicao
+                    into :idcomposicao,:materiaprima,:lote,quantidademateriaprima,
+                        descricaomateriaprima,DescricaoReduzidaMP,:custo do begin
+                        if (idcomposicao>1) then
+                            select c_laminacao.gramaturafilme
+                            from c_laminacao
+                            where c_laminacao.codigo=:produto
+                            and c_laminacao.sequencia=:idcomposicao-2
+                            into :gramaturamateriaprima;
+                        suspend;
+                    end
+                END
+
+            end
+
+        end
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_PEDIDOEMABERTOCOMPOSICAO TO  SYSDBA;
+

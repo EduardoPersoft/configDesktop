@@ -1,0 +1,18 @@
+select 
+    count(notafiscal.idnota) as idnota,
+    sum  (NOTAFISCAL.VLRTOTALNOTA) as vlrtotal
+from 
+    PEDIDO NOTAFISCAL
+inner join 
+    modelodocto on 
+        (modelodocto.id = NOTAFISCAL.modelo)
+inner join 
+    NATUREZAOPERACAO on 
+        (NOTAFISCAL.operacao = NATUREZAOPERACAO.ID)
+where 
+    NOTAFISCAL.filial = 5 and
+    NOTAFISCAL.DATAEMISSAO between '01.07.2022' and '31.12.2022' and
+    NOTAFISCAL.DATACANCELAMENTO is null and 
+    coalesce (NATUREZAOPERACAO.FATURA, 'N')='S' and 
+    coalesce(naturezaoperacao.ENTRADASAIDA, 'S') = 'S' 
+

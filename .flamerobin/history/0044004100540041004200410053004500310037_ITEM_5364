@@ -1,0 +1,8 @@
+select 
+    *
+from
+    MERCADORIASped
+where
+    mercadoriasped.codigo='2479408' 
+order by
+    idnota desc

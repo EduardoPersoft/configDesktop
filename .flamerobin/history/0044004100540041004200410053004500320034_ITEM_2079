@@ -1,0 +1,19 @@
+UPDATE
+    CLASSIFICACAOFISCAL
+SET
+    CLASSIFICACAOFISCAL.CEST=(SELECT  FIRST 1
+                            T_CEST2022.CEST
+                        FROM
+                            T_CEST2022
+                        WHERE 
+                            CLASSIFICACAOFISCAL.DESCRICAO LIKE T_CEST2022.NCM||'%')
+WHERE
+    EXISTS (
+        SELECT 
+            *
+        FROM
+            T_CEST2022
+        WHERE
+            CLASSIFICACAOFISCAL.DESCRICAO LIKE T_CEST2022.NCM||'%' )   
+
+   

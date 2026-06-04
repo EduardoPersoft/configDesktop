@@ -1,0 +1,4 @@
+select * from titulorec 
+where filial=1
+and titulorec.EMISSAO between
+'10.01.2022' and '20.01.2022'

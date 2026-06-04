@@ -1,0 +1,18 @@
+insert into prazomercpedcompra(
+filial, idnota, iditem, dias, quantidade)
+select 
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    0,
+    mercadoriaspedcompra.quantidade
+FROM
+    MERCADORIASPEDCOMPRA
+where 
+    mercadoriaspedcompra.baixa='N' and
+    not exists (
+    select * from PRAZOMERCPEDCOMPRA
+    where prazomercpedcompra.filial=mercadoriaspedcompra.filial 
+    and prazomercpedcompra.idnota=mercadoriaspedcompra.idnota 
+    and prazomercpedcompra.iditem=mercadoriaspedcompra.IDMERCADORIA)
+order by idnota desc

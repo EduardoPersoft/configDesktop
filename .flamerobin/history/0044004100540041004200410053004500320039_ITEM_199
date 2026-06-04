@@ -1,0 +1,2 @@
+select * from QRCODENFCE 
+where uuidnnota.QRCODENFCE='{09EE552E-3D48-4521-9599-178ED5A0D63'

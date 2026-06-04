@@ -1,0 +1,23 @@
+SELECT
+    mercadoriaspedcompra.*,
+    (SELECT
+        sum(mercadoriasnotacompra.QUANTIDADE)
+     FROM
+        MERCADORIASNOTACOMPRA
+     inner JOIN
+        notacompra on
+            mercadoriasnotacompra.filial=notacompra.filial AND
+            mercadoriasnotacompra.idnota=notacompra.idnota
+     where
+        notacompra.filial=meradoriasnotacompra.filial and 
+        notacompra.datacadastro>pedidocompra.datacadastro
+        )
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    PEDIDOCOMPRA on 
+        PEDIDOCOMPRA.filial=mercadoriaspedcompra.filial AND
+        PEDIDOCOMPRA.idnota=mercadoriaspedcompra.idnota
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa='N' 

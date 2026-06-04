@@ -1,0 +1,1 @@
+select filial, idnota, datacadastro, dataemissao, datareferencia from pedido where filial=184 and idnota in (417, 418, 420)

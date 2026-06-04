@@ -1,0 +1,2 @@
+--insert into c_itensSelecaox
+select * from c_itensSelecaox

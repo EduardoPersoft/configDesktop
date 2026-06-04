@@ -1,0 +1,5 @@
+select 
+    TIPOVENDEDOR.id,
+    tipovendedor.DESCRICAO
+from
+    tipovendedor

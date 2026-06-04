@@ -1,0 +1,3 @@
+select * from CADASTROPARCEIROS
+inner join clientes on clientes.cadastro=CADASTROPARCEIROS.CADASTRO
+where CADASTROPARCEIROS.DATACADASTRO between '01.09.2023' and '30.09.2023'

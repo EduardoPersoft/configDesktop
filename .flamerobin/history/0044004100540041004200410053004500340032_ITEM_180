@@ -1,0 +1,4 @@
+update
+    CONTASCONTABEIS
+set
+    contascontabeis.C_MOSTRARFLUXOCAIXA='N'

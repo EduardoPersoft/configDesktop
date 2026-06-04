@@ -1,0 +1,8 @@
+select 
+    *
+from
+    locallote
+where 
+    locallote.QUANTIDADE>0 
+order by
+    locallote.DATALOCACAO

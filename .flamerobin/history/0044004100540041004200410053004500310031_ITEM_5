@@ -1,0 +1,25 @@
+select 
+    coalesce(CENTROCUSTOS.CENTROCUSTO, ''),
+    COALESCE(centrocustos.descricao, 'SEM CENTRO DE CUSTO'),
+    titulopag.vencimento,
+    sum(lantocontpag.valor)
+from
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.CADASTRO=TITULOPAG.filial
+left join
+    centrocustos on
+        centrocustos.IDPLANO=ESTABELECIMENTO.PLANOCENTROCUSTOS and
+        centrocustos.CENTROCUSTO=LANTOCONTPAG.CENTROCUSTO
+where
+    titulopag.filial=2098 and
+    titulopag.baixa is null
+group by     
+    CENTROCUSTOS.CENTROCUSTO,
+    centrocustos.descricao,
+    titulopag.vencimento

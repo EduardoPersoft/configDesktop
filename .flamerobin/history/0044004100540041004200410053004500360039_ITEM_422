@@ -1,0 +1,2 @@
+select * from c_destinoavulso
+where observao='vai corinthians'

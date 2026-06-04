@@ -1,0 +1,3 @@
+SELECT * FROM TITULOREC WHERE FILIAL=5 AND TITULOREC.EMISSAO='11.03.2021'
+where not exists 
+(select * from cadastroparceiros where cadastroparceiros.cadastro=titulorec.parceiro)

@@ -1,0 +1,7 @@
+update 
+    orcamento
+set
+    orcamento.PREVISAOFECHAMENTOANO = extract(year from orcamento.DATACADASTRO+30),
+    orcamento.PREVISAOFECHAMENTOmes = extract(month from orcamento.DATACADASTRO+30)
+where
+    orcamento.DATAcadastro>='01.01.2025'

@@ -1,0 +1,1 @@
+select codigo,descricao,itemestoque.c_mrfornecedor,referencia from itemestoque where itemestoque.C_MRFORNECEDOR<>itemestoque.referencia

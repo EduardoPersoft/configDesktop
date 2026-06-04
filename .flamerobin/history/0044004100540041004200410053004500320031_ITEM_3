@@ -1,0 +1,18 @@
+select  
+    itemestoque.codigo,
+    itemestoque.descricao,
+    resumocompras.PRECO,
+    resumocompras.custo,
+    resumocompras.QUANTIDADE
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        materialfilial.IDITEM=itemestoque.CODIGO
+left JOIN
+    resumocompras on
+        resumocompras.item=itemestoque.CODIGO and
+        resumocompras.EMISSAO=materialfilial.ULTIMACOMPRA
+where 
+    materialfilial.filial=1
+    

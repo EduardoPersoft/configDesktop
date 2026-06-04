@@ -1,0 +1,18 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    GRUPOMERCADORIA.descricao,
+    c_especificacoes.DESCRICAO
+from 
+    ITEMESTOQUE
+INNER join
+    GRUPOMERCADORIA ON
+        GRUPOMERCADORIA.GRUPO=ITEMESTOQUE.GRUPO
+left join
+    C_ESPECIFICACOES ON
+        C_eSPECIFICACOES.IDITEM=ITEMESTOQUE.CODIGO and
+        UPPER(C_eSPECIFICACOES.DESCRICAO)='MEDIDAS'
+where
+    GRUPOMERCADORIA.grupo<100
+
+    

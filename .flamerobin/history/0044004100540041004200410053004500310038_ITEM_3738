@@ -1,0 +1,73 @@
+select 
+    CADCLI.CADASTRO,
+    CADCLI.RAZAOSOCIAL,
+    CADCLI.CONTRIBUINTE,
+    CADCLI.OPTANTESIMPLES,
+    CADCLI.TIPOEMPRESA AS ESTRANGEIRO,
+    CADCLI.Nome,
+    CADCLI.LOGRADOURO,
+    CADCLI.NUMERO,
+    CADCLI.COMPLEMENTO,
+    CADCLI.BAIRRO,
+    CADCLI.CEP,
+    CADCLI.CIDADE,
+    CADCLI.UF,
+    CADCLI.PRINCIPALCONTATO,
+    CADCLI.TELEFONE,
+    CADCLI.TELEFONECOMERCIAL,
+    CADCLI.FAX,
+    CADCLI.CELULAR,
+    CADCLI.EMAIL,
+    CADCLI.WEB,
+    CADCLI.TIPOPESSOA,
+    CADCLI.DOCUMENTO,
+    CADCLI.INSCESTADUAL,
+    CADCLI.INSCMUNICIPAL,
+    CADCLI.STATUS,
+    CADCLI.RAMOATIVIDADE,
+    CADVEN.NOME AS NOMEVENDEDOR,
+    (case (coalesce (cadcli.PARCEIROCLIENTE,'')) when 'S' then 'CLIENTE '  else '' end ) 
+    (case (coalesce (cadcli.PARCEIROFORNECEDOR,'')) when 'S' then 'FORNECEDOR '  else '' end )
+    (case (coalesce (cadcli.PARCEIROTRANSPORTADORA,'')) when 'S' then 'TRANSPORTADORA '  else '' end )||
+    (case (coalesce (cadcli.PARCEIROVENDEDOR,'')) when 'S' then 'VENDEDOR '  else '' end )      
+    as tipocontato,
+    CADCLI.EMAILNFE,
+    cadcli.CONTATONFE,
+    PAISES.DESCRICAOPAIS,
+    CLIENTES.SUBSTITUIRTRIBUTARIA,
+    CADCLI.DATAAPROVACAO,
+    CLIENTES.LIMITECREDITO,
+    CLIENTES.LISTAPRECODEFAULT,
+    CADCLI.DATACADASTRO,
+    CONDICAOPAGAMENTO.DESCRICAO AS CONDPAGAMENTO,
+    CLIENTES.CONSUMIDORFINAL, 
+    NULL AS REGIMETRIBUT, 
+    CAST (substring (CADCLI.AVISOMSG from 1 for 5000) AS VARCHAR (5000)) AS AVISO ,
+
+          transportadora.RAZAOSOCIAL as transportadora,
+       transportadora.LOGRADOURO locardouroTrans,
+       transportadora.NUMERO numeroTrans,
+       transportadora.COMPLEMENTO complementoTrans,
+       transportadora.BAIRRO bairroTrans,
+       transportadora.CIDADE cidadeTrans,
+       transportadora.UF ufTrans,
+       SUBSTRING(transportadora.CEP FROM 1 FOR 5)||'-'||SUBSTRING(transportadora.CEP FROM 6 FOR 3) AS CEPTrans
+
+
+FROM 
+    CADASTROPARCEIROS CADCLI
+left JOIN     
+    CLIENTES ON 
+        (CADCLI.CADASTRO=CLIENTES.CADASTRO)
+LEFT JOIN     
+    CADASTROPARCEIROS CADVEN ON 
+        (CLIENTES.VENDEDOR=CADVEN.CADASTRO)       
+LEFT JOIN 
+    PAISES ON 
+        (CADCLI.CODIGOPAIS=PAISES.CODIGOPAIS)
+LEFT JOIN 
+    CONDICAOPAGAMENTO ON 
+        (CLIENTES.CONDICAOPAGAMENTO=CONDICAOPAGAMENTO.ID)
+left join 
+    CADASTROPARCEIROS TRANSPORTADORA on     
+            (cadcli.transportadora=transportadora.cadastro)        

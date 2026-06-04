@@ -1,0 +1,14 @@
+SELECT
+    idmercadoria,
+    codigo,
+    quantidade,
+    precolista,
+    vlrfinalmercad,
+    mercadoriasorc.VLRICMSRECOLHIDO
+from
+    MERCADORIASORC
+WHERE
+    filial=5 AND
+    idnota=198695
+
+    

@@ -1,0 +1,8 @@
+select
+    itemestoque.codigo,
+    itemestoque.CODIGOBARRA,
+    itemestoque.DESCRICAO
+from
+    ITEMESTOQUE
+where
+    itemestoque.CODIGOBARRA=substring(itemestoque.CODIGOBARRA from 1 for 10)

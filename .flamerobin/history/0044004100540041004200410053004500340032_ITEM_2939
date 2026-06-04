@@ -1,0 +1,6 @@
+update 
+    MERCADORIASNOTA
+set 
+    mercadoriasnota.QTDBAIXA=quantidade
+where
+    filial=110 and idnota=4009

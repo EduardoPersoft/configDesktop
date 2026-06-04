@@ -1,0 +1,5 @@
+
+SELECT ITEMESTOQUE.c_descricaofiO
+      FROM c_itemregioesfios
+      INNER JOIN ITEMESTOQUE ON (c_itemregioesfios.fio=ITEMESTOQUE.CODIGO)
+      WHERE c_itemregioesfios.CODIGO='11011'    

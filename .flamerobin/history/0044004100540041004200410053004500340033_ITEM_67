@@ -1,0 +1,3 @@
+select * from NOTAFISCAL
+where filial=3941
+and numeronota in (179,180)

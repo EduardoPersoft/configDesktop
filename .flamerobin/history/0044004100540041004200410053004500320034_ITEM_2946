@@ -1,0 +1,3 @@
+select * from mercadoriasped
+where mercadoriasped.codigo ='05319' and filial=5
+order by idnota desc

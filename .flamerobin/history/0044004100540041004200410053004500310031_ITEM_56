@@ -1,0 +1,3 @@
+select * from TITULOPAG
+where titulopag.filial=2098
+and titulopag.TIPOBAIXA='P'

@@ -1,0 +1,2 @@
+select * from SERVICOSNOTA
+where idpedido=3037 and filial=110

@@ -1,0 +1,10 @@
+select 
+movimentoestoque.TIPOMOVIMENTO,
+movimentoestoque.documento,
+movimentoestoque.emissao,
+materialmovimentoestoque.* from materialmovimentoestoque 
+left join movimentoestoque on
+    movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.FILIAL and
+    movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+
+where materialmovimentoestoque.iditem='1881424' and materialmovimentoestoque.filial=1

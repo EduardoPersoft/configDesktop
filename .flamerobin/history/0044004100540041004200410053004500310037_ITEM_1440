@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    INVENTARIOESTOQUEDATA
+WHERE
+    codigo='2193205'

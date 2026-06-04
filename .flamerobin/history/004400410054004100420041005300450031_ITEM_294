@@ -1,0 +1,14 @@
+update
+    materialmovimentoestoque
+set 
+tempo = MATERIALMOVIMENTOESTOQUE.quantidade / 
+        ((select cast(itemestoque.C_gramaturatotal as double precision) from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto)/1000) / 
+        ((select cast(itemestoque.C_LARGURAMATERIAPRIMA as double precision) from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto)/1000)/150/60 ,
+setup = 0.5
+where MATERIALMOVIMENTOESTOQUE.IDCENTROCUSTO = '103' AND
+coalesce((select itemestoque.C_pesompporembalagem from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto),0)>0 AND
+coalesce((select itemestoque.C_LARGURAMATERIAPRIMA from ITEMESTOQUE
+         where itemestoque.codigo=materialmovimentoestoque.produto),0)>0        

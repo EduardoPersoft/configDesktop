@@ -1,0 +1,1 @@
+select * from INVENTARIOESTOQUEDATA where data='30.11.2023' WHERE LOCAL=1059

@@ -1,0 +1,10 @@
+select 
+    *
+FROM
+    MOVTOTITULOPAG
+WHERE
+    filial=5 AND
+    movtotitulopag.DATAPROCMOV>='04.08.2021' AND
+    movtotitulopag.VENCIMENTO between '01.07.2021' and '31.07.2021'
+ORDER by
+    idtitulo

@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+where locallote.quantidade<0
+and iditem between '01.' and '01.99'

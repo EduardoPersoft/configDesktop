@@ -1,0 +1,7 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where not exists
+(select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=
+materialmovimentoestoque.filial and
+movimentoestoque.idmovimento=
+materialmovimentoestoque.idmovimento)

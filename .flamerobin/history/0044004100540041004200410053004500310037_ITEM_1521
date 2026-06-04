@@ -1,0 +1,13 @@
+CREATE TABLE C_FATORES_anterior
+(
+  IDLOCAL integer NOT NULL,
+  IDFATOR integer NOT NULL,
+  CFISCAL varchar(3),
+  IMPIMPORTACAO double precision,
+  IPI double precision,
+  FATORA double precision,
+  FATORB double precision,
+  FATORC double precision,
+  FATORD double precision,
+  FATORE double precision
+)

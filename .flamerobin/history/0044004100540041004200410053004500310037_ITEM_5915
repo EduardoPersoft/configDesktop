@@ -1,0 +1,9 @@
+select 
+    codigo,
+    descricao,
+    referencia,
+    itemestoque.C_MRFORNECEDOR,
+    itemestoque.SISCOMEXID,
+    itemestoque.SISCOMEXDESCRICAO,
+    itemestoque.SISCOMEXINTEGRADO 
+from itemestoque 

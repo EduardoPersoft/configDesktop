@@ -1,0 +1,4 @@
+update 
+    MOVIMENTOESTOQUE
+set 
+    MOVIMENTOESTOQUE.DATAALTERACAO=cast(movimentoestoque.DATAALTERACAO as date)

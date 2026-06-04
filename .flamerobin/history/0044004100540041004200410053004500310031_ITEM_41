@@ -1,0 +1,7 @@
+select
+    *
+from 
+   LANTOCONTPAG
+where
+    lantocontpag.filial=2098 and
+    coalesce(lantocontpag.centrocusto,'')=''

@@ -1,0 +1,1 @@
+select pedido.idnota,pedido.pesobruto,pedido.QUANTIDADEVOLUME from orcamento pedido order by idnota desc

@@ -1,0 +1,7 @@
+select * from SERVICOSPEDCOMPRA
+where exists (
+select * from PEDIDOCOMPRA
+where servicospedcompra.filial=pedidocompra.FILIAL
+and servicospedcompra.idnota=pedidocompra.idnota 
+and servicospedcompra.baixa='N')
+and filial=110

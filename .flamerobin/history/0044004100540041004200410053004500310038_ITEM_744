@@ -1,0 +1,29 @@
+SELECT
+    centrocustos.CENTROCUSTO,
+    centrocustos.descricao,
+    c_faturamentoperiodo.tipo,
+    SUM(C_FATURAMENTOPERIODO.VALOR) VALOR,
+    SUM(C_FATURAMENTOPERIODO.VALORCOFINS) VALORCOFINS,
+    SUM(C_FATURAMENTOPERIODO.VALORPIS) VALORPIS,
+    SUM(C_FATURAMENTOPERIODO.VALORICMS) VALORICMS
+FROM 
+    C_FATURAMENTOPERIODO ('C_FATURAMENTOPERIODO')
+inner join
+    c_centrocustoxlocal on
+        c_Centrocustoxlocal.idlocal=c_faturamentoperiodo.c_loja
+inner join
+    centrocustos on
+        centrocustos.idplano=(select estabelecimento.PLANOCENTROCUSTOS from ESTABELECIMENTO 
+                              where ESTABELECIMENTO.cadatro=1) and
+        centrocustos.CENTROCUSTO=C_CENTROCUSTOXLOCAL.CENTROCUSTO
+group BY
+    c_faturamentoperiodo.tipo,
+    C_FATURAMENTOPERIODO.DATAINICIAL,
+    C_FATURAMENTOPERIODO.DATAFINAL,
+    C_FATURAMENTOPERIODO.MATERIALINICIAL,
+    C_FATURAMENTOPERIODO.MATERIALFINAL,
+    C_FATURAMENTOPERIODO.RAZAOFILIAL,
+    C_FATURAMENTOPERIODO.c_loja
+ORDER BY 
+    c_faturamentoperiodo.tipo
+

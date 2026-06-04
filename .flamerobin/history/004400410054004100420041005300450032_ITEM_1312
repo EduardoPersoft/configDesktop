@@ -1,0 +1,3 @@
+select 
+    orcamento.idnota,
+    orcamento.datat from orcamento where filial=5 and idnota=77

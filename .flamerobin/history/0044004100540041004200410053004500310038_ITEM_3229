@@ -1,0 +1,2 @@
+select filial,idnota,datacadastro,dataemissao,datareferencia from pedido
+where filial=184 and idnota in (823,825,837)

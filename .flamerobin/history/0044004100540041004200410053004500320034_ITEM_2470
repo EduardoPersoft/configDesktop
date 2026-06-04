@@ -1,0 +1,8 @@
+select
+    ITEMESTOQUEXARQUIVO.codigo,
+    itemestoquexarquivo.ordem,
+    itemestoquexarquivo.nomeArquivo
+from
+    ITEMESTOQUEXARQUIVO
+where
+    ITEMESTOQUEXARQUIVO.CODIGO='06390'

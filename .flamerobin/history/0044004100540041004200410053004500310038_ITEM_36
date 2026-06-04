@@ -1,0 +1,37 @@
+--- analitico
+
+SELECT 
+       C_FIOPEDIDOEMABERTO.filial,
+       C_FIOPEDIDOEMABERTO.idmovimento,
+      cast( null as integer) as c_empenho,
+       C_FIOPEDIDOEMABERTO.codigo,
+       C_FIOPEDIDOEMABERTO.descricao,
+       C_FIOPEDIDOEMABERTO.documento,
+       C_FIOPEDIDOEMABERTO.emissao,
+       sum(C_FIOPEDIDOEMABERTO.quantidade) AS QUANTIDADE,
+       C_FIOPEDIDOEMABERTO.razaofilial,
+       C_FIOPEDIDOEMABERTO.codigoproduto,
+       C_FIOPEDIDOEMABERTO.descproduto,
+       SUM(C_FIOPEDIDOEMABERTO.area) AS AREA,
+       C_FIOPEDIDOEMABERTO.materialinicial, 
+       C_FIOPEDIDOEMABERTO.materialfinal,
+       C_FIOPEDIDOEMABERTO.saldo,
+      C_FIOPEDIDOEMABERTO.c_up * SUM(C_FIOPEDIDOEMABERTO.area) as c_up
+ 
+from 
+       C_FIOPEDIDOEMABERTO
+group by 
+         C_FIOPEDIDOEMABERTO.filial,
+         C_FIOPEDIDOEMABERTO.descricao,
+         C_FIOPEDIDOEMABERTO.descproduto,
+         C_FIOPEDIDOEMABERTO.codigo,
+         C_FIOPEDIDOEMABERTO.idmovimento,
+         C_FIOPEDIDOEMABERTO.documento,
+         C_FIOPEDIDOEMABERTO.emissao,
+         C_FIOPEDIDOEMABERTO.razaofilial,
+         C_FIOPEDIDOEMABERTO.codigoproduto,
+
+       C_FIOPEDIDOEMABERTO.materialinicial, 
+       C_FIOPEDIDOEMABERTO.materialfinal,
+       C_FIOPEDIDOEMABERTO.saldo,
+      C_FIOPEDIDOEMABERTO.C_UP

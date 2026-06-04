@@ -1,0 +1,25 @@
+
+
+insert into listaprecoproduto(
+lista,
+produto,
+preco,
+variavel,
+custoconsiderado,
+comissao,
+margemlucro,
+margemcontribuicao,
+quantidade)
+select
+    2,
+    substring(1000000+l.codigo from 2 for 10) codigo,
+    l.preco,
+    0,
+    0,
+    0,
+    0,
+    
+    82,
+    0
+from
+    t_lista l

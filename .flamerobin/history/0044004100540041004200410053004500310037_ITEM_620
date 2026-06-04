@@ -1,0 +1,13 @@
+select 
+    * 
+from 
+    C_LOGsaldoECOMMERCE 
+where 
+    coalesce(status_code,'500')<>'200'
+    and exists (
+        select 
+            * 
+        from 
+            c_logprodutocommerce
+        where 
+            C_LOGPRODUTOECOMMERCE.codigo=C_LOGSALDOECOMMERCE.codigo)

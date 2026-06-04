@@ -1,0 +1,4 @@
+select * from locallote
+where quantidade < -0.009
+and (select * from local 
+     where locallote."LOCAL"=local.id)

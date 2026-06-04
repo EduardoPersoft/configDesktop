@@ -1,0 +1,1 @@
+select cfiscal, aliquota, cast(aliquota/0.65 as decimal(12,2)) from CLASSIFICACAOFISCAL

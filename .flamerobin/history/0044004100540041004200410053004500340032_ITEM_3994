@@ -1,0 +1,16 @@
+select titulorec.filial,
+       titulorec.idtitulo,
+       titulorec.baixa,
+       titulorec.DATAPAGAMENTO,
+       titulorec.TOTALJUROS
+from 
+    movTITULOREC titulorec
+inner join
+    titulosanexados on
+        titulosanexados.filial=titulorec.filial and
+        titulosanexados.idtitulo=titulorec.idtitulo
+where 
+    titulosanexados.filial=110
+    and titulosanexados.IDCONTACORRENTE=341
+    and titulosanexados.IDMOVTOBANC=12901
+    and titulorec.TIPOMOVTO='D'

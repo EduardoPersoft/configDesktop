@@ -1,0 +1,31 @@
+select
+    coalesce(cadvendedor.nome, 'EURO BRAKE') nome,
+    sum(coalesce(movimentoestoque.VALORFRETE,0)) as frete,
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as coleta,
+    sum(coalesce(movimentoestoque.VALORFRETE,0))+
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as total,
+    (select sum(notafiscal.VLRTOTALNOTA) from NOTAFISCAL
+     inner join naturezaoperacao
+     on notafiscal.NATUREZAOPERACAO=NATUREZAOPERACAO.ID
+     where 
+        notafiscal.DATAEMISSAO between '01.01.2025' and '31.12.2025'
+        and NATUREZAOPERACAO.receita='S'
+        and notafiscal.vendedor = pedido.vendedor)
+from
+    movimentoestoque
+left join 
+    c_coletas on
+        c_coletas.COLETA=movimentoestoque.COLETA
+left join
+    pedido on
+        movimentoestoque.filial=pedido.filial and
+        movimentoestoque.idpedido=pedido.idnota  
+        
+left join
+    CADASTROPARCEIROS cadvendedor on    
+        cadvendedor.cadastro=pedido.vendedor
+where
+    movimentoestoque.coletadata between '01.01.2025' and '31.12.2025'
+    and TIPOMOVIMENTO='13'
+group by
+    coalesce(cadvendedor.nome, 'EURO BRAKE')

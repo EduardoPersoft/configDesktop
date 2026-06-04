@@ -1,0 +1,47 @@
+SELECT
+       I1.CODIGO,
+       I1.REFERENCIA,
+       I1.DESCRICAO,
+       I1.unidade,
+       ARQ1.NOMESALVO,
+       GRUPOMERCADORIA.DESCRICAO GRUPO,
+       FAMILIA.DESCRICAO FAMILIA, 
+        I1.DEFINICAO,
+        coalesce(I1.metatag, '') as metatag,
+
+       (select 
+            sum(materiallocal.saldototal)
+        from 
+            MATERIALLOCAL 
+        inner JOIN
+            local on
+                local.ID=materiallocal.IDLOCAL
+        where
+            MATERIALLOCAL.IDITEM=case i1.estocado when 'N'
+                                 then coalesce(i1.itembase, i1.codigo)
+                                 else i1.codigo end and
+            local.DISPONIVEL='S') saldo,
+
+       (SELECT FIRST 1 LISTAPRECOPRODUTO.preco 
+         FROM LISTAPRECOPRODUTO
+        WHERE LISTAPRECOPRODUTO.LISTA=(select first 1 listapreco.lista from listapreco where listapreco.padrao='S')
+        AND LISTAPRECOPRODUTO.PRODUTO=I1.CODIGO
+        order by quantidade) AS PRECO
+      
+        
+      
+        
+FROM itemestoque i1
+LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=I1.CLASSIFISCAL)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ1 ON (ARQ1.CODIGO=I1.CODIGO AND ARQ1.ORDEM=0)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ2 ON (ARQ2.CODIGO=I1.CODIGO AND ARQ2.ORDEM=0)
+LEFT JOIN UNIDADE ON (UNIDADE.UNIDADE=CASE COALESCE(I1.UNIDADE2, '') WHEN ''
+                                      THEN I1.UNIDADE
+                                      ELSE I1.UNIDADE2 END)  
+LEFT JOIN 
+    GRUPOMERCADORIA ON 
+        GRUPOMERCADORIA.GRUPO=I1.GRUPO
+LEFT JOIN 
+    FAMILIA ON 
+        FAMILIA.ID=I1.FAMILIA
+--WHERE I1.TIPOPRODUTO IN (3,4)

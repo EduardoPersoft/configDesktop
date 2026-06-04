@@ -1,0 +1,1 @@
+update locallote set locallote.QUANTIDADE=colaesce(locallote.QUANTIDADE,0)

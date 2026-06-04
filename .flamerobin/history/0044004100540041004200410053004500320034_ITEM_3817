@@ -1,0 +1,6 @@
+select
+    *
+from
+    VERSAOALTERACAO
+where
+    upper(substring(sql from 1 for 1000)) like '%UUID%'

@@ -1,0 +1,11 @@
+select 
+    *
+from
+    titulorec 
+where 
+    titulorec.parceiro = 19231
+    
+    
+    
+    
+    

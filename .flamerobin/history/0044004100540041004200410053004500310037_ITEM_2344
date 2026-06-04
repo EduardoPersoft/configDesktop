@@ -1,0 +1,16 @@
+update
+    LANTOCONTREC
+set
+    lantocontrec.CONTACONTABIL = case lantocontrec.CONTACONTABIL
+                                    when '3110010' then '101010301'
+                                    when '36' then '101010301'
+                                    when '3615003' then '101010301'
+                                    when '3615004' then '101010301'
+                                    when '3615005' then '101010301'
+                                    when '3615007' then	'101010301'
+                                    when '3' then '102040101'
+                                    when '4110006' then '102040101'
+                                    when '45' then '102040101'
+                                    else '101010201'
+                                    end
+

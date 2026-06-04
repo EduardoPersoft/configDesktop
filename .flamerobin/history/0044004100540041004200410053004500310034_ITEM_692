@@ -1,0 +1,12 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.C_GRAMATURA,
+    itemestoque.C_GRAMATURABASE,
+    itemestoque.C_GRAMATURAMATERIAPRIMABASE,
+    itemestoque.C_GRAMATURATINTA,
+    itemestoque.C_GRAMATURATOTAL
+from
+    ITEMESTOQUE
+where 
+    itemestoque.tipoproduto='1'

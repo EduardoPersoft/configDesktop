@@ -1,0 +1,9 @@
+update
+    CADASTROPARCEIROS
+set
+    cadastroparceiros.PARCEIROCLIENTE=coalesce(cadastroparceiros.PARCEIROCLIENTE,'N'),
+    cadastroparceiros.PARCEIROFORNECEDOR=coalesce(cadastroparceiros.PARCEIROFORNECEDOR,'N'),
+    cadastroparceiros.PARCEIROCOLABORADOR=coalesce(cadastroparceiros.PARCEIROCOLABORADOR,'N'),
+    cadastroparceiros.PARCEIROVENDEDOR=coalesce(cadastroparceiros.PARCEIROVENDEDOR,'N'),
+    cadastroparceiros.PARCEIROTRANSPORTADORA=coalesce(cadastroparceiros.PARCEIROTRANSPORTADORA,'N'),
+    cadastroparceiros.PARCEIROOUTROS=coalesce(cadastroparceiros.PARCEIROoutros,'N')

@@ -1,0 +1,65 @@
+select
+    titulopag.filial,
+    titulopag.contaCorrente,
+    titulopag.tipoTransacao,
+    tipoPagamento.descricao,
+    titulopag.PROGRAMACAO as vencimento,
+    'P' AS TIPO,
+    cadfor.razaosocial,
+    cadfor.documento as cnpjcpf,
+    titulopag.idtitulo,
+    titulopag.TITULO,
+    titulopag.fatura,
+    titulopag.emissao,    
+    cast(0 as decimal(12,2)) as receber,
+    cast(titulopag.valoremaberto as decimal(12,2)) as pagar,    
+    cast(0 as decimal(12,2)) as saldo,
+    cast(titulopag.valoremaberto as decimal(12,2)) as pagar,    
+    cast('N' as char(1)) as p_char
+from 
+    TITULOPAG
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulopag.PARCEIRO
+left join
+    tipoPagamento on
+        tipoPagamento.id=titulopag.tipoTransacao
+where    
+    titulopag.filial = 1 and 
+    titulopag.vencimento between '01.01.2025' and '31.12.2025' and
+    titulopag.baixa is null
+
+
+UNION 
+
+select
+    titulorec.filial,
+    titulorec.contacorrente,
+    titulorec.tipoTransacao,
+    tipoCobranca,descricao,
+    titulorec.PROVAVEL as vencimento,
+    'R' AS TIPO,
+    cadfor.razaosocial,
+    cadfor.documento as cnpjcpf,    
+    titulorec.idtitulo,
+    titulorec.TITULO,
+    titulorec.fatura,
+    titulorec.emissao,      
+    cast(titulorec.valoremaberto as decimal(12,2)) as receber,    
+    cast(0 as decimal(12,2)) as pagar,
+    cast(0 as decimal(12,2)) as saldo,
+    cast(titulorec.valoremaberto as decimal(12,2)) as receber,    
+    cast('N' as char(1)) as p_char
+from 
+    titulorec
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulorec.PARCEIRO
+left join
+    tipoCobranca on
+        tipoCobranca.tipoCobranca=titulorec.tipoTransacao
+where    
+    titulorec.filial = 1 and
+    titulorec.vencimento between '01.01.2025' and '31.12.2025' and
+    titulorec.baixa is null
+

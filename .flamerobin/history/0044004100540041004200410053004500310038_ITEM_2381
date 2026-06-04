@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    itemcustodata
+where
+    itemcustodata.codigo='PE-13584'

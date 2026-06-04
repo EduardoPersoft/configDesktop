@@ -1,0 +1,26 @@
+select 
+    mercadoriasnotacompra.*
+from
+    NOTACOMPRA
+inner join
+    MERCADORIASNOTACOMPRA on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=MERCADORIASNOTACOMPRA.codigo
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.02.2024' and '29.02.2024' and
+    itemestoque.TIPOPRODUTO='1' and
+    itemestoque.codigo not like 'MPS%'
+    and not exists (
+        select
+            * 
+        from 
+            ITEMCUSTODATA
+        where
+            ITEMCUSTODATA.filial=mercadoriasnotacompra.filial and
+            ITEMCUSTODATA.DATAINVENTARIO='29.02.2024' and
+            itemcustodata.codigo=MERCADORIASNOTACOMPRA.codigo)
+    

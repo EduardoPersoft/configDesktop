@@ -1,0 +1,9 @@
+select 
+    local.id,
+    local.DESCRICAO
+from
+    local
+where
+    local.descricao like 'Z1-B%'
+order by
+    local.descricao

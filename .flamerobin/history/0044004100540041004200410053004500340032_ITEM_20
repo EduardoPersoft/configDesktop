@@ -1,0 +1,34 @@
+select
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.iditem,
+    itemestoque.descricao,
+    materialmovimentoestoque.idpedido
+from
+    materialmovimentoestoque
+left join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+where
+    materialmovimentoestoque.filial=110 and 
+    coalesce(materialmovimentoestoque.concluido, 'N')='N' and   
+    materialmovimentoestoque.idpedido is not null and
+    not exists (
+        Select 
+            *
+        from
+            mercadoriasped
+        inner join
+            movimentoestoque on
+                MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+                materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO and
+                movimentoestoque.tipomovimento='12'                
+        where     
+            mercadoriasped.filial=materialmovimentoestoque.filial and
+            mercadoriasped.idnota=materialmovimentoestoque.idpedido and
+            mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA and
+            mercadoriasped.baixa='N'    )   
+order by idpedido
+            
+    

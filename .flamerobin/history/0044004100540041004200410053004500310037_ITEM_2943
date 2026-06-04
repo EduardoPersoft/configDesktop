@@ -1,0 +1,2 @@
+select * from itemestoque 
+where substring(codigo from 1 for 1)=6

@@ -1,0 +1,7 @@
+select 
+    cadastro,
+    nome
+from 
+    CADASTROPARCEIROS
+where
+    nome like '%CONTRIBUINTE%'

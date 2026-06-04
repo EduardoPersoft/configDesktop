@@ -1,0 +1,3 @@
+UPDATE ITEMESTOQUE SET UNIDADE='MIL'
+where itemestoque.unidade='KG'
+AND ITEMESTOQUE.C_POUCHE='S'

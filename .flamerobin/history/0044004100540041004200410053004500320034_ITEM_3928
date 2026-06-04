@@ -1,0 +1,54 @@
+SELECT
+    notafiscal.numeronota,
+    notafiscal.DATAEMISSAO,
+    cadcli.documento documento,
+    cadcli.nome nomeClientes,
+    cadcli.RAZAOSOCIAL razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome nomeVendedor,
+    sum(mercadoriasnota.vlrFinalMercad) valorVenda,
+    sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100) comissao,
+    cast(sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100)/ 
+         sum(mercadoriasnota.vlrFinalMercad)*100 as decimal(7,4)) pcomissao
+    
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+inner join        
+    NATUREZAOPERACAO on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= 5 and
+    notafiscal.dataemissao between '01.08.2022' and '31.08.2022' and
+    notafiscal.dataCancelamento is null and
+
+    cadven.CADASTRO = 33208 and
+    notafiscal.vlrtotalNota >0
+group by                       
+    mercadoriasnota.idpedido,
+    notafiscal.DATAEMISSAO,
+
+    cadcli.documento,
+    cadcli.nome,
+    cadcli.razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome,
+    cadate.nome

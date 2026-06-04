@@ -1,0 +1,2 @@
+select * from NOTAFISCAL
+where emissao = '2025-01-23'

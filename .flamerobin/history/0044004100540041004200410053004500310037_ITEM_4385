@@ -1,0 +1,3 @@
+select * from MOVTITULOREC
+where filial=1 
+and idtitulo=884176

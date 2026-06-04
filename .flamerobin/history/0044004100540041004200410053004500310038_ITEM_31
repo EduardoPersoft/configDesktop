@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    MATERIALlote
+WHERE
+    filial=1
+    and iditem='01.12.7529'

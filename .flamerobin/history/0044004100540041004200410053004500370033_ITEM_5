@@ -1,0 +1,27 @@
+select
+    titulorec.filial,
+    titulorec.idtitulo,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.TIPOBAIXA,
+    titulorec.DATAPAGAMENTO,
+    titulorec.baixa,
+    titulorec.VALORTITULO,
+    titulorec.totalpago,
+    titulorec.TOTALjuros,
+    titulorec.totalDESCONTO,
+    TITULOREC.VALOREMABERTO
+from
+    TITULOREC
+WHERE 
+    EXISTS (
+        select
+            * 
+        FROM
+            TITULOSANEXADOS
+        where
+            TITULOSANEXADOS.FILIAL=TITULOREC.FILIAL and
+            TITULOSANEXADOS.IDTITULO=TITULOREC.IDTITULO and
+            TITULOSANEXADOS.IDCONTACORRENTE=1 and
+            TITULOSANEXADOS.IDMOVTOBANC=55935)
+    

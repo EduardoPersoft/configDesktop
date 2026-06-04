@@ -1,0 +1,3 @@
+alter table t_liquidados
+
+add faturas2 varchar(2)

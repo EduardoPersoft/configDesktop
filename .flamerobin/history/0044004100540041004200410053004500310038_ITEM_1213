@@ -1,0 +1,6 @@
+update
+    LANTOCONTbanc
+set
+    lantocontabanc='5104'
+where 
+    lantocontabanc.CENTROCUSTO='2700'

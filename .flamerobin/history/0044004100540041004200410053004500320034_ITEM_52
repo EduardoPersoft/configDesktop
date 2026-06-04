@@ -1,0 +1,1 @@
+update t_titulorec set t_titulorec.IMPORTADO = 'S' where t_titulorec.IMPORTADO is null

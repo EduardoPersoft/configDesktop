@@ -1,0 +1,4 @@
+select * from QRCODEENTREGA
+where exists (
+select * from NOTAFISCAL where notafiscal.uuid=QRCODEENTREGA.UUIDNFE
+and notafiscal.DATAEMISSAO<'31.08.2025')

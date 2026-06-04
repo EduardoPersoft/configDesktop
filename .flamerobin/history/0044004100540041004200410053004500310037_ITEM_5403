@@ -1,0 +1,2 @@
+select * from c_coletas
+where c_coletas.DATACOLETA between '31.07.2025' and '28.08.2025'

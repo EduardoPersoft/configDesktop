@@ -1,0 +1,91 @@
+update
+    C_ITENSAZERO
+set
+    codigo = case substring(item from 6 for 1) when ' ' 
+    then substring(item from 1 for 5)
+    else substring(item from 1 for 6)
+    end
+    
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO
+from 
+    C_ITENSAZERO
+inner join
+    itemestoque on
+        itemestoque.codigo=c_itensazero.codigo
+inner join
+    materialfilial on
+        materialfilial.filial=5 and
+        materialfilial.iditem=itemestoque.codigo
+where
+    not exists (
+    select 
+        *
+    from 
+        mercadoriaspedcompra
+    where
+        mercadoriaspedcompra.codigo=itemestoque.codigo and
+        mercadoriaspedcompra.baixa='N')
+
+and 
+    (select 
+        materiallocal.SALDOTOTAL
+    from
+        materiallocal
+     where
+        materiallocal.filial=5 and
+        materiallocal.iditem=itemestoque.codigo and
+        materiallocal.IDLOCAL=1) <= 0.009    
+        
+SELECT
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    notacompra.serie,
+    notacompra.dataentrada,
+    mercadoriasnotacompra.codigo,
+    mercadoriasnotacompra.DESreduzida,
+    case movimentoestoque.tipomovimento when '05' then 0 else mercadoriasnotacompra.quantidade end,
+    mercadoriasnotacompra.PRECOunitario,
+    cast(
+        materialmovimentoestoque.valor/
+        case when coalesce(MATERIALMOVIMENTOESTOQUE.QUANTIDADE,1) = 0 then 1
+        else materialmovimentoestoque.quantidade end
+        as
+        decimal(12,3)) custoentrada,
+    precopromocao.CUSTOCONSIDERADO as custopreco,
+    precopromocao.preco as promocao,
+    preconormal.custoconsiderado as custonormal,
+    preconormal.preco as preconormal
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+inner JOIN
+    LISTAPRECOPRODUTO precoNormal on (
+        precoNormal.lista=1 AND
+        precoNormal.produto=mercadoriasnotacompra.codigo)
+inner JOIN
+    LISTAPRECOPRODUTO precoPromocao on (
+        precoPromocao.lista=2 AND
+        precoPromocao.PRODUTO=mercadoriasnotacompra.codigo)
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=notacompra.filial AND
+        movimentoestoque.IDNOTACOMPRA=notacompra.IDNOTA
+inner JOIN
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDmovimento AND
+        materialmovimentoestoque.IDMOVIMENTOMATERIAL=mercadoriasnotacompra.idmercadoria
+inner JOIN
+    CADASTROPARCEIROS cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+WHERE
+    notacompra.filial=5
+    and notacompra.DATAENTRADA >= cast('now' as date)
+order by
+    dataentrada,codigo

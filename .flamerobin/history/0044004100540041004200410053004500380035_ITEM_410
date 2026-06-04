@@ -1,0 +1,7 @@
+select 
+    materialmovimentoestoque.*
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    materialmovimentoestoque.filial=7 and
+    materialmovimentoestoque.iditem like 'INT%'

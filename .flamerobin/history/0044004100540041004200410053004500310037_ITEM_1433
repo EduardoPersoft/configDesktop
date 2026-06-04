@@ -1,0 +1,2 @@
+select * from inventarioestoquedata 
+where idmovimento is null 

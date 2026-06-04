@@ -1,0 +1,70 @@
+SELECT 
+       GRUPOMERCADORIA.DESCRICAO,
+       sum(COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)) mercadorias,
+       sum(COALESCE(mercadoriasnota.VALORIPI,0)) ipi,       
+       sum(COALESCE(mercadoriasnota.VLRICMSRECOLHIDO,0)) vlricmsrecolhido,       
+       sum(COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0)) fcpst,
+       sum(mercadoriasnota.frete) frete,
+       sum(mercadoriasnota.seguro) seguro,
+       sum(mercadoriasnota.OUTDESPACESSOR) outdespacessor,
+       sum((coalesce(mercadoriasnota.DESCONTONOTA,0)+
+            coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+            case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end)) descontos,                
+       sum(COALESCE(mercadoriasnota.VLRTOTALMERCAD,0)+
+           COALESCE(mercadoriasnota.VALORIPI,0)+
+           COALESCE(MERCADORIASNOTA.VLRICMSRECOLHIDO,0)+
+           COALESCE(mercadoriasnota.ICMSSTFCPVALOR,0)+
+           mercadoriasnota.frete+
+           mercadoriasnota.seguro+
+           mercadoriasnota.OUTDESPACESSOR-
+           (coalesce(mercadoriasnota.DESCONTONOTA,0)+
+            coalesce(mercadoriasnota.VLRDESCPRODUTO,0)+
+            case notafiscal.ZONAFRANCA when 'S' then mercadoriasnota.valoricms else 0 end))   as VLRTOTALNOTA,
+        sum(MERCADORIASnota.quantidade),
+        mercadoriasnota.unidade,
+        case upper(mercadoriasnota.unidade) when 'KG' then sum(mercadoriasnota.quantidade) else sum(mercadoriasnota.QUANTIDADE*
+        itemestoque.C_PESOMPPOREMBALAGEM)   end         
+    
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+INNER join 
+        mercadoriasnota  on
+           ( mercadoriasnota.filial=notafiscal.filial and 
+             mercadoriasnota.idnota=notafiscal.idnota)
+INNER join 
+        itemestoque on 
+            (itemestoque.codigo=mercadoriasnota.codigo)
+left join
+    GRUPOMERCADORIA on
+        GRUPOMERCADORIA.grupo = itemestoque.GRUPO
+left join
+    pedido on
+        pedido.filial=mercadoriasnota.filial and
+        pedido.idnota=mercadoriasnota.idpedido
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro = pedido.vendedor
+
+WHERE 
+    notafiscal.DATAEMISSAO BETWEEN '01.03.2024' and '31.03.2024'
+    AND NOT NOTAFISCAL.DATAEMISSAO IS NULL
+    AND NOTAFISCAL.CANCELAMENTO = 'N'
+    AND NOTAFISCAL.ENTRADASAIDA='S'
+    --and mercadoriasnota.cfop not in ('5922','6922')
+    and notafiscal.filial=110
+    and mrecadoriasnota.codigo like 'AMO%' 
+group by 
+       GRUPOMERCADORIA.descricao,
+       mercadoriasnota.unidade
+

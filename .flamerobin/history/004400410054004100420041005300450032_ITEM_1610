@@ -1,0 +1,3 @@
+delete from RESUMOCOMPRAS
+where 
+    resumocompras.FORNECEDOR=1310 and resumocompras.EMISSAO>='01.11.2020'

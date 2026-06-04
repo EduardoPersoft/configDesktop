@@ -1,0 +1,2 @@
+select mercadoriasnota.*, mercadoriasnota.VLRFINALMERCAD from mercadoriasnota
+where filial=1 and idnota=384245

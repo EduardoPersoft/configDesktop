@@ -1,0 +1,19 @@
+select
+    filial,
+    idnota,
+    pedido.NUMPEDIDOCLIENTE
+from 
+    PEDIDO
+where
+    pedido.NUMPEDIDOCLIENTE is not null and
+    exists (
+        select 
+            * 
+        from 
+            movimentoestoque 
+        where 
+            movimentoestoque.filial=pedido.filial and
+            movimentoestoque.idpedido=pedido.idnota and
+            movimentoestoque.TIPOMOVIMENTO='13')
+order by
+    idnota desc

@@ -1,0 +1,9 @@
+select 
+    *
+from    
+    titulorec
+where 
+    titulorec.baixa is null and
+    titulorec.contacorrente = 707 and
+    titulorec.dataenvio is null and
+    titulorec.codremessa is null

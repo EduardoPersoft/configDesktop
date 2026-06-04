@@ -1,0 +1,6 @@
+update 
+    NOTACOMPRA
+set
+    notacompra.dataentrada=notacompra.DATAEMISSAO
+where 
+    notacompra.filial=110

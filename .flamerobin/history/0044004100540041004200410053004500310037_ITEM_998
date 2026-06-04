@@ -1,0 +1,15 @@
+SELECT
+    ls.produto,
+    (select 
+        sum(lc.preco*composicaoitem.QUANTIDADE)       
+    FROM      
+        COMPOSICAOITEM         
+    inner JOIN
+        listaprecoproduto lc on
+            lc.produto=composicaoitem.IDMATERIAL
+    WHERE
+         composicaoitem.IDITEM=ls.PRODUTO)
+FROM
+    listaprecoproduto ls
+where 
+    ls.produto like '%s'

@@ -1,0 +1,11 @@
+update 
+    c_movfinanceiro
+set 
+    c_movfinanceiro.id= (select 
+                            titulorec.IDTITULO
+                        from
+                            titulorec
+                        where
+                            titulorec.titulo=c_movfinanceiro.documento and
+                            titulorec.fatura=c_movfinanceiro.fatura)
+    

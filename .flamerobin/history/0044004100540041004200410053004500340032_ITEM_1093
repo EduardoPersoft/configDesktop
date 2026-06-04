@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=110
+    and movimentoestoque.emissao>='01.01.2024'
+    and movimentoestoque.TIPOMOVIMENTO = '17'

@@ -1,0 +1,22 @@
+select 
+    PEDIDO.IDNOTA,
+    TITULOREC.BAIXA as baixatitulo,
+    TITULOREC.filial, 
+    titulorec.idtitulo,
+    titulorec.titulo
+
+from    
+    TITULOREC
+INNER join
+        PEDIDO ON
+            PEDIDO.FILIAL=TITULOREC.FILIAL AND
+            PEDIDO.IDNOTA=SUBSTRING(TITULOREC.TITULO FROM 2 FOR 10)
+where 
+    TITULOREC.filial=110 and 
+    substring (TITULOREC.titulo from 1 for 1)='P' and 
+    TITULOREC.BAIXA is null and
+    NOT EXISTS (
+        SELECT * FROM MERCADORIASPED 
+        WHERE PEDIDO.FILIAL=MERCADORIASPED.FILIAL 
+        AND PEDIDO.IDOT=MERCADORIASPED.IDNOTA
+        AND MERCADORIASPED.BAIXA='N')

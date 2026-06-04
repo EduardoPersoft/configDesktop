@@ -1,0 +1,2 @@
+select * from FATPED
+where filial=110 and idnota in (10198, 10199, 10200)

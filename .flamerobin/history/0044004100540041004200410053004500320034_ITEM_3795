@@ -1,0 +1,2 @@
+select * from MATERIALLOCAL
+where filial=5 and idtem='76793'

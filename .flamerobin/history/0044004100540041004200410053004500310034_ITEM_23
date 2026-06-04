@@ -1,0 +1,1 @@
+select documento,filial,idmovimento from MOVIMENTOESTOQUE where filial=110

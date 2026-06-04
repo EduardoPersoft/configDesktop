@@ -1,0 +1,3 @@
+select * from c_comissoes
+
+where datalimite='2024-07-14'

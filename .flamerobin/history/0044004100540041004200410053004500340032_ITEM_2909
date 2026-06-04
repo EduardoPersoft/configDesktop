@@ -1,0 +1,13 @@
+update
+    MERCADORIASNOTA
+set
+    qtdbaixa=quantidade 
+where filial=110
+and idpedido in (
+11456,
+11613,
+11614,
+11615,
+11616,
+11618,
+11619)

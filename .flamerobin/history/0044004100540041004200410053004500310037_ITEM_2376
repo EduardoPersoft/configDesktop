@@ -1,0 +1,22 @@
+select 
+    c_fatores.idlocal, 
+    c_fatores.idfator, 
+    --c_fatores.impimportacao,
+    CLASSIFICACAOFISCAL.PII as impimportacao,
+    --c_fatores.ipi, 
+    CLASSIFICACAOFISCAL.aliquota as ipi,
+    c_fatores.fatora, 
+    c_fatores.fatorb, 
+    c_fatores.fatorc,
+    c_fatores.fatord, 
+    c_fatores.fatore,
+    classificacaofiscal.descricao as classificacaofiscal
+from
+    c_fatores
+inner join 
+    classificacaofiscal on 
+        (c_fatores.cfiscal=classificacaofiscal.cfiscal)
+WHERE 
+     c_fatores.idlocal=9
+order by 
+    c_fatores.idfator

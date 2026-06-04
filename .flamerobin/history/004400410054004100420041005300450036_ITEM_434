@@ -1,0 +1,30 @@
+select 
+    materiallocal.iditem,
+    materiallocal.SALDOTOTAL,
+    T_ESTOQUE0802.LOCACAO
+from 
+    materiallocal
+left JOIN
+    T_ESTOQUE0802 on
+        materiallocal.iditem = T_ESTOQUE0802.CODIGO 
+WHERE 
+    MATERIALLOCAL.SALDOTOTAL < 0 AND
+    materiallocal.filial=12826 AND
+    MATERIALLOCAL.IDLOCAL=1 and   
+    
+    not EXISTS
+    (select 
+        * 
+     from 
+        MATERIALMOVIMENTOESTOQUE
+     inner JOIN
+        movimentoestoque on 
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+     WHERE
+        materialmovimentoestoque.filial=materiallocal.filial AND
+        materialmovimentoestoque.iditem=materiallocal.iditem AND
+        movimentoestoque.TIPOMOVIMENTO='13' AND
+        movimentoestoque.IDNOTAEXPEDICAO is null)
+ORDER BY    
+    3

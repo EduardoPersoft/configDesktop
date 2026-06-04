@@ -1,0 +1,93 @@
+SELECT 
+       ITEMESTOQUE.CODIGO,
+       ITEMESTOQUE.DESCRICAO,
+       SUM(LOCALLOTE.quantidade) AS SALDOTOTAL,
+       MATERIALFILIAL.VALORTOTALESTOCADO,
+       ESTSIN.ESTABELECIMENTO,
+       ESTSIN.MATERIALINICIAL,
+       ESTSIN.MATERIALFINAL,
+       MATERIALFILIAL.FILIAL,
+       CADASTROPARCEIROS.RAZAOSOCIAL,
+       UNIDADE.UNIDADE,
+       MATERIALFILIAL.CUSTOMEDIO ,
+       estsin.materiallocalinicio,
+       estsin.materiallocalfim,
+       estsin.loteinicial,
+       estsin.lotefinal,
+       c_requisicaomaterialitem.CODIGO as reqcodigo,
+       SUM(LOCALLOTE.quantidade) - 
+       coalesce((select 
+            sum(c_requisicaomaterialitem.QUANTIDADE)
+        FROM
+            C_REQUISICAOMATERIALITEM
+        inner join 
+            C_REQUISICAOMATERIAL on
+                (c_requisicaomaterial.ID=c_requisicaomaterialitem.id  and  
+                 c_requisicaomaterial.IDMOVIMENTOESTOQUE is null )
+        WHERE
+            itemestoque.codigo=c_requisicaomaterialitem.codigo),0) as saldoliquido,
+       coalesce((select 
+            sum(c_requisicaomaterialitem.QUANTIDADE)
+        FROM
+            C_REQUISICAOMATERIALITEM
+        inner join 
+            C_REQUISICAOMATERIAL on
+                (c_requisicaomaterial.ID=c_requisicaomaterialitem.id  and  
+                 c_requisicaomaterial.IDMOVIMENTOESTOQUE is null )
+        WHERE
+            itemestoque.codigo=c_requisicaomaterialitem.codigo),0) as quantidadereq          
+       
+FROM 
+    ITEMESTOQUE
+INNER JOIN 
+    UNIDADE ON 
+        (ITEMESTOQUE.UNIDADE=UNIDADE.UNIDADE)
+INNER JOIN 
+        ESTSIN ON 
+            (ESTSIN.RELATORIO='COMPOSICAO' AND
+             ITEMESTOQUE.CODIGO BETWEEN ESTSIN.MATERIALINICIAL AND ESTSIN.MATERIALFINAL)
+INNER JOIN 
+        CADASTROPARCEIROS ON 
+                (ESTSIN.ESTABELECIMENTO=CADASTROPARCEIROS.CADASTRO)
+inner JOIN 
+        MATERIALLOCAL ON 
+                ( ESTSIN.ESTABELECIMENTO=MATERIALLOCAL.filial
+                  AND ITEMESTOQUE.CODIGO=MATERIALLOCAL.IDITEM)
+inner JOIN 
+        MATERIALFILIAL ON 
+                ( ESTSIN.ESTABELECIMENTO=MATERIALFILIAL.filial
+                   AND ITEMESTOQUE.CODIGO=MATERIALFILIAL.IDITEM)
+inner JOIN 
+        LOCAL ON 
+                ( local.id=MATERIALLOCAL.idlocal)
+inner join 
+        locallote on
+                    (locallote.filial=materiallocal.filial and
+                        locallote.iditem=materiallocal.iditem
+                        and locallote.local=local.id)
+                        and materiallocal.idlocal between estsin.materiallocalinicio and estsin.materiallocalfim
+                        and locallote.lote between estsin.loteinicial and estsin.lotefinal
+left join 
+    c_requisicaomaterialitem on 
+            (itemestoque.codigo=c_requisicaomaterialitem.codigo)
+left join 
+    c_requisicaomaterial on 
+            (c_requisicaomaterial.ID=c_requisicaomaterialitem.id  and  c_requisicaomaterial.IDMOVIMENTOESTOQUE is null )
+
+GROUP BY
+       ITEMESTOQUE.CODIGO,
+       ITEMESTOQUE.DESCRICAO,
+       MATERIALFILIAL.VALORTOTALESTOCADO,
+       ESTSIN.ESTABELECIMENTO,
+       ESTSIN.MATERIALINICIAL,
+       ESTSIN.MATERIALFINAL,
+       MATERIALFILIAL.FILIAL, 
+       CADASTROPARCEIROS.RAZAOSOCIAL,
+       UNIDADE.UNIDADE,
+       MATERIALFILIAL.CUSTOMEDIO,
+       estsin.materiallocalinicio,
+       estsin.materiallocalfim,
+       estsin.loteinicial,
+       estsin.lotefinal,
+       c_requisicaomaterialitem.CODIGO
+

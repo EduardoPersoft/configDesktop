@@ -1,0 +1,5 @@
+update MATERIALMOVIMENTOESTOQUE
+set valor = 7316.1
+
+where
+materialmovimentoestoque.iditem in ('PE-23970')

@@ -1,0 +1,1 @@
+select * from contascontabeis order by idplano, contacontabil

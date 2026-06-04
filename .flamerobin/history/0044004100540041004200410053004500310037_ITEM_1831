@@ -1,0 +1,11 @@
+select
+    i1.codigo,
+    i1.codigo as codchave
+from
+    itemestoque i1
+union    
+select
+    i1.referencia,
+    i1.codigo as codchave
+from
+    itemestoque i1

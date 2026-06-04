@@ -1,0 +1,2 @@
+select filial,idnotam,tiponota
+where filial=1 and idnota=28794

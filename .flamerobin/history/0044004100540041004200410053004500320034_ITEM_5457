@@ -1,0 +1,9 @@
+update
+    MERCADORIASPEDCOMPRA
+set
+    MERCADORIASPEDCOMPRA.IDMERCADORIA=mercadoriaspedcompra.idmercadoria+29
+                                                    
+where 
+    filial=5 
+    and idnota= 67282
+

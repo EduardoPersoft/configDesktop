@@ -1,0 +1,1 @@
+select * from itemestoque where codigo like '6%' and coalescE(filial,1)=1

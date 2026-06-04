@@ -1,0 +1,8 @@
+select 
+    *
+from 
+    NOTAFISCAL
+where 
+    filial=5 and 
+    destinatario=30911 AND
+    notafiscal.DATAEMISSAO='19.05.2022'

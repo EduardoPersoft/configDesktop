@@ -1,0 +1,5 @@
+update 
+    PEDIDOCOMPRA
+set
+    pedidocompra.DATAAPROVACAO='2023-08-08'
+where filial=5 and idnota=67279

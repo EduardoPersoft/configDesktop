@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+where locallote.iditem='MPP06CPPCOPO'
+AND LOCALLOTE.LOTE LIKE '21282%'

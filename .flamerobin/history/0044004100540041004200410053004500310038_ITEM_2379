@@ -1,0 +1,4 @@
+select 
+    *
+from 
+    itemcustodata.codigo='PE-13584'

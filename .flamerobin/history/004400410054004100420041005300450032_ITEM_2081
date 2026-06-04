@@ -1,0 +1,42 @@
+insert into ITEMESTOQUECODIGOS(codigo,codigoalternativo)
+select
+  0,  i1.codigo,i1.codigo
+from
+    ITEMESTOQUE i1
+UNION
+select
+   1, i1.codigo,I1.itembase
+from
+    ITEMESTOQUE i1
+WHERE
+    COALESCE(I1.ITEMBASE, '') <> ''
+UNION
+select
+    2,i1.codigo, referencia
+from
+    ITEMESTOQUE i1
+WHERE
+    COALESCE(REFERENCIA, '') <> ''
+UNION
+select
+    3,i1.itembase,i1.codigo
+from
+    itemestoque i1
+WHERE
+    COALESCE(I1.ITEMBASE, '')<> ''
+union
+select
+    4,i1.codigo,i1.CODIGOALTERNATIVO
+from
+    ITEMESTOQUEoutroscodigos i1
+UNION
+SELECT
+    5,i1.codigo,FORNECEDORESITEM.CODIGOFORNEC
+FROM
+    itemestoque i1
+inner join 
+    fornecedoresitem on
+        fornecedoresitem.IDITEM=i1.codigo
+WHERE
+    COALESCE(FORNECEDORESITEM.CODIGOFORNEC, '')<>''
+

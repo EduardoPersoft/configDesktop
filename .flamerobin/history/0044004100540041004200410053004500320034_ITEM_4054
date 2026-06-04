@@ -1,0 +1,8 @@
+select
+    *
+from
+    MOVTITULOREC
+where
+    movtitulorec.filial=5 and
+    movtitulorec.EMISSAO = '18.10.2022' and
+    movtitulorec.CONTACORRENTE=1

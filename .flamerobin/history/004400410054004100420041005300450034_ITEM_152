@@ -1,0 +1,6 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.C_CLASSIFICACAOMATERIAL='302'
+WHERE
+    substring(itemestoque.codigo from 1 for 3)='PE-'

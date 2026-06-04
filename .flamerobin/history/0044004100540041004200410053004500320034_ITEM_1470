@@ -1,0 +1,8 @@
+SELECT * FROM COMPOSICAOITEM WHERE COMPOSICAOITEM.IDITEM='76'
+/*
+update 
+    COMPOSICAOITEM
+set 
+
+fornecedoresitem.iditem='100603' where fornecedoresitem.iditem='76'
+*/

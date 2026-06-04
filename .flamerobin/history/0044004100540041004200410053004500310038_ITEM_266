@@ -1,0 +1,9 @@
+select 
+    FILIAL,
+    CODIGO,
+    CONTACORRENTE.DESCRICAOCONTA,
+    CONTACORRENTE.PROPRIETARIO
+from
+    contacorrente
+WHERE 
+        FILIAL=1

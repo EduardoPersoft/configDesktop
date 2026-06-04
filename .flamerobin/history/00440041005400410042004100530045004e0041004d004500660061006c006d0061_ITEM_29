@@ -1,0 +1,7 @@
+SELECT
+    l1.*
+FROM
+    LISTAPRECOPRODUTO l1
+where 
+    l1.lista=2 AND
+    l1.produto='05260'

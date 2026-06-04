@@ -1,0 +1,7 @@
+select 
+    tipocobranca,
+    descricao,
+    tipocobranca.TPAG
+from
+    tipocobranca
+

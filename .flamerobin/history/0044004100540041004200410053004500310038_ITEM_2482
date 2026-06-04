@@ -1,0 +1,4 @@
+select * from INVENTARIOESTOQUEDATA
+where filial=1
+and data='31.05.2024'
+and valor  is null

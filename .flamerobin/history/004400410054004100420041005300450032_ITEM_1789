@@ -1,0 +1,6 @@
+SELECT
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.VLRICMSRECOLHIDO
+FROM
+    mercadoriasped

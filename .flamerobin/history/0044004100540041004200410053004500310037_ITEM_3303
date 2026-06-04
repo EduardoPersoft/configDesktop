@@ -1,0 +1,2 @@
+select * from itemestoque where codigo like '6%'
+and filial=1

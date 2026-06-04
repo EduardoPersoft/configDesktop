@@ -1,0 +1,19 @@
+select 
+    movtitulorec.*
+from
+    MOVTITULOREC
+where
+    exists (
+        select
+            *
+        from
+            titulorec
+        where
+            titulorec.filial=MOVTITULOREC.filial and
+            titulorec.idtitulo=movtitulorec.idtitulo and
+            titulorec.IDMOVIMENTO-1=movtitulorec.IDMOVIMENTO and 
+            titulorec.CONTACORRENTE<>movtitulorec.CONTACORRENTE and
+            titulorec.TIPOBAIXA is null and 
+            titulorec.filial=110)
+order by
+    cadastro

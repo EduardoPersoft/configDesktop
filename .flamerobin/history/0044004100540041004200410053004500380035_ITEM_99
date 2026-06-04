@@ -1,0 +1,6 @@
+update
+    CADASTROPARCEIROS
+set     
+    CIDADE='São Paulo'
+where
+    cidade='SAO PAULO'

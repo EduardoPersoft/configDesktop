@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,codigo,mercadoriasped.icms from mercadoriasped

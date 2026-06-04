@@ -1,0 +1,6 @@
+SELECT 
+    *
+from
+    MATERIALLOTE
+where
+    MATERIALLOTE.LOTE LIKE 'I20855%'

@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    notafiscal 
+where 
+    filial=1 and numeronota=4602

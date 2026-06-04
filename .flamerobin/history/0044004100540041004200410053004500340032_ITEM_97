@@ -1,0 +1,3 @@
+select * from COMPOSICAOOP
+where filial=110
+order by composicaoop.IDMOVIMENTO,idmovimentomaterial,idcomposicao desc

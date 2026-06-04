@@ -1,0 +1,2 @@
+select max(notafiscal.DATAEMISSAO)
+from notafiscal

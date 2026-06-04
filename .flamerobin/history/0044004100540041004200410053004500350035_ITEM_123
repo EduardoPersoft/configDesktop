@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set
+    ITEMESTOQUE.GRUPO=90
+where
+    ITEMESTOQUE.GRUPO=7

@@ -1,0 +1,1 @@
+update titulorec set importado='S' where importado is null

@@ -1,0 +1,9 @@
+update
+MERCADORIASNOTA
+set
+descricao = mecadoriasnota.desreduzida
+where  exists (
+select * from NOTAFISCAL
+where notafiscal.filial=mercadoriasnota.filial
+and notafiscal.idnota=mercadoriasnota.IDNOTA
+and notafiscal.dataemissao>='2025-01-23')

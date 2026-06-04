@@ -1,0 +1,2 @@
+select * from C_faturasped where
+filial =1 and idnota=67493

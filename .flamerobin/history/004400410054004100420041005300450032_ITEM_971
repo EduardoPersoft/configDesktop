@@ -1,0 +1,15 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.TRIBUTACAOICMS,
+    materialfilial.*
+
+from 
+    MATERIALFILIAL
+INNER JOIN on
+    itemestoque on 
+        itemestoque.codigo=materialfilial.iditem
+where 
+    materialfilial.filial=5 and materialfilial.VALORTOTALESTOCADO>0
+order by
+    materialfilial.st desc

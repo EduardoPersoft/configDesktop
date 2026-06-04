@@ -1,0 +1,86 @@
+select
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    sum(case extract(month from movimentoestoque.EMISSAO) when 1 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Jan,
+    sum(case extract(month from movimentoestoque.EMISSAO) when 2 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Fev,
+    sum(case extract(month from movimentoestoque.EMISSAO) when 3 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Mar,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 4 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Abr,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 5 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Mai,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 6 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Jun,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 7 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Jul,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 8 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Ago,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 9 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) "Set",        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 10 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Out,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 11 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Nov,        
+    sum(case extract(month from movimentoestoque.EMISSAO) when 12 
+        then MATERIALMOVIMENTOESTOQUE.QUANTIDADE*MATERIALMOVIMENTOESTOQUE.SINAL
+        else 0 
+        end) Dez,       
+        sum(MATERIALMOVIMENTOESTOQUE.quantidade*MATERIALMOVIMENTOESTOQUE.sinal)
+from
+    MOVIMENTOESTOQUE
+inner join
+    tipomovimentoestoque on
+        tipomovimentoestoque.ID=movimentoestoque.TIPOMOVIMENTO
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=moviemntoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.iditem
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.01.2025' and '30.09.2025' and
+    TIPOMOVIMENTOESTOQUE.TIPOMOVIMENTO = 'S'
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        

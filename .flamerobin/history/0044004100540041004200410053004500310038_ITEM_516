@@ -1,0 +1,8 @@
+UPDATE
+    MATERIALMOVIMENTOESTOQUE
+SET
+    valor = valor * (-1),
+    quantidade = quantidade * (-1)
+WHERE
+    filial = 1 AND
+    idmovimento= 116629

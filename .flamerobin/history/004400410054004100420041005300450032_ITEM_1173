@@ -1,0 +1,7 @@
+SELECT
+    distinct
+    mercadoriasnota.codigo
+from
+    mercadoriasnota
+WHERE
+    substring(mercadoriasnota.SITUACAOTRIBUT from 2 for 2) in (10, 60)

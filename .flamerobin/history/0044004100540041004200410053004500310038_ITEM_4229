@@ -1,0 +1,1 @@
+update mercadoriasped set variavel=0 where variavel=2 and filial=1 

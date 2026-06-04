@@ -1,0 +1,21 @@
+select * from MERCADORIASNOTA
+where filial=110
+and qtdbaixa>0
+and idnota in (
+3762,
+3797,
+3815,
+3849,
+3854,
+3855,
+3873,
+3875,
+3911,
+3911,
+3911,
+3911,
+3911,
+3914,
+3916,
+3918
+)

@@ -1,0 +1,1 @@
+select cadastroparceiros.cadastro, cadastroparceiros.status from CADASTROPARCEIROS where cadastro=5326

@@ -1,0 +1,33 @@
+UPDATE
+    MERCADORIASNOTA m1
+SET
+    m1.precolista= (select 
+                        mp.precolista-m2.precolista 
+                    from 
+                        mercadoriasnota m2
+                    inner join 
+                        MERCADORIASPED mp on
+                            mp.filial=m2.filialped AND
+                            mp.idnota=m2.idpedido AND
+                            mp.IDMERCADORIA=m2.IDMERCPEDIDO
+                    where m2.filial=5 AND
+                    m2.idnota=26016 AND
+                    m2.idmercadoria=m1.idmercadoria)       ,
+                              
+    m1.precounitario= (select 
+                        mp.precolista-m2.precolista 
+                    from 
+                        mercadoriasnota m2
+                    inner join 
+                        MERCADORIASPED mp on
+                            mp.filial=m2.filialped AND
+                            mp.idnota=m2.idpedido AND
+                            mp.IDMERCADORIA=m2.IDMERCPEDIDO
+                    where m2.filial=5 AND
+                    m2.idnota=26016 AND
+                    m2.idmercadoria=m1.idmercadoria)       
+   
+                    
+where 
+    m1.filial=5 
+    and m1.idnota=26027

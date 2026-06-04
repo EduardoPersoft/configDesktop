@@ -1,0 +1,4 @@
+update TITULOREC
+set titulorec.valoremaberto=titulorec.VALOREMABERTO-titulorec.totalpago
+where titulorec.VALOREMABERTO=titulorec.VALORTITULO
+and titulorec.TOTALPAGO=titulorec.valortitulo

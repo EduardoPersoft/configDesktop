@@ -1,0 +1,8 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    filial=110 and
+    tipovimento in (10, 11) and
+    movimentoestoque.emissao='04.03.2024'

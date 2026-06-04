@@ -1,0 +1,1 @@
+updaet c_listacusto custo=custo*1000 where custo<100

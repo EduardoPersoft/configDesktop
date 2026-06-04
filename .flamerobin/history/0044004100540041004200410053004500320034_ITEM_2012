@@ -1,0 +1,10 @@
+select 
+    *
+FROM
+    CADASTROPARCEIROS
+WHERE
+    CADASTROPARCEIROS.tipopessoa is null
+order by
+        cadastro.cadastro DESC
+        
+update cadastroparceiros set CADASTROPARCEIROS.TIPOPESSOA = 'J'  where CADASTROPARCEIROS.TIPOpessoa is null      

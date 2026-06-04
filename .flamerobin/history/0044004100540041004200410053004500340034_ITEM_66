@@ -1,0 +1,6 @@
+select
+    * 
+from 
+    MATERIALLOCAL
+where
+    materiallocal.idlocal=109

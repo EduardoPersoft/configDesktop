@@ -1,0 +1,15 @@
+select 
+    mercadoriasnota.*
+FROM
+    notacompra NOTAFISCAL 
+inner JOIN
+    mercadoriasnotacompra mercadoriasnota on 
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+WHERE
+    mercadoriasnota.filial=1 AND
+    notafiscal.DATAENTRADA >='01.09.2021' and 
+    mercadoriasnota.cfop in ('2020', '1202','1411')  and
+    mercadoriasnota.cstpis<50  
+order by
+    idnota

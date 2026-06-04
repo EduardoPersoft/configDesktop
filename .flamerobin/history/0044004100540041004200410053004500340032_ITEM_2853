@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where filial=110 and usuario=null AND EMISSAo='19.09.2024'

@@ -1,0 +1,7 @@
+update
+    nota
+set
+    simples='S',
+    crt=1
+where
+    filial = 1 and idnota>25835

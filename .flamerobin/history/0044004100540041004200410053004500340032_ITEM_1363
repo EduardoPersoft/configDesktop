@@ -1,0 +1,1 @@
+select * from locallote where lote='22965/1/4'

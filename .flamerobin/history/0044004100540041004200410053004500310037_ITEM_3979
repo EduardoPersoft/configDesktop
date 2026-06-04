@@ -1,0 +1,14 @@
+select 
+    CLASSIFICACAOFISCAL.descricao,
+    c_fatores.*    
+from
+    c_fatores
+inner join 
+    classificacaofiscal on 
+        (c_fatores.cfiscal=classificacaofiscal.cfiscal)
+inner join
+    c_localimportacao on
+        c_localimportacao.IDLOCAL=c_fatores.idlocal
+
+where 
+    c_fatores.CFISCAL in ('032','043','067') and c_fatores.IDLOCAL=18

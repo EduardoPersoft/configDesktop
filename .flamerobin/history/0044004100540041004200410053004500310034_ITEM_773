@@ -1,0 +1,16 @@
+update 
+    MERCADORIASNOTACOMPRA
+set
+    MERCADORIASNOTACOMPRA.UNIDADE=(
+            select
+                ITEMESTOQUE.UNIDADE
+            from
+                ITEMESTOQUE
+            where
+                MERCADORIASNOTACOMPRA.CODIGO=
+                    ITEMESTOQUE.CODIGO)
+where
+    NOT EXISTS (
+        SELECT * FROM UNIDADE
+        WHERE UNIDADE.UNIDADE=
+                    MERCADORIASNOTACOMPRA.UNIDADE)

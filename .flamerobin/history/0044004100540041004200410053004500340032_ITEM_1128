@@ -1,0 +1,6 @@
+select
+    *
+from
+    materialfilial
+where filial=110
+and iditem='MPP01METAL'

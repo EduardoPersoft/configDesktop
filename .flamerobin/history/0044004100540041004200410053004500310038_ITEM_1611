@@ -1,0 +1,9 @@
+
+update
+    MERCADORIASNOTA
+set 
+    filialped=null,
+    idpedido=null,
+    idmercpedido=null
+where 
+    filial=1 and idpedido=68295

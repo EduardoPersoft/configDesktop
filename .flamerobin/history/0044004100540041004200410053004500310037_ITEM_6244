@@ -1,0 +1,2 @@
+select * from PEDIDO
+order by pedido.DATACADASTRO desc

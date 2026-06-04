@@ -1,0 +1,3 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=1 and iditem='254224' and 
+localarmazenamento=9

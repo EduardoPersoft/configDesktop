@@ -1,0 +1,2 @@
+select * from c_pedidosemabertoproducao(110)
+where filial=110 and idpedido=11839

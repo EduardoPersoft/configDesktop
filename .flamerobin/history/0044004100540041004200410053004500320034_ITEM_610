@@ -1,0 +1,5 @@
+delete from 
+    lantocontrec
+where 
+    filial=1 and 
+    lantocontrec.IDMOVTOBANC between 156731 and 156841

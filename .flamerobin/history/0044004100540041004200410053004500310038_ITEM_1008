@@ -1,0 +1,1 @@
+alter table Cadastroparceiros add c_centrocustos varchar(15)

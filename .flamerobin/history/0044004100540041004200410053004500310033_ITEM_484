@@ -1,0 +1,13 @@
+select 
+    movimentoestoque.IDMOVIMENTO,
+    count(MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL)
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+group by
+    movimentoestoque.idmovimento
+order by
+    movimentoestoque.idmovimento desc

@@ -1,0 +1,29 @@
+select 
+    cadven.CADASTRO,
+    cadven.nome,
+    count (vendedoresorc.idnota) as qtd,
+    sum (orcamento.VLRTOTALNOTA) as valor    
+from 
+    orcamento
+inner join 
+    vendedoresorc  on 
+             (orcamento.filial=vendedoresorC.filial and 
+              orcamento.idnota=vendedoresorc.idnota)
+inner join 
+    VENDEDOR on 
+        (vendedoresorc.VENDEDOR=vendedor.CADASTRO)
+inner join 
+    cadastroparceiros cadven on    
+        (cadven.cadastro = vendedor.CADASTRO)
+where 
+   orcamento.DATACANCELAMENTO is null and 
+   coalesce (orcamento.CANCELAMENTO,'N') ='N' AND 
+   ORCAMENTO.DATAEMISSAO IS NOT NULL AND 
+   ORCAMENTO.DATAEMISSAO BETWEEN '01.01.2024' AND '31.01.2024' and
+   vendedor.TIPOVENDEDOR = 5
+group by 
+    cadven.CADASTRO,
+    cadven.nome
+order by 
+    sum (orcamento.VLRTOTALNOTA) as valor    
+    

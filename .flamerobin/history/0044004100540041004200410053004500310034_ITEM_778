@@ -1,0 +1,7 @@
+select 
+    * 
+from 
+    MAPAPRODUCAO 
+where 
+    MAPAPRODUCAO.FILIAL=110
+    and MAPAPRODUCAO.IDMOVIMENTO=15457

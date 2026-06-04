@@ -1,0 +1,6 @@
+create table 
+    t_mercadoriabaixa(
+        filial integer,
+        idnota integer,
+        idmercadoria integer
+    )

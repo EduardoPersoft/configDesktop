@@ -1,0 +1,17 @@
+select 
+    titulopag.idtitulo,
+    titulopag.titulo,
+    titulopag.fatura,
+    cadastroparceiros.cadastro,
+    cadastroparceiros.nome,
+    titulopag.EMISSAO,
+    titulopag.vencimento,
+    titulopag.valortitulo
+from 
+    titulopag 
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=TITULOPAG.parceiro
+where 
+    titulopag.vencimento <> cast(vencimento as date) and
+    titulopag.baixa is  null 

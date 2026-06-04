@@ -1,0 +1,23 @@
+update
+    C_REQUISICAOMATERIALITEM
+set 
+    codigo = case CODIGO
+                  when '04.01.0001' then '60005'
+                  when '04.01.0002' then '60004'
+                  when '04.01.0010' then '60007'
+                  when '04.01.0050' then '60013'
+                  when '04.01.0040' then '60012'
+                  when '04.01.0030' then '60011'
+                  when '04.01.0020' then '60010'
+                  when '04.01.0005' then '60002'
+             else CODIGO end                
+where 
+    codigo in ('04.01.0001',
+               '04.01.0002',
+               '04.01.0010',
+               '04.01,0050',
+               '04.01.0040',
+               '04.01.0030',
+               '04.01.0020',
+               '04.01.0005')
+    order by id desc

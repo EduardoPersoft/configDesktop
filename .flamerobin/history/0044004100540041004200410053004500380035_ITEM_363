@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+where LOCALLOTE.iditem='P015'

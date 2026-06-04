@@ -1,0 +1,1 @@
+select * from carrinhoitem order by id desc

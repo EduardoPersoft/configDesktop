@@ -1,0 +1,35 @@
+SELECT
+modelodocto.modelo,
+c_faturamentoperiodo.emissao,
+C_FATURAMENTOPERIODO.idpedido,
+c_faturamentoperiodo.numeronota,
+C_FATURAMENTOPERIODO.FILIAL,
+c_faturamentoperiodo.destinatario,
+c_faturamentoperiodo.razaocli,
+c_faturamentoperiodo.tipo,
+C_FATURAMENTOPERIODO.DATAINICIAL,
+C_FATURAMENTOPERIODO.DATAFINAL,
+C_FATURAMENTOPERIODO.MATERIALINICIAL,
+C_FATURAMENTOPERIODO.MATERIALFINAL,
+C_FATURAMENTOPERIODO.RAZAOFILIAL,
+SUM(C_FATURAMENTOPERIODO.VALOR) VALOR
+FROM C_FATURAMENTOPERIODO ('C_FATURAMENTOPERIODO')
+left join modelodocto on (c_faturamentoperiodo.idmodelo = modelodocto.id)
+where  not (coalesce(C_FATURAMENTOPERIODO.IDMODELO,16) in (16,35,36,37))
+group BY modelodocto.modelo,
+c_faturamentoperiodo.emissao,
+C_FATURAMENTOPERIODO.idpedido,
+c_faturamentoperiodo.numeronota,
+C_FATURAMENTOPERIODO.FILIAL,
+c_faturamentoperiodo.destinatario,
+c_faturamentoperiodo.razaocli,
+c_faturamentoperiodo.tipo,
+C_FATURAMENTOPERIODO.DATAINICIAL,
+C_FATURAMENTOPERIODO.DATAFINAL,
+C_FATURAMENTOPERIODO.MATERIALINICIAL,
+C_FATURAMENTOPERIODO.MATERIALFINAL,
+C_FATURAMENTOPERIODO.RAZAOFILIAL
+ORDER BY modelodocto.modelo,
+c_faturamentoperiodo.emissao,
+c_faturamentoperiodo.numeronota,
+C_FATURAMENTOPERIODO.idpedido

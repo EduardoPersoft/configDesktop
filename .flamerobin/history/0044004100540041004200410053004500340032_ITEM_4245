@@ -1,0 +1,4 @@
+insert into c_expedicao2(codigo)
+select distinct c_estruturas.CODIGO2
+from c_Estruturas
+where coalesce(c_estruturas.codigo2,'')<>''

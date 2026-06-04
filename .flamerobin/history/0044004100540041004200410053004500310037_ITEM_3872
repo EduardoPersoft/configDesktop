@@ -1,0 +1,2 @@
+select filial,idmovimento,idnotaexpedicao from MOVIMENTOESTOQUE
+where filial=1 and idmovimento=1019757

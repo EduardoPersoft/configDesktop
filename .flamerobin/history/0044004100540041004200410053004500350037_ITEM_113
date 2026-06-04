@@ -1,0 +1,17 @@
+select
+    cadesp.cadastro,
+    cadesp.nome,
+    orcamento.DATACADASTRO,
+    'O' as tipo
+from
+    vendedor
+inner join
+    cadastroparceiros cadesp on
+        vendedor.cadastro=cadesp.CADASTRO
+inner join
+    orcamento on
+        orcamento.C_ARQUITETO=cadesp.cadastro
+where
+    vendedor.CANALRELACIONADO=105
+    
+    

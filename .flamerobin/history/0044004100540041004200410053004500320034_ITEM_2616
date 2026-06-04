@@ -1,0 +1,9 @@
+update 
+    titulorec
+set
+    codretorno='XX'
+where 
+    titulorec.baixa is null and
+    titulorec.contacorrente = 707 and
+    titulorec.dataenvio is null and
+    titulorec.codretorno is null

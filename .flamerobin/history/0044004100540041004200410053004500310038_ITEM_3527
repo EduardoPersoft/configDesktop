@@ -1,0 +1,2 @@
+select filial,idnota,c_status,datacadastro from ORCAMENTO
+order by datacadastro desc

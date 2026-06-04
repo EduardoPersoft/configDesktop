@@ -1,0 +1,7 @@
+update 
+    NOTAFISCAL
+set     
+    notafiscal.simples = 0
+where
+    filial=3941
+        

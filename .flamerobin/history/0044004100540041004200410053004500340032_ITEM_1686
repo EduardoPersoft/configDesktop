@@ -1,0 +1,2 @@
+select  * from SERVICOPEDCOMPRA
+where filal=1 and idnota=2026

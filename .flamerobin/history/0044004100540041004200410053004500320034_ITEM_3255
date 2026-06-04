@@ -1,0 +1,1 @@
+select * from mercadoriasorc where filial=1 and codigo='101790'

@@ -1,0 +1,81 @@
+SELECT DISTINCT
+    PEDIDO.FILIAL,
+    PEDIDO.IDNOTA,
+    CAST ((    case coalesce ((select first 1 materialmovimentoestoque.idpedido
+                    from
+                        MOVIMENTOESTOQUE 
+                    INNER JOIN 
+                         MATERIALMOVIMENTOESTOQUE 
+                                                ON 
+                                                (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and
+                                                 MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+                         where
+                        movimentoestoque.filial=:filial and 
+                        movimentoestoque.TIPOMOVIMENTO='13' and 
+                        materialmovimentoestoque.IDPEDIDO = pedido.idnota),'')
+    when '' then '' 
+    else 'OK' end) AS CHAR (2))  as expedicao,
+    
+    /*
+    CAST ((  case coalesce ((select first 1 materialmovimentoestoque.idpedido
+                    from
+                        MOVIMENTOESTOQUE 
+                    INNER JOIN 
+                         MATERIALMOVIMENTOESTOQUE 
+                                                ON 
+                                                (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and
+                                                 MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+                         where
+                        movimentoestoque.filial=:filial and 
+                        movimentoestoque.TIPOMOVIMENTO='13' and 
+                        materialmovimentoestoque.IDPEDIDO = pedido.idnota),'6815744')
+    when '6815744'  then '6815744' 
+    else '8421504' end)  AS integer) as P_STATUSCOR,
+    
+    */
+    
+    PEDIDO.DATACADASTRO,
+    PEDIDO.DATAEMISSAO,
+    PEDIDO.numpedidocliente,
+    PEDIDO.NUMERONOTA,
+    SUM(((m2.quantiDADE-m2.qtdeenviada)*(m2.vlrfinalmercad+m2.valoripi))/
+              m2.QUANTIDADE) AS VLRTOTALNOTA,
+    CADCLI.CADASTRO,
+    CADCLI.RAZAOSOCIAL,
+    CADCLI.NOME,
+    CADCLI.DOCUMENTO, 
+    CADFILIAL.CADASTRO AS FILIAL,
+    CADFILIAL.NOME AS NOMEFILIAL,
+    (select FIRST 1 cadven.NOMe FROM vendedoresped
+        INNER JOIN CADASTROPARCEIROS CADVEN ON (CADVEN.cadastro=vendedoresped.vendedor)
+        WHERE vendedoresped.filial=pedido.FILIAL
+        AND vendedoresped.idnota=pedido.IDNOTA) VENDEDOR
+
+
+FROM  MERCADORIASPED m2
+INNER JOIN PEDIDO  oN ((PEDIDO.FILIAL=m2.FILIAL)
+                            AND (PEDIDO.IDNOTA=m2.IDNOTA))
+INNER JOIN CADASTROPARCEIROS CADCLI ON 
+           (CADCLI.CADASTRO=PEDIDO.DESTINATARIO)
+INNER JOIN CADASTROPARCEIROS CADFILIAL ON (PEDIDO.FILIAL=CADFILIAL.CADASTRO)
+
+WHERE
+    PEDIDO.FILIAL=:FILIAL AND
+   m2.BAIXA='N' AND
+    PEDIDO.CANCELAMENTO='N' 
+GROUP BY
+    PEDIDO.FILIAL,
+    PEDIDO.IDNOTA,
+    3,
+    PEDIDO.DATACADASTRO,
+    PEDIDO.DATAEMISSAO,
+    PEDIDO.numpedidocliente,
+    PEDIDO.NUMERONOTA,
+    CADCLI.CADASTRO,
+    CADCLI.RAZAOSOCIAL,
+    CADCLI.NOME,
+    CADCLI.DOCUMENTO,
+    pedido.cancelamento,
+    CADFILIAL.CADASTRO,
+    CADFILIAL.NOME
+PLAN JOIN (M2 INDEX (I_MERCADORIASPEDBAIXA),PEDIDO INDEX (RDB$PRIMARY855),CADFILIAL INDEX (RDB$PRIMARY790),CADCLI INDEX (RDB$PRIMARY790))

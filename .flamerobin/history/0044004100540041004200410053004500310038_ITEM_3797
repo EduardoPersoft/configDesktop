@@ -1,0 +1,2 @@
+select * from C_COMISSOES
+where id=808

@@ -1,0 +1,2 @@
+CREATE DOMAIN d_texto
+AS blob sub_type 0 CHARACTER SET iso8859_1;

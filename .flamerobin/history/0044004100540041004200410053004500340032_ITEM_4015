@@ -1,0 +1,3 @@
+select * from movtitulorec
+where filial=110 and
+idtitulo=28553

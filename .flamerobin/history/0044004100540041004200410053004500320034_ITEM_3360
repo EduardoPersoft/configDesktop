@@ -1,0 +1,27 @@
+select
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao,
+    sum(mercadoriaspedcompra.quantidade) as quantidade
+from 
+    PEDIDOcompra
+inner join
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=pedidocompra.filial and
+        mercadoriaspedcompra.idnota=pedidocompra.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo
+where
+    pedidocompra.filial=5 and
+    pedidocompra.DATACADASTRO between '01.01.2022' and '31.12.2022'
+
+group by
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao
+
+
+
+
+
+order by
+    mercadoriaspedcompra.codigo

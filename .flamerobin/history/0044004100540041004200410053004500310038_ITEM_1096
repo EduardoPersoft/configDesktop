@@ -1,0 +1,2 @@
+select * from locallote 
+where locallote.iditem between '01.12' and '01.99.9999'

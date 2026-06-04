@@ -1,0 +1,25 @@
+select    
+    1 as id,
+    CADASTROPARCEIROS.nome,
+    (select
+        count(orcamento.idnota)
+     from
+        ORCAMENTO
+     inner join
+        VENDEDORESORC on
+            vendedoresorc.filial=orcamento.filial and
+            vendedoresorc.idnota=orcamento.idnota and
+            vendedoresorc.vendedor=CADASTROPARCEIROS.CADASTRO
+    where
+        orcamento.datacadastro>cast('now' as date)-extract(day from cast('now' as date)) and
+        orcamento.dataCancelamento is null) as qtdOrcamento                
+from
+    vendedor
+inner join
+    cadastroparceiros on
+        vendedor.vendedor=CADASTROPARCEIROS.cadastro
+where
+    CADASTROPARCEIROS.status=1
+order by
+    CADASTROPARCEIROS.nome
+

@@ -1,0 +1,4 @@
+update CADASTROPARCEIROS
+set CADASTROPARCEIROS.uf=(select cep.uf from cep where cep.cep=CADASTROPARCEIROS.cep),
+CADASTROPARCEIROS.cidade=(select cep.cidade from cep where cep.cep=CADASTROPARCEIROS.cep)
+where exists (select * from cep where cep.cep=CADASTROPARCEIROS.cep)

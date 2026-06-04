@@ -1,0 +1,15 @@
+ SELECT
+    sum(titulorec.VALOREMABERTO) titulosEmAberto,
+    sum(CASE when titulorec.vencimento+ESTABELECIMENTO.diasatraso > 
+                  cast('now' as date) 
+                  then titulorec.VALOREMABERTO else 0 end) atraso   
+from
+    TITULOREC
+inner JOIN  
+    estabelecimento on 
+        estabelecimento.cadastr=titulorec.filial
+WHERE
+    titulorec.filial=5 and
+    titulorec.parceiro=4 and
+    titulorec.naolimitefinanceiro='N' and
+    titulorec.baixa is null

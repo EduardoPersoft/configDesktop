@@ -1,0 +1,16 @@
+update 
+    MATERIALMOVIMENTOESTOQUE
+set
+    valor=0
+where
+    exists (
+        select 
+            * 
+        from 
+            MOVIMENTOESTOQUE
+        where 
+            movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+            movimentoestoque.TIPOMOVIMENTO in ('10', '11') and
+            movimentoestoque.emissao>'31.12.2023')
+        

@@ -1,0 +1,17 @@
+/*
+update
+    TITULOREC
+set 
+    titulorec.BAIXA = null,
+    titulorec.DATAPAGAMENTO = null,
+    titulorec.TIPOBAIXA = null
+*/    
+select 
+    *
+from
+    titulorec
+where
+    titulorec.filial=5 and
+    titulorec.VENCIMENTO>='27.03.2023'
+    titulorec.CONTACORRENTE=10000
+

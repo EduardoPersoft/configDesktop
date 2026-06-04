@@ -1,0 +1,11 @@
+create table apontamentocomponete(
+    filial integer not null,
+    idmovimento integer not null,
+    idmaterial integer not null,
+    idcomposicao integer  not null,
+    id integer not null,
+    lote varchar(15),
+    quantidade decimal(12,3),
+    constraint pk_apontamento
+    primary key (filial, idmovimento,
+                 idcomposicao, idmaterial, id))

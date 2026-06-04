@@ -1,0 +1,12 @@
+UPDATE
+    MERCADORIASNOTA
+set
+    PRECOLISTA = (select first 1 (VLRTOTAL - coalesce(ALIQICMSST,0)) / qtde from C_I_MOVESTX where C_I_MOVESTX.idnota=mercadoriasnota.idnota and C_I_MOVESTX.CODPECA=mercadoriasnota.codigo), 
+    PRECOUNITARIO = (select first 1 (VLRTOTAL - coalesce(ALIQICMSST,0)) / qtde from C_I_MOVESTX where C_I_MOVESTX.idnota=mercadoriasnota.idnota and C_I_MOVESTX.CODPECA=mercadoriasnota.codigo),  
+    VLRTOTALMERCAD = (select first 1 VLRTOTAL from C_I_MOVESTX where C_I_MOVESTX.idnota=mercadoriasnota.idnota and C_I_MOVESTX.CODPECA=mercadoriasnota.codigo),  
+    ALIQUOTAICMS = (select first 1 ALIQICMS from C_I_MOVESTX where C_I_MOVESTX.idnota=mercadoriasnota.idnota and C_I_MOVESTX.CODPECA=mercadoriasnota.codigo),  
+    VALORICMS = (select first 1 valoricms from C_I_MOVESTX where C_I_MOVESTX.idnota=mercadoriasnota.idnota and C_I_MOVESTX.CODPECA=mercadoriasnota.codigo) 
+WHERE
+    mercadoriasnota.filial=5 AND
+    mercadoriasnota.idnota between 110280 and 178832
+        

@@ -1,0 +1,1 @@
+select * from prazomercped where filial=1 and idnota=16180

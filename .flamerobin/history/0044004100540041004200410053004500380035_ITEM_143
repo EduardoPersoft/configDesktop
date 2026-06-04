@@ -1,0 +1,9 @@
+update
+    MERCADORIASPED
+set
+    MERCADORIASPED.CODIGO=CASE MERCADORIASPED.CODIGO 
+                            WHEN 'P02' THEN 'P002'
+                            WHEN 'P03' THEN 'P003'
+                            WHEN 'P04' THEN 'P004'
+                            ELSE MERCADORIASPED.CODIGO
+                            END

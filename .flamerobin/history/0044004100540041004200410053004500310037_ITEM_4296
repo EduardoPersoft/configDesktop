@@ -1,0 +1,2 @@
+select * from logalteracao
+where logalteracao.objeto='ESTOQUE'

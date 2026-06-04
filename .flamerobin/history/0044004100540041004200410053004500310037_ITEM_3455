@@ -1,0 +1,1 @@
+select * from usuario where id in (93,130, 39, 43 )

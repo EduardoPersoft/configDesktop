@@ -1,0 +1,2 @@
+select * from PEDIDO
+where uuid='{60F28CBD-158B-4264-92E5-7FCFB93D48E'

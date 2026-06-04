@@ -1,0 +1,6 @@
+update
+    notafiscal
+set
+    notafiscal.DESTINATARIO =notafiscal.destinatario-354214
+where
+    notafiscal.destinatario>35000

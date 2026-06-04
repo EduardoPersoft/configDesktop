@@ -1,0 +1,12 @@
+select 
+    * 
+from 
+    TITULOREC
+inner JOIN
+    C_FATURASPED on
+        c_faturasped.filial=titulorec.filial AND
+        c_faturasped.IDTITULO=titulorec.idititulo
+where 
+    titulorec.filial=1 
+    and titulorec.baixa is null 
+    and titulorec.VENCIMENTO<>c_faturasped."DATA"

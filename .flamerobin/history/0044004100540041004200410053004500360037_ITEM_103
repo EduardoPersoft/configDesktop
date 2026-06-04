@@ -1,0 +1,56 @@
+select 
+
+    CAST (PEDIDO.DATACADASTRO AS DATE) AS DATA,	
+    cadven.nome as VENDEDORNOME,
+    cadcli.nome as clientenome,
+    mercadoriasped.CODIGO,
+    itemestoque.DESCRICAO,
+    case (coalesce (itemestoque.QUANTIDADEUNIDADE, '')) 
+            when '' then itemestoque.QUANTIDADEUNIDADE 
+            else mercadoriasped.QUANTIDADE/itemestoque.QUANTIDADEUNIDADE        
+        end as qtdpct,
+    mercadoriasped.QTDEPRODUTO as total,
+    mercadoriasped.QTDEPRODUTO-mercadoriasped.QTDEENVIADA as pendencia,
+    mercadoriasped.precolista as VALORUNITARIO,
+    --VENDA   	 
+    pedido.VLRTOTALNOTA AS VALORTOTAL,
+    pedido.uf as ESTADO	,
+    CAST (((select first 1 PRAZOMERCPED.dias from PRAZOMERCPED 
+        where prazomercped.filial=mercadoriasped.filial AND 
+         prazomercped.IDNOTA=mercadoriasped.IDNOTA and
+         prazomercped.IDITEM=mercadoriasped.IDMERCADORIA)   + PEDIDO.DATAEMISSAO)AS DATE) AS DATAENTREGA
+         
+
+from 
+    pedido 
+inner join 
+    mercadoriasped on 
+        (mercadoriasped.filial=pedido.filial and 
+         mercadoriasped.idnota=pedido.idnota)
+left join 
+    itemestoque on 
+        (itemestoque.codigo=mercadoriasped.CODIGO)
+left join 
+    vendedoresped on 
+        (vendedoresped.filial=pedido.filial and 
+        vendedoresped.idnota=pedido.idnota)
+left join 
+    CADASTROPARCEIROS cadven on 
+        (cadven.cadastro=vendedoresped.VENDEDOR)
+left join 
+    CADASTROPARCEIROS cadcli on 
+        (cadcli.cadastro=pedido.DESTINATARIO)
+      
+order by 
+    quantidadeunidade desc
+                
+    
+    
+    
+    
+    
+    
+    
+    
+    
+         

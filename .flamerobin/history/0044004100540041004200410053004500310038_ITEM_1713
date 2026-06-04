@@ -1,0 +1,6 @@
+select * from PEDIDO
+left join  
+    VENDEDORESPED ON 
+        (VENDEDORESPED.FILIAL=PEDIDO.FILIAL AND 
+         VENDEDORESPED.IDNOTA=PEDIDO.IDNOTA)
+where pedido.filial=184

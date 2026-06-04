@@ -1,0 +1,10 @@
+select 
+    lote,
+    quantidade,
+    c_largura,
+    C_GRAMATURA
+from 
+    materiallote
+where
+    materiallote.filial=110 and
+    materiallote.lote='.'

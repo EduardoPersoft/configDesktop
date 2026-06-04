@@ -1,0 +1,3 @@
+update notafiscal set dataemissao='07.05.2021'
+where
+    filial=1 and idnota=26527

@@ -1,0 +1,7 @@
+update MATERIALMOVIMENTOESTOQUE
+set MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=1
+where exists
+(select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=materialmovimentoestoque.filial and
+movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+mvoimentoestoque.emissao>'31.10.2025')

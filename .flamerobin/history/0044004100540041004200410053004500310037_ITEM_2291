@@ -1,0 +1,33 @@
+    select
+        'A',
+        itemestoque.codigo,
+        itemestoque.REFERENCIA
+    from
+        itemestoque
+    where
+        coalesce(ITEMESTOQUE.referencia,'')<>'' and
+        itemestoque.referencia='02 11411 02'
+    union
+    select
+        'B',
+        itemestoque.codigo,
+        itemestoque.C_ORIGINAL
+    from
+        itemestoque
+    where
+        coalesce(ITEMESTOQUE.c_original,'')<>'' and
+        itemestoque.c_original='02 11411 02'
+    union
+    select
+        'C',
+        i2.codigo,
+        i1.referencia
+    from
+        itemestoque i1
+    inner join
+        itemestoque i2 on
+            i1.c_original=i2.C_ORIGINAL and
+            i1.codigo<>i2.codigo
+    where
+        coalesce(i1.referencia,'')<>'' and
+        i1.referencia='02 11411 02'

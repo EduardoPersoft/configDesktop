@@ -1,0 +1,2 @@
+alter table movimentoaestoque
+add c_dataanterior date

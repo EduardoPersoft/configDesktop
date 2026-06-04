@@ -1,0 +1,21 @@
+SELECT 1 AS MODO,
+         MOVBANCARIOS.FILIAL,
+        MOVBANCARIOS.IDCONTACORRENTE,
+       MOVBANCARIOS.Dataextrato,
+       (CASE MOVBANCARIOS.TIPOMOVIMENTO
+       WHEN 'C' THEN MOVBANCARIOS.VALORMOVIMENTO
+       ELSE MOVBANCARIOS.VALORMOVIMENTO*(-1) END ) AS VALORMOVIMENTO,
+       MOVBANCARIOS.TIPOMOVIMENTO,
+       MOVBANCARIOS.HISTORICOEXTRATO,
+       MOVBANCARIOS.NRDOCUMENTO,
+       MOVBANCARIOS.IDMOVTOBANCARIO,
+       MOVBANCARIOS.DATAEXTRATO,
+       case movbancarios.tipomovimento when 'D' then movbancarios.valormovimento
+         else NULL end as debito,
+       case movbancarios.tipomovimento when 'C' then movbancarios.valormovimento
+         else NULL end as credito,
+       Movbancarios.Transferencia,
+       movbancarios.Contacorrentedest
+    FROM MOVBANCARIOS
+    WHERE MOVBANCARIOS.Dataextrato BETWEEN '04.10.2023' AND '04.10.2023'
+    ORDER BY MOVBANCARIOS.FILIAL,MOVBANCARIOS.IDCONTACORRENTE,MOVBANCARIOS.DATAEXTRATO,MOVBANCARIOS.IDMOVTOBANCARIO

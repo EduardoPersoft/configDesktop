@@ -1,0 +1,2 @@
+select * from local
+order by prioridade, descricao

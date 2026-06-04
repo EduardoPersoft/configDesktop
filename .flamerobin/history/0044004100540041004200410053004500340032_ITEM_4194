@@ -1,0 +1,2 @@
+select * from locallote
+where locallote.QUANTIDADE is null

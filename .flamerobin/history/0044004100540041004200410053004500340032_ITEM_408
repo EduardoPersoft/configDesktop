@@ -1,0 +1,6 @@
+create table t_ultimocusto(
+codigo varchar(15) not null,
+custo decimal(12,2),
+constraint pk_t_ultimocusto 
+primary key
+t_ultimocusto(codigo))

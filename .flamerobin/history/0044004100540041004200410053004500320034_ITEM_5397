@@ -1,0 +1,4 @@
+update titulorec set 
+codremessa='01'
+where titulorec.filial=5
+and titulorec.emissao>='21.03.2023'

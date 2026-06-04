@@ -1,0 +1,4 @@
+select * from materialmovimentoestoque where materialmovimentoestoque.filial=1
+and materialmovimentoestoque.idmovimento in (299241, 299242)
+and materialmovimentoestoque.iditem='1007401'
+order by iditem

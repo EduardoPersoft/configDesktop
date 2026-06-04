@@ -1,0 +1,9 @@
+SELECT 
+   C_MAPAPRODUCAO.*,
+   (select mercadoriasped.baixa from MERCADORIASPED
+    where mercadoriasped.filial=C_MAPAPRODUCAO.FILIAL AND
+    mercadoriasped.idnota=C_MAPAPRODUCAO.idnota AND
+    mercadoriasped.IDMERCADORIA=c_mapaproducao.idmercadoria)
+  CAST('N' AS CHAR(1)) AS P_MARCA
+  FROM C_MAPAPRODUCAO(1,'01.01.2021','31.12.2021')
+where C_MAPAPRODUCAO.C_REVISAOFINAL IS NULL

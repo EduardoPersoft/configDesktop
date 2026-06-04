@@ -1,0 +1,7 @@
+select 
+
+    materialmovimentoestoque.* 
+from 
+    materialmovimentoestoque
+where 
+    substring(materialmovimentoestoque.iditem from 1 for 1)='P'

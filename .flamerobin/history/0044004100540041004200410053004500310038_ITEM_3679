@@ -1,0 +1,2 @@
+select * from ITEMESTOQUE
+where codigo in ('02.01.1010','60005','60004')

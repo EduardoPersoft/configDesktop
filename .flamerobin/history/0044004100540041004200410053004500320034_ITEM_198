@@ -1,0 +1,2 @@
+select * from titulopag 
+where filial=1 and vencimento>='01.11.2021'

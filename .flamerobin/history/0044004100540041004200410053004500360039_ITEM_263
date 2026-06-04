@@ -1,0 +1,1 @@
+select localentrega from imp_nfe('NFE')

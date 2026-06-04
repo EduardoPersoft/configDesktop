@@ -1,0 +1,20 @@
+SET TERM ^;
+
+CREATE TRIGGER pedidopendente FOR NOTAFISCAL
+ACTIVE AFTER INSERT OR UPDATE POSITION 0
+AS
+declare idPedido integer;
+BEGIN
+    if(new.DATAEMISSAO is not null and old.DATAEMISSAO is null) then BEGIN
+        for select distinct mercadoriasnota.IDPEDIDO
+        from MERCADORIASNOTA
+        where mercadoriasnota.filial=new.filial AND
+        mercadoriasnota.idnota=new.IDNOTA
+        into :idpedido do 
+            insert into PEDIDOSACOMPLEMENTAR(filial, idnotaoriginal, idpedido)
+            values (new.filial, new.idnota, :idpedido);
+    end
+
+END^
+
+SET TERM ;^

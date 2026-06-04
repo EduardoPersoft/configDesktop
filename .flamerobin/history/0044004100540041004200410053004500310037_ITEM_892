@@ -1,0 +1,33 @@
+SELECT
+    materialmovimentoestoque.filial,
+    movimentoestoque.idmovimento,
+    movimentoestoque.EMISSAO,
+    ORIGEM.DESCRICAO AS ORIGEM,
+    DESTINO.DESCRICAO AS DESTINO,
+    movimentoestoque.LOCALTRANSFERENCIA,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialmovimentoestoque.quantidade
+FROM
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+inner join 
+    local origem on
+        origem.id=movimentoestoque.localarmazenamento
+inner join 
+    local destino on
+        destino.id=movimentoestoque.LOCALTRANSFERENCIA
+inner join 
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+where 
+    materialmovimentoestoque.filial=12826 AND
+    materialmovimentoestoque.iditem <='6' AND
+    movimentoestoque.documento=cast(movimentoestoque.idmovimento as varchar(10)) AND
+    movimentoestoque.tipomovimento = '10'
+
+order by
+    materialmovimentoestoque.idmovimento desc

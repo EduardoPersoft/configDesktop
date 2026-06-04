@@ -1,0 +1,2 @@
+delete from local
+where local.id>=4541

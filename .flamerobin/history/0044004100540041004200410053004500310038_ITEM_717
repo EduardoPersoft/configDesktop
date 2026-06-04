@@ -1,0 +1,28 @@
+select  
+    item.codigo,
+    item.descricao,
+    item.CODIGOTRIBUTACAO,
+    
+    case substring (item.codigo from 1 for 2) 
+        when 'PE 'then (select itembase.codigo from itemestoque itembase 
+                        where itembase.codigo=item.ITEMBASE)
+        else item.codigo end as codigoitem,
+    
+    case substring (item.codigo from 1 for 2) 
+        when 'PE 'then (select itembase.VALORULTIMACOMPRA from itemestoque itembase 
+                        where itembase.codigo=item.ITEMBASE)
+        else item.VALORULTIMACOMPRA end as ULTIMACOMPRA,
+    materialfilial.valor*(item.VALORULTIMACOMPRA*(TRIBUTACAOICMSUF.ALIQUOTA*(TRIBUTACAOICMSUF.REDUCAO/100)/100)) as icmscusto
+from 
+    itemestoque item
+inner join
+    itemestoque itemcusto on
+        itemecusto.codigo = case when coalesce(item.VALORULTIMACOMPRA,0) >0 then item.CODIGO
+                     else coalesce(item.itembase, item.codigo) end
+inner join 
+    TRIBUTACAOICMSUF ON
+     (item.CODIGOTRIBUTACAO=TRIBUTACAOICMSUF.ID)   
+where 
+    TRIBUTACAOICMSUF.uf='SP'
+order by
+    item.codigo

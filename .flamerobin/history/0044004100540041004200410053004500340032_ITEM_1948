@@ -1,0 +1,8 @@
+
+select
+    *
+from
+    TITULOSANEXADOS
+where
+    titulosanexados.filial=110 and
+    titulosanexados.idtitulo=10559

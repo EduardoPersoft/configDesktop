@@ -1,0 +1,1 @@
+select * from cadastroparceiros where CADASTROPARCEIROS.C_CODVENDEDORANTIGO is not null order by c_codvendedorantigo

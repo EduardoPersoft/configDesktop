@@ -1,0 +1,13 @@
+select 
+    NOTACOMPRA.filial,
+    NOTACOMPRA.idnota,
+    NOTACOMPRA.NRNOTAFORNECEDOR,
+    CADASTROPARCEIROS.RAZAOSOCIAL,
+    CADASTROPARCEIROS.DOCUMENTO,
+    notacompra.CHAVE,
+    notacompra.VLRTOTALNOTA
+from 
+    NOTACOMPRA
+where 
+    notacompra.DATAEMISSAO between 
+'01.03.2025' and '31.03.2025'

@@ -1,0 +1,5 @@
+update 
+    INVENTARIOESTOQUEDATA 
+set
+    idmovimento=-10
+where quantidade<>quantidadeestoque and idmovimento is null and data<'01.03.2026'

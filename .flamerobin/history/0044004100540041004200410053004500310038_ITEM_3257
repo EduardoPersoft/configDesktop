@@ -1,0 +1,3 @@
+SELECT c_listastatus.*
+    FROM C_LISTASTATUS(1,null,null)
+   where nomevendedor is null

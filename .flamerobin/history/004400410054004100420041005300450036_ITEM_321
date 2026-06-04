@@ -1,0 +1,19 @@
+select 
+    materialmovimentoestoque.*
+FROM
+    materialmovimentoestoque 
+inner JOIN
+    movimentoestoque on 
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+WHERE
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' AND
+    materialmovimentoestoque.iditem='1977118' and
+    movimentoestoque.emissao>='01.02.2021' AND
+    exists (
+    select * from MERCADORIASPED
+    where mercadoriasped.filial=materialmovimentoestoque.filial AND
+    mercadoriasped.idnota=MATERIALMOVIMENTOESTOQUE.IDPEDIDO AND
+    mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA AND
+    mercadoriasped.quantidade<>MATERIALMOVIMENTOESTOQUE.quantidade)
+       

@@ -1,0 +1,2 @@
+select * from materialfilial
+WHERE iditem='AB0318002'

@@ -1,0 +1,2 @@
+select * from MATERIALLOCAL
+where filial=1 and saldototal>0

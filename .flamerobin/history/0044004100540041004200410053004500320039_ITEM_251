@@ -1,0 +1,8 @@
+update  
+    NOTAFISCAL
+set
+    simples='S'
+where 
+    dataemissao is null
+
+    

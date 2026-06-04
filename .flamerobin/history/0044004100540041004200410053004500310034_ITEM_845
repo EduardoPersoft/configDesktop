@@ -1,0 +1,2 @@
+select * from itemestoque 
+where substring(itemestoque from 1 for 1)=''

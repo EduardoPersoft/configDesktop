@@ -1,0 +1,1 @@
+select * from turnos order by recurso,inicio

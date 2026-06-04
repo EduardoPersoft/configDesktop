@@ -1,0 +1,7 @@
+select
+    *
+from
+    MOVBANCARIOS
+where  
+    filial=1 and
+    idmovimento=15244

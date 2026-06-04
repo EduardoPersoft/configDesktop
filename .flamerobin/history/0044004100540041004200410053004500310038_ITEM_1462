@@ -1,0 +1,6 @@
+select * from MATERIALLOTE
+where filial=1
+and iditem between '01.01' and '99.'
+and lote ='.'
+
+

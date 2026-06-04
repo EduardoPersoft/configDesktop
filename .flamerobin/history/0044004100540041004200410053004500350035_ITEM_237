@@ -1,0 +1,5 @@
+select
+itemestoque.codigo,
+itemestoque.C_DIMENSOES,
+itemestoque.C_DETALHES
+from itemestoque

@@ -1,0 +1,4 @@
+select * from notafiscal 
+where uuid = (select notafiscal.uuid 
+              from NOTAFISCAL
+              where filial=3941 and idnota=269)

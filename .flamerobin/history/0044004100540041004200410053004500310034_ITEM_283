@@ -1,0 +1,6 @@
+update
+    clientes
+set
+    cadastro =CADASTROPARCEIROS.cadastro-354214
+where
+    cadastroparceiros.cadastro>35000

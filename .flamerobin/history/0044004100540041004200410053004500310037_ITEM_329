@@ -1,0 +1,2 @@
+select count(titulorec.titulo) from TITULOREC
+where titulorec.DATAENVIO='03.08.2021'

@@ -1,0 +1,6 @@
+select
+    *
+from 
+    vendedoresped 
+where 
+    filial = 1 and vendedor = 20 and vendedoresped.C_IDCOMISSAO is null

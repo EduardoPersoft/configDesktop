@@ -1,0 +1,3 @@
+select * from ITEMCUSTODATA
+where itemcustodata.FILIAL=223
+and itemcustodata.CODIGO='MPP01TRACOG13'

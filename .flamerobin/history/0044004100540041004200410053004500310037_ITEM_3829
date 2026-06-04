@@ -1,0 +1,6 @@
+select
+    *
+from 
+    PEDIDO
+where
+    pedido.vendedor is null

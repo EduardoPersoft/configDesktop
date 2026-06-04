@@ -1,0 +1,17 @@
+update
+    c_movfinanceiro
+set
+    contaOriginal = (select
+                        titulorec.CONTACORRENTE
+                     from
+                        TITULOREC
+                     where
+                        titulorec.filial=110 and
+                        titulorec.idtitulo=c_movfinanceiro.id),
+    tipobaixa = (select
+                        titulorec.tipobaixa
+                     from
+                        TITULOREC
+                     where
+                        titulorec.filial=110 and
+                        titulorec.idtitulo=c_movfinanceiro.id)

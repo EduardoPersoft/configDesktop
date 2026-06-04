@@ -1,0 +1,1 @@
+select filial,iditem,lote,quantidade,codigobarra from materiallote where codigobarra is not null

@@ -1,0 +1,3 @@
+select idnota,orcamento.FRETEIPI
+from ORCAMENTO
+order by idnota desc

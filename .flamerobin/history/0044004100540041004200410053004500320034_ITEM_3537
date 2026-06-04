@@ -1,0 +1,6 @@
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000'
+where
+    cod_ncm='99999999'

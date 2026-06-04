@@ -1,0 +1,13 @@
+select 
+    distinct
+    mercadoriasnotacompra.CLASSIFISCAL,
+    max(mercadoriasnotacompra.pipi)
+from 
+    mercadoriasnotacompra 
+where 
+    filial=5 and coalesce(pipi,0)<>0
+group by
+    mercadoriasnotacompra.CLASSIFISCAL
+order by
+    mercadoriasnotacompra.CLASSIFISCAL
+    

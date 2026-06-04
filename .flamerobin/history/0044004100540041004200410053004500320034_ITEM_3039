@@ -1,0 +1,22 @@
+select
+    cadfor.cadastro,
+    cadfor.nome,
+    count(distinct notacompra.idnota) as qtdCompras,
+    count(distinct mercadoriasnotacompra.codigo) qtdItensComprados,
+    sum(mercadoriasnotacompra.quantidade) as volume
+from
+    pedidocompra NOTACOMPRA
+inner join
+    CADASTROPARCEIROS cadfor
+        on cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    mercadoriaspedcompra mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.idnota
+where
+    notacompra.filial=5 and
+    notacompra.datacadastro between '01.08.2021' and '31.07.2022'
+group by         
+    cadfor.cadastro,
+    cadfor.nome
+order by 4 desc

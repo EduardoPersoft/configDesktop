@@ -1,0 +1,7 @@
+UPDATE
+    mercadoriasnota
+SET
+    mercadoriasnota.comissao = 5
+WHERE
+    mercadoriasnota.filial = 5 AND
+    mercadoriasnota.idnota = 26061

@@ -1,0 +1,18 @@
+SELECT
+    tipoitemestoque.DESCRICAO,
+    ITEMCUSTODATA.datainventario,
+    sum(itemcustodata.CUSTOTOTAL)
+   
+FROM
+    ITEMCUSTODATA
+INNER JOIN
+    ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO=itemcustodata.codigo
+INNER JOIN
+    TIPOiTEMeSTOQUE ON
+        tipoitemestoque.ID=ITEMESTOQUE.tipoproduto
+WHERE
+    ITEMCUSTODATA.datainventario between '01.01.2026' and '31.12.2026'
+GROUP BY 
+    tipoitemestoque.DESCRICAO,
+    itemcustodata.datainventario

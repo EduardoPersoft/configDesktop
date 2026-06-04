@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    MATERIALMOVIMENTOESTOQUE
+where 
+    materialmovimentoestoque.filial=5 AND
+    materialmovimentoestoque.LOCALARMAZENAMENTO<>1

@@ -1,0 +1,30 @@
+update
+    MATERIALLOTE
+set
+    materiallote.C_GRAMATURA = (select
+                                    t_lotes.GRAMATURA
+                                from
+                                    t_lotes
+                                where 
+                                    t_lotes.filial=materiallote.filial and
+                                    t_lotes.iditem=materiallote.iditem and
+                                    t_lotes.lote=materiallote.lote),
+    materiallote.C_largura = (select
+                                    t_lotes.largura
+                                from
+                                    t_lotes
+                                where 
+                                    t_lotes.filial=materiallote.filial and
+                                    t_lotes.iditem=materiallote.iditem and
+                                    t_lotes.lote=materiallote.lote)
+                                     
+where 
+    exists 
+        (select
+            *
+         from
+            t_lotes
+         where 
+            t_lotes.filial=materiallote.filial and
+            t_lotes.iditem=materiallote.iditem and
+            t_lotes.lote=materiallote.lote)

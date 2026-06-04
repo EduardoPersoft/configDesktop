@@ -1,0 +1,63 @@
+
+select 
+    coalesce (itembase.codigo, C_POSICAOESTOQUERESERVACON.CODIGO) as codigo,  
+    GRUPOMERCADORIA.DESCRICAO as GRUPODESCRICAO,
+    cast( coalesce (itembase.DESCRICAO, item.descricao) as varchar (250)) AS DESCRICAO,
+    coalesce (itembase.UNIDADE, item.unidade) as unidade,
+    case item.TIPOPRODUTO
+        when '1' then 'MATERIAPRIMA'
+        when '2' then 'CONSUMO'
+        when '3' then 'REVENDA'
+        when '4' then 'INDUSTRIALIZADO'
+        when '5' then 'INATIVO'
+        else ''
+    end as TIPOPRODUTO,
+    
+
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.SALDOTOTAL, 0)) as SALDOTOTAL,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.VALORTOTALESTOCADO, 0)) AS VALORTOTALESTOCADO,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.CUSTOMEDIO, 0)) AS CUSTOMEDIO,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAPEDIDO, 0)) AS RESERVAPEDIDO,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVANOTA, 0)) AS RESERVANOTA,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAOP, 0)) as RESERVAOP,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAPEDIDOCOMPRA, 0)) AS RESERVAPEDIDOCOMPRA,
+  
+  C_POSICAOESTOQUERESERVACON.ESTABELECIMENTO,
+  C_POSICAOESTOQUERESERVACON.RAZAOSOCIAL,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAOP, 0)) + sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAPEDIDO, 0)) + 
+        sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVANOTA, 0)) as RESERVATOTAL,
+    sum(coalesce(C_POSICAOESTOQUERESERVACON.SALDOTOTAL, 0)) + sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAPEDIDOCOMPRA, 0)) - 
+        (sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAOP, 0)) + sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVAPEDIDO, 0)) + 
+        sum(coalesce(C_POSICAOESTOQUERESERVACON.RESERVANOTA, 0))) as ESTOQUELIQUIDO,
+  sum (C_POSICAOESTOQUERESERVACON.consumo) as consumo,
+  sum (C_POSICAOESTOQUERESERVACON.consumo)/coalesce (C_POSICAOESTOQUERESERVACON.SEMANAS,1) as consumosemanal,
+  sum (C_POSICAOESTOQUERESERVACON.consumo)/coalesce (C_POSICAOESTOQUERESERVACON.MESES,1) as consumomensal  
+from
+           C_POSICAOESTOQUERESERVACON (1, '01.01.2021', '01.01.2222')
+            --C_POSICAOESTOQUERESERVACON (:filial, :datainicial, :datafinal)
+inner join 
+        itemestoque item on (item.codigo=C_POSICAOESTOQUERESERVACON.CODIGO)
+LEFT join 
+        grupomercadoria on (grupomercadoria.grupo=item.grupo)
+LEFT join
+        itemestoque itembase on (itembase.codigo=item.itembase)
+WHERE
+   item.TIPOPRODUTO <> '5'   
+        
+
+group by 
+    1,
+    GRUPOMERCADORIA.DESCRICAO,
+    3,
+    4,
+    item.TIPOPRODUTO,   
+  C_POSICAOESTOQUERESERVACON.ESTABELECIMENTO,
+  C_POSICAOESTOQUERESERVACON.RAZAOSOCIAl,
+  C_POSICAOESTOQUERESERVACON.SEMANAS,
+  C_POSICAOESTOQUERESERVACON.MESES  
+
+having 
+item.TIPOPRODUTO <> '5'
+    and 
+    coalesce (itembase.codigo, C_POSICAOESTOQUERESERVACON.CODIGO) in  ('857030-S','857030ACP' )
+   order by  1

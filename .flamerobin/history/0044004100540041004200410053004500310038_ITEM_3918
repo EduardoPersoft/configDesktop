@@ -1,0 +1,4 @@
+select * from DOCTOBANCARIOS
+where 
+MOVBANCARIOS.IDCONTACORRENTE= 1001 and
+movbancarios.IDMOVTOBANCario in (1172,1173)

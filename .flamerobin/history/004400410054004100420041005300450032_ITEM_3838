@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    PEDIDOCOMPRA
+where 
+    uuid is not null

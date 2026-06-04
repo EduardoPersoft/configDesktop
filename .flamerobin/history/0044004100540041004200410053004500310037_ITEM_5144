@@ -1,0 +1,8 @@
+update
+    C_COLETAS
+set
+    C_COLETAS.VALORMEDIO=
+        c_coletas.valor/c_coletas.QTDEXPEDICOES
+where 
+    c_coletas.qtdexpedicoes>0
+            

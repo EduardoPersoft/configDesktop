@@ -1,0 +1,4 @@
+select
+    itemestoque.DESCRIMINACAO
+from
+    itemestoque

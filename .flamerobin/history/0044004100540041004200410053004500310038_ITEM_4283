@@ -1,0 +1,12 @@
+select * from composicaoop
+where substring(COMPOSICAOop.CODIGO from 1 for 2)='M-'
+and exists (
+select * from materialmovimentoestoque 
+where MATERIALMOVIMENTOESTOQUE.filial=composicaoop.filial and
+materialmovimentoestoque.idmovimento=COMPOSICAOOP.idmovimento and
+MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N')
+and exists (
+select * from movimentoestoque
+where MOVIMENTOestoque.filial=composicaoop.filial and
+movimentoestoque.idmovimento=composicaoop.idmovimento and
+movimentoestoque.tipomovimento='12')

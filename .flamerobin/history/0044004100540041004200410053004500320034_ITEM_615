@@ -1,0 +1,5 @@
+delete from 
+    movtitulorec 
+where 
+    filial=5 and 
+    idtitulo between 156731 and 156841

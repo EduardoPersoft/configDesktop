@@ -1,0 +1,18 @@
+select
+    composicaoop.codigo,
+    composicaoop.QUANTIDADE
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    composicaoop on
+        composicaoop.filial=MATERIALMOVIMENTOESTOQUE.FILIAL and
+        composicaoop.IDMOVIMENTO=materialmovimentoestoque.idmovimento  and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.TIPOMOVIMENTO='12' and
+    MATERIALMOVIMENTOESTOQUE.concluido='N'

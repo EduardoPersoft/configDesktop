@@ -1,0 +1,23 @@
+update
+    servicosped
+set
+    servicosped.C_FILALPEDVEN=110,
+    servicosped.C_IDPEDVEN=(select first 1
+                                    mercadoriasped.idnota
+                                  from
+                                    mercadoriasped
+                                  where 
+                                    mercadoriasped.baixa='N' and
+                                    mercadoriasped.codigo=servicosped.C_itemestoque
+                                    ),
+    servicosped.C_IDMERCVEN=(select first 1
+                                    mercadoriasped.idmercadoria
+                                  from
+                                    mercadoriasped
+                                  where 
+                                    mercadoriasped.baixa='N' and
+                                    mercadoriasped.codigo=servicosped.C_itemestoque
+                                    )
+                                    
+where 
+    servicosped.baixa='N'

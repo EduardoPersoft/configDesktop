@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE
+where filial=1
+and movimentoestoque.EMISSAO='01.01.2023'

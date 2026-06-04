@@ -1,0 +1,23 @@
+select
+    orcamento.idnota,
+    orcamento.DATACADASTRO,
+    cadcli.nome,
+    cadatendente.nome,
+    orcamento.VLRTOTALNOTA
+from 
+    orcamento
+left join
+    CADASTROPARCEIROS cadacli on
+        cadclicadastro=ORCAMENTO.desinatario
+left join
+    CADASTROPARCEIROS cadatendente on
+        cadatendente.cadastro=ORCAMENTO.ATENDENTE
+left join
+    CADASTROPARCEIROS cadvendedor on
+        cadvendedor.cadastro=ORCAMENTO.vendedor
+
+where
+    orcamento.DATACADASTRO between '01.07.2025' and '31.07.2025' and
+    orcamento.vendedor<>orcamento.ATENDENTE
+group by
+    CADASTROPARCEIROS.nome

@@ -1,0 +1,3 @@
+select * from PEDIDO
+where pedido.LOGRADOUROENTREGA is not null
+order by pedido.DATACADASTRO desc

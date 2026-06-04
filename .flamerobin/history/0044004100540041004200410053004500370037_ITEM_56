@@ -1,0 +1,8 @@
+update 
+    MERCADORIASNOTA
+set 
+    idpedido = idpedvendev,
+    mercadoriasnota.IDMERCPEDIDO=MERCADORIASNOTA.idpedvenmercdev,
+    filialped=233
+where filial=233
+and idpedvendev in (55,56,57,58)

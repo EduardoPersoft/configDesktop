@@ -1,0 +1,27 @@
+SELECT DISTINCT C_PEDIDOSEMABERTO.filial,
+                C_PEDIDOSEMABERTO.idnota,
+                C_PEDIDOSEMABERTO.idmercadoria,
+                C_PEDIDOSEMABERTO.datacadastro,
+                C_PEDIDOSEMABERTO.dataentrega ,
+                c_pedidosemaberto.DATAPREVISTA,
+                C_PEDIDOSEMABERTO.clientecadastro ,
+                C_PEDIDOSEMABERTO.clientenome ,
+                C_PEDIDOSEMABERTO.produto,
+                C_PEDIDOSEMABERTO.descricaoproduto,
+                coalesce(VENDEDORESPED.VENDEDOR, -1),
+                C_PEDIDOSEMABERTO.QTDPEDIDO,
+                C_PEDIDOSEMABERTO.QUANTIDADEPRODUZIR,
+                C_PEDIDOSEMABERTO.QTDSALDO,
+                case coalesce (c_pedidosemaberto.VALORIPI,0)
+                    when 0 then C_PEDIDOSEMABERTO.valorsaldo else 
+                    C_PEDIDOSEMABERTO.valorsaldo * (1+(coalesce (C_PEDIDOSEMABERTO.pipi,0)/100))end as valorsaldo,   
+                COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME
+
+FROM C_PEDIDOSEMABERTO(?)
+LEFT JOIN VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                           AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+LEFT JOIN CADASTROPARCEIROS VENDEDOR ON (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+where  C_PEDIDOSEMABERTO.DATAEMISSAO IS NOT NULL
+ORDER BY 11, c_pedidosemaberto.DATAPREVISTA,
+         C_PEDIDOSEMABERTO.IDNOTA,
+         C_PEDIDOSEMABERTO.IDCOMPOSICAO

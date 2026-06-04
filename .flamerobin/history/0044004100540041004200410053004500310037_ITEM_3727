@@ -1,0 +1,2 @@
+select * from logalteracao
+where OBJETO='CADASTRO' AND TIPO='D' AND CHAVE='2014'

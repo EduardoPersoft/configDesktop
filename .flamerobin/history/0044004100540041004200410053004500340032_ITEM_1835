@@ -1,0 +1,4 @@
+select * from LOCALLOTE
+where filial=110
+and quantidade<-0.009
+order by local

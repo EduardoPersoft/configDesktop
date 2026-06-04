@@ -1,0 +1,13 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    c_laminacao.
+from
+    itemestoque
+inner join
+    C_LAMINACAO on
+        c_laminacao.codigo=itemestoque.codigo and 
+        C_LAMINACAO.SEQUENCIA=1
+        
+    
+    

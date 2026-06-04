@@ -1,0 +1,2 @@
+select * from titulorec 
+where filial=110 and titulo='887285

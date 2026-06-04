@@ -1,0 +1,3 @@
+select filial,idnota, DATACADASTRO,dataemissao,datareferencia
+ from notafiscal
+where filial>110 and idnota in (184,188)

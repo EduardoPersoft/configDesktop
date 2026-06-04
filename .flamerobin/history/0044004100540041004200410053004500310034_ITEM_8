@@ -1,0 +1,3 @@
+update itemestoque set nomearquivoimagem=(
+select ITEMESTOQUEXARQUIVO.NOMEARQUIVO from ITEMESTOQUEXARQUIVO
+where itemestoquexarquivo.codigo=itemestoque.codigo and itemestoquexarquivo.ORDEM=0)

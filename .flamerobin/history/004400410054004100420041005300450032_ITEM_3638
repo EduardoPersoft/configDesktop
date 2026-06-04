@@ -1,0 +1,10 @@
+select 
+    * 
+from 
+    materialmovimentoestoque
+WHERE
+    materialmovimentoestoque.filial=5 AND
+    materialmovimentoestoque.idmovimento>=206463
+order by
+    materialmovimentoestoque.idmovimento
+order by idmovimento

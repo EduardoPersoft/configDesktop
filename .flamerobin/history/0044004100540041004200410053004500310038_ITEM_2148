@@ -1,0 +1,2 @@
+select * from VENDEDORESPED
+where filial=1 and idnota in (70748,70838,70956)

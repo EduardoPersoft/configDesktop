@@ -1,0 +1,4 @@
+delete from c_laminacao
+WHERE not exists
+(select * from ITEMESTOQUE
+ where itemestoque.codigo=c_laminacao.codigo)

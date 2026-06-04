@@ -1,0 +1,9 @@
+update 
+    ITEMESTOQUE
+set   
+    itemestoque.LOCALIZACAO = (
+        select 
+            T_ESTOQUE0802.ARMAZEM
+        FROM
+            t_estoque0802.CODIGO = itemestoque.codigo)
+    

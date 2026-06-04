@@ -1,0 +1,16 @@
+ SELECT
+    coalesce(sum(titulorec.VALOREMABERTO),0) titulosEmAberto,
+    coalesce(sum(CASE when titulorec.vencimento+ESTABELECIMENTO.diasatraso > 
+                  cast('now' as date) 
+                  then titulorec.VALOREMABERTO else 0 end),0) atraso   
+from
+    TITULOREC
+inner JOIN  
+    estabelecimento on 
+        estabelecimento.cadastro=titulorec.filial
+WHERE
+    titulorec.filial=5 and
+    titulorec.parceiro=1880 and
+    titulorec.naolimitefinanceiro='N' and
+    titulorec.baixa is null
+

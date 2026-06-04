@@ -1,0 +1,191 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_FICHAPRODUTO3 (
+    PCODIGO varchar(15) )
+RETURNS (
+    CODIGO varchar(15),
+    SEQUENCIA integer,
+    FILME varchar(15),
+    FILME2 varchar(15),
+    DESCRICAOFILME varchar(240),
+    DESCRICAOFILME2 varchar(240),
+    GRAMATURAFILME numeric(9,3),
+    GRAMATURAFILME2 numeric(9,3),
+    ADESIVO varchar(15),
+    DESCRICAOADESIVO varchar(240),
+    GRAMATURAADESIVO numeric(9,3),
+    APLICARTRATADOR varchar(20),
+    LADOLAMINAR varchar(20),
+    SAIDAREBOBINADEIRA varchar(20),
+    LARGURAROLO numeric(9,3),
+    ITEMRIGOROSO varchar(20),
+    OBSERVACAO varchar(400),
+    C_SETUP numeric(9,2),
+    C_VELOCIDADE numeric(9,2),
+    C_TENSAREBOBINADOR numeric(9,2),
+    C_TENSAOPELICULA numeric(9,2),
+    C_TENSAODESBOBINADORA numeric(9,2),
+    C_TENSAODESBOBINADORB numeric(9,2),
+    LADOLAMINAR2 varchar(20),
+    APLICACAOADESIVOMINIMO numeric(12,3),
+    APLICACAOADESIVOMAXIMO numeric(12,3),
+    C_VELOCIDADEL10 numeric(9,2),
+    C_SETUPL10 numeric(9,2),
+    C_TENSAREBOBINADORL10 numeric(9,2),
+    C_TENSAOPELICULAL10 numeric(9,2),
+    C_TENSAODESBOBINADORAL10 numeric(9,2),
+    C_TENSAODESBOBINADORBL10 numeric(9,2),
+    C_PERDAPROCESSOL10 numeric(12,3),
+    C_PERDAAJUSTEMAQUINAL10 numeric(12,3),
+    FORCASELAGEML10 integer,
+    FORCALAMINACAOL10 integer,
+    TEMPERATURACONJUNTOL7 numeric(8,3),
+    TEMPERATURANIPL10 numeric(8,3),
+    TEMPERATURAAPLICADOSL10 numeric(8,3),
+    SEQUENCIADESC integer,
+    FILME1BOBINADOR char(1),
+    FILME2BOBINADOR char(1) )
+
+AS
+declare variable v_count integer;
+BEGIN
+    CODIGO=:PCODIGO;
+
+    select count(sequencia) from C_LAMINACAO
+    where C_LAMINACAO.CODIGO = :CODIGO
+    into :v_count;
+
+  FOR
+    select :v_count - SEQUENCIA,
+           SEQUENCIA+1, 
+           C_LAMINACAO.FILME,
+           --FILME.DESCRICAO DESCRICAOFILME,
+           C_LAMINACAO.GRAMATURAFILME,
+           C_LAMINACAO.ADESIVO,
+           ADESIVO.DESCRICAO DESCRICAOADESIVO,
+           C_LAMINACAO.GRAMATURAADESIVO,
+           C_LAMINACAO.APLICARTRATADOR,
+           C_LAMINACAO.LADOLAMINAR,
+           C_LAMINACAO.SAIDAREBOBINADEIRA,
+           C_LAMINACAO.LARGURAROLO,
+           C_LAMINACAO.ITEMRIGOROSO,
+           C_LAMINACAO.OBSERVACAO,
+           C_LAMINACAO.C_SETUP,
+           C_LAMINACAO.C_VELOCIDADE,
+           C_LAMINACAO.C_TENSAREBOBINADOR,
+           C_LAMINACAO.C_TENSAOPELICULA,
+           C_LAMINACAO.C_TENSAODESBOBINADORA,
+           C_LAMINACAO.C_TENSAODESBOBINADORB,
+           C_LAMINACAO.LADOLAMINAR2,
+           c_laminacao.aplicacaoadesivominimo,
+           c_laminacao.aplicacaoadesivomaximo,
+           c_laminacao.C_VELOCIDADEL10,
+           c_laminacao.C_SETUPL10,
+           c_laminacao.C_TENSAREBOBINADORL10,
+           c_laminacao.C_TENSAOPELICULAL10,
+           c_laminacao.C_TENSAODESBOBINADORAL10,
+           c_laminacao.C_TENSAODESBOBINADORBL10,
+           c_laminacao.C_PERDAPROCESSOL10,
+           c_laminacao.C_PERDAAJUSTEMAQUINAL10,
+           c_laminacao.FORCASELAGEML10,
+           c_laminacao.FORCALAMINACAOL10,
+           c_laminacao.temperaturaConjuntoL7,
+           c_laminacao.temperaturaNipL10,
+           c_laminacao.temperaturaAplicadosL10,           
+
+          c_laminacao.FILME2,
+     --     FILME2.DESCRICAO,
+          c_laminacao.GRAMATURAFILME2,
+          c_laminacao.FILME1BOBINADOR,
+          c_laminacao.FILME2BOBINADOR
+
+          
+
+    from
+        C_LAMINACAO
+         
+    left join
+         ITEMESTOQUE FILME on (FILME.CODIGO = C_LAMINACAO.FILME)
+    left join
+         ITEMESTOQUE FILME2 on (FILME2.CODIGO = C_LAMINACAO.FILME2)
+    left join
+         ITEMESTOQUE ADESIVO on (ADESIVO.CODIGO = C_LAMINACAO.ADESIVO)
+    where
+         C_LAMINACAO.CODIGO = :CODIGO
+    order by
+        sequencia desc
+    INTO :sequencia,
+         :sequenciadesc,
+         :FILME,
+         --:DESCRICAOFILME,
+         :GRAMATURAFILME,
+         :ADESIVO,
+         :DESCRICAOADESIVO,
+         :GRAMATURAADESIVO,
+         :APLICARTRATADOR,
+         :LADOLAMINAR,
+         :SAIDAREBOBINADEIRA,
+         :LARGURAROLO,
+         :ITEMRIGOROSO,
+         :OBSERVACAO,
+         :C_SETUP,
+         :C_VELOCIDADE,
+         :C_TENSAREBOBINADOR,
+         :C_TENSAOPELICULA,
+         :C_TENSAODESBOBINADORA,
+         :C_TENSAODESBOBINADORB,
+         :LADOLAMINAR2,
+         :aplicacaoadesivominimo,
+         :aplicacaoadesivomaximo,
+         :C_VELOCIDADEL10,
+         :C_SETUPL10,
+         :C_TENSAREBOBINADORL10,
+         :C_TENSAOPELICULAL10,
+         :C_TENSAODESBOBINADORAL10,
+         :C_TENSAODESBOBINADORBL10,
+         :C_PERDAPROCESSOL10,
+         :C_PERDAAJUSTEMAQUINAL10,
+         :FORCASELAGEML10,
+         :FORCALAMINACAOL10,
+         :temperaturaConjuntoL7,
+         :temperaturaNipL10,
+         :temperaturaAplicadosL10,
+       
+         :FILME2,
+       --  :DESCRICAOFILME2,
+         :GRAMATURAFILME2,
+         :FILME1BOBINADOR,
+         :FILME2BOBINADOR
+
+        
+  DO
+  BEGIN
+         select 
+            C_FICHAPRODUTODESCPROD.DESCFILME
+         from 
+            C_FICHAPRODUTODESCPROD ( :CODIGO,:sequencia, :FILME2) 
+         into   
+            :DESCRICAOFILME2;
+         
+  
+           select 
+            C_FICHAPRODUTODESCPROD.DESCFILME
+         from 
+            C_FICHAPRODUTODESCPROD ( :CODIGO,:sequencia, :FILME) 
+         into   
+            :DESCRICAOFILME;
+           /*
+         :FILME2,
+         :DESCRICAOFILME2,
+         :GRAMATURAFILME2
+         */
+  
+    SUSPEND;
+  END
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_FICHAPRODUTO3 TO  SYSDBA;
+

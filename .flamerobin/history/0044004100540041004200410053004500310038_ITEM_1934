@@ -1,0 +1,3 @@
+select * from MERCADORIASnotacompra
+where idnota=6292
+order by idnota desc

@@ -1,0 +1,3 @@
+select concluido, c_revisaofinal from materialMOVIMENTOESTOQUE
+where idpedido=71955 and c_revisaofinal is not null
+order by c_revisaofinal desc

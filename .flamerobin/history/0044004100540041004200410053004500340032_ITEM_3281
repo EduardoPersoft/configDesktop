@@ -1,0 +1,8 @@
+select 
+    filial, idnota, idmercadoria,
+    MERCADORIASNOTA.FILIALPED,
+    MERCADORIASNOTA.IDPEDIDO,
+    MERCADORIASNOTA.IDMERCPEDIDO
+from 
+    MERCADORIASNOTA
+where filial=110 and idnota=4903

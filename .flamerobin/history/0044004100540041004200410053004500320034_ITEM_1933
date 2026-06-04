@@ -1,0 +1,1 @@
+select * from titulorec where titulorec.fiilal=5 and titulorec.enviado='23.04.2022'

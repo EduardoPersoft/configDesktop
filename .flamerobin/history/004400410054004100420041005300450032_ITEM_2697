@@ -1,0 +1,1 @@
+SELECT * from itemestoque where codigo like '108930%'

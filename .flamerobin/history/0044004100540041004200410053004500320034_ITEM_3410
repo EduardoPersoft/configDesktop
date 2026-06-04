@@ -1,0 +1,1 @@
+select * from C_IMPORTARMOVIMENTOS_PREPARAR(5)

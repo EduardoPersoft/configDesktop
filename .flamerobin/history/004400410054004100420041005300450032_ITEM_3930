@@ -1,0 +1,1 @@
+select * from cadastropaceiro where cadastro = 33980

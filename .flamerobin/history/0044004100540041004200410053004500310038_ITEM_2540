@@ -1,0 +1,6 @@
+update
+    itemcustodata
+set 
+    custounitario=custototal / quantidade
+where datainventario='31.12.2023'
+and custounitario  is  null

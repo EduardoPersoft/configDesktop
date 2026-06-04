@@ -1,0 +1,26 @@
+select
+    itemestoque.filialPadrao,
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    (select sum(locallote.quantidade)
+     from locallote
+     where locallote.iditem=itemestoque.codigo) QUANTIDADE,
+    ITEMESTOQUE.UNIDADE,
+    familia.DESCRICAO, 
+    grupomercadoria.DESCRICAO,:vs
+
+    TIPOITEMESTOQUE.DESCRICAO tipo,
+    cast('N' as char(1)) as p_char
+from
+    itemestoque
+left join 
+    grupomercadoria on 
+    ITEMESTOQUE.GRUPO=grupomercadoria.GRUPO
+left join  
+    FAMILIA ON 
+    familia.id=itemestoque.familia
+left join 
+    TIPOITEMESTOQUE on
+    ITEMESTOQUE.TIPOPRODUTO=TIPOITEMESTOQUE.ID

@@ -1,0 +1,18 @@
+select 
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    mercadoriasped.codigo,
+    mercadoriasped.cfop,
+    mercadoriasped.pipi,
+    mercadoriasped.valoripi,
+    mercadoriasped.IPIBASE,
+    mercadoriasped.ipioutros,
+    mercadoriasped.IPIISENTO
+from
+    MERCADORIASPED
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.codigo like 'PE-%'
+order by
+    mercadoriasped.idnota desc

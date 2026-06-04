@@ -1,0 +1,20 @@
+select 
+    titulopag.titulo,
+    titulopag.fatura,
+    titulopag.vencimento,
+    lantocontpag.*
+from
+    TITULOPAG
+inner join
+    LANTOCONTPAG on 
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.idtitulo
+left join
+    CONTASCONTABEIS on
+        contascontabeis.IDPLANO=4 and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+where
+    titulopag.filial=1 and
+    titulopag.baixa between '01.01.2024' and '31.12.2024' and
+    coalesce(CONTASCONTABEIS.TIPOCONTA, 'S')='S'
+    

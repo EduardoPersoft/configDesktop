@@ -1,0 +1,10 @@
+select 
+    itemestoque.codigo,
+    itemestoque.DESCRICAO
+from 
+    consultas
+inner join
+    itemestoque on
+        consultas.UUIDSELECIONADO=itemestoque.CODIGO
+where
+    consultas.uuid='bd6ad464-2349-4dd1-8e92-9863b3d44e90'

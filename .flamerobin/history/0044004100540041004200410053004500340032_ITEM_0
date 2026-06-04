@@ -1,0 +1,4 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.codigobarra=substring(codigo from 1 for 13)

@@ -1,0 +1,5 @@
+update
+    SPEDFISCAL_C
+set
+        SPEDFISCAL_c.VL_RD_BC=SPEDFISCAL_C.vl_opr-SPEDFISCAL_C.VL_BC_ICMS
+where segmento = 'C190' and substring(cst_icms from 2 for 2)='20' 

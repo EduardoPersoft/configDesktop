@@ -1,0 +1,2 @@
+select * from materialmovimentoestoque where filial=1 and idmovimento=44799 AND
+iditem in ('PE-21767', 'PE-21773')

@@ -1,0 +1,4 @@
+update itemestoque
+set itemestoque.CLASSIFISCAL='150'
+
+where itemestoque.CLASSIFISCAL in ('0','5')

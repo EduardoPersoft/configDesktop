@@ -1,0 +1,11 @@
+select
+    movimentoestoque.idmovimento,
+    movimentoestoque.ENTRADAPRODUCAO,
+    movimentoestoque.SAIDAPRODUCAO,
+    (movimentoestoque.ENTRADAPRODUCAO-
+    movimentoestoque.SAIDAPRODUCAO)*24
+    
+from
+    movimentoestoque
+where
+    movimentoestoque.entradaproducao is not null

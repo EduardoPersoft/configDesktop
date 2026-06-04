@@ -1,0 +1,9 @@
+select 
+    tipocobranca,
+    descricao,
+    tipocobranca.TPAG
+from
+    tipocobranca
+where
+    tpag in (3,4)
+

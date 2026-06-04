@@ -1,0 +1,6 @@
+update
+    titulopag
+set
+    titulopag.PARCEIRO =titulopag.PARCEIRO-354214
+where
+    titulopag.PARCEIRO>35000

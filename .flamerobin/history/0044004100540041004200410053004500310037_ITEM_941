@@ -1,0 +1,6 @@
+UPDATE
+    MERCADORIASNOTACOMPRA
+SET
+    mercadoriasnotacompra.cstipi=49
+WHERE
+    mercadoriasnotacompra.filial=12826 

@@ -1,0 +1,6 @@
+select
+    *
+from
+    listaprecoproduto
+where
+    produto='60001'

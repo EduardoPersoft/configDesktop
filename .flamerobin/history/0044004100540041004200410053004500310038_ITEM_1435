@@ -1,0 +1,2 @@
+select * from itemestoque item
+where ITEM.codigo=   'PE-24832'

@@ -1,0 +1,487 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_MAPAPRODUCAO (
+    PFILIAL integer,
+    PDATAINICIAL timestamp,
+    PDATAFINAL timestamp )
+RETURNS (
+    FILIAL integer,
+    IDMOVIMENTO integer,
+    IDMOVIMENTOMATERIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    CODIGO varchar(15),
+    DATACADASTROPRODUCAO timestamp,
+    DATAEMISSAO timestamp,
+    NOMEDOCLIENTE varchar(60),
+    VENDEDOR integer,
+    PRAZODIAS integer,
+    PRAZOENTREGA date,
+    DATAFABRICACAO date,
+    DATAFATURAMENTO date,
+    C_CORTE timestamp,
+    C_TUFTINGFUNDO timestamp,
+    C_REVISAO timestamp,
+    C_LATEX timestamp,
+    C_REVISAOFINAL timestamp,
+    ATRASO integer,
+    NUMEROPEDIDO integer,
+    TCE char(2),
+    LARGURA numeric(7,3),
+    COMPRIMENTO numeric(7,3),
+    M2 numeric(7,3),
+    PRODUTO varchar(240),
+    UP numeric(8,3),
+    UPPORM2 numeric(8,3),
+    ESPESSURA varchar(20),
+    CORES varchar(1000),
+    ACABAMENTO varchar(20),
+    NIVEL integer,
+    C_DTESCULPIDO timestamp,
+    C_FICHAPRODUCAOEMITIDA char(1),
+    C_LARGURATELA numeric(7,3),
+    C_COMPRIMENTOTELA numeric(7,3),
+    CONCLUIDO char(1),
+    C_BASE varchar(50),
+    C_SUPERFICIE varchar(50),
+    CORESETIQUETA varchar(1000),
+    PAGINAANTRON varchar(1),
+    CODIGOPRODUTO varchar(15),
+    VAZIO varchar(10),
+    ORIGEM varchar(10),
+    COR1 varchar(40),
+    KGCOR1 numeric(10,3),
+    COR2 varchar(40),
+    KGCOR2 numeric(10,3),
+    COR3 varchar(40),
+    KGCOR3 numeric(10,3),
+    COR4 varchar(40),
+    KGCOR4 numeric(10,3),
+    COR5 varchar(40),
+    KGCOR5 numeric(7,3),
+    COR6 varchar(40),
+    KGCOR6 numeric(10,3),
+    COR7 varchar(40),
+    KGCOR7 numeric(10,3),
+    COR8 varchar(40),
+    KGCOR8 numeric(10,3),
+    COR9 varchar(40),
+    KGCOR9 numeric(10,3),
+    COR10 varchar(40),
+    KGCOR10 numeric(10,3),
+    COR11 varchar(40),
+    KGCOR11 numeric(10,3),
+    COR12 varchar(40),
+    KGCOR12 numeric(10,3),
+    COR13 varchar(40),
+    KGCOR13 numeric(10,3),
+    COR14 varchar(40),
+    KGCOR14 numeric(10,3),
+    C_INICIOPRODUCAO date,
+    C_COLABORADORTUFF varchar(20),
+    C_MAQUINATUFF varchar(20),
+    C_PONTUACAOTUFF varchar(10),
+    C_ENCOLHIMENTO varchar(20),
+    C_COLABORADORBAINHA varchar(20),
+    C_MAQUINABAINHA varchar(20),
+    C_DATASAIDAMAQUINA date,
+    C_COLABORADORBORDADO varchar(20),
+    C_MAQUINABORDADO varchar(20),
+    C_COLABORADORBARRA varchar(20),
+    PREVISAOLATEX date,
+    ATRASOLATEX integer,
+    DATAENTREGA date,
+    C_PESOTELA decimal(12,2),
+    C_PESOTOTALTAPETE decimal(12,2),
+    C_GRAMAPORM2 decimal(12,2),
+    STATUS varchar(30),
+    C_DTBAINHAVIRADA date,
+    C_DTDESENHO date,
+    processo varchar(10),
+    dataProcesso date )
+
+AS
+declare variable v_esculpido char(1);
+declare variable v_cor varchar(100);
+declare variable v_regiao integer;
+declare variable v_kgcor numeric(10,3);
+declare variable v_baixa char(1);
+BEGIN
+
+    dataentrega = cast(null as date);
+
+    vazio = '';
+    
+    FOR SELECT  MATERIALMOVIMENTOESTOQUE.FILIAL,
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+                MATERIALMOVIMENTOESTOQUE.Idmovimentomaterial,
+                MATERIALMOVIMENTOESTOQUE.concluido,
+                MATERIALMOVIMENTOESTOQUE.IDITEM,
+                MERCADORIASPED.IDNOTA,
+                MERCADORIASPED.Idmercadoria,
+                MERCADORIASPED.CODIGO,
+                MOVIMENTOESTOQUE.EMISSAO,
+                PEDIDO.Datacadastro,
+                CADASTROPARCEIROS.RAZAOSOCIAL,
+                PEDIDO.C_Prazo,
+                pedido.entrega,
+                MERCADORIASPED.IDNOTA,
+                MERCADORIASPED.C_Esculpido,
+                MERCADORIASPED.C_Largura,
+                MERCADORIASPED.C_Comprimento,
+                coalesce (materialmovimentoestoque.quantidade,0),
+                ITEMESTOQUE.DESCRICAO,
+                coalesce (ITEMESTOQUE.C_Up,0),
+                coalesce (ITEMESTOQUE.C_UP,0)*coalesce (materialmovimentoestoque.quantidade,0),
+                MERCADORIASPED.C_Espessura,
+                MATERIALMOVIMENTOESTOQUE.C_CORTE,
+                MATERIALMOVIMENTOESTOQUE.C_TUFTINGFUNDO,
+                MATERIALMOVIMENTOESTOQUE.C_REVISAO,
+                MATERIALMOVIMENTOESTOQUE.C_LATEX,
+                MATERIALMOVIMENTOESTOQUE.C_REVISAOFINAL,
+                C_ACABAMENTO.Descricao,
+                ITEMESTOQUE.C_NIVEL,
+                materialmovimentoestoque.c_dtesculpido, 
+                coalesce(MATERIALMOVIMENTOESTOQUE.C_Fichaproducaoemitida,'N'),
+                coalesce(MATERIALMOVIMENTOESTOQUE.C_Larguratela,
+                         COALESCE(MERCADORIASPED.C_Largura,0)*
+                  (1 + ( coalesce(itemestoque.C_Pencolhimentotela,0)/100)))   ,
+                COALESCE(MATERIALMOVIMENTOESTOQUE.C_COMPRIMENTOTELA,
+                         COALESCE(MERCADORIASPED.C_Comprimento,0)*
+                  (1 + ( coalesce(itemestoque.C_Pencolhimentotela,0)/100))),
+               COALESCE(c_composicao.superficie,''),
+               COALESCE(c_composicao.base,''),
+               materialmovimentoestoque.C_INICIOPRODUCAO,
+               materialmovimentoestoque.C_COLABORADORTUFF, --(E)
+               materialmovimentoestoque.C_MAQUINATUFF, --(F)
+               materialmovimentoestoque.C_PONTUACAOTUFF, -- (G)
+               materialmovimentoestoque.C_ENCOLHIMENTO, --(H)
+               materialmovimentoestoque.C_COLABORADORBAINHA, --(I)
+               materialmovimentoestoque.C_MAQUINABAINHA, --(J)
+               materialmovimentoestoque.C_DATASAIDAMAQUINA,  -- (K)
+               materialmovimentoestoque.C_COLABORADORBORDADO, --(L)
+               materialmovimentoestoque.C_MAQUINABORDADO, -- (M)
+               materialmovimentoestoque.C_COLABORADORBARRA, -- (N)
+               MATERIALMOVIMENTOESTOQUE.c_tuftingfundo, -- (O)
+               MERCADORIASPED.BAIXA,
+               MATERIALMOVIMENTOESTOQUE.C_PESOTELA,
+               MATERIALMOVIMENTOESTOQUE.C_PESOTOTALTAPETE,
+               materialmovimentoestoque.c_status,
+               materialmovimentoestoque.C_PREVISAOENTREGA,
+               materialmovimentoestoque.C_DTBAINHAVIRADA,
+               materialmovimentoestoque.C_DTDESENHO
+               -- 'POLIAMIDA' AS SUPERFICIE,
+               -- '100% POLIPROPILENO' AS BASE
+
+    FROM MOVIMENTOESTOQUE
+    INNER JOIN MATERIALMOVIMENTOESTOQUE ON (
+        MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.Filial AND
+        Materialmovimentoestoque.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO)
+    INNER JOIN MERCADORIASPED ON (
+        MERCADORIASPED.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        MERCADORIASPED.IDNOTA=MATERIALMOVIMENTOESTOQUE.Idpedido AND
+        MERCADORIASPED.IDMERCADORIA=MATERIALMOVIMENTOESTOQUE.Idmercadoria)
+    INNER JOIN PEDIDO ON (
+        PEDIDO.FILIAL=MERCADORIASPED.FILIAL AND
+        PEDIDO.IDNOTA=MERCADORIASPED.IDNOTA)
+    INNER JOIN CADASTROPARCEIROS ON (
+        CADASTROPARCEIROS.CADASTRO=PEDIDO.DESTINATARIO)
+    INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=materialmovimentoestoque.iditem)
+    LEFT JOIN C_Acabamento ON (C_ACABAMENTO.Codigo=MERCADORIASPED.C_Acabamento)
+    left join c_composicao on (materialmovimentoestoque.c_composicao=c_composicao.id)
+    WHERE MOVIMENTOESTOQUE.FILIAL=:PFILIAL
+    AND MOVIMENTOESTOQUE.EMISSAO BETWEEN :PDATAINICIAL AND :PDATAFINAL
+    AND MOVIMENTOESTOQUE.Tipomovimento=12
+
+    INTO        Filial,
+                IdMovimento,
+                IdMovimentoMaterial,
+                CONCLUIDO,
+                CODIGOPRODUTO,
+                IdNota,
+                IdMercadoria,
+                Codigo,
+                Datacadastroproducao,
+                Dataemissao,
+                Nomedocliente,
+                Prazodias,
+                Prazoentrega,
+                Numeropedido,
+                v_esculpido,
+                Largura,
+                Comprimento,
+                M2,
+                Produto,
+                Upporm2,
+                Up,
+                Espessura,
+                C_CORTE,
+                C_TUFTINGFUNDO,
+                C_REVISAO,
+                C_LATEX,
+                C_REVISAOFINAL,
+                ACABAMENTO,
+                NIVEL,
+                c_dtesculpido,
+                C_Fichaproducaoemitida,
+                C_Larguratela,
+                C_COMPRIMENTOTELA,
+                C_SUPERFICIE,
+                C_BASE,
+                c_inicioproducao,
+                C_COLABORADORTUFF,
+                C_MAQUINATUFF,
+                C_PONTUACAOTUFF,
+                C_ENCOLHIMENTO,
+                C_COLABORADORBAINHA,
+                C_MAQUINABAINHA,
+                C_DATASAIDAMAQUINA,
+                C_COLABORADORBORDADO,
+                C_MAQUINABORDADO,
+                C_COLABORADORBARRA,
+                c_tuftingfundo,
+                V_BAIXA,
+                C_PESOTELA,
+                C_PESOTOTALTAPETE ,
+                status,
+                dataEntrega,
+                c_dtbainhavirada,
+                c_dtdesenho
+  DO begin
+          
+        C_GRAMAPORM2 = 0;
+        IF(m2 > 0) THEN
+            C_GRAMAPORM2 = (C_PESOTOTALTAPETE - C_PESOTELA) / M2;
+          
+        previsaolatex = :prazoentrega - 6;
+        atrasolatex = coalesce(cast(c_latex as date), current_date) - previsaolatex;
+        
+        /*if(not c_latex is null) then
+            atrasolatex = :c_latex - previsaolatex;
+        else
+            atrasolatex = current_date - previsaolatex;*/
+
+        cor1='';
+        kgcor1=null;
+        cor2='';
+        kgcor2=null;
+        cor3='';
+        kgcor3=null;
+        cor4='';
+        kgcor4=null;
+        cor5='';
+        kgcor5=null;
+        cor6='';
+        kgcor6=null;
+        cor7='';
+        kgcor7=null;
+        cor8='';
+        kgcor8=null;
+        cor9='';
+        kgcor9=null;
+        cor10='';
+        kgcor10=null;
+        cor11='';
+        kgcor11=null;
+        cor12='';
+        kgcor12=null;
+        cor13='';
+        kgcor13=null;
+        cor4='';
+        kgcor4=null;
+
+
+        vendedor=null;
+        SELECT FIRST 1 VENDEDORESPED.Vendedor
+        FROM  VendedoresPed
+        where VENDEDORESPED.FILIAL=:filial
+        and VENDEDORESPed.Idnota=:Idnota
+        into :Vendedor;
+
+        datafabricacao = null;
+        SELECT FIRST 1 MOVIMENTOESTOQUE.Emissao
+        FROM MOVIMENTOESTOQUE
+        WHERE MOVIMENTOESTOQUE.FILIAL=:FILIAL
+        AND MOVIMENTOESTOQUE.IDOP=:IDMOVIMENTO
+        AND MOVIMENTOESTOQUE.Idopitem=:IDMOVIMENTOMATERIAL
+        INTO Datafabricacao;
+        
+
+        datafaturamento=null;
+        SELECT FIRST 1 NOTAFISCAL.Dataemissao
+        FROM MERCADORIASNOTA
+        INNER JOIN NOTAFISCAL ON (
+            NOTAFISCAL.FILIAL=MERCADORIASNOTA.FILIAL AND
+            NOTAFISCAL.IDNOTA=MERCADORIASNOTA.IDNOTA)
+        WHERE MERCADORIASNOTA.FILIALPED=:FILIAL
+        AND MERCADORIASNOTA.IDPEDIDO=:Idnota
+        AND MERCADORIASNOTA.Idmercpedido=:Idmercadoria
+        INTO Datafaturamento;
+
+        if (datafaturamento is not null) then 
+            atraso = datafaturamento - Prazoentrega;
+        else
+            atraso = cast('now' as date) - prazoentrega;
+
+
+        tce='';
+        if (v_esculpido='S') then
+            Tce='ES';
+        ELSE
+            SELECT CASE ITEMESTOQUE.C_Tipoproduto WHEN 0 THEN 'TP'
+            WHEN 1 THEN 'CA' ELSE 'OU' END
+            FROM ITEMESTOQUE
+            where itemestoque.codigo=:codigo
+            into tce;
+
+/*        cores='';
+        for select itemestoque.c_descricaofio||' ('||cast(composicaoop.Quantidade as NUMERIC(6,2))||'); '
+        from composicaoop
+        Inner join itemestoque on (itemestoque.codigo=composicaoop.Codigo)
+        where composicaoop.filial=:filial
+        and composicaoop.Idmovimento=:idmovimento
+        and composicaoop.Idmovimentomaterial=:Idmovimentomaterial
+        into :v_cor do
+            cores = substring(cores ||v_cor from 1 for 1000);
+  */
+
+        coresetiqueta='';
+        
+        for select COMPOSICAOop.IDCOMPOSICAO, substring(itemestoque.c_descricaofio from 1 for 40),
+                   composicaoop.QUANTIDADE 
+        from composicaoop
+        Inner join itemestoque on (itemestoque.codigo=composicaoop.Codigo)
+        where composicaoop.filial=:filial
+        and composicaoop.Idmovimento=:idmovimento
+        and composicaoop.Idmovimentomaterial=:Idmovimentomaterial
+        into v_regiao,:v_cor,v_kgcor do begin
+            
+            if (coresetiqueta='') then
+                coresetiqueta = substring(coresetiqueta ||v_cor from 1 for 1000);
+            else
+                coresetiqueta = substring(coresetiqueta ||', '||v_cor from 1 for 1000);
+
+            if(v_regiao=1) then begin
+                cor1=v_Cor;
+                kgcor1 = v_kgcor;
+            end
+            if(v_regiao=2) then begin
+                cor2=v_Cor;
+                kgcor2 = v_kgcor;
+            end
+            if(v_regiao=3) then begin
+                cor3=v_Cor;
+                kgcor3 = v_kgcor;
+            end
+            if(v_regiao=4) then begin
+                cor4=v_Cor;
+                kgcor4 = v_kgcor;
+            end
+            if(v_regiao=5) then begin
+                cor5=v_Cor;
+                kgcor5 = v_kgcor;
+            end
+            if(v_regiao=6) then begin
+                cor6=v_Cor;
+                kgcor6 = v_kgcor;
+            end
+            if(v_regiao=7) then begin
+                cor7=v_Cor;
+                kgcor7 = v_kgcor;
+            end
+            if(v_regiao=8) then begin
+                cor8=v_Cor;
+                kgcor8 = v_kgcor;
+            end
+            if(v_regiao=9) then begin
+                cor9=v_Cor;
+                kgcor9= v_kgcor;
+            end
+            if(v_regiao=10) then begin
+                cor10=v_Cor;
+                kgcor10 = v_kgcor;
+            end
+            if(v_regiao=11) then begin
+                cor11=v_Cor;
+                kgcor11 = v_kgcor;
+            end
+            if(v_regiao=12) then begin
+                cor12=v_Cor;
+                kgcor12 = v_kgcor;
+            end           
+            if(v_regiao=13) then begin
+                cor13=v_Cor;
+                kgcor13 = v_kgcor;
+            end
+            if(v_regiao=14) then begin
+                cor14=v_Cor;
+                kgcor14 = v_kgcor;
+            end
+
+            
+        end            
+        cores=coresetiqueta;
+        paginaantron='S';
+
+        if (C_CORTE is not null) then begin
+            PROCESSO = 'CORTE'
+            dataProcesso = cast(c_corte as date);
+        end
+ 
+        if (C_TUFTINGFUNDO is not null) then begin
+            PROCESSO = 'TUFF'
+            dataProcesso = cast(C_TUFTINGFUNDO as date);
+        end 
+        
+        if (C_REVISAO is not null) then begin
+            PROCESSO = 'REVISÃO'
+            dataProcesso = cast(C_REVISAO as date);
+        end 
+
+        if (C_LATEX is not null) then begin
+            PROCESSO = 'LATEX'
+            dataProcesso = cast(C_LATEX as date);
+        end 
+
+        if (C_DTDESENHO is not null) then begin
+            PROCESSO = 'DESENHO'
+            dataProcesso = cast(C_DTDESENHO as date);
+        end 
+        
+        if (C_DTESCULPIDO is not null) then begin
+            PROCESSO = 'ESCULPIDO'
+            dataProcesso = cast(C_DTESCULPIDO as date);
+        end 
+
+        if (C_DTBAINHAVIRADA is not null) then begin
+            PROCESSO = 'BAINHA'
+            dataProcesso = cast(C_DTBAINHAVIRADA as date);
+        end 
+        
+        if (C_DTBAINHAVIRADA is not null) then begin
+            PROCESSO = 'BAINHA'
+            dataProcesso = cast(C_DTBAINHAVIRADA as date);
+        end 
+        
+        if (C_REVISAOFINAL is not null) then begin
+            PROCESSO = 'REVISÃO FINAL'
+            dataProcesso = cast(C_REVISAOFINAL as date);
+        end 
+        
+        if (DATAFATURAMENTO is not null) then begin
+            PROCESSO = 'FATURADO'
+            dataProcesso = cast(DATAFATURAMENTO as date);
+        end 
+        
+        SUSPEND;
+
+    end
+
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_MAPAPRODUCAO TO  SYSDBA GRANTED BY SYSDBA                                                                                       ;
+

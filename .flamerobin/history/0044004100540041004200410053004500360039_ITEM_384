@@ -1,0 +1,7 @@
+create table CLASSTRIB(
+cClassTrib char(6) NOT NULL,
+CST char(3),
+pRedIBS	decimal(6,2),
+pRedCBS	decimal(6,3),
+ind_gTribRegular char(1),
+CONSTRAINT PK_CLASSTRIB PRIMARY KEY(CCLASSTRIB))

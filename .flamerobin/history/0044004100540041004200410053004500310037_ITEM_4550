@@ -1,0 +1,9 @@
+update
+    NOTAFISCAL
+set
+    valorfrete = coalesce(valorfrete,0),
+    valorseguro = coalesce(valorseguro,0),
+    vlroutdespacessoria= coalesce(vlroutdespacessoria,0)
+where
+    notafiscal.filial=12826 and 
+    notafiscal.DATAEMISSAO>='01.03.2025'

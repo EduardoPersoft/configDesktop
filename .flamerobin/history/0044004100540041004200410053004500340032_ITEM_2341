@@ -1,0 +1,7 @@
+update
+    locallote
+set
+    quantidade=0, valor=0
+where
+    MATERIALMOVIMENTOESTOQUE.iditem='MPP03MAT2G18'
+    and quantidade is null

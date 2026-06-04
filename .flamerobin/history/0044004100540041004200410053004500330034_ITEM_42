@@ -1,0 +1,2 @@
+select * from MATERIALLOCAL
+where iditem='1790727'

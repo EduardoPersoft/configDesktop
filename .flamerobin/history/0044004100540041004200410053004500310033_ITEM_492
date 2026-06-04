@@ -1,0 +1,4 @@
+select 
+    coalesce(max(movimentoEstoque.idcq), 0 )+1
+from
+    movimentoEstoque

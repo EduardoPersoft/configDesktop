@@ -1,0 +1,14 @@
+select
+    c_faturasped.data,
+    titulorec.*
+from 
+    TITULOREC
+inner JOIN
+    C_FATURASPED on
+        c_faturasped.filial=titulorec.filial AND
+        c_faturasped.IDTITULO=titulorec.idtitulo
+where 
+    titulorec.filial=1 
+    and titulorec.baixa is null 
+    and titulorec.VENCIMENTO<>c_faturasped."DATA" 
+    and titulorec.TIPOTRANSACAO in (43, 31, 6, 35, 57, 34)

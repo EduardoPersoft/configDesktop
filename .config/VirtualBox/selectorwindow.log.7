@@ -1,0 +1,8 @@
+13:12:30.196488 Log continuation - Log started 2026-06-01T12:16:03.827329000Z
+13:12:31.216417 
+13:12:31.216418 !!Assertion Failed!!
+13:12:31.216418 Expression: state <= 1 && ( (state == 0 && count == 0) || (state == 1 && count < PR_UINT32_MAX/2))
+13:12:31.216419 Location  : /home/vbox/tinderbox/build-VBox-7.2/svn/src/libs/xpcom18a4/xpcom/components/nsComponentManager.cpp(912) virtual nsrefcnt nsComponentManagerImpl::AddRef()
+13:12:31.216420 Stack     :
+13:12:31.216421 
+13:12:31.216472 AddRef: illegal refcnt=3221225469 state=2

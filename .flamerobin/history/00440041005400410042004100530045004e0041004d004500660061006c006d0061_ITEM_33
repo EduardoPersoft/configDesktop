@@ -1,0 +1,14 @@
+SELECT
+    l2.*
+FROM
+    LISTAPRECOPRODUTO l1
+inner JOIN
+    listapreco on
+        listapreco.LISTAREFERENCIA=l1.lista
+inner JOIN
+    listaprecoproduto l2 on
+        l2.lista=listapreco.lista AND
+        l2.produto=l1.produto
+where 
+    l1.lista=1 AND
+    l1.produto='05160'

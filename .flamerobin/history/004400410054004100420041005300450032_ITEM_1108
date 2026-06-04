@@ -1,0 +1,18 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.TRIBUTACAOICMS = 2
+
+SELECT
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    exists (
+        SELECT
+            *
+        from 
+            CLASSIFICACAOFISCAL
+        WHERE
+            classificacaofiscal.CFISCAL = itemestoque.CLASSIFISCAL
+            and CLASSIFICACAOFISCAL.C_TRIBUTACAOICMS<>2)

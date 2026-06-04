@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    C_MERCADORIASORCFIOS
+WHERE
+    c_mercadoriasorcfios.filial=1 AND
+    C_MERCADORIASORCFIOS.idnota=65225

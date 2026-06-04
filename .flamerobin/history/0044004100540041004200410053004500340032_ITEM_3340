@@ -1,0 +1,25 @@
+select                           
+sum(coalesce(APONTAMENTOcomp.QUANTIDADE,0)),
+max( composicaoop.QUANTIDADE),
+                            case when   
+                                (cast(sum(coalesce(APONTAMENTOcomp.QUANTIDADE,0)) as decimal(12,3))< 
+                                 cast(max( composicaoop.QUANTIDADE) as decimal(12,3))) 
+                                then 'N'
+                                ELSE 'S' END  
+                        from
+                            composicaoop
+                        inner join 
+                                itemestoque on 
+                                    (itemestoque.codigo=composicaoop.CODIGO)
+                        left join
+                            APONTAMENTOCOMP on
+                                composicaoop.filial=APONTAMENTOCOMP.filial and
+                                composicaoop.IDMOVIMENTO=apontamentocomp.idmovimento and
+                                composicaoop.IDMOVIMENTOMATERIAL=apontamentocomp.IDMATERIAL and 
+                                composicaoop.IDCOMPOSICAO=apontamentocomp.IDCOMPOSICAO 
+                        where 
+                            composicaoop.filial=110 and
+                            composicaoop.IDMOVIMENTO=66851 and                         
+                            composicaoop.IDMOVIMENTOMATERIAL=1 and 
+                            itemestoque.tipoproduto=1 and
+                            itemestoque.GRUPO=2

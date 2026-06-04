@@ -1,0 +1,1 @@
+select * from resumocompras where item='104571'

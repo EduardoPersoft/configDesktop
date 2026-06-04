@@ -1,0 +1,17 @@
+select
+    titulorec.filial,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.EMISSAO,
+    cadastroparceiros.NOME,
+    titulorec.vencimento,
+    titulorec.valortitulo
+from
+    TITULOREC
+inner join  
+    CADASTROPARCEIROS on
+        cadastroparceiros.cadastro=titulorec.parceiro
+where 
+    titulorec.filial=1 and 
+    titulorec.DATAENVIO = '02.02.2022' and 
+    titulorec.emissao < '01.02.2022'

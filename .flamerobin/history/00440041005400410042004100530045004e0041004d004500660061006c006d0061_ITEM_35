@@ -1,0 +1,7 @@
+update listaprecoproduto l1
+set l1.CUSTOCONSIDERADO=
+(select l2.custoconsiderado
+from listaprecoproduto l2
+where l2.lista=1
+and l2.produto=l1.produto)
+where l1.lista=2

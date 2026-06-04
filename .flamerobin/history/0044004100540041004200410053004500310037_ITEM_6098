@@ -1,0 +1,6 @@
+select 
+    tipocobranca,
+    descricao,
+    tppag
+from
+    tipocobranca

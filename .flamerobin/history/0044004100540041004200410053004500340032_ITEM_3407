@@ -1,0 +1,17 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    materialmovimentoestoque.c_metros=
+    (select 
+        max(composicaoop.METRAGEM)
+     from
+        COMPOSICAOOP
+     where
+        composicaoop.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        composicaoop.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL)
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MATERIALMOVIMENTOESTOQUE.idcentrocusto in ('101', '103')
+    

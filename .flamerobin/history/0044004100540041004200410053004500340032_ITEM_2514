@@ -1,0 +1,15 @@
+SELECT
+    contascontabeis.CONTACONTABIL,
+    contascontabeis.NIVEL,
+    contascontabeis.descricao,
+    movtobancarioLancamentos.*,
+    case movtobancariolancamentos.contacontabil when contascontabeis.contacontabil then movtobancariolancamentos.valormovimento else 0 end as valorlancado
+FROM
+    movtobancariolancamentos(1,'01.01.2024','31.01.2024', 'PRIMEFLEX', 4)
+inner join 
+    ESTABELECIMENTO on 
+    movtobancariolancamentos.FILIAL=ESTABELECIMENTO.CADASTRO 
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=movtobancariolancamentos.codigo

@@ -1,0 +1,5 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.TIPOPRODUTO,
+    itemestoque.referencia

@@ -1,0 +1,8 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.DISPONIVELECOMMERCE='S'
+where
+
+    itemestoque.codigo in ('109266')
+ 

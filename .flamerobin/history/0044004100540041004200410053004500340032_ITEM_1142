@@ -1,0 +1,67 @@
+select
+    TIPOITEMESTOQUE.descricao,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    /*
+    materiallote.lote,
+    materiallote.C_LARGURA,
+    materiallote.C_GRAMATURA,
+    local.descricao local,
+    */
+    c_customedio.custo,
+    itemcustodata.custounitario,
+    sum(materialmovimentoestoque.valor*MATERIALMOVIMENTOESTOQUE.SINAL)/sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL),
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL),
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL*C_CUSTOMEDIO.CUSTO),
+    sum(materialmovimentoestoque.valor*MATERIALMOVIMENTOESTOQUE.SINAL)
+    
+    
+   
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+     itemcustodata on
+        itemcustodata.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        itemcustodata.DATAINVENTARIO='31.01.2023'
+        itemcustodata.codigo=materialmovimentoestoque.iditem 
+inner join
+    local on
+        local.ID=materialmovimentoestoque.LOCALARMAZENAMENTO
+inner join
+    tipoItemEstoque on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+inner join
+     c_customedio on
+        C_CUSTOMEDIO.iditem=materialmovimentoestoque.iditem 
+
+left join
+    materiallote on
+        materiallote.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materiallote.iditem=MATERIALMOVIMENTOESTOQUE.iditem and
+        materiallote.lote=materialmovimentoestoque.lote
+where
+
+    MATERIALMOVIMENTOESTOQUE.IDITEM LIKE 'MPP%' and
+
+    movimentoestoque.emissao<'31.12.2023'
+group by 
+    TIPOITEMESTOQUE.descricao,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    
+    /*materiallote.lote,
+    materiallote.C_LARGURA,
+    materiallote.C_GRAMATURA,
+    local.descricao,
+    */
+    materialfilial.customedio,
+    c_customedio.custo
+HAVING 
+   sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)>0.001 

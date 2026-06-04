@@ -1,0 +1,10 @@
+SELECT
+    *
+FROM
+    USUARIO
+inner JOIN
+    GRUPOXUSUARIO on
+        grupoxusuario.IDUSUARIO=usuario.id
+        
+where 
+    usuario.id=39

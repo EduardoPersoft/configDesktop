@@ -1,0 +1,3 @@
+select * from materiallote 
+where materiallote.iditem='MPP04SOFTG22' 
+and materiallote.lote='I230930/35/1'

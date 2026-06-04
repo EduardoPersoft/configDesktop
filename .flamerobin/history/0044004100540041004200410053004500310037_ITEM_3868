@@ -1,0 +1,2 @@
+select * from NOTAFISCAL
+where qrcodeentrega is not null

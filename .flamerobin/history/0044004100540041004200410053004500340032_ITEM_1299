@@ -1,0 +1,4 @@
+update MOVIMENTOESTOQUE
+set movimentoestoque.LOCALARMAZENAMENTO=6
+where tipomovimento='12' and
+movimentoestoque.filial=110

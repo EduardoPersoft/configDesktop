@@ -1,0 +1,1 @@
+select C_LOGPRODUTOECOMMERCE.*, cast(substring(C_LOGPRODUTOECOMMERCE.content from 1 for 400) as varchar(400)) from C_LOGPRODUTOECOMMERCE where status_code<>'200'

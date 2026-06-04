@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    C_MERCADORIASpedFIOS
+WHERE
+    c_mercadoriasPEDfios.filial=1 AND
+    C_MERCADORIASPEDFIOS.idnota=65225

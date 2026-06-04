@@ -1,0 +1,2 @@
+select * from ACESSOS
+where path like '%aprovacao%'

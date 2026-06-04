@@ -1,0 +1,10 @@
+SELECT
+    clientes.cadastro,
+    coalesce(clientes.limiteCredito,
+             (select max(estabelecimento.limiteCredito)
+              from estabelecimento)) limiteCredito,
+    cast(clientes.dataAvaliacao as date)
+from
+    CLIENTES
+WHERE
+    clientes.cadastro=1

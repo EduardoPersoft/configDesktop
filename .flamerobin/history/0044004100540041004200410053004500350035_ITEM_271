@@ -1,0 +1,2 @@
+delete from VERSAOALTERACAO
+where id>1667

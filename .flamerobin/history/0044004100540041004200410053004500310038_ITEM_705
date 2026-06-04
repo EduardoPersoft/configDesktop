@@ -1,0 +1,7 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.c_empenho is null and
+    movimentoestoque.filial=46

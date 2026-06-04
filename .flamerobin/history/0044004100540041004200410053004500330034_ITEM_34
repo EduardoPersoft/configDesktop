@@ -1,0 +1,2 @@
+insert into VOLUMES(id, descricao, altura, largura, comprimento) 
+values  (3, 'Caixa Media', 40, 60, 90)

@@ -1,0 +1,4 @@
+select
+    *
+FROM 
+    C_REQUISICAO

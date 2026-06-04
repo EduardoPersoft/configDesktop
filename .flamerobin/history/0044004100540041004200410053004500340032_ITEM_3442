@@ -1,0 +1,13 @@
+INSERT INTO FORNECEDORESITEM (
+    IDITEM, 
+    ID)
+VALUES (
+    'ABC',
+    coalesce((select 
+        max(fornecedoresitem.id)
+     from 
+        FORNECEDORESITEM
+     where
+        fornecedoresitem.iditem='ABC'),0)+1
+)
+   

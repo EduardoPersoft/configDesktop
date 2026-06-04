@@ -1,0 +1,15 @@
+select 
+    a.filial,
+    a.idcontaCorrente,
+    a.idMovtoBanc,
+    a.idLancamento,
+    a.contaContabil,
+    a.centroCusto,
+    a.VALOR
+from 
+    LANTOCONTBANC a
+where
+    a.filial = 1
+    a.idcontaCorrente = 3
+    a.idMovtoBanc = 3784
+    

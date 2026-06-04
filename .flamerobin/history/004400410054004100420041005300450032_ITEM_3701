@@ -1,0 +1,1 @@
+SELECT * FROM titulorec where parceiro = 33965

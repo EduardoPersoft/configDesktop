@@ -1,0 +1,3 @@
+select * from mercadoriasnotacompra where filial=12826 and idnota=2698 
+order by mercadoriasnotacompra.filial, mercadoriasnotacompra.idnota, 
+mercadoriasnotacompra.SITUACAOTRIBUT,mercadoriasnotacompra.cfop

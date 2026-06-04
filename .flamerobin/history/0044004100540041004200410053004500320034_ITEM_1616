@@ -1,0 +1,8 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.DEFINICAO||' nr. original: '||itemestoque.REFERENCIA,
+    itemestoque.itembase
+from 
+    itemestoque
+    

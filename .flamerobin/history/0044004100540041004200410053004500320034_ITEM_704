@@ -1,0 +1,108 @@
+SELECT
+       
+       I1.CODIGO,
+       I1.DESCRICAO,
+       I1.unidade,
+
+       COALESCE((SELECT SUM(MATERIALLOCAL.saldototal) FROM MATERIALLOCAL
+        WHERE MATERIALLOCAL.FILIAL='05012'
+        AND MATERIALLOCAL.iditem=I1.CODIGO),0) AS QUANTIDADE,
+
+       (select 
+            sum(materiallocal.saldototal)
+        from 
+            MATERIALLOCAL 
+        inner JOIN
+            local on
+                local.ID=materiallocal.IDLOCAL
+        where
+            MATERIALLOCAL.FILIAL=5 AND
+            MATERIALLOCAL.IDITEM=case i1.estocado when 'N'
+                                 then coalesce(i1.itembase, i1.codigo)
+                                 else i1.codigo end and
+            local.DISPONIVEL='S')
+        -
+        coalesce((select
+            sum(m2.quantidade - coalesce(m2.qtdeenviada,0))
+         FROM
+            MERCADORIASPED m2
+         INNER JOIN
+            PEDIDO p2 ON
+                p2.FILIAL=m2.FILIAL AND
+                p2.IDNOTA=m2.IDNOTA and
+                p2.cancelamento='N' and
+                p2.dataemissao is not null
+         WHERE
+            m2.FILIAL=5 AND
+            m2.baixa='N' AND
+            m2.codigoestoque=case i1.estocado when 'N'
+                                 then coalesce(i1.itembase, i1.codigo)
+                                 else i1.codigo end
+                         ),0)
+             saldoliquido,
+
+       (SELECT FIRST 1 LISTAPRECOPRODUTO.preco *
+        (CASE COALESCE(QUANTIDADE,0) WHEN 0 THEN 1 ELSE QUANTIDADE END)
+         FROM LISTAPRECOPRODUTO
+        WHERE LISTAPRECOPRODUTO.LISTA=(select listapreco.lista from listapreco where listapreco.listapadrao='S')
+        AND LISTAPRECOPRODUTO.PRODUTO=I1.CODIGO
+        order by quantidade) AS PRECO,
+        ARQ1.NOMEARQUIVO,
+        I1.REFERENCIA,
+        (SELECT COUNT(I2.CODIGO)
+         FROM ITEMESTOQUE I2
+         WHERE I1.REFERENCIA=I2.REFERENCIA
+         AND I1.CODIGO<>I2.CODIGO) AS ALTERNATIVAS,
+       case when i1.codigo = '05012' then 0 else 1 end,
+       (select
+            max(notafiscal.DATAEMISSAO)
+        FROM
+            NOTAFISCAL
+        inner JOIN
+            mercadoriasnota on
+                notafiscal.filial=mercadoriasnota.filial AND
+                notafiscal.idnota=mercadoriasnota.IDNOTA
+        WHERE
+            notafiscal.destinatario=1 AND
+            mercadoriasnota.codigo=i1.codigo) as ultimacompra,
+        (select
+            max(notafiscal.DATAEMISSAO)
+        FROM
+            orcamento NOTAFISCAL
+        inner JOIN
+            mercadoriasorc mercadoriasnota on
+                notafiscal.filial=mercadoriasnota.filial AND
+                notafiscal.idnota=mercadoriasnota.IDNOTA
+        WHERE
+            notafiscal.destinatario=1 AND
+            mercadoriasnota.codigo=i1.codigo) as ultimoorcamento
+FROM ITEMESTOQUE I1
+LEFT JOIN CLASSIFICACAOFISCAL ON (CLASSIFICACAOFISCAL.CFISCAL=I1.CLASSIFISCAL)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ1 ON (ARQ1.CODIGO=I1.CODIGO AND ARQ1.ORDEM=0)
+LEFT JOIN ITEMESTOQUEXARQUIVO ARQ2 ON (ARQ2.CODIGO=I1.CODIGO AND ARQ2.ORDEM=1)
+LEFT JOIN FAMILIA ON (FAMILIA.ID=I1.FAMILIA)
+LEFT JOIN UNIDADE ON (UNIDADE.UNIDADE=CASE COALESCE(I1.UNIDADE2, '') WHEN ''
+                                      THEN I1.UNIDADE
+                                      ELSE I1.UNIDADE2 END)
+WHERE I1.TIPOPRODUTO IN (3,4)
+and i1.codigo in
+(select
+    i2.codigo
+from
+    ITEMESTOQUECODIGOS i2
+where
+    i2.codigoalternativo = '05012'
+plan join (i2 index (I_ITEMCODIGOALTERNATIVO)))
+PLAN JOIN (
+    I1 INDEX ON (RDB$PRIMARY21),
+    CLASSIFICACAOFISCAL INDEX (RDB$PRIMARY824),
+    ARQ1 INDEX (PK_ITEMESTOQUEXARQUIVO),
+    ARQ2 INDEX (PK_ITEMESTOQUEXARQUIVO),
+    FAMILIA INDEX (RDB$PRIMARY246),
+    UNIDADE INDEX (RDB$PRIMARY692))
+order by
+10, 2
+    
+    
+    
+

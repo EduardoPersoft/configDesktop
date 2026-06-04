@@ -1,0 +1,2 @@
+select * from saldoentrada 
+order by idmovimento desc

@@ -1,0 +1,16 @@
+--update MATERIALMOVIMENTOESTOQUE set concluido='S'
+select * from materialmovimentoestoque
+where
+    MATERIALMOVIMENTOESTOQUE.FILIAL=1 and
+    MATERIALMOVIMENTOESTOQUE.concluido = 'N' and
+    exists (
+        select
+            *
+        from
+            COMPOSICAOOP
+        where
+            composicaoop.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            composicaoop.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento and
+            COMPOSICAOOP.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL and
+            substring(composicaoop.codigo from 1 for 2)='M-' )
+    

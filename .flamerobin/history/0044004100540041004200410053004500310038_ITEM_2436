@@ -1,0 +1,2 @@
+delete from ITEMCUSTODATA
+where itemcustodata.codigo between '10000' and '29999'

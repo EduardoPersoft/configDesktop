@@ -1,0 +1,1 @@
+update C_LOGECOMMERCE set inclusao='S' where inclusao='N'

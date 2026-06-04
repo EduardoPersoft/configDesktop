@@ -1,0 +1,2 @@
+select * from c_coletas
+where coleta='13426'

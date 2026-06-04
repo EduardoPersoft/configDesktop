@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    C_LOGSALDOECOMMERCE
+WHERE
+    c_logsaldoecommerce.STATUS_CODE<>200

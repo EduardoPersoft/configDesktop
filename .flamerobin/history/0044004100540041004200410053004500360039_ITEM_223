@@ -1,0 +1,1 @@
+select * from movtitulorec where filial=1 and idtitulo=885544

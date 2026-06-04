@@ -1,0 +1,13 @@
+SELECT 
+    LOCALLOTE.*,
+    local.DESCRICAO
+FROM 
+    LOCALLOTE 
+inner join
+    local on
+        local.ID=locallote."LOCAL"
+WHERE 
+    FILIAL=110 AND 
+    IDITEM='MPP01TRART'
+order by
+    quantidade

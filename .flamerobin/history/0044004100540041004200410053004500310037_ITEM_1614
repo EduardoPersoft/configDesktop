@@ -1,0 +1,1 @@
+select * from materialfilial where materialfilial.filial=1 and materiallocal.iditem='6850119'

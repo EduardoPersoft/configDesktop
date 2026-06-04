@@ -1,0 +1,35 @@
+select distinct SPEDFISCAL_C.COD_PART,
+                      case
+                        when coalesce(CADASTROPARCEIROS.CODIGOPAIS, '') = '' then 1058
+                        else CADASTROPARCEIROS.CODIGOPAIS
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'F' then CADASTROPARCEIROS.DOCUMENTO
+                        else ''
+                      end,
+                      case CADASTROPARCEIROS.TIPOPESSOA
+                        when 'J' then case upper(CADASTROPARCEIROS.INSCESTADUAL)
+                                        when 'ISENTA' then ''
+                                        when 'ISENTO' then ''
+                                        else CADASTROPARCEIROS.INSCESTADUAL
+                                      end
+                        else ''
+                      end,
+                      MUNICIPIO.UF || MUNICIPIO.MUNICIPIO, CLIENTES.INSCSUFRAMA, CADASTROPARCEIROS.RAZAOSOCIAL,
+                      substring ( CADASTROPARCEIROS.LOGRADOURO from 1 for 60), CADASTROPARCEIROS.NUMERO,
+                      SUBSTRING ( CADASTROPARCEIROS.COMPLEMENTO from 1 for 20),
+                      substring ( CADASTROPARCEIROS.BAIRRO from 1 for 30)
+      from SPEDFISCAL_C
+      inner join CADASTROPARCEIROS on (SPEDFISCAL_C.COD_PART = CADASTROPARCEIROS.CADASTRO)
+      left join MUNICIPIO on (CADASTROPARCEIROS.UF = MUNICIPIO.UF_SIGLA and
+            upper(CADASTROPARCEIROS.CIDADE) = upper(MUNICIPIO.MUNICIPIO_NOME))
+      left join CLIENTES on (CADASTROPARCEIROS.CADASTRO = CLIENTES.CADASTRO)
+      where SPEDFISCAL_C.SEGMENTO in ( 'C100', 'C500') and
+            not exists(select *
+                       from SPEDFISCAL_0
+                       where SPEDFISCAL_0.SEGMENTO = '0150' and
+                             SPEDFISCAL_0.COD_PART = CADASTROPARCEIROS.CADASTRO)

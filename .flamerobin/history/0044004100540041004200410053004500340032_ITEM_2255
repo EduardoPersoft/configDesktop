@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,filialped,idpedido,idmercped,quantidade,qtdbaixa from mercadoriasnota where filial=110

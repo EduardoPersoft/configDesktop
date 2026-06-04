@@ -1,0 +1,13 @@
+/*
+update 
+    clientes
+set
+    clientes.CONSUMIDORFINAL = 'S'
+*/
+select
+    *
+from
+    cadastroparceiros
+where
+    exists (
+    select * from cadastroparceiros where cadastroparceiros.cadastro=clientes.cadastro and cadastroparceiros.CONTRIBUINTE='N'

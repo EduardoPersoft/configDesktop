@@ -1,0 +1,4 @@
+select * from MOVBANCARIOS
+where filial=1 
+and idcontacorrente=1013
+and idmovtobancario=14179

@@ -1,0 +1,17 @@
+select
+    cast(pedido.DATAREFERENCIA as date),
+    pedido.idnota,
+    pedido.IDORCAMENTO,
+    cadcli.nome,
+    pedido.vlrtotalnota vlrpedido,
+    coalesce(orcamento.VLRTOTALNOTA,
+             pedido.vlrtotalnota) vlrorcamento 
+from
+    PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+left join
+    orcamento on
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.IDORCAMENTO

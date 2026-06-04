@@ -1,0 +1,6 @@
+update
+    mercadoriasped
+set
+    mercadorisaped.variavel=0
+where
+    baixa='N'

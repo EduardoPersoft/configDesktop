@@ -1,0 +1,10 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    quantidade,
+    QTdeenviada,
+    minimobaixa,
+    baixa
+    from MERCADORIASPED
+where filial=1 and idnota=50582

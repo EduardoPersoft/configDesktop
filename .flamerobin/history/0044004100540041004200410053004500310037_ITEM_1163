@@ -1,0 +1,10 @@
+select 
+    *
+from
+    movimentoestoque
+where
+    movimentoestoque.filial=12897 and    
+    movimentoestoque.TIPOMOVIMENTO in (10, 11) and
+    (movimentoestoque.LOCALARMAZENAMENTO=9 or movimentoestoque.LOCALTRANSFERENCIA=9)
+order by
+    idmovimento

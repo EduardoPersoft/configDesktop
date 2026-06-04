@@ -1,0 +1,26 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.CUSTOMEDIO,
+    precoNormal.custoconsiderado,
+    precoNormal.preco,
+    precoPromocao.custoConsiderado,
+    precoPromocao.preco
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.CODIGO
+inner JOIN
+    listaprecoproduto precoNormal on
+        precoNormal.lista=1 AND
+        precoNormal.produto=itemestoque.CODIGO
+left JOIN
+    listaprecoproduto precoPromocao on
+        precoPromocao.lista=2 AND
+        precoPromocao.produto=itemestoque.CODIGO
+WHERE
+    itemestoque.tipoproduto=3
+        
+    

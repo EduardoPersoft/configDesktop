@@ -1,0 +1,13 @@
+select
+    *
+from
+    materialmovimentoestoque
+inner join 
+     movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='12'
+    

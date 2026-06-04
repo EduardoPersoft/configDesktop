@@ -1,0 +1,2 @@
+alter table movimentoestoque
+add c_coletaFinanceira date 

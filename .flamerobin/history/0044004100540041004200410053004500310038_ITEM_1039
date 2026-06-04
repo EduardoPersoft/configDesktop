@@ -1,0 +1,13 @@
+select 
+    lantocontpag.*,
+    titulopag.* 
+from 
+    titulopag 
+inner join 
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+where 
+    titulopag.filial=5 and
+    titulopag.VENCIMENTO between '01.12.2022' and '31.12.2022' amd
+    titulopag.baixa is null

@@ -1,0 +1,12 @@
+alter table CENTROCUSTOS
+    drop c_total,
+    drop c_receita1,
+    drop c_receita2,
+    drop c_receita3,
+    drop c_receita4,
+    drop c_despesa1,
+    drop c_despesa2,
+    drop c_despesa3,
+    drop c_despesa4,
+    drop c_total,
+    drop c_internoexterno

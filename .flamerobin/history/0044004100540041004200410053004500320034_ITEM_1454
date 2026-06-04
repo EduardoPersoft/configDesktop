@@ -1,0 +1,1 @@
+select * from titulorec where titulorec.filial=1 and titulorec.DATAENVIO>='03.03.2022'

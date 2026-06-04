@@ -1,0 +1,1 @@
+SELECT * FROM cadastroparcereiros where cadastro = '33994'

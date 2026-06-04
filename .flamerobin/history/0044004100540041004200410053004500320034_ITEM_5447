@@ -1,0 +1,13 @@
+
+select 
+    MERCADORIASpedCOMPRA.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    0,
+    mercadoriaspedcompra.QUANTIDADE
+from
+    mercadoriaspedcompra
+where 
+    filial=5 
+    and idnota= 67279
+

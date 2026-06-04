@@ -1,0 +1,8 @@
+update 
+    ITEMESTOQUE
+SET
+    itembase = NULL
+WHERE
+i1.itembase is not null and
+not exists (
+select * from itemestoque i2 where i2.codigo=i1.itembase)

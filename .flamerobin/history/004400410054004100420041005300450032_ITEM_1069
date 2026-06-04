@@ -1,0 +1,2 @@
+select * from notafiscal where notafiscal.chave is not null and notafiscal.DATAEMISSAO<'01.02.2021'
+order by dataemissao desc

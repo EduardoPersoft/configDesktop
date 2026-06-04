@@ -1,0 +1,9 @@
+select notafiscal.DEVOLUCAO,
+       notafiscal.EMBUTIRICMS,
+       notafiscal.baseii,
+       notafiscal.VLRIMPOSTOIMPORT,
+       notafiscal.VLRTAXASISCOMEX,
+       notafiscal.VLRDESPADUANEIRAS,
+       notafiscal.vipidevolv
+
+from notafiscal

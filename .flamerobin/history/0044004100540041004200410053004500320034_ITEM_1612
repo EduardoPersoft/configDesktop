@@ -1,0 +1,3 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=5 and iditem in ('10294', '12608')
+and quantidade>100000

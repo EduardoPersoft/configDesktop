@@ -1,0 +1,6 @@
+select 
+    idplano,
+    contacontabil,
+    descricao,
+    c_mostrarfluxocaixa
+    from CONTASCONTABEIS

@@ -1,0 +1,14 @@
+select 
+    CADASTROPARCEIROS.cadastro,
+    CADASTROPARCEIROS.nome,
+    CADASTROPARCEIROS.telefone,
+    CADASTROPARCEIROS.email,
+    CADASTROPARCEIROS.logradouro,
+    CADASTROPARCEIROS.PRINCIPALCONTATO
+from
+    VENDEDOR
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=vendedor.CADASTRO
+where
+    vendedor.TIPOVENDEDOR=5

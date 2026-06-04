@@ -1,0 +1,76 @@
+SELECT  CAD1.CADASTRO,
+        CAD1.nome,
+        (case when coalesce(cad1.logradouro,'')='' and vendedor.tipovendedor=6 then
+            COALESCE(CAD2.logradouro,'')||', '||
+            COALESCE(CAD2.numero,'')||' '||
+            COALESCE(CAD2.complemento,'')||' '||
+            COALESCE(cad2.bairro,'')||' '||
+            COALESCE(CAD2.CIDADE,'')||' - '||
+            COALESCE(CAD2.uf,'')||' '||
+            CASE COALESCE(cad2.CEP,'') WHEN '' THEN ''
+                ELSE
+                'CEP: '||
+                SUBSTRING(COALESCE(CAD2.cep, '') FROM 1 FOR 5)||'-'||
+                SUBSTRING(COALESCE(CAD2.CEP,'') FROM 6 FOR 3)
+             END
+        else
+            COALESCE(CAD1.logradouro,'')||', '||
+            COALESCE(CAD1.numero,'')||' '||
+            COALESCE(CAD1.complemento,'')||' '||
+            COALESCE(cad1.bairro,'')||' '||
+            COALESCE(CAD1.CIDADE,'')||' - '||
+            COALESCE(CAD1.uf,'')||' '||
+            CASE COALESCE(cad1.CEP,'') WHEN '' THEN ''
+                ELSE
+                'CEP: '||
+                SUBSTRING(COALESCE(CAD1.cep, '') FROM 1 FOR 5)||'-'||
+                SUBSTRING(COALESCE(CAD1.CEP,'') FROM 6 FOR 3)
+            END
+        end)
+            ||' Telefone '||
+       (case when coalesce(cad1.telefone,'')='' and vendedor.tipovendedor=6 then
+            COALESCE(CAD2.telefone,'')||
+            CASE COALESCE(CAD2.telefonecomercial,'') WHEN '' THEN ''
+             ELSE ' / '||COALESCE(CAD2.telefonecomercial,'')
+            END||
+            CASE COALESCE(CAD1.celular,'') WHEN '' THEN ''
+            ELSE ' / '||COALESCE(CAD1.celular,'')
+            end
+       else
+            COALESCE(CAD1.telefone,'')||
+            CASE COALESCE(CAD1.telefonecomercial,'') WHEN '' THEN ''
+             ELSE ' / '||COALESCE(CAD1.telefonecomercial,'')
+            END||
+            CASE COALESCE(CAD1.celular,'') WHEN '' THEN ''
+            ELSE ' / '||COALESCE(CAD1.celular,'')
+            end
+       END) ENDERECO,
+       CAD1.email||';'||coalesce(CAD1.c_emailalternativo,''),
+       c_agendaagentes.quando,
+       (SELECT first 1 REGISTROCONTATO.abertura
+        FROM registrocontato
+        WHERE REGISTROCONTATO.PARCEIRO=CAD2.CADASTRO
+        ORDER BY REGISTROCONTATO.ABERTURA DESC)+
+        COALESCe(c_curvaabccontato.DIAS,0) AS LIMITE,
+        CAD1.CEP,
+        VENDEDOR.canalrelacionado,
+        EXTRACT(day FROM cad1.c_datanascimento)||'/'||
+
+        case EXTRACT(month FROM cad1.c_datanascimento) when 1 then 'Janeiro'
+        when 2 then 'Fevereiro' when 3 then 'Março' when 4 then 'Abril'
+        when 5 then 'Maio' when 6 then 'Junho' when 7 then 'Julho'
+        when 8 then 'Agosto' when 9 then 'Setembro' when 10 then 'Outubro'
+        when 11 then 'Novembro' when 12 then 'Dezembro' end ANIVERSARIO,
+        VENDEDOR.tipovendedor
+    FROM VENDEDOR
+    INNER JOIN cadastroparceiros cad1 ON
+        (CAD1.CADASTRO=VENDEDOR.CADASTRO)
+    left JOIN c_agendaagentes ON
+        (c_agendaagentes.cadastro=cad1.CADASTRO)
+    LEFT JOIN c_curvaabccontato ON
+        (c_curvaabccontato.id=cad1.C_INCIDECONTATOS)
+    left join cadastroparceiros cad2 on (cad2.cadastro=vendedor.canalrelacionado)
+    WHERE EXTRACT(MONTH FROM CAD1.C_DATANASCIMENTO)=3
+    AND VEnDEDOR.tipovendedor IN (5,6)
+
+    ORDER BY vendedor, EXTRACT(DAY FROM cad1.c_datanascimento), CAD1.NOME

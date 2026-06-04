@@ -1,0 +1,16 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.idmovimento,
+    movimentoestoque.documento,
+    CADASTROPARCEIROS.nome
+from
+    MOVIMENTOESTOQUE
+inner join
+    pedido on
+        pedido.filial=movimentoestoque.filial and
+        pedido.idnota=movimentoestoque.IDPEDIDO
+inner join
+    CADASTROPARCEIROS on
+        pedido.DESTINATARIO=CADASTROPARCEIROS.CADASTRO
+where
+    pedido.baixa='N'

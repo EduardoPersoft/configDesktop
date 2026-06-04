@@ -1,0 +1,16 @@
+update 
+    PEDIDO
+set 
+    vendedor=(select vendedoresped.vendedor from vendedoresped
+              where vendedoresped.filial=pedido.filial 
+              and vendedoresped.idnota=pedido.idnota)
+where exists (
+    select  
+        *
+    from 
+        MERCADORIASPED
+    where
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota and
+        mercadoriasped.baixa='N') and
+    pedido.vendedor is null

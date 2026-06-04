@@ -1,0 +1,2 @@
+select * from LANTOCONTPAG
+where lantocontpag.filial in (110,3941)

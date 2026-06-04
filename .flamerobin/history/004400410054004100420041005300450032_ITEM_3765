@@ -1,0 +1,14 @@
+SELECT
+    NOMECOMPLETO,
+    EMAIL,
+    EMAILSERVIDOR,
+    EMAILPORTA,
+    EMAILLOGIN,
+    EMAILSENHA,
+    EMAILSSL,
+    cast(substring(ASSINATURA from 1 for 100) as varchar(100)),
+    USUARIO
+FROM
+    USUARIO
+WHERE
+    ID=39

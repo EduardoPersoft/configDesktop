@@ -1,0 +1,3 @@
+select * from FATURASNOTACOMPRA
+where faturasnotacompra.filial=5 and
+faturasnotacompra.idnota=127073

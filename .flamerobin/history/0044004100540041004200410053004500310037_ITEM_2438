@@ -1,0 +1,10 @@
+select
+    *
+from
+    materiallocal 
+inner join
+    local on
+        local.id=materiallocal.IDLOCAL
+where
+    materiallocal.SALDOTOTAL>0 and
+    local.DESCRICAO like 'Z2-B%'

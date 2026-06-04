@@ -1,0 +1,47 @@
+select
+    c_consumo.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    c_fornecedorpeca.DESCRICAO,
+    c_consumo.consumo,
+    c_saldoz2.saldo,
+    cast(c_consumo.consumo/12 as integer) + 1 saldominimo,
+    cast(c_consumo.consumo/3 as integer) + 1 saldomaximo,
+    (cast(c_consumo.consumo/3 as integer) + 1)-c_saldoz2.saldo quantidade,
+    materialfilial.SALDOMINIMO,
+    materialfilial.SALDOMAXIMO,
+    materialfilial.saldoMaximo-c_saldoz2.saldo tranfere
+from
+    C_CONSUMO
+inner join
+    c_saldoz2 on
+        c_saldoz2.codigo=c_consumo.codigo
+inner join
+    itemestoque on
+        itemestoque.codigo=C_CONSUMO.codigo
+inner join
+    materialfilial on
+        materialfilial.filial = case substring(c_consumo.codigo from 1 for 1) 
+                                when '6' then 12826
+                                else 1 end and
+        materialfilial.iditem = c_consumo.codigo
+left join
+    C_FORNECEDORPECA on
+        c_fornecedorpeca.id = itemestoque.C_FORNECEDOR
+where
+    itemestoque.C_LOCALIMPORTACAO<>8 and
+    not exists (
+    select 
+        *
+    from
+        LOCALLOTE
+    inner join
+        local on
+            local.id=locallote.local
+    where
+        locallote.iditem=c_consumo.codigo and 
+        locallote.QUANTIDADE>0 and
+        substring(local.descricao from 1 for 4) = 'Z1-D') 
+order by
+    c_consumo.consumo desc
+ 

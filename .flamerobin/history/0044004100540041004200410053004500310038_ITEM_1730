@@ -1,0 +1,7 @@
+select
+    *
+from
+    PEDIDO
+where
+    filial=184 and
+    idnota=342

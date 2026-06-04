@@ -1,0 +1,7 @@
+update  
+    TITULOREC
+set
+    titulorec.DATAENVIO = null
+where filial=5 and parceiro=31571 
+and baixa is null
+    

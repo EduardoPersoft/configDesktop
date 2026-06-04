@@ -1,0 +1,14 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    quantidade,
+    unidade,
+    precounitario,
+    minimobaixo,
+    mercadoriaspedcompra.QTDEENTREGUE
+from 
+    mercadoriaspedcompra 
+where 
+    mercadoriaspedcompra.MINIMOBAIXA>mercadoriaspedcompra.QUANTIDADE

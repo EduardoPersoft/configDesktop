@@ -1,0 +1,6 @@
+select * from lantocontrec
+where exists (
+select * from titulorec where 
+titulorec.filial=lantocontrec.filial and
+titulorec.idtitulo=lantocontrec.IDMOVTOBANC
+and cadastro='2025-01-23')

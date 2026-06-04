@@ -1,0 +1,2 @@
+select * from lantocontpag
+where lantocontpag.CONTACONTABIL='0501'

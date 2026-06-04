@@ -1,0 +1,13 @@
+update 
+    mercadoriasorc
+set
+    mercadoriasorc.DESCRICAO=mercadoriasorc.DESREDUZIDA
+where
+    (select
+        *
+     from 
+        ORCAMENTO
+     where
+        mercadoriasorc.filial=orcamento.filial and
+        mercadoriasorc.idnota=orcamento.idnota and
+        orcamento.DATACADASTRO='2025-01-24')

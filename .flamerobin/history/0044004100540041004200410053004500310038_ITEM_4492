@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set 
+    pedido.c_condicaomateriais=' 21/06/2026 - R$16.690,37 - Cobrança Bancaria, 21/07/2026 - R$16.690,37 - Cobrança Bancaria'
+where 
+    filial=1 and idnota = 77208

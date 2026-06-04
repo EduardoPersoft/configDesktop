@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where lote='1/8' and c_largura=320

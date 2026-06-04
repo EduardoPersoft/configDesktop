@@ -1,0 +1,51 @@
+    FOR SELECT ORCAMENTO.FILIAL,
+       ORCAMENTO.IDNOTA,
+       ORCAMENTO.C_Loja,
+       ORCAMENTO.DATACADASTRO,
+       ORCAMENTO.DATAEMISSAO,
+       ORCAMENTO.NUMERONOTA,
+       ORCAMENTO.DATAVALIDADE,
+       ORCAMENTO.DESTINATARIO,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.NOME END AS AOSCUIDADOS,
+       case orcamento.cadastrar when 'S' then ORCAMENTO.EMAIL
+       else cadcli.email end as email,
+       case orcamento.cadastrar when 'S' then ORCAMENTO.TELEFONE
+       else cadcli.telefone end as telefone,
+       ORCAMENTO.VLRTOTALNOTA,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.NOME END AS AOSCUIDADOS,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.razaosocial END AS RAZAOSOCIAL,
+       CADCLI.DOCUMENTO,
+       CADLOJA.NOME AS NOME_LOJA,
+       CASE when ORCAMENTO.dataemissao IS NULL THEN 'SEM APROVAÇĂO'
+       WHEN EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.IDNOTA)
+                or EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.idrelacao)  THEN 'FECHADO'
+       ELSE
+        CASE COALESCE(ORCAMENTO.c_status,0) WHEN 0 THEN 'ABERTO'
+        WHEN 1 THEN 'ABERTO' WHEN 2 THEN 'SUSPENSO' WHEN 3 THEN 'PERDIDO'
+        WHEN 4 THEN 'FECHADO' END
+      END STATUS,
+      (select cadven.NOME FROM vendedoresorc
+       INNER JOIN CADASTROPARCEIROS CADVEN ON (CADVEN.cadastro=VENDEDORESORC.vendedor)
+       WHERE VENDEDORESORC.filial=ORCAMENTO.FILIAL
+       AND VENDEDORESORC.idnota=ORCAMENTO.IDNOTA
+       AND VENDEDORESORC.Vendedor=ORCAMENTO.Vendedor) VENDEDOR, 
+       case when ORCAMENTO.cancelamento='S' then 255
+       when exists (select * from PEDIDO
+                      where PEDIDO.filial=ORCAMENTO.filial
+                      and PEDIDO.idORCAMENTO=ORCAMENTO.idnota
+                      and PEDIDO.CANCELAMENTO='N') then 8421504
+        WHEN ORCAMENTO.datavalidade<CAST('NOW' AS TIMESTAMP) THEN -16777208
+        else 0 end AS P_STATUSCOR,
+        COALESCE(ORCAMENTO.idrelacao,0)
+    FROM ORCAMENTO
+    INNER JOIN CADASTROPARCEIROS cadcli ON (CADCLI.CADASTRO = ORCAMENTO.DESTINATARIO)
+    LEFT JOIN CADASTROPARCEIROS CADLOJA ON (CADLOJA.CADASTRO = ORCAMENTO.c_loja)
+    WHERE ORCAMENTO.FILIAL=1
+    AND ORCAMENTO.DATACADASTRO BETWEEN '01.01.2024' AND '03.10.2024'

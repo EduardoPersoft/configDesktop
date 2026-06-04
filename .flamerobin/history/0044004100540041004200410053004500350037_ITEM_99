@@ -1,0 +1,6 @@
+select 
+    cadven.nome
+from    
+    cadastroparceiros cadven
+where
+    cadven.cadastro=105

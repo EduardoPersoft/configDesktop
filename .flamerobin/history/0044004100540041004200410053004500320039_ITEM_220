@@ -1,0 +1,10 @@
+update  
+    TITULOREC
+set
+    titulorec.NUMBOLBANCO=null,
+    titulorec.LINHADIGITAVEL=null,
+    titulorec.CODIGOBARRA=null,
+    titulorec.vencimento='04.03.2026'
+where
+    TITULOREC.filial=1 and 
+    titulorec.EMISSAO>='22.02.2026'

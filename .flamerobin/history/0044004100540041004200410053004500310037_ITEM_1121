@@ -1,0 +1,58 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(m1.saldototal) as saldototal,
+    itemestoque.unidade,    
+    Itemestoque.referencia ,    
+    materialfilial.SALDOMINIMO,
+    materialfilial.saldomaximo - sum(m1.saldototal) as qtd
+    
+--    l2.descricao local
+
+    
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = materialfilial.IDITEM
+LEFT JOIN
+    materiallocal m1 on
+        m1.filial=materialfilial.filial AND
+        m1.iditem=materialfilial.IDITEM 
+LEFT JOIN
+    local l1 on 
+      l1.id=m1.idlocal  
+left JOIN
+    materiallocal m2 on
+        m2.filial=materialfilial.filial AND
+        m2.iditem=materialfilial.IDITEM        
+left JOIN
+    local l2 on 
+      l2.id=m2.idlocal          
+WHERE
+    materialfilial.filial=:filial AND
+    materialfilial.saldominimo > 0 and
+    substring(l1.descricao from 1 for 2) = 'Z2' and 
+    exists (select 
+                * 
+            from 
+                materiallocal m2
+            inner join
+                local l1 on
+                    l1.id=m2.IDLOCAL                    
+            where
+                m2.filial=m1.filial and
+                m2.iditem=m1.iditem and
+                m2.SALDOTOTAL>0 and
+                substring(l2.descricao from 1 for 2) = 'Z1')
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade,
+    materialfilial.SALDOMINIMO,
+    materialfilial.saldomaximo,
+    l2.descricao,
+    itemestoque.referencia
+having 
+    sum(m1.saldototal)<=materialfilial.saldominimo and
+    sum(m2.saldototal)>0 

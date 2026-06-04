@@ -1,0 +1,4 @@
+update MOVIMENTOESTOQUE
+set emissao='30.06.2024'
+where movimentoestoque.emissao='01.07.2024'
+and movimentoestoque.tipomovimento in ('10','11','17')

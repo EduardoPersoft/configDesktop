@@ -1,0 +1,26 @@
+SELECT 
+    materialmovimentoestoque.IDCENTROCUSTO,
+    centrocustos.descricao,
+    cast(sum(materialmovimentoestoque.tempo) as integer) tempo,
+    cast(sum(materialmovimentoestoque.setup) as integer) setup,
+    cast(sum(materialmovimentoestoque.tempo+materialmovimentoestoque.setup)
+         as integer) total
+FROM 
+    MATERIALMOVIMENTOESTOQUE
+inner join 
+    estabelecimento on
+        estabelecimento.cadastro=materialmovimentoestoque.filial
+inner JOIN
+    movimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+inner JOIN
+    centrocustos on
+        centrocustos.idplano=estabelecimento.cadastro AND
+        centrocustos.CENTROCUSTO=MATERIALMOVIMENTOESTOQUE.centrocusto
+where 
+    materialmovimentoestoque.concluido = 'N' AND
+    movimentoestoque.tipomovimento='12'
+group by
+    materialmovimentoestoque.IDCENTROCUSTO,
+    centrocustos.descricao

@@ -1,0 +1,4 @@
+update 
+    CONFIGURACOESGERAIS
+SET
+    c_url='http://portal.persoft.com.br/loja'

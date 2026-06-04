@@ -1,0 +1,7 @@
+update
+    itemcustodata
+set
+ 
+    custototal =  custounitario*quantidade                              
+where 
+    datainventario = '31.12.2025'

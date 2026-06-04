@@ -1,0 +1,13 @@
+update 
+    mercadoriasped
+set
+    mercadoriasped.DESCRICAO=mercadoriasped.DESREDUZIDA
+where exists
+    (select
+        *
+     from 
+        pedido
+     where
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota and
+        pedido.DATACADASTRO='2025-01-23')

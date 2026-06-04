@@ -1,0 +1,1720 @@
+SET TERM ^ ;
+ALTER PROCEDURE IMP_NFE (
+    RELATORIO varchar(20) )
+RETURNS (
+    FILIAL integer,
+    RAZAOFILIAL varchar(60),
+    NOMEFILIAL varchar(60),
+    DOCUMENTOFILIAL varchar(18),
+    INSCESTADUALFILIAL varchar(20),
+    INSCMUNICIPALFILIAL varchar(20),
+    LOGRADOUROFILIAL varchar(70),
+    NUMEROFILIAL varchar(10),
+    COMPLEMENTOFILIAL varchar(60),
+    BAIRROFILIAL varchar(72),
+    CIDADEFILIAL varchar(50),
+    UFFILIAL varchar(2),
+    CEPFILIAL varchar(9),
+    TELEFONEFILIAL varchar(20),
+    TELEFONECOMERCIALFILIAL varchar(20),
+    FAXFILIAL varchar(20),
+    PRINCIPALCONTATOFILIAL varchar(60),
+    EMAILFILIAL varchar(60),
+    WEBFILIAL varchar(100),
+    NOMEUSUARIO varchar(50),
+    TELEFONEUSUARIO varchar(20),
+    FAXUSUARIO varchar(20),
+    EMAILUSUARIO varchar(400),
+    DEPARTAMENTOUSUARIO varchar(30),
+    CARGOUSUARIO varchar(20),
+    IDNOTA integer,
+    NUMERONOTA varchar(20),
+    DATAEMISSAO timestamp,
+    DATACADASTRO timestamp,
+    DESTINATARIO integer,
+    RAZAO varchar(60),
+    NOME varchar(60),
+    LOGRADOURO varchar(70),
+    NUMERO varchar(10),
+    BAIRRO varchar(72),
+    COMPLEMENTO varchar(60),
+    CIDADE varchar(50),
+    UF varchar(2),
+    CEP varchar(9),
+    NCEP varchar(8),
+    DOCUMENTO varchar(18),
+    INSCESTADUAL varchar(20),
+    INSCMUNICIPAL varchar(20),
+    EMAIL varchar(400),
+    TELEFONE varchar(20),
+    TELEFONECOMERCIAL varchar(20),
+    CELULAR varchar(20),
+    FAX varchar(20),
+    PRINCIPALCONTATO varchar(60),
+    LOGRADOUROENTREGA varchar(70),
+    NUMEROENTREGA varchar(10),
+    COMPLEMENTOENTREGA varchar(60),
+    BAIRROENTREGA varchar(72),
+    CIDADEENTREGA varchar(50),
+    UFENTREGA varchar(2),
+    CEPENTREGA varchar(9),
+    NCEPENTREGA varchar(9),
+    LOCALENTREGA varchar(400),
+    LOGRADOUROCOBRANCA varchar(70),
+    NUMEROCOBRANCA varchar(10),
+    BAIRROCOBRANCA varchar(72),
+    COMPLEMENTOCOBRANCA varchar(60),
+    CIDADECOBRANCA varchar(70),
+    UFCOBRANCA varchar(2),
+    CEPCOBRANCA varchar(9),
+    NCEPCOBRANCA varchar(9),
+    LOCALCOBRANCA varchar(400),
+    NOMEUSUARIOAPROVACAO varchar(60),
+    TELEFONEUSUARIOAPROVACAO varchar(20),
+    FAXUSUARIOAPROVACAO varchar(20),
+    EMAILUSUARIOAPROVACAO varchar(60),
+    DEPARTAMENTOUSUARIOAPROVACAO varchar(30),
+    CARGOUSUARIOAPROVACAO varchar(20),
+    VENDEDOR integer,
+    RAZAOVENDEDOR varchar(60),
+    NOMEVENDEDOR varchar(40),
+    TELEFONEVENDEDOR varchar(20),
+    TELEFONECOMERCIALVENDEDOR varchar(20),
+    CELULARVENDEDOR varchar(20),
+    FAXVENDEDOR varchar(20),
+    EMAILVENDEDOR varchar(400),
+    CFOP integer,
+    NATUREZAOPERACAO varchar(30),
+    TIPOPAGTO varchar(50),
+    CONDICAOPAGTO varchar(50),
+    ENTRADA_SAIDA char(1),
+    VLRDESCONTO double precision,
+    MSGDESCMERCADORIAS varchar(120),
+    VLRDESCINDPRODUTO double precision,
+    MSGDESCPRODUTOS varchar(120),
+    VLRACRESCIMO double precision,
+    MSGACRESCMERCADORIA varchar(120),
+    VLRMERCADORIAS double precision,
+    VLRICMS double precision,
+    VLRZONAFRANCA double precision,
+    VLRSUBSTRIB double precision,
+    VLRIPITOTAL double precision,
+    VLRFRETE double precision,
+    VLRSEGURO double precision,
+    VLRDESPESAS double precision,
+    VLRSERVICO double precision,
+    VLRTOTANOTA double precision,
+    CODTRANSP integer,
+    NOMETRANSP varchar(50),
+    RAZAOTRANSP varchar(60),
+    FONETRANSP varchar(30),
+    COMERCIALTRANSP varchar(20),
+    CELULARTRANSP varchar(20),
+    EMAILTRANSP varchar(400),
+    NOMECONTATOTRANSP varchar(60),
+    LOGRADOUROTRANSP varchar(70),
+    NUMEROTRANSP varchar(10),
+    COMPLEMENTOTRANSP varchar(60),
+    BAIRROTRANSP varchar(72),
+    CIDADETRANSP varchar(50),
+    UFTRANSP varchar(2),
+    QTDEVOLUME double precision,
+    PESOLIQUIDO double precision,
+    PESOBRUTO double precision,
+    DETALHECF varchar(400),
+    MSGADICIONAL varchar(2000),
+    ORDEM integer,
+    IDITEM integer,
+    CODIGO varchar(15),
+    DESCRICAO varchar(4596),
+    DESCRICAOREDUZIDA varchar(50),
+    DESCRICAODETALHE varchar(120),
+    DESCRICAOTOTAL varchar(50),
+    QUANTIDADE double precision,
+    UNIDADE varchar(3),
+    PRUNITARIO double precision,
+    PRLISTA double precision,
+    PIPIMERC double precision,
+    VLRIPIMERC double precision,
+    VLRTOTITEM double precision,
+    PICMS double precision,
+    CF varchar(12),
+    CODCF char(3),
+    DIAHOJE integer,
+    MESHOJEEXTENSO varchar(15),
+    ANOHOJE integer,
+    DOCUMENTOTRANSP varchar(18),
+    INSCESTADUALTRANSP varchar(20),
+    PLACAVEICULO varchar(7),
+    TOTBASEICMS double precision,
+    VLRBASESUBSTITUTO double precision,
+    INSCRICAOSUBSTITUTO varchar(20),
+    DATAENTRADASAIDA timestamp,
+    MARCAVOLUME varchar(20),
+    NUMEROVOLUME integer,
+    ESPECIEVOLUME varchar(20),
+    VLRTOTALSERVICOS double precision,
+    ISS double precision,
+    REM_DEST varchar(1),
+    REM_DEST_DESC varchar(20),
+    ICMSBASE double precision,
+    SITUACAOTRIBUT varchar(4),
+    VLRTOTNOTAEXTENSO blob sub_type 0,
+    VALORICMS_PROD double precision,
+    CFOP_PROD char(4),
+    SERIE varchar(3),
+    CHAVE varchar(44),
+    ALEATORIO varchar(9),
+    CHAVEXML varchar(47),
+    CHAVEFORMATADA varchar(60),
+    MODELO smallint,
+    INDICADORPAGAMENTO char(1),
+    CUFFILIAL char(2),
+    CMUNICIPIOFILIAL char(7),
+    CODIGOPAISFILIAL varchar(4),
+    PAISFILIAL varchar(30),
+    CNAEFILIAL varchar(7),
+    INSCSUBSTITUTAFILIAL varchar(20),
+    CNPJFILIAL varchar(14),
+    CPFFILIAL varchar(14),
+    CNPJENTREGA varchar(14),
+    CCIDADE varchar(7),
+    CNPJ varchar(14),
+    CPF varchar(14),
+    INSCSUFRAMA varchar(20),
+    EAN char(13),
+    EANTRIBUTAVEL char(13),
+    UNIDADETRIBUTAVEL varchar(3),
+    QUANTIDADETRIBUTAVEL double precision,
+    VALORUNITARIOTRIBUTAVEL double precision,
+    FRETEPRODUTO double precision,
+    SEGUROPRODUTO double precision,
+    DESCONTOPRODUTO double precision,
+    ORIGEM integer,
+    CTICMS varchar(3),
+    MODBC integer,
+    PREDBC double precision,
+    MODBCST integer,
+    PMVAST double precision,
+    PREDBCST double precision,
+    VBCST double precision,
+    PICMSST double precision,
+    VICMSST double precision,
+    PISALIQUOTA double precision,
+    PISCST integer,
+    PISBASE double precision,
+    PISVALOR double precision,
+    COFINSCST integer,
+    COFINSBASECALCULO double precision,
+    COFINSALIQUOTA double precision,
+    COFINSVALOR double precision,
+    DESCONTOTOTAL double precision,
+    CNPJTRANSP varchar(14),
+    CPFTRANSP varchar(14),
+    UFPLACAVEICULO varchar(2),
+    IPIBASE_PROD double precision,
+    CODIGOPAIS varchar(4),
+    PAIS varchar(30),
+    DETALHEITENS char(1),
+    AAMM varchar(4),
+    TPIMP smallint,
+    TPEMIS smallint,
+    CDV smallint,
+    TPAMB smallint,
+    FINNFE smallint,
+    PROCEMI smallint,
+    VERPROC varchar(10),
+    NUMEROFATURA integer,
+    VLRTOTALFATURA double precision,
+    VLRLIQFATURA double precision,
+    CENQ varchar(3),
+    VII double precision,
+    NDI varchar(12),
+    DDI timestamp,
+    XLOCDESEMB varchar(60),
+    UFDI varchar(2),
+    DDESEMB timestamp,
+    CEXPORTADOR varchar(60),
+    NADICAO integer,
+    NSEQADIC integer,
+    CFABRICANTE varchar(60),
+    VDESCDI double precision,
+    VBASEIMPORTAMERC double precision,
+    VDESPADUMERC double precision,
+    VIMPORTOIMPORTACAOMERC double precision,
+    VIOFMERC double precision,
+    IDFATURA1 integer,
+    VENCIMENTO1 timestamp,
+    VALORFATURA1 double precision,
+    IDFATURA2 integer,
+    VENCIMENTO2 timestamp,
+    VALORFATURA2 double precision,
+    IDFATURA3 integer,
+    VENCIMENTO3 timestamp,
+    VALORFATURA3 double precision,
+    IDFATURA4 integer,
+    VENCIMENTO4 timestamp,
+    VALORFATURA4 double precision,
+    IDFATURA5 integer,
+    VENCIMENTO5 timestamp,
+    VALORFATURA5 double precision,
+    IDFATURA6 integer,
+    VENCIMENTO6 timestamp,
+    VALORFATURA6 double precision,
+    IDFATURA7 integer,
+    VENCIMENTO7 timestamp,
+    VALORFATURA7 double precision,
+    IDFATURA8 integer,
+    VENCIMENTO8 timestamp,
+    VALORFATURA8 double precision,
+    DESCRICAODESDOBRAMENTO varchar(50),
+    PISNOTA double precision,
+    COFINSNOTA double precision,
+    BASEPISCOFINSNOTA double precision,
+    MSGDESCRMERCADORIAS varchar(1000),
+    MSGCORPONOTA varchar(1000),
+    MCODIGO varchar(1),
+    MDESCRICAO varchar(1),
+    MCF varchar(1),
+    MCST varchar(1),
+    MCFOP varchar(1),
+    MUN varchar(1),
+    MQTD varchar(1),
+    MVLRUNI varchar(1),
+    MVLRTOT varchar(1),
+    MBASEICMS varchar(1),
+    MVLRICMS varchar(1),
+    MVLRIPI varchar(1),
+    MALIQICMS varchar(1),
+    MALIQIPI varchar(1),
+    SIMPLES varchar(1),
+    ALIQUOTASIMPLES double precision,
+    REFERENCIADESCRICAO varchar(1024),
+    IPICST integer,
+    PROTOCOLO varchar(50),
+    CRT smallint,
+    VOUTRO double precision,
+    INDTOT smallint,
+    PREDIPI double precision,
+    PEDIDONFE varchar(1),
+    PEDIDOCLINFE varchar(1),
+    NUMEROPEDIDO integer,
+    NUMEROPEDIDOCLIENTE varchar(50),
+    CTICMSSIMPLES varchar(3),
+    EXPORTACAO char(1),
+    PCREDSN double precision,
+    VCREDICMSSN double precision,
+    DHCONT timestamp,
+    XJUST char(32),
+    VICMSDESONERADO double precision,
+    MOTDESICMS varchar(1),
+    INFADPROD varchar(500),
+    VENDEDORDANFE varchar(1),
+    IDPEDIDO integer,
+    AMBIENTE smallint,
+    CANCELAMENTO varchar(1),
+    DATAENVIO timestamp,
+    XPED varchar(50),
+    NITEMPED integer,
+    VTOTTRIB decimal(10,2),
+    VTOTTRIBNF decimal(10,2),
+    PTOTTRIBUTO decimal(10,2),
+    APRESENTARTRIBUTOCONSUMIDOR char(1),
+    IDMERCADORIAPEDIDO integer,
+    DEVOLUCAO char(1),
+    VVALORMAOOBRA double precision,
+    IDDEST smallint,
+    INDFINAL smallint,
+    INDPRES smallint,
+    INDIEDEST smallint,
+    IDESTRANGEIRO varchar(20),
+    S_UTC varchar(6),
+    UFSAIDAPAIS varchar(2),
+    XLOCDESPACHO varchar(60),
+    NRE varchar(12),
+    NCONTRIBUINTEINTER char(1),
+    VBCUFDEST numeric(12,2),
+    PFCUFDEST numeric(5,4),
+    PICMSUFDEST numeric(5,4),
+    PICMSINTER numeric(5,4),
+    PICMSINTERPART numeric(5,4),
+    VFCPUFDEST numeric(12,2),
+    VICMSUFDEST numeric(12,2),
+    VICMSUFREMET numeric(12,2),
+    VLRFCPUFDEST numeric(12,2),
+    VLRICMSUFDEST numeric(12,2),
+    VLRICMSUFREMET numeric(12,2),
+    NFCI char(36),
+    CEST varchar(7),
+    ORIGEMPRODUTO double precision,
+    PICMSINTERESTADUAL double precision,
+    VRETPIS double precision,
+    VRETCOFINS double precision,
+    VRETCSLL double precision,
+    VBCIRRF double precision,
+    VIRRF double precision,
+    VBCRETPREV double precision,
+    VRETPREV double precision,
+    P_VALORRETIDO double precision,
+    NDRAW varchar(11),
+    CHNFEEXP varchar(44),
+    EXTIPI varchar(12),
+    GENERO integer,
+    VTOTTRIBFEDNF decimal(12,2),
+    VTOTTRIBESTNF decimal(12,2),
+    VTOTTRIBFED decimal(12,2),
+    VTOTTRIBEST decimal(12,2),
+    IBPTFONTECHAVE varchar(50),
+    TIPOCOBRANCA smallint,
+    NVE varchar(8),
+    CBENEF varchar(10),
+    INDESCALA varchar(1),
+    CNPJFAB varchar(14),
+    ICMSORIGEMFCP numeric(6,3),
+    ICMSORIGEMFCPVALOR numeric(12,2),
+    ICMSSTFCP numeric(6,3),
+    ICMSSTFCPVALOR numeric(12,2),
+    ICMSALIQUOTACF numeric(6,3),
+    ICMSALIQUOTASIMPLES numeric(6,3),
+    ICMSVALORSIMPLES numeric(12,2),
+    VFCP numeric(12,2),
+    VFCPST numeric(12,2),
+    VFCPSTRET numeric(12,2),
+    VBCFCP numeric(12,2),
+    VBCFCPST numeric(12,2),
+    VBCFCPSTRET numeric(12,2),
+    PFCP numeric(6,3),
+    PFCPST numeric(6,3),
+    PFCPSTRET numeric(6,3),
+    ICMSPART integer,
+    VIPIDEVOLITEM numeric(12,2),
+    VIPIDEVOLTOT numeric(12,2),
+    PDEVOL numeric(6,3),
+    VDESC numeric(6,3),
+    INFADFISCO blob sub_type 0,
+    PST double precision,
+    VICMSSTTOT double precision,
+    VBCSTRET numeric(13,2),
+    VICMSSUBSTITUTO numeric(13,2),
+    VICMSSTRET numeric(13,2),
+    CNPJCONTADOR varchar(14),
+    CPFCONTADOR varchar(11),
+    CPRODANP varchar(9),
+    DESCANP varchar(95),
+    PGLP double precision,
+    PGNN double precision,
+    PGNI double precision,
+    VPART numeric(13,2),
+    MENSAGEMIPI varchar(1),
+    NFENOMEFANTASIA varchar(60),
+    PNFENOMEFANTASIA char(1),
+    INDDEDUZDESON integer,
+    INDINTERMED integer,
+    IMPOSTODEVOL varchar(1),
+    QRCODEENTREGA blob sub_type 0,
+    QRCODENFCE blob sub_type 0,
+    DESCRICAOFORMAPAGAMENTO varchar(60),
+    TPAG integer,
+    VIDFATURA integer,
+    VSEQFATURA integer,
+    VBCIBSCBS decimal(12,2),
+    VDIF decimal(12,2),
+    TIBSUF decimal(12,2),
+    TIBSMUN decimal(12,2),
+    TIBS decimal(12,2),
+    TCBS decimal(12,2),
+    VNFTOT decimal(12,2),
+    CSTIBSCBS varchar(3),
+    CCLASSTRIB char(6),
+    VBC decimal(15,2),
+    PIBSUF decimal(6,2),
+    PIBSUFREDALIQ decimal(7,4),
+    PIBSUFALIQEFET decimal(7,4),
+    VIBSUF decimal(15,2),
+    PIBSMUN decimal(6,2),
+    PIBSMUNREDALIQ decimal(7,4),
+    PIBSMUNALIQEFET decimal(7,4),
+    VIBSMUN decimal(15,2),
+    VIBS decimal(15,2),
+    PCBS decimal(6,2),
+    PCBSREDALIQ decimal(7,4),
+    PCBSALIQEFET decimal(7,4),
+    VCBS decimal(15,2),
+    CSTREG varchar(3),
+    CCLASSTRIBREG char(6),
+    PALIQEFETREGIBSUF decimal(7,4),
+    VTRIBREGIBSUF decimal(15,2),
+    PALIQEFETREGIBSMUN decimal(7,4),
+    VTRIBREGIBSMUN decimal(15,2),
+    PALIQEFETREGCBS decimal(7,4),
+    VTRIBREGCBS decimal(15,2),
+    VITEM decimal(12,2),
+    ADIANTAMENTO numeric(12,2),
+    CFNAOIDENTIFICADO varchar(1),
+    QTDITENS smallint,
+    URLCHAVE varchar(85),
+    URLQRCODE varchar(600) )
+
+AS
+declare variable PDATAHOJE timestamp;
+declare variable PQTDITEM integer;
+declare variable PIDINICIAL integer;
+declare variable PIDFINAL integer;
+declare variable PCF varchar(12);
+declare variable PCODCF char(3);
+declare variable PVLRTOTAL double precision;
+declare variable PPIPI decimal(2,2);
+declare variable VDATAVENCIMENTO timestamp;
+declare variable NADICAOANTES integer;
+declare variable NSEQADICCONTAGEM integer;
+declare variable VVALORFATURA double precision;
+declare variable VVALORFATURA1 double precision;
+declare variable VLOTE varchar(4096);
+declare variable VLOTEDSC varchar(12);
+declare variable VQUANTIDADELOTE varchar(20);
+declare variable VREMONTADESCRICAO char(1);
+declare variable VLRICMSSIMPLES double precision;
+declare variable PEDIDONFEREGNUM char(1);
+declare variable ITEMCODREFNFE char(1);
+declare variable LOCALENTREGANOTA char(1);
+declare variable MENSAGEMAUXILIAR varchar(200);
+declare variable VEANNFE char(1);
+declare variable PXPED char(50);
+declare variable VVALORMERCAPLICADA double precision;
+declare variable PNOTAFISCALMAODEOBRA char(1);
+declare variable pTIPONOTA char(1);
+DECLARE variable tipocalculoipi char (1);
+DECLARE variable uuid char(36);
+DECLARE variable OBSENTREGARETIRA VARCHAR(400);
+DECLARE variable DOCUMENTOCUPOM VARCHAR(20);
+--DECLARE variable pnfenomefantasia char (1);
+
+
+begin
+  VIPIDEVOLITEM=null;
+  VIPIDEVOLTOT=0;
+  icmspart=0;
+  pFCP=0;
+  pFCPST=0;
+  pFCPSTRET=0;
+  VFCP=0;
+  VFCPST=0;
+  VFCPSTRET=0;
+  vBCFCP=0;
+  vBCFCPST=0;
+  vBCFCPSTRet=0;
+  MSGADICIONAL = '';
+  MSGCORPONOTA = '';
+  VTOTTRIBNF = 0;
+  VTOTTRIBFEDNF = 0;
+  VTOTTRIBESTNF = 0;
+  VICMSDESONERADO = null;
+  MOTDESICMS = null;
+  TPEMIS = 1;
+  PROCEMI = 0;
+  VERPROC = '0902';
+  PDATAHOJE = cast('now' as timestamp);
+  DIAHOJE = extract(day from PDATAHOJE);
+  ANOHOJE = extract(year from PDATAHOJE);
+  VDESC = 0.001;
+  
+  --NT2018.005
+  vBCSTRet = 100;
+  vICMSSubstituto = 18;
+  vICMSSTRet = 18;
+
+  MESHOJEEXTENSO = case extract(month from PDATAHOJE)
+                     when 1 then 'Janeiro'
+                     when 2 then 'Fevereiro'
+                     when 3 then 'Mar?o'
+                     when 4 then 'Abril'
+                     when 5 then 'Maio'
+                     when 6 then 'Junho'
+                     when 7 then 'Julho'
+                     when 8 then 'Agosto'
+                     when 9 then 'Setembro'
+                     when 10 then 'Outubro'
+                     when 11 then 'Novembro'
+                     when 12 then 'Dezembro'
+                   end;
+                   
+  select 
+        PEDIDONFE, 
+        PEDIDOCLINFE, 
+        VENDEDORDANFE, 
+        PEDIDONFEREGNUM, 
+        ITEMCODREFNFE, 
+        EANNFE, 
+        IBPTFONTE || ' ' || IBPTCHAVE,
+        MENSAGEMIPI,
+        NFENOMEFANTASIA
+  from 
+        CONFIGURACOESGERAIS
+  into 
+        :PEDIDONFE, :PEDIDOCLINFE, :VENDEDORDANFE, :PEDIDONFEREGNUM, :ITEMCODREFNFE, :VEANNFE, :IBPTFONTECHAVE, :MENSAGEMIPI, :PNFENOMEFANTASIA;
+
+  select CADASTROPARCEIROS.CADASTRO, CADASTROPARCEIROS.RAZAOSOCIAL, CADASTROPARCEIROS.NOME,
+         case
+           when (CADASTROPARCEIROS.DOCUMENTO <> '') and (not CADASTROPARCEIROS.DOCUMENTO is null) then case CADASTROPARCEIROS.TIPOPESSOA
+                                                                                                         when 'F' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 4 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 7 for 3) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 10 for 2) as varchar(18))
+                                                                                                         when 'J' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 2) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 3 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 6 for 3) || '/' || substring(CADASTROPARCEIROS.DOCUMENTO from 9 for 4) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 13 for 2) as varchar(18))
+                                                                                                         else null
+                                                                                                       end
+           else null end as DOCUMENTO,
+         case CADASTROPARCEIROS.INSCESTADUAL
+           when 'ISENTO' then ''
+           else CADASTROPARCEIROS.INSCESTADUAL end as INSCESTADUAL,
+         CADASTROPARCEIROS.INSCMUNICIPAL, CADASTROPARCEIROS.LOGRADOURO,
+         case coalesce(CADASTROPARCEIROS.NUMERO, 0)
+           when 0 then 'SN'
+           else CADASTROPARCEIROS.NUMERO end,
+         CADASTROPARCEIROS.COMPLEMENTO, CADASTROPARCEIROS.BAIRRO, CADASTROPARCEIROS.CIDADE, CADASTROPARCEIROS.UF,
+         substring(CADASTROPARCEIROS.CEP from 1 for 5) || '-' || substring(CADASTROPARCEIROS.CEP from 6 for 3),
+         CADASTROPARCEIROS.CEP, CADASTROPARCEIROS.TELEFONE, CADASTROPARCEIROS.TELEFONECOMERCIAL, CADASTROPARCEIROS.FAX,
+         CADASTROPARCEIROS.PRINCIPALCONTATO, CADASTROPARCEIROS.EMAIL, CADASTROPARCEIROS.WEB, ESTSIN.IDNOTAINICIAL,
+         ESTSIN.IDNOTAFINAL, USUARIO.NOMECOMPLETO, USUARIO.TELEFONE, USUARIO.FAX, USUARIO.EMAIL, USUARIO.DEPARTAMENTO,
+         USUARIO.CARGO, ESTADO.CODIGOIBGE,
+         case coalesce(PAISES.CODIGOPAIS, '1058')
+           when '1058' then 
+               case coalesce (cadastroparceiros.MUNICIPIO,'') 
+                    when '' then MUNICIPIO.UF || MUNICIPIO.MUNICIPIO
+                    else MUNICIPIO.UF || cadastroparceiros.MUNICIPIO end
+           else '9999999'
+         end,
+         ESTADO.INSCRICAOSUBSTITUTO, ESTABELECIMENTO.CNAE,
+         case CADASTROPARCEIROS.TIPOPESSOA
+           when 'J' then CADASTROPARCEIROS.DOCUMENTO
+           else ''
+         end,
+         case CADASTROPARCEIROS.TIPOPESSOA
+           when 'F' then CADASTROPARCEIROS.DOCUMENTO
+           else ''
+         end,
+         coalesce(PAISES.CODIGOPAIS, '1058'),
+         PAISES.DESCRICAOPAIS,
+         ESTABELECIMENTO.UTC,
+         ESTABELECIMENTO.TIPOCALCULOIPI,
+         estabelecimento.cnpjcontador,
+         estabelecimento.cpfcontador
+
+  from ESTSIN
+  inner join
+        CADASTROPARCEIROS
+                         on (CADASTROPARCEIROS.CADASTRO = ESTSIN.ESTABELECIMENTO)
+  inner join
+        ESTABELECIMENTO
+                       on (ESTABELECIMENTO.CADASTRO = ESTSIN.ESTABELECIMENTO)
+  left join
+       ESTADO
+             on (ESTADO.ESTADO = CADASTROPARCEIROS.UF)
+  left join
+       MUNICIPIO
+                on (MUNICIPIO.UF_SIGLA = CADASTROPARCEIROS.UF and
+        upper(MUNICIPIO.MUNICIPIO_NOME) = upper(CADASTROPARCEIROS.CIDADE))
+  left join
+       USUARIO
+              on (USUARIO.USUARIO = ESTSIN.USUARIO)
+  left join
+       PAISES
+             on (CADASTROPARCEIROS.CODIGOPAIS = PAISES.CODIGOPAIS)
+  where
+       ESTSIN.RELATORIO = :RELATORIO
+  into FILIAL, RAZAOFILIAL, NOMEFILIAL, DOCUMENTOFILIAL, INSCESTADUALFILIAL, INSCMUNICIPALFILIAL,
+       LOGRADOUROFILIAL, NUMEROFILIAL, COMPLEMENTOFILIAL, BAIRROFILIAL, CIDADEFILIAL, UFFILIAL, CEPFILIAL, NCEP,
+       TELEFONEFILIAL, TELEFONECOMERCIALFILIAL, FAXFILIAL, PRINCIPALCONTATOFILIAL, EMAILFILIAL, WEBFILIAL,
+       PIDINICIAL, PIDFINAL, NOMEUSUARIO, TELEFONEUSUARIO, FAXUSUARIO, EMAILUSUARIO, DEPARTAMENTOUSUARIO,
+       CARGOUSUARIO, CUFFILIAL, CMUNICIPIOFILIAL, INSCSUBSTITUTAFILIAL, CNAEFILIAL, CNPJFILIAL, CPFFILIAL,
+       CODIGOPAISFILIAL, PAISFILIAL, S_UTC, :tipocalculoipi, :cnpjcontador, :cpfcontador;
+
+  for select
+             NOTAFISCAL.IDNOTA,
+             NOTAFISCAL.NUMERONOTA,
+             NOTAFISCAL.DATAHORAEMISSAO,
+             NOTAFISCAL.DATACADASTRO,
+             NOTAFISCAL.DESTINATARIO,
+             NOTAFISCAL.DEVOLUCAO,
+             CADASTROPARCEIROS.RAZAOSOCIAL,
+             CADASTROPARCEIROS.NOME,
+             CADASTROPARCEIROS.LOGRADOURO,
+             case coalesce(CADASTROPARCEIROS.NUMERO, 0)
+               when 0 then 'SN'
+               else CADASTROPARCEIROS.NUMERO
+             end,
+             CADASTROPARCEIROS.COMPLEMENTO, CADASTROPARCEIROS.BAIRRO, CADASTROPARCEIROS.CIDADE, CADASTROPARCEIROS.UF,
+             substring(CADASTROPARCEIROS.CEP from 1 for 5) || '-' || substring(CADASTROPARCEIROS.CEP from 6 for 3),
+             CADASTROPARCEIROS.CEP,
+             case
+               when (CADASTROPARCEIROS.DOCUMENTO <> '') and (not CADASTROPARCEIROS.DOCUMENTO is null) then case CADASTROPARCEIROS.TIPOPESSOA
+                                                                                                             when 'F' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 4 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 7 for 3) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 10 for 2) as varchar(18))
+                                                                                                             when 'J' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 2) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 3 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 6 for 3) || '/' || substring(CADASTROPARCEIROS.DOCUMENTO from 9 for 4) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 13 for 2) as varchar(18))
+                                                                                                             else null
+                                                                                                           end
+               else null
+             end as DOCUMENTO,
+             case CADASTROPARCEIROS.TIPOPESSOA
+               when 'J' then CADASTROPARCEIROS.INSCESTADUAL
+               else case CADASTROPARCEIROS.CONTRIBUINTE
+                      when 'S' then CADASTROPARCEIROS.INSCESTADUAL
+                      else ''
+                    end
+             end,
+             CADASTROPARCEIROS.INSCMUNICIPAL,
+             case
+               when coalesce(NOTAFISCAL.EMAIL, '') <> '' then NOTAFISCAL.EMAIL
+               else CADASTROPARCEIROS.EMAIL
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.TELEFONE
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.TELEFONECOMERCIAL
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.CELULAR
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.FAX
+               else ''
+             end,
+             case
+               when coalesce(NOTAFISCAL.CONTATO, '') <> '' then NOTAFISCAL.CONTATO
+               else CADASTROPARCEIROS.PRINCIPALCONTATO
+             end,
+             NOTAFISCAL.LOGRADOUROENTREGA,
+             case coalesce(NOTAFISCAL.NUMEROENTREGA, 0)
+               when 0 then 'SN'
+               else NOTAFISCAL.NUMEROENTREGA
+             end,
+             NOTAFISCAL.COMPLEMENTOENTREGA,
+             NOTAFISCAL.BAIRROENTREGA,
+             NOTAFISCAL.CIDADEENTREGA,
+             NOTAFISCAL.UFENTREGA,
+             substring(NOTAFISCAL.CEPENTREGA from 1 for 5) || '-' || substring(NOTAFISCAL.CEPENTREGA from 6 for 3),
+             NOTAFISCAL.OBSENTREGARETIRA,
+             NOTAFISCAL.CEPENTREGA,
+             
+             USUARIO.NOMECOMPLETO,
+             USUARIO.TELEFONE,
+             USUARIO.FAX,
+             USUARIO.EMAIL,
+             USUARIO.DEPARTAMENTO,
+             USUARIO.CARGO,
+             NOTAFISCAL.CFOP,
+             NOTAFISCAL.NATUREZAOPERACAO,
+             TIPOCOBRANCA.DESCRICAO,
+             CONDICAOPAGAMENTO.DESCRICAO,
+             NOTAFISCAL.VLRDESCMERCADORIAS,
+             substring(NOTAFISCAL.MSGDESCMERCADORIAS from 1 for 120),
+             NOTAFISCAL.VLRDESCINDPRODUTO,
+             substring(NOTAFISCAL.MSGDESCPRODUTOS from 1 for 120),
+             NOTAFISCAL.VLRACRESCMERCAD,
+             substring(NOTAFISCAL.MSGACRESCMERCADORIA from 1 for 120),
+             NOTAFISCAL.VLRTOTNOTAEXTENSO,
+             NOTAFISCAL.VLRTOTALMERCADORIAS,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) in ('6', '2') and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' and NOTAFISCAL.SIMPLES = 'N' then NOTAFISCAL.ICMSORIGEMVALOR
+               else case NOTAFISCAL.ZONAFRANCA
+                      when 'S' then 0
+                      else NOTAFISCAL.icmsorigemvalor
+                    end
+             end,
+             case NOTAFISCAL.ZONAFRANCA
+               when 'N' then 0
+               else NOTAFISCAL.icmsorigemvalor
+             end,
+             NOTAFISCAL.VALORIPI,
+             NOTAFISCAL.VLRICMSRECOLHIDO,
+             NOTAFISCAL.VALORFRETE,
+             NOTAFISCAL.VALORSEGURO,
+             NOTAFISCAL.VLROUTDESPACESSORIA +
+             coalesce(NOTAFISCAL.JUROSMULTAIMPOSTOS, 0) +
+             coalesce(NOTAFISCAL.VLRTAXASISCOMEX, 0) +
+             coalesce(NOTAFISCAL.VLRACRESCMERCAD, 0) +
+             coalesce(NOTAFISCAL.VLRACRESCSERVICOS, 0) +
+             coalesce(NOTAFISCAL.VLRDESPADUANEIRAS, 0),
+             NOTAFISCAL.VLRFINALSERVICOS,
+             NOTAFISCAL.VLRTOTALNOTA,
+             NOTAFISCAL.CODIGOTRANSP,
+             NOTAFISCAL.QUANTIDADEVOLUME,
+             NOTAFISCAL.PESOLIQUIDO,
+             NOTAFISCAL.PESOBRUTO,
+             case NOTAFISCAL.ENTRADASAIDA
+               when 'E' then '0'
+               else '1'
+             end,
+             cast(NOTAFISCAL.FRETE as varchar(1)),
+             case NOTAFISCAL.FRETE
+               when '0' then 'REMETENTE'
+               when '1' then 'DESTINATARIO'
+               when '2' then 'TERCEIROS'
+               when '3' then 'REMETENTE'
+               when '4' then 'DESTINATARIO'
+               else 'SEM FRETE'
+             end as REM_DEST_DESC,
+             NOTAFISCAL.PLACAVEICULO,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) = '6' and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' and NOTAFISCAL.SIMPLES = 'N' then NOTAFISCAL.ICMSORIGEMBASE
+               else case NOTAFISCAL.ZONAFRANCA
+                      when 'S' then 0
+                      else NOTAFISCAL.TOTBASEICMS
+                    end
+             end,
+             NOTAFISCAL.VLRBASESUBSTITUTO,
+             NOTAFISCAL.DATAENTRADASAIDA,
+             --NOTAFISCAL.INSCRICAOSUBSTITUTO,
+             case (notafiscal.filial )
+                when 1 then estado.INSCRICAOSUBSTITUTO else 
+                NOTAFISCAL.INSCRICAOSUBSTITUTO end,
+             NOTAFISCAL.NUMEROVOLUME,
+             NOTAFISCAL.MARCAVOLUME,
+             NOTAFISCAL.ESPECIEVOLUME,
+             NOTAFISCAL.VLRTOTALSERVICOS,
+             NOTAFISCAL.ISS,
+             MODELODOCTO.SERIE,
+             NOTAFISCAL.CHAVE,
+             NOTAFISCAL.ALEATORIO,
+             MODELODOCTO.CODMODELOFISCAL,
+             CADASTROPARCEIROS.DOCUMENTOENTREGA,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+           when '1058' then 
+               case coalesce (cadastroparceiros.MUNICIPIO,'') 
+                    when '' then MUNICIPIO.UF || MUNICIPIO.MUNICIPIO
+                    else MUNICIPIO.UF || cadastroparceiros.MUNICIPIO end
+           else '9999999'
+         end,
+             case
+               when CADASTROPARCEIROS.TIPOEMPRESA = 'N' and CADASTROPARCEIROS.TIPOPESSOA = 'J' then CADASTROPARCEIROS.DOCUMENTO
+               else ''
+             end,
+             case
+               when CADASTROPARCEIROS.TIPOEMPRESA = 'N' and CADASTROPARCEIROS.TIPOPESSOA = 'F' then CADASTROPARCEIROS.DOCUMENTO
+               else ''
+             end,
+             case CADASTROPARCEIROS.TIPOEMPRESA
+               when 'E' then CADASTROPARCEIROS.IDESTRANGEIRO
+               else ''
+             end,
+             coalesce(NOTAFISCAL.VLRDESCMERCADORIAS, 0) + coalesce(NOTAFISCAL.VLRDESCINDPRODUTO, 0),
+             NOTAFISCAL.UFPLACAVEICULO, coalesce(PAISES.CODIGOPAIS, '1058'), PAISES.DESCRICAOPAIS, substring(extract(year from NOTAFISCAL.DATAEMISSAO) from 3 for 2) ||
+             case extract(month from NOTAFISCAL.DATAEMISSAO)
+               when 1 then '01'
+               when 2 then '02'
+               when 3 then '03'
+               when 4 then '04'
+               when 5 then '05'
+               when 6 then '06'
+               when 7 then '07'
+               when 8 then '08'
+               when 9 then '09'
+               when 10 then '10'
+               when 11 then '11'
+               when 12 then '12'
+             end,
+             substring(NOTAFISCAL.CHAVE from 44 for 1), MODELODOCTO.AMBIENTE,
+             case
+               when NOTAFISCAL.DEVOLUCAO = 'S' then 4
+               when NOTAFISCAL.TIPONOTA = 2 then 2
+               else 1
+             end,
+             NOTAFISCAL.VLRIMPOSTOIMPORT, MODELODOCTO.TIPOIMPDANFE, NOTAFISCAL.VLRPISPASEPMERC,
+             NOTAFISCAL.VLRCOFINSMERC, NOTAFISCAL.BASEPISPASEPMERC,
+             substring(NOTAFISCAL.MSGDESCRMERCADORIAS from 1 for 1000), NOTAFISCAL.MCODIGO, NOTAFISCAL.MDESCRICAO,
+             NOTAFISCAL.MCF, NOTAFISCAL.MCST, NOTAFISCAL.MCFOP, NOTAFISCAL.MUN, NOTAFISCAL.MQTD, NOTAFISCAL.MVLRUNI,
+             NOTAFISCAL.MVLRTOT, NOTAFISCAL.MBASEICMS, NOTAFISCAL.MVLRICMS, NOTAFISCAL.MVLRIPI, NOTAFISCAL.MALIQICMS,
+             NOTAFISCAL.MALIQIPI, NOTAFISCAL.MAODEOBRA as PNOTAFISCALMAODEOBRA, MODELODOCTO.REMONTARDESCRICAO,
+             NOTAFISCAL.SIMPLES, NOTAFISCAL.ALIQUOTASIMPLES, NOTAFISCAL.CRT, MODELODOCTO.FORMAEMISSAONFE,
+             MODELODOCTO.LOCALENTREGANOTA, NFECTRL.AMBIENTE,
+             case coalesce(NFECTRL.PROTOCOLO, ' ')
+               when ' ' then null
+               else NFECTRL.ENVIO
+             end,
+             case coalesce(NOTAFISCAL.CANCELAMENTO, ' ')
+               when ' ' then null
+               else NOTAFISCAL.CANCELAMENTO
+             end,
+             case
+               when NOTAFISCAL.ENTRADASAIDA = 'S' and NOTAFISCAL.DEVOLUCAO = 'N' then 'S'
+               else 'N'
+             end,
+             NOTAFISCAL.VTOTTRIB,
+             case NOTAFISCAL.TIPONOTA
+               when 3 then 1
+               when 2 then case CADASTROPARCEIROS.CONTRIBUINTE
+                             when 'N' then 1
+                             else 0
+                           end
+               else 0
+             end,
+             NOTAFISCAL.INDPRES,
+             case CADASTROPARCEIROS.CONTRIBUINTE
+               when 'N' then '9'
+               when 'S' then case CADASTROPARCEIROS.INSCESTADUAL
+                               when 'ISENTO' then 2
+                               else 1
+                             end
+             end,
+             NOTAFISCAL.XLOCDESEMB, NOTAFISCAL.XLOCDESPACHO,
+             case substring(NOTAFISCAL.CFOP from 1 for 1)
+               when '7' then NOTAFISCAL.UFDI
+               else ''
+             end,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) in ('6', '2') and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' then 'S'
+               else 'N'
+             end as NCONTRIBUINTEINTER,
+             coalesce(NOTAFISCAL.ICMSDESTINOFCP, 0), coalesce(NOTAFISCAL.ICMSDESTINOVALOR, 0),
+             coalesce(NOTAFISCAL.ICMSORIGEMVALORINTERESTADUAL, 0), coalesce(NOTAFISCAL.ICMSDESTINOPARTILHA, 0),
+             coalesce(NOTAFISCAL.VALORRETIDOPIS, 0), coalesce(NOTAFISCAL.VALORRETIDOCOFINS, 0),
+             coalesce(NOTAFISCAL.VALORRETIDOCSLL, 0), coalesce(NOTAFISCAL.BASERETENCAOIRRF, 0),
+             coalesce(NOTAFISCAL.VALORRETENCAOIRRF, 0), coalesce(NOTAFISCAL.BASERETENCAOPREVSOCIAL, 0),
+             coalesce(NOTAFISCAL.VALORRETENCAOPREVSOCIAL, 0), NOTAFISCAL.NDRAW, NOTAFISCAL.CHNFEEXPORTACAO,
+             NOTAFISCAL.VTOTTRIBFED, NOTAFISCAL.VTOTTRIBEST, NOTAFISCAL.TIPOCOBRANCA, NOTAFISCAL.VFCP,
+             NOTAFISCAL.VFCPST, NOTAFISCAL.VFCPSTRET, notafiscal.tiponota,         
+             notafiscal.INFADFISCO,
+             CASE (:PNFENOMEFANTASIA)
+                WHEN 'S' THEN CADASTROPARCEIROS.NOME
+                ELSE ''
+             END AS nfenomefantasia,
+             NATUREZAOPERACAO.MOTDESICMS,
+             NOTAFISCAL.UUID,
+             TIPOCOBRANCA.TPAG,
+             NOTAFISCAL.vBCIBSCBS,
+             NOTAFISCAL.vDif ,
+             NOTAFISCAL.vIBSUF ,
+             NOTAFISCAL.vIBSMun ,
+             NOTAFISCAL.vIBS ,
+             NOTAFISCAL.vCBS,
+             NOTAFISCAL.vNFTot,
+             notafiscal.vBrutoFatura,
+             notafiscal.vLiquidoFatura,
+             (COALESCE (notafiscal.vDescFatura,0)+ COALESCE (notafiscal.adiantamento,0)),
+             notafiscal.adiantamento,
+             coalesce(cadastroparceiros.cfNaoIdentificado,'N') as cfNaoIdentificado,
+             NOTAFISCAL.DOCUMENTOCUPOM
+
+             
+      from NOTAFISCAL
+      inner join 
+            ESTABELECIMENTO on 
+                (NOTAFISCAL.FILIAL = ESTABELECIMENTO.CADASTRO)
+      inner join 
+            CADASTROPARCEIROS on 
+                (NOTAFISCAL.DESTINATARIO = CADASTROPARCEIROS.CADASTRO)
+      inner join 
+            MODELODOCTO on 
+                (MODELODOCTO.ID = NOTAFISCAL.MODELO)      
+      inner join 
+            NATUREZAOPERACAO on 
+                (NATUREZAOPERACAO.ID = NOTAFISCAL.OPERACAO)
+      inner join 
+            estado on 
+                (estado.estado=notafiscal.uf)
+                
+      left join NFECTRL on 
+                    (NFECTRL.IDNOTA = NOTAFISCAL.IDNOTA and
+                    NFECTRL.FILIAL = NOTAFISCAL.FILIAL)
+      left join 
+            TIPOCOBRANCA on 
+                (TIPOCOBRANCA.TIPOCOBRANCA = NOTAFISCAL.TIPOCOBRANCA)
+      left join 
+            CONDICAOPAGAMENTO on (
+                CONDICAOPAGAMENTO.ID = NOTAFISCAL.CONDICAOPAGAMENTO)
+      left join 
+            USUARIO on 
+                (NOTAFISCAL.USUARIOEMISSAO = USUARIO.USUARIO)
+      left join 
+            MUNICIPIO on 
+                (MUNICIPIO.UF_SIGLA = CADASTROPARCEIROS.UF and
+                upper(MUNICIPIO.MUNICIPIO_NOME) = upper(CADASTROPARCEIROS.CIDADE))
+      left join 
+            PAISES on (PAISES.CODIGOPAIS = CADASTROPARCEIROS.CODIGOPAIS)
+      where NOTAFISCAL.FILIAL = :FILIAL and
+            NOTAFISCAL.IDNOTA between :PIDINICIAL and :PIDFINAL
+      into IDNOTA, NUMERONOTA, DATAEMISSAO, DATACADASTRO, DESTINATARIO, DEVOLUCAO, RAZAO, NOME, LOGRADOURO,
+           NUMERO, COMPLEMENTO, BAIRRO, CIDADE, UF, CEP, NCEP, DOCUMENTO, INSCESTADUAL, INSCMUNICIPAL, EMAIL,
+           TELEFONE, TELEFONECOMERCIAL, CELULAR, FAX, PRINCIPALCONTATO, LOGRADOUROENTREGA, NUMEROENTREGA,
+           COMPLEMENTOENTREGA, BAIRROENTREGA, CIDADEENTREGA, UFENTREGA, CEPENTREGA, OBSENTREGARETIRA, NCEPENTREGA,
+           NOMEUSUARIOAPROVACAO, TELEFONEUSUARIOAPROVACAO, FAXUSUARIOAPROVACAO, EMAILUSUARIOAPROVACAO,
+           DEPARTAMENTOUSUARIOAPROVACAO, CARGOUSUARIOAPROVACAO, CFOP, NATUREZAOPERACAO, TIPOPAGTO, CONDICAOPAGTO,
+           VLRDESCONTO, MSGDESCMERCADORIAS, VLRDESCINDPRODUTO, MSGDESCPRODUTOS, VLRACRESCIMO, MSGACRESCMERCADORIA,
+           VLRTOTNOTAEXTENSO, VLRMERCADORIAS, VLRICMS, VLRZONAFRANCA, VLRIPITOTAL, VLRSUBSTRIB, VLRFRETE,
+           VLRSEGURO, VLRDESPESAS, VLRSERVICO, VLRTOTANOTA, CODTRANSP, QTDEVOLUME, PESOLIQUIDO, PESOBRUTO,
+           ENTRADA_SAIDA, REM_DEST, REM_DEST_DESC, PLACAVEICULO, TOTBASEICMS, VLRBASESUBSTITUTO,
+           DATAENTRADASAIDA, INSCRICAOSUBSTITUTO, NUMEROVOLUME, MARCAVOLUME, ESPECIEVOLUME, VLRTOTALSERVICOS,
+           ISS, SERIE, CHAVE, ALEATORIO, MODELO, CNPJENTREGA, CCIDADE, CNPJ, CPF, IDESTRANGEIRO,
+           DESCONTOTOTAL, UFPLACAVEICULO, CODIGOPAIS, PAIS, AAMM, CDV, TPAMB, FINNFE, VII, TPIMP, PISNOTA,
+           COFINSNOTA, BASEPISCOFINSNOTA, MSGDESCRMERCADORIAS, MCODIGO, MDESCRICAO, MCF, MCST, MCFOP, MUN,
+           MQTD, MVLRUNI, MVLRTOT, MBASEICMS, MVLRICMS, MVLRIPI, MALIQICMS, MALIQIPI, PNOTAFISCALMAODEOBRA,
+           VREMONTADESCRICAO, SIMPLES, ALIQUOTASIMPLES, CRT, TPEMIS, LOCALENTREGANOTA, AMBIENTE, DATAENVIO,
+           CANCELAMENTO, APRESENTARTRIBUTOCONSUMIDOR, VTOTTRIBNF, INDFINAL, INDPRES, INDIEDEST, XLOCDESEMB,
+           XLOCDESPACHO, UFSAIDAPAIS, NCONTRIBUINTEINTER, VLRFCPUFDEST, VLRICMSUFDEST, VLRICMSUFREMET,
+           PICMSINTERPART, VRETPIS, VRETCOFINS, VRETCSLL, VBCIRRF, VIRRF, VBCRETPREV, VRETPREV, NDRAW,
+           CHNFEEXP, VTOTTRIBFEDNF, VTOTTRIBESTNF, TIPOCOBRANCA, VFCP, VFCPST, VFCPSTRET, PTIPONOTA,
+           INFADFISCO, nfenomefantasiA, MOTDESICMS, UUID, tpag,           
+           :vBCIBSCBS , :vDif ,:TIBSUF ,:TIBSMun ,:TIBS ,:tCBS , :vNFTot,         
+           :VLRTOTALFATURA ,:VLRLIQFATURA, :vdesc, :adiantamento, :cfNaoIdentificado , DOCUMENTOCUPOM
+          
+  do
+  begin
+     
+     
+     
+    select 
+        CAST (QRCODE AS blob sub_type 0)  
+    FROM 
+        QRCODEENTREGA
+    where
+        QRCODEENTREGA.UUIDnfe = :UUID
+    INTO    
+        :QRCODEENTREGA;
+        
+     
+    select 
+        CAST (qrcodenfce.QRCODEIMAGEM AS blob sub_type 0) , 
+        qrcodenfce.urlchave,
+        qrcodenfce.QRCODETEXTO 
+    FROM 
+        qrcodenfce
+    where
+        qrcodenfce.UUIDnfe = :UUID
+    INTO    
+        :qrcodenfce, :urlchave, :urlqrcode;        
+        
+  --  qrcodenfce = QRCODEENTREGA;    
+    
+    if (cfNaoIdentificado='S') then begin
+    
+        RAZAO=null;
+        NOME= null;
+        LOGRADOURO=null;
+        NUMERO=null;
+        COMPLEMENTO=null;
+        BAIRRO=null;
+        CIDADE=null;
+        UF= null;
+        CEP=null;
+        NCEP= null;
+        DOCUMENTO = null;
+        CPF=NULL;
+        CNPJ=NULL;
+        INSCESTADUAL=null;
+        INSCMUNICIPAL=null;
+        EMAIL=null;
+        TELEFONE=null;  
+    end
+    
+    if (documentocupom is not null) then
+         cpf=documentocupom;
+     descricaoformapagamento = tipopagto;
+     IF ((:indPres =  2) OR 
+        (:indPres =  3) OR 
+        (:indPres =  4) OR
+        (:indPres =  9))
+        THEN indIntermed = 0;
+        ELSE indIntermed = NULL;
+    
+  
+    select MSGADICIONAL
+    from IMP_NFE_MENSAGEMDADOSADICIONAIS(:FILIAL, :IDNOTA)
+    into :MSGADICIONAL;
+    if (substring(:CFOP from 1 for 1) = '7') then
+      VTOTTRIBFEDNF = 0;
+    VTOTTRIBESTNF = 0;
+
+    if (VLRTOTANOTA > 0) then
+      PTOTTRIBUTO = cast(VTOTTRIBNF / VLRTOTANOTA * 100 as decimal(12,2));
+
+    if (TPEMIS <> 1) then
+    begin
+      DHCONT = cast('now' as timestamp);
+      XJUST = 'NOTA FISCAL EM CONTINGENCIA';
+    end
+
+    select PROTOCOLO
+    from NFECTRL
+    where FILIAL = :FILIAL and
+          IDNOTA = :IDNOTA
+    into PROTOCOLO;
+
+    if (substring(cast(CFOP as varchar(4)) from 1 for 1) = '7') then
+      EXPORTACAO = 'S';
+    else
+      EXPORTACAO = 'N';
+
+    if (substring(cast(CFOP as varchar(4)) from 1 for 1) in ('3', '7')) then
+      IDDEST = 3;
+    if (substring(cast(CFOP as varchar(4)) from 1 for 1) in ('2', '6')) then
+      IDDEST = 2;
+    if (substring(cast(CFOP as varchar(4)) from 1 for 1) in ('1', '5')) then
+      IDDEST = 1;
+
+    if (IDDEST = 2 and
+        INDIEDEST = 9 and
+        FINNFE = 2) then
+      INDFINAL = 1;
+
+    if (VLRZONAFRANCA > 0) then
+    begin
+      DESCONTOTOTAL = DESCONTOTOTAL /*+ VLRZONAFRANCA*/;
+      
+    end
+
+    MENSAGEMAUXILIAR = '';
+
+
+    if (MENSAGEMIPI='S') then 
+    begin     
+          MSGADICIONAL = MSGADICIONAL || '
+';
+          MSGADICIONAL = MSGADICIONAL || 'Reducao do IPI conforme Decreto 11.055/2022.';
+    end 
+
+    if (PEDIDONFE = 'S') then
+    begin
+
+      if (PEDIDONFEREGNUM = 'S') then
+      begin
+        for select distinct IDPEDIDO
+            from MERCADORIASNOTA
+            where FILIAL = :FILIAL and
+                  IDNOTA = :IDNOTA
+            into :IDPEDIDO
+        do
+        begin
+          MENSAGEMAUXILIAR = MENSAGEMAUXILIAR || ' ' || coalesce(IDPEDIDO, '');
+        end
+        if (MENSAGEMAUXILIAR <> '') then
+        begin
+          MSGADICIONAL = MSGADICIONAL || '
+';
+          MSGADICIONAL = MSGADICIONAL || 'PEDIDO N. ' || coalesce(MENSAGEMAUXILIAR, '' || ' ');
+        end
+      end
+      else
+      begin
+        for select distinct PEDIDO.NUMERONOTA
+            from MERCADORIASNOTA
+            inner join PEDIDO on (PEDIDO.FILIAL = MERCADORIASNOTA.FILIAL and
+                  PEDIDO.IDNOTA = MERCADORIASNOTA.IDPEDIDO)
+            where MERCADORIASNOTA.FILIAL = :FILIAL and
+                  MERCADORIASNOTA.IDNOTA = :IDNOTA
+            into :NUMEROPEDIDO
+        do
+        begin
+          MENSAGEMAUXILIAR = MENSAGEMAUXILIAR || ' ' || coalesce(NUMEROPEDIDO, '') ;
+        end
+        if (MENSAGEMAUXILIAR <> '') then
+        begin
+          MENSAGEMAUXILIAR = MENSAGEMAUXILIAR || '
+';
+          MSGADICIONAL = MSGADICIONAL || ' PEDIDO N. ' || coalesce(MENSAGEMAUXILIAR, '' || ' ');
+        end
+      end
+    end
+ 
+  
+    MENSAGEMAUXILIAR = '';
+    
+
+
+    if (PEDIDOCLINFE = 'S') then
+    begin
+      for select distinct cast(NUMPEDIDOCLIENTE as varchar(50))
+          from MERCADORIASNOTA
+          inner join PEDIDO on (PEDIDO.FILIAL = MERCADORIASNOTA.FILIAL and
+                PEDIDO.IDNOTA = MERCADORIASNOTA.IDPEDIDO)
+          where MERCADORIASNOTA.FILIAL = :FILIAL and
+                MERCADORIASNOTA.IDNOTA = :IDNOTA
+          into :NUMEROPEDIDOCLIENTE
+      do
+      begin
+        MENSAGEMAUXILIAR = MENSAGEMAUXILIAR || ' ' || coalesce(NUMEROPEDIDOCLIENTE, '');
+      end
+      if (MENSAGEMAUXILIAR <> '') then
+        MSGADICIONAL = MSGADICIONAL || ' PEDIDO DO CLIENTE N. ' || coalesce(MENSAGEMAUXILIAR, 0);
+    end
+    
+    
+
+    if (:pNFENOMEFANTASIA='S') then
+        MSGADICIONAL =  MSGADICIONAL ||'
+NOME FANTASIA: **'|| :NFENOMEFANTASIA||'**
+';
+        
+        
+
+    if (:SIMPLES = 'S' and
+        DEVOLUCAO = 'N') then
+    begin
+
+      if (coalesce(MSGADICIONAL, '') = '') then
+        MSGADICIONAL = '';
+      else
+        MSGADICIONAL = MSGADICIONAL || '
+';
+      MSGADICIONAL = MSGADICIONAL || '"Documento emitido por ME ou EPP optante pelo simples nacional, conforme LC 123/2006"."Nao gera direito a credito fiscal de IPI".
+';
+
+
+      select sum(
+             case
+               when (coalesce(MERCADORIASNOTA.VLRICMSRECOLHIDO, 0) = 0 and NOTAFISCAL.TIPONOTA <> '3') or (substring(MERCADORIASNOTA.CFOP from 1 for 1) <> 3 and NOTAFISCAL.TIPONOTA <> '3') then MERCADORIASNOTA.VALORICMS
+               else 0
+             end),
+             sum(
+             case
+               when (coalesce(MERCADORIASNOTA.VLRICMSRECOLHIDO, 0) > 0) or (substring(MERCADORIASNOTA.CFOP from 1 for 1) = 3) then MERCADORIASNOTA.VALORICMS
+               else 0
+             end),
+             sum(
+             case
+               when (coalesce(MERCADORIASNOTA.VLRICMSRECOLHIDO, 0) > 0) or (substring(MERCADORIASNOTA.CFOP from 1 for 1) = 3) then MERCADORIASNOTA.ICMSBASE
+               else 0
+             end)
+      from MERCADORIASNOTA
+      inner join NOTAFISCAL on (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL and
+            NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+      where MERCADORIASNOTA.FILIAL = :FILIAL and
+            MERCADORIASNOTA.IDNOTA = :IDNOTA
+      into :VLRICMSSIMPLES, :VLRICMS, :TOTBASEICMS;
+
+      if (VLRICMSSIMPLES > 0 and
+          (substring(CFOP from 1 for 1) <> 3)) then
+      begin
+        MSGADICIONAL = MSGADICIONAL || '"Permite o aproveitamento do credito de ICMS no valor de R$ ' || cast(VLRICMSSIMPLES as decimal(8,2)) || ', correspondente a aliquota de ' || cast(ALIQUOTASIMPLES as decimal(3,2)) || ' %, nos termos do art. 23 da LC 123/2006".
+';
+      end
+    end
+
+   if (:VLRZONAFRANCA > 0 ) then
+      MSGADICIONAL=coalesce (MSGADICIONAL,'')||'Desconto concedido por '|| :NATUREZAOPERACAO ||' no valor de: R$'|| cast (vlrzonafranca AS numeric (9,2));
+
+    if (PNOTAFISCALMAODEOBRA = 'S') then
+    begin
+      select sum(coalesce(ICMSBASE, 0)), sum((coalesce(VLRTOTALMERCAD, 0))) - (sum(coalesce(ICMSBASE, 0)))
+      from MERCADORIASNOTA
+      where FILIAL = :FILIAL and
+            IDNOTA = :IDNOTA and
+            CFOP not in ('5902', '5925', '5903', '6902', '6925', '6903')
+      into :VVALORMERCAPLICADA, :VVALORMAOOBRA;
+
+      if (VVALORMAOOBRA > 0) then
+      begin
+        if (MSGADICIONAL is null) then
+          MSGADICIONAL = '';
+        else
+          MSGADICIONAL = MSGADICIONAL || '
+';
+        MSGADICIONAL = MSGADICIONAL || '1) MATERIAL APLICADO R$ ' || cast(VVALORMERCAPLICADA as decimal(8,2)) || '
+';
+        MSGADICIONAL = MSGADICIONAL || '2) MAO DE OBRA R$ ' || cast(VVALORMAOOBRA as decimal(8,2));
+      end
+    end
+
+    CHAVEXML = 'NFe' || CHAVE;
+    CHAVEFORMATADA = substring(CHAVE from 1 for 2) || '.' || substring(CHAVE from 3 for 4) || '.' || substring(CHAVE from 7 for 2) || '.' || substring(CHAVE from 9 for 3) || '.' || substring(CHAVE from 12 for 3) || '/' || substring(CHAVE from 15 for 4) || '-' || substring(CHAVE from 19 for 2) || '-' || substring(CHAVE from 21 for 2) || '-' || substring(CHAVE from 23 for 3) || '-' || substring(CHAVE from 26 for 3) || '.' || substring(CHAVE from 29 for 3) || '.' || substring(CHAVE from 32 for 3) || '-' || substring(CHAVE from 35 for 3) || '.' || substring(CHAVE from 38 for 3) || '.' || substring(CHAVE from 41 for 3) || '-' || substring(CHAVE from 44 for 1);
+
+    INDICADORPAGAMENTO = 2;
+    VSEQFATURA = 1;
+    IDFATURA1 = null; VENCIMENTO1 = null; VALORFATURA1 = null;
+    IDFATURA2 = null; VENCIMENTO2 = null; VALORFATURA2 = null;
+    IDFATURA3 = null; VENCIMENTO3 = null; VALORFATURA3 = null;
+    IDFATURA4 = null; VENCIMENTO4 = null; VALORFATURA4 = null;
+    IDFATURA5 = null; VENCIMENTO5 = null; VALORFATURA5 = null;
+    IDFATURA6 = null; VENCIMENTO6 = null; VALORFATURA6 = null;
+    IDFATURA7 = null; VENCIMENTO7 = null; VALORFATURA7 = null;
+    IDFATURA8 = null; VENCIMENTO8 = null; VALORFATURA8 = null;
+    DESCRICAODESDOBRAMENTO = null;
+
+    select count(IDFATURA)
+    from FATURAS
+    where FILIAL = :FILIAL and
+          IDNOTA = :IDNOTA
+    into :VIDFATURA;
+    if (VIDFATURA = 1) then
+    begin
+      select DATAVENCIMENTO, VALORFATURA
+      from FATURAS
+      where FILIAL = :FILIAL and
+            IDNOTA = :IDNOTA
+      into :VDATAVENCIMENTO, :VVALORFATURA1;
+      if (cast (:VDATAVENCIMENTO as date) = cast (:DATAEMISSAO as date)) then
+      begin
+        INDICADORPAGAMENTO = 0;
+        DESCRICAODESDOBRAMENTO = :CONDICAOPAGTO;
+      end
+      else
+      begin
+        INDICADORPAGAMENTO = 1;
+        IDFATURA1 = VSEQFATURA;
+        VENCIMENTO1 = VDATAVENCIMENTO;
+        VALORFATURA1 = VVALORFATURA1;
+      end
+    end
+    else
+    begin
+      if (VIDFATURA > 1) then begin
+        INDICADORPAGAMENTO = 1;
+        for select IDFATURA, DATAVENCIMENTO, VALORFATURA
+            from FATURAS
+            where FILIAL = :FILIAL and
+                  IDNOTA = :IDNOTA
+            order by DATAVENCIMENTO
+            into :VIDFATURA, :VDATAVENCIMENTO, :VVALORFATURA
+        do begin
+          if (VSEQFATURA = 1) then
+          begin
+            IDFATURA1 = VSEQFATURA; VENCIMENTO1 = VDATAVENCIMENTO;VALORFATURA1 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 2) then
+          begin
+            IDFATURA2 = VSEQFATURA;VENCIMENTO2 = VDATAVENCIMENTO;VALORFATURA2 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 3) then
+          begin
+            IDFATURA3 = VSEQFATURA;VENCIMENTO3 = VDATAVENCIMENTO;VALORFATURA3 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 4) then
+          begin
+            IDFATURA4 = VSEQFATURA;VENCIMENTO4 = VDATAVENCIMENTO;VALORFATURA4 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 5) then
+          begin
+            IDFATURA5 = VSEQFATURA;VENCIMENTO5 = VDATAVENCIMENTO;VALORFATURA5 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 6) then
+          begin
+            IDFATURA6 = VSEQFATURA;VENCIMENTO6 = VDATAVENCIMENTO;VALORFATURA6 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 7) then
+          begin
+            IDFATURA7 = VSEQFATURA;VENCIMENTO7 = VDATAVENCIMENTO;VALORFATURA7 = VVALORFATURA;
+          end
+          if (VSEQFATURA = 8) then
+          begin
+            IDFATURA8 = VSEQFATURA;VENCIMENTO8 = VDATAVENCIMENTO;VALORFATURA8 = VVALORFATURA;
+          end
+          VSEQFATURA = VSEQFATURA + 1;
+        end
+      end
+    end
+
+    numerofatura = null;
+
+
+    if (INDICADORPAGAMENTO <> 2) then
+    begin
+      NUMEROFATURA = NUMERONOTA;
+
+/*
+      select SUM (VALORFATURA)
+      from FATURAS
+      where FILIAL = :FILIAL and
+            IDNOTA = :IDNOTA
+      INTO :VLRTOTALFATURA;
+
+      select SUM (VALORFATURA)
+      from FATURAS
+      where FILIAL = :FILIAL and
+            IDNOTA = :IDNOTA
+      INTO :VLRLIQFATURA;
+      */
+    end
+    
+    LOCALENTREGA = '';
+    if (coalesce(:LOGRADOUROENTREGA, '') <> '') then
+        LOCALENTREGA = coalesce(LOGRADOUROENTREGA, '') || ', ' || coalesce(NUMEROENTREGA, '') || ' ' || coalesce(COMPLEMENTOENTREGA, '') || ' ' || coalesce(BAIRROENTREGA, '') || ' ' || coalesce(CIDADEENTREGA, '') || ' ' || coalesce(UFENTREGA, '') || ' ' || coalesce(CEPENTREGA, '');
+    if (coalesce(:OBSENTREGARETIRA, '') <> '') then
+        localentrega = localentrega||' OBS: '|| :obsEntregaRetira;
+    
+    if (coalesce(:localentrega, '') <> '') then
+    begin
+      LOCALENTREGA = 'LOCAL DE ENTREGA: ' || LOCALENTREGA;
+
+      if (LOCALENTREGANOTA = 'N') then
+      begin
+        MSGADICIONAL = MSGADICIONAL || '
+';
+        MSGADICIONAL = MSGADICIONAL || LOCALENTREGA;
+        LOCALENTREGA = null;
+      end
+    end
+    select LOGRADOUROCOBRANCA,
+           case coalesce(NUMEROCOBRANCA, 0)
+             when 0 then 'SN'
+             else NUMEROCOBRANCA
+           end,
+           COMPLEMENTOCOBRANCA,
+           BAIRROCOBRANCA,
+           CIDADECOBRANCA,
+           UFCOBRANCA,
+           substring(CEPCOBRANCA from 1 for 5) || '-' || substring(CEPCOBRANCA from 6 for 3),
+           CEPCOBRANCA, INSCSUFRAMA
+    from CLIENTES
+    where CADASTRO = :DESTINATARIO
+    into :LOGRADOUROCOBRANCA, :NUMEROCOBRANCA, :COMPLEMENTOCOBRANCA, :BAIRROCOBRANCA, :CIDADECOBRANCA, :UFCOBRANCA,
+         :CEPCOBRANCA, :NCEPCOBRANCA, :INSCSUFRAMA;
+    if (coalesce(:LOGRADOUROCOBRANCA, '') = '') then
+    begin
+      LOCALCOBRANCA = 'O MESMO';
+      LOGRADOUROCOBRANCA = LOGRADOURO;
+      NUMEROCOBRANCA = NUMERO;
+      COMPLEMENTOCOBRANCA = COMPLEMENTO;
+      BAIRROCOBRANCA = BAIRRO;
+      CIDADECOBRANCA = CIDADE;
+      UFCOBRANCA = UF;
+      CEPCOBRANCA = CEP;
+    end
+    else
+      LOCALCOBRANCA = LOGRADOUROCOBRANCA || ', ' || NUMEROCOBRANCA || ' ' || coalesce(COMPLEMENTOCOBRANCA, '') || ' ' || BAIRROCOBRANCA || ' ' || CIDADECOBRANCA || ' ' || UFCOBRANCA || ' ' || CEPCOBRANCA;
+
+    select first 1 VENDEDORESPED.VENDEDOR, CADASTROPARCEIROS.RAZAOSOCIAL, CADASTROPARCEIROS.NOME,
+                   CADASTROPARCEIROS.TELEFONE, CADASTROPARCEIROS.CELULAR, CADASTROPARCEIROS.TELEFONECOMERCIAL,
+                   CADASTROPARCEIROS.FAX, CADASTROPARCEIROS.EMAIL
+    from VENDEDORESNOTA VENDEDORESPED
+    inner join CADASTROPARCEIROS on (CADASTROPARCEIROS.CADASTRO = VENDEDORESPED.VENDEDOR)
+    where VENDEDORESPED.FILIAL = :FILIAL and VENDEDORESPED.IDNOTA = :IDNOTA
+    into :VENDEDOR, :RAZAOVENDEDOR, :NOMEVENDEDOR, :TELEFONEVENDEDOR, :CELULARVENDEDOR, :TELEFONECOMERCIALVENDEDOR,
+         :FAXVENDEDOR, :EMAILVENDEDOR;
+
+    if (VENDEDORDANFE = 'S') then
+      if (coalesce(VENDEDOR, '') <> '') then
+        if (coalesce(NOMEVENDEDOR, '') <> '') then
+          MSGADICIONAL = 'Vendedor : (' || VENDEDOR || ') ' || NOMEVENDEDOR || '
+' || MSGADICIONAL;
+
+    select USUARIO.NOMECOMPLETO, USUARIO.TELEFONE, USUARIO.FAX, USUARIO.EMAIL, USUARIO.DEPARTAMENTO, USUARIO.CARGO
+    from VENDEDOR
+    inner join USUARIO on (VENDEDOR.USUARIORELACIONADO = USUARIO.ID)
+    where VENDEDOR.CADASTRO = :VENDEDOR
+    into :NOMEUSUARIOAPROVACAO, :TELEFONEUSUARIOAPROVACAO, :FAXUSUARIOAPROVACAO, :EMAILUSUARIOAPROVACAO,
+         :DEPARTAMENTOUSUARIOAPROVACAO, :CARGOUSUARIOAPROVACAO;
+
+    select CADASTROPARCEIROS.NOME, CADASTROPARCEIROS.RAZAOSOCIAL, CADASTROPARCEIROS.TELEFONE,
+           CADASTROPARCEIROS.TELEFONECOMERCIAL, CADASTROPARCEIROS.CELULAR, CADASTROPARCEIROS.EMAIL,
+           CADASTROPARCEIROS.PRINCIPALCONTATO, CADASTROPARCEIROS.LOGRADOURO,
+           case coalesce(CADASTROPARCEIROS.NUMERO, 0)
+             when 0 then 'SN'
+             else CADASTROPARCEIROS.NUMERO
+           end,
+           CADASTROPARCEIROS.COMPLEMENTO, CADASTROPARCEIROS.BAIRRO, CADASTROPARCEIROS.CIDADE, CADASTROPARCEIROS.UF,
+           case
+             when (CADASTROPARCEIROS.DOCUMENTO <> '') and (not CADASTROPARCEIROS.DOCUMENTO is null) then case TIPOPESSOA
+                                                                                                           when 'F' then cast(substring(DOCUMENTO from 1 for 3) || '.' || substring(DOCUMENTO from 4 for 3) || '.' || substring(DOCUMENTO from 7 for 3) || '-' || substring(DOCUMENTO from 10 for 2) as varchar(18))
+                                                                                                           when 'J' then cast(substring(DOCUMENTO from 1 for 2) || '.' || substring(DOCUMENTO from 3 for 3) || '.' || substring(DOCUMENTO from 6 for 3) || '/' || substring(DOCUMENTO from 9 for 4) || '-' || substring(DOCUMENTO from 13 for 2) as varchar(18))
+                                                                                                           else null
+                                                                                                         end
+             else null
+           end as DOCUMENTO,
+           INSCESTADUAL,
+           case TIPOPESSOA
+             when 'J' then DOCUMENTO
+             else ''
+           end,
+           case TIPOPESSOA
+             when 'F' then DOCUMENTO
+             else ''
+           end
+    from CADASTROPARCEIROS
+    where CADASTRO = :CODTRANSP
+    into NOMETRANSP, RAZAOTRANSP, FONETRANSP, COMERCIALTRANSP, CELULARTRANSP, EMAILTRANSP, NOMECONTATOTRANSP,
+         LOGRADOUROTRANSP, NUMEROTRANSP, COMPLEMENTOTRANSP, BAIRROTRANSP, CIDADETRANSP, UFTRANSP, DOCUMENTOTRANSP,
+         INSCESTADUALTRANSP, CNPJTRANSP, CPFTRANSP;
+
+    DETALHECF = '';
+    for select distinct
+    CLASSIFICACAOFISCAL.CFISCAL,
+    CLASSIFICACAOFISCAL.DESCRICAO,
+    cast(CLASSIFICACAOFISCAL.ALIQUOTA as decimal(2,2))
+
+        from MERCADORIASPED MERCADORIASNOTA
+        inner join CLASSIFICACAOFISCAL on (MERCADORIASNOTA.CLASSIFISCAL = CLASSIFICACAOFISCAL.CFISCAL)
+        where MERCADORIASNOTA.FILIAL = :FILIAL and
+              MERCADORIASNOTA.IDNOTA = :IDNOTA
+        into :PCODCF, :PCF, :PPIPI
+    do
+    begin
+      if (DETALHECF <> '') then
+        DETALHECF = substring(DETALHECF || '
+' from 1 for 400);
+      DETALHECF = substring(DETALHECF || PCODCF || ' - ' || PCF from 1 for 400);
+      if (PPIPI > 0) then
+        DETALHECF = substring(DETALHECF || ' IPI ' || PPIPI || '%' from 1 for 400);
+    end
+    ORDEM=0;PVLRTOTAL=0;PQTDITEM=0;NADICAOANTES=0;INDTOT=1;
+    QTDITENS = 0;
+    for select
+        IDITEM,        
+        CODIGO,
+        CAST (coalesce(substring(DESCRICAO from 1 for 4096), '')as blob sub_type 0 character set iso8859_1)	,
+        DESCRICAOREDUZIDA,
+        QUANTIDADE,
+        UNIDADE,
+        PRUNITARIO,
+        PRLISTA,
+        PIPIMERC,
+        VLRIPIMERC,
+        VLRTOTITEM,
+        PICMS,
+        PCREDSN,
+        VCREDICMSSN,
+        CODCF,
+        ICMSBASE,
+        SITUACAOTRIBUT,
+        VALORICMS_PROD,
+        CFOP_PROD,
+        EAN,
+        NFCI,
+        EANTRIBUTAVEL,
+        UNIDADETRIBUTAVEL,
+        QUANTIDADETRIBUTAVEL,
+        VALORUNITARIOTRIBUTAVEL,
+        FRETEPRODUTO,
+        SEGUROPRODUTO,
+        VOUTRO,
+        DESCONTOPRODUTO,
+        ORIGEM,
+        CTICMS,
+        MODBC,
+        PREDBC,
+        MODBCST,
+        PMVAST,
+        PREDBCST,
+        VBCST,
+        PICMSST,
+        VICMSST,
+        IPIBASE_PROD,
+        PISALIQUOTA,
+        IPICST,
+        PISCST,
+        PISBASE,
+        PISVALOR,
+        COFINSALIQUOTA,
+        COFINSCST,
+        COFINSBASECALCULO,
+        COFINSVALOR,
+        NDI,
+        DDI,
+        XLOCDESEMB,
+        UFDI,
+        DDESEMB,
+        CEXPORTADOR,
+        NADICAO,
+        NSEQADIC,
+        CFABRICANTE,
+        VDESCDI,
+        VBASEIMPORTAMERC,
+        VDESPADUMERC,
+        VIMPORTOIMPORTACAOMERC,
+        VIOFMERC,
+        PREDIPI,
+        IDMERCADORIAPEDIDO,
+        IDPEDIDO,
+        INFADPROD,
+        VTOTTRIB,
+        VBCUFDEST,
+        PFCUFDEST,
+        PICMSUFDEST,
+        PICMSINTER,
+        VFCPUFDEST,
+        VICMSUFDEST,
+        VICMSUFREMET,
+        VTOTTRIBFED,
+        VTOTTRIBEST,
+        CENQ,
+        INDESCALA,
+        ORIGEMPRODUTO,
+        CNPJFAB,
+        ICMSORIGEMFCP,
+        ICMSORIGEMFCPVALOR,
+        ICMSSTFCP,
+        ICMSSTFCPVALOR,
+        ICMSALIQUOTACF,
+        ICMSALIQUOTASIMPLES,
+        ICMSVALORSIMPLES,
+        PRLISTA,
+        VBCUFDEST,
+        CODCF,
+        VTOTTRIBFED,
+        VIPIDEVOLITEM,
+        VIPIDEVOLtot,
+        PDEVOL,
+        CBENEf,
+        P_VALORRETIDO,
+        CTICMSSIMPLES,
+        NRE ,
+        NSEQADIC,
+        PICMSINTERESTADUAL,
+        ORDEM,
+        xPED ,
+        CEST,
+        CF,
+        NVE,
+        DETALHEITENS,
+        NITEMPED,
+        VICMSDESONERADO,
+        ICMSPART,
+        pst ,
+        vBCFCPST,
+        pFCPST,
+        VBCSTRET,
+        VICMSSUBSTITUTO,
+        VICMSSTRET,
+        cProdANP, descANP, pGLP, pGNn, pGNi, vPart,
+        INDDEDUZDESON,
+        CSTIBSCBS,
+        cClassTrib,
+        vBC,
+        pIBSUF,
+        pIBSUFRedAliq,
+        pIBSUFaliqEfet,
+        vIBSUF,
+        pIBSMun,
+        pIBSMunRedAliq,
+        pIBSMunaliqEfet,
+        vIBSMun,
+        vIBS,
+        pCBS,
+        pCBSRedAliq,
+        pCBSaliqEfet,
+        vCBS,
+        CSTReg,
+        cClassTribReg,
+        paliqEfetRegIBSUF,
+        vTribRegIBSUF,
+        paliqEfetRegIBSMun,
+        vTribRegIBSMun,
+        paliqEfetRegCBS,
+        vTribRegCBS,
+        vItem
+        
+
+
+    from IMP_NFE_MERCADORIAS (:FILIAL, :IDNOTA, :INDFINAL, :ITEMCODREFNFE, :NCONTRIBUINTEINTER,
+              :SIMPLES, :DEVOLUCAO, :IDDEST,
+              :pTIPONOTA, :uf, :VRETPIS, :VRETCOFINS,
+              :VRETcsll, :CFOP, :VEANNFE, :VBCIRRF, :VBCRETPREV, :VIRRF, :VLRZONAFRANCA,
+              :VREMONTADESCRICAO, :VRETPREV )
+        order by IMP_NFE_MERCADORIAS.IDITEM
+        into IDITEM, CODIGO, DESCRICAO, DESCRICAOREDUZIDA, QUANTIDADE, UNIDADE, PRUNITARIO, PRLISTA, PIPIMERC,
+             VLRIPIMERC, VLRTOTITEM, PICMS, PCREDSN, VCREDICMSSN, CODCF, ICMSBASE, SITUACAOTRIBUT,
+             VALORICMS_PROD, CFOP_PROD, EAN, NFCI, EANTRIBUTAVEL, UNIDADETRIBUTAVEL, QUANTIDADETRIBUTAVEL,
+             VALORUNITARIOTRIBUTAVEL, FRETEPRODUTO, SEGUROPRODUTO, VOUTRO, DESCONTOPRODUTO, ORIGEM, CTICMS,
+             MODBC, PREDBC, MODBCST, PMVAST, PREDBCST, VBCST, PICMSST,
+              VICMSST,
+             IPIBASE_PROD, PISALIQUOTA,
+             IPICST, PISCST, PISBASE, PISVALOR, COFINSALIQUOTA, COFINSCST, COFINSBASECALCULO, COFINSVALOR, NDI,
+             DDI, XLOCDESEMB, UFDI, DDESEMB, CEXPORTADOR, NADICAO, NSEQADIC, CFABRICANTE, VDESCDI,
+             VBASEIMPORTAMERC, VDESPADUMERC, VIMPORTOIMPORTACAOMERC, VIOFMERC, PREDIPI, IDMERCADORIAPEDIDO,
+             IDPEDIDO, INFADPROD, VTOTTRIB, VBCUFDEST, PFCUFDEST, PICMSUFDEST, PICMSINTER, VFCPUFDEST,
+             VICMSUFDEST, VICMSUFREMET, VTOTTRIBFED, VTOTTRIBEST, CENQ, INDESCALA, ORIGEMPRODUTO, CNPJFAB,
+             ICMSORIGEMFCP, ICMSORIGEMFCPVALOR, ICMSSTFCP, ICMSSTFCPVALOR, ICMSALIQUOTACF, ICMSALIQUOTASIMPLES,
+             ICMSVALORSIMPLES, PRLISTA, VBCUFDEST, CODCF, VTOTTRIBFED, VIPIDEVOLITEM, VIPIDEVOLtot,
+             PDEVOL , CBENEf, P_VALORRETIDO, CTICMSSIMPLES, NRE , NSEQADIC, PICMSINTERESTADUAL,
+             ORDEM , xPED , CEST, CF, NVE , DETALHEITENS , NITEMPED , VICMSDESONERADO, ICMSPART,
+             :pst, vBCFCPST, pFCPST, VBCSTRET, VICMSSUBSTITUTO, VICMSSTRET,
+             :cProdANP, :descANP, :pGLP, :pGNn, :pGNi, :vPart, :INDDEDUZDESON, 
+             :CSTIBSCBS,:cClassTrib,:vBC,:pIBSUF,:pIBSUFRedAliq,:pIBSUFaliqEfet,:vIBSUF,:pIBSMun,
+             :pIBSMunRedAliq,:pIBSMunaliqEfet,:vIBSMun,:vIBS,:pCBS,:pCBSRedAliq,:pCBSaliqEfet,:vCBS,:CSTReg,
+             :cClassTribReg,:paliqEfetRegIBSUF,:vTribRegIBSUF,:paliqEfetRegIBSMun,:vTribRegIBSMun,:paliqEfetRegCBS,:vTribRegCBS,
+             :vItem
+
+    do
+    begin
+
+      --vFCPSTRet=coalesce (vFCPSTRet,0)+coalesce (ICMSSTFCPVALOR,0);
+      QTDITENS = QTDITENS + 1;
+      vFCPSTRet=0;
+      vBCFCPSTRet=coalesce (vBCFCPSTRet,0)+coalesce (vBCFCPST,0);
+      vICMSSTtot= coalesce (VICMSSTtot,0)+   coalesce ( vICMSST,0);
+
+    /*  if (TIPOCALCULOIPI='M' AND DEVOLUCAO='S') then
+      begin
+          :impostoDevol = 'S'; 
+           if (coalesce (IPIBASE_PROD,0)=0) then
+           *//*
+              if (coalesce (ICMSBASE,0)=0) then PDEVOL=0;
+              ELSE 
+                PDEVOL=VIPIDEVOLITEM/ICMSBASE *100;
+           else
+             *//*
+              PDEVOL=VIPIDEVOLITEM/IPIBASE_PROD *100;
+  
+      end*/
+      
+      if (DEVOLUCAO='N') then 
+        begin
+            :impostoDevol = 'N';
+            :VIPIDEVOLTOT = null;
+            :VIPIDEVOLITEM = null;
+            :PDEVOL = null;
+        end       
+
+      suspend;
+    end
+
+    IDITEM = null;
+    CODIGO = null;
+    DESCRICAO = null;
+    DESCRICAOREDUZIDA = null;
+    QUANTIDADE = null;
+    UNIDADE = null;
+    PRUNITARIO = null;
+    PRLISTA = null;
+    PIPIMERC = null;
+    VLRIPIMERC = null;
+    VLRTOTITEM = null;
+    PICMS = null;
+    CODCF = null;
+    ICMSBASE = null;
+    SITUACAOTRIBUT = null;
+    CF = null;
+    ORDEM = ORDEM + 1;
+    CFOP = null;
+    CFOP_PROD = null;
+    VALORICMS_PROD = null;
+    DETALHEITENS = 'N';
+    REFERENCIADESCRICAO = null;
+    INFADPROD=null;
+
+    if (coalesce(:VLRDESCINDPRODUTO, 0) + coalesce(:VLRDESCONTO, 0) + coalesce(:VLRZONAFRANCA, 0) + coalesce(VLRACRESCIMO, 0) > 0) then
+    begin
+
+      DESCRICAOTOTAL = '';
+      ORDEM = 101;
+      if (VLRDESCINDPRODUTO > 0) then  begin
+        DESCRICAODETALHE = MSGDESCPRODUTOS;
+        VLRTOTITEM = VLRDESCINDPRODUTO * (-1);
+       end
+      if (VLRDESCONTO > 0) then
+      begin
+        DESCRICAODETALHE = MSGDESCMERCADORIAS;
+        VLRTOTITEM = VLRDESCONTO * (-1);
+      end
+      if (VLRZONAFRANCA > 0) then
+      begin
+        DESCRICAODETALHE = 'Abatimento do ICMS';
+        VLRTOTITEM = VLRZONAFRANCA * (-1);
+      end
+      if (VLRACRESCIMO > 0) then
+      begin
+        DESCRICAODETALHE = MSGACRESCMERCADORIA;
+        VLRTOTITEM = VLRACRESCIMO;
+      end
+      DESCRICAODETALHE = null;
+    end
+    DESCRICAODETALHE = null; VLRTOTITEM = null;
+    if (MSGDESCRMERCADORIAS is not null) then
+    begin
+      MSGCORPONOTA = MSGDESCRMERCADORIAS;
+      suspend;
+    end
+    MSGCORPONOTA = null;
+  end
+end
+^
+SET TERM ; ^
+

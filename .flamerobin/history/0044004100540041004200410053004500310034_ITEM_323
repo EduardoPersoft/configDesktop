@@ -1,0 +1,74 @@
+select 
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.IDNOTA,
+       NOTAFISCAL.NUMERONOTA,
+       NOTAFISCAL.DATAEMISSAO DATAFABRICACAO,
+       NOTAFISCAL.DATACADASTRO,
+       NOTAFISCAL.DESTINATARIO,
+       estabelecimento.logo,
+       CADCLI.RAZAOSOCIAL,
+       CADCLI.NOME,
+       cadcli.C_NAOPAGINAESTRUTURA,
+       MERCADORIASNOTA.IDMERCADORIA,
+       MERCADORIASNOTA.CODIGO,
+       MERCADORIASNOTA.DESCRICAO,
+       MERCADORIASNOTA.QUANTIDADE,
+       MERCADORIASNOTA.UNIDADE,
+       MERCADORIASNOTA.IDPEDIDO,
+       MERCADORIASNOTA.IDMERCPEDIDO,
+       PEDIDO.idnota NUMEROPEDIDO,
+       '12 MESES' as DATAVALIDADE,
+       --ITEMESTOQUE.C_MATERIAPRIMABASE,
+       ITEMESTOQUE.itembase,
+       itemestoque.c_gramaturatotal,
+       itemestoque.c_passo,
+       itemestoque.c_largurafinal,
+       coalesce (itemestoque.c_posicionamento,'Conf. Arte'),
+       itemestoque.c_impressao,
+       coalesce(itemestoque.c_gramaturatinta,0),
+       itemestoque.c_diametrobobina,
+       itemestoque.c_tubeteacabamento,
+       itemestoque.c_lineaturalaudo,
+       coalesce (itemestoque.c_forcaselagem,'1000'),
+       coalesce (itemestoque.c_forcalaminacao,'700'),
+       coalesce (materialmovimentoestoque.lote,'')
+
+from
+      NOTAFISCAL
+inner join 
+      CADASTROPARCEIROS CADCLI on 
+          (NOTAFISCAL.DESTINATARIO = CADCLI.CADASTRO)
+inner join 
+      estabelecimento on 
+          (notafiscal.filial=estabelecimento.cadastro)
+inner join 
+      MERCADORIASNOTA on 
+          (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL and 
+           NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+inner join 
+      ITEMESTOQUE on 
+          (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+inner join 
+      mercadoriasped on 
+              (mercadoriasped.FILIAL = MERCADORIASNOTA.FILIAL and 
+               mercadoriasped.idnota = MERCADORIASNOTA.IDPEDIDO and
+               mercadoriasped.codigo = MERCADORIASNOTA.codigo and
+               mercadoriasped.IDMERCADORIA=mercadoriasnota.IDMERCPEDIDO)
+inner join 
+      pedido on 
+              (pedido.FILIAL = mercadoriasped.FILIAL and 
+               pedido.idnota = mercadoriasped.idnota)                 
+inner join 
+      materialmovimentoestoque on 
+              (mercadoriasped.filial = materialmovimentoestoque.filial and 
+               mercadoriasped.idnota = materialmovimentoestoque.idpedido and 
+               mercadoriasped.CODIGO = materialmovimentoestoque.IDITEM and
+               mercadoriasped.idmercadoria = materialmovimentoestoque.IDMERCADORIA)
+inner join 
+      movimentoestoque on 
+              (movimentoestoque.filial = materialmovimentoestoque.filial and 
+               movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and 
+               movimentoestoque.tipomovimento=12)
+where 
+  notafiscal.filial = 110 and 
+  NOTAFISCAL.IDNOTA = 691

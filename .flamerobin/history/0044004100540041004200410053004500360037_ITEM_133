@@ -1,0 +1,15 @@
+update 
+    mercadoriasped mercadoriasnota
+set 
+    mercadoriasnota.CSTIBSCBS='000',
+    mercadoriasnota.CCLASSTRIB='000001',
+    mercadoriasnota.PCBS=0.9,
+    mercadoriasnota.PIBSUF=0.1
+where
+    mercadoriasnota.baixa='N'
+    /*
+    exists  ( select * from NOTAFISCAL
+              where notafiscal.filial=mercadoriasnota.filial 
+              and notafiscal.idnota=mercadoriasnota.idnota 
+              and notafiscal.dataemissao is null)
+    */

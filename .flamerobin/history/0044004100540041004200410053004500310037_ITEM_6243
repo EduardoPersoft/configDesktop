@@ -1,0 +1,2 @@
+select uuid from PEDIDO
+order by pedido.DATACADASTRO desc

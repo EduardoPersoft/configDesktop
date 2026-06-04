@@ -1,0 +1,7 @@
+select 
+    *
+from
+    titulorec 
+where 
+    titulorec.TIPOBAIXA='E' and 
+    titulorec.baixa>='07.12.2021'

@@ -1,0 +1,135 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_POSICAOESTOQUERESERVA2 (
+    PFILIAL INTEGER,
+    PDATAINICIAL TIMESTAMP,
+    PDATAFINAL TIMESTAMP )
+RETURNS (
+    GRUPODESCRICAO VARCHAR(60),
+    DESCRICAO VARCHAR(250),
+    UNIDADE VARCHAR(3),
+    TIPOPRODUTO CHAR(20),
+    CODIGO VARCHAR(15),
+    SALDOTOTAL NUMERIC(12,3),
+    VALORTOTALESTOCADO NUMERIC(12,3),
+    CUSTOMEDIO NUMERIC(12,3),
+    RESERVAPEDIDO NUMERIC(12,3),
+    RESERVANOTA NUMERIC(12,3),
+    RESERVAOP NUMERIC(12,3),
+    RESERVAPEDIDOCOMPRA NUMERIC(12,3),
+    RESRVATOTAL NUMERIC(12,3),
+    ESTOQUELIQUIDO NUMERIC(12,3),
+    ESTABELECIMENTO INTEGER,
+    RAZAOSOCIAL VARCHAR(60),
+    CONSUMO NUMERIC(12,3) )
+
+AS
+begin 
+
+
+for select
+    GRUPOMERCADORIA.DESCRICAO as GRUPODESCRICAO,
+    cast( coalesce(itembase.DESCRICAO, item.DESCRICAO)as varchar (250)) AS DESCRICAO,
+    item.UNIDADE,
+    case item.TIPOPRODUTO
+        when '1' then 'MATERIAPRIMA'
+        when '2' then 'CONSUMO'
+        when '3' then 'REVENDA'
+        when '4' then 'INDUSTRIALIZADO'
+        when '5' then 'INATIVO'
+        else ''
+    end as TIPOPRODUTO,
+    coalesce(item.itembase, item.CODIGO) as codigo,
+    sum(coalesce(POSICAOESTOQUERESERVA2.SALDOTOTAL, 0)) as SALDOTOTAL,
+    sum(coalesce(POSICAOESTOQUERESERVA2.VALORTOTALESTOCADO, 0)) AS VALORTOTALESTOCADO,
+    sum(coalesce(POSICAOESTOQUERESERVA2.CUSTOMEDIO, 0)) AS CUSTOMEDIO,
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAPEDIDO, 0)) AS RESERVAPEDIDO,
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVANOTA, 0)) AS RESERVANOTA,
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAOP, 0)) as RESERVAOP,
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAPEDIDOCOMPRA, 0)) AS RESERVAPEDIDOCOMPRA,
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAOP, 0)) + sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAPEDIDO, 0)) + 
+    sum(coalesce(POSICAOESTOQUERESERVA2.RESERVANOTA, 0)) as RESERVATOTAL,
+    sum(coalesce(POSICAOESTOQUERESERVA2.SALDOTOTAL, 0)) + sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAPEDIDOCOMPRA, 0)) - 
+        (sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAOP, 0)) + sum(coalesce(POSICAOESTOQUERESERVA2.RESERVAPEDIDO, 0)) + 
+        sum(coalesce(POSICAOESTOQUERESERVA2.RESERVANOTA, 0))) as ESTOQUELIQUIDO,
+    posicaoestoquereserva2.estabelecimento,
+    posicaoestoquereserva2.razaosocial,
+    SUM(COALESCE(select 
+            coalesce( sum (coalesce (materialmovimentoestoque.quantidade,0) * materialmovimentoestoque.sinal),0)as consumo  
+            from 
+                materialmovimentoestoque
+            inner join 
+                movimentoestoque on 
+                   (movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and 
+                   movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+            inner join 
+                TIPOMOVIMENTOESTOQUE on  
+                    movimentoestoque.TIPOMOVIMENTO = TIPOMOVIMENTOESTOQUE.ID
+            where 
+                movimentoestoque.filial=:pfilial and
+                movimentoestoque.emissao between :pdatainicial and :pdatafinal and
+                materialmovimentoestoque.IDITEM=POSICAOESTOQUERESERVA2.CODIGO and
+                tipomovimentoestoque.tipomovimento='S'),0)
+
+    from 
+        POSICAOESTOQUERESERVA2(1)
+    inner join 
+        itemestoque item on (item.codigo=POSICAOESTOQUERESERVA2.CODIGO)
+    LEFT join 
+        grupomercadoria on (grupomercadoria.grupo=item.grupo)
+    left join 
+        itemestoque itembase on (itembase.codigo=item.itembase)
+    left join 
+        materialmovimentoestoque on
+    (materialmovimentoestoque.IDITEM=item.codigo)
+        
+    group by
+        coalesce(item.itembase, item.CODIGO),
+        GRUPOMERCADORIA.DESCRICAO,
+        coalesce(itembase.DESCRICAO, item.DESCRICAO),
+        item.UNIDADE,
+        item.TIPOPRODUTO,
+        posicaoestoquereserva2.estabelecimento,
+        posicaoestoquereserva2.razaosocial,
+        materialmovimentoestoque.filial
+    having 
+        item.TIPOPRODUTO <> '5' and
+        materialmovimentoestoque.filial = :pfilial 
+    into
+        :GRUPODESCRICAO, :DESCRICAO, :unidade, :tipoproduto, :codigo , :saldototal, :valortotalestocado , 
+        :customedio, :reservapedido, :reservanota, 
+        :reservaop, :reservapedidocompra , :resrvatotal , :estoqueliquido, :estabelecimento, :razaosocial    
+    do begin 
+    
+        select 
+            coalesce( sum (coalesce (materialmovimentoestoque.quantidade,0) * materialmovimentoestoque.sinal),0)as consumo  
+            from 
+                materialmovimentoestoque
+            inner join 
+                movimentoestoque on 
+                   (movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and 
+                   movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+            inner join 
+                TIPOMOVIMENTOESTOQUE on  
+                    movimentoestoque.TIPOMOVIMENTO = TIPOMOVIMENTOESTOQUE.ID
+            where 
+                movimentoestoque.filial=:pfilial and
+                movimentoestoque.emissao between :pdatainicial and :pdatafinal and
+                materialmovimentoestoque.IDITEM=:codigo and
+                tipomovimentoestoque.tipomovimento='S'
+        into 
+            :consumo;
+    
+        suspend;
+    end
+
+
+
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_POSICAOESTOQUERESERVA2 TO  SYSDBA WITH GRANT OPTION;
+

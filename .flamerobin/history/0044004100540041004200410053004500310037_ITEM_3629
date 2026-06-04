@@ -1,0 +1,3 @@
+select * from PEDIDO
+where destinatario=4480
+and PEDIDO.datacadastro>='01.09.2024'

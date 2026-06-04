@@ -1,0 +1,8 @@
+select 
+    T_ESTOQUE0802.CODIGO,
+    materiallocal.SALDOTOTAL
+from 
+    T_ESTOQUE0802
+WHERE
+    materiallocal.filial=1 AND
+    materiallocal.iditem = T_ESTOQUE0802.CODIGO

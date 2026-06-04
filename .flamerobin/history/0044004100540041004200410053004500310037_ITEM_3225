@@ -1,0 +1,11 @@
+select coalesce 
+                ( sum (COALESCE (MLocal.Saldototal,0)),0) 
+           From 
+                MaterialLocal MLocal
+           INNER JOIN 
+                LOCAL ON (MLOCAL.IDLOCAL=LOCAL.ID )
+           where 
+                 LOCAL.SALDODISPONIVEL='S' AND   
+                 Mlocal.filial=1 and
+                 Mlocal.iditem='a0' 
+                 --and Mlocal.idlocal = 1

@@ -1,0 +1,6 @@
+select  
+    *
+from 
+    c_coletas
+where
+    c_coletas.data between '29.09.2025' and '14.10.2025'

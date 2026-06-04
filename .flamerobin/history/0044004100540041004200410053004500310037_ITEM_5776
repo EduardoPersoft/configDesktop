@@ -1,0 +1,4 @@
+select * from C_DESTINOAVULSO
+where C_DESTINOAVULSO.coleta='14110'
+and coleta is not null
+order by coleta14''

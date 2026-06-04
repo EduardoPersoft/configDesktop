@@ -1,0 +1,11 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.C_MATERIAPRIMABASE = (select    
+                                        C_CONVERSAOMP.CODIGONOVO
+                                      from  
+                                        C_CONVERSAOMP
+                                      where
+                                        C_CONVERSAOMP.CODIGO=ITEMESTOQUE.C_MATERIAPRIMABASE),
+    ITEMESTOQUE.C_TINTA = NULL
+

@@ -1,0 +1,34 @@
+select
+    TIPOITEMESTOQUE.descricao,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL*itemcustodata.CUSTOUNITARIO)
+   
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+     materialfilial on
+        materialfilial.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materialfilial.iditem=materialmovimentoestoque.iditem 
+inner join
+    tipoItemEstoque on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+inner join
+     itemcustodata on
+        itemcustodata.filial=materialmovimentoestoque.filial and
+        itemcustodata.codigo=materialmovimentoestoque.iditem 
+
+where
+
+
+
+    itemcustodata.DATAINVENTARIO='31.12.2023' and
+    movimentoestoque.emissao<=itemcustodata.datainventario
+group by 
+    TIPOITEMESTOQUE.descricao
+

@@ -1,0 +1,1 @@
+delete from comentarios where part is null

@@ -1,0 +1,4 @@
+select * from titulorec 
+where filial=5
+and titulorec.dataenvio between
+'10.01.2022' and '20.01.2022'

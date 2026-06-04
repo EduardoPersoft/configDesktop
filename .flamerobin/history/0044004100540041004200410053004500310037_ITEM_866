@@ -1,0 +1,1 @@
+update local set podezerar=coalesce(podezerar, 'N')

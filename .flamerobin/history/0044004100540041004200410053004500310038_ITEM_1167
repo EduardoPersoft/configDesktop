@@ -1,0 +1,2 @@
+select * from composicaoop
+where iditem like 'M-%' and concluido='N' 

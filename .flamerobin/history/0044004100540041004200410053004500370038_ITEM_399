@@ -1,0 +1,10 @@
+insert into clientes(cadastro)
+select
+    CADASTROPARCEIROS.CADASTRO
+from
+    CADASTROPARCEIROS
+where 
+    CADASTROPARCEIROS.PARCEIROCLIENTE='S'
+    and not exists (
+    select * from CLIENTES
+    where clientes.cadastro=CADASTROPARCEIROS.cadastro)

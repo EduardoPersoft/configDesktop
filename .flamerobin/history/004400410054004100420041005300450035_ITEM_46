@@ -1,0 +1,5 @@
+delete
+FROM
+    materiallocal
+WHERE
+    idlocal>=1790

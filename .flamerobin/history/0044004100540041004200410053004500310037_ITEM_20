@@ -1,0 +1,1 @@
+update titulorec set titulorec.DATAENVIO = null where emissao='17.06.2021'

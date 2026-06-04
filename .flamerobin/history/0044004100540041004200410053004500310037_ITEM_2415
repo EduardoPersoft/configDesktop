@@ -1,0 +1,39 @@
+SELECT 
+    case when exists (
+        select  
+            *
+        from
+            NOTACOMPRA
+        where 
+            notacompra.OPERACAO=NATUREZAOPERACAO.id
+    ) then '*' else '' end Terceiros,
+    case when exists (
+        select  
+            *
+        from
+            NOTAfiscal
+        where 
+            notafiscal.OPERACAO=NATUREZAOPERACAO.id
+    ) then '*' else '' end Emitidas,
+
+    NATUREZAOPERACAO.*
+        
+FROM 
+    NATUREZAOPERACAO
+where 
+    not exists(
+        select  
+            *
+        from
+            NOTACOMPRA
+        where 
+            notacompra.OPERACAO=NATUREZAOPERACAO.id
+    ) and 
+    not  exists (
+        select  
+            *
+        from
+            NOTAfiscal
+        where 
+            notafiscal.OPERACAO=NATUREZAOPERACAO.id
+    )

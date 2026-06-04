@@ -1,0 +1,2 @@
+select * from ITEMESTOQUECODIGOS 
+order by codigoalternativo

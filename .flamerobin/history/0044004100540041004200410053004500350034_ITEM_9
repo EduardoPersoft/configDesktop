@@ -1,0 +1,7 @@
+select 
+    codigo,
+    descricao,
+    valorultimacompra
+from
+    ITEMESTOQUE
+    

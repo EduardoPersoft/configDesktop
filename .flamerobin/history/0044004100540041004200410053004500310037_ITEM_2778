@@ -1,0 +1,12 @@
+select    
+    1 as id,
+    extract(day from orcamento.DATACADASTRO) as qtd,
+    count(orcamento.idnota)    
+from
+    orcamento
+where
+    orcamento.datacadastro>cast('now' as date)-extract(day from cast('now' as date)) and
+    orcamento.dataCancelamento is null
+group by
+    extract(day from orcamento.DATACADASTRO)
+

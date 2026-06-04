@@ -1,0 +1,1 @@
+select * from CONTACORRENTE where filial=1 and codigo between 2000 and 2012

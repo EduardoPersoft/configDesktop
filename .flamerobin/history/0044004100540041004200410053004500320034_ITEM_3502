@@ -1,0 +1,21 @@
+update 
+    SPEDFISCAL_0
+set
+    SPEDFISCAL_0.COD_MUN = (SELECT
+                                ESTADO.CODIGOIBGE
+                             from   
+                                CADASTROPARCEIROS
+                             INNER JOIN
+                                ESTADO ON
+                                    ESTADO.ESTADO=CADASTROPARCEIROS.UF
+                             where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)||
+                            (select
+                                CADASTROPARCEIROS.MUNICIPIO
+                             from
+                                CADASTROPARCEIROS
+                            where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)
+WHERE                                
+    SEGMENTO='0150'
+                                

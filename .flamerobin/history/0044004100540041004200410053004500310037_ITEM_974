@@ -1,0 +1,1 @@
+update C_LOGPEIDOECOMMERCE set status_code = null

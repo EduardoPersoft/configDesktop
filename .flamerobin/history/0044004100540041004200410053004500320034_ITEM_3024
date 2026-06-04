@@ -1,0 +1,9 @@
+select
+    cadfor.cadastro,
+    cadfor.nome
+from
+    NOTACOMPRA
+inner join
+    CADASTROPARCEIROS cadfor
+        on cadfor.cadastro=notacompra.DESTINATARIO
+        

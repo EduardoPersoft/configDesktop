@@ -1,0 +1,2 @@
+select * from vendedoresorc
+where filial=1 and idnota in (207268, 207179, 207181)

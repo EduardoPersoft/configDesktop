@@ -1,0 +1,20 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.idmovimento,
+    movimentoestoque.idnotaexpedicao,
+    COALESCE(movimentoestoque.COLETADATA, CAST('NOW' AS TIMESTAMP)) coleta,
+    NOTAFISCAL.datahoraemissao emissao   
+    
+from
+    MOVIMENTOESTOQUE
+INNER join
+    PEDIDO ON
+        MOVIMENTOESTOQUE.FILIAL=PEDIDO.FILIAL and
+        MOVIMENTOESTOQUE.IDPEDIDO=PEDIDO.IDNOTA
+left join        
+    NOTAFISCAL on
+        notafiscal.filial=movimentoestoque.filial and
+        notafiscal.idnota=movimentoestoque.IDNOTAEXPEDICAO
+where
+    MOVIMENTOESTOQUE.EMISSAO = cast('now' as date) and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'

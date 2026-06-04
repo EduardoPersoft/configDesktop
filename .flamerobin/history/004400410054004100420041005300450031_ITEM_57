@@ -1,0 +1,2 @@
+select * from C_CORES
+WHERE CODIGO='AB0318002'

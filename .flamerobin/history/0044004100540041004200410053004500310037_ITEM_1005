@@ -1,0 +1,2 @@
+select C_LOGPRODUTOECOMMERCE.*,
+        substring(cast(C_LOGPRODUTOECOMMERCE.CONTENT as varchar(100)) from 1 for 100) from C_LOGPRODUTOECOMMERCE where C_LOGPRODUTOECOMMERCe.codigo='2133128'

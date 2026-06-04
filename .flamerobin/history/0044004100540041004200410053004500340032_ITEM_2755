@@ -1,0 +1,1 @@
+update materialfilial set saldototal =0 where saldototal is null

@@ -1,0 +1,6 @@
+update
+    COMPOSICAOOP
+set 
+    composicaoop.QUANTIDADE = cast(composicaoop.quantidade as decimal(12,2))
+where
+    filial=110

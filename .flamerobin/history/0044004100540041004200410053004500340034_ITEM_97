@@ -1,0 +1,19 @@
+insert into c_fatores(cfiscal,idlocal)
+
+select
+    distinct
+    itemestoque.C_LOCALIMPORTACAO,
+    itemestoque.CLASSIFISCAL
+from
+    ITEMESTOQUE
+where 
+    not exists (
+        select 
+            * 
+        from 
+            C_FATORES
+        where
+            c_fatores.CFISCAL=itemestoque.CLASSIFISCAL and
+            c_fatores.IDLOCAL=itemestoque.C_LOCALIMPORTACAO)
+and itemestoque.C_CODMOEDA is not null
+and itemestoque.TIPOPRODUTO<>'5'

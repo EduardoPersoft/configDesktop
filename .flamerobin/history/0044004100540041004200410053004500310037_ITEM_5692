@@ -1,0 +1,7 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.emissao>='27.10.2025' and
+    movimentoestoque.valorfrete=70

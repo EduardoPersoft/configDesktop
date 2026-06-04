@@ -1,0 +1,7 @@
+update MATERIALMOVIMENTOESTOQUE
+set valor=0 
+where exists 
+(select * from movimentoestoque 
+where movimentoestoque.filial=materialmovimentoestoque.filial and
+movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and
+movimentoestoque.tipomovimento in ('12', '13'))

@@ -1,0 +1,13 @@
+select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    materialfilial.consumomedio,
+    itemestoque.descricao,
+    materialfilial.SALDOMINIMO
+from
+    materialfilial
+inner join
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+order by 
+    materialfilial.CONSUMOMEDIO desc

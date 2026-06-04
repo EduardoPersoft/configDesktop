@@ -1,0 +1,13 @@
+select
+    itemestoquexarquivo.codigo,
+    ITEMESTOQUEXARQUIVO.NOMEARQUIVO
+from
+    MERCADORIASPED
+inner join
+    itemetoquexarquivo on
+        itemestoquexarquivo.codigo=mercadoriasped.codigo
+where
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=1 and
+    mercadoriasped.IDMERCADORIA=1
+    

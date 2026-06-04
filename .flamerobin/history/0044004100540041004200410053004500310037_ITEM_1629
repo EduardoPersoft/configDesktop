@@ -1,0 +1,1 @@
+update itemestoque set itemestoque.filialpadrao=1

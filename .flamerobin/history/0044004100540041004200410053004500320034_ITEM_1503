@@ -1,0 +1,8 @@
+select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    materialfilial.consumomedio
+from
+    materialfilial
+order by 
+    materialfilial.CONSUMOMEDIO desc

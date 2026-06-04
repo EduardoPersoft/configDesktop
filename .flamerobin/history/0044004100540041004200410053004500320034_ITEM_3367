@@ -1,0 +1,5 @@
+select * from titulorec 
+where 
+    filial=5 and
+    cast(titulorec.dataenvio as date)=titulorec.emissao and 
+    baixa is null

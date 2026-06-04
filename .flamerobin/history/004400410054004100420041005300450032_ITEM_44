@@ -1,0 +1,16 @@
+select 
+    objeto.tipo,
+    objeto.OBJETO,
+    grupoxusuario.manutencao, 
+    grupoxusuario.relatorio,
+    grupoxusuario.acoes
+from 
+    GRUPOXUSUARIO
+inner join
+    USUARIOXOBJETO on
+        USUARIOXOBJETO.IDUSUARIO = GRUPOXUSUARIO.IDGRUPO
+inner join  
+    objeto on
+        objeto.ID=USUARIOXOBJETO.IDOBJETO
+where 
+    GRUPOXUSUARIO.idusuario=39

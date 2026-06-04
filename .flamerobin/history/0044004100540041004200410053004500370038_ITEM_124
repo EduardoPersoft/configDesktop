@@ -1,0 +1,1 @@
+select * from MODELODOCTO where id in (1,14)

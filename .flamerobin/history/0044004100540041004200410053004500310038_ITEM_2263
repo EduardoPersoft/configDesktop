@@ -1,0 +1,2 @@
+select * from itemestoque 
+where codigo between '60000' and '60020'

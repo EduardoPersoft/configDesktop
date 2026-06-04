@@ -1,0 +1,2 @@
+select * from MAPAPRODUCAO
+where filial=233 and idmovimento between 95 and 102

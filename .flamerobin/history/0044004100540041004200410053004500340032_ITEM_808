@@ -1,0 +1,36 @@
+select
+    CADCLI.NOME,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    mercadoriasnota.idpedido,
+    NOTAFISCAL.NRNOTAFORNECEDOR, 
+    notafiscal.dataemissao,   
+    mercadoriasnota.idpedido,
+    mercadoriasnota.IDMERCPEDIDO,
+    mercadoriasnota.cfop,    
+    mercadoriasnota.QUANTIDADE,
+    mercadoriasnota.unidade,
+    case mercadoriasnota.unidade when 'KG' 
+    then mercadoriasnota.quantidade
+    else mercadoriasnota.QUANTIDADE*itemestoque.C_PESOMPPOREMBALAGEM
+    end as peso,
+    MERCADORIASNOTA.VLRFINALMERCAD
+from
+    NOTACOMPRA NOTAFISCAL
+inner join
+    MERCADORIASNOTACOMPRA mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.destinatario
+where
+    notafiscal.filial=110 and
+    notafiscal.DATAEMISSAO between '01.10.2023' and '31.10.2023' and
+    itemestoque.tipoproduto='4' and
+    mercadoriasnota.cfop not in ('6116','1902','1915', '1124','1103', '1102')
+order by
+    mercadoriasnota.cfop

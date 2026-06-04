@@ -1,0 +1,2 @@
+select * from itemestoque
+where itemestoque.metatag like '%02 11411 02%'

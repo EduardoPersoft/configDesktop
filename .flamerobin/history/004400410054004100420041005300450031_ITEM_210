@@ -1,0 +1,2 @@
+select * from itemestoque where itemestoque.C_CODIGOANT in ('3317011',
+'3317005', '3317013', '3317012', '3317014')

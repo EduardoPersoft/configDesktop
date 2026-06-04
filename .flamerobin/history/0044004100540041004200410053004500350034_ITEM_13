@@ -1,0 +1,28 @@
+insert into 
+    inventarioestoquedata(
+        filial,
+        codigo,
+        data,
+        lote,
+        local,
+        valor)
+select
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.iditem,
+    '31.12.2024',
+    '.',
+    1,
+    sum(materialmovimentoestoque.valor*
+        materialmovimentoestoque.sinal)
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao <= '31.12.2024'
+group by
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.iditem

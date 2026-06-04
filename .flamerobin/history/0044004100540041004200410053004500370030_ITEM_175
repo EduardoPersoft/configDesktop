@@ -1,0 +1,5 @@
+ALTER TABLE 
+    servicosped
+ ADD   c_filialpedven INTEGER, 
+ ADD   c_idpedven INTEGER , 
+ ADD   c_idmercven INTEGER 

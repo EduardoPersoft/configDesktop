@@ -1,0 +1,2 @@
+select * from NFECTRL
+where  idresultado not in (100,135)

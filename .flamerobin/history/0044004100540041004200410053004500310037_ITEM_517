@@ -1,0 +1,10 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.LOCALIZACAO = case itemestoque.LOCALIZACAO
+                              when '1.1' then 'Z1-A'
+                              when '1.2' then 'Z1-B'
+                              when '2.1' then 'Z2-A'
+                              when '2.2' then 'Z2-B'
+                              else itemestoque.LOCALIZACAO
+                              end

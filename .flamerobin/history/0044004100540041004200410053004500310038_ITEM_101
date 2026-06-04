@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MATERIALMOVIMENTOESTOQUE
+WHERE
+    materialmovimentoestoque.filial=1 AND
+    materialmovimentoestoque.idmovimento in (111100, 111099)

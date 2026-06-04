@@ -1,0 +1,25 @@
+select
+    distinct
+    pedido.idnota,
+    pedido.dataemissao,
+    cadastroparceiros.nome
+from    
+    PEDIDO
+inner join
+    mercadoriasped on
+        pedido.filial=mercadoriasped.FILIAL and
+        pedido.idnota=mercadoriasped.IDNOTA
+where
+    pedido.filial=1 and
+    pedido.dataemissao between '01.09.2023' and '30.09.2023' and
+    mercadoriasped.baixa='S' and
+    not exists (
+        select 
+            *
+        from
+            MERCADORIASNOTA
+        where
+            mercadoriasnota.filialped=mercadoriasped.filialped and
+            mercadoriasnota.idmercpedido=mercadoriasped.idmercadoria and
+            mercadoriasnota.idpedido=mercadoriasped.idnota
+            )

@@ -1,0 +1,8 @@
+update
+    ORCAMENTO
+set
+    orcamento.pesoliquido=0,
+    orcamento.pesobruto=0,
+    orcamento.CLCTRANSP='N'
+where
+    orcamento.DATAcadastro>='01.01.2025'

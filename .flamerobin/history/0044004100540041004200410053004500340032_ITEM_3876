@@ -1,0 +1,3 @@
+select documento,fatura, count(*) from C_MOVFINANCEIRO
+group by documento,fatura
+having count(*)>1

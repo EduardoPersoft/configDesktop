@@ -1,0 +1,15 @@
+select 
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    itemestoque.VALORULTIMACOMPRA,
+    customes.CUSTOMEDIO
+from 
+    itemestoque
+LEFT join
+    CUSTOMES ON
+        CUSTOMES.FILIAL=110 AND 
+        CUSTOMEDIO.ANO=2023 AND 
+        CUSTOMEDIO.MES=11 AND
+        CUSTOMEDIO.IDITEM=ITEMESTOQUE.CODIGO
+WHERE
+ iditem like 'MPP%'

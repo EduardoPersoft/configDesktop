@@ -1,0 +1,12 @@
+update
+    movimentoestoque
+set
+    localarmazenamento=2
+where 
+    movimentoestoque.TIPOMOVIMENTO='12' and
+    exists (
+    select * from MATERIALMOVIMENTOESTOQUE
+    where 
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and
+        materialmovimentoestoque.CONCLUIDO='N' )

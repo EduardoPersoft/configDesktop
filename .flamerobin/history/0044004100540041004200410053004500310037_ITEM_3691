@@ -1,0 +1,4 @@
+select * from ORCAMENTO
+where orcamento.vendedor=1
+and orcamento.atendente=1
+order by datacadastro

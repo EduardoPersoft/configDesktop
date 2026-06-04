@@ -1,0 +1,1 @@
+select filial,idnota,desreduzida,unidade,quantidade,qtdeentregue from mercadoriaspedcompra where baixa='N' and mercadoriaspedcompra.qtdeentregue>0

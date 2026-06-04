@@ -1,0 +1,8 @@
+SELECT
+    *
+from 
+    MATERIALFILIAL
+where 
+    materialfilial.filial=5 and materialfilial.VALORTOTALESTOCADO>0
+order by
+    materialfilial.st desc

@@ -1,0 +1,39 @@
+SET TERM ^ ;
+ALTER TRIGGER C_COLETAS_INSERT ACTIVE
+BEFORE insert OR update POSITION 0
+
+
+AS
+declare variable p_qtdExpedicoes integer;    
+declare variable p_qtdParadas integer;  
+BEGIN
+
+    select 
+         count (movimentoestoque.COLETA) as somaexpedicoes    
+         from 
+             movimentoestoque
+         where                                       
+             movimentoestoque.coleta = new.coleta and
+             movimentoestoque.TIPOMOVIMENTo='13'
+        INTO 
+            p_qtdExpedicoes;
+            
+     select 
+         count (c_destinoavulso.id)   as somaparadas    
+         from 
+             c_destinoavulso
+         where 
+            c_destinoavulso.COLETA=new.COLETA
+         INTO 
+            p_qtdParadas;        
+        
+       new.qtdExpedicoes=p_qtdExpedicoes  +   p_qtdParadas;
+            
+            
+     if (new.qtdExpedicoes > 0 ) then 
+         new.VALORMEDIO=new.valor/new.qtdExpedicoes;
+     else new.VALORMEDIO=0 ;
+
+END
+^
+SET TERM ; ^

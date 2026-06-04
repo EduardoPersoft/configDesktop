@@ -1,0 +1,6 @@
+select * from VENDEDORESTITULOREC 
+where exists (
+select * from titulorec where 
+titulorec.filial=VENDEDORESTITULOREC.filial and
+titulorec.idtitulo=VENDEDORESTITULOREC.IDMOVTOBANC
+and cadastro='2025-01-23')

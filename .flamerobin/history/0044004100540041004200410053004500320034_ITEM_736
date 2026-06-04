@@ -1,0 +1,32 @@
+update 
+    listaprecoproduto
+SET
+    custoconsiderado = 
+    
+    (select
+        FIRST 1
+        cast(materialmovimentoestoque.valor/materialmovimentoestoque.quantidade 
+             as decimal(12,2))
+     from 
+        MATERIALMOVIMENTOESTOQUE
+     inner JOIN
+        movimentoestoque on 
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+     WHERE 
+         movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02') AND
+         materialmovimentoestoque.filial=5 and
+         MATERIALMOVIMENTOESTOQUE.IDITEM = MERCADORIASorc.CODIGO
+    ORDER BY
+        EMISSAO DESC
+        )
+WHERE
+    exists (
+        SELECT 
+            *
+        FROM    
+            MERCADORIASORC
+        WHERE   
+            mercadoriasorc.filial=5 and
+            mercadoriasorc.idnota=284 AND
+            mercadoriasorc.codigo=listaprecoproduto.produto)

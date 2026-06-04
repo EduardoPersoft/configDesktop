@@ -1,0 +1,30 @@
+select 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    sum (materiallocal.SALDOTOTAL) as quantidade
+    
+from 
+    materialfilial 
+inner join 
+    materiallocal on 
+        (materiallocal.FILIAL=materialfilial.filial and 
+        materiallocal.IDITEM=materialfilial.IDITEM)
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.iditem
+where 
+    materialfilial.filial=5 and
+    itemestoque.itembase is null and
+    not exists (
+        select * from MERCADORIASPEDCOMPRA
+        where MERCADORIASPEDCOMPRA.filial=materialfilial.filial and
+        mercadoriaspedcompra.codigo=materialfilial.iditem and
+        mercadoriaspedcompra.baixa='N')
+group by 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    materialfilial.filial
+having 
+    coalesce(materialfilial.saldomaximo, materialfilial.consumomedio)*0.4>SUM(materiallocal.saldototal)

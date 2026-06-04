@@ -1,0 +1,2 @@
+select * from ITEMESTOQUEXARQUIVO
+where itemestoquexarquivo.CODIGO='A0110PORT001'

@@ -1,0 +1,2 @@
+select * from itemcustodata
+where codigo='M000009'

@@ -1,0 +1,2 @@
+select * from ENDERECOENTREGA
+where UPPER(logradouro) liKe '%FREDERICO%' and numero = 215

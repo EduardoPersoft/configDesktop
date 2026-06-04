@@ -1,0 +1,21 @@
+select 
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.destinatario,
+    notafiscal.VLRTOTALNOTA,
+    pedido.c_tipo
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner join
+    pedido on
+        pedido.filial=mercadoriasnota.filialped and
+        pedido.idnota=mercadoriasnota.idpedido
+where 
+    notafiscal.filial=1 
+    and notafiscal.DATAEMISSAO between '01.02.2024' and '29.02.2024'
+    and notafiscal.modelo =16
+    and pedido.c_tipo in (3,4,5)

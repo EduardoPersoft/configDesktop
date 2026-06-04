@@ -1,0 +1,55 @@
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    '' AS CFOP,
+    SERVICOSNOTACOMPRA.codigo,
+    '' tipomaterial,
+    sum(SERVICOSNOTACOMPRA.quantidade) as quantidade,
+    sum(SERVICOSNOTACOMPRA.vlrfinalmercad) as vlrfinalmercad,
+    
+    0 FRETE,
+    
+    0 as valoripi,
+    s0 valoripiCredito,
+    
+    sum(SERVICOSNOTACOMPRA.VLRFINALSERVICO) TOTAL,
+   
+    0 valoricms,
+    
+    0 as valorestoque,
+    'N' as devolucao
+       
+from 
+    notacompra
+inner join
+    SERVICOSNOTAcompra on
+        SERVICOSnotacompra.filial=notacompra.filial and
+        SERVICOSnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+left join
+    modelodocto on
+        modelodocto.id=notacompra.modelo
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.05.2024' and '31.05.2024' 
+group by    
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    SERVICOSnotacompra.codigo,    
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR
+order by 
+    1,2,notacompra.modelo,
+    MODELODOCTO.MODELO,
+    SERVICOSnotacompra.codigo,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR

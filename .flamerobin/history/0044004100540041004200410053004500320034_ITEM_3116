@@ -1,0 +1,28 @@
+select 
+    COUNT(FORNECEDORESITEM.IDITEM)
+FROM
+    MATERIALFILIAL
+INNER join
+    FORNECEDORESITEM ON
+        FORNECEDORESITEM.IDITEM=MATERIALFILIAL.IDITEM
+WHERE
+    MATERiALFILIAL.FILIAL=5 AND
+    fornecedoresitem.FORNECEDOr=1270 and
+    not exists (
+        select
+            *
+        from 
+            MERCADORIASPEDCOMPRA
+        where   
+            mercadoriaspedcompra.filial=materialfilial.filial and
+            mercadoriaspedcompra.codigo=materialfilial.iditem and
+            mercadoriaspedcompra.baixa='N')
+    COALESCE(MATERIALFILIAL.SALDOMAXIMO,MATERIALFILIAL.CONSUMOMEDIO)*0.4<
+    (select 
+        SUM(MATERIALLOCAL.SALDOTOTAL)    
+     from
+        MATERIALLOCAL
+     where
+        MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+        MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM)
+    

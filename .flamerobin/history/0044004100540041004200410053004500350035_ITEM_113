@@ -1,0 +1,6 @@
+select 
+    *
+from
+    ITEMESTOQUEXARQUIVO
+where
+    itemestoquexarquivo.codigo='04240031'

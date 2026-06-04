@@ -1,0 +1,9 @@
+update
+    pedido NOTAFISCAL
+set
+    vendedor = (select first 1 vnededoresped vendedoresnota.VENDEDOR
+                from VENDEDORESNOTA
+                where vendedoresnota.filial=notafiscal.filial and
+                vendedoresnota.idnota=notafiscal.idnota)
+where 
+    filial=110

@@ -1,0 +1,7 @@
+select
+    *
+from
+    SPEDFISCAL_0
+where
+    spedfiscal_0.SEGMENTO = '0150' and
+    spedfiscal_0.cod_part in (2376, 2375, 3914)

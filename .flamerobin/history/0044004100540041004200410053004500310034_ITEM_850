@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    mercadoriasped
+where 
+    substring(mercadoriasped.codigo from 1 for 1)=''

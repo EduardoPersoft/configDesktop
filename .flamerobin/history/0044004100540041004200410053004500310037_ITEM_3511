@@ -1,0 +1,5 @@
+select * from orcamento PEDIDO
+where not exists (select * from  fatorc fatped
+where fatped.filial=pedido.filial and 
+fatped.idnota=pedido.idnota)
+order by datacadastro desc

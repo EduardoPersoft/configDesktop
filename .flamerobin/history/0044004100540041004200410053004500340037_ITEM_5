@@ -1,0 +1,1 @@
+delete from CADASTROPARCEIROS where cadastro>1

@@ -1,0 +1,387 @@
+SET TERM ^ ;
+ALTER PROCEDURE SALDONOTADEVOLUCAO (
+    DESTINATARIO integer,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    PFILIAL integer )
+RETURNS (
+    FILIAL integer,
+    IDNOTASAIDA integer,
+    NUMERONOTA varchar(10),
+    DATAEMISSAO timestamp,
+    CODIGO varchar(15),
+    LOTE char(12),
+    DESREDUZIDA varchar(50),
+    DESCRICAO blob sub_type 0,
+    IDMERCADORIASAIDA smallint,
+    QUANTIDADESALDO double precision,
+    QUANTIDADENOTA double precision,
+    QUANTIDADE double precision,
+    QTDDEVOLVIDA double precision,
+    PRECOLISTA double precision,
+    VLRTOTALMERCAD double precision,
+    SITUACAOTRIBUT varchar(4),
+    SISTEMACALCULAIPI char(1),
+    CLASSIFISCAL varchar(3),
+    PIPI double precision,
+    IPIBASE double precision,
+    VALORIPI double precision,
+    IPIISENTO double precision,
+    IPIOUTROS double precision,
+    SISTEMACALCULAICMS char(1),
+    ALIQUOTAICMS double precision,
+    ICMSBASE double precision,
+    VALORICMS double precision,
+    ICMSISENTO double precision,
+    ICMSOUTROS double precision,
+    SISTEMACALCULASUBSTITUICAO char(1),
+    VLRBASESUBST double precision,
+    VLRICMSSUBST double precision,
+    VLRICMSRECOLHIDO double precision,
+    PLUCRO double precision,
+    ALIQUOTASUBSTITUTO double precision,
+    SISTEMACALCULAPIS char(1),
+    PPIS double precision,
+    BASEPIS double precision,
+    VLRPISPASEP double precision,
+    SISTEMACALCULACOFINS char(1),
+    PCOFINS double precision,
+    BASECOFINS double precision,
+    VLRCOFINS double precision,
+    ORIGEMNOTAREL char(1),
+    ORIGEMDESCRICAO varchar(12),
+    IDPEDVENDEV integer,
+    IDPEDVENMERCDEV smallint,
+    ICMSSTFCP double precision,
+    ICMSSTFCPVALOR double precision,
+    P_MARCA char(1),
+    VIPIDEVOLVITEM double precision,
+    PIPIDEVOLVITEM double precision,
+    TIPOCALCULOIPI char(1),
+    ICMSORIGEMBASE double precision,
+    ICMSORIGEMVALOR double precision,
+    TIPOPRODUTO char(20) )
+
+AS
+DECLARE VARIABLE V_QTEDEVOLVIDA DOUBLE PRECISION;
+begin
+
+quantidadeSaldo=0;
+QTDDEVOLVIDA=0;
+VIPIDEVOLVITEM=0;
+PIPIDEVOLVITEM=0;
+
+select
+     estabelecimento.TIPOCALCULOIPI
+from
+     ESTABELECIMENTO
+where
+     estabelecimento.CADASTRO=:PFILIAL
+into
+    :TIPOCALCULOIPI;
+
+
+
+for SELECT
+       notafiscal.filial,
+       notafiscal.idnota idnotasaida,
+       cast(notafiscal.numeronota as varchar(10)) as numeronota,
+       notafiscal.dataemissao,
+       mercadoriasnota.codigo,
+       materialmovimentoestoque.lote,
+       mercadoriasnota.desreduzida,
+       mercadoriasnota.descricao,
+       mercadoriasnota.idmercadoria idmercadoriasaida,
+
+       mercadoriasnota.quantidade as  quantidadenota,
+       mercadoriasnota.quantidade as quantidade,
+
+       mercadoriasnota.precounitario AS PRECOLISTA,
+       mercadoriasnota.VLRTOTALMERCAD,
+       mercadoriasnota.SITUACAOTRIBUT,
+
+       'N' as SISTEMACALCULAIPI,
+       mercadoriasnota.classifiscal,
+       mercadoriasnota.PIPI,
+       mercadoriasnota.IPIBase,
+       mercadoriasnota.ValorIPI,
+       mercadoriasnota.IPIIsento,
+       mercadoriasnota.IPIOutros,
+
+       'N' as SISTEMACALCULAICMS,
+       mercadoriasnota.ALIQUOTAICMS,
+       mercadoriasnota.ICMSBase,
+       mercadoriasnota.VALORICMS,
+       mercadoriasnota.ICMSIsento,
+       mercadoriasnota.ICMSOutros,
+       MERCADORIASNOTA.ICMSORIGEMBASE, 
+       MERCADORIASNOTA.icmsorigemvalor,
+
+       'N' as SISTEMACALCULASUBSTITUICAO,
+       mercadoriasnota.VLRBASESUBST,
+       mercadoriasnota.VLRICMSSUBST,
+       mercadoriasnota.VLRICMSRECOLHIDO,
+       mercadoriasnota.plucro,
+       mercadoriasnota.aliquotasubstituto ,
+
+       'N' as SISTEMACALCULAPIS,
+       mercadoriasnota.ppis,
+       mercadoriasnota.basepis,
+       mercadoriasnota.VlrPisPasep,
+
+       'N' as SISTEMACALCULACOFINS,
+       mercadoriasnota.pcofins,
+       mercadoriasnota.basecofins,
+       mercadoriasnota.vlrcofins,
+
+      CAST( '0' as VARCHAR(12)) as ORIGEMNOTAREL,
+       CAST('NOSSA' AS VARCHAR(12)) AS ORIGEMDESCRICAO,
+
+      mercadoriasnota.idpedido as IDPEDVENDEV,
+      mercadoriasnota.idmercpedido as IDPEDVENMERCDEV,
+      MERCADORIASNOTA.ICMSSTFCP,
+      MERCADORIASNOTA.ICMSSTFCPVALOR,
+
+      cast('N' as char(1)) as P_MARCA
+
+from notafiscal
+inner join mercadoriasnota on (mercadoriasnota.filial=notafiscal.filial
+                   and mercadoriasnota.idnota=notafiscal.idnota)
+left join movimentoestoque on (movimentoestoque.filial=notafiscal.filial
+            and movimentoestoque.idnota=notafiscal.idnota
+            and movimentoestoque.tipomovimento<>'11')
+left join materialmovimentoestoque on (
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.Idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.Idmercadoria=mercadoriasnota.Idmercadoria)
+where
+notafiscal.filial=:pfilial
+and notafiscal.dataemissao between :datainicial and :datafinal
+and notafiscal.destinatario=:destinatario
+and notafiscal.cancelamento='N'
+and notafiscal.DATAemissao is not  null
+
+INTO :FILIAL, :IDNOTASAIDA, :NUMERONOTA, :DATAEMISSAO, :CODIGO, :LOTE,
+     :DESREDUZIDA, :DESCRICAO, :IDMERCADORIASAIDA,
+     :QUANTIDADENOTA, :QUANTIDADE, :PRECOLISTA, :VLRTOTALMERCAD,
+     :SITUACAOTRIBUT, :SISTEMACALCULAIPI, :CLASSIFISCAL, :PIPI, :IPIBASE,
+     :VALORIPI, :IPIISENTO, :IPIOUTROS, :SISTEMACALCULAICMS, :ALIQUOTAICMS,
+     :ICMSBASE, :VALORICMS, :ICMSISENTO, :ICMSOUTROS,
+     :icmsorigembase, :icmsorigemvalor,
+      :SISTEMACALCULASUBSTITUICAO,
+     :VLRBASESUBST, :VLRICMSSUBST, :VLRICMSRECOLHIDO, :PLUCRO, :ALIQUOTASUBSTITUTO,
+     :SISTEMACALCULAPIS, :PPIS, :BASEPIS, :VLRPISPASEP, :SISTEMACALCULACOFINS,
+     :PCOFINS, :BASECOFINS, :VLRCOFINS, :ORIGEMNOTAREL, :ORIGEMDESCRICAO,
+     :IDPEDVENDEV, :IDPEDVENMERCDEV, :ICMSSTFCP, :ICMSSTFCPVALOR, :P_MARCA
+do BEGIN
+    
+   select    
+        case  (itemestoque.TIPOPRODUTO)
+        when 1 then 'MATÉRIA PRIMA'
+        when 2 then 'CONSUMO'
+        when 3 then 'REVENDA'
+        WHEN 4 THEN 'INDUSTRIALIZADO'
+        WHEN 5 THEN 'INATIVO' END
+   from
+        itemestoque 
+   where 
+        itemestoque.codigo=:codigo
+   into: tipoproduto;     
+   
+
+   if (:TIPOCALCULOIPI='N') then
+      BEGIN
+           PIPIDEVOLVITEM=PIPI;
+           VIPIDEVOLVITEM=valoripi;
+           ipibase=0;
+           valoripi=0;
+      end
+
+   select
+         sum (mercadoriasnota.QUANTIDADE)
+   from
+       MERCADORIASNOTA
+   inner join notafiscal on (mercadoriasnota.filial=notafiscal.filial
+                   and mercadoriasnota.idnota=notafiscal.idnota)
+   WHERE
+        mercadoriasnota.filial= :FILIAL AND
+        mercadoriasnota.IDNOTASAIDA=:IDNOTASAIDA AND
+        mercadoriasnota.IDMERCADORIASAIDA=:IDMERCADORIASAIDA
+        and mercadoriasnota.ORIGEMNOTAREL = :origemnotarel        
+        and notafiscal.cancelamento='N'
+        and notafiscal.DATAemissao is not  null
+        into :V_QTEDEVOLVIDA;
+
+     QTDDEVOLVIDA=coalesce (V_QTEDEVOLVIDA,0);
+
+   select
+         sum (MERCADORIASNOTACOMPRA.QUANTIDADE)
+   from
+       MERCADORIASNOTACOMPRA
+   inner join notaCOMPRA on (mercadoriasnotaCOMPRA.filial=notaCOMPRA.filial
+                   and mercadoriasnotaCOMPRA.idnota=notaCOMPRA.idnota)
+   WHERE
+        mercadoriasnotaCOMPRA.filial= :FILIAL AND
+        mercadoriasnotaCOMPRA.IDNOTASAIDA=:IDNOTASAIDA AND
+        mercadoriasnotaCOMPRA.IDMERCADORIASAIDA=:IDMERCADORIASAIDA
+        and mercadoriasnotacompra.ORIGEMNOTAREL = :origemnotarel
+    plan join (mercadoriasnota index (I_SALDONOTADEVOLUCAO),
+               notafiscal index (RDB$PRIMARY30))
+
+        into :V_QTEDEVOLVIDA;
+
+     QTDDEVOLVIDA= QTDDEVOLVIDA + coalesce (V_QTEDEVOLVIDA,0);
+
+     quantidadesaldo=QUANTIDADENOTA-coalesce (QTDDEVOLVIDA,0);
+     quantidade = 0;
+     if (quantidadesaldo>0) then
+         quantidade = quantidadesaldo;
+        
+     suspend;
+     quantidadeSaldo=0;
+     QTDDEVOLVIDA=0;
+     QUANTIDADENOTA=0;
+   end
+
+   quantidadeSaldo=0;
+   QTDDEVOLVIDA=0;
+   QUANTIDADENOTA=0;
+
+   for SELECT notacompra.filial,
+       notacompra.idnota idnotasaida,
+       cast(notacompra.NRNOTAFORNECEDOR as varchar(10)) as numeronota,
+       notacompra.dataemissao,
+       mercadoriasnotacompra.codigo,
+       coalesce(materialmovimentoestoque.lote,'.'),
+       mercadoriasnotacompra.desreduzida,
+       mercadoriasnotacompra.descricao,
+       mercadoriasnotacompra.idmercadoria idmercadoriasaida,
+
+       mercadoriasnotacompra.quantidade as  quantidadenota,
+       mercadoriasnotacompra.quantidade as quantidade,
+
+       mercadoriasnotacompra.precounitario AS PRECOLISTA,
+       mercadoriasnotacompra.VLRTOTALMERCAD,
+       mercadoriasnotacompra.SITUACAOTRIBUT,
+
+       'N' as SISTEMACALCULAIPI,
+       mercadoriasnotacompra.classifiscal,
+       mercadoriasnotacompra.PIPI,
+       mercadoriasnotacompra.IPIBase,
+       mercadoriasnotacompra.ValorIPI,
+       mercadoriasnotacompra.IPIIsento,
+       mercadoriasnotacompra.IPIOutros,
+
+       'N' as SISTEMACALCULAICMS,
+       mercadoriasnotacompra.ALIQUOTAICMS,
+       mercadoriasnotacompra.ICMSBase,
+       mercadoriasnotacompra.VALORICMS,
+       mercadoriasnotacompra.ICMSIsento,
+       mercadoriasnotacompra.ICMSOutros,
+       MERCADORIASNOTAcompra.ICMSBase,
+       MERCADORIASNOTAcompra.VALORICMS,
+
+       'N' as SISTEMACALCULASUBSTITUICAO,
+       mercadoriasnotacompra.VLRBASESUBST,
+       mercadoriasnotacompra.VLRICMSSUBST,
+       mercadoriasnotacompra.VLRICMSRECOLHIDO,
+       mercadoriasnotacompra.plucro,
+       mercadoriasnotacompra.aliquotasubstituto ,
+
+       'N' as SISTEMACALCULAPIS,
+       mercadoriasnotacompra.ppis,
+       mercadoriasnotacompra.basepis,
+       mercadoriasnotacompra.VlrPisPasep,
+
+       'N' as SISTEMACALCULACOFINS,
+       mercadoriasnotacompra.pcofins,
+       mercadoriasnotacompra.basecofins,
+       mercadoriasnotacompra.vlrcofins,
+
+      CAST( '1' as VARCHAR(12)) as ORIGEMNOTAREL,
+       CAST('DESTINATARIO' AS VARCHAR(12)) AS ORIGEMDESCRICAO,
+
+      mercadoriasnotacompra.idpedido as IDPEDVENDEV,
+      mercadoriasnotacompra.idmercpedido as IDPEDVENMERCDEV,
+      mercadoriasnotacompra.ICMSSTFCP,
+      mercadoriasnotacompra.ICMSSTFCPVALOR,
+
+      cast('N' as char(1)) as P_MARCA
+
+from notacompra
+inner join mercadoriasnotacompra on (mercadoriasnotacompra.filial=notacompra.filial
+                   and mercadoriasnotacompra.idnota=notacompra.idnota)
+left join movimentoestoque on (movimentoestoque.filial=notacompra.filial
+            and movimentoestoque.idnota=notacompra.idnota
+            and movimentoestoque.tipomovimento<>'11')
+left join materialmovimentoestoque on (
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.Idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.Idmercadoria=mercadoriasnotacompra.Idmercadoria
+        )
+where
+notacompra.filial=:pfilial
+and notacompra.dataemissao between :datainicial and :datafinal
+and notacompra.destinatario=:destinatario
+and notacompra.DATAemissao is not  null
+INTO :FILIAL, :IDNOTASAIDA, :NUMERONOTA, :DATAEMISSAO, :CODIGO, :LOTE,
+     :DESREDUZIDA, :DESCRICAO, :IDMERCADORIASAIDA,
+     :QUANTIDADENOTA, :QUANTIDADE, :PRECOLISTA, :VLRTOTALMERCAD,
+     :SITUACAOTRIBUT, :SISTEMACALCULAIPI, :CLASSIFISCAL, :PIPI, :IPIBASE,
+     :VALORIPI, :IPIISENTO, :IPIOUTROS, :SISTEMACALCULAICMS, :ALIQUOTAICMS,
+     :ICMSBASE, :VALORICMS, :ICMSISENTO, :ICMSOUTROS,
+     :icmsorigembase, :icmsorigemvalor,
+      :SISTEMACALCULASUBSTITUICAO,
+     :VLRBASESUBST, :VLRICMSSUBST, :VLRICMSRECOLHIDO, :PLUCRO, :ALIQUOTASUBSTITUTO,
+     :SISTEMACALCULAPIS, :PPIS, :BASEPIS, :VLRPISPASEP, :SISTEMACALCULACOFINS,
+     :PCOFINS, :BASECOFINS, :VLRCOFINS, :ORIGEMNOTAREL, :ORIGEMDESCRICAO,
+     :IDPEDVENDEV, :IDPEDVENMERCDEV, :ICMSSTFCP, :ICMSSTFCPVALOR, :P_MARCA
+do BEGIN
+
+   if (:TIPOCALCULOIPI='N') then
+      BEGIN
+           PIPIDEVOLVITEM=PIPI;
+           VIPIDEVOLVITEM=valoripi;
+           ipibase=0;
+           valoripi=0;
+      end   
+
+   select
+         sum (mercadoriasnota.QUANTIDADE)
+   from
+       MERCADORIASNOTA
+   inner join notafiscal on (mercadoriasnota.filial=notafiscal.filial
+                   and mercadoriasnota.idnota=notafiscal.idnota)
+   WHERE
+        mercadoriasnota.filial= :FILIAL AND
+        mercadoriasnota.IDNOTASAIDA=:IDNOTASAIDA AND
+        mercadoriasnota.IDMERCADORIASAIDA=:IDMERCADORIASAIDA 
+        and mercadoriasnota.ORIGEMNOTAREL = :origemnotarel
+        and notafiscal.cancelamento='N'
+        and notafiscal.DATAemissao is not  null
+    plan join (mercadoriasnota index (I_SALDONOTADEVOLUCAO),
+               notafiscal index (RDB$PRIMARY30))
+        into :V_QTEDEVOLVIDA;
+
+     QTDDEVOLVIDA=coalesce (V_QTEDEVOLVIDA,0);
+
+     quantidadesaldo=QUANTIDADENOTA-coalesce (QTDDEVOLVIDA,0);
+     quantidade = 0;
+     if (quantidadesaldo>0) then
+         quantidade = quantidadesaldo;
+        
+     suspend;
+        
+     quantidadeSaldo=0;
+     QTDDEVOLVIDA=0;
+     QUANTIDADENOTA=0;
+   end
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE SALDONOTADEVOLUCAO TO  SYSDBA;
+

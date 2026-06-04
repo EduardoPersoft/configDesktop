@@ -1,0 +1,7 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where concluido='N' and EXISTS
+(select * from mercadoriasped 
+where mercadoriasped.filial =materialmovimentoestoque.filial AND
+mercadoriasped.idnota=MATERIALMOVIMENTOESTOQUE.idpedido AND
+mercadoriasped.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA AND
+mercadoriasped.baixa='S')

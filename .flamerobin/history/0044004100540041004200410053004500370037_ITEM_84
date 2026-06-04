@@ -1,0 +1,2 @@
+select * from notafiscal where filial=233
+and idnota=1189

@@ -1,0 +1,6 @@
+update
+    mercadoriasorc mercadoriasped
+set
+    mercadoriasped.PESOBRUTO=(select t_itens.pesobruto from t_itens where t_itens.codigo=mercadoriasped.codigo)*mercadoriasped.quantidade,
+    mercadoriasped.PESOLiquido=(select t_itens.pesobruto from t_itens where t_itens.codigo=mercadoriasped.codigo)*mercadoriasped.quantidade,
+    mercadoriasped.QTDEVOLUME=mercadoriasped.quantidade

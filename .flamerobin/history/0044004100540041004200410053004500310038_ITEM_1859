@@ -1,0 +1,1 @@
+select * from C_ITEMREGIOES where C_ITEMREGIOES='PE-24877'

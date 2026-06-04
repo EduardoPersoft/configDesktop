@@ -1,0 +1,17 @@
+select
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    concluido='S' and
+    MATERIALMOVIMENTOESTOQUE.C_TUFTINGFUNDO is null and 
+    MATERIALMOVIMENTOESTOQUE.C_REVISAOFINAL is null and 
+    exists (select * from MOVIMENTOESTOQUE
+            where movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+            movimentoestoque.tipomovimento='12') and
+    not exists (select * from MOVIMENTOESTOQUE
+                where movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                movimentoestoque.idop=MATERIALMOVIMENTOESTOQUE.idmovimento and
+                movimentoestoque.IDOPITEM=materialmovimentoestoque.IDMOVIMENTOMATERIAL)
+            

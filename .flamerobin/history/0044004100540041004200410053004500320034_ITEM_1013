@@ -1,0 +1,11 @@
+SELECT
+   titulo,
+   fatura,
+   valortitulo,
+   titulopag.VENCIMENTO,
+   cast(substring(observacoes from 1 for 1000) as varchar(1000)) as observacoes
+FROM
+    TITULOPAG
+where 
+    titulopag.filial=5 AND
+    titulopag.parceiro=19446

@@ -1,0 +1,15 @@
+select 
+    titulorec.*
+from 
+    NOTAFISCAL
+inner join 
+    faturas on
+        faturas.filial=notafiscal.filial and 
+        faturas.idnota=notafiscal.IDNOTA
+inner join
+    titulorec on
+        titulorec.filial=faturas.filial and
+        titulorec.idtitulo=faturas.idtitulo
+where
+    notafiscal.DATAEMISSAO>='01.01.2025' and
+    notafiscal.DATACANCELAMENTO is not null

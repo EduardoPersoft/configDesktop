@@ -1,0 +1,3 @@
+select * from INVENTARIOESTOQUEDATA
+where INVENTARIOESTOQUEDATA.codigo='6206609'
+order by data desc

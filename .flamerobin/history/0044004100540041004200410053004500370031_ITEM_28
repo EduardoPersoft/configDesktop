@@ -1,0 +1,88 @@
+SET TERM ^ ;
+CREATE or alter PROCEDURE SITUACAOSALDODOPEDIDO (
+    PFILIAL integer,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    IDITEM varchar(15),
+    LOTE char(12),
+    DATAENTREGA timestamp,
+    QUANTIDADE double precision,
+    FISICA double precision,
+    RESERVADO double precision,
+    ENTRADAS double precision,
+    STATUS smallint )
+
+AS
+begin
+    
+    /*
+   delete from t_reservaestoque;
+
+   insert into T_reservaestoque(filial,codigo,reservas)
+   select saldodopedidocomposicao.filial,
+          saldodopedidocomposicao.iditem,
+          sum(saldodopedidocomposicao.quantidade)
+   from saldodopedidocomposicao(:pfilial)
+   where saldodopedidocomposicao.dataentrega <= :datafinal
+   GROUP by saldodopedidocomposicao.filial,
+            saldodopedidocomposicao.iditem;
+
+   for select t_reservaestoque.codigo,
+              sum(materiallocal.saldototal)
+       from t_reservaestoque
+       inner join materiallocal on (
+                      materiallocal.filial=t_reservaestoque.filial
+                    and materiallocal.iditem=t_reservaestoque.CODIGO)
+       group by t_reservaestoque.codigo
+       into :iditem,:quantidade do
+          update t_reservaestoque set t_reservaestoque.fisica=:quantidade
+          where t_reservaestoque.codigo=:iditem;
+
+   for select t_reservaestoque.codigo,
+              sum(materialmovimentoestoque.quantidade)
+       from t_reservaestoque
+       inner join materialmovimentoestoque on (
+            materialmovimentoestoque.filial=t_reservaestoque.filial
+        and materialmovimentoestoque.iditem=t_reservaestoque.CODIGO
+        and materialmovimentoestoque.saidaproducao<=:datafinal)
+   group by t_reservaestoque.codigo
+       into :iditem,:quantidade do
+          update t_reservaestoque set t_reservaestoque.entradas=:quantidade
+          where t_reservaestoque.codigo=:iditem;
+
+*/
+
+   for select saldodopedidocomposicao.filial,
+              saldodopedidocomposicao.idnota,
+              saldodopedidocomposicao.idmercadoria,
+              saldodopedidocomposicao.iditem,
+              saldodopedidocomposicao.lote,
+              saldodopedidocomposicao.dataentrega,
+              saldodopedidocomposicao.quantidade,
+              0,0,0,0
+  --            t_reservaestoque.fisica,
+    --          T_RESERVAESTOQUE.reservas,
+      --        T_RESERVAESTOQUE.entradas, 
+        --      CASE WHEN
+          --       T_RESERVAESTOQUE.FISICA+COALESCE(T_RESERVAESTOQUE.entradas,0)>=
+            --        T_RESERVAESTOQUE.reservas then 1 else 0 end
+        from saldodopedidocomposicao(:pfilial)
+        inner join t_reservaestoque on (
+                t_reservaestoque.filial=saldodopedidocomposicao.filial
+            and t_reservaestoque.codigo=saldodopedidocomposicao.iditem)
+        where saldodopedidocomposicao.dataentrega between :datainicial and :datafinal
+   into :filial,:idnota,:idmercadoria,:iditem,:lote,:dataentrega,:quantidade,
+         :FISICA,:reservado,:entradas,:status do
+       suspend;
+
+end
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE SITUACAOSALDODOPEDIDO TO  SYSDBA;
+

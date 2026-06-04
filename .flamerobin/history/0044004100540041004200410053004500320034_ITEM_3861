@@ -1,0 +1,10 @@
+update
+    MERCADORIASNOTA
+set
+    mercadoriasnota.valoricms=0,
+    mercadoriasnota.VLRPISPASEP=0,
+    mercadoriasnota.VLRCOFINS=0,
+    mercadoriasnota.custo=0
+where 
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idnota=33358

@@ -1,0 +1,90 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_PEDIDODATAFINFILIAL_V1 (
+    PFILIAL integer,
+    PDATAINICIAL timestamp,
+    PDATAFINAL timestamp )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    "DATA" timestamp,
+    SINAL integer,
+    V_IDNOTASUBSTITUIDO integer,
+    V_IDNOTADEVOLUCAO integer,
+    V_IDNOTAORIGINAL integer,
+    V_SELECT integer )
+
+AS
+BEGIN
+
+    FOR Select DISTINCT FAT1.FILIAL,FAT1.Idnota,MIN(FAT1.DATA),
+        pedido.c_pedidosubstituido,PEDIDO.C_DEVOLUCAO,1
+    FROM C_FATURASPED FAT1
+    INNER JOIN PEDIDO ON (FAT1.FILIAL=PEDIDO.FILIAL
+                    AND FAT1.IDNOTA=PEDIDO.IDNOTA)
+    WHERE FAT1.FILIAL=:PFILIAL
+    AND COALESCE(PEDIDO.Cancelamento,'N')='N'
+    AND FAT1.DATA BETWEEN :PDATAINICIAL AND :PDATAFINAL
+    AND PEDIDO.c_pedidosubstituido IS NULL    
+    AND PEDIDO.c_datacomissao IS NULL
+    and PEDIDO.c_tipo IN (0,1)
+    and ( PEDIDO.C_DEVOLUCAO IS NULL OR COALESCE(PEDIDO.C_CREDITOCLIENTE,0)=0)
+    AND NOT EXISTS
+    (SELECT * FROM C_FATURASPED FAT2
+     WHERE FAT2.FILIAL=FAT1.FILIAL
+     AND FAT2.IDNOTA=FAT1.IDNOTA
+     AND FAT2.DATA<FAT1.DATA
+    )
+    GROUP BY FAT1.FILIAL,FAT1.IDNOTA, c_pedidosubstituido,C_DEVOLUCAO
+
+    UNION
+    
+    Select DISTINCT PEDIDO.FILIAL,PEDIDO.Idnota,PEDIDO.c_datacomissao,
+        pedido.c_pedidosubstituido,PEDIDO.C_DEVOLUCAO,2
+    FROM PEDIDO
+    WHERE PEDIDO.FILIAL=:PFILIAL
+    AND COALESCE(PEDIDO.Cancelamento,'N')='N'
+    and PEDIDO.c_tipo IN (0,1)
+    AND PEDIDO.c_datacomissao BETWEEN :PDATAINICIAL AND :PDATAFINAL    
+    and ( PEDIDO.C_DEVOLUCAO IS NULL OR COALESCE(PEDIDO.C_CREDITOCLIENTE,0)=0)
+    UNION
+    Select DISTINCT PEDIDO.FILIAL,PEDIDO.Idnota,CAST(PEDIDO.DATACADASTRO AS DATE),
+        pedido.c_pedidosubstituido,pedido.c_devolucao,3
+    FROM PEDIDO
+    WHERE PEDIDO.FILIAL=:PFILIAL
+    AND COALESCE(PEDIDO.Cancelamento,'N')='N'
+    AND PEDIDO.datareferencia BETWEEN :PDATAINICIAL AND :PDATAFINAL
+    AND PEDIDO.c_pedidosubstituido IS NOT NULL
+    AND PEDIDO.c_datacomissao is null
+    and PEDIDO.c_tipo IN (0,1)                                                    
+    INTO :FILIAL,IDNOTA,DATA, :V_idnotasubstituido,:V_IDNOTADEVOLUCAO ,V_SELECT DO
+
+
+    begin
+        V_IDNOTAORIGINAL=IDNOTA ;
+        IF (V_IDNOTADEVOLUCAO IS NULL) THEN
+            SINAL = 1;
+        ELSE    
+            SINAL = -1;
+        SUSPEND;
+        if (V_IDNOTASUBSTITUIDO IS NOT NULL) then BEGIN
+            Select MIN(FAT1.DATA)
+            FROM C_FATURASPED FAT1
+            WHERE FAT1.FILIAL=:pfilial AND FAT1.IDNOTA=:V_IDNOTASUBSTITUIDO
+            INTO :DATA       ;
+            V_SELECT=4;
+            IDNOTA = V_IDNOTASUBSTITUIDO;
+            SINAL= -1;
+            SUSPEND;
+         END
+
+    end
+    
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_PEDIDODATAFINFILIAL_V1 TO  SYSDBA;
+

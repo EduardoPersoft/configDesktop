@@ -1,0 +1,2 @@
+update MATERIALMOVIMENTOESTOQUE
+set materialmovimentoestoque.alteracaodata=cast(movimentoestoque.alteracaodata as date)

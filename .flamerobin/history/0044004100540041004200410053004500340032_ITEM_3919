@@ -1,0 +1,3 @@
+update  C_MOVFINANCEIRO 
+set datapagamento=null, processamento=null
+where contacorrenteimportada=10333

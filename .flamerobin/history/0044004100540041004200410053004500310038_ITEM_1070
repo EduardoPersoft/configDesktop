@@ -1,0 +1,3 @@
+select * from LISTAPRECOSERVICO
+where listaprecoservico.lista=179
+order by servico

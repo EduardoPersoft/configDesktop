@@ -1,0 +1,16 @@
+select 
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa='N' AND
+    exists
+(SELECT
+    *
+ FROM
+    PEDIDOCOMPRA
+ WHERE
+    pedidocompra.filial=mercadoriaspedcompra.filial AND
+    pedidocompra.idnota=mercadoriaspedcompra.idnota AND
+    pedidocompra.datacadastro<='31.12.2021')

@@ -1,0 +1,94 @@
+
+select 
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.idpedido,
+    pedido.datacadastro,
+    movimentoestoque.emissao,
+    movimentoestoque.documento,
+    cadcli.cadastro,
+    cadcli.nome,
+    materialmovimentoestoque.produto,
+    materialmovimentoestoque.quantidade,
+    produto.descricao descricaoproduto,
+    produto.c_ean,
+    produto.unidade as produtounidade,
+    processo.unidade as processounidade,
+    mercadoriasped.quantidade pedidoquantidade,
+    mercadoriasped.unidade,
+    movimentoestoque.previsaofimproducao,
+    produto.C_LARGURAMATERIAPRIMA,
+    (Produto.C_LARGURAMATERIAPRIMA - 10) AS LARGURALAMINACAO,
+    PRODUTO.C_LARGURAFINAL,
+    PRODUTO.C_PISTAS,
+    produto.C_SENTIDOBOBINAMENTOACABAMENTO,
+    materialmovimentoestoque.CENTROCUSTO,
+    C1.IDCOMPOSICAO,
+    centrocustos.descricao descricaoCentrocusto,
+    c1.codigo componente,
+    produto.C_DIAMETROBOBINA,
+    componente.descricao componentedescricao,
+    componente.unidade componenteunidade,
+    c1.gramatura componentegramatura,
+    c1.quantidade componentequantidade,
+    c1.perdaestimadap componenteperdaestimdap,
+    c1.perdaestimadaq componenteperdaestimdaq,
+  CAST( ((c1.quantidade * 1000) / (c1.gramatura)) / (produto.c_larguramateriaprima/1000) AS DECIMAL(10,2)) AS METROS ,
+  case when EXISTS
+    (select * from composicaoop c2
+     where c2.filial=materialmovimentoestoque.filial AND
+           c2.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+           c2.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+           c2.codigo='I001') then 'Segunda ' else '' end
+
+from 
+    materialmovimentoestoque 
+    
+inner join 
+        estabelecimento on 
+            estabelecimento.cadastro = materialmovimentoestoque.FILIAL
+    
+inner JOIN
+    centrocustos on
+        centrocustos.IDPLANO = estabelecimento.PLANOCENTROCUSTOS AND
+        centrocustos.centrocusto = materialMovimentoEstoque.IDCENTROCUSTO
+inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+
+inner JOIN
+        itemestoque produto on
+            produto.codigo=materialmovimentoestoque.produto
+
+inner join 
+        composicaoop c1 on
+            c1.filial=materialmovimentoestoque.filial AND
+            c1.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+            c1.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+
+inner JOIN
+        itemestoque componente on 
+            componente.codigo=c1.codigo
+            
+inner join itemestoque processo on
+        processo.codigo=materialmovimentoestoque.IDITEM
+
+left join 
+        pedido on
+            pedido.filial=materialmovimentoestoque.filial AND
+            pedido.idnota=materialmovimentoestoque.idpedido
+
+left JOIN
+    mercadoriasped on
+        mercadoriasped.filial=MATERIALMOVIMENTOESTOQUE.filial AND
+        mercadoriasped.idnota=materialmovimentoestoque.idpedido and 
+        mercadoriasped.idmercadoria=materialmovimentoestoque.idmercadoria
+left JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.destinatario        
+where 
+    materialmovimentoestoque.filial= 1 and 
+    materialmovimentoestoque.idmovimento = 941 and
+    materialmovimentoestoque.centrocusto <> 6

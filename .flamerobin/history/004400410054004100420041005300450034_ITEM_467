@@ -1,0 +1,4 @@
+update 
+    pedido
+set 
+    uuid = orcamento.filial||'-'||orcamento.idnota||'-'||orcamento.DESTINATARIO

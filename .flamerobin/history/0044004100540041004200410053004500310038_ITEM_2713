@@ -1,0 +1,24 @@
+select
+    cadven.cadastro,
+    cadven.nome,
+    extract(month from orcamento.datacadastro) ano,
+    extract(year from orcamento.datacadastro) mes,
+    count(orcamento.id) as qtdOrcamento,
+    sum(case when ORCAMENTO.C_ARQUITETO is null then 0 else 1 end) as qtdComArquiteto,
+    sum(orcamento.VLRTOTALNOTA) AS VALORORCAMENTO,
+    sum(case when pedido.idnota is null then 0 else 1 end) as qtdPedido,    
+    sum(coalesce(pedido.vlrtotalNota,0)) as valorpedido,
+    sum(coalesce(pedido.vlrtotalNota,0)) / sum(case when pedido.idnota is null then 0 else 1 end) ticketmedio
+from
+    ORCAMENTO
+inner join
+     CADASTROPARCEIROS cadven on
+        cadven.cadastro=orcamento.VENDEDOR
+left join
+    pedido on
+        pedido.filial=orcamento.filial and
+        pedido.IDORCAMENTO=orcamento.idnota
+where 
+    orcamento.filial =1 and 
+    orcamento.DATACADASTRO between '01.01.2024' and '31.12.2024'
+    

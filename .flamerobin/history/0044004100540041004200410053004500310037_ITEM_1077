@@ -1,0 +1,78 @@
+select
+    materialmovimentoestoque.idmovimento,
+    TIPOMOVIMENTOESTOQUE.sigla,
+    TIPOMOVIMENTOESTOQUE.DESCRICAO AS DESCRICAOMOVIMENTO,    
+    MOVIMENTOESTOQUE.USUARIO,    
+    movimentoestoque.emissao ,
+    movimentoestoque.documento ,
+    TIPOMOVIMENTOESTOQUE.TIPOMOVIMENTO,
+    materalmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.lote ,
+    materialmovimentoestoque.LOCALARMAZENAMENTO,
+    movimentoestoque.LOCALTRANSFERENCIA,
+    origem.descricao || case when destino.descricao is null 
+                        then ''
+                        else ' > '|| destino.descricao
+                        end as localarmazenamento ,
+    coalesce(materialmovimentoestoque.idpedido, coalesce(mercadoriasnota.idpedido, mercadoriasnotacompra.idpedido)) ,
+    MATERIALMOVIMENTOESTOQUE.sinal ,
+    materialmovimentoestoque.quantidade,
+    0 as unitario ,
+    materialmovimentoestoque.VALOR as custo ,
+    coalesce(CADNOTA.CADASTRO, cadnotacompra.cadastro) cadastro,
+    coalesce(CADNOTA.nome, cadnotacompra.nome) nome,    
+    COALESCE(MERCADORIASNOTA.PRECOUNITARIO,MERCADORIASNOTACOMPRA.PRECOUNITARIO) AS PRECO,
+    case 
+        when 'E' then 'green' 
+        when 'S' then 'blue'
+        else 'blak'
+    end as cor
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+LEFT JOIN
+    TIPOMOVIMENTOESTOQUE ON
+        TIPOMOVIMENTOESTOQUE.ID=MOVIMENTOESTOQUE.TIPOMOVIMENTO
+LEFT JOIN
+    NOTAFISCAL ON
+        NOTAFISCAL.FILIAL=MOVIMENTOESTOQUE.FILIAL AND
+        NOTAFISCAL.IDNOTA=MOVIMENTOESTOQUE.IDNOTA
+LEFT JOIN 
+    MERCADORIASNOTA ON
+        MERCADORIASNOTA.FILIAL=MOVIMENTOESTOQUE.FILIAL AND
+        MERCADORIASNOTA.IDNOTA=MOVIMENTOESTOQUE.IDNOTA AND
+        MERCADORIASNOTA.IDMERCADORIA=MATERIALMOVIMENTOESTOQUE.IDMERCADORIA
+LEFT JOIN
+    CADASTROPARCEIROS CADNOTA ON
+        NOTAFISCAL.DESTINATARIO=CADNOTA.CADASTRO     
+        
+LEFT JOIN
+    NOTACOMPRA ON
+        NOTACOMPRA.FILIAL=MOVIMENTOESTOQUE.FILIAL AND
+        NOTACOMPRA.IDNOTA=MOVIMENTOESTOQUE.IDNOTACOMPRA
+LEFT JOIN 
+    MERCADORIASNOTAcompra ON
+        MERCADORIASNOTACOMPRA.FILIAL=MOVIMENTOESTOQUE.FILIAL AND
+        MERCADORIASNOTACOMPRA.IDNOTA=MOVIMENTOESTOQUE.IDNOTACOMPRA AND
+        MERCADORIASNOTACOMPRA.IDMERCADORIA=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+LEFT JOIN
+    CADASTROPARCEIROS CADNOTACOMPRA ON
+        NOTACOMPRA.DESTINATARIO=CADNOTACOMPRA.CADASTRO             
+LEFT join 
+    local origem on 
+        origem.id=MATERIALMOVIMENTOESTOQUE.localarmazenamento
+LEFT join 
+    local destino on 
+        destino.id=MOVIMENTESTOQUE.localtransferencia
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL = 1 AND
+    MATERIALMOVIMENTOESTOQUE.IDITEM BETWEEN '2205111' AND '2205111' AND
+    MOVIMENTOESTOQUE.EMISSAO BETWEEN '01,01.2021' AND '31.12.2022' AND
+    MATERIALMOVIMENTOESTOQUE.LOTE BETWEEN '.' and 'zzzzz' and
+    (MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO BETWEEN 0 AND 9999 OR
+     MOVIMENTOESTOQUE.LOCALTRANSFERENCIA BETWEEN 0 AND 9999) AND   
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO <> 11
+ORDER BY SEQUENCIA DESC

@@ -1,0 +1,3 @@
+select * from C_MOVFINANCEIRO 
+where contacorrenteimportada=10333
+order by documento,FATURA

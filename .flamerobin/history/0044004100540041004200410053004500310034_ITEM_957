@@ -1,0 +1,12 @@
+SELECT DISTINCT COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME,
+        
+                    when 0 then C_PEDIDOSEMABERTO.valorsaldo else 
+                    C_PEDIDOSEMABERTO.valorsaldo * (1+(coalesce (C_PEDIDOSEMABERTO.pipi,0)/100)) end) valorsaldo
+FROM C_PEDIDOSEMABERTO(110)
+LEFT JOIN VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                           AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+LEFT JOIN CADASTROPARCEIROS VENDEDOR ON (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+where c_pedidosemaberto.dataprevista between '01.09.2023' and '31.12.2029'
+AND C_PEDIDOSEMABERTO.DATAEMISSAO IS NOT NULL
+group by
+    1

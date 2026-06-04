@@ -1,0 +1,4 @@
+select * from PEDIDO
+where loja=4
+and datacadastro>='01.09.2023'
+and idnota

@@ -1,0 +1,45 @@
+select 
+    'PRODUTO' AS labelPedidoProduto,
+    itemestoque.codigo as numeropedido,
+    itemestoque.descricao produto,
+    
+cast(itemestoque.c_largura as decimal(7,2))||' x '||cast(itemestoque.c_comprimento as  decimal(7,2)) as dimensao,
+itemestoque.c_espessura,
+itemestoque.C_COR1,
+c_composicao.BASE c_base,
+c_composicao.SUPERFICIE c_superficie,
+itemestoque.C_ANTRON,
+cast('now' as date),
+
+'PARA UMA MELHOR MANUTENÇÃO, RECOMENDAMOS O USO REGULAR DE ASPIRADOR DE PÓ.' AS MANUTENCAO,
+'LAVAGENS COM SABÃO NEUTRO E ÁGUA FRIA (NÃO ENCHARCAR)' AS LAVAGEM,
+'CNPJ:'||
+
+         CASE WHEN (CADASTROPARCEIROS.DOCUMENTO<>'') AND
+                 (NOT CADASTROPARCEIROS.DOCUMENTO IS NULL) THEN
+            CASE CADASTROPARCEIROS.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 4 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 7 FOR 3)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+              WHEN 'J' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 2)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 3 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 6 FOR 3)||'/'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 9 FOR 4)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+         ELSE NULL END
+         ELSE NULL END
+
+||' '||CADASTROPARCEIROS.LOGRADOURO||', '||CADASTROPARCEIROS.NUMERO AS END1,
+'CEP '||SUBSTRING(cadastroparceiros.cep FROM 1 FOR 5)||'-'||
+SUBSTRING(cadastroparceiros.cep FROM 6 FOR 3)||' '
+||CADASTROPARCEIROS.bairro||' '||CADASTROPARCEIROS.CIDADE||' '||CADASTROPARCEIROS.UF AS END2,
+'TEL/FAX: '||CADASTROPARCEIROS.TELEFONE||' '||CADASTROPARCEIROS.email AS END3,
+cast ('N' AS char (1)) as P_MARCA
+
+
+from itemestoque
+left join c_composicao on c_composicao.ID=itemestoque.C_COMPOSICAO
+inner join cadastroparceiros on (cadastroparceiros.cadastro=1)
+where itemestoque.codigo='PE-24859'

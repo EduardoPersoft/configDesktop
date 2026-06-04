@@ -1,0 +1,8 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where substring(MATERIALMOVIMENTOESTOQUE.iditem from 1 for 2)='M-'
+and MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+and exists (
+select * from movimentoestoque
+where MOVIMENTOestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+mvimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+movimentoestque.tipo='12')

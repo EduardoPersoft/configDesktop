@@ -1,0 +1,188 @@
+SET TERM ^ ;
+
+ALTER PROCEDURE IMP_NFE_MENSAGEMDADOSADICIONAIS (
+    FILIAL integer,
+    IDNOTA integer )
+RETURNS (
+    MSGADICIONAL varchar(2000) )
+
+
+AS
+declare variable vmsgadicional varchar(1000);
+BEGIN
+  msgadicional='';
+  vmsgadicional='';
+  FOR SELECT 'RETORNO '||INSUMOS.TIPO||
+         CASE NOTACOMPRA.destinatario WHEN NOTAFISCAL.destinatario THEN ' S/ '
+          ELSE '' END ||
+          'NF: '||INSUMOS.notafiscal||' DE '||
+          EXTRACT(DAY FROM INSUMOS.dataemissao)||'/'||
+          EXTRACT(MONTH FROM INSUMOS.DATAEMISSAO)||'/'||
+          EXTRACT(YEAR FROM  INSUMOS.DATAEMISSAO)||
+          ' NO VALOR DE R$ '||CAST(INSUMOS.VALOR AS DECIMAL(12,2))||
+          ' ('||CAST(INSUMOS.QUANTIDADE AS DECIMAL(12,2))||'KG)'||
+          CASE notacompra.destinatario WHEN notafiscal.destinatario THEN ''
+          ELSE
+          ' Emitida por: '||cadastroparceiros.razaosocial||' '||
+          COALESCE(cadastroparceiros.logradouro,'')||' '||
+          COALESCE(cadastroparceiros.numero,'') ||' '||
+          COALESCE(cadastroparceiros.complemento,'')||' '||
+          COALESCE(cadastroparceiros.bairro,'')||' '||
+          COALESCE(cadastroparceiros.cidade,'')||' '||
+          COALESCE(cadastroparceiros.uf,'')||' '||
+          'CEP:'||SUBSTRING(COALESCE(cadastroparceiros.cep,'') FROM 1 FOR 5)||
+          '-'||SUBSTRING(COALESCE(cadastroparceiros.cep,'')FROM 6 FOR 3)||
+          ' CNPJ:'||
+          SUBSTRING(cadastroparceiros.documento FROM 1 FOR 2)||'.'||
+          SUBSTRING(cadastroparceiros.documento FROM 3 FOR 3)||'.'||
+          SUBSTRING(cadastroparceiros.documento FROM 6 FOR 3)||'/'||
+          SUBSTRING(cadastroparceiros.documento FROM 9 FOR 4)||'-'||
+          SUBSTRING(cadastroparceiros.documento FROM 13 FOR 2)||
+          ' I.E.:'||COALESCE(cadastroparceiros.inscestadual,'') END
+          FROM NOTAFISCAL
+   INNER JOIN INSUMOS ON (NOTAFISCAL.FILIAL=INSUMOS.FILIAL AND NOTAFISCAL.IDNOTA=INSUMOS.IDNOTA)
+   LEFT JOIN NOTACOMPRA ON (NOTACOMPRA.FILIAL=INSUMOS.FILIAL AND NOTACOMPRA.IDNOTA=INSUMOS.IDNOTAENTRADA)
+   LEFT JOIN CADASTROPARCEIROS  ON (NOTACOMPRA.DESTINATARIO=CADASTROPARCEIROS.CADASTRO)
+   WHERE NOTAFISCAL.FILIAL=:FILIAL
+   AND notafiscal.idnota = :idnota
+   INTO :vmsgadicional DO
+                    IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                          msgadicional=msgadicional||'
+';
+                       msgadicional=msgadicional||vmsgadicional;
+                    END
+
+   FOR SELECT DISTINCT SUBSTRING(tributacaoicmsuf.mensagemreducao FROM 1 FOR 1000)
+                 FROM notafiscal
+                 INNER JOIN mercadoriasnota ON (notafiscal.filial = mercadoriasnota.filial AND
+                                           notafiscal.idnota = mercadoriasnota.idnota)
+                 INNER JOIN itemestoque ON (mercadoriasnota.codigo=itemestoque.codigo)
+                 INNER JOIN tributacaoicms ON (itemestoque.tributacaoicms=tributacaoicms.id)
+                 INNER JOIN tributacaoicmsuf ON (tributacaoicmsuf.id = tributacaoicms.id AND
+                                            tributacaoicmsuf.uf =notafiscal.uf)
+                  inner join cadastroparceiros on (cadastroparceiros.cadastro=notafiscal.destinatario)
+                 WHERE notafiscal.filial=:filial
+                 AND notafiscal.idnota = :idnota
+                 AND tributacaoicmsuf.mensagemreducao IS NOT NULL
+                 and substring(mercadoriasnota.situacaotribut from 2 for 2) in ('20', '70')
+
+                 ORDER BY mercadoriasnota.idmercadoria ASC
+                 INTO :vmsgadicional DO
+                    IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                          msgadicional=msgadicional||'
+';
+                       msgadicional=msgadicional||vmsgadicional;
+                    END
+
+   FOR SELECT DISTINCT SUBSTRING(tributacaoicmsuf.mensagem FROM 1 FOR 1000)
+                 FROM notafiscal
+                 INNER JOIN mercadoriasnota ON (notafiscal.filial = mercadoriasnota.filial AND
+                                           notafiscal.idnota = mercadoriasnota.idnota)
+                 INNER JOIN itemestoque ON (mercadoriasnota.codigo=itemestoque.codigo)
+                 INNER JOIN tributacaoicms ON (itemestoque.tributacaoicms=tributacaoicms.id)
+                 INNER JOIN tributacaoicmsuf ON (tributacaoicmsuf.id = tributacaoicms.id AND
+                                            tributacaoicmsuf.uf =notafiscal.uf)
+                  inner join cadastroparceiros on (cadastroparceiros.cadastro=notafiscal.destinatario)
+                 WHERE notafiscal.filial=:filial
+                 AND notafiscal.idnota = :idnota
+                 AND tributacaoicmsuf.mensagem IS NOT NULL
+                 and (mercadoriasnota.valoricms>0 or tributacaoicmsuf.tiposubstituicao = '2')
+
+                 ORDER BY mercadoriasnota.idmercadoria ASC
+                 INTO :vmsgadicional DO
+                    IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                          msgadicional=msgadicional||'
+';
+                       msgadicional=msgadicional||vmsgadicional;
+                    END
+
+
+   FOR 
+      SELECT SUBSTRING(ESTADO.MSGDADOSADICIONAIS FROM 1 FOR 1000)
+              FROM ESTADO,NOTAFISCAL
+
+              WHERE NOTAFISCAL.UF = ESTADO.ESTADO
+              AND NOTAFISCAL.FILIAL=:FILIAL
+              AND NOTAFISCAL.IDNOTA = :idnota
+              AND ESTADO.MSGDADOSADICIONAIS IS NOT NULL
+       UNION
+       SELECT SUBSTRING(REDUCAOESTADO.MENSAGEM FROM 1 FOR 1000)
+              FROM REDUCAOESTADO,ESTADO, NOTAFISCAL
+              WHERE REDUCAOESTADO.SIGLA = ESTADO.ESTADO
+              AND REDUCAOESTADO.LOCALMENSAGEM = 'D'
+              AND NOTAFISCAL.UF = ESTADO.ESTADO
+              AND NOTAFISCAL.REDUCAOICMS = REDUCAOESTADO.ID
+              AND NOTAFISCAL.FILIAL=:FILIAL
+              AND NOTAFISCAL.IDNOTA = :idnota
+              AND reducaoestado.mensagem IS NOT NULL 
+       UNION
+       SELECT SUBSTRING(REDUCAOESTADO.mensagem FROM 1 FOR 1000)
+              FROM REDUCAOESTADO,ESTADO,NOTAFISCAL
+              WHERE REDUCAOESTADO.SIGLA = ESTADO.ESTADO
+              AND REDUCAOESTADO.LOCALMENSAGEM = 'D'
+              AND notafiscal.uf = ESTADO.ESTADO
+              AND NOTAFISCAL.REDUCAOIPI = REDUCAOESTADO.ID
+              AND NOTAFISCAL.FILIAL=:FILIAL
+              AND NOTAFISCAL.IDNOTA = :idnota
+              AND REDUCAOESTADO.MENSAGEM IS NOT NULL
+
+
+       UNION
+       SELECT SUBSTRING(ESTABELECIMENTO.MENSAGEMNOTA FROM 1 FOR 1000)
+              FROM NOTAFISCAL
+              INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.CADASTRO=NOTAFISCAL.FILIAL)
+              WHERE NOTAFISCAL.FILIAL=:FILIAL
+              AND NOTAFISCAL.IDNOTA = :idnota
+              AND ESTABELECIMENTO.MENSAGEMNOTA IS NOT NULL
+              INTO :vmsgadicional DO
+                   IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                           msgadicional=CAST (msgadicional)||'
+';
+                   msgadicional=CAST (msgadicional)||vmsgadicional;
+                   END
+
+       FOR SELECT
+       SUBSTRING((cast (cadastroparceiros.OBSERVACOESENTREGA)) FROM 1 FOR 1000)
+       FROM cadastroparceiros
+       INNER JOIN NOTAFISCAL ON (NOTAFISCAL.destinatario=cadastroparceiros.cadastro)
+       WHERE NOTAFISCAL.FILIAL=:filial
+             AND NOTAFISCAL.IDNOTA=:IDNOTA
+             INTO :vmsgadicional DO
+                   IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                           msgadicional=CAST (msgadicional)||'
+';
+                   msgadicional=CAST (msgadicional)||vmsgadicional;
+                   END
+                   
+         FOR SELECT SUBSTRING(CAST (NOTAFISCAL.MSGDADOSADICIONAIS) FROM 1 FOR 1000)
+              FROM NOTAFISCAL
+              WHERE NOTAFISCAL.FILIAL=:FILIAL
+              AND NOTAFISCAL.IDNOTA = :idnota
+              AND NOTAFISCAL.MSGDADOSADICIONAIS IS NOT NULL
+              INTO :vmsgadicional DO
+                   IF (:vmsgadicional <>'') THEN BEGIN
+                       IF (:msgadicional<>'') THEN
+                           msgadicional=CAST (msgadicional)||'
+';
+                   msgadicional=CAST (msgadicional)||vmsgadicional;
+                   END
+    
+
+    suspend;
+
+END
+
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE IMP_NFE_MENSAGEMDADOSADICIONAIS TO  SYSDBA;
+

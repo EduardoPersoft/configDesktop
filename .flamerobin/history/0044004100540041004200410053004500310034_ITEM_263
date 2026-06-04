@@ -1,0 +1,5 @@
+update 
+    movtotitulopag
+set
+    movtotitulopag.VENCIMENTO = cast(movtotitulopag.vencimento as date),
+    movtotitulopag.PROGRAMACAO = cast(movtotitulopag.PROGRAMACAO as date)

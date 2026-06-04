@@ -1,0 +1,1 @@
+select * from fatped where datavencimento is not null

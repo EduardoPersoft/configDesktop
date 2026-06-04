@@ -1,0 +1,5 @@
+delete from 
+    titulorec 
+where 
+    filial=5 and 
+    titulorec.idtitulo between 156731 and 156841

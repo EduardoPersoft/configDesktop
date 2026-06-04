@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    custo,
+    prec
+from 
+    MERCADORIASNOTA
+where
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idpedido=614

@@ -1,0 +1,9 @@
+SELECT
+    first 1000
+    mercadoriasnota.*
+from 
+    MERCADORIASNOTA
+WHERE
+    filial=5
+order by
+    idnota desc

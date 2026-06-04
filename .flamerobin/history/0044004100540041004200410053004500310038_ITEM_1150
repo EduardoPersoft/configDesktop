@@ -1,0 +1,9 @@
+update  
+    PEDIDO
+set
+    pedido.c_indicador = case when exists (select * from VENDEDORESPED
+                                           inner join vendedor on vendedoresped.vendedor=vendedor.cadastro
+                                           where vendedoresped.filial=pedido.FILIAL
+                                           and vendedoresped.idnota=pedido.idnota
+                                           and vendedor.TIPOVENDEDOR in (5,6)) then 'S' else 'N' end
+                                           

@@ -1,0 +1,1 @@
+update titulorec set enviado=null where enviado = '17.08.2021'

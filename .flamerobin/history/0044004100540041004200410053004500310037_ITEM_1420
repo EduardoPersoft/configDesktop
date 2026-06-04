@@ -1,0 +1,1 @@
+select * from LOCAL WHERE DESCRICAO='Z2-B-1-19-3'

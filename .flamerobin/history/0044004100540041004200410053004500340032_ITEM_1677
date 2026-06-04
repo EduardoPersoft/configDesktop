@@ -1,0 +1,7 @@
+select 
+    *
+from
+    APONTAMENTOCOMP
+where
+    filial=110 and
+    idmovimento=24992

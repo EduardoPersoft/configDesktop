@@ -1,0 +1,7 @@
+create table c_titpagarcomissoes(
+filial integer not null,
+id integer not null,
+vendedor integer not null,
+idPagar integer not null,
+constraint pk_c_titpagarComissoes
+primary key(filial, id, vendedor))

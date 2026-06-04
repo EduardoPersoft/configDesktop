@@ -1,0 +1,16 @@
+select 
+    distinct
+    PEDIDO.DESTINATARIO,
+    PEDIDO.DATAREFERENCIA,
+    PEDIDO.FILIAL,    
+    PEDIDO.IDNOTA,
+    PEDIDO.vlrtotalnota
+from 
+    mercadoriasped
+inner join
+    PEDIDO on
+        pedido.filial=mercadoriasped.filial and
+        pedido.idnota=mercadoriasped.idnota
+where
+    pedido.datacancelamento is null and 
+    mercadoriasped.baixa='N' 

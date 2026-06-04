@@ -1,0 +1,4 @@
+select * from C_DESTINOAVULSO
+where C_DESTINOAVULSO.DATACOLETA between '14.11.2025' and '27.11.2025' 
+and coleta is not null
+order by coleta

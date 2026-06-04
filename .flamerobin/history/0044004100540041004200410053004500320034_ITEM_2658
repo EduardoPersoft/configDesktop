@@ -1,0 +1,14 @@
+select
+    itemestoque.codigo as fp,
+    itemestoque.descricao,
+    itemestoque.itembase as local,
+    materiallocal.saldototal
+from
+    ITEMESTOQUE
+inner join
+    materiallocal on
+        materiallocal.filial=5 and 
+        materiallocal.iditem=itemestoque.itembase
+        
+where
+    itemestoque.itembase is not null and itemestoque.ESTOCADO='N' and materiallocal.SALDOTOTAL>0

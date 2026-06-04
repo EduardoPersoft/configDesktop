@@ -1,0 +1,6 @@
+UPDATE
+    t_titulorec 
+set 
+    importado = 'S'
+WHERE
+    importado is null

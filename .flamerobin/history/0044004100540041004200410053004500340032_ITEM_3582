@@ -1,0 +1,1 @@
+select * from c_pedidosabertodata(110, '2025-02-28')

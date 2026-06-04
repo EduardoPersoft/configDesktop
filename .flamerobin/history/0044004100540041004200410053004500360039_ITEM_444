@@ -1,0 +1,9 @@
+insert into c_SALDOZ2(codigo,saldo)
+select locallote.codigo,sum(locallote.quantidade)
+from LOCALLOTE
+inner join 
+     local local on
+          local.id = locallote."LOCAL"
+where 
+     locallote.iditem=materialmovimentoestoque.iditem and
+     substring(local.descricao from 1 for 2) = 'Z2')

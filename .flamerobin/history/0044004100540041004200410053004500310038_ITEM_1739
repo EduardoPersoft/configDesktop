@@ -1,0 +1,7 @@
+update
+    PEDIDO
+set
+    c_datacomissao='01.08.2023'    
+where
+    filial=184 and
+    idnota=345

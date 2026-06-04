@@ -1,0 +1,1 @@
+update materiallote set quantidade =0 where quantidade is null

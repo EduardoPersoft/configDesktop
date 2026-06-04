@@ -1,0 +1,10 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao
+from
+    itemestoque
+where
+    itemestoque.codigo = 'ABRA' or 
+    itemestoque.descricao like '%ABRA%'
+

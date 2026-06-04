@@ -1,0 +1,58 @@
+    SELECT
+        C_COMISSAOPEDIDOPAGA.VENDEDOR,
+        CADVEN.NOME,
+        SUM(C_COMISSAOPEDIDOPAGA.BASECOMISSAO) BASECOMISSAO,
+        SUM(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO) VALORCOMISSAO,
+        CASE CADVEN.C_TABELACOMISSAO WHEN 3 THEN
+		(SELECT CADLOJA.NOME FROM CADASTROPARCEIROS CADLOJA,PEDIDO
+         WHERE PEDIDO.FILIAL=MIN(C_COMISSAOPEDIDOPAGA.FILIAL )
+         AND PEDIDO.IDNOTA=MIN(C_COMISSAOPEDIDOPAGA.IDNOTA)
+         AND CADLOJA.CADASTRO=PEDIDO.C_LOJA)
+		ELSE
+		(SELECT CADLOJA.NOME FROM CADASTROPARCEIROS CADLOJA
+         WHERE CADLOJA.CADASTRO=VENDEDOR.CANALRELACIONADO) 
+		 END AS LOJA,
+        MIN(COALESCE(C_COMISSAOPEDIDOPAGA.IMPRESSA ,'N')) AS IMPRESSA,
+        TITULOPAG.IDTITULO,
+        cadven.C_CCAGENCIA,
+        cadven.C_CCBANCO,
+        cadven.C_CCNUMERO,
+        coalesce(cadven.C_CCTIPOPESSOA, cadven.TIPOPESSOA),
+        coalesce(cadven.C_CCDOCUMENTO, cadven.DOCUMENTO),
+        coalesce(cadven.C_CCTITULAR, cadven.RAZAOSOCIAL),
+        cadven.C_PIX
+
+    FROM
+        C_COMISSAOPEDIDOPAGA
+    INNER join
+        CADASTROPARCEIROS CADVEN ON  CADVEN.CADASTRO = C_COMISSAOPEDIDOPAGA.VENDEDOR
+	LEFT JOIN
+		VENDEDOR ON 
+		   VENDEDOR.CADASTRO=CADVEN.CADASTRO
+    LEFT join
+        titulopag on
+            titulopag.filial=c_comissaopedidopaga.filial and
+            titulopag.IDCOMISSAO=c_comissaopedidopaga.id and
+            titulopag.parceiro=c_comissaopedidopaga.vendedor and
+            coalesce(titulopag.tipoBaixa, '')<>'E'
+
+
+    WHERE
+        C_COMISSAOPEDIDOPAGA.ID = 761
+    GROUP BY
+        C_COMISSAOPEDIDOPAGA.VENDEDOR,
+        CADVEN.C_TABELACOMISSAO,
+        VENDEDOR.CANALRELACIONADO,
+        CADVEN.NOME,
+        TITULOPAG.IDTITULO,
+        TITULOPAG.IDTITULO,
+        cadven.C_CCAGENCIA,
+        cadven.C_CCBANCO,
+        cadven.C_CCNUMERO,
+        coalesce(cadven.C_CCTIPOPESSOA, cadven.TIPOPESSOA),
+        coalesce(cadven.C_CCDOCUMENTO, cadven.DOCUMENTO),
+        coalesce(cadven.C_CCTITULAR, cadven.RAZAOSOCIAL),
+        cadven.C_PIX
+        
+   ORDER BY 5,
+        CADVEN.NOME

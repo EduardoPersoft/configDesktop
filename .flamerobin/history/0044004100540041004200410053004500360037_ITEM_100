@@ -1,0 +1,2 @@
+select filial,idnota,tiponota  from notafiscal
+where filial=1 and idnota=28974

@@ -1,0 +1,19 @@
+SELECT 
+    centrocustositem.filial,
+    centrocustositem.IDITEM,
+    centrocustositem.sequencia,
+    centrocustositem.idcentrocusto,
+    centrocustositem.tempo,
+    centrocustositem.produto,
+    centrocustositem.quantidadeaproduzir
+FROM
+    centrocustositem
+inner join
+    estabelecimento on
+        estabecimento.cadastro=centrocustositem.filial
+inner join
+    centrocustos on
+        centrocustos.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        centrocustos.centrocusto=CENTROCUSTOSITEM.IDCENTROCUSTO
+WHERE
+    centrocustositem.IDITEM = '70200850'

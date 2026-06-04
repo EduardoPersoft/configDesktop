@@ -1,0 +1,1 @@
+select * from SPEDFISCALEFD(12826)

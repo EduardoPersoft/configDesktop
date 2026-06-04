@@ -1,0 +1,2 @@
+select * from materialMOVIMENTOESTOQUE
+order by idmovimento desc

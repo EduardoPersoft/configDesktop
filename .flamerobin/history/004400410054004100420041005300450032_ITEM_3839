@@ -1,0 +1,4 @@
+UPDATE
+    PEDIDOCOMPRA
+SET
+    uuid = pedidocompra.filial||'-'||pedidocompra.destinatario||'-'||pedidocompra.idnota

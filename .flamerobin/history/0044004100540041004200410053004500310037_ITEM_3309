@@ -1,0 +1,2 @@
+select * from logalteracao
+where chave like '%393744%'

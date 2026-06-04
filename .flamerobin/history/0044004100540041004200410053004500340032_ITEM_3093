@@ -1,0 +1,42 @@
+select
+    movimentoestoque.documento,
+    movimentoestoque.PREVISAOFIMPRODUCAO,
+    pedido.entrega,
+    cadcli.nome,
+    COMPOSICAOOP.CODIGO,
+    itemestoque.descricao,
+    APONTAMENTOCOMP.LOTE,
+    APONTAMENTOCOMP.QUANTIDADE
+from
+    materialmovimentoestoque
+inner join 
+     movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+INNER join
+    COMPOSICAOOP ON
+        COMPOSICAOOP.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and
+        COMPOSICAOOP.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+        COMPOSICAOOP.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+INNER join
+    APONTAMENTOCOMP ON
+        APONTAMENTOCOMP.FILIAL=COMPOSICAOOP.FILIAL and
+        APONTAMENTOCOMP.IDMOVIMENTO=COMPOSICAOOP.IDMOVIMENTO and
+        APONTAMENTOCOMP.IDMATERIAL=COMPOSICAOOP.IDMOVIMENTOMATERIAL and
+        APONTAMENTOCOMP.IDCOMPOSICAO=COMPOSICAOOP.IDCOMPOSICAO    
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.produto
+left join
+    pedido on
+        pedido.filial=materialmovimentoestoque.filial and
+        pedido.idnota=materialmovimentoestoque.idpedido
+left join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.DESTINATARIO
+where
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    composicaoop.codigo='MPP03MAT2G18' and
+    APONTAMENTOCOMP.lote='73018/1/4' and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and    
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='12'

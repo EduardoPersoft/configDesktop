@@ -1,0 +1,79 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ABASTECIMENTO (
+    DATAINICIAL TIMESTAMP,
+    DATAFINAL TIMESTAMP )
+RETURNS (
+    PLACA VARCHAR(10),
+    LITROS NUMERIC(12,4),
+    DATAANTERIOR TIMESTAMP,
+    DATA TIMESTAMP,
+    KMANTERIOR NUMERIC(12,4),
+    KM NUMERIC(12,4),
+    KMPLITROS NUMERIC(12,4),
+    KMRODADA NUMERIC(12,4) )
+AS
+
+declare variable pPlaca char (10);
+declare variable pdata date;
+declare variable pKm  numeric (12,4);
+
+
+begin
+
+
+Placa = '';
+
+for select 
+   itinerarios.PLACA ,
+   cast (itinerarios.DATA as timestamp),
+   COALESCE (itinerarios.ABASTECIMENTOKM, 0),
+   COALESCE (itinerarios.ABASTECIMENTOLITROS, 0)/1000
+from 
+   itinerarios 
+where 
+   itinerarios.ABASTECIMENTOLITROS is not null and
+   itinerarios.DATA between :datainicial  and :datafinal
+order by 
+   itinerarios.placa, itinerarios.data   
+into
+   :PPLACA, :PDATA, :pKM, :LITROS
+
+do begin 
+
+   if (:placa<>:pplaca) then begin
+        select 
+            first 1
+            itinerarios.placa,
+            cast (itinerarios.DATA as timestamp),
+            COALESCE (itinerarios.ABASTECIMENTOKM, 0)
+        from 
+            itinerarios 
+        where 
+            itinerarios.ABASTECIMENTOLITROS is not null and
+            itinerarios.placa = :pplaca
+            itinerarios.DATA < :datainicial
+        order by 
+            itinerarios.data desc
+        :placa, :dataAnterior, :kmAnterior;
+   end
+
+   :Km = pkm;
+   :data = :Pdata;
+   :KmRodada = COALESCE (:Km,0) - COALESCE (:KmAnterior,0);
+   if (coalesce (:litros,0)<>0) then 
+     :kmplitros =  coalesce (:KmRodada,0) / :Litros ;
+
+   suspend;
+
+   :KmAnterior = :km;
+   :dataAnterior = :data;
+
+ end
+ 
+end^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ABASTECIMENTO TO  SYSDBA WITH GRANT OPTION;
+

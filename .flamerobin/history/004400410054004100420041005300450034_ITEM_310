@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM   
+    servicosnota
+where 
+    filial=1 and idnota=26791

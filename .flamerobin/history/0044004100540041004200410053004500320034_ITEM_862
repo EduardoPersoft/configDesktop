@@ -1,0 +1,20 @@
+select
+    notafiscal.filial,
+    notafiscal.dataemissao,
+    cadastroparceiros.cadastro,
+    cadastroparceiros.nome,
+    sum(notafiscal.VLRTOTALNOTA)
+from
+    notafiscal
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=notafiscal.destinatario
+where 
+    notafiscal.filial=5 and
+    notafiscal.destinatario = 4436 and
+    notafiscal.dataemissao = '2021-12-21'
+group by
+    notafiscal.filial,
+    notafiscal.dataemissao,
+    cadastroparceiros.cadastro,
+    cadastroparceiros.nome

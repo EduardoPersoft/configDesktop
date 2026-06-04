@@ -1,0 +1,19 @@
+select
+    i1.codigo,
+    i1.codigo as codchave
+from
+    itemestoque i1
+union     
+select
+    i1.referencia,
+    i1.codigo as codchave
+from
+    itemestoque i1
+where    
+    coalesce(i1.referencia, '')<>''
+union    
+select
+    i1.C_ORIGINAL,
+    i1.codigo as codchave
+from
+    itemestoque i1

@@ -1,0 +1,3 @@
+alter table USUARIO
+drop ihorariopermitido,
+drop fhorariopermitido

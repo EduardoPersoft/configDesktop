@@ -1,0 +1,6 @@
+select
+    *
+from 
+    listaprecoproduto 
+WHERE
+    listaprecoproduto.lista=2

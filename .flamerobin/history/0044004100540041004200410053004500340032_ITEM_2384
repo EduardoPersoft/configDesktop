@@ -1,0 +1,1 @@
+giselect * from usuario where id in (238, 271)

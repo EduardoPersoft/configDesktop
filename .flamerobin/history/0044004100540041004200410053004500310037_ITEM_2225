@@ -1,0 +1,7 @@
+select
+    *
+from
+    VERSAOALTERACAO
+where
+    substring(sql from 1 for 200) like '%FILIALPADRAO%'
+    

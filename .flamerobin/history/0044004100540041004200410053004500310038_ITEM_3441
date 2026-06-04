@@ -1,0 +1,2 @@
+select filial,idnota,c_malote from PEDIDO
+where filial=1 and idnota=74849

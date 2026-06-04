@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,codigo,mercadoriasped.icms,mercadoriasped.SISTEMACALCULASUBSTITUICAO from mercadoriasped

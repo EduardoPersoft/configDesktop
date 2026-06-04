@@ -1,0 +1,14 @@
+select 
+    filial,
+    idnota,
+    notafiscal.DATAEMISSAO,
+    numeronota
+from
+    NOTAFISCAL
+where
+    notafiscal.filial=12826 and
+    notafiscal.DATAEMISSAO>='01.03.2026'
+order by
+    notafiscal.numeronota
+
+    

@@ -1,0 +1,11 @@
+update
+    RECURSOSXCENTROCUSTOS
+set 
+    RECURSOSXCENTROCUSTOS.CENTROCUSTO = case RECURSOSXCENTROCUSTOS.CENTROCUSTO 
+    when '101' then '1101'
+    when '102' then '1105'
+    when '103' then '1102'
+    when '104' then '1103'
+    when '106' then '1104'
+    else RECURSOSXCENTROCUSTOS.CENTROCUSTO end
+

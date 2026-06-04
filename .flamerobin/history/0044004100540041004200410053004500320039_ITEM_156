@@ -1,0 +1,2 @@
+update notafiscal set uud=null 
+where filial=1 and destinatario=1282 and idnota<>25851

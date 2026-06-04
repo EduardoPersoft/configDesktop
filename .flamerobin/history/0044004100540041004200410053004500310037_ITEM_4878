@@ -1,0 +1,27 @@
+SET TERM ^ ;
+alter TRIGGER C_COLETAS_INSERT FOR C_COLETAS ACTIVE
+BEFORE insert OR update POSITION 0
+
+AS
+BEGIN
+
+/*depois de carregar a quantidade calcula o valor médio se new.qtdExpedicao>0 se não deixa valor médio como null*/
+
+    select 
+         count (movimentoestoque.COLETA) as soma    
+         from 
+             movimentoestoque
+         where                                       
+             movimentoestoque.coleta = new.coleta  
+        INTO 
+            new.qtdExpedicoes;
+            
+     if (new.qtdExpedicoes > 0 ) then 
+         new.VALORMEDIO=new.valor/new.qtdExpedicoes;
+     else new.VALORMEDIO=0 ;
+
+                
+                                        
+END
+^
+SET TERM ; ^

@@ -1,0 +1,1 @@
+select filial,idnota, vendedor from pedido where filial=110 and idnota=11605

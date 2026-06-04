@@ -1,0 +1,6 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110 and
+iditem='MPP02CPE/HR' and
+lote='63505/1/2'
+order by
+idmovimento

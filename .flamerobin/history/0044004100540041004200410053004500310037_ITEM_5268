@@ -1,0 +1,8 @@
+select      
+    substring(mercadoriasnota.descricao 
+              from 1 for 100)
+from
+    mercadoriasnota
+where 
+    filial=1 and
+    idnota=365227

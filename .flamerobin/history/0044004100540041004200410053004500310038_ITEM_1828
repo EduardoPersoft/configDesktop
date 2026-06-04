@@ -1,0 +1,30 @@
+SELECT c_pedidodatafinfilial.Idnota,
+               c_pedidodatafinfilial.Data,
+               coalesce(VENDEDORESPED.VENDEDOR,0) as vendedor,
+               coalesce(CADVEN.NOME , 'SEM VENDEDOR') NOMEVENDEDOR,
+               CADCLI.Nome,
+               PEDIDO.VLRTOTALNOTA*c_pedidodatafinfilial.Sinal AS VALORPEDIDO,
+               COALESCE(PEDIDO.C_Creditocliente,0)*c_pedidodatafinfilial.Sinal AS  C_CREDITOCLIENTE,
+               PEDIDO.Valoripi*c_pedidodatafinfilial.Sinal,
+               VENDEDORESPED.Comissaovenda AS PERCENTUALPARTICIPACAO,
+               CADVEN.C_Meta,
+               COALESCe(Pedido.C_Descontort,'N'),
+               c_pedidodatafinfilial.Sinal
+
+    FROM c_pedidodatafinfilial_v1(1,'07.08.2023','08.08.2023') c_pedidodatafinfilial
+
+    INNER JOIN PEDIDO ON (PEDIDO.FILIAL=c_pedidodatafinfilial.FILIAL
+              AND PEDIDO.IDNOTA=c_pedidodatafinfilial.IDNOTA)
+    INNER JOIN CADASTROPARCEIROS CADCLI ON (
+            CADCLI.CADASTRO=PEDIDO.DESTINATARIO)
+    Left JOIN VENDEDORESPED ON (PEDIDO.FILIAL=VENDEDORESPED.FILIAL
+                AND PEDIDO.IDNOTA=VENDEDORESPED.IDNOTA)
+    Left JOIN CADASTROPARCEIROS CADVEN ON (CADVEN.CADASTRO=
+                            VENDEDORESPED.VENDEDOR)
+    Left JOIN VENDEDOR ON (VENDEDOR.Cadastro=VENDEDORESPED.Vendedor)
+    WHERE PEDIDO.FILIAL=:FILIAL
+    AND vendedor.canalrelacionado= :C_LOJA
+    AND coalesce(VENDEDOR.Tipovendedor,1) IN (1,2,3,4)
+    AND COALESCE(PEDIDO.C_Consignacao,'N')='N'
+    AND COALESCE(PEDIDO.cancelamento,'N')='N'
+    ORDER BY vendedor.canalrelacionado,3,PEDIDO.IDNOTA

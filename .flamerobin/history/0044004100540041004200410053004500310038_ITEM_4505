@@ -1,0 +1,2 @@
+select c_fatped.* from c_fatped 
+where c_fatped.filial=1 and c_fatped.idnota in ( 77242,77228,77127)

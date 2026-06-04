@@ -1,0 +1,12 @@
+select 
+        
+        cadger.nome
+     from 
+        vendedor gerente 
+     left join
+        CADASTROPARCEIROS cadger on
+            cadger.cadastro=gerente.cadastro and
+            cadger.status = 1                        
+     where
+        gerente.canalrelacionado = 4 and
+        gerente.tipovendedor = 2

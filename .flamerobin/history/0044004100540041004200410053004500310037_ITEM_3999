@@ -1,0 +1,10 @@
+select  
+    notafiscal.*,
+    notafiscal.IDMOVIMENTO,
+from
+    NOTAFISCAL
+where
+    filial=1 and
+    notafiscal.DATAEMISSAO>='01.12.2024'
+order by
+    idnota desc

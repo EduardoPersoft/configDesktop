@@ -1,0 +1,3 @@
+update itemestoque set c_tipomateriaprima='F',
+itemestoque.grupo=2,
+itemestoque.TRIBUTACAOICMS=1

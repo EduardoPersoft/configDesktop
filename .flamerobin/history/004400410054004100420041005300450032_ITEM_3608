@@ -1,0 +1,13 @@
+SELECT
+    mercadoriasnotacompra.*
+FROM
+    MERCADORIASNOTACOMPRA
+inner JOIN  
+    notacompra on
+        notacompra.filial=mercadoriasnotacompra.filial and 
+        notacompra.idnota=mercadoriasnotacompra.idnota
+WHERE 
+    MERCADORIASNOTACOMPRA.STATUSCONFERENCIA IS not NULL AND
+    notacompra.DATAENTRADA='25.08.2021'
+order by
+    idnota

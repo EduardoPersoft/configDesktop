@@ -1,0 +1,4 @@
+select * from TITULOREC
+where filial=12826 
+and titulorec.TIPOBAIXA = 'P'
+--and tiutlorec.='16.02.2023'

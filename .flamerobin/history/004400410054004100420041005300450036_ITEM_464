@@ -1,0 +1,16 @@
+update 
+    NOTACOMPRA
+SET
+    notacompra.valorpis = 
+        coalesce((select sum(mercadoriasnotacompra.VLRPISPASEP)
+                  from MERCADORIASNOTACOMPRA
+                  where mercadoriasnotacompra.filial=notacompra.FILIAL
+                  and mercadoriasnotacompra.idnota=notacompra.idnota),0),
+    notacompra.valorcofins = 
+        coalesce((select sum(mercadoriasnotacompra.VLRCOFINS)
+                  from MERCADORIASNOTACOMPRA
+                  where mercadoriasnotacompra.filial=notacompra.FILIAL
+                  and mercadoriasnotacompra.idnota=notacompra.idnota),0)
+WHERE
+    notacompra.filial=1 
+    and notacompra.DATAEMISSAO>='01.03.2021'

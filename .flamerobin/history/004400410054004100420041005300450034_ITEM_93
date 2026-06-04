@@ -1,0 +1,4 @@
+SELECT
+    * 
+from 
+    materialmovimentoestoque.fiial=1 and MATERIALMOVIMENTOESTOQUE.idmovimento=101773

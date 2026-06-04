@@ -1,0 +1,76 @@
+SET TERM ^ ;
+
+CREATE PROCEDURE c_listaMantas( 
+    pcodigo varchar(15), 
+    plote char(12) ) 
+RETURNS( 
+    iditem varchar(15),
+    lote char(12),
+    c_largura numeric(12,3),
+    saldo double precision,
+    reserva double precision,
+    comprimento double precision    
+)
+AS 
+DECLARE VARIABLE v_filial integer; 
+DECLARE VARIABLE v_op double precision; 
+BEGIN
+  /* write your code here */ 
+  for SELECT 
+    MATERIALLOTE.FILIAL,
+    MATERIALLOTE.IDITEM,
+    MATERIALLOTE.LOTE,
+    MATERIALLOTE.C_LARGURA,
+    MATERIALLOTE.QUANTIDADE
+  FROM 
+    MATERIALLOTEDISPONIVEL   
+  WHERE MATERIALLOTEDISPONIVEL.IDITEM = :pcodigo
+    AND substring(MATERIALLOTEDISPONIVEL.LOTE from 1 for 3) = plote
+  INTO  
+    :v_filial, :iditem, :lote, c_largura, saldo do BEGIN
+    
+    SELECT 
+        sum(COMPOSICAOOP.QUANTIDADE)
+    FROM 
+        COMPOSICAOOP
+    INNER JOIN 
+        MATERIALMOVIMENTOESTOQUE ON 
+		 (MATERIALMOVIMENTOESTOQUE.FILIAL=COMPOSICAOOP.FILIAL
+		 AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=COMPOSICAOOP.IDMOVIMENTO
+		 AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL=COMPOSICAOOP.IDMOVIMENTOMATERIAL)
+	INNER JOIN 
+        MOVIMENTOESTOQUE ON
+		 (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL
+		 AND MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+    WHERE 
+        COMPOSICAOOP.FILIAL=:v_filial AND
+        COMPOSICAOOP.CODIGO=:iditem AND 
+        COMPOSICAOOP.LOTE=:lote AND 
+        MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+    into 
+        :v_op;
+        
+    saldo = saldo - coalesce(v_op, 0);
+        
+    select 
+        SUM(C_RESERVARMATERIALLOTE.QUANTIDADE)
+    FROM
+        C_RESERVARMATERIALLOTE 
+    where 
+        C_RESERVARMATERIALLOTE.FILIAL=:v_filial AND 
+        C_RESERVARMATERIALLOTE.IDITEM=:iditem AND 
+        C_RESERVARMATERIALLOTE.LOTE=:lote AND 
+        C_RESERVARMATERIALLOTE.ATIVA = 'S'
+    into 
+        :reserva;
+        
+    saldo = saldo - coalesce(reserva, 0);
+    comprimento = saldo / :c_largura;
+    
+    suspend;
+           
+  end
+
+END^
+
+SET TERM ; ^

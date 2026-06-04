@@ -1,0 +1,7 @@
+select
+    movimentoestoque.*
+from
+    movimentoestoque
+where
+    movimentoestoque.COLETADATA between '29.05.2025' and '27.06.2025' and
+    movimentoestoque.TIPOMOVIMENTO='13'

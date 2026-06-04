@@ -1,0 +1,9 @@
+select 
+    c_foradeLista.ID, 
+    c_foradeLista.CODIGO,
+    c_foradeLista.FABRICANTE,
+    c_foradeLista.APLICACAO,
+    c_foradeLista.CODIGOORIGINAL
+ from 
+    c_foradeLista
+

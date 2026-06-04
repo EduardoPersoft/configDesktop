@@ -1,0 +1,13 @@
+update 
+    mercadoriasnota 
+set 
+    precolista = precolista - (select 
+                                 mercadoriasped.PRECOLISTA 
+                               FROM 
+                                 mercadoriasped
+                               WHERE
+                                 mercadoriasped.filial=5 AND
+                                 mercadoriasped.idnota=317 AND
+                                 mercadoriasped.codigo=mercadoriasnota.codigo)
+where 
+    filial=5 and idnota=26064

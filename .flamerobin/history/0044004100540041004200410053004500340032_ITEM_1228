@@ -1,0 +1,39 @@
+select
+    apontamentocomp.filial,
+    apontamentocomp.idmovimento,
+    apontamentocomp.idmaterial,
+    apontamentocomp.IDCOMPOSICAO,
+    apontamentocomp.id,
+    apontamentocomp.lote,
+    apontamentocomp.quantidade,
+    apontamentocomp.sobra,
+    materiallote.codigoBarra,
+    materiallote.uuid,
+    LOCAL.ID,
+    LOCAL.DESCRICAO,
+    LOCALLOTE.QUANTIDADE,
+    cast('N' as char(1)) as p_check
+from
+    apontamentocomp
+inner join 
+    composicaoop on 
+    APONTAMENTOCOMP.FILIAL=composicaoop.FILIAL and 
+    APONTAMENTOCOMP.IDMOVIMENTO=composicaoop.IDMOVIMENTO and 
+    APONTAMENTOCOMP.IDCOMPOSICAO=composicaoop.IDCOMPOSICAO
+inner join
+    materiallote on
+        materiallote.filial=APONTAMENTOCOMP.filial and
+        materiallote.iditem=composicaoop.codigo and
+        materiallote.lote=APONTAMENTOCOMP.lote
+left join 
+    LOCALLOTE on 
+    MATERIALLOTE.FILIAL=LOCALLOTE.FILIAL and 
+    MATERIALLOTE.IDITEM=LOCALLOTE.IDITEM AND
+    MATERIALLOTE.LOTE=LOCALLOTE.LOTE AND
+    LOCALLOTE.QUANTIDADE>0.09
+left join 
+    local on 
+    LOCALLOTE.LOCAL=LOCAL.ID
+where  
+    apontamentocomp.filial=110 and
+    apontamentocomp.idmovimento=27605

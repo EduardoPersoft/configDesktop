@@ -1,0 +1,12 @@
+        select 
+            *
+        from
+            mapaProducao
+        inner join
+            RECURSOSXCENTROCUSTOS on
+                RECURSOSXCENTROCUSTOS.ID=MAPAPRODUCAO.RECURSO
+        where
+            materialMovimentoEstoque.filial = mapaProducao.filial and
+            mapaProducao.idMovimento = 5196 and
+            recursosXCentroCustos.centroCusto = 
+                materialmovimentoEstoque.idCentroCusto

@@ -1,0 +1,7 @@
+select
+    orcamento.datacadastro,
+    count(orcamento.idnota)    
+from
+    orcamento
+where
+    orcamento.datacadastro>='10.07.2023'

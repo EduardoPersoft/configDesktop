@@ -1,0 +1,12 @@
+select
+    pedido.datacadastro, vendedoresped.*
+from 
+    vendedoresped 
+inner join
+        pedido  on 
+            pedido.filial= vendedoresped.filial and
+            pedido.idnota=vendedoresped.idnota
+where 
+    vendedoresped.filial = 1 and 
+    vendedoresped.vendedor = 20 and 
+    vendedoresped.C_IDCOMISSAO is null

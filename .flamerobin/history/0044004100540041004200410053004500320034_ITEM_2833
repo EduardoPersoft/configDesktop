@@ -1,0 +1,6 @@
+select
+    *
+from
+    CADASTROPARCEIROS
+where
+    c_codclienteantigo=5430

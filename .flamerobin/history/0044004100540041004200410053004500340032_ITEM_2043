@@ -1,0 +1,11 @@
+update 
+    movimentoestoque
+set
+   movimentoestoque.emissao='31.03.2024'
+
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.emissao between '01.04.2024' and '03.04.2024' and
+    movimentoestoque.tipomovimento in ('17', '10', '11') and
+    movimentoestoque.usuario='ELIANE' and
+    movimentoestoque.DATAALTERACAO between '01.04.2024' and '03.04.2024' 

@@ -1,0 +1,18 @@
+select
+   classificacaofiscal.cfiscal CF_CFISCAL,
+   classificacaofiscal.descricao CF_DESCRICAO,
+   classificacaofiscal.cest cest,
+   CLASSIFICACAOFISCAL.cst CF_CST,
+   COALESCE(CLASSIFICACAOFISCAL.aliquota,0) CF_ALIQUOTA ,
+   classificacaofiscal.cstpis CF_CSTPIS,
+   classificacaofiscal.ppis CF_PPIS,
+   classificacaofiscal.cstcofins CF_CSTCOFINS,
+   classificacaofiscal.pCOFINS CF_PCOFINS,
+   classificacaofiscal.aliqnacional CF_ALIQNACIONAL,
+   classificacaofiscal.aliqimportada CF_ALIQIMPORTADA,
+   classificacaofiscal.aliqMun CF_Municipal,
+   classificacaofiscal.aliqEst CF_Estadual
+from
+    classificacaoFiscal
+where
+    classificacaoFiscal.cfiscal in ('0', '1', '39', '58')

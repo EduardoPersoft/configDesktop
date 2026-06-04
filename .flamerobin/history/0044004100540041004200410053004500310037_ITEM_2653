@@ -1,0 +1,78 @@
+select
+    case cast(itemestoque.CODIGOTRIBUTACAO as integer)
+    when '0' then 'Nacional'
+    when '1' then 'Importado'
+    when '2' then 'Adquirido Merc. Nac.'
+    end as codigoTributacao,
+
+    sum((mercadoriasnota.VLRFINALMERCAD+
+        mercadoriasnota.valoripi+
+        mercadoriasnota.VLRICMSRECOLHIDO+
+        mercadoriasnota.ICMSSTFCPVALOR+
+        mercadoriasnota.OUTDESPACESSOR+
+        mercadoriasnota.seguro+
+        mercadoriasnota.frete+
+        mercadoriasnota.ACRESCIMONOTA)-
+        (mercadoriasnota.DESCONTONOTA)) total,
+    
+    sum(mercadoriasnota.valoripi) valoripi,
+    sum(mercadoriasnota.VLRICMSRECOLHIDO)+
+    sum(mercadoriasnota.ICMSSTFCPVALOR) VLRICMSRECOLHIDO,
+    sum(mercadoriasnota.valoricms) valoricms,
+    sum(mercadoriasnota.VLRCOFINS) VLRCOFINS,
+    sum(mercadoriasnota.VLRPISPASEP) VLRpis,
+     
+    sum(mercadoriasnota.OUTDESPACESSOR) +
+    sum(mercadoriasnota.seguro)+
+    sum(mercadoriasnota.frete) freteDespesa,  
+    
+    sum((mercadoriasnota.VLRFINALMERCAD+
+    mercadoriasnota.ACRESCIMONOTA)-
+    (mercadoriasnota.DESCONTONOTA+
+     mercadoriasnota.valoricms +
+     mercadoriasnota.VLRCOFINS+
+     mercadoriasnota.VLRPISPASEP)) as liquido,
+     sum(MATERIALMOVIMENTOESTOQUE.valor)  
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on
+        mercadoriasnota.codigo=itemestoque.codigo
+inner join
+    naturezaoperacao on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+left join
+    movimentoestoque on
+        movimentoestoque.filial=notafiscal.FILIAL and
+        movimentoestoque.idnota=notafiscal.IDNOTA
+left join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.IDMERCADORIA=mercadoriasnota.idmercadoria
+where
+    notafiscal.DATAEMISSAO between '01.07.2023' and '31.07.2023'
+    and notafiscal.DATACANCELAMENTO is null
+    and notafiscal.ENTRADASAIDA = 'S'
+    
+    and not exists (select
+                        *
+                    from
+                        ESTABELECIMENTO
+                    where
+                        estabelecimento.cadastro=notafiscal.destinatario)
+    
+    and exists (select 
+                    *
+                from
+                    faturas
+                where
+                    faturas.filial=notafiscal.filial and
+                    faturas.idnota=notafiscal.idnota)
+                    
+group by
+    1

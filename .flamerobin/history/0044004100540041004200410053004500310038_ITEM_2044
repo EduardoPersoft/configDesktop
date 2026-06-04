@@ -1,0 +1,1 @@
+select max(idnota) from pedido  where filial=1

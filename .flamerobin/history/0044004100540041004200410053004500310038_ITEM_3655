@@ -1,0 +1,2 @@
+select  movimentoestoque.ITINERARIO from movimentoestoque
+where filial=1 and idnotaexpedicao=40256

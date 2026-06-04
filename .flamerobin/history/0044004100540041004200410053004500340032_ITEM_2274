@@ -1,0 +1,15 @@
+            select
+                    sum(coalesce(mercadoriasnota.VLRFINALMERCAD,0)+
+                        coalesce(MERCADORIASNOTA.VALORIPI,0))
+            from
+                MERCADORIASNOTA
+            inner join
+                notafiscal on
+                    notafiscal.filial=mercadoriasnota.filial and
+                    notafiscal.idnota=mercadoriasnota.IDNOTA
+            where
+                mercadoriasnota.filial=110 and
+                mercadoriasnota.IDPEDIDO=11142 and
+                mercadoriasnota.IDMERCPEDIDO=1 and
+                notafiscal.CANCELAMENTO='N' and
+                coalesce(mercadoriasnota.QTDBAIXA,0) = 0

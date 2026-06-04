@@ -1,0 +1,8 @@
+update
+    CADASTROPARCEIROS
+set
+    
+    CADASTROPARCEIROS.logradouroentrega = null
+where
+    CADASTROPARCEIROS.LOGRADOUROENTREGA=''
+    

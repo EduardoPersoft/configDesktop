@@ -1,0 +1,5 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.c_autorizado = itemestoque.aprovado,
+    itemestoque.C_VALIDACAO = itemestoque.aprovado

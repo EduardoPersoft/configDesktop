@@ -1,0 +1,15 @@
+select
+    cadastroparceiros.nome,
+    movtitulorec.titulo,
+    movtitulorec.fatura,
+    movtitulorec.NUMBOLBANCO,
+    movtitulorec.VALORTITULO
+from
+    MOVTITULOREC
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=movtitulorec.parceiro
+where
+    movtitulorec.filial=5 and
+    movtitulorec.EMISSAO = '18.10.2022' and
+    movtitulorec.CONTACORRENTE=1

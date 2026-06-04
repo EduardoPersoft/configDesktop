@@ -1,0 +1,16 @@
+select 
+        *
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '15.10.2024' and '15.10.2024' and
+        exists (select 
+                    * 
+                from 
+                    fatped
+                where
+                    fatped.filial=orcamento.filial and
+                    fatped.idnota=orcamento.idnota)

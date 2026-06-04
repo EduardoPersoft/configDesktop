@@ -1,0 +1,2 @@
+create index c_notafiscal_operacao
+on notafiscal(operacao)

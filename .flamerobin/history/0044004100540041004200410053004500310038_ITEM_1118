@@ -1,0 +1,15 @@
+update 
+    itemestoque Ifinal
+set
+    ifinal.VALORULTIMACOMPRA = (select 
+                                    ibase.valorultimacompra
+                                from
+                                    itemestoque ibase
+                                where
+                                    ibase.codigo=ifinal.itembase)
+where
+    ifinal.CODIGO BETWEEN 'PE-' AND 'PE-ZZZZZZ' and
+    IFANAL.VALORULTIMACOMPRA IS NULL
+                                                                    
+                
+    

@@ -1,0 +1,5 @@
+select 
+    orcamento.idrelacao,
+    orcamento.IDORCAMENTO
+from 
+orcamento

@@ -1,0 +1,15 @@
+select
+    distinct
+    CADASTROPARCEIROS.nome,
+    transportadora.PESOVOLUME
+from
+    PEDIDO
+inner join  
+    transportadora on   
+        transportadora.CADASTRO=pedido.CODIGOTRANSP
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=transportadora.cadastro
+where 
+   
+    pedido.DATACADASTRO>='18.09.2023'

@@ -1,0 +1,14 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    cast(listaprecoproduto.preco*.72 as decimal(12,2))
+from
+    LISTAPRECOPRODUTO
+inner join
+    itemestoque on
+        itemestoque.codigo=LISTAPRECOproduto.PRODUTO
+where 
+    listaprecoproduto.lista =1
+order by
+    itemestoque.codigo

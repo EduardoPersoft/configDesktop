@@ -1,0 +1,6 @@
+select
+    *
+from 
+    ORCAMENTO
+where
+    orcamento.DATAEMISSAO='27.03.2024'

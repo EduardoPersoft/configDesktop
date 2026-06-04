@@ -1,0 +1,4 @@
+UPDATE
+    itemestoque
+set
+    itemestoque.TRIBUTACAOICMS = 1

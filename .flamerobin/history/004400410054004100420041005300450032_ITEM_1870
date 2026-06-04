@@ -1,0 +1,41 @@
+select
+    i1.codigo
+from
+    ITEMESTOQUE i1
+where
+    i1.codigo = '107302'
+UNION
+select
+    i1.codigo
+from
+    ITEMESTOQUE i1
+where
+    i1.itembase = '107302'
+UNION
+select
+    i1.codigo
+from
+    ITEMESTOQUE i1
+where i1.referencia = (select
+                           i2.referencia
+                        from
+                           itemestoque i2
+                        where
+                            i2.codigo = '107302')
+UNION
+select
+    i1.itembase
+from
+    itemestoque i1
+where
+    i1.codigo = '107302'
+    and coalesce(i1.itembase, '')<>''
+union
+select
+    i1.codigo
+from
+    ITEMESTOQUECODIGOS i1
+where
+    i1.CODIGOALTERNATIVO = '107302'
+    and coalesce(i1.codigo, '')<>''
+

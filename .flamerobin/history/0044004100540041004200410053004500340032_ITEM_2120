@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+where quantidade is null

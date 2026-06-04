@@ -1,0 +1,6 @@
+update notacompra
+set
+notacompra.VLIQUIDOFATURA=vlrtotalnota,
+notacompra.VBRUTOFATURA=vlrtotalnota,
+notacompra.ADIANTAMENTO=0,
+notacompra.VDESCFATURA=0

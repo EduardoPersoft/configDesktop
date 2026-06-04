@@ -1,0 +1,7 @@
+update 
+    TITULOREC
+set
+    titulorec.codretorno='x'
+where
+    filial=5 and 
+    dataenvio = '01.01.2022'

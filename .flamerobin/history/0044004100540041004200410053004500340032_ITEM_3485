@@ -1,0 +1,14 @@
+select 
+    *
+from
+    PEDIDO
+inner join
+    mercadoriasped on
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota 
+where 
+    pedido.filial=110 and
+    pedido.datacadastro <= '31.01.2025' and
+    pedido.dataemissao is not null and
+    pedido.DATACANCELAMENTO is null and
+    mercadoriasped.baixa='N'

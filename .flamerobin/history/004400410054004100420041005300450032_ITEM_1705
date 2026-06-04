@@ -1,0 +1,3 @@
+select pedidocompra.idnota, pedidocompra.usuario from pedidocompra 
+where pedidocompra.filial=5 and pedidocompra.DATACADASTRO = '14.04.2021'
+order usuario

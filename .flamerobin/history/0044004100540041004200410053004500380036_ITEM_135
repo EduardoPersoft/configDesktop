@@ -1,0 +1,2 @@
+select * from C_LAMINACAO
+where c_lamincacao.codigo='I3-5K42C'

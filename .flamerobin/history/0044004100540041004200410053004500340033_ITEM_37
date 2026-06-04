@@ -1,0 +1,12 @@
+update
+    C_LAMINACAO
+set 
+    filme = c_filme2Salvo,
+    filme2 = c_filmeSalvo,
+    C_LAMINACAO.GRAMATURAFILME = c_gramatura2FilmeS,
+    C_LAMINACAO.GRAMATURAFILME2 = c_gramaturaFilmeS,
+    filme1bobinador = c_laminacao.C_FILME2BOBINADORS,
+    filme2bobinador = c_filme1bobinadors
+where
+c_filme2Salvo is not null
+    

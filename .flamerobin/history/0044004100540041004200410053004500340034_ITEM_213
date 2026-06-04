@@ -1,0 +1,1 @@
+select * from c_fatores where c_fatores.IDLOCAL=19

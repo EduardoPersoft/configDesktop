@@ -1,0 +1,26 @@
+insert into listaprecoproduto(
+    lista,
+    produto,
+    preco,
+    variavel,
+    custoconsiderado,
+    comissao,
+    margemlucro,
+    margemcontribuicao,
+    descontoitem, 
+    quantidade)
+select
+    lista,
+    60013,
+    preco,
+    variavel,
+    custoconsiderado,
+    comissao,
+    margemlucro,
+    margemcontribuicao,
+    descontoitem,
+    quantidade
+from
+    listaprecoproduto
+where
+    produto='60001'

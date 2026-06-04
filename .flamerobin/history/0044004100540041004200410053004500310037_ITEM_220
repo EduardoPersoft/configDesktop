@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    TITULOREC
+where 
+    titulorec.dataenvio='31.12.2021'

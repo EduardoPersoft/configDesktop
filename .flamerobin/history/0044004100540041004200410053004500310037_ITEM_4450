@@ -1,0 +1,34 @@
+SELECT DISTINCT 
+    MOVIMENTOESTOQUE.filial, 
+    MOVIMENTOESTOQUE.idmovimento,
+    MOVIMENTOESTOQUE.emissao,
+    PEDIDO.idnota,
+    PEDIDO.numeronota,
+    cadcli.nome Cliente,
+    cadtrans.nome Transportadora,
+    MATERIALMOVIMENTOESTOQUE.CONCLUIDO,
+    MOVIMENTOESTOQUE.EAN,
+    2100000000000+PEDIDO.idnota as codigoBarra
+FROM
+    MOVIMENTOESTOQUE
+INNER JOIN 
+    MATERIALMOVIMENTOESTOQUE ON 
+        (MATERIALMOVIMENTOESTOQUE.filial = MOVIMENTOESTOQUE.filial
+         AND MATERIALMOVIMENTOESTOQUE.idmovimento = MOVIMENTOESTOQUE.idmovimento)
+inner join 
+    itemestoque on 
+        (materialmovimentoestoque.iditem=itemestoque.codigo)
+LEFT JOIN 
+    PEDIDO ON 
+        (PEDIDO.filial = MATERIALMOVIMENTOESTOQUE.filial
+         AND PEDIDO.idnota = MATERIALMOVIMENTOESTOQUE.idpedido)
+LEFT JOIN 
+    CADASTROPARCEIROS CADCLI ON 
+        cadcli.cadastro = PEDIDO.destinatario
+left join 
+      cadastroparceiros cadtrans on
+              cadtrans.cadastro=movimentoestoque.transportadora
+WHERE
+    MOVIMENTOESTOQUE.tipomovimento = '13'
+    AND materialmovimentoestoque.concluido = 'N'
+    and movimentoestoque.idotaexpedicao is null

@@ -1,0 +1,3 @@
+select * from C_LISTAXCADASTRO
+where datafinal>'21.11.2025'
+order by datafinal

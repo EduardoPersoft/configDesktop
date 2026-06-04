@@ -1,0 +1,6 @@
+update NOTACOMPRA
+set dataentrada=dataemissao
+where notacompra.filial=5
+and notacompra.DATAEMISSAO between '01.08.2022' 
+and '31.08.2022'
+and notacompra.dataentrada > '31.08.2022'

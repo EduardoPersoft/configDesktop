@@ -1,0 +1,12 @@
+select 
+    ITEMESTOQUE.codigo,
+    itemestoque.CODIGOBARRA,
+    itemestoque.codigobarravolume,
+    itemestoque.PESOLIQUIDO,
+    itemestoque.DISPONIVELECOMMERCE,
+    itemestoque.DESCRIMINACAO,
+    itemestoque.familia,
+    itemestoque.grupo,
+    itemestoque.C_LOCALIMPORTACAO
+from
+    itemestoque

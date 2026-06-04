@@ -1,0 +1,3 @@
+select * from NOTAFISCAL
+where 
+notafiscal.numeronota=3447

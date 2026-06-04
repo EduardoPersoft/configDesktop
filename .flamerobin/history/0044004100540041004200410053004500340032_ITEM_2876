@@ -1,0 +1,83 @@
+
+
+select   
+    mapaProducao.recurso,
+    recursos.DESCRICAO,
+    mapaProducao.filial,
+    mapaProducao.idMovimento,
+    mapaProducao.idMovimentoMaterial,
+    mapaProducao.inicio,
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    produto.codigo,
+    produto.descricao, 
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.NOME,
+    materiallote.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    materiallote.CODIGOBARRA,    
+    local.ID,
+    local.descricao,
+    locallote.quantidade
+from
+    materialMovimentoEstoque
+inner join 
+    mercadoriasped on 
+    MATERIALMOVIMENTOESTOQUE.FILIAL=MERCADORIASPED.FILIAL and 
+    MATERIALMOVIMENTOESTOQUE.IDPEDIDO=MERCADORIASPED.IDNOTA and 
+    MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=MERCADORIASPED.IDMERCADORIA
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join
+    mapaProducao on
+        materialMovimentoEstoque.filial = mapaProducao.filial and
+        materialMovimentoEstoque.idMovimento = mapaProducao.idMovimento and
+        materialMovimentoEstoque.idMovimentoMaterial = mapaProducao.idMovimentoMaterial
+inner JOIN
+    ITEMEsTOQUE PRODUTO ON
+        produto.codigo = materialmovimentoestoque.PRODUTO
+inner JOIN
+    PEDIDO ON
+        PEDIDO.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        PEDIDO.IDNOTA=MATERIALMOVIMENTOESTOQUE.IDPEDIDO 
+inner JOIN
+    CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO = PEDIDO.DESTINATARIO
+inner join
+    composicaoop on
+        composicaoop.FILIAL=materialmovimentoestoque.filial and
+        composicaoop.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+inner join
+    APONTAMENTOCOMP on
+        APONTAMENTOCOMP.filial=composicaoop.filial and
+        apontamentocomp.IDMOVIMENTO=composicaoop.IDMOVIMENTO and
+        apontamentocomp.IDMATERIAL=composicaoop.IDMOVIMENTOMATERIAL and
+        apontamentocomp.IDCOMPOSICAO=composicaoop.IDCOMPOSICAO
+inner join
+    itemestoque mp on
+        mp.codigo=composicaoop.codigo
+inner join
+    materiallote on
+        materiallote.filial=apontamentocomp.filial and
+        materiallote.iditem=mp.codigo and
+        materiallote.lote=APONTAMENTOCOMP.lote
+inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+inner join
+    local on
+        local.id=locallote."LOCAL"
+
+inner join
+    RECURSOS on
+        recursos.ID=mapaProducao.recurso
+ where
+    materialMovimentoEstoque.filial = 110 and
+    materialMovimentoEstoque.concluido = 'N' 
+order by 
+    mapaProducao.inicio nulls last

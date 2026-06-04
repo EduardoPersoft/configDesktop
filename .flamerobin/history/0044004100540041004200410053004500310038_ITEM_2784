@@ -1,0 +1,7 @@
+select 
+    orcamento.idrelacao,
+    orcamento.IDORCAMENTO
+from 
+orcamento
+where
+    orcamento.idorcamento is not null

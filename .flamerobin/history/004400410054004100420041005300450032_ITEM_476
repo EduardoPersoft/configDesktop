@@ -1,0 +1,6 @@
+select 
+    *
+from    
+    CADASTROPARCEIROS
+where 
+    cadastro=33383

@@ -1,0 +1,6 @@
+select * from TITULOPAG titulorec
+where exists (
+select * from MOVTOTITULOPAG MOVTITULOREC
+where movtitulorec.filial=titulorec.FILIAL 
+and movtitulorec.idtitulo=titulorec.idtitulo
+and movtitulorec.DATAPROCMOV='2025-01-23' )

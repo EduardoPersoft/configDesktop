@@ -1,0 +1,10 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    itemestoque.ITEMBASE
+from 
+    ITEMESTOQUECODIGOS
+inner join 
+    itemestoque on
+        itemestoque.codigo=ITEMESTOQUECODIGOS.CODIGO

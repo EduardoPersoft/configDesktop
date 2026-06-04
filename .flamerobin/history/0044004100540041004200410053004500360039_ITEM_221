@@ -1,0 +1,3 @@
+update TITULOREC
+set titulorec.NAOLIMITEFINANCEIRO='N'
+where naolimitefinanceiro is null

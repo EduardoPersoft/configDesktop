@@ -1,0 +1,19 @@
+select * from MERCADORIASPED
+where filial=110 
+and baixa='N'
+and exists (
+select 
+    * 
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on 
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento
+where 
+    materialmovimentoestoque.filial=mercadoriasped.filial and
+    materialmovimentoestoque.idpedido=mercadoriasped.IDnota and
+    materialmovimentoestoque.IDMERCADORIA=mercadoriasped.IDMERCADORIA and
+    materialmovimentoestoque.iditem=mercadoriasped.codigo and 
+    materialmovimentoestoque.concluido='S')
+order by idnota    

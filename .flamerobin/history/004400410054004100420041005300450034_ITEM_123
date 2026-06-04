@@ -1,0 +1,7 @@
+select
+    titulorec.*
+FROM
+    titulore
+WHERE
+    titulorec.filial=1 AND
+    titulorec.documento='P63016'

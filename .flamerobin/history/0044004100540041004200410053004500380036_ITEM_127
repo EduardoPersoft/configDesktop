@@ -1,0 +1,2 @@
+select * from C_LAMINACAO
+where codigo='I3-149'

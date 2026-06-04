@@ -1,0 +1,1 @@
+select idnota,idpedido from pedido

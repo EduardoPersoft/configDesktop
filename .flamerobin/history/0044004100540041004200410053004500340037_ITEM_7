@@ -1,0 +1,1 @@
+delete from fornecedores where cadastro>1

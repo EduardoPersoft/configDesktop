@@ -1,0 +1,34 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.REFERENCIA,
+    itemestoque.itembase,
+    itemestoque.descricao,
+    sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE) as qtd
+FROM    
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial AND
+        notafiscal.idnota=mercadoriasnota.idnota
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.idnota =notafiscal.IDNOTA
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.FILIAL and
+        MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=movimentoestoque.idmovimento and 
+        materialmovimentoestoque.IDMERCADORIA=materialmovimentoestoque.IDMERCADORIA
+
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+WHERE
+    notafiscal.filial=5 and 
+    notafiscal.DATAEMISSAO between '04.08.2022' and '04.08.2022' AND
+    mercadoriasnota.idpedido is not null
+group by
+    itemestoque.codigo,
+    itemestoque.REFERENCIA,
+    itemestoque.itembase,
+    itemestoque.descricao

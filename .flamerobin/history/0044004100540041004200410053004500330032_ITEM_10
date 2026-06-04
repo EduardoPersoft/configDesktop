@@ -1,0 +1,8 @@
+select
+    *
+FROM
+    MERCADORIASNOTA
+where
+    MERCADORIASNOTA.FILIAL=5 and
+    MERCADORIASNOTA.IDNOTA=301879 and
+    mercadoriasnota.SITUACAOTRIBUT='010'

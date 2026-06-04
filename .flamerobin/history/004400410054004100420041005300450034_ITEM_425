@@ -1,0 +1,2 @@
+select itemestoque.codigo, itemestoque.descricao, itemestoque.c_tipo,itemestoque.C_TIPOPRODUTO from itemestoque
+order by codigo

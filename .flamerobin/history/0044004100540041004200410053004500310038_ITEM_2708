@@ -1,0 +1,2 @@
+select filial,idnota,pedido.datacadastro,pedido.DESTINATARIO,pedido.C_PEDIDOSUBSTITUIDO from PEDIDO
+where filial=1 and idnota in (71701,72288)

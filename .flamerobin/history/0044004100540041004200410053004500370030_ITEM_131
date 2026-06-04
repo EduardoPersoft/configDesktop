@@ -1,0 +1,10 @@
+create table c_movfinanceiro(
+entrada varchar(30),
+dataPagamento date,
+contaCorrenteImportada integer,
+documento varchar(10),
+fatura varchar(2),
+id integer,
+contaOriginal integer,
+tipoBaixa char(1),
+situacao varchar(50))

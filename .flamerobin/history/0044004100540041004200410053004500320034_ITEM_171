@@ -1,0 +1,7 @@
+select PLANILHAORC.*, 
+       (select mercadoriasorc.IDMERCADORIA FROM MERCADORIASORC
+        where mercadoriasorc.filial=planilhaorc.filial AND
+        mercadoriasorc.idnota=planilhaorc.idnota AND
+        mercadoriasorc.codigo=planilhaorc.codigo)  as id
+ from PLANILHAORC where filial = 5 and idnota=188
+

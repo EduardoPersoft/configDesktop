@@ -1,0 +1,5 @@
+select 
+    CADASTROPARCEIROS.cadastro,
+    cadastroparceiros.GRUPOEMPRESARIAL
+from 
+    CADASTROPARCEIROS

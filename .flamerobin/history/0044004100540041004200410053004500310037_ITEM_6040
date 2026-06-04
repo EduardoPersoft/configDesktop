@@ -1,0 +1,7 @@
+select 
+    *
+from
+    CADASTROPARCEIROS
+where
+    CADASTROPARCEIROS.LOGRADOUROENTREGA is not null and
+    CADASTROPARCEIROS.CIDADEENTREGA is null

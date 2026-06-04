@@ -1,0 +1,28 @@
+select 
+    first 10 
+    registroContato.registro,
+    registroContato.processamento,
+    registroContato.abertura,
+    registroContato.tipoOcorrencia,
+    registroContato.atendente,
+    
+
+    registroContato.PARCEIRO,
+    cadParceiro.nome,
+    cadParceiro.telefone,
+    registroContato.contato,
+    
+    registroContato.assunto,
+    registroContato.descricao,
+    
+    registroContato.responsavel,
+    registroContato.previsaoResposta,
+    registroContato.fechamento,
+    
+    registroContato.usuario,
+    registroContato.dataAlteracao
+from 
+    registroContato
+inner join
+    cadastroParceiros cadParceiro on
+        cadParceiro.cadastro=registroContato.parceiro

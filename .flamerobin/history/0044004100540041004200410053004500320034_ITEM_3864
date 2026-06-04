@@ -1,0 +1,7 @@
+update
+    NOTAFISCAL
+set
+    notafiscal.destinatario=3231
+where
+    notafiscal.destinatario=4042
+    

@@ -1,0 +1,6 @@
+select
+    *
+from
+    ESTSIN
+where
+    ESTSIN.RELATORIO='C_RECCOMISAO'

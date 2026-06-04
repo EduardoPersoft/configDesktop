@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+order by locallote.DATALOCACAO desc

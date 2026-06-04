@@ -1,0 +1,16 @@
+insert c_preco(codigo,descricao,CUSTO)
+SELECT 
+    MERCADORIASPEDcompra.codigo,
+    itemestoque.descricao,
+    cast((sum(mercadoriaspedcompra.VLRFINALMERCAD)-sum(mercadoriaspedcompra.VALORICMS))/sum(mercadoriaspedcompra.quantidade)
+         as decimal(12,3))
+from
+    MERCADORIASPEDCOMPRA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo
+where
+    itemestoque.tipoproduto='1'
+group by
+    MERCADORIASPEDcompra.codigo,
+   itemestoque.descricao

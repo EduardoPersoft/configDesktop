@@ -1,0 +1,10 @@
+select
+    mercadoriasnota.idmercadoria,
+    mercadoriasnota.codigo,
+    mercadoriasnota.quantidade
+from 
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota=24112 and
+    mercadoriasnota.codigo='9886005-S'

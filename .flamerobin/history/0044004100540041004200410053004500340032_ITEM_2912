@@ -1,0 +1,5 @@
+update
+mercadoriasped 
+set qtdeenviada=0, baixa='N'
+where filial=110 and idnota in 
+(11594, 11595,11597,11598)

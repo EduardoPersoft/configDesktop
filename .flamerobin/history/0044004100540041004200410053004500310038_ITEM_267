@@ -1,0 +1,7 @@
+update
+    CONTACORRENTE
+set
+    PROPRIETARIO = 2
+where
+    FILIAL=1 AND 
+    CODIGO IN (238, 35, 343)

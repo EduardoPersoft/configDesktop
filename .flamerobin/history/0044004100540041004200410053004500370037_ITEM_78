@@ -1,0 +1,6 @@
+select * from movbancarios
+where filial=233
+and idcontacorrente=2
+
+and movimentacao between '25.09.2025' and '30.09.2025'
+order by movimentacao desc

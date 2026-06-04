@@ -1,0 +1,9 @@
+
+select
+    *
+from 
+    ITEMCUSTODATA
+where
+    itemcustodata.codigo='CAM1C00G'
+
+        

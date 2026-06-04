@@ -1,0 +1,2 @@
+select * from locallote where filial=110 and locallote.QUANTIDADE<-0.001
+order by iditem, lote

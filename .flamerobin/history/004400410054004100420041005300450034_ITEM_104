@@ -1,0 +1,1 @@
+select * from INVENTARIOESTOQUEDATA where data='31.03.2021'  order by data desc

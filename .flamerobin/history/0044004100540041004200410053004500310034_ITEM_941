@@ -1,0 +1,4 @@
+update
+    CONFIGURACOESGERAIS
+set
+    URL = 'https://erp.persoft.com.br/primeflex/api/'

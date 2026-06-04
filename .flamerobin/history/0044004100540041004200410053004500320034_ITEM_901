@@ -1,0 +1,1 @@
+alter table cadastroparceiros alter emailnfe type varchar(400) 

@@ -1,0 +1,15 @@
+SELECT
+    *
+FROM
+    pedido
+inner JOIN  
+    c_faturasped on
+        c_faturasped.filial=pedido.filial and 
+        c_faturasped.idnota=pedido.idnota
+WHERE
+    c_faturasped.c_malote is null and
+    exists (
+    select * from titulorec
+    where titulorec.filial=1
+    and titulorec.titulo='P'||pedido.idnota)
+

@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.localizacao=null
+where
+    itemestoque.localizacao='[null]'

@@ -1,0 +1,17 @@
+select
+    locallote.iditem,
+    locallote.lote,
+    sum(locallote.quantidade)
+from
+    LOCALLOTE
+where
+    locallote.lote in ('116080/1/10',
+'206666',
+'205586',
+'114312',
+'73930',
+'74006',
+'3150')
+group by
+    locallote.iditem,
+    locallote.lote

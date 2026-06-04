@@ -1,0 +1,38 @@
+select 
+    i1.codigo 
+from 
+    ITEMESTOQUE i1
+where 
+    i1.codigo = '14505'
+UNION
+select 
+    i1.codigo 
+from 
+    ITEMESTOQUE i1
+where 
+    i1.itembase = '14505'
+UNION
+select 
+    i1.codigo 
+from 
+    ITEMESTOQUE i1
+where i1.referencia = (select 
+                           i2.referencia 
+                        from 
+                           itemestoque i2
+                        where 
+                            i2.codigo = '14505')
+UNION
+select 
+    i2.itembase
+from
+    itemestoque i2
+where 
+    i2.codigo = '14505'
+union
+select 
+    i1.codigo 
+from 
+    ITEMESTOQUECODIGOS i1
+where 
+    i1.CODIGOALTERNATIVO = '14505'

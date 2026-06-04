@@ -1,0 +1,1 @@
+select * from C_LOGPRODUTOECOMMERCE where codigo in ('1707221', '1460506')

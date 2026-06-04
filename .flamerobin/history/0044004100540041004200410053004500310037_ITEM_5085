@@ -1,0 +1,21 @@
+select
+    cadvendedor.nome,
+    sum(coalesce(movimentoestoque.VALORFRETE,0)) as frete,
+    sum(coalesce(c_coletas.VALORMEDIO,0)) as coleta
+from
+    movimentoestoque
+inner join
+    NOTAFISCAL on
+        movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.IDNOTAEXPEDICAO=notafiscal.idnota  
+left join  
+    c_coletas on 
+        c_coletas.COLETA=movimentoestoque.COLETA
+left join
+    CADASTROPARCEIROS cadvendedor on    
+        cadvendedor.cadastro=notafiscal.vendedor
+where
+    movimentoestoque.COLETADATA between '29.05.2025' and '27.06.2025' and
+    movimentoestoque.TIPOMOVIMENTO='13'
+group by
+    cadvendedor.nome

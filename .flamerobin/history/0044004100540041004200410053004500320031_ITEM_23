@@ -1,0 +1,27 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallote."DATA",
+    materiallote.lote,
+    local.descricao,
+    locallote.QUANTIDADE
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materiallote on
+        materiallote.filial=1 AND
+        materiallote.iditem=itemestoque.CODIGO
+inner JOIN
+    locallote on
+        locallote.FILIAL=materiallote.filial AND
+        locallote.iditem=materiallote.iditem AND
+        locallote.lote=materiallote.lote
+inner JOIN
+    local on
+        local.id=locallote.local
+WHERE
+    materiallote.quantidade > 0.09 AND
+    locallote.QUANTIDADE > 0.09 and
+    materiallote."DATA" < '01.01.2021'
+order by
+    ITEMESTOQUE.codigo

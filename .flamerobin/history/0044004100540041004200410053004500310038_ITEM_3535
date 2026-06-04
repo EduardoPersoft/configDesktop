@@ -1,0 +1,2 @@
+select * from movTITULOPAG
+where filial=1 and idtitulo=371288

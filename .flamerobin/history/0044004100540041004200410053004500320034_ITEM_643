@@ -1,0 +1,8 @@
+insert into itemestoquecodigos(codigo,codigoalternativo)
+select 
+    codigo,
+    substring(codigo from 2 for 10)='0'
+FROM
+    ITEMESTOQUECODIGOS
+WHERE
+    substring(codigo from 1 for 1)='0'

@@ -1,0 +1,52 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    coalesce((select
+        sum(m1.saldototal)
+     from 
+        MATERIALLOCAL m1
+     inner join 
+        local l1 on
+            l1.id = m1.IDLOCAL
+     where
+        m1.filial=materialfilial.filial and
+        m1.iditem=materialfilial.iditem and
+        substring(l1.descricao from 1 for 2) = 'Z2'),0) as saldo,
+    itemestoque.unidade,    
+    Itemestoque.referencia ,    
+    materialfilial.SALDOMINIMO,
+    materialfilial.saldomaximo - 
+    coalesce((select
+        sum(m1.saldototal)
+     from 
+        MATERIALLOCAL m1
+     inner join 
+        local l1 on
+            l1.id = m1.IDLOCAL
+     where
+        m1.filial=materialfilial.filial and
+        m1.iditem=materialfilial.iditem and
+        substring(l1.descricao from 1 for 2) = 'Z2'),0) as qtd
+
+    
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = materialfilial.IDITEM
+WHERE
+    materialfilial.filial=:filial AND
+    materialfilial.saldominimo > 0 and
+    coalesce((select
+        sum(m1.saldototal)
+     from 
+        MATERIALLOCAL m1
+     inner join 
+        local l1 on
+            l1.id = m1.IDLOCAL
+     where
+        m1.filial=materialfilial.filial and
+        m1.iditem=materialfilial.iditem and
+        substring(l1.descricao from 1 for 2) = 'Z2'),0)<materialfilial.SALDOMINIMO    
+order by
+    itemestoque.codigo

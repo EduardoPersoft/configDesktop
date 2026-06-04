@@ -1,0 +1,27 @@
+select
+    ITEMESTOQUE.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal 
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materiallocal on
+        materiallocal.filial=5 AND
+        materiallocal.IDLOCAL=1 AND
+        itemestoque.codigo=MATERIALLOCAL.iditem
+inner JOIN
+    MERCADORIASNOTA on
+        mercadoriasnota.filial=materiallocal.filial AND
+        mercadoriasnota.codigo=materiallocal.iditem
+inner JOIN        
+   notafiscal on
+        notafiscal.filial=mercadoriasnota.filial AND
+        notafiscal.idnota=mercadoriasnota.idnota
+where        
+    itemestoque.ITEMBASE is null AND
+    itemestoque.TIPOPRODUTO = 3 AND          
+    notafiscal.dataemissao>'01.05.2022')
+            
+order by
+    materiallocal.SALDOTOTAL
+    

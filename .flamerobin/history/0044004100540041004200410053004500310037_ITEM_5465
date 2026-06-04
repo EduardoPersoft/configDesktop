@@ -1,0 +1,2 @@
+update  notafiscal orcamento set orcamento.vendedor=21083
+where orcamento.VENDEDOR=21562

@@ -1,0 +1,6 @@
+update 
+    C_MOVFINANCEIRO 
+set 
+    contacorrenteimportada=2016
+where 
+    processamento is null

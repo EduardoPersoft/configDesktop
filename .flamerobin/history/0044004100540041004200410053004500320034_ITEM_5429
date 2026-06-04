@@ -1,0 +1,32 @@
+select 
+    pedidocompra.IDNOTA as numeropedido,
+    CADASTROPARCEIROS.DOCUMENTO,
+    MERCADORIASPEDCOMPRA.CODIGO,
+    MERCADORIASPEDCOMPRA.VLRFINALMERCAD as valor,
+    pedidocompra.DATAAPROVACAO,
+    max (PRAZOMERCPEDCOMPRA.DIAS+pedidocompra.DATAAPROVACAO)
+    
+    
+from 
+    PEDIDOCOMPRA
+LEFT JOIN 
+    CADASTROPARCEIROS ON 
+        CADASTROPARCEIROS.CADASTRO=PEDIDOCOMPRA.DESTINATARIO
+inner join 
+    mercadoriaspedcompra on 
+        mercadoriaspedcompra.filial=pedidocompra.filial and
+        mercadoriaspedcompra.idnota=pedidocompra.idnota 
+left join  
+    PRAZOMERCPEDCOMPRA on
+        prazomercpedcompra.filial=mercadoriaspedcompra.filial and 
+        prazomercpedcompra.idnota=mercadoriaspedcompra.idnota and 
+        prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+where 
+    mercadoriaspedcompra.filial = 5 and 
+    coalesce (mercadoriaspedcompra.BAIXA,'N') = 'N'
+group by 
+    pedidocompra.IDNOTA,
+    CADASTROPARCEIROS.DOCUMENTO,
+    MERCADORIASPEDCOMPRA.CODIGO,
+    MERCADORIASPEDCOMPRA.VLRFINALMERCAD,
+    pedidocompra.DATAAPROVACAO

@@ -1,0 +1,2 @@
+select * from RCONTACORRENTE
+where RELATORIO='FLUXOCAIXA'

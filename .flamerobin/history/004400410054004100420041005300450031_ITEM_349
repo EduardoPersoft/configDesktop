@@ -1,0 +1,7 @@
+select
+    materialmovimentoestoque.concluido,
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.IDMOVIMENTO,
+    materialmovimentoestoque.idmovimentomaterial
+from
+    materialmovimentoestoque

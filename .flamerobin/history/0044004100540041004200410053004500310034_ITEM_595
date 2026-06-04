@@ -1,0 +1,5 @@
+select * from COMPOSICAOITEM
+where not exists
+(select * from ITEMESTOQUE
+where itemestoque.codigo=composicaoitem.iditem)
+and composicaoitem.iditem like 'I3-%'

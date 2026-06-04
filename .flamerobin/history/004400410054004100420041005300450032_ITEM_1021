@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+SET
+    itemestoque.TRIBUTACAOICMS=2
+WHERE
+    itemestoque.CLASSIFISCAL=67

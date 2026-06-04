@@ -1,0 +1,2 @@
+insert into centrocustositem(filial, iditem, idcentrocusto, tempo, sequencia, produto, quantidadeaproduzir, c_estruturacompleta, setup)
+select 110, iditem, idcentrocusto, tempo, sequencia, produto, quantidadeaproduzir, c_estruturacompleta, setup from CENTROCUSTOSITEM 

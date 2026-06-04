@@ -1,0 +1,21 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.IDMOVIMENTO,
+    movimentoestoque.IDPEDIDO,    
+    pedido.DATAALTERACAO,    
+    CADASTROPARCEIROS.nome
+from
+    MOVIMENTOESTOQUE
+left join
+    pedido on
+        pedido.filial=movimentoestoque.filial and
+        pedido.idnota=movimentoestoque.IDPEDIDO
+left join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.CADASTRO=pedido.destinatario
+where
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and 
+    coalesce(movimentoestoque.IMPRESSO, 'N') ='N' and
+    movimentoestoque.emissao = cast('now' as date)
+order by
+    idpedido desc

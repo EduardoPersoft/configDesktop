@@ -1,0 +1,53 @@
+ select 
+    itemestoque.codigo,
+    itemestoque.descricao produto,
+    coalesce('Nr.Original: '||itemestoque.REFERENCIA||'. ', '')||coalesce('Aplicacao: '||itemestoque.DEFINICAO descricao, ''),
+    itemestoque.itembase,
+    cast('' as varchar(2)) as lado,
+    'https://erp.persoft.com.br/falma/files/'||itemestoque.codigo||'/'||arq1.NOMEARQUIVO,
+    materialfilial.customedio,
+    materiallocal.SALDOTOTAL,
+    tributacaoicmsuf.LUCROSUBSTITUICAO,
+    CLASSIFICACAOFISCAL.descricao,
+    'Troca', 
+    1,
+    'ano'    
+from 
+    estabelecimento
+inner join 
+    materiallocal on
+        materiallocal.filial=estabelecimento.cadastro and
+        materiallocal.IDLOCAL=1
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.IDITEM
+inner join
+    materialfilial on
+        materialfilial.filial=materiallocal.filial and
+        materialfilial.iditem=materiallocal.IDITEM       
+left join
+    CADASTROPARCEIROS cadest on
+        cadest.cadastro=ESTABELECIMENTO.CADASTRO
+left join
+    itemestoquexarquivo arq1 on
+        arq1.CODIGO=itemestoque.codigo and
+        arq1.ORDEM = (Select
+                        min(arq2.ordem)
+                      from
+                        itemestoquexarquivo arq2
+                      where
+                        arq1.codigo=arq2.codigo)
+                        
+left join
+    TRIBUTACAOICMSUF on
+        tributacaoicmsuf.ID=itemestoque.TRIBUTACAOICMS and
+        tributacaoicmsuf.uf=cadest.uf
+        
+left join
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL   
+where
+    estabelecimento.cadastro = 5  and
+    itemestoque.DISPONIVELECOMMERCE ='S' and 
+
+    

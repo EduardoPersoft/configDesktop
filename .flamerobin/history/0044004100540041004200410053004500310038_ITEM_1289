@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where filial=184 order by documento

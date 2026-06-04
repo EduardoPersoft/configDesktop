@@ -1,0 +1,17 @@
+select 
+    '(-) TOTAL SAÍDAS',
+    titulopag.vencimento,
+    sum(lantocontpag.valor)*(-1)
+from
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+
+where
+    titulopag.filial=2098 and
+    titulopag.baixa is null
+group by     
+    1,
+    titulopag.vencimento

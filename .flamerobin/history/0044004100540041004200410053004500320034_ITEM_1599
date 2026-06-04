@@ -1,0 +1,6 @@
+select 
+* 
+from
+materiallocal
+where
+iditem='12608'

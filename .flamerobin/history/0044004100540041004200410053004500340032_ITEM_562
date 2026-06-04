@@ -1,0 +1,4 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110 and
+iditem='MPP02CPE/HRG40' and
+lote='360/6608/6'

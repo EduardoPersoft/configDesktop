@@ -1,0 +1,31 @@
+select
+    cast(pedido.dataCadastro as date) as "data",
+    pedido.idnota idorcamento,
+    cadloja.NOME,
+    cadven.nome,    
+    cadcli.nome,
+    cadcli.cidade,
+    cadcli.uf,
+    pedido.VLRTOTALNOTA as vlrtotalnotaorc,
+    'https://erp.persoft.com.br/sm/impressao.html?d=orcamentosVenda&id='||pedido.uuid as urlorcamento
+
+from
+    orcamento PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=pedido.C_LOJA
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=pedido.vendedor
+where
+    pedido.DATAEMISSAO>='01.01.2021' and
+    pedido.DATACANCELAMENTO is null  and
+    vendedorPed.TIPOVENDEDOR<=4 and
+    pedido.c_tipo=0 and
+    pedido.IDRELACAO is null and
+    pedido.c_status=1 and
+    cadloja.cadastro<>184 and
+    pedido.vlrtotalnota>150000

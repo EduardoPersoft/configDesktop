@@ -1,0 +1,2 @@
+select * from ITEMESTOQUE
+where codigobarra='4025258722821'

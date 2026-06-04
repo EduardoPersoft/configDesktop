@@ -1,0 +1,30 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    notafiscal.dataemissao, 
+    notafiscal.numeronota,
+    cadcli.nome,
+    mercadoriasnota.cfop,    
+    mercadoriasnota.QUANTIDADE,
+    mercadoriasnota.unidade,
+    case mercadoriasnota.unidade when 'KG' 
+    then mercadoriasnota.quantidade
+    else mercadoriasnota.QUANTIDADE*itemestoque.C_PESOMPPOREMBALAGEM
+    end as peso
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.destinatario
+where
+    notafiscal.filial=110 and
+    notafiscal.DATAEMISSAO between '01.08.2023' and '31.10.2023' and
+    notafiscal.CANCELAMENTO='N' and
+    itemestoque.tipoproduto='4'

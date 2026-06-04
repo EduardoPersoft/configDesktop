@@ -1,0 +1,81 @@
+SET TERM ^ ;
+
+alter PROCEDURE c_listaMantas( 
+    pcodigo varchar(15), 
+    plote char(12) ) 
+RETURNS( 
+    filial integer,
+    iditem varchar(15),
+    lote char(12),
+    c_largura numeric(12,3),
+    saldo double precision,
+    reserva double precision,
+    comprimento double precision,
+    op double precision,
+)
+AS 
+BEGIN
+  /* write your code here */ 
+  for SELECT 
+    MATERIALLOTE.FILIAL,
+    MATERIALLOTE.IDITEM,
+    MATERIALLOTE.LOTE,
+    MATERIALLOTE.C_LARGURA,
+    MATERIALLOTE.QUANTIDADE
+  FROM 
+    MATERIALLOTEDISPONIVEL   
+  INNER JOIN MATERIALLOTE ON (MATERIALLOTE.FILIAL=MATERIALLOTEDISPONIVEL.FILIAL 
+   AND MATERIALLOTE.IDITEM=MATERIALLOTEDISPONIVEL.IDITEM
+   AND MATERIALLOTE.LOTE=MATERIALLOTEDISPONIVEL.LOTE)
+  WHERE MATERIALLOTEDISPONIVEL.IDITEM = :pcodigo
+    AND substring(MATERIALLOTEDISPONIVEL.LOTE from 1 for 3) = :plote
+  INTO  
+    :filial, :iditem, :lote, c_largura, saldo do BEGIN
+    
+    SELECT 
+        sum(COMPOSICAOOP.QUANTIDADE)
+    FROM 
+        COMPOSICAOOP
+    INNER JOIN 
+        MATERIALMOVIMENTOESTOQUE ON 
+		 (MATERIALMOVIMENTOESTOQUE.FILIAL=COMPOSICAOOP.FILIAL
+		 AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=COMPOSICAOOP.IDMOVIMENTO
+		 AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL=COMPOSICAOOP.IDMOVIMENTOMATERIAL)
+	INNER JOIN 
+        MOVIMENTOESTOQUE ON
+		 (MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL
+		 AND MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+    WHERE 
+        COMPOSICAOOP.FILIAL=:filial AND
+        COMPOSICAOOP.CODIGO=:iditem AND 
+        COMPOSICAOOP.LOTE=:lote AND 
+        MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+    into 
+        :op;
+        
+    op = coalesce(op, 0);        
+    saldo = saldo - op;
+        
+    select 
+        SUM(C_RESERVARMATERIALLOTE.QUANTIDADE)
+    FROM
+        C_RESERVARMATERIALLOTE 
+    where 
+        C_RESERVARMATERIALLOTE.FILIAL=:filial AND 
+        C_RESERVARMATERIALLOTE.IDITEM=:iditem AND 
+        C_RESERVARMATERIALLOTE.LOTE=:lote AND 
+        C_RESERVARMATERIALLOTE.ATIVA = 'S'
+    into 
+        :reserva;
+        
+    reserva = coalesce(reserva, 0);
+    saldo = saldo - reserva;
+    comprimento = saldo / :c_largura;
+    
+    suspend;
+           
+  end
+
+END^
+
+SET TERM ; ^

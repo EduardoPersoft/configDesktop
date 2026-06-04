@@ -1,0 +1,13 @@
+SELECT 
+    filial,
+    idmovtobanc,
+    idlancamento,
+    contacontabil,
+    centrocusto,
+    valor
+FROM 
+    LANTOCONTPAG 
+where 
+    LANTOCONTPAG.filial=1
+    LANTOCONTPAG.idmovtobanc=201
+    

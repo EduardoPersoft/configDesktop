@@ -1,0 +1,12 @@
+update 
+    TITULOREC
+set
+    titulorec.numbolbanco=null,
+    titulorec.CODREMESSA=null,
+    titulorec.codretorno=null,
+    titulorec.LINHADIGITAVEL=null,
+    titulorec.codigobarra=null
+where
+    titulorec.CONTACORRENTE=9999 and
+    titulorec.CODRETORNO is not null and
+    titulorec.baixa is null

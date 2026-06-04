@@ -1,0 +1,2 @@
+SELECT DESREDUZIDA FROM 
+ where filial=1 and idnota=71757 AND IDMERCADORIA=1

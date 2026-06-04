@@ -1,0 +1,4 @@
+select * from NOTAFISCAL
+where filial>110  and
+uuid='{D2389AD6-8A71-49E5-9FDE-20039C9A570'
+order by idnota desc

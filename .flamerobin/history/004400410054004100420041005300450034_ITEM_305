@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM 
+    C_CREDITOS
+where 
+    cadastro = 28456

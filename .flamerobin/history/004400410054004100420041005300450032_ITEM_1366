@@ -1,0 +1,1 @@
+insert into c_i_movestx select c_i_movest5.*, null from c_i_movest5

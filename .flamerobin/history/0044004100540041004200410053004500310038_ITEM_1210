@@ -1,0 +1,6 @@
+update
+    LANTOCONTPAG
+set
+    centrocusto='5104'
+where 
+    lantocontpag.CENTROCUSTO='2700'

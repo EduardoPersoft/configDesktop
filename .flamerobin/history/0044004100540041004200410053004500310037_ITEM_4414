@@ -1,0 +1,2 @@
+insert c_itensSelecao2
+select * from c_itensSelecao

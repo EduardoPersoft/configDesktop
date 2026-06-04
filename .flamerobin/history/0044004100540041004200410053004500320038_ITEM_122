@@ -1,0 +1,14 @@
+SELECT DISTINCT
+            FATURAS.FILIAL,
+            FATURAS.IDNOTA,
+            row_number() over() ,
+            --FATURAS.IDFATURA,
+            substring  ((1000+ faturas.IDFATURA) from 2 for 3) AS DUPLICATA,
+            faturas.DATAVENCIMENTO,
+            faturas.valorfatura as VALORTITULO,
+            imp_nfe.iditem
+FROM IMP_NFE('NFE') as nfe
+INNER JOIN FATURAS ON (FATURAS.FILIAL=nfe.FILIAL AND FATURAS.IDNOTA=nfe.IDNOTA)
+where 
+    faturas.datavencimento>=nfe.DATAEMISSAO and
+    nfe.iditem = (select min(nfe2.iditem) from imp_nfe('NFE') nfe2)

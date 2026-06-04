@@ -1,0 +1,20 @@
+update
+    TITULOREC
+set 
+    tipobaixa = null,
+    titulorec.DATAPAGAMENTO=null,
+    titulorec.baixa=null,
+    titulorec.TOTALPAGO=0,
+    titulorec.VALOREMABERTO=titulorec.valortitulo,
+    titulorec.TOTALDESCONTO=0,
+    titulorec.totaljuros=0
+where
+    titulorec.filial=12826 
+    and titulorec.CONTACORRENTE=21
+    and titulorec.TIPOBAIXA = 'P'
+    and titulorec.BAIXA = '16.02.2023'
+    and not exists
+    (select * from MOVTITULOREC
+     where movtitulorec.filial=titulorec.FILIAL
+     and movtitulorec.idtitulo=titulorec.IDTITULO
+     and movtitulorec.TIPOMOVTO='D')

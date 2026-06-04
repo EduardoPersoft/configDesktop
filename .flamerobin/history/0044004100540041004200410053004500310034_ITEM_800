@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    TITULOREC
+where
+    filial=110 and
+    idtitulo=5809

@@ -1,0 +1,4 @@
+UPDATE
+    COMPOSICAOOP
+SET
+    COMPOSICAOOP.metragem = cast( (COMPOSICAOOP.QUANTIDADE * 1000) / COMPOSICAOOP.GRAMATURA / (composicao.largura/1000) as integer) 

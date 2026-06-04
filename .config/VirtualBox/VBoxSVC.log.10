@@ -1,0 +1,116 @@
+00:00:00.001275 main     VirtualBox XPCOM Server 7.2.6 r172322 linux.amd64 (Jan 20 2026 17:07:15) release log
+00:00:00.001279 main     Log opened 2026-05-22T16:10:56.699306000Z
+00:00:00.001280 main     Build Type: release
+00:00:00.001283 main     OS Product: Linux
+00:00:00.001284 main     OS Release: 6.18.7-76061807-generic
+00:00:00.001285 main     OS Version: #202601231045~1778249322~24.04~b44a3c3 SMP PREEMPT_DYNAMIC Fri M
+00:00:00.001310 main     DMI Product Name: 300E5M/300E5L
+00:00:00.001320 main     DMI Product Version: P05RED
+00:00:00.001326 main     Firmware type: UEFI
+00:00:00.002120 main     Secure Boot: Disabled
+00:00:00.002164 main     Host RAM: 7848MB (7.6GB) total, 4484MB (4.3GB) available
+00:00:00.002168 main     Executable: /usr/lib/virtualbox/VBoxSVC
+00:00:00.002168 main     Process ID: 10005
+00:00:00.002169 main     Package type: LINUX_64BITS_UBUNTU_24_04
+00:00:00.010568 main     IPC socket path: /tmp/.vbox-eduardo-ipc/ipcd
+00:00:00.036230 DCon01   VirtualBox: object creation starts
+00:00:00.038468 DCon01   Home directory: '/home/eduardo/.config/VirtualBox'
+00:00:00.039847 DCon01   Loading settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml" with version "1.21-linux"
+00:00:00.049858 DCon01   USB: Unknown USB device detected (idVendor: 0x0cf3, idProduct: 0xe500)
+00:00:00.050025 DCon01   Successfully initialised host USB using sysfs
+00:00:00.060490 DCon01   Failed to retrive disk info: getDiskName(/dev/mapper/data-root) --> data-root
+00:00:00.070148 DCon01   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp3s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:00:00.072279 DCon01   HostDnsMonitor: initializing
+00:00:00.072609 DCon01   NAT: resolv.conf: nameserver 127.0.0.53
+00:00:00.072618 DCon01   NAT: resolv.conf: ignoring "options edns0 trust-ad"
+00:00:00.072629 DCon01   HostDnsMonitor: updating information
+00:00:00.072642 DCon01   HostDnsMonitor: old information
+00:00:00.072645 DCon01     no server entries
+00:00:00.072647 DCon01     no domain set
+00:00:00.072649 DCon01     no search string entries
+00:00:00.072652 DCon01   HostDnsMonitor: new information
+00:00:00.072654 DCon01     server 1: 127.0.0.53
+00:00:00.072657 DCon01     domain: box
+00:00:00.072659 DCon01     search string 1: box
+00:00:00.080239 DCon01   VD: VDInit finished with VINF_SUCCESS
+00:00:00.097204 DCon01   rtldrNativeLoad: dlopen('/usr/lib/virtualbox/ExtensionPacks/Oracle_VM_VirtualBox_Extension_Pack/linux.amd64/VBoxPuelMain.so', RTLD_NOW | RTLD_LOCAL) failed: /usr/lib/virtualbox/ExtensionPacks/Oracle_VM_VirtualBox_Extension_Pack/linux.amd64/VBoxPuelMain.so: undefined symbol: _ZNK9RTCString10startsWithERKS_NS_15CaseSensitivityE
+00:00:00.126524 DCon01   Platform architecture set to 'x86'
+00:00:00.132740 DCon01   Loading settings file "/home/eduardo/VirtualBox VMs/windows732/windows732.vbox" with version "1.19-linux"
+00:00:00.133502 DCon01   Platform architecture set to 'x86'
+00:00:00.135985 DCon01   Platform architecture set to 'x86'
+00:00:00.137309 DCon01   Loading settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+00:00:00.137664 DCon01   Platform architecture set to 'x86'
+00:00:00.144088 DCon01   OCI: Local config file '/home/eduardo/.config/VirtualBox/oci_config' does not exist
+00:00:00.144115 DCon01   OCI: Original config file '/home/eduardo/.oci/config' does not exist
+00:00:00.144118 DCon01   OCI: Reading profiles finished with status NS_OK
+00:00:00.144125 DCon01   ExtPack: Created cloud provider 'OCI' (hrc=NS_OK)
+00:00:00.145015 DCon01   VirtualBox: object created
+00:00:01.842753 DCon04   Saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml" with version "1.21-linux"
+00:00:01.862292 DCon04   Finished saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml"
+00:00:01.862918 DCon04   Saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml" with version "1.21-linux"
+00:00:01.881641 DCon04   Finished saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml"
+00:00:01.882471 DCon04   Saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml" with version "1.21-linux"
+00:00:01.901604 DCon04   Finished saving settings file "/home/eduardo/.config/VirtualBox/VirtualBox.xml"
+00:00:02.016362 DCon04   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:04.218091 DCon01   Launched VM: 1146956464 pid: 10043 (0x273b) frontend: GUI/Qt name: W10
+00:00:04.265799 DCon05   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:04.856700 DCon06   Platform architecture set to 'x86'
+00:00:04.889428 DCon07   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:05.940053 DCon08   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:00:06.056019 DCon08   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp3s0: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:00:06.276921 DCon04   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:06.555098 DCon02   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:00:06.693709 DCon05   Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+00:00:06.746370 DCon05   Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+00:00:06.813362 DCon01   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:06.896593 DCon05   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Property 'CRYPT/KeyId' does not exist}, preserve=false aResultDetail=0
+00:00:06.900730 DCon01   HostDnsMonitorProxy::GetDomainName: box
+00:00:06.901016 DCon01   HostDnsMonitorProxy::GetNameServers:
+00:00:06.901027 DCon01     name server 1: 127.0.0.53
+00:00:06.901214 DCon01   HostDnsMonitorProxy::GetSearchStrings:
+00:00:06.901220 DCon01     search string 1: box
+00:00:07.073086 DCon05   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+00:00:07.293748 DCon02   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+00:00:09.032198 DCon07   Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+00:00:09.146532 DCon07   Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+00:00:09.167391 DCon04   ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:13:45.072454 DCon149  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+01:13:45.100536 DCon149  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+01:13:45.251087 DCon139  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:14:44.209992 DCon154  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+01:14:44.280444 DCon157  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+01:14:44.298536 DCon157  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+01:14:44.344574 DCon146  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:15:20.221102 DCon140  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+01:15:20.239214 DCon140  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+01:15:20.297970 DCon161  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:15:20.320350 DCon161  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:17:41.883008 DCon156  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+01:17:41.940843 DCon161  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+01:17:43.989010 DCon161  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+01:17:44.072962 DCon165  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:22:06.106535 DCon508  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+04:22:06.152528 DCon508  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+04:22:06.230163 DCon501  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+04:22:06.254278 DCon501  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+04:22:06.402395 DCon492  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:22:07.191448 DCon492  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+04:22:07.215384 DCon492  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+04:22:07.251993 DCon517  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+04:22:07.273072 DCon517  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+04:22:07.313003 DCon513  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:22:07.377009 DCon517  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:24:37.808596 DCon514  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+04:24:37.826086 DCon514  Saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox" with version "1.19-linux"
+04:24:37.844762 DCon514  Finished saving settings file "/home/eduardo/VirtualBox VMs/W10/W10.vbox"
+04:24:37.873540 DCon499  ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={83cfdc66-4f20-4569-ad39-8722f7d472b3} aComponent={RecordingSettingsWrap} aText={Recording not started}, preserve=false aResultDetail=0
+04:24:37.894239 DCon499  ERROR [COM]: aRC=NS_ERROR_INVALID_ARG (0x80070057) aIID={e36a5081-a82a-40bd-9e4e-42a44d6ce50f} aComponent={SessionMachine} aText={Properties with TRANSIENT or TRANSRESET flag cannot be set or modified if VM is not running}, preserve=false aResultDetail=0
+04:24:38.359756 DCon526  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:24:38.917986 DCon507  ERROR [COM]: aRC=VBOX_E_OBJECT_NOT_FOUND (0x80bb0001) aIID={5bfd8965-b81b-469f-8649-f717ce97a5d5} aComponent={NvramStoreWrap} aText={The UEFI NVRAM file is not existing for this machine}, preserve=false aResultDetail=0
+04:25:02.570215 main     VirtualBox: object deletion starts
+04:25:02.636982 main     ERROR [COM]: aRC=VBOX_E_OBJECT_IN_USE (0x80bb000c) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Medium '/home/eduardo/VirtualBox VMs/windows732/windows732.vdi' cannot be closed because it is still attached to 1 virtual machines}, preserve=false aResultDetail=0
+04:25:02.637553 main     ERROR [COM]: aRC=VBOX_E_OBJECT_IN_USE (0x80bb000c) aIID={7d510820-a678-4730-a862-818dcd3fbed0} aComponent={MediumWrap} aText={Medium '/home/eduardo/VirtualBox VMs/w10/w10.vdi' cannot be closed because it is still attached to 1 virtual machines}, preserve=false aResultDetail=0
+04:25:02.652949 main     HostDnsMonitor: shutting down ...
+04:25:02.653216 main     HostDnsMonitor: shut down
+04:25:02.667645 Watcher  ERROR [COM]: aRC=E_ACCESSDENIED (0x80070005) aIID={2ce10519-3c09-45d8-a12d-e887786146b7} aComponent={VirtualBoxWrap} aText={The object is not ready}, preserve=false aResultDetail=0
+04:25:02.668834 main     VirtualBox: object deleted

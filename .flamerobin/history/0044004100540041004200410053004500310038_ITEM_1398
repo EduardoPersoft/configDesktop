@@ -1,0 +1,10 @@
+select pedido.filial, 
+       pedido.idnota, 
+       pedido.c_loja,
+       pedido.datacadastro,
+       pedido.DATAEMISSAO,
+       pedido.C_DATACOMISSAO
+from
+        pedido
+where
+    pedido.c_Comissao between '01.02.2023' and '28.02.2021'

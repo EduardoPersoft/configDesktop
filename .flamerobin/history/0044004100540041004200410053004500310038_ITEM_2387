@@ -1,0 +1,4 @@
+execute procedure C_AJUSTAGRUPOSESTOQUE('01.04.2021')
+
+
+

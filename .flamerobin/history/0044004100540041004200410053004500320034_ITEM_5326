@@ -1,0 +1,2 @@
+select * from TITULOREC
+where contacorrente=1342

@@ -1,0 +1,33 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    grupomercadoria.grupo,
+    local.id,
+    local.descricao,
+    grupomercadoria.descricao,
+    itemestoque.unidade,
+    materiallote.lote,
+    materiallote.quantidade,
+    materiallote.uuid,
+    materiallote.codigobarra,
+    materiallote.c_gramatura,
+    materiallote.c_largura,
+    cast('n' as char(1)) as p_check
+ from 
+    itemestoque
+inner join 
+    materiallote on 
+    itemestoque.codigo=materiallote.iditem
+inner join
+    estabelecimento on
+    estabelecimento.cadastro=materiallote.filial
+inner join
+    local on
+        local.id=estabelecimento.localInventario
+left join 
+    grupomercadoria on 
+    itemestoque.grupo=grupomercadoria.grupo
+where
+     materiallote.filial=? and 
+     materiallote.quantidade<=0 and
+     itemestoque.tipoproduto='1'

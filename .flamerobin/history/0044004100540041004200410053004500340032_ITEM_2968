@@ -1,0 +1,114 @@
+select 
+    mp.codigo,
+    mp.descricao,
+    composicaoop.LARGURA,
+    composicaoop.GRAMATURA,
+    
+    composicaoop.quantidade necessidade,
+
+
+    (select 
+        sum(locallote.quantidade)
+     from  
+        materiallote
+     inner join
+        LOCALLOTE on
+            locallote.filial=materiallote.filial and
+            locallote.IDITEM=materiallote.iditem and
+            locallote.lote=materiallote.lote
+     where
+        materiallote.filial=composicaoop.filial and
+        materiallote.iditem=COMPOSICAOOP.codigo and
+        materiallote.C_GRAMATURA=composicaoop.GRAMATURA and
+        materiallote.C_LARGURA=composicaoop.largura) as estoque,
+
+    (select 
+        max(PRAZOMERCPEDCOMPRA.dias) 
+     from
+        PRAZOMERCPEDCOMPRA
+     where
+        PRAZOMERCPEDCOMPRA.filial=mercadoriaspedcompra.filial and
+        prazomercpedcompra.idnota=mercadoriaspedcompra.idnota and
+        prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA)+pedido.DATACADASTRO as entregacompra,
+    MERCADORIASPEDCOMPRA.quantidade - mercadoriaspedcompra.QTDEENTREGUE as qtdComprada,
+
+    mercadoriasped.idnota pedidoVenda,
+    mercadoriasped.idmercadoria,
+    movimentoestoque.PREVISAOFIMPRODUCAO,
+    cadcli.nome,
+    produto.descricao,
+
+    
+    pedidocompra.idnota pedidocompra,    
+    cadfor.nome as fornecedor
+
+from
+    mercadoriasped
+inner join
+    pedido on
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota
+inner join 
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    itemestoque produto on
+        produto.codigo=mercadoriasped.codigo
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=mercadoriasped.filial and
+        materialmovimentoestoque.idpedido=mercadoriasped.idnota and
+        materialmovimentoestoque.IDMERCADORIA=mercadoriasped.IDMERCADORIA
+inner join
+    movimentoestoque on
+        MOVIMENTOESTOQUE.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join 
+    composicaoop on
+        composicaoop.filial=materialmovimentoestoque.filial and
+        composicaoop.idmovimento=materialmovimentoestoque.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+inner join
+    itemestoque mp on
+        mp.codigo=composicaoop.CODIGO
+left join
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=mercadoriasped.filial and
+        mercadoriaspedcompra.IDPEDVEN=mercadoriasped.idnota and
+        mercadoriaspedcompra.IDMERCPEDVEN=mercadoriasped.IDMERCADORIA and
+        mercadoriaspedcompra.baixa='N'
+left join
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial and
+        pedidocompra.idnota=mercadoriaspedcompra.idnota 
+left join
+    CADASTROPARCEIROS cadfor on    
+        cadfor.cadastro=pedidocompra.DESTINATARIO
+where
+    mercadoriasped.filial=110 and
+    mercadoriasped.baixa='N' and
+    mp.TIPOPRODUTO = 1 and
+    mp.grupo=2
+order by        
+    mp.codigo,
+    mp.descricao,
+    composicaoop.LARGURA,
+    composicaoop.GRAMATURA
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+

@@ -1,0 +1,4 @@
+select * from MOVTOTITULOPAG
+where filial=1
+and idtitulo=371967
+and MOVTOTITULOPAG.TIPOMOVTO in ('D','F')

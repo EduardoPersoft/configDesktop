@@ -1,0 +1,2 @@
+select * from MERCADORIASped
+where filial=110 and idnota=10031 and idmercadoria=1

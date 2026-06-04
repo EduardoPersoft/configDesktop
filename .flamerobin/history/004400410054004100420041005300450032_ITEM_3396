@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MERCADORIASNOTACOMPRA
+where 
+    mercadoriasnotacompra.filial=5 AND
+    mercadoriasnotacompra.idpedido=53568

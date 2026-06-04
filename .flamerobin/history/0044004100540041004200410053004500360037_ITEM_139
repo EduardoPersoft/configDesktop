@@ -1,0 +1,4 @@
+select * from NOTAFISCAL
+where notafiscal.DATAEMISSAO>='01.11.2025'
+and notafiscal.tiponota='2'
+order by numeronota

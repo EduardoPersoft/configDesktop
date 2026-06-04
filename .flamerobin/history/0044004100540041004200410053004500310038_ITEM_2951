@@ -1,0 +1,2 @@
+create index c_orcamentoalternativo
+on orcamento(filial,idrelacao)

@@ -1,0 +1,8 @@
+select * from C_COMISSAOPEDIDOPAGA 
+where 
+    id=793 and
+    
+VENDEDOR = 12530 and
+FILIAL = 1 and 
+IDNOTA = 75176 and
+IDMERCADORIA = 1

@@ -1,0 +1,14 @@
+select
+    *
+from
+    MATERIALLOTE
+where 
+    exists 
+        (select
+            *
+         from
+            t_lotes
+         where 
+            t_lotes.filial=materiallote.filial and
+            t_lotes.iditem=materiallote.iditem and
+            t_lotes.lote=materiallote.lote)

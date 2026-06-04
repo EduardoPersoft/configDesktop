@@ -1,0 +1,8 @@
+update
+    MATERIALFILIAL
+set
+    c_custodefinido=186
+where
+    materialfilial.filial=1 and
+    substring(materialfilial.iditem from 1 for 3)='PE-' and
+    materialfilial.customedio = 0

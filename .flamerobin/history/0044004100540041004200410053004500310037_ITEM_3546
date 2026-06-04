@@ -1,0 +1,10 @@
+select distinct notaFISCAL.idnota from notaFISCAL
+where notafiscal.dataemissao>='10.07.2024'
+and
+not exists
+
+(select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=notafiscal.FILIAL
+and movimentoestoque.idnota=notafiscal.idnota)
+order by
+filial,idnota desc

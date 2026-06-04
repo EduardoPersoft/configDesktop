@@ -1,0 +1,9 @@
+SELECT
+    TIPOMOVIMENTOESTOQUE.id,
+    tipomovimentoestoque.DESCRICAO,
+    tipomovimentoestoque.PRIORIDADE,
+    tipomovimentoestoque.TIPOMOVIMENTO,
+    TIPOMOVIMENTOESTOQUE.SIGLA
+FROM
+    TIPOMOVIMENTOESTOQUE
+    

@@ -1,0 +1,22 @@
+UPDATE
+    NOTAFISCAL
+SET 
+    IDMOVIMENTO =
+    (select 
+        FIRST 1
+            MOVIMENTOESTOQUE.IDMOVIMENTO
+     from
+        MOVIMENTOESTOQUE
+     WHERE   
+        movimentoestoque.filial=1 
+        and movimentoestoque.idNOTAEXPEDICAO = NOTAFISCAL.IDNOTA) AS IDMOVIMENTOESTOQUE,
+WHERE
+    NOTAFISCAL.FILIAL = 1
+    AND NOTAFISCAL.IDNOTA IN 
+    (select 
+            MOVIMENTOESTOQUE.IDNOTAEXPEDICAO
+     from
+        MOVIMENTOESTOQUE
+     WHERE   
+        movimentoestoque.filial=1 
+        and movimentoestoque.idmovimento between 102053 and 102059)

@@ -1,0 +1,1 @@
+select distinct locacao from T_ESTOQUE0802

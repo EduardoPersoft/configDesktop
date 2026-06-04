@@ -1,0 +1,1 @@
+select * from C_I_MOVEST3 where docto='57420/2'

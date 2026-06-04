@@ -1,0 +1,2 @@
+update ITEMESTOQUE
+set c_cliche=0 where c_cliche='S'

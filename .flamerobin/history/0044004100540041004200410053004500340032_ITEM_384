@@ -1,0 +1,22 @@
+select
+    notacompra.dataemissao,
+    notacompra.DATACADASTRO,
+    notacompra.NRNOTAFORNECEDOR,
+    mercadoriasnotacompra.CODIGO,
+    itemestoque.descricao,
+    mercadoriasnotacompra.QUANTIDADE
+from
+    NOTACOMPRA
+inner join
+    MERCADORIASNOTACOMPRA on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.codigo
+where
+    notacompra.filial=110 and
+    notacompra.DATAEMISSAO>='01.09.2023' and
+    mercadoriasnotacompra.codigo like 'MPP%'
+ORDER BY
+    NOTACOMPRA.DATAEMISSAO DESC

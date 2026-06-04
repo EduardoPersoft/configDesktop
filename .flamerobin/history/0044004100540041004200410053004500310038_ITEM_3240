@@ -1,0 +1,2 @@
+select * from MERCADORIASORC
+order by filial, idnota desc, idmercadoria

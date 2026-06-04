@@ -1,0 +1,14 @@
+
+  UPDATE MERCADORIASPEDCOMPRA SET QTDEENTREGUE= coalesce((select sum(mercadoriasnotacompra.quantidade) FROM mercadoriasnotacompra
+                                                 where mercadoriasnotacompra.filial=mercadoriaspedcompra.filial and 
+                                                 mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+                                                 mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA) ,0)
+where baixa = 'N'                                            
+
+UPDATE
+    MERCADORIASPEDCOMPRA
+SET
+    mercadoriaspedcompra.MINIMOBAIXA=0 ,
+    baixa='S'
+WHERE
+    filial=5 and idnota<=49387

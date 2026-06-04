@@ -1,0 +1,41 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    local.id,
+    local.descricao,
+    materialmovimentoestoque.lote,
+    materialfilial.CUSTOMEDIO,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL),
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)*
+    materialfilial.CUSTOMEDIO
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+    materialfilial on
+        materialfilial.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materialfilial.iditem=materialmovimentoestoque.iditem 
+inner join
+    local on
+        local.ID=materialmovimentoestoque.LOCALARMAZENAMENTO
+where
+    MATERIALMOVIMENTOESTOQUE.IDITEM LIKE 'MPP%' and
+    MATERIALMOVIMENTOESTOQUE.LOTE <> '.' and 
+    movimentoestoque.emissao<='31.10.2023'
+group by 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialmovimentoestoque.lote,
+    local.id,
+    local.descricao,
+    materialfilial.CUSTOMEDIO
+HAVING 
+   -- sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)>0.001 OR
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)<-0.001 
+    

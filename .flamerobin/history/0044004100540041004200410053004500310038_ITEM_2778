@@ -1,0 +1,10 @@
+select
+    filial,
+    idnota,
+    datacadastro,
+    datareferencia
+from    
+    PEDIDO
+where
+    pedido.filial=1 and
+    pedido.idnota=634

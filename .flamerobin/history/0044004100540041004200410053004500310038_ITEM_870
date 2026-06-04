@@ -1,0 +1,1 @@
+update TITULOREC set provavel=provavel+1 where filial=1 and baixa is null and vencimento=provavel and titulorec.TIPOTRANSACAO=6

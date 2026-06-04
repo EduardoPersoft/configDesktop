@@ -1,0 +1,7 @@
+UPDATE
+    MATERIALMOVIMENTOESTOQUE
+SET 
+    materialmovimentoestoque.LOCALARMAZENAMENTO=1
+where 
+    materialmovimentoestoque.filial=5 AND
+    materialmovimentoestoque.LOCALARMAZENAMENTO<>1

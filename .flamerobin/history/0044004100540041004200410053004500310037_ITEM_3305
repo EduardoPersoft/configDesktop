@@ -1,0 +1,5 @@
+update 
+    ITEMESTOQUE
+set filialpadrao=6
+ where codigo like '6%'
+and filialpadrao=1

@@ -1,0 +1,28 @@
+select 
+    MATERIALMOVIMENTOESTOQUE.FILIAL,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    sum(case movimentoestoque.tipomovimento 
+        when 10 then MATERIALMOVIMENTOESTOQUE.quantidade
+        else 0 end) as saida,
+    sum(case movimentoestoque.tipomovimento 
+        when 11 then MATERIALMOVIMENTOESTOQUE.quantidade
+        else 0 end) as entrada       
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on 
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    
+    movimentoestoque.tipomovimento in (10,11)
+group by
+    MATERIALMOVIMENTOESTOQUE.FILIAL,
+    MATERIALMOVIMENTOESTOQUE.iditem
+having 
+    sum(case movimentoestoque.tipomovimento 
+        when 10 then MATERIALMOVIMENTOESTOQUE.quantidade
+        else 0 end) <>
+    sum(case movimentoestoque.tipomovimento 
+        when 11 then MATERIALMOVIMENTOESTOQUE.quantidade
+        else 0 end) 

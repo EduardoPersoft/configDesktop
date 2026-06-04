@@ -1,0 +1,6 @@
+select * from titulorec 
+where titulorec.baixa='02.06.2025'
+and titulorec.DATAPAGAMENTO='02.06.2025'
+and titulorec.TIPOBAIXA='P'
+and titulorec.CONTACORRENTE=21 
+and titulorec.TIPOTRANSACAO=11

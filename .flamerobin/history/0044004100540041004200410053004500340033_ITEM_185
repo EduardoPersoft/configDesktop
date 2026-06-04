@@ -1,0 +1,14 @@
+select
+    mercadoriasped.idnota,
+    itemestoquexarquivo.*
+from
+    MERCADORIASPED
+inner join
+    ITEMESTOQUEXARQUIVO on
+        mercadoriasped.CODIGO=
+        ITEMESTOQUEXARQUIVO.CODIGO
+where
+    mercadoriasped.filial=110 and
+    mercadoriasped.baixa='N'
+order by
+    mercadoriasped.idnota desc

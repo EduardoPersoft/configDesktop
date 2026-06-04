@@ -1,0 +1,31 @@
+select
+    materialmovimentoestoque.filial,
+    MATERIALMOVIMENTOESTOQUE.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    materialmovimentoestoque.iditem,
+    itemestoque.descricao,
+    materialmovimentoestoque.lote,
+    materialmovimentoestoque.quantidade,
+    materiallote.C_GRAMATURA,
+    materiallote.c_largura
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+inner join
+    materiallote on
+        materiallote.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materiallote.iditem=materialmovimentoestoque.iditem and
+        materiallote.lote=MATERIALMOVIMENTOESTOQUE.lote
+where
+    MOVIMENTOESTOQUE.filial=110 and
+    movimentoestoque.PROCESSAMENTO>='01.10.2023' and
+    materialmovimentoestoque.lote like '%230930%' and
+    MOVIMENTOestoque.tipomovimento='04'
+order by
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovimentoestoque.lote
+    
+    

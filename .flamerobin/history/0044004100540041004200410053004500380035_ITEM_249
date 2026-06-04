@@ -1,0 +1,11 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+SET 
+    VALOR = QUANTIDADE * (SELECT C_PRECO.CUSTO FROM C_PRECO WHERE C_PRECO.CODIGO=MATERIALMOVIMENTOESTOQUE.IDITEM)
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        movimentoestoque.TIPOMOVIMENTO='02'
+where 
+    SUBSTRING(MATERIALMOVIMENTOESTOQUE.IDITEM FROM 1 FOR 2) IN ('EM', 'MP')

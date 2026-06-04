@@ -1,0 +1,2 @@
+select * from FATPED 
+where filial=1 and idnota=291855

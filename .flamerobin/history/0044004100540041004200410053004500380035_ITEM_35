@@ -1,0 +1,4 @@
+update
+    ITEMESTOQUEXARQUIVO
+set
+    ITEMESTOQUEXARQUIVO.ordem=0

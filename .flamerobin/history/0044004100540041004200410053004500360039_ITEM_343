@@ -1,0 +1,30 @@
+update 
+    movimentoestoque 
+set
+    movimentoestoque.VALORFRETE=
+    (select 
+        c_freteCliente.valor 
+     from 
+        c_freteCliente
+     inner join 
+        pedido on 
+      pedido.filial = movimentoestoque.filial  and 
+      pedido.idnota = movimentoestoque.IDPEDIDO and 
+      C_FRETECLIENTE.id=pedido.DESTINATARIO
+     ) 
+where 
+    movimentoestoque.filial=1 and 
+    movimentoestoque.idmovimento=2 and
+    tipomovimento=13 and exists 
+    (select 
+        c_freteCliente.valor 
+     from 
+        c_freteCliente
+     inner join 
+        pedido on 
+      pedido.filial = movimentoestoque.filial  and 
+      pedido.idnota = movimentoestoque.IDPEDIDO and 
+      C_FRETECLIENTE.id=pedido.DESTINATARIO
+     )    
+
+order by idpedido desc

@@ -1,0 +1,1 @@
+select * from c_logprodutoecommerce where codigo like '11917327s'

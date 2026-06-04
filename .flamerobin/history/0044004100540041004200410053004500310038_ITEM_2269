@@ -1,0 +1,3 @@
+select * from CADASTROPARCEIROS
+where coalesce(CADASTROPARCEIROS.PARCEIROVENDEDOR,'N')='N'
+and exists (select * from vendedor where vendedor.cadastro=CADASTROPARCEIROS.cadastro)

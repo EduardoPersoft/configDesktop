@@ -1,0 +1,164 @@
+CREATE VIEW FLCAIXAVENCIMENTO (FILIAL, RAZAOSOCIAL, SALDOANTERIOR, TIPO, RECEBIMENTOS, PAGAMENTOS, VENCIMENTO, DESCRICAO, DATAINICIAL, DATAFINAL)
+AS 
+SELECT titulorec.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'R' as tipo,
+       sum(titulorec.valoremaberto) as recebimentos,
+       CAST(0 AS DOUBLE PRECISION) as pagamentos,
+       titulorec.vencimento ,
+       estsin.descricao,
+       estsin.datainicial ,
+       estsin.datafinal
+FROM titulorec
+INNER JOIN estsin on(estsin.estabelecimento = titulorec.filial and
+                     titulorec.vencimento between estsin.datainicial and estsin.datafinal and
+                     estsin.relatorio = 'FLUXOCAIXA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = titulorec.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = titulorec.contacorrente and
+                              rcontacorrente.relatorio = 'FLUXOCAIXA')
+INNER JOIN rtipocobranca on (rtipocobranca.tipotransacao = titulorec.tipotransacao and
+                             rtipocobranca.relatorio = 'FLUXOCAIXA')
+WHERE titulorec.baixa is null
+GROUP BY filial, razaosocial, vencimento, descricao, datainicial, datafinal
+
+UNION
+
+SELECT titulopag.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'P' as tipo,
+       CAST(0 AS DOUBLE PRECISION) as recebimentos,
+       sum(titulopag.valoremaberto) as pagamentos,
+       titulopag.vencimento,
+       estsin.descricao,
+       estsin.datainicial,
+       estsin.datafinal
+FROM titulopag
+INNER JOIN estsin on(estsin.estabelecimento = titulopag.filial and
+                     titulopag.vencimento between estsin.datainicial and estsin.datafinal and
+                     estsin.relatorio = 'FLUXOCAIXA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = titulopag.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = titulopag.contacorrente and
+                              rcontacorrente.relatorio = 'FLUXOCAIXA')
+INNER JOIN rtipopagamento on (rtipopagamento.tipopagamento = titulopag.tipotransacao and
+                             rtipopagamento.relatorio = 'FLUXOCAIXA')
+WHERE titulopag.baixa is null
+GROUP BY filial, razaosocial, vencimento, descricao, datainicial, datafinal
+
+--pedidos de compra de mercadoria em aberto com pagamentos no períoodo
+UNION
+/*
+       select pedidocompra.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'P' as tipo,
+       CAST('0' AS DOUBLE PRECISION) as recebimentos,
+       faturaspedcompra.VALORFATURA AS PAGAMENTOS,
+       (pedidocompra.dataaprovacao+prazomercpedcompra.dias+faturaspedcompra.qtdedias) AS VENCIMENTO,
+       estsin.descricao,
+       estsin.datainicial,
+       estsin.datafinal
+  from   mercadoriaspedcompra
+
+  inner join pedidocompra on (mercadoriaspedcompra.filial=pedidocompra .filial
+                      and mercadoriaspedcompra.idnota=pedidocompra .idnota)
+
+  inner join prazomercpedcompra on (mercadoriaspedcompra.filial=prazomercpedcompra.filial
+                      and mercadoriaspedcompra.idnota=prazomercpedcompra.idnota
+                      and mercadoriaspedcompra.idmercadoria=prazomercpedcompra.iditem)
+  inner join faturaspedcompra on (faturaspedcompra.filial=pedidocompra.filial
+                             and faturaspedcompra.idnota=pedidocompra.idnota)
+  inner join cadastroparceiros estab on (estab.cadastro = pedidocompra .filial)
+  inner join cadastroparceiros parceiro on (parceiro.cadastro = pedidocompra .destinatario)
+  inner join estsin on (estsin.estabelecimento = pedidocompra .filial and
+                      estsin.relatorio = 'FLUXOCAIXA')
+
+  where (pedidocompra.dataaprovacao+prazomercpedcompra.dias+faturaspedcompra.qtdedias)
+  between estsin.datainicial and estsin.datafinal and
+  mercadoriaspedcompra.baixa='N'
+  and pedidocompra.datacancelamento is null
+
+
+  UNION
+
+       select pedidocompra.filial,
+       estab.razaosocial,
+       0 as saldoanterior,
+       'P' as tipo,
+       CAST('0' AS DOUBLE PRECISION) as recebimentos,
+       faturaspedcompra.VALORFATURA AS PAGAMENTOS,
+       (pedidocompra.dataaprovacao+PRAZOSERVPEDCOMPRA.dias+faturaspedcompra.qtdedias) AS VENCIMENTO,
+       estsin.descricao,
+       estsin.datainicial,
+       estsin.datafinal
+  from   SERVICOSPEDCOMPRA
+
+  inner join pedidocompra on (SERVICOSPEDCOMPRA.filial=pedidocompra .filial
+                      and SERVICOSPEDCOMPRA.idnota=pedidocompra .idnota)
+
+  inner join PRAZOSERVPEDCOMPRA on (SERVICOSPEDCOMPRA.filial=PRAZOSERVPEDCOMPRA.filial
+                      and SERVICOSPEDCOMPRA.idnota=PRAZOSERVPEDCOMPRA.idnota
+                      and SERVICOSPEDCOMPRA.IDSERVICO=PRAZOSERVPEDCOMPRA.iditem)
+  inner join faturaspedcompra on (faturaspedcompra.filial=pedidocompra.filial
+                             and faturaspedcompra.idnota=pedidocompra.idnota)
+  inner join cadastroparceiros estab on (estab.cadastro = pedidocompra .filial)
+  inner join cadastroparceiros parceiro on (parceiro.cadastro = pedidocompra .destinatario)
+  inner join estsin on (estsin.estabelecimento = pedidocompra .filial and
+                      estsin.relatorio = 'FLUXOCAIXA')
+
+  where (pedidocompra.dataaprovacao+prazoservpedcompra.dias+faturaspedcompra.qtdedias)
+  between estsin.datainicial and estsin.datafinal and
+  SERVICOSPEDCOMPRA.baixa='N'
+  and pedidocompra.datacancelamento is null
+
+
+
+--pedidos de compra de serviço em aberto com pagamentos no períoodo
+
+UNION
+*/
+SELECT CAST(contacorrente.filial AS INTEGER),
+       estab.razaosocial,
+       0 as saldoanterior,
+       'R' as tipo,
+       sum(contacorrente.saldoreal) as recebimentos,
+
+       CAST(0 AS DOUBLE PRECISION) as pagamentos,
+       estsin.datainicial-1 as vencimento,
+       estsin.descricao,
+       estsin.datainicial,
+       estsin.datafinal
+FROM contacorrente
+INNER JOIN estsin on(estsin.estabelecimento = contacorrente.filial and
+                     estsin.relatorio = 'FLUXOCAIXA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = contacorrente.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = contacorrente.codigo and
+                              rcontacorrente.relatorio = 'FLUXOCAIXA')
+GROUP BY filial, razaosocial, descricao, datainicial, datafinal
+having sum(contacorrente.saldoreal)>=0
+
+UNION
+
+SELECT CAST(contacorrente.filial AS INTEGER),
+       estab.razaosocial,
+       0 as saldoanterior,
+       'R' as tipo,
+       sum(contacorrente.saldoreal) as recebimentos,
+       CAST(0 AS DOUBLE PRECISION) as  pagamentos,
+       estsin.datainicial-1 as vencimento,
+       estsin.descricao,
+       estsin.datainicial ,
+       estsin.datafinal
+FROM contacorrente
+INNER JOIN estsin on(estsin.estabelecimento = contacorrente.filial and
+                     estsin.relatorio = 'FLUXOCAIXA')
+INNER JOIN cadastroparceiros estab on (estab.cadastro = contacorrente.filial)
+INNER JOIN rcontacorrente on (rcontacorrente.contacorrente = contacorrente.codigo and
+                              rcontacorrente.relatorio = 'FLUXOCAIXA')
+GROUP BY filial, razaosocial, descricao, datainicial, datafinal
+having sum(contacorrente.saldoreal)<0;
+
+GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
+ ON FLCAIXAVENCIMENTO TO  SYSDBA WITH GRANT OPTION;
+

@@ -1,0 +1,9 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.C_CONSIGNACAO
+from 
+    pedido
+where 
+    coalesce(pedido.C_CONSIGNACAO,'N')='S' and 
+    coalesce(pedido.C_DATADEVOLUCAO) is not null

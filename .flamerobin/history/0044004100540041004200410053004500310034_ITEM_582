@@ -1,0 +1,2 @@
+select * from LOGALTERACAO
+where objeto='ESTOQUE'

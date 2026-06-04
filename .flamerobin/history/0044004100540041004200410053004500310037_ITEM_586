@@ -1,0 +1,2 @@
+select C_LOGPRODUTOECOMMERCE.*, 
+       cast(substring(C_LOGPRODUTOECOMMERCE.content from 1 for 50) as varchar(50)) from C_LOGPRODUTOECOMMERCE where C_LOGPRODUTOECOMMERCE.STATUS_CODE <> 200

@@ -1,0 +1,34 @@
+select
+    coalesce(itemestoque.itembase,itemestoque.codigo),
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    (SELECT
+        sum(materiallocal.saldototal)
+     FROM
+        MATERIALLOCAL
+     where 
+        materiallocal.filial=mercadoriasnota.filial AND
+        materiallocal.iditem=coalesce(itemestoque.itembase,itemestoque.codigo)) as saldo,
+    count(mercadoriasnota.idmercadoria)/12 as qtd_vendas,
+    sum(mercadoriasnota.quantidade)/12 as qtd_pecas,    
+    sum(coalesce(mercadoriasnota.VLRTOTALMERCAd,0))/12 as valor
+FROM
+    itemestoque
+inner join
+    MERCADORIASNOTA on
+        mercadoriasnota.codigo=itemestoque.codigo
+inner JOIN
+    notafiscal on
+        mercadoriasnota.filial=notafiscal.filial and 
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+WHERE
+    notafiscal.filial=5 AND
+    notafiscal.DATAEMISSAO between '01.10.2020' and '30.04.2021'
+group by
+    mercadoriasnota.filial,
+    1,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    4
+order by
+    5 desc

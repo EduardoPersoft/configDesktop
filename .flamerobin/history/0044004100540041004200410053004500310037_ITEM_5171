@@ -1,0 +1,2 @@
+select * from NFECTRL
+where filial=12826 and idnota=364785

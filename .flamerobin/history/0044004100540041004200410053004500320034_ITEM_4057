@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    TITULOPAG
+where
+    titulopag.fiial=6 and
+    titulopag.titulo='IPTU'

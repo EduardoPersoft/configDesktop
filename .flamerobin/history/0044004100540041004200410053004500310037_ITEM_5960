@@ -1,0 +1,16 @@
+select 
+    c_destinoavulso.ID,
+    c_destinoavulso.DATASOLICITACAO,
+    c_destinoavulso.MOTORISTA,
+    c_destinoavulso.COLETA,
+    c_destinoavulso.DATACOLETA,
+    c_destinoavulso.OBSERVACAO,
+    c_destinoavulso.LOCALIZACAO,
+    cast('N' as char(1)) as P_MARCA
+from
+    c_destinoavulso
+left join
+    c_tipopadraocoleta on
+        c_tipopadraocoleta.id=c_destinoavulso.TIPOPARADA
+where 
+    c_destinoavulso.COLETA='0877'

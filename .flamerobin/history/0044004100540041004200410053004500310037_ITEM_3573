@@ -1,0 +1,8 @@
+update 
+    MERCADORIASorc
+set
+    mercadoriasorc.SITUACAOTRIBUT = '260'
+where
+    mercadoriasorc.filial=12826 and
+    mercadoriasorc.SITUACAOTRIBUT='160'
+    

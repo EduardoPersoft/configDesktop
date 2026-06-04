@@ -1,0 +1,6 @@
+update 
+    PEDIDO
+set
+    pedido.indpres=1, frete=9
+where coalesce(pedido.uf,'') = ''
+and pedido.datacasdatro>='01.01.2025'

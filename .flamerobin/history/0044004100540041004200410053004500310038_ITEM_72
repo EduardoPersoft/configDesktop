@@ -1,0 +1,4 @@
+update 
+    configuracoesgerais
+SET
+    c_url = 'http://porta.stamonica.com.br'

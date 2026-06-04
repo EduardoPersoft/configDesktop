@@ -1,0 +1,7 @@
+update
+    LANTOCONTrec
+set 
+    lantocontrec.CENTROCUSTO='0503'
+where
+    lantocontrec.filial=2098 and
+    coalesce(lantocontrec.centrocusto,'')=''

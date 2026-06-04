@@ -1,0 +1,7 @@
+--insert into ITEMESTOQUECODIGOS(codigo, codigoalternativo)
+
+select * from itemestoque
+where not exists
+(select * from ITEMESTOQUECODIGOS
+where itemestoque.codigo=ITEMESTOQUECODIGOS.codigo)
+order by codigo

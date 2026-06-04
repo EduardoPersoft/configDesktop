@@ -1,0 +1,4 @@
+select * from VENDEDORESPED
+
+where filial=1 and idnota=66067
+    

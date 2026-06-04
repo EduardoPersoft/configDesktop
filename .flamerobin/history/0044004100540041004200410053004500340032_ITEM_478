@@ -1,0 +1,11 @@
+select 
+    iditem,
+    lote,
+    quantidade*(-1) 
+from 
+    MATERIALLOTE
+where
+    materiallote.filial = 110 and
+    materiallote.iditem like 'MPP%' and
+    materiallote.quantidadE<0
+    

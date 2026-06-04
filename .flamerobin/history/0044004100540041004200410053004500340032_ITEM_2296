@@ -1,0 +1,4 @@
+select * from MERCADORIASNOTACOMPRA where filial=110
+
+and cfop='5922'
+order by idnota desc

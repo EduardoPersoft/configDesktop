@@ -1,0 +1,3 @@
+select filial,idnota,idmovimento from NOTAFISCAL
+where filial=12826 and
+idmovimento=516822

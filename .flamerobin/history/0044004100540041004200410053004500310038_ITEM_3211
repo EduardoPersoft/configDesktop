@@ -1,0 +1,3 @@
+select * from c_comissaopaga
+vendedor=165 and
+vendedoresped.C_IDCOMISSAO=769

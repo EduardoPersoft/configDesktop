@@ -1,0 +1,14 @@
+select 
+    filial,idnota,PEDIDOCOMPRA.TIPOPAGAMENTO
+from
+    PEDIDOCOMPRA
+where 
+    EXISTS
+    (select
+        *
+     from
+        MERCADORIASPEDCOMPRA
+     where
+        mercadoriaspedcompra.filial=pedidocompra.filial
+        and mercadoriaspedcompra.idnota=pedidocompra.idnota
+        and mercadoriaspedcompra.baixa='N')

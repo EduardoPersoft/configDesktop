@@ -1,0 +1,2 @@
+alter table notafiscal 
+drop c_transp_logradouro 

@@ -1,0 +1,2 @@
+insert into turnos INTO (RECURSO,INICIO,FIM)
+VALUES(1,'08:00', '18:00')

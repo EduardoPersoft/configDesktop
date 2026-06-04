@@ -1,0 +1,9 @@
+select
+*
+from
+    TURNODEFAULT
+where 
+    TURNODEFAULT.RECURSO=7
+ORDER by 
+    TURNODEFAULT.DIA
+    TURNODEFAULT.DIA

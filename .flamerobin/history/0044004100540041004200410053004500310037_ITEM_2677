@@ -1,0 +1,10 @@
+select
+    MOVBANCARIOS.filial,
+    movbancarios.IDCONTACORRENTE,
+    movbancarios.IDMOVTOBANCARIO,
+    movbancarios.HISTORICOEXTRATO
+from
+    movbancarios
+where
+    movbancarios.filial=1 and
+    movbancarios.MOVIMENTACAO between '01.07.2023' and '31.07.2023'

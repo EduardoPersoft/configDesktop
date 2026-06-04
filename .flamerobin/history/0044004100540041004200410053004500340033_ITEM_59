@@ -1,0 +1,2 @@
+select * from inventarioestoquedata
+where filial=110 and data='2023-09-01'

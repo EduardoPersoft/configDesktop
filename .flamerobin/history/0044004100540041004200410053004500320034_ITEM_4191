@@ -1,0 +1,7 @@
+select  
+    *
+from
+    MOVTOTITULOREC
+where
+    movtotitulorec.filial=5 and
+    movtotitulorec.titulo in ('9035388', '9035393')

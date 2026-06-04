@@ -1,0 +1,12 @@
+SELECT
+    filial,
+    idnota,
+    datacadastro,
+    idcomprador,
+    USUARIO
+FROM
+    PEDIDOCOMPRA
+WHERE
+    filial=5
+order by
+    idnota desc

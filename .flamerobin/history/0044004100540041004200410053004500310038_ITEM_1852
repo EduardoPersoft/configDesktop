@@ -1,0 +1,15 @@
+select
+    MATERIALMOVIMENTOESTOQUE.codigo,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    sum(materialmovimentoestoque.quantidade) qtd,
+    sum(materialmovimentoestoque.valor) VALOR
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.IDMOVIMENTO=movimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao<'01.02.2023'
+    

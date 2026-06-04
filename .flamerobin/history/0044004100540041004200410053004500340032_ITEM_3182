@@ -1,0 +1,2 @@
+select * from materiallocal
+where codigo='MPP02TRAC85ME'

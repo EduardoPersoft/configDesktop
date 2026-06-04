@@ -1,0 +1,10 @@
+SELECT
+    distinct
+    mercadoriasnota.codigo,
+    mercadoriasnota.desreduzida,
+    mercadoriasnota.cfop,
+    mercadoriasnota.SITUACAOTRIBUT
+from
+    mercadoriasnota
+WHERE
+    substring(mercadoriasnota.SITUACAOTRIBUT from 1 for 2) in (10, 60)

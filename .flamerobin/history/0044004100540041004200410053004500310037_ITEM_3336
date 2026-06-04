@@ -1,0 +1,37 @@
+SELECT 
+       ITEMESTOQUE.CODIGO ITEMESTOQUE_CODIGO,
+
+       coalesce((select 
+            sum(coalesce(locallote.quantidade,0))
+        from 
+            locallote 
+        inner JOIN
+            local on
+                local.ID=locallote.local
+        where
+            locallote.IDITEM=case itemestoque.estocado when 'N'
+                                 then coalesce(itemestoque.itembase, itemestoque.codigo)
+                            else itemestoque.codigo end and
+            local.SALDODISPONIVEL='S'),0)
+        -
+        coalesce((select 
+            sum(m2.quantidade - coalesce(m2.qtdeenviada,0))
+         FROM
+            MERCADORIASPED m2
+         INNER JOIN
+            PEDIDO p2 ON
+                p2.FILIAL=m2.FILIAL AND
+                p2.IDNOTA=m2.IDNOTA and
+                p2.cancelamento='N' and
+                p2.dataemissao is not null 
+         WHERE
+            m2.baixa='N' AND
+            m2.codigoestoque=case itemestoque.estocado when 'N'
+                                 then coalesce(itemestoque.itembase, itemestoque.codigo)
+                                 else itemestoque.codigo end 
+                         ),0)
+             MERCPED_ESTOQUEDISPONIVEL
+
+FROM itemestoque
+
+WHERE ITEMESTOQUE.CODIGO='01240004'

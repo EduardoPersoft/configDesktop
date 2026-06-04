@@ -1,0 +1,7 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.CODIGO
+from 
+    ITEMESTOQUE
+where 
+    not exists (select * from itemestoquecodigos where ITEMESTOQUECODIGOS.codigo=itemestoque.codigo and ITEMESTOQUECODIGOS.CODIGOALTERNATIVO=itemestoquecodigos.codigo)

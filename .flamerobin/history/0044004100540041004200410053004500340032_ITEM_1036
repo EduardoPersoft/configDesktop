@@ -1,0 +1,9 @@
+select 
+    contaAnalitica.contacontabil,
+    contaAnalitica.descricao
+from 
+    contascontabeis contaAnalitica
+where 
+    idplano=4 
+order by 
+    contacontabil

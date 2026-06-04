@@ -1,0 +1,19 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.datacadastro,
+    pedido.DATAREFERENCIA,
+    pedido.C_DATACOMISSAO,
+    (select 
+        C_FATURASPED.LIBERACAO
+     from 
+        C_FATURASPED
+     where
+        c_faturasped.filial=pedido.filial and
+        c_faturasped.idnota=pedido.idnota)
+from
+    PEDIDO
+where
+    pedido.filial=184
+order by 
+    pedido.idnota desc

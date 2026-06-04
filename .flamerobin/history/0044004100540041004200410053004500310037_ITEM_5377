@@ -1,0 +1,6 @@
+update 
+    movimentoestoque
+set
+    c_coletafinanceiro = movimentoestoque.COLETADATA
+where
+    movimentoestoque.coletadata>='01.01.2025'

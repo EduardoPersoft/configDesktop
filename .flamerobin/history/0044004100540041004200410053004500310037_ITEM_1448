@@ -1,0 +1,46 @@
+SELECT
+    --first 60
+    TITULOREC.FILIAL,
+    TITULOREC.IDTITULO,
+    TITULOREC.titulo,
+    TITULOREC.FATURA,
+    TITULOREC.EMISSAO,
+    TITULOREC.VENCIMENTO,
+    TITULOREC.VALORTITULO,
+    TITULOREC.LINHADIGITAVEL,
+    CADCLI.CADASTRO,
+    CADCLI.NOME,
+    CADCLI.TIPOPESSOA,
+    CADCLI.DOCUMENTO,
+    CADCLI.RAZAOSOCIAL,
+    COALESCE(CLIENTES.EMAILCOBRANCA,COALESCE(CADCLI.EMAILNFE, CADCLI.EMAIL)) AS EMAIL,
+    (select first 1 usuario.email from usuario where usuario.SERNOTIFICADO like '%TITREC_BCC;%' ) as Bcc,
+    coalesce(cadven.email,'') as CC,
+    cast(null as varchar(20)) as subject,
+    cast(null as varchar(100)) as body
+FROM
+        TITULOREC
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro = titulorec.PARCEIRO
+inner JOIN
+    clientes on
+        clientes.cadastro = cadcli.CADASTRO
+left JOIN
+    vendedor on
+        vendedor.cadastro = clientes.VENDEDOR AND
+        vendedor.NOTIFICARVENDEDOR = 'S'
+left JOIN
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vendedor.CADASTRO
+WHERE
+    titulorec.idtiulo<=289362
+    and titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+	and coalesce(COALESCE(CLIENTES.EMAILCOBRANCA,COALESCE(CADCLI.EMAILNFE, CADCLI.EMAIL)),'') <> ''
+order by
+    titulorec.filial,
+    titulorec.titulo,
+    titulorec.fatura

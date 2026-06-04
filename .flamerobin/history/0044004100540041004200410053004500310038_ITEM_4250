@@ -1,0 +1,1 @@
+select * from CONDICAOPAGAMENTO where c_descricaocompeta is not null

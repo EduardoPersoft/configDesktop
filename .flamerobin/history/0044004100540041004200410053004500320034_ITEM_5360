@@ -1,0 +1,19 @@
+select
+    *
+from 
+    titulorec
+where 
+    titulorec.CONTACORRENTE=1342 and
+    titulorec.filial=5 and 
+    coalesce(titulorec.codretorno, '**') <> '02'
+order by
+    titulorec.vencimento
+    
+    
+    
+    
+    
+    
+    
+    
+    

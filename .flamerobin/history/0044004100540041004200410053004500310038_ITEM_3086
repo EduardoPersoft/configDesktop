@@ -1,0 +1,2 @@
+update C_FATURASPED set liberacao=null, filialtitulo=null, idtitulo=null
+where filial=1 and idnota=74183

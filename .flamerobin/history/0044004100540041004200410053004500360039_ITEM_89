@@ -1,0 +1,2 @@
+delete  from mercadoriasped
+where filial=12826 and idnota>=172635

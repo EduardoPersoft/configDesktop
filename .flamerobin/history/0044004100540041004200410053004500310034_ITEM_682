@@ -1,0 +1,6 @@
+select 
+    *
+from
+    composicaoop
+where 
+    filial=110

@@ -1,0 +1,9 @@
+select
+    mercadoriasnotacompra.CFOP,
+    mercadoriasnotacompra.cstipi,
+    MERCADORIASNOTACOMPRA.*
+from
+    MERCADORIASNOTACOMPRA
+where
+    mercadoriasnotacompra.filial=5 and
+    mercadoriasnotacompra.idnota=125979

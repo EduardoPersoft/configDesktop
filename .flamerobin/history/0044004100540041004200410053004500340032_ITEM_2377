@@ -1,0 +1,7 @@
+SELECT * FROM T_LOTESNULOS
+INNER JOIN LOCALLOTE on
+LOCALLOTE.FILIAL=110
+AND LOCALLOTE.IDITEM=T_LOTESNULOS.IDITEM
+ANd locallote.lote=t_lotesnulos.LOTE
+and locallote."LOCAL"=t_lotesnulos.localarmazenamento
+and locallote.quantidade<>0

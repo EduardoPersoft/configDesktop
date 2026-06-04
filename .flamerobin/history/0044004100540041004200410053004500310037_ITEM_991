@@ -1,0 +1,6 @@
+select * from MERCADORIASNOTA
+where filial=1 and idnota>273883 and not exists (
+select * from COMPOSICAOMERCNOTA
+where composicaomercnota.filial=mercadoriasnota.FILIAL
+and composicaomercnota.idnota=mercadoriasnota.idnota 
+and composicaomercnota.IDITEM=mercadoriasnota.IDMERCADORIA)

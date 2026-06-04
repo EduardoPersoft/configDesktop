@@ -1,0 +1,14 @@
+select
+    CADcli.CADASTRO,
+    CADcli.NOME,
+    
+    MAX(PEDIDO.DATACADASTRO) DATA
+from
+    PEDIDO
+INNER join
+    CADASTROPARCEIROS cadcli ON
+        cadcli.CADASTRO=PEDIDO.DESTINATARIO
+
+GROUP BY
+cadcli.CADASTRO,
+    cadcli.NOME

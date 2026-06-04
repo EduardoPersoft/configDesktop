@@ -1,0 +1,3 @@
+select * from C_IMPORTARMOVIMENTOS_PREPARAR(5)
+--execute procedure C_IMPORTARNOTAS1
+

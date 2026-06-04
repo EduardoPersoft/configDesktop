@@ -1,0 +1,10 @@
+select 
+    codigo, 
+    c_original,
+    c_mrfornecedor,
+    FORNECEDOr,
+    descricao,
+    coalesce(estoqueimportadora,0)
+    coalesce(esqoquedistribuidora,0) total 
+from    
+    c_estoque(1)

@@ -1,0 +1,1 @@
+select * from materiallote where filial=110

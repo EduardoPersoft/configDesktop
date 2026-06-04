@@ -1,0 +1,129 @@
+SELECT 
+       NOTAFISCAL.FILIAL, 
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.ENTRADASAIDA,
+       NOTAFISCAL.DATAEMISSAO AS DATA,
+       CAST(NOTAFISCAL.NUMERONOTA AS VARCHAR(10)) AS NUMERONOTA,
+       NOTAFISCAL.NUMERONOTA AS ORDEMNOTA,
+       coalesce (NOTAFISCAL.CFOP,null) as cfop,
+       servicosnota.idpedido,
+       CLIENTES.CADASTRO,
+       CLIENTES.NOME,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.DEVOLUCAO,
+       case notafiscal.entradasaida when 'S' 
+            then NATUREZAOPERACAO.FATURA 
+            else NATUREZAOPERACAO.DEVOLUCAOFATURAMENTO 
+            end fatura,
+       
+       case when exists (select 
+                            * 
+                         from 
+                            ESTABELECIMENTO
+                         where 
+                            estabelecimento.CADASTRO=clientes.cadastro) 
+        then 'N' else 'S' end receita,
+       case when exists (select 
+                            * 
+                         from 
+                            ESTABELECIMENTO
+                         where 
+                            estabelecimento.CADASTRO=clientes.cadastro) 
+        then 'S' else 'N' end entreFiliais,
+       
+       COALESCE(NOTAFISCAL.VLRTOTALNOTA, 0) as VLRTOTALMERCAD,
+       CAST ('0' AS NUMERIC (12,2)) AS VALORIPI,
+       CAST ('0' AS NUMERIC (12,2)) AS VLRSEMIPI,
+       NOTAFISCAL.FILIAL,
+       ESTAB.RAZAOSOCIAL,
+	    CAST ('0' AS NUMERIC (12,2)) VLRICMSRECOLHIDO,
+       cast(0 as numeric(12,2)) AS DESPACESSORIAS,
+       CAST ('0' AS NUMERIC (12,2)) AS VLRFINALMERCADORIAS,
+       CAST ('0' AS NUMERIC (12,2)) AS TOTVALORICMS,
+       CAST ('0' AS NUMERIC (12,2)) AS ICMSORIGEMVALOR,
+       CAST ('0' AS NUMERIC (12,2)) AS ICMSDESTINOVALOR,
+       sum(notafiscal.VALORPIS) as pis,            
+       sum(notafiscal.VALORCOFINS) as cofins,        
+
+       sum(COALESCE(SERVICOSNOTA.VLRFINALSERVICO,0)) - COALESCE(NOTAFISCAL.ISS, 0) AS VALORLIQUIDO,
+       COALESCE(NOTAFISCAL.VLRFINALSERVICOS, 0) AS VLRFINALSERVICOS,
+       COALESCE(NOTAFISCAL.ISS, 0) AS ISS,
+       CAST (coalesce(notafiscal.psimples, 0)* 
+             notafiscal.vlrtotalnota/100 AS NUMERIC (12,2)) AS simples,
+       MODELODOCTO.ID,     
+       coalesce(cadven.cadastro, -1),
+       coalesce(cadven.nome, 'SEM VENDEDOR'),     
+       'EMISSAO' as emissaoentrada
+FROM 
+    NOTAFISCAL
+INNER JOIN 
+    NATUREZAOPERACAO ON 
+        (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+    CADASTROPARCEIROS ESTAB ON 
+        (NOTAFISCAL.FILIAL = ESTAB.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS CLIENTES 
+        ON (NOTAFISCAL.DESTINATARIO=CLIENTES.CADASTRO)
+INNER JOIN MODELODOCTO ON 
+    (NOTAFISCAL.MODELO = MODELODOCTO.ID)
+INNER join 
+        servicosnota on 
+            (servicosnota.filial=notafiscal.filial and 
+             servicosnota.idnota=notafiscal.idnota)
+INNER join 
+        SERVICO on 
+            (CAST (SERVICO.codigo AS VARCHAR (15))=SERVICOSNOTA.codigo)
+
+left join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro = (select first 1 
+                                vendedoresped.VENDEDOR
+                           from
+                                vendedoresped
+                           where
+                                vendedoresped.filial=servicosnota.filial and
+                                vendedoresped.idnota=servicosnota.IDPEDido)
+WHERE 
+    DATAEMISSAO BETWEEN '2024-05-01' and '2024-05-31'
+    AND NOT NOTAFISCAL.DATAEMISSAO IS NULL
+    AND NOTAFISCAL.CANCELAMENTO = 'N'
+    AND NOTAFISCAL.ENTRADASAIDA='S'
+
+group by 
+       NOTAFISCAL.FILIAL, 
+       NOTAFISCAL.ZONAFRANCA , 
+       notafiscal.simples, 
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.NUMERONOTA ,
+       NOTAFISCAL.ENTRADASAIDA ,
+       NOTAFISCAL.CFOP,
+       servicosnota.idpedido,       
+       CLIENTES.CADASTRO,
+       CLIENTES.NOME,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.DEVOLUCAO,
+       NATUREZAOPERACAO.DEVOLUCAOFATURAMENTO,
+       NATUREZAOPERACAO.FATURA,
+       NOTAFISCAL.VLRTOTALNOTA,
+       NOTAFISCAL.VALORIPI,
+       NOTAFISCAL.FILIAL,
+       notafiscal.idnota,
+       ESTAB.RAZAOSOCIAL,
+       NOTAFISCAL.VLRICMSRECOLHIDO,
+       NOTAFISCAL.CANCELAMENTO,
+       NOTAFISCAL.VLRFINALSERVICOS,
+       NOTAFISCAL.ISS,
+       cadven.cadastro,
+       cadven.nome,     
+       NOTAFISCAL.PSIMPLES,
+       MODELODOCTO.ID
+    
+order by
+       MODELODOCTO.MODELO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.NUMERONOTA, 
+       NOTAFISCAL.CFOP,
+       servicosnota.idpedido      
+

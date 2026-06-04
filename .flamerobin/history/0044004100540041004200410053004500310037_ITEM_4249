@@ -1,0 +1,57 @@
+SELECT (SELECT CFOPESPECIAL.CFOP FROM CFOPESPECIAL(N1.FILIAL,
+       N1.IDNOTA)) CFOP_ESPECIAL,
+       N1.FILIAL,
+       N1.IDNOTA,
+       N1.DATACADASTRO,
+       N1.VLRTOTALNOTA,
+       N1.DATAEMISSAO,
+       cast  (N1.NUMERONOTA as varchar (20)) as numeronota,
+       CADASTROPARCEIROS.CADASTRO,
+       CADASTROPARCEIROS.RAZAOSOCIAL,
+       cast (( CADASTROPARCEIROS.NOME) as varchar (60)) AS nome,
+       cast ((CADASTROPARCEIROS.DOCUMENTO) as varchar (20)) AS DOCUMENTO,
+            case when N1.cancelamento='S' then 255
+            WHEN N1.ENTRADASAIDA='E' THEN 32768
+            when not exists (select * from FATURAS
+                            where FATURAS.filial=N1.filial
+                            and FATURAS.idNOTA=N1.idnota) then -16777208
+            when cOALESCE(NFECTRL.idresultado,0) <> 100 and 
+                  modelodocto.codmodelofiscal=55 and 
+                  N1.DATACANCELAMENTO is null then 55295                      
+            else 0 end
+         as P_STATUSCOR,
+        
+        N1.NATUREZAOPERACAO,
+        N1.CONTATO,
+        N1.EMAIL,
+        N1.VLRTOTALNOTA,
+        'N' AS P_MARCA,
+        case coalesce (nfecce.idnota,0)
+        when 0 THEN 'N'
+        else 'S' END AS CARTACORRECAO,
+
+        case (coalesce ((select first 1 N1.idnota
+                     from mercadoriasnota
+                     WHERE (N1.filial=mercadoriasnota.filial
+                           And N1.idnota=mercadoriasnota.IDNOTASAIDA)),''))
+        when '' then case
+                     (coalesce((select first 1 MERCADORIASNOTACOMPRA.idnota
+                     from MERCADORIASNOTACOMPRA
+                     WHERE (N1.filial=mercadoriasnotacompra.filial
+                           And N1.idnota=mercadoriasnotacompra.IDNOTASAIDA)),''))
+        when '' then 'N'
+        else 'S' end else 'S' end as notadevolvida
+
+FROM NOTAFISCAL N1
+inner join  CADASTROPARCEIROS on (N1.DESTINATARIO=CADASTROPARCEIROS.CADASTRO)
+inner join  ESTABELECIMENTO on (N1.FILIAL=ESTABELECIMENTO.CADASTRO)
+inner join modelodocto on (N1.modelo=modelodocto.id)
+left join nfecce on (n1.filial=nfecce.filial and
+                     n1.idnota=nfecce.idnota)
+left join 
+        nfectrl on 
+            (nfectrl.filial=N1.filial and 
+             nfectrl.idnota=N1.idnota)
+WHERE  n1.FILIAL= :FILIAL AND
+       N1.DATACADASTRO BETWEEN  :DATAINICIAL AND  :DATAFINAL and
+       modelodocto.tipodocto='NV'

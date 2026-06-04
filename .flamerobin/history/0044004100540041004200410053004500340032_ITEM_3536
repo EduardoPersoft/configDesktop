@@ -1,0 +1,11 @@
+update
+    NOTAFISCAL
+set
+    vendedor = (select first 1 vendedoresnota.VENDEDOR
+                from VENDEDORESNOTA
+                where vendedoresnota.filial=notafiscal.filial and
+                vendedoresnota.idnota=notafiscal.idnota)
+where 
+    notafiscal.filial=110 and
+    notafiscal.DATAEMISSAO>='01.01.2025' and
+    notafiscal.vendedor=474

@@ -1,0 +1,6 @@
+UPDATE
+    titulorec 
+SET
+    dataenvio = null
+where 
+    dataenvio = '30.08.2021'

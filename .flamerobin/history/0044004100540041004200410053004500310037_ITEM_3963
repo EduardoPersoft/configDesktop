@@ -1,0 +1,4 @@
+update transportadora
+set notaautomatica='S'
+
+where cadastro=133

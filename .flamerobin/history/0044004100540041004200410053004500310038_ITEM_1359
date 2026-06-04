@@ -1,0 +1,18 @@
+update 
+    MATERIALMOVIMENTOESTOQUE
+set
+    valor = MATERIALMOVIMENTOESTOQUE.QUANTIDADE*(SELECT MATERIALFILIAL.CUSTOMEDIO 
+                                                 FROM MATERIALFILIAL
+                                                 WHERE MATERIALFILIAL.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL 
+                                                 AND MATERIALFILIAL.IDITEM=MATERIALMOVIMENTOESTOQUE.IDITEM)
+where 
+    MATERIALMOVIMENTOESTOQUE.IDITEM LIKE 'PE-%' AND
+    exists (
+        select 
+            * 
+        from 
+            MOVIMENTOESTOQUE
+        where 
+            movimentoestoque.filial=materialmovimentoestoque.FILIAL
+            and movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+            and movimentoestoque.TIPOMOVIMENTO in ('10','11'))

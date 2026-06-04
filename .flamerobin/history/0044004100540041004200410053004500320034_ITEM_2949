@@ -1,0 +1,3 @@
+select * from mercadoriasorc
+where mercadoriasnota.codigo ='50654' and filial=5
+order by idnota desc

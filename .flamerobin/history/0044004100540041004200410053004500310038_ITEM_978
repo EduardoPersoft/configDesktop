@@ -1,0 +1,1 @@
+select * from c_comissaopedido where filial=1 and idnota in (67734, 67738)

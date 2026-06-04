@@ -1,0 +1,22 @@
+INSERT INTO COMPOSICAOMERCNOTA (FILIAL, IDNOTA, IDMERCADORIA, IDITEM,
+    QUANTIDADE, VALORUNITARIO, COMPOSICAO, IDLOCAL, LOTE, IDCOMPOSICAO,
+    GRADEVERTICAL, GRADEHORIZONTAL, QTDEENVIADA)
+select
+        mercadoriasnota.filial,
+        mercadoriasnota.idnota,
+        mercadoriasnota.IDMERCADORIA,
+        mercadoriasnota.codigo,
+        mercadoriasnota.quantidade,
+        mercadoriasnota.precolista,
+        'N',
+        1,
+        '.',
+        1,
+        null,
+        null,
+        mercadoriasnota.QUANTIDADE
+from 
+    MERCADORIASNOTA
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota=363745

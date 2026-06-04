@@ -1,0 +1,6 @@
+select 
+    municipio,
+    count(uf)
+from
+    MUNICIPIO
+group by municipio

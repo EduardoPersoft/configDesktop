@@ -1,0 +1,7 @@
+select  
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.IDMOVIMENTO,
+    notafiscal.MOVIMENTOESTOQUEFILIAL
+    
+ from notafiscal where filial=1 and idnota=29059

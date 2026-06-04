@@ -1,0 +1,7 @@
+UPDATE
+    MERCADORIASNOTA m1
+SET
+    m1.precounitario=m1.precolista
+where 
+    m1.filial=5 
+    and m1.idnota=26012

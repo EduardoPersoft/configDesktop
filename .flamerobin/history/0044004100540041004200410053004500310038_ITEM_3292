@@ -1,0 +1,3 @@
+select * from C_COMISSAOPEDIDOPAGA
+where C_COMISSAOPEDIDOPAGA.id=778
+and vendedor=38076

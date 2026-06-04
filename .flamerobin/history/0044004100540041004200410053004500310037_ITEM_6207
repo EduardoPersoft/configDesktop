@@ -1,0 +1,14 @@
+select 
+    titulorec.NUMBOLBANCO,
+    titulorec.TIPOTRANSACAO,
+    count(titulorec.IDTITULO)
+from
+    TITULOREC
+where
+    titulorec.baixa is null and
+    titulorec.NUMBOLBANCO is not null
+group by
+    titulorec.NUMBOLBANCO,
+    titulorec.TIPOTRANSACAO
+order by
+    2 desc

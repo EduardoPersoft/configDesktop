@@ -1,0 +1,10 @@
+select 
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+where 
+    not exists (
+    select * from PRAZOMERCPEDCOMPRA
+    where prazomercpedcompra.filial=mercadoriaspedcompra.filial 
+    and prazomercpedcompra.idnota=mercadoriaspedcompra.idnota 
+    and prazomercpedcompra.iditem=mercadoriaspedcompra.IDMERCADORIA)

@@ -1,0 +1,53 @@
+/*
+INSERT INTO materialmovimentoestoque(
+    FILIAL,
+    idmovimento,
+    idmovimentomaterial,
+    iditem,
+    quantidade,
+    valor,
+    sinal,
+    recalculo,
+    localarmazenamento,
+    lote,
+    concluido)   */
+SELECT 
+    MATERIALMOVIMENTOESTOQUE.FILIAL,
+    105696,
+    (select coalesce(max(materialmovimentoestoque.IDMOVIMENTOMATERIAL)+1,1)
+     from materialmovimentoestoque
+     where materialmovimentoestoque.filial=1 
+     and materialmovimentoestoque.IDMOVIMENTO=105696)
+    MATERIALMOVIMENTOESTOQUE.IDITEM,
+    SUM(MATERIALMOVIMENTOESTOQUE.QUANTIDADE*
+        MATERIALMOVIMENTOESTOQUE.SINAL),
+    SUM(MATERIALMOVIMENTOESTOQUE.QUANTIDADE*
+        MATERIALMOVIMENTOESTOQUE.SINAL)*ITEMCUSTODATA.CUSTOUNITARIO,
+    1,
+    'N',
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    MATERIALMOVIMENTOESTOQUE.lote,
+    'N'
+from
+    MATERIALMOVIMENTOESTOQUE
+INNER join
+    MOVIMENTOESTOQUE ON
+        MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and
+        MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+LEFT join  
+    ITEMCUSTODATA ON
+        itemcustodata.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        itemcustodata.DATAINVENTARIO='31.12.2023' and
+        itemcustodata.CODIGO=MATERIALMOVIMENTOESTOQUE.IDITEM 
+where
+    MOVIMENTOESTOQUE.FILIAL=1 and
+    MOVIMENTOESTOQUE.EMISSAO<='31.12.2023' and
+    itemcustodata.CUSTOUNITARIO is null
+GROUP BY    
+    MATERIALMOVIMENTOESTOQUE.FILIAL,
+    MATERIALMOVIMENTOESTOQUE.IDITEM,
+    itemcustodata.CUSTOUNITARIO
+having 
+    SUM(MATERIALMOVIMENTOESTOQUE.QUANTIDADE*
+        MATERIALMOVIMENTOESTOQUE.SINAL)<>0
+        

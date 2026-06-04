@@ -1,0 +1,4 @@
+update
+    MATERIALLOTE
+set 
+    materiallocal.QUANTIDADE=cast(materiallocal.quantidade as decimal(12,3))

@@ -1,0 +1,284 @@
+SET TERM ^ ;
+ALTER PROCEDURE PCNAB240 (
+    IFILIAL INTEGER,
+    ICONTACORRENTE INTEGER,
+    IDATAINICIAL TIMESTAMP,
+    IDATAFINAL TIMESTAMP )
+RETURNS (
+    FILIAL INTEGER,
+    IDTITULO INTEGER,
+    SEGMENTO VARCHAR(5),
+    SEQUENCIA VARCHAR(4),
+    CODIGOCAMARACOMPENSACAO SMALLINT,
+    FORMALANCAMENTO SMALLINT,
+    TIPOPESSOAFILIAL CHAR(1),
+    INSCRICAOESTADUALFILIAL VARCHAR(20),
+    DOCUMENTOFILIAL VARCHAR(14),
+    CONVENIOBANCO VARCHAR(20),
+    AGENCIA VARCHAR(6),
+    DIGITOAGENCIA CHAR(1),
+    NUMCCORRENTE VARCHAR(10),
+    DIGITOCCORRENTE CHAR(1),
+    DIGITOAGCC CHAR(1),
+    RAZAOSOCIALFILIAL VARCHAR(60),
+    LOGRADOUROFILIAL VARCHAR(70),
+    NUMEROFILIAL INTEGER,
+    COMPLEMENTOFILIAL VARCHAR(20),
+    CIDADEFILIAL VARCHAR(50),
+    CEPFILIAL VARCHAR(8),
+    UFFILIAL VARCHAR(2),
+    TIPOMOVIMENTO CHAR(1),
+    CODIGOINSTRUCAOMOVIMENTO CHAR(2),
+    CODCAMARACOMPENSACAOFORNEC VARCHAR(3),
+    BANCOCOBRADOR SMALLINT,
+    AGENCIACOBRADORA VARCHAR(10),
+    DIGAGENCIACOBRADORA CHAR(1),
+    NUMCONTACORRENTEFORNEC VARCHAR(10),
+    DIGITOCONTACORRENTEFORNEC CHAR(2),
+    DIGITOAGCCFORNEC CHAR(1),
+    RAZAOSOCIALFORNECEDOR VARCHAR(60),
+    TITULO VARCHAR(15),
+    FATURA VARCHAR(2),
+    DATAPAGAMENTO TIMESTAMP,
+    SIGLA VARCHAR(3),
+    QUANTIDADEMOEDA SMALLINT,
+    VALOREMABERTO DOUBLE PRECISION,
+    PROGRAMACAO TIMESTAMP,
+    TIPOSERVICO VARCHAR(2),
+    AVISOFAVORECIDO CHAR(1),
+    TIPOPESSOAFORNECEDOR CHAR(1),
+    INSCESTADUALFORNECEDOR VARCHAR(20),
+    LOGRADOUROFORNECEDOR VARCHAR(70),
+    NUMEROFORNECEDOR INTEGER,
+    COMPLEMENTOFORNECEDOR VARCHAR(20),
+    BAIRROFORNECEDOR VARCHAR(72),
+    CIDADEFORNECEDOR VARCHAR(50),
+    CEPFORNECEDOR VARCHAR(8),
+    UFFORNECEDOR VARCHAR(2),
+    VENCIMENTO TIMESTAMP,
+    VALORTITULO DOUBLE PRECISION,
+    TOTALABATIDO DOUBLE PRECISION,
+    TOTALDESCONTO DOUBLE PRECISION,
+    VALORMORA DOUBLE PRECISION,
+    VALOROUTROSACRESC DOUBLE PRECISION,
+    VALORIR DOUBLE PRECISION,
+    VALORISS DOUBLE PRECISION,
+    VALORIOF DOUBLE PRECISION,
+    VALOROUTRASDEDUCOES DOUBLE PRECISION,
+    VLRACRESCIMOELETRON DOUBLE PRECISION,
+    VALORINSS DOUBLE PRECISION,
+    CODIGOBARRA VARCHAR(44),
+    DESCONTO DOUBLE PRECISION,
+    ACRESCIMO DOUBLE PRECISION,
+    BANCODESCRICAO VARCHAR(30),
+    COMPLEMENTOTIPOSERVICO VARCHAR(2),
+    CODIGOMOEDA CHAR(1),
+    LOTE INTEGER,
+    CADASTRO INTEGER,
+    SOMATORIAVALOR DOUBLE PRECISION,
+    TIPO CHAR(1),
+    VLRDESCONTOELETRON DOUBLE PRECISION,
+    QUANTIDADEMOEDAESPACO VARCHAR(18),
+    DOCUMENTODEST VARCHAR(20),
+    FORMALANCAMENTOANTIGO SMALLINT,
+    EMISSAO TIMESTAMP,
+    TIPOTITULO CHAR(1),
+    NARQUIVOPAGAR INTEGER,
+    TIPOCONTAFORNEC VARCHAR(2),
+    VALORTOTALARQUIVO DOUBLE PRECISION,
+    REGISTRO SMALLINT,
+    CODBARRASVALOR DOUBLE PRECISION,
+    VERSAO SMALLINT,
+    IDENTIFICACAOEMPRESA VARCHAR(20),
+    VLRPIS DOUBLE PRECISION )
+AS
+Declare Variable Xsequencia Varchar(4);
+begin
+    Lote=0;
+    XSEQUENCIA='';
+    somatoriavalor=0;
+    valortotalarquivo=0;
+    registro=0;
+    for select (case tipopagamento.tipopageletronico
+                when 1 then
+                    CASE TIPOPAGAMENTO.formapagamento WHEN '11' then 'O'
+                    ELSE  'J' END
+                when 2 then (CASE substring(titulopag.codremessa FROM 1 FOR 1)
+                             WHEN '1' THEN 'A'
+                             WHEN '9' THEN 'A'
+                             else
+                                (case when (coalesce(titulopag.valorir,0)+
+                                            coalesce(titulopag.valoriss,0)+
+                                            coalesce(titulopag.valoriof,0)+
+                                            coalesce(titulopag.valoroutrasdeducoes,0)+
+                                            coalesce(titulopag.valoroutrosacresc,0)+
+                                            coalesce(titulopag.valorinss,0)) > 0
+                                      then 'A,B,C'
+                                      else 'A,B'
+                                 end)
+                             END)
+              end) as segmento,
+              ((case when TITULOPAG.tipotitulo='1' AND titulopag.codigobarra <> '' then
+                   (case when substring(titulopag.codigobarra from 1 for 3)<>banco.banco
+                         then '31'
+                         else '30'
+                   end)
+               else tipopagamento.formapagamento
+              end)||tipopagamento.tipolancamento) as sequencia,
+              titulopag.filial,titulopag.idtitulo,
+              contacorrente.conveniocontapagar,
+              contacorrente.agencia, contacorrente.digitoagencia,
+              contacorrente.numccorrente, contacorrente.digitoccorrente,
+              contacorrente.digitoagcc, filial.razaosocial, filial.logradouro,
+              filial.numero, filial.complemento, filial.cidade, filial.cep,
+              filial.uf, filial.tipopessoa, filial.inscestadual,
+
+              (case when TITULOPAG.tipotitulo='1'   AND titulopag.codigobarra <> '' then
+                   (case when substring(titulopag.codigobarra from 1 for 3)<>banco.banco
+                         then '31'
+                         else '30'
+                   end)
+               else tipopagamento.formapagamento
+              end) as formapagamento,
+
+              banco.codcamaracomp,
+              (case when titulopag.codremessa <> '' then
+               (case cast(substring(titulopag.codremessa from 1 for 1) as integer)
+                 when 1 then 5
+                else cast(substring(titulopag.codremessa from 1 for 1) as integer)
+                end)
+              end) as tipomovimento,titulopag.codremessa as codigoinstrucaomovimento,
+             titulopag.codcamaracompensacaofornec,titulopag.bancocobrador,
+             titulopag.agenciacobradora, titulopag.digagenciacobradora,
+             titulopag.numcontacorrentefornec, titulopag.digitocontacorrentefornec,
+             titulopag.digitoagccfornec,
+              cast ( fornecedor.razaosocial as varchar (60)),
+              cast(titulopag.titulo as varchar(15)) as titulo,
+             titulopag.fatura, titulopag.datapagamento, CAST(moeda.layoutcnab AS VARCHAR(3)),
+             cast(0 as integer) as quantidademoeda,
+             titulopag.valoremaberto,titulopag.programacao,
+             tipopagamento.tipolancamento,
+             tipopagamento.avisofavorecido,
+             fornecedor.tipopessoa, fornecedor.inscestadual,
+             fornecedor.logradouro, fornecedor.numero,
+             SUBSTRING ( fornecedor.complemento FROM 1 FOR 20),
+             SUBSTRING (fornecedor.bairro FROM 1 FOR 72),
+             fornecedor.cidade, fornecedor.cep, fornecedor.uf,
+             titulopag.vencimento,
+             titulopag.valortitulo, titulopag.totalabatido,
+             titulopag.totaldesconto, titulopag.valormora, titulopag.valoroutrosacresc,
+             titulopag.valorir, titulopag.valoriss, titulopag.valoriof,
+             titulopag.valoroutrasdeducoes, titulopag.vlracrescimoeletron,
+             titulopag.valorinss, coalesce(titulopag.codigobarra,'00000000000000000000000000000000000000000000'),
+             (coalesce(titulopag.totalabatido,0)+coalesce(titulopag.vlrdescontoeletron,0)+coalesce(titulopag.valorcofins,0)+coalesce(titulopag.valorcsll,0)+
+             coalesce(titulopag.valorpis,0)+coalesce(titulopag.valorir,0)+coalesce(titulopag.valoriss,0)+
+             coalesce(titulopag.valorinss,0)) as desconto,
+             (coalesce(titulopag.valormora,0)+coalesce(titulopag.vlracrescimoeletron,0)) as acrescimo,
+             banco.descricao as bancodescricao,
+             substring(titulopag.finalidadedoctofornec from 1 for 2) as complementotiposervico,
+             CASE TITULOPAG.tipotitulo WHEN '2' THEN 9
+             ELSE coalesce(substring(titulopag.codigobarra from 4 for 1),0) END      as codmoeda,FORNECEDOR.CADASTRO,
+             filial.documento, cast('T' as char(1)) as tipo,
+             TITULOPAG.vlrdescontoeletron,
+             case when titulopag.documentoconta>'0' then cast(titulopag.documentoconta as varchar(20)) else cast(fornecedor.documento as varchar(20)) end,
+             titulopag.emissao, TITULOPAG.tipotitulo, contacorrente.narquivocontapagar,
+             titulopag.tipocontafornec,
+             case when titulopag.codigobarra <> '' then (substring(titulopag.codigobarra from 10 for 10))
+             else 0 end,
+             contacorrente.identificacaoempresa,
+             titulopag.valorpis
+
+    from titulopag
+    inner join contacorrente on (contacorrente.codigo=titulopag.contacorrente and contacorrente.filial=titulopag.filial)
+    inner join banco on (banco.banco=contacorrente.banco)
+    inner join cadastroparceiros filial on (filial.cadastro=titulopag.filial)
+    inner join cadastroparceiros fornecedor on (fornecedor.cadastro=titulopag.parceiro)
+    inner join tipopagamento on (tipopagamento.id=titulopag.tipotransacao)
+    inner join moeda on (moeda.moeda=titulopag.moeda)
+    where titulopag.programacao between :idatainicial and :idatafinal and
+         tipopagamento.formapagamento <> '' and
+         tipopagamento.tipolancamento <> '' and
+         not tipopagamento.tipopageletronico is null and
+         titulopag.contacorrente=:icontacorrente and
+         titulopag.filial=:ifilial and
+         titulopag.baixa is null  and
+         (titulopag.codretorno is null or titulopag.codretorno='') and
+         not exists (select titulosanexadosprg.idtitulo
+                     from titulosanexadosprg where
+                     titulosanexadosprg.filial=titulopag.filial and
+                     titulosanexadosprg.idtitulo=titulopag.idtitulo)
+ 
+
+    
+     into  :segmento, :sequencia, :filial, :idtitulo,
+          :ConvenioBanco, :Agencia, :DigitoAgencia, :numccorrente, :DigitoCcorrente,
+          :Digitoagcc, :RazaoSocialFilial, :logradouroFilial, :numeroFilial,
+          :complementoFilial, :cidadefilial, :cepfilial, :ufFilial,
+          :tipopessoafilial,:inscricaoestadualfilial,:formalancamento,
+          :codigocamaracompensacao, :tipomovimento,
+          :codigoinstrucaomovimento, :codcamaracompensacaofornec, :bancocobrador,
+          :agenciacobradora, :digagenciacobradora, :numcontacorrentefornec,
+          :digitocontacorrentefornec, :digitoagccfornec, :razaosocialfornecedor,
+          :titulo, :fatura, :datapagamento, :sigla, :quantidademoeda, :valoremaberto,
+          :programacao, :tipoServico, :AvisoFavorecido,
+          :tipopessoafornecedor, :inscestadualfornecedor, :logradourofornecedor,
+          :numerofornecedor, :complementofornecedor, :bairrofornecedor, :cidadefornecedor,
+          :cepfornecedor, :uffornecedor, :vencimento, :valortitulo
+          , :totalabatido,
+          :totaldesconto, :valormora, :valoroutrosacresc, :valorir, :valoriss,
+          :valoriof, :valoroutrasdeducoes, :vlracrescimoeletron, :valorinss,
+          :codigobarra, :desconto, :acrescimo, :bancodescricao, :complementotiposervico,
+          :codigomoeda,:CADASTRO, :documentofilial, :tipo, :vlrdescontoeletron,:documentodest,
+          :emissao,:TIPOTITULO,:narquivopagar,:tipocontafornec,:codbarrasvalor, :identificacaoempresa,
+          :vlrpis
+       do begin
+        if(xsequencia<>sequencia) then begin
+          xsequencia=sequencia;
+          Lote=Lote+1;
+          somatoriavalor=0;
+        end
+        if (NOT vlracrescimoeletron IS null) then
+           valoremaberto=valoremaberto+vlracrescimoeletron;
+        if (NOT vlrdescontoeletron IS NULL) THEN
+           valoremaberto=valoremaberto-vlrdescontoeletron;
+/*       valortotalarquivo=valortotalarquivo+valoremaberto;*/
+        if (codcamaracompensacaofornec is null or codcamaracompensacaofornec='') then
+           if (formalancamento=01) then
+               codcamaracompensacaofornec='000';
+           else
+               if (formalancamento=03 and valoremaberto<5000) then
+                   codcamaracompensacaofornec='700';
+               else
+                  if ((formalancamento=03 and valoremaberto>=5000)
+                   OR formalancamento=07 or formalancamento=08) then
+                     codcamaracompensacaofornec='018';
+        if (digitocontacorrentefornec is null or digitocontacorrentefornec='') then
+           digitocontacorrentefornec='0';
+        if (digitoagccfornec is null or digitoagccfornec='') then
+           digitoagccfornec=' ';
+        if (segmento='J') then
+           quantidademoedaESPACO=' ';
+        else
+           quantidademoedaESPACO='000000000000000000';
+        QUANTIDADEMOEDA=0;
+        valortotalarquivo=valortotalarquivo+valoremaberto;
+        somatoriavalor=somatoriavalor+valoremaberto;
+        if (formalancamento=07 or formalancamento=08) then
+           formalancamentoantigo=03;
+        else
+           formalancamentoantigo=formalancamento;
+        registro=registro+1;
+        if (segmento='O') then
+           formalancamentoantigo=11;
+        if (segmento='O') then
+           versao=10 ;
+           else versao=31;
+        suspend;
+         if (segmento='J') THEN begin
+            segmento='J52';
+            suspend;
+        end
+     end
+end^
+SET TERM ; ^
+

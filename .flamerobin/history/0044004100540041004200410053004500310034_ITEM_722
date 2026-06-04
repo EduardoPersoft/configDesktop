@@ -1,0 +1,1 @@
+select mercadoriasorc.C_LARGURAMATERIAPRIMA, mercadoriasorc.C_LARGURAMP, mercadoriasorc.* from mercadoriasorc order by idnota desc

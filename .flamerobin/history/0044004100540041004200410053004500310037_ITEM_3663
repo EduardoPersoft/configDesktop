@@ -1,0 +1,5 @@
+select
+    CADven.cadastro,
+    cadven.nome
+from
+    cadastroparceiros cadven

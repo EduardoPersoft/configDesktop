@@ -1,0 +1,42 @@
+select   
+    mapaProducao.*
+from
+    materialMovimentoEstoque
+    /*
+inner join 
+    mercadoriasped on 
+    MATERIALMOVIMENTOESTOQUE.FILIAL=MERCADORIASPED.FILIAL and 
+    MATERIALMOVIMENTOESTOQUE.IDPEDIDO=MERCADORIASPED.IDNOTA and 
+    MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=MERCADORIASPED.IDMERCADORIA */
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join
+    mapaProducao on
+        materialMovimentoEstoque.filial = mapaProducao.filial and
+        materialMovimentoEstoque.idMovimento = mapaProducao.idMovimento --and
+        --materialMovimentoEstoque.idMovimentoMaterial = mapaProducao.idMovimentoMaterial
+where 
+    materialmovimentoestoque.filial=110 and materialmovimentoestoque.idmovimento=14717
+/*
+left JOIN
+    ITEMEsTOQUE PRODUTO ON
+        produto.codigo = materialmovimentoestoque.PRODUTO
+left JOIN
+    ITEMESTOQUE PRODUZIDO ON
+        produzido.codigo = materialmovimentoestoque.iditem
+LEFT JOIN
+    PEDIDO ON
+        PEDIDO.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        PEDIDO.IDNOTA=MATERIALMOVIMENTOESTOQUE.IDPEDIDO 
+LEFT JOIN
+    CADASTROPARCEIROS ON
+        CADASTROPARCEIROS.CADASTRO = PEDIDO.DESTINATARIO
+ where
+    materialMovimentoEstoque.filial = ? and
+    materialMovimentoEstoque.concluido = 'N' and
+    mapaProducao.recurso = ?
+order by 
+    mapaProducao.inicio nulls last
+*/

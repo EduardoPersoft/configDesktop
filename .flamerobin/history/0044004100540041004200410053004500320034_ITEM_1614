@@ -1,0 +1,7 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.DESCRIMINACAO
+from 
+    itemestoque
+    

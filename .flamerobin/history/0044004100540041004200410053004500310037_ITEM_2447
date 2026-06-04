@@ -1,0 +1,5 @@
+create table t_locais(
+id integer,
+local varchar(30),
+LocalDestino varchar(30),
+idDestino integer)

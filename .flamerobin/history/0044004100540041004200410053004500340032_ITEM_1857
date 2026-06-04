@@ -1,0 +1,3 @@
+select * from ITEMCUSTODATA where filial=110
+and datainventario='31.12.2023'
+order by codigo

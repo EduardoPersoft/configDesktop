@@ -1,0 +1,2 @@
+update itemestoque set ordem = cast(itemestoque.codigo as integer) 
+where itemestoque.TIPOPRODUTO = 3

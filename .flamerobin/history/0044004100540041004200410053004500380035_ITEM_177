@@ -1,0 +1,9 @@
+select 
+    case materialmovimentoestoque.iditem when substring(materialmovimentoestoque.iditem from 1 for 4)
+    then MATERIALMOVIMENTOESTOQUE.iditem
+    else 'P'||substring(MATERIALMOVIMENTOESTOQUE.iditem from 4 for 3) end,
+    materialmovimentoestoque.* 
+from 
+    materialmovimentoestoque
+where 
+    substring(materialmovimentoestoque.iditem from 1 for 1)='P'

@@ -1,0 +1,6 @@
+select
+    *
+from
+    C_I_MOVEST3
+where
+    C_I_MOVEST3.C_DATA is null

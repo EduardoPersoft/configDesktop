@@ -1,0 +1,1 @@
+select * from ITINERARIOS where abastecimentolitros is null

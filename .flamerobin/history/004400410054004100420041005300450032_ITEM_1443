@@ -1,0 +1,25 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal,
+    max(notacompra.DATAEMISSAO)
+FROM
+    ITEMESTOQUE
+inner join
+    MATERIALLOCAL on
+        materiallocal.filial=5
+        itemestoque.codigo=materiallocal.IDITEM
+left JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.codigo=itemestoque.CODIGO
+left JOIN
+    notacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallocal.saldototal
+HAVING
+    max(notacompra.DATAEMISSAO) <= '01.03.2020'
+         

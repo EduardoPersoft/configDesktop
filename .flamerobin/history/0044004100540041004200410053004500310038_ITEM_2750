@@ -1,0 +1,33 @@
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 2, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 3, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 4, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 5, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 6, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 7, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 8, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 9, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 10, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 11, 34, 151536);
+insert into 
+   METASVENDEDOR(ano, mes, vendedor, valor)
+   VALUES (2024, 12, 34, 151536);

@@ -1,0 +1,6 @@
+select 
+    itemestoque.codigo,
+    itemestoque.TRIBUTACAOICMS,
+    itemestoque.CLASSIFISCAL
+FROM
+    itemestoque

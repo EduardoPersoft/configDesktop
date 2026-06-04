@@ -1,0 +1,7 @@
+select 
+    codigo,
+    descricao
+from 
+    itemestoque 
+where
+    itemestoque.METATAG like '%400 5549 20%' 

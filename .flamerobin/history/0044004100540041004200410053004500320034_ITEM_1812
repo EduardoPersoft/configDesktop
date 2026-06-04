@@ -1,0 +1,20 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.REFERENCIA,
+    for1.CODIGOFORNEC
+from 
+    fornecedoresitem  for1
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=for1.iditem
+where 
+    for1.fornecedor = 1247 AND
+    not exists(
+        select 
+            * 
+        from 
+            fornecedoresitem for2
+        WHERE
+            for2.iditem=for1.iditem and
+            for2.fornecedor <> 1247)            

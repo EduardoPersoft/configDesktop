@@ -1,0 +1,2 @@
+SELECT distinct fornecedor FROM C_ITENSNOVOS
+where codfor is null

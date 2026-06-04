@@ -1,0 +1,10 @@
+select
+    filial,idnota,datacadastro,logradouroentrega,pedido.OBSENTREGARETIRA
+from
+    PEDIDO
+where
+    coalesce(pedido.LOGRADOUROENTREGA,'')<>'' and
+    coalesce(pedido.CIDADEENTREGA,'')='' and
+    pedido.DATACADASTRO>='23.03.2026'
+order by
+    datacadastro

@@ -1,0 +1,24 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    count(mercadoriasnota.idmercadoria) as qtd,
+    sum(mercadoriasnota.VLRTOTALMERCAd)/12 as valor
+FROM
+    itemestoque
+inner join
+    MERCADORIASNOTA on
+        mercadoriasnota.codigo=itemestoque.codigo
+inner JOIN
+    notafiscal on
+        mercadoriasnota.filial=notafiscal.filial and 
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+WHERE
+    notafiscal.filial=5 AND
+    notafiscal.DATAEMISSAO between '01.05.2020' and '30.04.2021'
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO
+order by
+    5

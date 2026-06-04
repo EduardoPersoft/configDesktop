@@ -1,0 +1,32 @@
+update
+    PEDIDO
+set
+    pedido.filial=233
+where
+pedido.filial=110 and
+pedido.DATacancelamento is null and
+pedido.C_FOMENTO is null and
+exists (
+    select 
+        * 
+    from 
+        MERCADORIASPED
+    where 
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota and
+        mercadoriasped.baixa='N') and 
+not exists (
+    select 
+        * 
+    from 
+        MERCADORIASnota
+    inner join
+        notafiscal on
+            notafiscal.filial=mercadoriasnota.filial and
+            notafiscal.idnota=mercadoriasnota.idnota 
+    where 
+        MERCADORIASnota.filial=pedido.filial and
+        MERCADORIASnota.idnota=pedido.idnota and
+        notafiscal.DATACANCELAMENTO is null)
+
+

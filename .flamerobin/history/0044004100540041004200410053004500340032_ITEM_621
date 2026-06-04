@@ -1,0 +1,2 @@
+select * from contacorrente
+where codigo not in (110,3941)

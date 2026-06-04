@@ -1,0 +1,28 @@
+select 
+    materialmovimentoestoque.iditem,
+    movimentoestoque.tipomovimento,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    sum(materialmovimentoestoque.quantidade*
+        case movimentoestoque.localtransferencia when 3 then -1 else 1 end)
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner join 
+    MOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.TIPOMOVIMENTO = 10 and
+    MOVIMENTOESTOQUE.LOCALARMAZENAMENTO <> 2 and
+    MOVIMENTOESTOQUE.LOCALARMAZENAMENTO <> 6 and
+    MOVIMENTOESTOQUE.localtransferencia <> 6 and    
+    MOVIMENTOESTOQUE.localtransferencia <> 2 and        
+    (movimentoestoque.LOCALARMAZENAMENTO = 3 or 
+     movimentoestoque.LOCALTRANSFERENCIA = 3) and
+
+    
+    movimentoestoque.emissao = '31.01.2024' and
+    MATERIALMOVIMENTOESTOQUE.iditem like 'MP%'
+group by    
+    materialmovimentoestoque.iditem,
+        movimentoestoque.tipomovimento,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO

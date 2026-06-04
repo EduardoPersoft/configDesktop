@@ -1,0 +1,23 @@
+select
+    mercadoriasnota.filial,
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    mercadoriasnota.cfop,
+    mercadoriasnota.codigo,
+    mercadoriasnota.descricao,
+    mercadoriasnota.unidade,
+    mercadoriasnota.quantidade
+from
+    NOTAFISCAL
+inner join
+    MODELODOCTO on
+        notafiscal.modelo=modelodocto.ID
+inner join 
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+where
+    NOTAFISCAL.dataemissao>='01.01.2022' and
+    notafiscal.CANCELAMENTO='N' and
+    MODELODOCTO.CODMODELOFISCAL='55'
+    

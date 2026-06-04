@@ -1,0 +1,7 @@
+SELECT
+    *
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.filial=5 and
+    mercadoriaspedcompra.idnota=52376

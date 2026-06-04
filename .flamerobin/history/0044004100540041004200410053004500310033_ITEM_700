@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set 
+    pedido.CLCTRANSP='N'
+where
+        pedido.dacadastro>='01.01.2024'

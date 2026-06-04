@@ -1,0 +1,1 @@
+delete from NFECTRL where filial=5 and idnota=26016

@@ -1,0 +1,14 @@
+SELECT
+    pedidocompra.idnota,
+    pedidocompra.DESTINATARIO,
+    CADASTROPARCEIROS.cadastro,
+    CADASTROPARCEIROS.nome,
+    pedidocompra.datacadastro,
+    pedidocompra.VLRTOTALNOTA,
+    pedidocompra.usuaro
+FROM    
+    pedidocompra
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro = pedidocompra.DESTINATARIO
+ORDER BY IDNOTA DESC

@@ -1,0 +1,3 @@
+SELECT * FROM SPEDFISCAL_0
+where segmento='0000'
+order by sequencia

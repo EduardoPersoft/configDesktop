@@ -1,0 +1,18 @@
+select
+    coalesce(sum(MATERIALMOVIMENTOESTOQUE.quantidade),0),
+    coalesce(sum(materialmovimentoestoque.valor),0)
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL = 1 AND
+    MATERIALMOVIMENTOESTOQUE.IDITEM BETWEEN '2205111' AND '2205111' AND
+    MOVIMENTOESTOQUE.EMISSAO > '31.12.2022' AND
+    MATERIALMOVIMENTOESTOQUE.LOTE BETWEEN '.' and 'zzzzz' and
+    (MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO BETWEEN 0 AND 9999 OR
+     MOVIMENTOESTOQUE.LOCALTRANSFERENCIA BETWEEN 0 AND 9999) AND   
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO <> 11 and
+    MATERIALMOVIMENTOESTOQUE.SINAL <> 0

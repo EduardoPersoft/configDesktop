@@ -1,0 +1,7 @@
+delete
+from
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=1 and
+    movimentoestoque.processamento ='13.09.2022' and
+    movimentoestoque.tipomovimento <> '13'

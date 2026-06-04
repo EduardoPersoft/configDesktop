@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE where perda is not null
+order by perda desc

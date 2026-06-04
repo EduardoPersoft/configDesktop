@@ -1,0 +1,15 @@
+select 
+    *
+from 
+    MATERIALLOCAL
+WHERE
+    EXISTS
+        (select * from notacompra
+         inner join MERCADORIASNOTACOMPRA on
+            notacompra.filial=mercadoriasnotacompra.filial AND
+            notacompra.idnota=mercadoriasnotacompra.IDNOTA
+         where
+            notacompra.filial=materiallocal.filial AND
+            mercadoriasnotacompra.codigo=materiallocal.iditem)
+WHERE
+    materiallocal.filial=5

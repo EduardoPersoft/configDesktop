@@ -1,0 +1,1 @@
+select first 100 filial,idnota,substring(notafiscal.VLRTOTNOTAEXTENso from 1 for 200) from notafiscal order by dataemissao desc

@@ -1,0 +1,4 @@
+select * from materiallocal 
+where not exists (
+select * from LOCAL
+where local.id=materiallocal.IDLOCAL)

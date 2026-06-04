@@ -1,0 +1,7 @@
+update 
+    TITULOREC
+set 
+    titulorec.DATAENVIO = null
+where 
+    titulorec.filial=5 and 
+    titulorec.titulo between '48167' and '48328'

@@ -1,0 +1,10 @@
+SELECT
+    *
+from 
+update
+    titulopag 
+SET
+    vencimento = cast(titulopag.vencimento as date)
+where 
+    titulopag.filial=5 AND
+    titulopag.vencimento <> cast(titulopag.vencimento as date)

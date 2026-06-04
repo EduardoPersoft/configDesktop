@@ -1,0 +1,14 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.IDMOVIMENTO,
+    movimentoestoque.IDPEDIDO,    
+    movimentoestoque.DATAALTERACAO,
+    MOVIMENTOESTOQUE.IMPresso
+from
+    MOVIMENTOESTOQUE
+where
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and 
+  --  coalesce(movimentoestoque.IMPRESSO, 'N') ='N' and
+    movimentoestoque.emissao = cast('now' as date)
+order by
+    movimentoestoque.DATAALTERACAO

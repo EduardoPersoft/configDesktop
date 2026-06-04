@@ -1,0 +1,15 @@
+update
+    MERCADORIASPED
+set
+    baixa='N'
+where
+    baixa = 'S' and
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            mercadoriasped.filial=pedido.filial and
+            mercadoriasped.idnota = pedido.idnota and
+            pedido.CANCELAMENTO='S')    

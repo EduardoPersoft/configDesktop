@@ -1,0 +1,21 @@
+update 
+    itemestoque
+set
+    itemestoque.C_LOCALIMPORTACAO=
+    (select 
+            materialfilial.C_LOCALIMPORTACAO 
+         from 
+            materialfilial 
+         where 
+            filial=12826 and 
+            materialfilial.iditem=ITEMESTOQUE.codigo)
+where
+    itemestoque.codigo like '6%' and
+    itemestoque.C_LOCALIMPORTACAO <> 
+        (select 
+            materialfilial.C_LOCALIMPORTACAO 
+         from 
+            materialfilial 
+         where 
+            filial=12826 and 
+            materialfilial.iditem=ITEMESTOQUE.codigo)

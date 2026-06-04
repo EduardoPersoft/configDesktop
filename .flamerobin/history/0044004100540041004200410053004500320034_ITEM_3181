@@ -1,0 +1,1 @@
+update titulorec set titulorec.dataenvio = null where filial=5 and titulorec.DATAENVIO='15.08.2022'

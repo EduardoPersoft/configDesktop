@@ -1,0 +1,7 @@
+select 
+    *
+from    
+    titulorec
+where 
+    titulorec.baixa is null and
+    titulorec.contacorrente = 707

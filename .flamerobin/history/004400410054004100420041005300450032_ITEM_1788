@@ -1,0 +1,5 @@
+SELECT
+    mercadoriasped.filial,
+    mercadoriasped.idnota
+FROM
+    mercadoriasped

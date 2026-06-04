@@ -1,0 +1,1 @@
+select CODIGO,DESCRICAO,REFERENCIA,ITEMBASE from itemestoque where ITEMBASE='05028'

@@ -1,0 +1,2 @@
+select * from notacompra
+where filial=1 and idnota=6

@@ -1,0 +1,3 @@
+select * from INVENTARIOESTOQUEDATA
+where inventarioestoquedata.data>='15.09.2023'
+order by data desc,local desc

@@ -1,0 +1,28 @@
+SELECT
+    mercadoriasnotacompra.filial,
+    mercadoriasnotacompra.idnota,
+    mercadoriasnotacompra.idmercadoria,
+    mercadoriasnotacompra.codigo,
+    itemestoque.descricao,
+    mercadoriasnotacompra.quantidade,
+    mercadoriasnotacompra.unidade,
+    mercadoriasnotacompra.idpedido,
+    mercadoriasnotacompra.IDMERCPEDIDO,
+    mercadoriaspedcompra.codigo
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial AND
+        mercodoriasnotacompra.idnota=notacompra.idnota
+inner join 
+    itemestoque on 
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+left JOIN
+    mercadoraispedcompra on
+        mercadoriaspedcompra.filial=mercadoriasnotacompra.filial AND
+        mercadoriaspedcompra.idnota=mercadoriasnotacompra.idpedido AND
+        mercadoriaspedcompra.IDMERCADORIA=mercadoriasnotacompra.IDMERCPEDIDO
+WHERE
+    notacompra.filial=5 AND
+    notacompra.dataentrada='23.07.2021'

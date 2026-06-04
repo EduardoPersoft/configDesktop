@@ -1,0 +1,29 @@
+select
+    notafiscal.filial,
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.razaosocial,
+    mercadoriasnota.codigo,
+    mercadoriasnota.desreduzida,
+    mercadoriasnota.UNIDADE
+    mercadoriasnota.quantidade,
+    mercadoriasnota.CFOP
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.idnota
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=NOTAFISCAL.destinatario
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.codigo
+where
+    notafiscal.DATAEMISSAO between '01.01.2023' and '31.12.2023' and
+    notafiscal.CANCELAMENTO = 'N' and
+    notafiscal.ENTRADASAIDA = 'S' and
+    itemestoque.TIPOPRODUTO in (3, 4) 
+    
+    

@@ -1,0 +1,4 @@
+update 
+movimentoeste
+
+set dataalteracao=cast(dataalteracao as date)

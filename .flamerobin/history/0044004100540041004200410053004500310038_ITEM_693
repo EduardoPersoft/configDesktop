@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    locallote 
+where 
+    locallote.quantidae<0

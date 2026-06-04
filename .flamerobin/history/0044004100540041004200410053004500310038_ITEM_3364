@@ -1,0 +1,6 @@
+update pedido 
+set c_condicaomateriais='07/07/2025 R$ 1.050,00 - Boleto
+07/08/2025 R$ 1.050,00 - Boleto
+07/09/2025 R$ 1.050,00 - Boleto
+07/10/2025 R$ 1.050,00 - Boleto'
+where filial=1 and idnota=74844

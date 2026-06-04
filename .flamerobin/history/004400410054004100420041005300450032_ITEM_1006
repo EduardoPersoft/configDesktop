@@ -1,0 +1,4 @@
+update 
+    LISTAPRECOPRODUTO
+set 
+    listaprecoproduto.DESCONTOITEM = 8

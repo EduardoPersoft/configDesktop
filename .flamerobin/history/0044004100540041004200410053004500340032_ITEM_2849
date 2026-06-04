@@ -1,0 +1,1 @@
+select * from notafiscal where filial>110 and uuid='{675896CB-C976-491B-B606-7EFA732D5E5'

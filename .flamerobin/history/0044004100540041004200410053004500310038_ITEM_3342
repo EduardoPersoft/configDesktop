@@ -1,0 +1,3 @@
+select filial,idtitulo,titulo,fatura from titulopag
+where titulopag.filial=1 
+and titulopag.idtitulo in (370589,366203)

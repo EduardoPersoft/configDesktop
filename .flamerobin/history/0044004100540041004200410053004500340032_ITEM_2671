@@ -1,0 +1,4 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110
+
+and lote='154086/1'

@@ -1,0 +1,21 @@
+--agrupe por modelo, a somatória da not
+select 
+    sum  (NOTAFISCAL.VLRTOTALNOTA) as vlrtotal,
+    MODELODOCTO.modelo, 
+    'NOTA FISCAL' AS TIPO
+from 
+    NOTAFISCAL
+inner join 
+    modelodocto on 
+        (modelodocto.id = NOTAFISCAL.modelo)
+inner join 
+    NATUREZAOPERACAO on 
+        (NOTAFISCAL.cfop = NATUREZAOPERACAO.CFOP)
+where 
+    NOTAFISCAL.filial=5 and
+    NOTAFISCAL.DATAEMISSAO between '01.01.2022' and '01.01.2222' and
+    NOTAFISCAL.DATACANCELAMENTO is null and 
+    coalesce (NATUREZAOPERACAO.FATURA, 'N')='S'
+
+group by 
+    MODELODOCTO.modelo, 3

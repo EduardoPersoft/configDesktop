@@ -1,0 +1,2 @@
+select * from INVENTARIOESTOQUEDATA
+where codigo='6341001'

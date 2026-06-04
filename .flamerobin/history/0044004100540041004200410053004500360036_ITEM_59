@@ -1,0 +1,16 @@
+update 
+    MATERIALFILIAL
+set
+    materialfilial.CUSTOMEDIO=(select itemcustodata.CUSTOUNITARIO from ITEMCUSTODATA
+                                where itemcustodata.FILIAL=materialfilial.filial and
+                                itemcustodata.codigo=materialfilial.iditem and
+                                itemcustodata.DATAINVENTARIO='2024-11-30'),
+    materialfilial.VALORTOTALESTOCADO=(select itemcustodata.CUSTOtotal from ITEMCUSTODATA
+                                where itemcustodata.FILIAL=materialfilial.filial and
+                                itemcustodata.codigo=materialfilial.iditem and
+                                itemcustodata.DATAINVENTARIO='2024-11-30')
+where
+    exists (select itemcustodata.CUSTOtotal from ITEMCUSTODATA
+                                where itemcustodata.FILIAL=materialfilial.filial and
+                                itemcustodata.codigo=materialfilial.iditem and
+                                itemcustodata.DATAINVENTARIO='2024-11-30')

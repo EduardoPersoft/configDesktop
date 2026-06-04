@@ -1,0 +1,387 @@
+SET TERM ^ ;
+CREATE OR ALTER PROCEDURE FICHADOCADASTRO(
+    FILIAL INTEGER,
+    CADASTRO INTEGER)
+RETURNS (
+    CODIGOFILIAL INTEGER,
+    RAZAOFILIAL VARCHAR(60),
+    DOCUMENTOFILIAL VARCHAR(18),
+    INSCESTADUALFILIAL VARCHAR(20),
+    LOGRADOUROFILIAL VARCHAR(70),
+    NUMEROFILIAL INTEGER,
+    COMPLEMENTOFILIAL VARCHAR(60),
+    BAIRROFILIAL VARCHAR(72),
+    CIDADEFILIAL VARCHAR(50),
+    UFFILIAL VARCHAR(2),
+    CEPFILIAL VARCHAR(9),
+    CODIGO VARCHAR(8),
+    NOME VARCHAR(40),
+    RAZAOSOCIAL VARCHAR(60),
+    DOCUMENTO VARCHAR(18),
+    INSCESTADUAL VARCHAR(20),
+    INSCMUNICIPAL VARCHAR(20),
+    TIPOEMPRESA CHAR(1),
+    CONTRIBUINTE CHAR(1),
+    TIPOPESSOA VARCHAR(10),
+    LOGRADOURO VARCHAR(70),
+    NUMERO INTEGER,
+    COMPLEMENTO VARCHAR(60),
+    BAIRRO VARCHAR(72),
+    CIDADE VARCHAR(50),
+    UF VARCHAR(2),
+    CEP VARCHAR(9),
+    TELEFONE VARCHAR(20),
+    FAX VARCHAR(20),
+    EMAIL VARCHAR(50),
+    PRINCIPALCONTATO VARCHAR(40),
+    AREAGEOGRAFICA VARCHAR(30),
+    RAMOATIVIDADE VARCHAR(30),
+    TRANSP SMALLINT,
+    DESCTRANS VARCHAR(40),
+    DATACADASTRO TIMESTAMP,
+    DATAATUALIZACAO TIMESTAMP,
+    DOCUMENTOENTREGA VARCHAR(18),
+    INSCRICAOESTADUALENTREGA VARCHAR(20),
+    LOGRADOUROENTREGA VARCHAR(70),
+    NUMEROENTREGA INTEGER,
+    COMPLEMENTOENTREGA VARCHAR(60),
+    BAIRROENTREGA VARCHAR(72),
+    CIDADEENTREGA VARCHAR(50),
+    UFENTREGA VARCHAR(2),
+    CEPENTREGA VARCHAR(9),
+    LOCALENTREGA SMALLINT,
+    DESCLOCALENTREGA VARCHAR(40),
+    NATUREZAENTRADADEFAULT SMALLINT,
+    NATUREZASAIDADEFAULT SMALLINT,
+    CLIENTE CHAR(1),
+    SUBTRIBUTARIA CHAR(1),
+    ZONAFRANCA CHAR(1),
+    CODMUNICIPIO INTEGER,
+    NOMEMUNICIPIO VARCHAR(30),
+    AVALIACAO TIMESTAMP,
+    LIMITECREDITO DOUBLE PRECISION,
+    DESCONTOCOMUM DOUBLE PRECISION,
+    IDCONDICAOPAGTO SMALLINT,
+    CONDICAOPAGTO VARCHAR(30),
+    MOEDA VARCHAR(30),
+    LISTAPRECO SMALLINT,
+    NOMELISTAPRECO VARCHAR(20),
+    VEND INTEGER,
+    NOMEVENDEDOR VARCHAR(40),
+    CANALDISTRIBUICAO SMALLINT,
+    DESCCANALDIST VARCHAR(30),
+    RECOLHEINSS CHAR(1),
+    RECOLHEIRF CHAR(1),
+    RECOLHECSLL CHAR(1),
+    RECOLHEPIS CHAR(1),
+    RECOLHECOFINS CHAR(1),
+    RETEMTETO CHAR(1),
+    TIPOCOBRANCA VARCHAR(50),
+    JUROSDIARIOATRASO DOUBLE PRECISION,
+    MULTAATRASO DOUBLE PRECISION,
+    IDBANCOCOBRANCACLIENTE SMALLINT,
+    BANCOCOBRANCACLIENTE VARCHAR(40),
+    DESCONTOFINANCEIRO DOUBLE PRECISION,
+    DIASDESCONTO SMALLINT,
+    LOGRADOUROCOBRANCA VARCHAR(70),
+    NUMEROCOBRANCA INTEGER,
+    COMPLEMENTOCOBRANCA VARCHAR(60),
+    BAIRROCOBRANCA VARCHAR(72),
+    CIDADECOBRANCA VARCHAR(50),
+    UFCOBRANCA VARCHAR(2),
+    NOMEESTADOCOBRANCA VARCHAR(30),
+    CEPCOBRANCA VARCHAR(9),
+    FORNECEDOR CHAR(1),
+    BANCOCOBRADOR VARCHAR(40),
+    FINALIDADEDOCTO VARCHAR(30),
+    AGENCIACOBRADORA SMALLINT,
+    DIGAGENCIACOBRADORA CHAR(1),
+    NUMCONTACORRENTE VARCHAR(10),
+    DIGITOCONTACORRENTE CHAR(2),
+    DIGITOAGCC CHAR(1),
+    TIPOCONTA VARCHAR(2),
+    CODCAMARACOMPENSACAO VARCHAR(3),
+    BANCOPAGADOR VARCHAR(40),
+    IDBANCOPAGADOR SMALLINT,
+    IDTIPOPAGTO INTEGER,
+    TIPOPAGTO VARCHAR(30),
+    IDCONDICAOPAGTOFOR SMALLINT,
+    CONDICAOPAGTOFOR VARCHAR(30),
+    MOEDAFOR VARCHAR(30),
+    DESCONTOFINANCEIROFOR DOUBLE PRECISION,
+    DIASDESCFINANCEIROFOR SMALLINT,
+    JUROSDIARIOATRASOFOR DOUBLE PRECISION,
+    MULTAATRASOFOR DOUBLE PRECISION,
+    CODJUROSMORA CHAR(1),
+    CODDESCONTO CHAR(1),
+    VENDEDOR CHAR(1),
+    COMISSAOVENDA DOUBLE PRECISION,
+    COMISSAORECEB DOUBLE PRECISION,
+    TRANSPORTADORA CHAR(1),
+    BANCO SMALLINT,
+    BANCO2 SMALLINT,
+    BANCOCOBRADOR2 VARCHAR(40),
+    AGENCIACOBRADORA2 SMALLINT,
+    DIGAGENCIACOBRADORA2 CHAR(1),
+    NUMCONTACORRENTE2 VARCHAR(10),
+    DIGITOCONTACORRENTE2 CHAR(2),
+    DIGITOAGCC2 CHAR(1),
+    FINALIDADEDOCTO2 VARCHAR(30),
+    TIPOCONTA2 VARCHAR(2),
+    CODCAMARACOMPENSACAO2 VARCHAR(3),
+    DOCUMENTOCONTA VARCHAR(18),
+    DOCUMENTOCONTA2 VARCHAR(18),
+    ZONAFRANCAFORNEC CHAR(1),
+    CODMUNICIPIOFORNEC INTEGER,
+    NOMEMUNICIPIOFORNEC VARCHAR(30),
+    CFOPENTRADA SMALLINT,
+    DESCOPENTRADA VARCHAR(60),
+    CFOPSAIDA SMALLINT,
+    DESCOPSAIDA VARCHAR(60),
+    PERCENTUALIRF DOUBLE PRECISION,
+    CODIGOIRF VARCHAR(4),
+    PERCENTUALINSS DOUBLE PRECISION,
+    CODIGOINSS VARCHAR(4),
+    PERCENTUALCSSL DOUBLE PRECISION,
+    CODIGOCSSL SMALLINT,
+    PERCENTUALISS DOUBLE PRECISION,
+    PERCENTUALPIS DOUBLE PRECISION,
+    CODIGOPIS SMALLINT,
+    PERCENTUALCOFINS DOUBLE PRECISION,
+    CODIGOCOFINS SMALLINT,
+    SUBTRIBUTARIAFOR CHAR(1))
+AS
+declare variable pessoa char(1);
+declare variable cod varchar(8);
+BEGIN
+     SELECT cadastroparceiros.cadastro, cadastroparceiros.razaosocial,
+      CASE WHEN (CADASTROPARCEIROS.DOCUMENTO<>'') AND
+                 (NOT CADASTROPARCEIROS.DOCUMENTO IS NULL) THEN
+            CASE CADASTROPARCEIROS.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 4 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 7 FOR 3)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+              WHEN 'J' THEN
+            CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 2)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 3 FOR 3)||'.'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 6 FOR 3)||'/'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 9 FOR 4)||'-'||
+            SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+         ELSE NULL END
+         ELSE NULL END AS DOCUMENTO,
+            cadastroparceiros.inscestadual, cadastroparceiros.logradouro,
+            cadastroparceiros.numero, cadastroparceiros.complemento, cadastroparceiros.bairro,
+            cadastroparceiros.cidade, cadastroparceiros.uf,
+
+         SUBSTRING(cadastroparceiros.cep FROM 1 FOR 5)||'-'||
+         SUBSTRING(cadastroparceiros.cep FROM 6 FOR 3)
+     FROM cadastroparceiros
+     WHERE cadastroparceiros.cadastro=:filial
+     INTO :codigofilial, :razaofilial, :documentofilial, :inscestadualfilial,
+          :logradourofilial, :numerofilial, :complementofilial, :bairrofilial,
+          :cidadefilial, :uffilial, :cepfilial;
+     FOR SELECT cadastroparceiros.nome, cadastroparceiros.razaosocial,
+                 CASE WHEN (CADASTROPARCEIROS.DOCUMENTO<>'') AND
+                 (NOT CADASTROPARCEIROS.DOCUMENTO IS NULL) THEN
+                 CASE CADASTROPARCEIROS.TIPOPESSOA WHEN 'F' THEN
+                 CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 3)||'.'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 4 FOR 3)||'.'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 7 FOR 3)||'-'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+                 WHEN 'J' THEN
+                 CAST(SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 1 FOR 2)||'.'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 3 FOR 3)||'.'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 6 FOR 3)||'/'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 9 FOR 4)||'-'||
+                 SUBSTRING(CADASTROPARCEIROS.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+                 ELSE NULL END
+                 ELSE NULL END AS DOCUMENTO,
+
+                cadastroparceiros.inscmunicipal,
+                cadastroparceiros.inscestadual,
+                CASE cadastroparceiros.tipoempresa WHEN 'S' THEN 'X' ELSE ' ' END,
+                CASE cadastroparceiros.contribuinte WHEN 'S' THEN 'X' ELSE ' ' END,
+                cadastroparceiros.tipopessoa, cadastroparceiros.logradouro,
+                cadastroparceiros.bairro, cadastroparceiros.numero, cadastroparceiros.complemento,
+                cadastroparceiros.cidade, cadastroparceiros.uf,
+                SUBSTRING(cadastroparceiros.cep FROM 1 FOR 5)||'-'||
+                SUBSTRING(cadastroparceiros.cep FROM 6 FOR 3),
+                cadastroparceiros.telefone, cadastroparceiros.fax, cadastroparceiros.email,
+                cadastroparceiros.principalcontato, areageografica.descricao, ramoatividade.descricao,
+                cadastroparceiros.transportadora, cadastroparceiros.datacadastro, cadastroparceiros.dataatualizacao,
+                cadastroparceiros.documentoentrega, cadastroparceiros.inscestadualentrega, cadastroparceiros.logradouroentrega,
+                cadastroparceiros.numeroentrega, cadastroparceiros.complementoentrega, cadastroparceiros.bairroentrega,
+                cadastroparceiros.cidadeentrega, cadastroparceiros.ufentrega,
+                SUBSTRING(cadastroparceiros.cepentrega FROM 1 FOR 5)||'-'||
+                SUBSTRING(cadastroparceiros.cepentrega FROM 6 FOR 3),
+                cadastroparceiros.localentrega, local.descricao, cadastroparceiros.naturezaentradadefault,
+                cadastroparceiros.naturezasaidadefault, entrada.cfop, entrada.descricaooperacao,
+                saida.cfop, saida.descricaooperacao
+        from cadastroparceiros
+        left join areageografica on (cadastroparceiros.areageografica=areageografica.areage)
+        left join ramoatividade on (cadastroparceiros.ramoatividade=ramoatividade.ramoatividade)
+        left join local on (cadastroparceiros.localentrega=local.id)
+        left join naturezaoperacao entrada on (cadastroparceiros.naturezaentradadefault=entrada.id)
+        left join naturezaoperacao saida on (cadastroparceiros.naturezasaidadefault=saida.id)
+        where cadastroparceiros.cadastro = :CADASTRO or :cadastro is null
+     INTO :nome, :razaosocial, :documento, :inscmunicipal, :inscestadual, :tipoempresa, :contribuinte, :pessoa,
+          :logradouro, :bairro, :numero, :complemento, :cidade, :uf, :cep, :telefone, :fax, :email,
+          :principalcontato, :areageografica, :ramoatividade, :transp, :datacadastro, :dataatualizacao,
+          :documentoentrega, :inscricaoestadualentrega, :logradouroentrega, :numeroentrega, :complementoentrega,
+          :bairroentrega, :cidadeentrega, :ufentrega, :cepentrega, :localentrega, :desclocalentrega,
+          :naturezaentradadefault, :naturezasaidadefault, :cfopentrada, :descopentrada,
+          :cfopsaida, :descopsaida
+     DO BEGIN
+
+        IF (:pessoa = 'J') THEN
+           TIPOPESSOA = 'JURÍDICA';
+        ELSE
+           TIPOPESSOA = 'FÍSICA';
+
+        select cadastroparceiros.nome from cadastroparceiros
+        inner join transportadora on (cadastroparceiros.cadastro=transportadora.cadastro)
+        where cadastroparceiros.cadastro = :transp
+        INTO :desctrans;
+
+        COD = NULL;
+
+        SELECT clientes.cadastro,
+               CASE clientes.substituirtributaria WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.zonafranca WHEN 'S' THEN 'X' ELSE ' ' END,
+               clientes.codmunicipio, municipiozf.descricao, clientes.dataavaliacao,
+               clientes.limitecredito, clientes.descontocomum, condicaopagamento.id,
+               condicaopagamento.descricao, moeda.descricao, listapreco.lista,
+               listapreco.nomelista, clientes.vendedor, canaldistribuicao.canaldist,
+               canaldistribuicao.descricao,
+               CASE clientes.recolheinss WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.recolheirf WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.recolhecsll WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.recolhepis WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.recolhecofins WHEN 'S' THEN 'X' ELSE ' ' END,
+               CASE clientes.retemteto WHEN 'S' THEN 'X' ELSE ' ' END,
+               tipocobranca.descricao, clientes.jurosdiarioatraso, clientes.multatraso,
+               banco.banco, banco.descricao, clientes.descontofinanceiro,
+               clientes.diasdescfinanceiro, clientes.logradourocobranca, clientes.numerocobranca,
+               clientes.complementocobranca, clientes.bairrocobranca, clientes.cidadecobranca,
+               clientes.ufcobranca, estado.nome,
+               SUBSTRING(clientes.cepcobranca FROM 1 FOR 5)||'-'||
+               SUBSTRING(clientes.cepcobranca FROM 6 FOR 3)
+
+
+
+        FROM clientes
+        left join listapreco on (clientes.listaprecodefault=listapreco.lista)
+        left join condicaopagamento on (clientes.condicaopagamento=condicaopagamento.id)
+        LEFT JOIN banco on (clientes.banco=banco.banco) 
+        left join moeda on (clientes.moeda=moeda.moeda)
+        left join canaldistribuicao on (clientes.canaldistribuicao=canaldistribuicao.canaldist)
+        LEFT JOIN tipocobranca ON (CLIENTES.tipocobranca=tipocobranca.tipocobranca)
+        left join estado on (clientes.ufcobranca=estado.estado)
+        left join municipiozf on (clientes.codmunicipio=municipiozf.codigomunicipio)
+        WHERE clientes.cadastro = :cadastro
+        INTO :cod, :subtributaria, :zonafranca, :codmunicipio, :nomemunicipio, :avaliacao,
+             :limitecredito, :descontocomum, :idcondicaopagto, :condicaopagto, :moeda,
+             :listapreco, :nomelistapreco, :vend, :canaldistribuicao, :desccanaldist,
+             :recolheinss, :recolheirf, :recolhecsll, :recolhepis, :recolhecofins,
+             :retemteto, :tipocobranca, :jurosdiarioatraso, :multaatraso,
+             :idbancocobrancacliente, :bancocobrancacliente, :descontofinanceiro,
+             :diasdesconto, :logradourocobranca, :numerocobranca, :complementocobranca,
+             :bairrocobranca, :cidadecobranca, :ufcobranca, :nomeestadocobranca, :cepcobranca;
+
+        select cadastroparceiros.nome from cadastroparceiros
+        left join vendedor on (cadastroparceiros.cadastro=vendedor.cadastro)
+        where cadastroparceiros.cadastro = :VEND
+        INTO :NOMEVENDEDOR;
+        If (:cod IS NULL) then
+           cliente = ' ';
+        else
+           cliente = 'X';
+
+        COD = NULL;
+
+        SELECT fornecedores.cadastro, banco1.descricao, fornecedores.finalidadedocto,
+               fornecedores.agenciacobradora, fornecedores.digagenciacobradora,
+               fornecedores.numcontacorrente, fornecedores.digitocontacorrente,
+               fornecedores.digitoagcc, fornecedores.tipoconta,
+               fornecedores.codcamaracompensacao, banco3.banco, banco3.descricao,
+               tipopagamento.id, tipopagamento.descricao, condicaopagamento.id,
+               condicaopagamento.descricao, moeda.descricao,
+               fornecedores.descontofinanceiro, fornecedores.diasdescfinanceiro,
+               fornecedores.jurosdiarioatraso, fornecedores.multaatraso, fornecedores.documentoconta,
+               fornecedores.agenciacobradora2, fornecedores.banco, fornecedores.banco2,
+               banco2.descricao, fornecedores.codcamaracompensacao2,
+               fornecedores.digagenciacobradora2, fornecedores.digitoagcc2,
+               fornecedores.digitocontacorrente2, fornecedores.documentoconta2,
+               fornecedores.finalidadedocto2, fornecedores.numcontacorrente2,
+               fornecedores.tipoconta2, fornecedores.codjurosmora, fornecedores.coddesconto,
+               CASE fornecedores.zonafranca WHEN 'S' THEN 'X' ELSE ' ' END,
+               fornecedores.percentualirf, fornecedores.codrecolhimentoirf,
+               fornecedores.percentualinss, fornecedores.codpagtoinss,
+               fornecedores.percentualcsll, fornecedores.codigocsll, fornecedores.percentualiss,
+               fornecedores.percentualpis, fornecedores.codigopis, fornecedores.percentualcofins,
+               fornecedores.codigocofins,
+               CASE fornecedores.substituirtributaria WHEN 'S' THEN 'X' ELSE ' ' END,
+               fornecedores.codmunicipio, municipiozf.descricao
+        FROM fornecedores
+        left join condicaopagamento on (fornecedores.condicaopagamento=condicaopagamento.id)
+        LEFT JOIN banco banco1 on (fornecedores.banco=banco1.banco)
+        LEFT JOIN banco banco2 on (fornecedores.banco2=banco2.banco)
+        LEFT JOIN banco banco3 on (fornecedores.bancopagador=banco3.banco)
+        left join moeda on (fornecedores.moeda=moeda.moeda)
+        LEFT JOIN tipopagamento ON (fornecedores.tipopagamento=tipopagamento.id)
+        left join municipiozf on (fornecedores.codmunicipio=municipiozf.codigomunicipio)
+        WHERE fornecedores.cadastro = :cadastro
+        INTO :cod, :bancocobrador, :finalidadedocto, :agenciacobradora, :digagenciacobradora,
+             :numcontacorrente, :digitocontacorrente, :digitoagcc,
+             :tipoconta, :codcamaracompensacao, :idbancopagador, :bancopagador,
+             :idtipopagto, :tipopagto, :idcondicaopagtofor, :condicaopagtofor, :moedafor,
+             :descontofinanceirofor, :diasdescfinanceirofor, :jurosdiarioatrasofor,
+             :multaatrasofor, :documentoconta, :agenciacobradora2, :banco, :banco2,
+             :bancocobrador2, :codcamaracompensacao2, :digagenciacobradora2, :digitoagcc2,
+             :digitocontacorrente2, :documentoconta2, :finalidadedocto2,
+             :numcontacorrente2, :tipoconta2, :codjurosmora, :coddesconto, :zonafrancafornec,
+             :percentualirf, :codigoirf, :percentualinss, :codigoinss, :percentualcssl,
+             :codigocssl, :percentualiss, :percentualpis, :codigopis, :percentualcofins,
+             :codigocofins, :subtributariafor, :codmunicipiofornec, :nomemunicipiofornec;
+        If (:cod IS NULL) then
+           fornecedor = ' ';
+        else
+           fornecedor = 'X';
+
+        COD = NULL;
+
+        SELECT vendedor.cadastro, vendedor.comissaovenda, vendedor.comissaorecebimento
+        FROM vendedor
+        WHERE vendedor.cadastro = :cadastro
+        INTO :cod, :comissaovenda, :comissaoreceb;
+
+        If (:cod IS NULL) then
+           vendedor = ' ';
+        else
+           vendedor = 'X';
+
+        COD = NULL;
+
+        SELECT transportadora.cadastro
+        FROM transportadora
+        WHERE transportadora.cadastro = :cadastro
+        INTO :cod;
+
+        If (:cod IS NULL) then
+           transportadora = ' ';
+        else
+           transportadora = 'X';
+
+     CODIGO = :CADASTRO;
+
+     SUSPEND;
+
+     END
+END^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE FICHADOCADASTRO TO  SYSDBA;
+

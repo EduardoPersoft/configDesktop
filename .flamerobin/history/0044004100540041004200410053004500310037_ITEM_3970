@@ -1,0 +1,17 @@
+select 
+    c_fatores.idlocal,
+    c_fatores.CFISCAL, 
+    CLASSIFICACAOFISCAL.descricao,
+    count(c_fatores.IDFATOR)    
+from
+    c_fatores
+inner join 
+    classificacaofiscal on 
+        (c_fatores.cfiscal=classificacaofiscal.cfiscal)
+
+group by
+    c_fatores.idlocal,
+    c_fatores.CFISCAL,
+    CLASSIFICACAOFISCAL.descricao
+having
+    count(c_fatores.IDFATOR)>1    

@@ -1,0 +1,5 @@
+select * from LANTOCONTPAG
+where not exists (
+select * from CONTASCONTABEIS
+where contascontabeis.IDPLANO=2 and
+contascontabeis.CONTACONTABIL=LANTOCONTPAG.CONTACONTABIL)

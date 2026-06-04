@@ -1,0 +1,11 @@
+select
+    movimentoestoque.*
+from
+    movimentoestoque
+inner join
+    NOTAFISCAL on
+        movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.IDNOTAEXPEDICAO=notafiscal.idnota    
+where
+    movimentoestoque.COLETADATA between '29.05.2025' and '27.06.2025' and
+    movimentoestoque.TIPOMOVIMENTO='13'

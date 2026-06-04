@@ -1,0 +1,21 @@
+select 
+    distinct
+    notafiscalref.CHAVE
+from 
+    imp_nfe ('NFE')
+inner join 
+   mercadoriasnota mercadoriasnota1 on 
+        mercadoriasnota1.filial=imp_nfe.filial and 
+        mercadoriasnota1.idnota=imp_nfe.idnota and
+        mercadoriasnota1.IDMERCADORIA=imp_nfe.iditem        
+inner join 
+    mercadoriasnota mercadoriasnotaref on 
+        mercadoriasnotaref.filialped=mercadoriasnota1.filialped and
+        mercadoriasnotaref.idpedido=mercadoriasnota1.idpedido and
+        mercadoriasnotaref.idmercpedido=mercadoriasnota1.idmercpedido
+inner join 
+    notafiscal notafiscalref on 
+        (notafiscalref.filial=mercadoriasnotaref.filial and
+         notafiscalref.IDNOTA=mercadoriasnotaref.idnota)         
+where 
+    notafiscalref.tpNFDebito='06'

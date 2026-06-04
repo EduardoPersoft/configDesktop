@@ -1,0 +1,2 @@
+select iditem, sum(saldototal) from MATERIALLOCAL
+having sum(saldototal)=1

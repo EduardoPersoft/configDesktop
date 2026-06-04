@@ -1,0 +1,7 @@
+SELECT
+    pedidocompra.*
+from
+    pedidocompra 
+where 
+    pedidocompra.filial=5 AND
+    pedidocompra.DATACADASTRO = '11.10.2021'

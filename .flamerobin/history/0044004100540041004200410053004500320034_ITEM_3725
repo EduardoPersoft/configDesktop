@@ -1,0 +1,23 @@
+select
+totaisperiodo.FILIAL,
+totaisperiodo.RAZAOFILIAL,
+totaisperiodo.DATAINICIAL,
+totaisperiodo.DATAFINAL,
+totaisperiodo.DETALHE,
+totaisperiodo.VLRATE15,
+totaisperiodo.PERCENTUALATE15,
+totaisperiodo.VLRATE30,
+totaisperiodo.PERCENTUALATE30,
+totaisperiodo.VLRATE45,
+totaisperiodo.PERCENTUALATE45,
+totaisperiodo.VLRATE60,
+totaisperiodo.PERCENTUALATE60,
+totaisperiodo.VLRATE75,
+totaisperiodo.PERCENTUALATE75,
+totaisperiodo.VLRATE90,
+totaisperiodo.PERCENTUALATE90,
+totaisperiodo.VLR90MAIS,
+totaisperiodo.PERCENTUAL90MAIS,
+totaisperiodo.VLRFATURAS,
+totaisperiodo.mediadias
+from totaisperiodo

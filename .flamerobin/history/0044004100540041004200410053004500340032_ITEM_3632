@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,codigo,desreduzida,filialped,idpedido,idmercped from mercadoriasnota where filial=110 and idnota in (6075,6080)

@@ -1,0 +1,7 @@
+CREATE TABLE C_LOCALIMPORTACAO_antes
+(
+  IDLOCAL smallint NOT NULL,
+  DESCRICAO varchar(30),
+  BASEMOEDA double precision
+  
+);

@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set
+    pedido.operacao=128
+where
+    pedidop.operacao=null

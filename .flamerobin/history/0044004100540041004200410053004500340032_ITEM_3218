@@ -1,0 +1,17 @@
+select
+    materialmovimentoestoque.*,
+    (select 
+        max(composicaoop.METRAGEM)
+     from
+        COMPOSICAOOP
+     where
+        composicaoop.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        composicaoop.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL)
+from
+    MATERIALMOVIMENTOESTOQUE
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MATERIALMOVIMENTOESTOQUE.idcentrocusto='101'
+    

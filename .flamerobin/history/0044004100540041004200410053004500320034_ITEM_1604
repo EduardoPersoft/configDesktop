@@ -1,0 +1,6 @@
+select 
+    * 
+from
+    CONSUMOITENSESTOQUE
+where
+    CONSUMOITENSESTOQUE.codigo='12608'

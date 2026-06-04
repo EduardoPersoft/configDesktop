@@ -1,0 +1,1 @@
+delete from materialmovimentoestoque where filial=12826 and idmovimento between 236970 and 236981

@@ -1,0 +1,1 @@
+select * from LANTOCONTPAG where filial=1 and idmovtobanc in (376861, 376862, 376863)

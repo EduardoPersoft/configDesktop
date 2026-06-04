@@ -1,0 +1,1 @@
+select * from MERCADORIASNOTA order by datacadastro desc

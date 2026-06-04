@@ -1,0 +1,16 @@
+select
+    orcamento.vendedor,
+    count(orcamento.idnota) qtd,
+    sum((select 
+            count(mercadoriasorc.idnota)
+         from
+            MERCADORIASORC
+         where
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota)) qtditens,
+    sum(orcamento.VLRTOTALnota)
+from
+    cadastroparceiros cadven
+inner join
+    pedido on
+        pedid

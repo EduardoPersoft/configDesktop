@@ -1,0 +1,6 @@
+upadate 
+    ITEMCUSTODATA
+set 
+    itemcustodata.CUSTOUNITARIO=
+        itemcustodata.CUSTOTOTAL/
+        itemcustodata.quantidade

@@ -1,0 +1,1 @@
+alter table mercadoriaspedcompra add c_qtdeenviada double precision

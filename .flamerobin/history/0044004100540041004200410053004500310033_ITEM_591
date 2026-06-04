@@ -1,0 +1,4 @@
+update
+    PEDIDO
+set
+    pedido.datareferencia = cast(pedido.datareferencia as date)

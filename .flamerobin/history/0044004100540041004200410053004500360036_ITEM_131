@@ -1,0 +1,2 @@
+select id, clastrib from NATUREZAOPERACAO
+where NATUREZAOPERACAO.CLASSTRIB is not null

@@ -1,0 +1,9 @@
+select
+    materialfilial.*
+from
+    MATERIALFILIAL
+inner join
+    itemestoque on
+        materialfilial.iditem=itemestoque.codigo
+where
+    materialfilial.C_LOCALIMPORTACAO=itemestoque.C_LOCALIMPORTACAO

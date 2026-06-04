@@ -1,0 +1,27 @@
+select
+    materialmovimentoestoque.*,
+    materialmovimentoestoque.c_metros/
+    coalesce((
+        select 
+           itemestoque.C_VELOCIDADEIMPRESSAO
+        from
+           ITEMESTOQUE
+        where
+            itemestoque.CODIGO=MATERIALMOVIMENTOESTOQUE.iditem),1)/60,
+    coalesce((
+        select 
+           itemestoque.C_SETUPIMPRESSAO
+        from
+           ITEMESTOQUE
+        where
+            itemestoque.CODIGO=MATERIALMOVIMENTOESTOQUE.iditem),1)/60    
+from
+    MATERIALMOVIMENTOESTOQUE
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MATERIALMOVIMENTOESTOQUE.idcentrocusto='101'
+order by
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento desc
+    

@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,codigo,mercadoriasorc.CUSTO from mercadoriasorc where filial=5 and idnota=284

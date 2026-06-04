@@ -1,0 +1,21 @@
+SELECT
+    sum(fatped.VALORFATURA) totalPedido
+from
+    pedido
+inner JOIN  
+    fatped on
+        fatped.filial=pedido.filial AND
+        fatped.idnota=pedido.idnota
+WHERE
+    pedido.filial=5
+    pedido.destinatario=5 and
+    and exists 
+        (select 
+            * 
+         from 
+            mercadoriasped
+         where 
+            mercadoriasped.filial=pedido.filial AND
+            mercadoriasped.idnota=pedido.idnota AND
+            mercadoriasped.baixa='N')
+    

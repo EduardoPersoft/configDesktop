@@ -1,0 +1,19 @@
+select mercadoriasnota.* from MOVIMENTOESTOQUE
+inner join MATERIALMOVIMENTOESTOQUE on
+    materialmovimentoestoque.filial=movimentoestoque.filial and
+    materialmovimentoestoque.idmovimento=MOVIMENTOestoque.idmovimento
+inner join mercadoriasnota on 
+    mercadoriasnota.filial=movimentoestoque.filial and
+    mercadoriasnota.idnota=movimentoestoque.idnota and
+    mercadoriasnota.idmercadoria=MATERIALMOVIMENTOESTOQUE.IDMERCADORIA
+inner join notafisca on
+    notafiscal.filial=mercadoriasnota.filial and
+    notafiscal.idnota=mercadoriasnota.idnota 
+inner join itemestoque on
+    itemestoque.codigo=mercadoriasnota.codigo
+where movimentoestoque.filial=1 
+and movimentoestoque.TIPOMOVIMENTO='02'
+and movimentoestoque.idnota is not null 
+and MATERIALMOVIMENTOESTOQUE.IDMERCADORIA is not null
+and (materialmovimentoestoque.iditem<>MERCADORIASNOTA.codigo or
+MATERIALMOVIMENTOESTOQUE.QUANTIDADE<>mercadoriasnota.QUANTIDADE)

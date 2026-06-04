@@ -1,0 +1,6 @@
+select
+    *
+from
+    TITULOREC
+where
+    titulorec.titulo='9034120'

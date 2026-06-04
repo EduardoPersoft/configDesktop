@@ -1,0 +1,6 @@
+SELECT * FROM titulorec 
+where not exists (
+select * from C_MOVFINANCEIRO
+where C_MOVFINANCEIRO.id=titulorec.IDTITULO
+and titulorec.filial=110 
+and titulorec.CONTACORRENTE<>c_movfinanceiro.contacorrente)

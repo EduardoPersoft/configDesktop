@@ -1,0 +1,2 @@
+
+insert into c_lantocontbanc select * from lantocontbanc

@@ -1,0 +1,65 @@
+SET TERM ^ ;
+ALTER PROCEDURE GETMODELO (
+    FILIAL integer,
+    ID smallint,
+    SALTO smallint )
+RETURNS (
+    NUMERO integer,
+    CODMODELOFISCAL smallint,
+    FORMAEMISSAONFE char(1),
+    SERIE char(3),
+    sequencia integer,
+    CODIGOIBGE char(2),
+    DATAHORA timestamp,
+    "DATA" date )
+
+AS
+BEGIN
+  /* write your code here */ 
+  update
+    MODELODOCTO
+  set 
+    ultimanota = ultimanota + :salto
+  where 
+    modelodocto.id=:id;
+    
+  select 
+    MODELODOCTO.ULTIMANOTA,
+    MODELODOCTO.CODMODELOFISCAL,
+    MODELODOCTO.FORMAEMISSAONFE,
+    MODELODOCTO.SERIE,
+    MODELODOCTO.SEQUENCIA,
+    cast('now' as timestamp),
+    cast('now' as date)
+  from
+    MODELODOCTO
+  where
+    modelodocto.id = :id
+  into
+    :numero,
+    codmodelofiscal,
+    formaemissaonfe,
+    serie,
+    SEQUENCIA,
+    :datahora,    
+    :data;
+    
+  select
+    estado.CODIGOIBGE
+  from
+    CADASTROPARCEIROS
+  inner join
+    estado on
+        estado.ESTADO=CADASTROPARCEIROS.UF
+  into :codigoibge;  
+    
+  suspend;  
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE GETMODELO TO  SYSDBA WITH GRANT OPTION;
+

@@ -1,0 +1,35 @@
+select 
+    i1.itemestoque.codigo 
+from 
+    ITEMESTOQUE i1
+where 
+    i1.codigo = 'a'
+UNION
+select 
+    itemestoque.codigo 
+from 
+    ITEMESTOQUE i1
+where i1.itembase = 'a'
+UNION
+select 
+    itemestoque.codigo 
+from 
+    ITEMESTOQUE i1
+where i1.referencia = (select 
+                           i2.referencia 
+                        from 
+                           itemestoque i2
+                        where 
+                            i2.codigo = 'a')
+UNION
+select 
+    itemestoque.codigo 
+from 
+    ITEMESTOQUE i1
+where i1.codigo = (select 
+                       i2.itembase
+                     from 
+                        itemestoque i2
+                     where 
+                        i2.codigo = 'a')
+                

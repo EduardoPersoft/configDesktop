@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where locallote.lote like '145126%'

@@ -1,0 +1,22 @@
+select 
+    cadastroparceiros.cadastro,
+    cadastroparceiros.nome,
+    count(orcamento.idnota) qtdOrcamento,
+    sum(case when pedConvertido.idnota is null then 0 else 1 end) qtdConversao
+from 
+    orcamento
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=orcamento.destinatario
+left join
+    pedido pedConvertido on
+        pedConvertido.filial=orcamento.filial and
+        pedConvertido.idorcamento=orcamento.idnota and
+        pedConvertido.CANCELAMENTO='N'
+where 
+    orcamento.DATACADASTRO between '01.01.2023' and '31.12.2023' and
+    orcamento.CANCELAMENTO='N'
+group by    
+    CADASTROPARCEIROS.cadastro,
+    cadastroparceiros.nome
+order by 4 desc,3 desc

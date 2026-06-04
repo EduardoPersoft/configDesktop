@@ -1,0 +1,12 @@
+select
+    c_coletas.COLETA,
+    c_coletas.datacoleta,
+    C_DESTINOAVULSO.DATACOLETA
+from
+    c_Coletas
+inner join
+    C_DESTINOAVULSO on
+        C_DESTINOAVULSO.coleta=c_coletas.coleta and
+        cast(C_DESTINOAVULSO.DATACOLETA as date)<>c_coletas.datacoleta
+where
+    c_coletas.datacoleta between '15.09.2025' and '29.09.2025'

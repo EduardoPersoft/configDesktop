@@ -1,0 +1,14 @@
+select 
+    * 
+from 
+    C_REQUISICAOMATERIALITEM
+where 
+    codigo in ('04.01.0001',
+               '04.01.0002',
+               '04.01.0010',
+               '04.01,0050',
+               '04.01.0040',
+               '04.01.0030',
+               '04.01.0020',
+               '04.01.0005')
+    order by id desc

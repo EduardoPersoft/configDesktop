@@ -1,0 +1,6 @@
+create table C_TIPOPADRAOCOLETA(
+    id smalint not null,
+    descricao varchar(40),
+    constraint pk_c_tipoPadraoColeta
+    primary key(id)
+)

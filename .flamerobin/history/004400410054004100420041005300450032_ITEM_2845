@@ -1,0 +1,1 @@
+select * from titulorec where titulorec.DATAENVIO='06.07.2021' and titulorec.EMISSAO='06.07.2021'

@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    itemestoque.C_DESCRICAOFIO like 'S/ GARRA%'

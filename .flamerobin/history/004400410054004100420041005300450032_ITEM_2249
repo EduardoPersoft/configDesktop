@@ -1,0 +1,94 @@
+select 
+    mercadoriasnota.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    sum(mercadoriasnota.quantidade) venda,
+    (select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=mercadoriasnota.filial AND
+        materiallocal.iditem=mercadoriasnota.codigo) as saldo,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.saldomaximo,
+    (select
+        min(pedidocompra.datacadastro+PRAZOMERCPEDCOMPRA.dias)
+     FROM
+        MERCADORIASPEDCOMPRA
+     inner join 
+        pedidocompra on
+            mercadoriaspedcompra.filial=pedidocompra.filial AND
+            mercadoriaspedcompra.idnota=pedidocompra.IDNOTA
+     left join 
+        PRAZOMERCPEDCOMPRA on
+            prazomercpedcompra.filial=mercadoriaspedcompra.filial AND
+            prazomercpedcompra.idnota=mercadoriaspedcompra.idnota AND
+            prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+     where
+        mercadoriaspedcompra.filial=mercadoriasnota.filial AND
+        mercadoriaspedcompra.codigo=mercadoriasnota.codigo AND
+        mercadoriaspedcompra.baixa='N') as data,
+    (select
+        sum(mercadoriaspedcompra.quantidade)
+     FROM
+        MERCADORIASPEDCOMPRA
+     inner join 
+        pedidocompra on
+            mercadoriaspedcompra.filial=pedidocompra.filial AND
+            mercadoriaspedcompra.idnota=pedidocompra.IDNOTA
+     left join 
+        PRAZOMERCPEDCOMPRA on
+            prazomercpedcompra.filial=mercadoriaspedcompra.filial AND
+            prazomercpedcompra.idnota=mercadoriaspedcompra.idnota AND
+            prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+     where
+        mercadoriaspedcompra.filial=mercadoriasnota.filial AND
+        mercadoriaspedcompra.codigo=mercadoriasnota.codigo AND
+        mercadoriaspedcompra.baixa='N') as comprado,
+    case when (select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=mercadoriasnota.filial AND
+        materiallocal.iditem=mercadoriasnota.codigo) + 
+    sum(mercadoriasnota.quantidade) >
+            case when coalesce(materialfilial.SALDOMAXIMO,0)>0 
+            then materialfilial.SALDOMAXIMO*.5
+            else materialfilial.CONSUMOMEDIO*.4
+            end then 'Incluso' else 'Recorrente' end status
+from 
+    notafiscal
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+inner join
+    materialfilial on
+        materialfilial.filial=notafiscal.filial and
+        materialfilial.iditem=itemestoque.codigo
+where
+    notafiscal.filial = :filial and 
+    notafiscal.dataemissao = :data AND
+    (select 
+        sum(materiallocal.SALDOTOTAL)
+     from 
+        MATERIALLOCAL
+     where
+        materiallocal.filial=mercadoriasnota.filial AND
+        materiallocal.iditem=mercadoriasnota.codigo)<
+            case when coalesce(materialfilial.SALDOMAXIMO,0)>0 
+            then materialfilial.SALDOMAXIMO*.5
+            else materialfilial.CONSUMOMEDIO*.4
+            end
+group by
+    mercadoriasnota.filial,
+    mercadoriasnota.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.saldomaximo

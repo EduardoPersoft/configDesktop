@@ -1,0 +1,6 @@
+update
+    LANTOCONTBANC
+set
+    contacontabil='1220207'
+where
+    contacontabil='1121'

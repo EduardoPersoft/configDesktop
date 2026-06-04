@@ -1,0 +1,44 @@
+select 
+    (select 
+         SUM(MATERIALLOCAL.SALDOTOTAL)    
+     from
+         MATERIALLOCAL
+     where
+         MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+         materiallocal.idlocal=1 and
+         MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM),
+    itemestoque.itembase,
+    itemestoque.TIPOPRODUTO,
+    fornecedoresitem.*
+    
+FROM
+    fornecedoresitem
+inner join
+    itemestoque on
+        itemestoque.codigo=fornecedoresitem.iditem
+INNER join
+    materialfilial ON
+            FORNECEDORESITEM.IDITEM=MATERIALFILIAL.IDITEM and
+            MATERiALFILIAL.FILIAL=5 
+WHERE
+    
+    fornecedoresitem.FORNECEDOr=1082 and
+    not exists (
+        select
+            *
+         from 
+             MERCADORIASPEDCOMPRA
+         where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and                
+    (select 
+         SUM(MATERIALLOCAL.SALDOTOTAL)    
+     from
+         MATERIALLOCAL
+     where
+         MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+         materiallocal.idlocal=1 and
+         MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM)<=0
+order by 
+            iditem

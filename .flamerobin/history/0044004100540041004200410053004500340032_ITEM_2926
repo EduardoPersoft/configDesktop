@@ -1,0 +1,1 @@
+select * from composicaoop order by idmovimento

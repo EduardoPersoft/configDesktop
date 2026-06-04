@@ -1,0 +1,9 @@
+INSERT INTO PRAZOMERCPED (FILIAL, IDNOTA, IDITEM, DIAS, QTDE, DIASORIGINAL)
+VALUES (
+    110, 
+    11747, 
+    1, 
+    0, 
+    6, 
+    0
+);

@@ -1,0 +1,34 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    familia.DESCRICAO,
+    itemestoque.referencia,
+    materiallocal.SALDOTOTAL,
+    materialfilial.CONSUMOMEDIO,
+    (select first 1 
+        RESUMOCOMPRAS.preco 
+     FROM 
+        resumocompras
+     where
+        resumocompras.item=itemestoque.codigo 
+     order by RESUMOCOMPRAS.EMISSAO desc)
+
+from 
+    itemestoque 
+
+inner join
+    materiallocal on
+        materiallocal.filial=5 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.idlocal=1
+
+inner join
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo    
+left JOIN
+    familia on
+        familia.id=itemestoque.familia
+where 
+
+    itemestoque.descricao like 'CATRACA%'

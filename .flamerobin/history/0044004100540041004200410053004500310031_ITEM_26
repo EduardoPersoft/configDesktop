@@ -1,0 +1,40 @@
+
+select 
+    cast(titulopag.PROVAVEL as date) programacao,
+    lantoContPag.centroCusto,
+    sum(lantocontpag.VALOR / titulopag.VALORTITULO * titulopag.valoremaberto) ValorEmAberto,
+    cadastroparceiros.RAZAOSOCIAL,
+    TITULOPAG.IDTITULO,
+    titulopag.titulo,
+    titulopag.FATURA,
+    cast ('Receber' as varchar(10)),
+    titulopag.FILIAL
+from 
+    TITULOREC titulopag
+inner join 
+    LANTOCONTREC LANTOCONTPAG on 
+    titulopag.FILIAL = LANTOCONTPAG.FILIAL and
+    titulopag.IDTITULO= LANTOCONTPAG.idmovtobanc
+inner join 
+    ESTABELECIMENTO on 
+    titulopag.FILIAL = ESTABELECIMENTO.CADASTRO
+inner join 
+    CADASTROPARCEIROS on 
+    TITULOPAG.PARCEIRO= CADASTROPARCEIROS.CADASTRO
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=titulopag.contacorrente
+where 
+    titulopag.baixa is null and 
+    titulopag.filial  = 2098 and
+    titulopag.PROVAVEL between '01.01.2024' and '31.12.2024' and
+    titulopag.baixa is null
+group by
+    titulopag.provavel,
+    LANTOCONTPAG.centrocusto,
+    cadastroparceiros.RAZAOSOCIAL,
+    TITULOPAG.IDTITULO,
+    titulopag.titulo,
+    titulopag.FATURA,
+    titulopag.FILIAL

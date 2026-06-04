@@ -1,0 +1,7 @@
+update
+    MERCADORIASPED
+set 
+    cstibscbs='000',
+    cclasstrib='000001'
+where
+    baixa='N'

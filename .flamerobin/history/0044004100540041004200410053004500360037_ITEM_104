@@ -1,0 +1,2 @@
+select * from PEDIDO
+where pedido.idnota=24408

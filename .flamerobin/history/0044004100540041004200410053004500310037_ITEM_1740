@@ -1,0 +1,2 @@
+select * from local
+where descricao='z2-A'

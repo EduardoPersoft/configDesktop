@@ -1,0 +1,14 @@
+
+select
+    movtobancariolancamentos.FILIAL,
+    movtobancariolancamentos.CONTACONTABIL,
+    coalesce(movtobancariolancamentos.DESCRICAOCONTACONTABIL,movtobancariolancamentos.DESCRICAOCONTATRANSFERENCIA) Descricao,
+    movtobancariolancamentos.MOVIMENTACAO,
+    movtobancariolancamentos.CODIGO CONTACORRENTE,
+    movtobancariolancamentos.HISTORICOEXTRATO,
+    movtobancariolancamentos.NRDOCUMENTO,
+    movtobancariolancamentos.VALORMOVIMENTO            
+from
+    movtobancariolancamentos(110,'01.08.2023', '31.08.2023',  'PRIMEFLEX', 4)
+order by 
+    1, 2, 3

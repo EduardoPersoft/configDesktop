@@ -1,0 +1,34 @@
+select
+    mercadoriasped.idmercadoria,
+    mercadoriasped.PRECOUNITARIO,
+    mercadoriasped.quantidade,
+    mercadoriasped.VLRFINALMERCAD,    
+    mercadoriasped.IPIBASE,
+    mercadoriasped.pipi,
+    mercadoriasped.valoripi,
+    mercadoriasnota.PRECOUNITARIO,
+    sum(mercadoriasnota.quantidade),
+    sum(mercadoriasnota.vlrfinalmercad) valornota,    
+    mercadoriasnota.pipi,
+    sum(mercadoriasnota.ipibase) baseipinota,
+    sum(mercadoriasnota.valoripi) valoripinota
+from
+    MERCADORIASPED
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=mercadoriasped.FILIAL
+        and mercadoriasnota.idpedido=mercadoriasped.idnota
+        and mercadoriasnota.IDMERCPEDIDO=mercadoriasped.IDMERCADORIA
+where
+    mercadoriasped.filial=1 and 
+    mercadoriasped.idnota=51007
+group by        
+    mercadoriasped.idmercadoria,
+    mercadoriasped.VLRFINALMERCAD,
+    mercadoriasped.IPIBASE,
+    mercadoriasped.pipi,
+    mercadoriasped.valoripi,
+    mercadoriasnota.pipi
+having
+    sum(mercadoriasnota.valoripi)<>mercadoriasped.valoripi
+        

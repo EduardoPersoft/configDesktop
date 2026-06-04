@@ -1,0 +1,4 @@
+update c_destinoavulso
+set datasolicitacao=(select c_coletas.datacoleta from c_coletas where c_destinoavulso.coleta=c_coletas.coleta)
+where datasolicitacao is null
+                

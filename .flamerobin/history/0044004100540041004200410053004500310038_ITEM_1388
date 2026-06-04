@@ -1,0 +1,2 @@
+select * from movimentoestoque where filial=1 and tipomovimento='12'
+and movimentoestoque.C_IMPRESSAOACOMPANHAMENTO is null

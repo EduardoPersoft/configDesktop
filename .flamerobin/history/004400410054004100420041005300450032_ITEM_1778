@@ -1,0 +1,1 @@
+update titulorec set codretorno=null where titulorec.filial=5 and titulorec.CONTACORRENTE=422

@@ -1,0 +1,12 @@
+update
+    CLIENTES
+set
+    clientes.VENDEDOR = (select 
+                            PEDIDO.vendedor
+                         from
+                            pedido
+                         where
+                            pedido.destinatario=clientes.CADASTRO and
+                            pedido.vendedor is not null
+                         order by
+                            pedido.idnota desc)

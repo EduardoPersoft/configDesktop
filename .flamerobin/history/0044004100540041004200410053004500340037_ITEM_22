@@ -1,0 +1,2 @@
+update MATERIALFILIAL
+set filialpadrao=1,temporeposicao=45

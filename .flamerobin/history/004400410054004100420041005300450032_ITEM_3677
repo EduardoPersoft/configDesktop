@@ -1,0 +1,1 @@
+select * from cadastroparceiros where cadastro in (33956, 33957)

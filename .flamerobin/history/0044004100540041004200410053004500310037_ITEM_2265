@@ -1,0 +1,1 @@
+select * from itemestoque where itemestoque.METATAG like '%02 11411 02%'

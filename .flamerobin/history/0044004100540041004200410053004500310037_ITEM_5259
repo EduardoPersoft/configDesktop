@@ -1,0 +1,4 @@
+select valormedio*qtdexpedicoes as total, c_coletas.* from C_COLETAS
+where c_coletas.DATACOLETA between '30.06.2025'
+and '30.07.2025' and c_coletas.QTDEXPEDICOES<>(select count(movimentoestoque.idmovimento) from MOVIMENTOESTOQUE
+                                               where movimentoestoque.coleta=c_coletas.coleta)

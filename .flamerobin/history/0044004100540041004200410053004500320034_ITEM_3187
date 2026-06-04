@@ -1,0 +1,109 @@
+select
+    cadfor.cadastro,
+    cadfor.nome,
+    count(distinct notacompra.idnota) as qtdCompras,
+    count(distinct mercadoriasnotacompra.codigo) qtdItensComprados,   
+    (select 
+        COUNT(FORNECEDORESITEM.IDITEM)
+    FROM
+        MATERIALFILIAL
+    INNER join
+        FORNECEDORESITEM ON
+            FORNECEDORESITEM.IDITEM=MATERIALFILIAL.IDITEM
+    WHERE
+        MATERiALFILIAL.FILIAL=notacompra.filial AND
+        fornecedoresitem.FORNECEDOr=cadfor.cadastro and
+        not exists (
+            select
+                *
+            from 
+                MERCADORIASPEDCOMPRA
+            where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and
+                COALESCE(MATERIALFILIAL.SALDOMAXIMO,MATERIALFILIAL.CONSUMOMEDIO)*0.4<
+                (select 
+                    SUM(MATERIALLOCAL.SALDOTOTAL)    
+                 from
+                    MATERIALLOCAL
+                 where
+                    MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+                    materiallocal.idlocal=1 and
+                    MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM)) as faltasGerais,
+
+    (select 
+        COUNT(itemestoque.codigo)
+     FROM
+        materialfilial
+     inner join
+        itemestoque on
+            materialfilial.iditem=itemestoque.codigo       
+     WHERE
+        MATERiALFILIAL.FILIAL=notacompra.filial AND
+        itemestoque.FORNECEDORPADRAO=cadfor.cadastro and
+        not exists (
+            select
+                *
+            from 
+                MERCADORIASPEDCOMPRA
+            where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and
+        COALESCE(MATERIALFILIAL.SALDOMAXIMO,MATERIALFILIAL.CONSUMOMEDIO)*0.4<
+             (select 
+                  SUM(MATERIALLOCAL.SALDOTOTAL)    
+              from
+                  MATERIALLOCAL
+              where
+                  MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+                  materiallocal.idlocal=1 and
+                  MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM)) faltaFornecedor,
+
+    (select 
+        COUNT(FORNECEDORESITEM.IDITEM)
+    FROM
+        MATERIALFILIAL
+    INNER join
+        FORNECEDORESITEM ON
+            FORNECEDORESITEM.IDITEM=MATERIALFILIAL.IDITEM
+    WHERE
+        MATERiALFILIAL.FILIAL=notacompra.filial AND
+        fornecedoresitem.FORNECEDOr=cadfor.cadastro and
+        not exists (
+            select
+                *
+            from 
+                MERCADORIASPEDCOMPRA
+            where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and                
+                (select 
+                    SUM(MATERIALLOCAL.SALDOTOTAL)    
+                 from
+                    MATERIALLOCAL
+                 where
+                    MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+                    materiallocal.idlocal=1 and
+                    MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM))=0) as zerado
+                  
+                    
+from
+    pedidocompra NOTACOMPRA
+inner join
+    CADASTROPARCEIROS cadfor
+        on cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    mercadoriaspedcompra mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.idnota
+where
+    notacompra.filial=? and
+    notacompra.datacadastro between ? and ?
+group by         
+    notacompra.filial,
+    cadfor.cadastro,
+    cadfor.nome
+order by 4 desc

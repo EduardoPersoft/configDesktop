@@ -1,0 +1,22 @@
+select 
+    contadre.contacontabil,
+    lantocontpag.*
+from
+    TITULOPAG
+
+inner join 
+    ESTABELECIMENTO on 
+    TITULOPAG.FILIAL=ESTABELECIMENTO.CADASTRO 
+inner join
+    LANTOCONTPAG on 
+        lantocontpag.filial=titulopag.Filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.idtitulo
+inner join 
+    CONTASCONTABEIS contaDre on
+    ESTABELECIMENTO.PLANOCONTAS=contaDre.IDPLANO and 
+    lantocontpag.contacontabil like contaDre.CONTACONTABIL||'%'
+where
+    TITULOPAG.DATAREFERENCIA between '01.01.2026'  and '31.03.2026'
+order
+    4
+

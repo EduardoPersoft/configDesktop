@@ -1,0 +1,2 @@
+select * from c_transferencia where idtransferencia=1276
+

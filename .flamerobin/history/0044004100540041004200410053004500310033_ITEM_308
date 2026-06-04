@@ -1,0 +1,19 @@
+select 
+    prazomercpedcompra.filial,
+    prazomercpedcompra.idnota,
+    prazomercpedcompra.IDITEM,
+    count(prazomercpedcompra.dias)
+from 
+    prazomercpedcompra
+inner JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=PRAZOMERCPEDCOMPRA.filial AND
+        mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+        mercadoriaspedcompra.idmercadoria=prazomercpedcompra.iditem
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa='N'
+group by
+    prazomercpedcompra.filial,
+    prazomercpedcompra.idnota,
+    prazomercpedcompra.iditem

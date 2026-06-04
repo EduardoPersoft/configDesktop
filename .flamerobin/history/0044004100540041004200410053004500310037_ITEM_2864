@@ -1,0 +1,1 @@
+select filial,idnota,cancelamento,datacancelamento,dataalteracao from pedido where datacancelamento is not null

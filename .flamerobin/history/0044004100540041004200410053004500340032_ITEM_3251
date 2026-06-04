@@ -1,0 +1,1 @@
+delete from ITEMCUSTODATA where datainventario='2024-12-06'

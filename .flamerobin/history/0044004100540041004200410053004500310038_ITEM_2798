@@ -1,0 +1,1 @@
+update c_transferenciaitem set recebido=quantidade where idtransferencia=1276

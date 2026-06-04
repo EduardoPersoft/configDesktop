@@ -1,0 +1,7 @@
+select 
+    *
+FROM 
+    CARRINHO
+WHERE
+    substring(numeropedidocliente from 4) ='c1b1'
+order by id desc

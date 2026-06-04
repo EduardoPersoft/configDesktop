@@ -1,0 +1,4 @@
+select * from MOVBANCARIOS
+where MOVBANCARIOS.FILIAL=341
+and movbancarios.idcontacorrente=341
+and MOVBANCARIOS.IDMOVTOBANC=3633

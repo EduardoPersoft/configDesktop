@@ -1,0 +1,24 @@
+select
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.lote,
+    
+    count(materialmovimentoestoque.IDMOVIMENTOMATERIAL)
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MOVIMENTOESTOQUE.filial=110 and
+    movimentoestoque.PROCESSAMENTO>='01.10.2023' and
+    materialmovimentoestoque.lote like '%230930%' and
+    MOVIMENTOestoque.tipomovimento='04'
+group by
+materialmovimentoestoque.iditem,
+    materialmovimentoestoque.lote
+order by
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovimentoestoque.lote
+    
+  

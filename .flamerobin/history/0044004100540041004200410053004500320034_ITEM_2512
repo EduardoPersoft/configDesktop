@@ -1,0 +1,16 @@
+SELECT 
+    a.IDITEM, 
+    a.SEQUENCIA,     
+    a.IDMATERIAL, 
+    materiaprima.descricao,
+    a.QUANTIDADE, 
+    materiaprima.unidade,
+    a.QUANTIDADESETUP,
+    a.CENTROCUSTO
+FROM 
+    COMPOSICAOITEM a 
+inner join
+    itemestoque materiaprima on
+        materiaprima.codigo=a.idmaterial
+WHERE
+    a.IDITEM = '01580'

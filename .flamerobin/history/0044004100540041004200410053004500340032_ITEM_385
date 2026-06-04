@@ -1,0 +1,8 @@
+select 
+    itemestoque.codigo,
+    itemestoque.decricao
+from    
+    INVENTARIOESTOQUEDATA
+inner join
+    itemestoque on
+        itemestoque.codigo=INVENTARIOESTOQUEDATA.codigo

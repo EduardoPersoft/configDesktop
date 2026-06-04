@@ -1,0 +1,8 @@
+select      
+    cast(substring(mercadoriasnota.descricao 
+              from 1 for 100) as varchar(100))
+from
+    mercadoriasnota
+where 
+    filial=12826 and
+    idnota=365227

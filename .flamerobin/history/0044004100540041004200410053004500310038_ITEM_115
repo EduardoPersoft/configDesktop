@@ -1,0 +1,60 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_DESCRICAOTAPETE (
+    PCODIGO VARCHAR(15) )
+RETURNS (
+    CODIGO VARCHAR(15),
+    DESCRICAO VARCHAR(400) )
+
+AS
+declare variable v_qtdcores INTEGER;
+declare variable V_COR VARCHAR(40);
+declare variable v_espessura varchar(20);
+declare variable v_acabamento varchar(20);
+declare variable v_formato smallint;
+BEGIN
+
+    CODIGO = PCODIGO;
+    v_qtdcores = 0;
+
+    SELECT ITEMESTOQUE.DESCRICAO, ITEMESTOQUE.c_espessura,
+    COALESCE(c_acabamento.descricao, ''), ITEMESTOQUE.C_FORMATO
+    FROM ITEMESTOQUE
+    LEFT JOIN C_ACABAMENTO ON (C_aCABAMENTO.codigo=ITEMESTOQUE.c_acabamento)
+    WHERE ITEMESTOQUE.CODIGO=:PCODIGO
+    INTO :DESCRICAO,:v_espessura,:v_acabamento, :V_FORMATO;
+
+    FOR SELECT ITEMESTOQUE.c_descricaofiO
+      FROM c_itemregioesfios
+      INNER JOIN ITEMESTOQUE ON (c_itemregioesfios.fio=ITEMESTOQUE.CODIGO)
+      WHERE c_itemregioesfios.CODIGO=:CODIGO
+      INTO :V_COR DO BEGIN
+           if (coalesce(v_cor,'')<>'') then begin
+             if (V_qtdcores=0) then
+               DESCRICAO = substring(DESCRICAO||' CORES: '||V_COR from 1 for 400);
+             ELSE
+               DESCRICAO = substring(DESCRICAO||', '||V_COR from 1 for 400);
+             V_QTDCORES = V_QTDCORES +1;
+           end
+    END
+
+    IF(COALESCE(V_ESPESSURA,'')<>'') THEN
+           DESCRICAO = substring(DESCRICAO || ' ESPESSURA: '||V_eSPESSURA from 1 for 400);
+    IF(COALESCE(V_ACABAMENTO,'')<>'') THEN
+           DESCRICAO = substring(DESCRICAO || ' ACABAMENTO: '||V_ACABAMENTO from 1 for 400);
+    
+    IF(V_FORMATO = 2) THEN
+        descricao = substring(descricao || ' OVAL ' from 1 for 400);
+    IF(V_FORMATO = 3) THEN
+        descricao = substring(descricao || ' REDONDO ' from 1 for 400);
+    IF(V_FORMATO = 4) THEN
+        descricao = substring(descricao || ' CONFORME PLANTA ' from 1 for 400);
+    
+    SUSPEND;
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_DESCRICAOTAPETE TO  SYSDBA;
+

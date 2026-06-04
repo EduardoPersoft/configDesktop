@@ -1,0 +1,6 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where exists 
+(select * from movimentoestoque 
+where movimentoestoque.filial=materialmovimentoestoque.filial AND
+movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento AND
+movimentoestoque.tipomovimento='12')

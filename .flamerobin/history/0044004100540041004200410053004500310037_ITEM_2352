@@ -1,0 +1,9 @@
+select
+    filial,
+    idnota,
+    condicaopagamento
+from 
+    NOTACOMPRA
+where
+    notacompra.filial=12826 and
+    notacompra.idnota=5999

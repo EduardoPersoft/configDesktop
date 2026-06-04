@@ -1,0 +1,10 @@
+select 
+    sum(coalesce(c_destinoavulso.valor, 0)), 
+    sum(coalesce(c_Coletas.VALORMEDIO, 0))
+from 
+    c_destinoavulso
+left join
+    c_coletas on
+        C_COLETAS.coleta=C_DESTINOAVULSO.coleta
+where  
+    datasolicitacao between '30.06.2025' and '30.07.2025'

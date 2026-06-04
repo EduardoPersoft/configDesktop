@@ -1,0 +1,7 @@
+update
+    MOVIMENTOESTOQUE
+set
+    valorfrete = null
+where 
+    movimentoestoque.emissao>='27.10.2025' and
+    movimentoestoque.valorfrete=70

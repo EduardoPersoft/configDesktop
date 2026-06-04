@@ -1,0 +1,12 @@
+select 
+    MOVIMENTOESTOQUE.COLETADATA,
+    c_coletas.* 
+from 
+    c_coletas
+inner join
+    movimentoestoque on
+        movimentoestoque.COLETA=c_coletas.COLETA
+where
+    cast(movimentoestoque.COLETADATA as date)<>
+    c_coletas.DATACOLETA and
+    c_coletas.DATACOLETA between '30.04.2026' and '14.05.2026'

@@ -1,0 +1,22 @@
+select 
+    titulorec.dataenvio,
+    titulorec.*
+from 
+    titulorec     
+where 
+    titulorec.filial=5 and 
+    titulorec.baixa is null and
+    exists (
+        select
+            *
+        from
+            MOVTITULOREC
+        where
+            titulorec.filial=movtitulorec.filial and
+            titulorec.idtitulo=movtitulorec.idtitulo and
+            movtitulorec.tipomovto='B' and
+            movtitulorec.dataenvio<>cast(movtitulorec.dataenvio as date) 
+            titulorec.DATAENVIO=cast(movtitulorec.dataenvio as date))
+order by
+    titulorec.DATAENVIO
+    

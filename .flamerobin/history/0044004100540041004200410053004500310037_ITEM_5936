@@ -1,0 +1,3 @@
+select filial, idnota, dataemissao, indpres
+from notafiscal
+where notafiscal.DATAEMISSAO>'01.02.2026'

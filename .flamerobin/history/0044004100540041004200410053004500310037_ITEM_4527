@@ -1,0 +1,8 @@
+update
+    pedido
+set
+    pedido.pesoliquido=0,
+    pedido.pesobruto=0,
+    pedido.CLCTRANSP='N'
+where
+    pedido.DATAcadastro>='01.01.2025'

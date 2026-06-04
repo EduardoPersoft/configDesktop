@@ -1,0 +1,28 @@
+update pedido set vendedor = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresped 
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota),
+atendente = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresped
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota)
+where exists (select * from pedido where pedido.filial=vendedoresped.filial and pedido.DATACADASTRO>='01.01.2023')
+
+/*
+update orcamento pedido set vendedor = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresorc vendedoresped 
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota),
+atendente = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresorc vendedoresped
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota)
+*/

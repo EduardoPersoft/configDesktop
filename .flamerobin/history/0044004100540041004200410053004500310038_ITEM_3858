@@ -1,0 +1,17 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    TIPOITEMESTOQUE.descricao,
+    cast('N' as char(1)) as p_char
+from
+    ITEMESTOQUE
+inner join
+    TIPOITEMESTOQUE on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+where 
+    ITEMESTOQUE.TIPOPRODUTO in ('3', '4') and
+    not exists (
+        select * from LISTAPRECOPRODUTO
+        where LISTAPRECOPRODUTO.lista=1
+        and listaprecoproduto.produto=ITEMESTOQUE.codigo)

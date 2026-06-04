@@ -1,0 +1,9 @@
+update
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.impresso = 'S'
+where
+    movimentoestoque.tipomovimento='13' and
+    movimentoestoque.emissao='08.05.2025'
+    
+    

@@ -1,0 +1,11 @@
+
+update
+    movimentoestoque
+set 
+    impresso='S'
+where
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and 
+    coalesce(movimentoestoque.IMPRESSO, 'N') ='N' and
+    movimentoestoque.emissao = cast('now' as date)
+order by
+    movimentoestoque.DATAALTERACAO

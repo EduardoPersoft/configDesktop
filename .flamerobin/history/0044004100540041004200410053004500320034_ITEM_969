@@ -1,0 +1,18 @@
+insert into ITEMESTOQUECODIGOS(codigo, codigoalternativo) 
+select 
+    distinct
+    i2.codigo,
+    substring(i2.codigo from 2 for 4)
+
+FROM
+    ITEMESTOQUE i2
+WHERE
+    substring(codigo from 1 for 1)='0'  AND
+    not exists 
+        (select 
+            * 
+         from 
+            itemestoquecodigos  i1
+        where 
+            i1.codigo=i2.codigo AND
+            i1.CODIGOALTERNATIVO=substring(i2.codigo from 2 for 4))

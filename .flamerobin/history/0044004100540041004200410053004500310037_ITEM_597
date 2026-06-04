@@ -1,0 +1,5 @@
+select * from ITEMESTOQUE
+where itemestoque.TIPOPRODUTO='3'
+and not exists 
+(select * from C_LOGPRODUTOECOMMERCE
+where C_LOGPRODUTOECOMMERCE.CODIGO=itemestoque.codigo)

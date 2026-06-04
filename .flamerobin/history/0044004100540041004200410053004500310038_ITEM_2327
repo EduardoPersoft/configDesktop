@@ -1,0 +1,6 @@
+update 
+    MERCADORIASPED
+set
+    DESCRICAO = 'TAPETE LISO ESPECIAL 08MM Formato: Conforme a Planta. Acabamento: BAINHA VIRADA. Espessura: 08.0/  . /  .',
+    DESREDUZIDA = 'TAPETE LISO ESPECIAL 08MM'
+ where filial=1 and idnota=71757 AND IDMERCADORIA=1

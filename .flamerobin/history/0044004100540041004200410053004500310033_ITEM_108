@@ -1,0 +1,89 @@
+SET TERM ^ ;
+CREATE PROCEDURE C_POSICAOESTOQUERESERVACON (
+    FILIAL INTEGER )
+RETURNS (
+    CODIGO VARCHAR(15),
+    SALDOTOTAL DOUBLE PRECISION,
+    VALORTOTALESTOCADO DOUBLE PRECISION,
+    CUSTOMEDIO DOUBLE PRECISION,
+    RESERVAPEDIDO DOUBLE PRECISION,
+    RESERVANOTA DOUBLE PRECISION,
+    RESERVAOP DOUBLE PRECISION,
+    RESERVAPEDIDOCOMPRA DOUBLE PRECISION,
+    ESTABELECIMENTO INTEGER,
+    RAZAOSOCIAL VARCHAR(60) )
+
+AS
+begin
+
+  for SELECT
+    CODIGO,
+    SALDOTOTAL,
+    VALORTOTALESTOCADO,
+    CUSTOMEDIO,
+    RESERVAPEDIDO,
+    RESERVANOTA,
+    RESERVAOP,
+    RESERVAPEDIDOCOMPRA,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL
+  FROM 
+    POSICAOESTOQUERESERVA2(FILIAL)
+  INTO
+    CODIGO,
+    SALDOTOTAL,
+    VALORTOTALESTOCADO,
+    CUSTOMEDIO,
+    RESERVAPEDIDO,
+    RESERVANOTA,
+    RESERVAOP,
+    RESERVAPEDIDOCOMPRA,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL do
+        suspend;
+    
+  
+  SALDOTOTAL = 0;
+  VALORTOTALESTOCADO = 0;
+  CUSTOMEDIO = 0;
+  RESERVAPEDIDO = 0;
+  RESERVANOTA = 0;
+  RESERVAOP = 0;
+  RESERVAPEDIDOCOMPRA = 0;
+  
+  for select 
+    materialmovimentoestoque.codigo,
+    sum(coalesce (materialmovimentoestoque.quantidade,0) * materialmovimentoestoque.sinal) * (-1) as consumo , 
+    cadastrofilial.cadastro,
+    cadastrofilial.razaosocial
+ from 
+    MOVIMENTOESTOQUE
+ inner JOIN
+    materialmovimentoestoque on 
+        materialmovimentoestoque.filial=movimentoestoque.filial AND
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+ inner join 
+    TIPOMOVIMENTOESTOQUE on  
+       movimentoestoque.TIPOMOVIMENTO = TIPOMOVIMENTOESTOQUE.ID  
+ inner JOIN
+    cadastroparceiros cadastrofilial on
+        cadastrofilial.cadastro=movimentoestoque.filial
+    
+ where 
+    movimentoestoque.filial=:filial AND
+    tipomovimentoestoque.tipomovimento='S' and
+    movimentoestoque.emissao between :datainicial and :datafinal
+ INTO
+    CODIGO,
+    ESTABELECIMENTO,
+    RAZAOSOCIAL
+  do
+    suspend;
+
+end
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE POSICAOESTOQUERESERVA2 TO  SYSDBA;
+

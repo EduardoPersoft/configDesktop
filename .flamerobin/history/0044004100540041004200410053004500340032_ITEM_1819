@@ -1,0 +1,12 @@
+update 
+    materiallocal
+set
+    saldototal = cast(coalesce((select 
+                    sum(materialmovimentoestoque.quantidade*
+                        materialmovimentoestoque.sinal)
+                  from 
+                    MATERIALMOVIMENTOESTOQUE
+                  where
+                     materialmovimentoestoque.filial=materiallocal.filial and
+                     materialmovimentoestoque.iditem=materiallocal.iditem and
+                     MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=materiallocal.IDLOCAL),0) as decimal(12,3))

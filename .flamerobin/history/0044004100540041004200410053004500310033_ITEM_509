@@ -1,0 +1,7 @@
+select
+    itemestoque.codigo,
+    itemestoque.DESCRICAO
+from
+    itemetoque
+where
+    itemetoque.grupo = 7

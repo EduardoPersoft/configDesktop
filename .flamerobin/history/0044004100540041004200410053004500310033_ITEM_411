@@ -1,0 +1,42 @@
+select 
+    FILIAL,
+    IDNOTA, 
+    idmercadoria,
+    uuid,
+    NUMPEDIDOCLIENTE,
+    DATACADASTRO,
+    DATAAPROVACAO,
+
+    DESTINATARIO,
+    NOME,
+    TELEFONE,
+    EMAIL,
+
+    VENDEDOR,
+    NOMEVENDEDOR, 
+    EMAILVENDEDOR,
+
+    CODIGO ,
+    DESREDUZIDA,
+    UNIDADE,
+    saldototal,   
+    TOTALRESERVADO,
+
+    IDPEDCOMPRA,
+    SOMACOMPRAS,
+    DATACHEGADA,
+    
+    QUANTIDADE,
+    VALOR,
+    VLRTOTALNOTA,     
+    SALDO,
+    DATAENTREGA,
+    DATAENTREGAORIGINAL,    
+    
+    comentario,
+    cast('N' as char(1)) p_check
+    
+
+    
+from FOLLOWUPITEMVENDAS(1) 
+

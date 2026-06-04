@@ -1,0 +1,2 @@
+select * from composicaomercorc
+wheref filial=1 and idnota=42421

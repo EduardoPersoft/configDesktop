@@ -1,0 +1,10 @@
+select 
+    materialfilial.filial,
+    materialfilial.iditem,
+    materialfilial.consumomedio,
+    itemestoque.descricao,
+    materialfilial.SALDOMINIMO
+from
+    materialfilial
+order by 
+    materialfilial.CONSUMOMEDIO desc

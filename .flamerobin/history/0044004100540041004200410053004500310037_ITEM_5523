@@ -1,0 +1,11 @@
+select
+    *
+from
+    c_Coletas
+inner join
+    MOVIMENTOESTOQUE on
+        MOVIMENTOESTOQUE.coleta=c_coletas.coleta and
+        movimentoestoque.TIPOMOVIMENTO='13' and
+        movimentoestoque.COLETADATA<>c_coletas.datacoleta
+where
+    c_coletas.datacoleta between '15.09.2025' and '29.09.2025'

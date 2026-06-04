@@ -1,0 +1,6 @@
+select 
+    *
+from
+    C_REQUISICAOMATERIALITEM
+where 
+    codigo in  ('04.01.0050')

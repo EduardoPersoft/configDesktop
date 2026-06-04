@@ -1,0 +1,1 @@
+create TABLE c_classifiscalst(classifiscal varchar(3))

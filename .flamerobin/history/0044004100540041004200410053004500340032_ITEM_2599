@@ -1,0 +1,2 @@
+select * from FATURASPED
+where filial=110 and idnota=11545

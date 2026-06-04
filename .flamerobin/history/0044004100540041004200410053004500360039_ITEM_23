@@ -1,0 +1,1 @@
+select tipocobranca,descricao,modoliberacaocredito from TIPOCOBRANCA order by tipocobranca

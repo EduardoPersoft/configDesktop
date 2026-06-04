@@ -1,0 +1,46 @@
+SET TERM ^ ;
+ALTER TRIGGER C_PEDIDO_DTCOMISSAO inACTIVE
+BEFORE insert OR update POSITION 50
+
+
+AS
+DECLARE VARIABLE INICIO DATE;
+DECLARE VARIABLE FIM DATE;
+BEGIN
+    /* enter trigger code here */ 
+    IF(NEW.C_DATACOMISSAO IS NOT NULL) THEN
+        IF(OLD.C_DATACOMISSAO IS NULL OR OLD.C_DATACOMISSAO<>NEW.C_DATACOMISSAO) then begin
+            select 
+                estabelecimento.VENDASINICIO,
+                estabelecimento.VENDASFIM
+            from
+                ESTABELECIMENTO
+            where 
+                estabelecimento.cadastro=new.FILIAL
+            into :inicio, :fim;
+        
+            if(new.C_DATACOMISSAO<:inicio or new.c_datacomissao>:fim) then
+                exception C_DATAFECHAMENTOVENDAS;
+
+        end
+
+    IF(NEW.C_DATACOMISSAO IS NULL) THEN
+        IF(OLD.C_DATACOMISSAO IS NOT NULL) then begin
+            select 
+                estabelecimento.VENDASINICIO,
+                estabelecimento.VENDASFIM
+            from
+                ESTABELECIMENTO
+            where 
+                estabelecimento.cadastro=new.FILIAL
+            into :inicio, :fim;
+        
+            if(old.C_DATACOMISSAO<:inicio or old.c_datacomissao>:fim) then
+                exception C_DATAFECHAMENTOVENDAS;
+
+        end
+        
+    
+END
+^
+SET TERM ; ^

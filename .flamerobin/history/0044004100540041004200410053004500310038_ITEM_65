@@ -1,0 +1,12 @@
+SELECT
+    mercadoriasnotacompra.*
+FROM
+    NOTAcompra
+inner JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial AND
+        mercadoriasnotacompra.idnota=notacompra.idnota
+WHERE
+    notacompra.filial=1 AND
+    notacompra.dataentrada between '01.08.2021' and '31.08.2021' AND
+    mercadoriasnotacompra.cfop= '5924'

@@ -1,0 +1,27 @@
+select 
+    movimentoestoque.filial,
+    movimentoestoque.emissao,
+    movimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    materialmovimentoestoque.iditem,
+    coalesce(materialmovimentoestoque.quantidade,0),
+    coalesce(materialmovimentoestoque.valor,0),
+    materialmovimentoestoque.sinal 
+from 
+    MOVIMENTOESTOQUE
+inner join
+    DOCUMENTOSASSOCIADOS on
+        documentosassociados.filial=movimentoestoque.filial and
+        DOCUMENTOSASSOCIADOS.IDMOVIMENTOENTRADA=movimentoestoque.IDMOVIMENTO
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    movimentoestoque.filial=1
+    and movimentoestoque.emissao between '01.01.2024' and '31.01.2024'
+order by 
+    movimentoestoque.emissao,
+    DOCUMENTOSASSOCIADOS.filial,
+    DOCUMENTOSASSOCIADOS.IDMOVIMENTOENTRADA,
+    DOCUMENTOSASSOCIADOS.IDMATERIAL

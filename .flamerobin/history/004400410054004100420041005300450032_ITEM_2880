@@ -1,0 +1,89 @@
+
+SELECT ITEMESTOQUE.codigo,
+       itemestoque.descricao,
+       itemestoque.c_mrfornecedor,
+       itemestoque.tipoproduto,
+       itemestoque.c_original,
+       c_marca.descricao as marca,
+       itemestoque.c_aplicacao, GrupoMercadoria.Descricao as Grupo,
+       itemestoque.pipi,
+       itemestoque.c_impostoimportacao,
+       c_fornecedorpeca.descricao as fornecedor, moeda.sigla as moeda,
+       classificacaofiscal.descricao as classificaofiscal,
+       c_localimportacao1.descricao as localorigem1,
+       c_localimportacao2.descricao as localorigem2,
+       MAX(C_ENTRADASAIDA.precoOriginal) PRECOORIGINAL,
+       MAX(C_ENTRADASAIDA.precoA) PRECOA,
+       MAX(C_ENTRADASAIDA.precob) PRECOB,
+       MAX(C_ENTRADASAIDA.precoC) PRECOC,
+       itemestoque.datacadastro,
+       coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.filial=:filial and mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1), 0) as MLOCAL,
+
+        coalesce((select clocal.saldototal from materiallocal clocal
+        where clocal.filial=:filial and clocal.iditem=itemestoque.codigo
+                                    and clocal.idlocal = 2),0) AS CLOCAL,
+        coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=1), 0) as ESTOQUEIMPORTADORA,
+        coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=12826), 0) as ESTOQUEDISTRIBUIDORA ,
+       SUM(C_ENTRADASAIDA.compras) COMPRAS,
+       SUM(C_ENTRADASAIDA.demanda) DEMANDA,
+       itemestoque.DESCRIMINACAO AS descriminacaoNCM,
+        ((coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=1), 0))+(
+        coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=12826), 0))) as ESTOQUECONSOLIDADO,
+       itemestoque.codigobarra,
+       itemestoque.CODIGOBARRAVOLUME,
+       familia.DESCRICAO as familia,
+       itemestoque.PESOLIQUIDO,
+       itemestoque.DISPONIVELECOMMERCE,
+       itemestoque.TIPOPRODUTO
+
+FROM C_ENTRADASAIDA(1,'01.01.2021','30.06.2021')
+INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=C_ENTRADASAIDA.CODIGO)
+left join c_marca on (itemestoque.c_marca=c_marca.idmarca)
+left join GrupoMercadoria on (GrupoMercadoria.Grupo = ItemEstoque.Grupo)
+inner join c_fornecedorpeca on (c_fornecedorpeca.id=itemestoque.c_fornecedor)
+inner join classificacaofiscal on (classificacaofiscal.cfiscal=itemestoque.classifiscal)
+inner join moeda on (moeda.moeda=itemestoque.c_codmoeda)
+left join MATERIALFILIAL materialfilial1 on (materialfilial1.FILIAL=1 and
+                             materialfilial1.IDITEM=itemestoque.codigo)
+left join MATERIALFILIAL materialfilial2 on (materialfilial2.FILIAL=12826 and
+                             materialfilial2.IDITEM=itemestoque.codigo)
+left join c_localimportacao c_localimportacao1 on (c_localimportacao1.idlocal=MATERIALFILIAL1.C_LOCALIMPORTACAO)
+left join c_localimportacao c_localimportacao2 on (c_localimportacao2.idlocal=MATERIALFILIAL2.C_LOCALIMPORTACAO)
+left join FAMILIA on (familia.ID=itemestoque.FAMILIA)
+
+
+GROUP BY ITEMESTOQUE.CODIGO,itemestoque.descricao, itemestoque.c_mrfornecedor, itemestoque.tipoproduto,
+         itemestoque.c_original, c_marca.descricao, itemestoque.c_aplicacao, GrupoMercadoria.Descricao,
+         itemestoque.pipi, itemestoque.c_impostoimportacao,
+         c_fornecedorpeca.descricao, moeda.sigla,classificacaofiscal.descricao,
+         itemestoque.datacadastro, c_localimportacao1.descricao,
+         c_localimportacao2.descricao, itemestoque.DESCRIMINACAO,
+         itemestoque.codigobarra,
+       itemestoque.CODIGOBARRAVOLUME ,familia.DESCRICAO,
+       itemestoque.PESOLIQUIDO,
+       itemestoque.DISPONIVELECOMMERCE
+ 
+having
+      ((itemestoque.TIPOPRODUTO<>5) or (SUM(C_ENTRADASAIDA.demanda)>0) or (
+      ((coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=1), 0))+(
+        coalesce((select mlocal.saldototal from materiallocal mlocal
+        where mlocal.iditem=itemestoque.codigo
+                                    and mlocal.idlocal = 1
+                                    and mlocal.FILIAL=12826), 0)))>0) )

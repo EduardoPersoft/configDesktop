@@ -1,0 +1,72 @@
+SET TERM ^ ;
+ALTER PROCEDURE IMP_NFEITEMSTANTERIOR (
+    FILIAL INTEGER,
+    IDNOTA INTEGER,
+    IDITEM INTEGER )
+RETURNS (
+    VBCSTRET NUMERIC(13,2),
+    VICMSSUBSTITUTO NUMERIC(13,2),
+    VICMSSTRET NUMERIC(13,2) )
+AS
+declare variable vidmovimento integer;
+declare variable vidmovimentomaterial integer;
+BEGIN
+    
+    VBCSTRET = 0;
+    VICMSSUBSTITUTO = 0;
+    VICMSSTRET = 0;
+    vidmovimento = null;
+  
+    select 
+        first 1
+        materialmovimentoestoque.idmovimento,
+        materialmovimentoestoque.IDMOVIMENTOMATERIAL
+    from 
+        movimentoestoque
+    inner JOIN
+        materialmovimentoestoque on
+            (movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+    WHERE
+        movimentoestoque.filial=:filial AND
+        movimentoestoque.idnota=:idnota AND
+        materialmovimentoestoque.idmercadoria=:iditem
+    into :vidmovimento, vidmovimentomaterial;
+    
+    if (vidmovimento is not null) then 
+        select
+            sum(mercadoriasnotacompra.VLRICMSRECOLHIDO * SAIDAXENTRADA.quantidade / mercadoriasnotacompra.quantidade),
+            sum(mercadoriasnotacompra.VLRICMSSUBST * SAIDAXENTRADA.quantidade / mercadoriasnotacompra.quantidade),
+            sum(mercadoriasnotacompra.VLRBASESUBST * SAIDAXENTRADA.quantidade / mercadoriasnotacompra.quantidade)
+        FROM
+            SAIDAXENTRADA
+        inner JOIN
+            MATERIALMOVIMENTOESTOQUE on
+                MATERIALMOVIMENTOESTOQUE.filial=SAIDAXENTRADA.filial AND
+                materialmovimentoestoque.idmovimento=SAIDAXENTRADA.IDENTRADA AND
+                materialmovimentoestoque.IDMOVIMENTOMATERIAL = SAIDAXENTRADA.IDMERCADORIAENTRADA 
+        inner JOIN
+            movimentoestoque on 
+                movimentoestoque.filial=SAIDAXENTRADA.filial AND
+                movimentoestoque.IDMOVIMENTO=SAIDAXENTRADA.IDENTRADA
+        inner join 
+            mercadoriasnotacompra on
+                mercadoriasnotacompra.filial=movimentoestoque.filial AND
+                mercadoriasnotacompra.idnota=movimentoestoque.IDNOTACOMPRA AND
+                mercadoriasnotacompra.IDMERCADORIA=SAIDAXENTRADA.IDMERCADORIAENTRADA
+        where 
+            saidaxentrada.filial=:filial AND
+            SAIDAXENTRADA.IDSAIDA=:vidmovimento and
+            saidaxentrada.IDMERCADORIASAIDA=:vidmovimentomaterial
+        into VICMSSTRET, :VICMSSUBSTITUTO, :VBCSTRET ;
+
+    suspend;
+            
+
+end^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE IMP_NFEITEMSTANTERIOR TO  SYSDBA;
+

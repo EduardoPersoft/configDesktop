@@ -1,0 +1,24 @@
+update
+    estabelecimento
+set
+c_mensagem=
+'ESTE PEDIDO SE COMPLEMENTA COM A CONFIRMAÇĂO DOS DADOS TÉCNICOS (Ex.: Bobinamento, tubete, diâmetro externo de bobina, tolerâncias e padrăo de cores).
+
+QUANTIDADES:
+Lotes acima de 500kg - Pode ocorrer uma variação de 10%.
+lotes abaixo de 500kg - Pode ocorrer uma variação de 20%.
+lotes abaixo de 200kg - Pode ocorrer uma variação de 30%.
+
+PRAZO MÉDIO DE ENTREGA
+
+- Filmes laminados – Bobinas - 25 a 30 dias
+- Pouchs ou Stand Up Pouchs - 35 a 40 dias
+- Pouchs Especiais  - 45 a 50 dias
+- Bisnagas - 45 a 50 dias
+
+CANCELAMENTOS:
+Cancelamento ou postergaçăo de entrega, somente serăo aceitos se em tempo hábil para o respectivo cancelamento das matérias primas, portanto depende de nossa concordância. O pedido de embalagem é personalizado e deve ser tratado como tal.
+
+DEVOLUÇŐES: Somente serăo aceitas após comprovada discrepância com este pedido e/ou especificaçőes, bem como dentro de enventuais variaçőes normais de processo e autorizada pela Primeflex.
+
+Sujeito a aprovaçăo financeira e técnica.'

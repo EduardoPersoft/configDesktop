@@ -1,0 +1,7 @@
+select
+    *
+from
+    locallote
+where
+    locallote.filial=1 and locallote.iditem='01.12.0595'
+    

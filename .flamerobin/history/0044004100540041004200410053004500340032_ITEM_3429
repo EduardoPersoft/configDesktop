@@ -1,0 +1,3 @@
+select * from materialMOVIMENTOESTOQUE
+where filial=110 
+and idmovimento=69690

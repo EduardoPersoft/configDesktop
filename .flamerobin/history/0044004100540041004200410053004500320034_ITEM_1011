@@ -1,0 +1,7 @@
+SELECT
+   *
+FROM
+    TITULOPAG
+where 
+    titulopag.filial=5 AND
+    titulopag.parceiro=19446

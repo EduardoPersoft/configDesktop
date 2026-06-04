@@ -1,0 +1,46 @@
+select 
+    cadven.cadastro,
+    cadven.nome,
+    'O' as tipo,
+    pedido.datacadastro
+from    
+    orcamento pedido
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=pedido.vendedor      
+where
+    pedido.filial=1 and 
+    pedido.DATACADASTRO between '01.01.2024' and '31.12.2024' and
+    pedido.CANCELAMENTO='N' and
+    pedido.vendedor=105
+union    
+select 
+    cadven.cadastro,
+    cadven.nome,
+    'P' as tipo,
+    pedido.datacadastro
+from    
+    pedido
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=pedido.vendedor      
+where
+    pedido.filial=1 and 
+    pedido.DATACADASTRO between '01.01.2024' and '31.12.2024' and
+    pedido.CANCELAMENTO='N' and
+    pedido.vendedor=105
+union    
+select 
+    cadven.cadastro,
+    cadven.nome,
+    'H' as tipo,
+    historia.DATAHORA
+from    
+    historia
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=historia.PARCEIRO
+where
+    cast(historia.datahora as date) between '01.01.2024' and '31.12.2024' and
+    historia.parceiro=105 and
+    historia.assunto is null

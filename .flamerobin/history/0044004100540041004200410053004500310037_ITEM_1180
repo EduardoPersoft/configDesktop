@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    acessos
+order by
+    path

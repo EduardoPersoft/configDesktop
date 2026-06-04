@@ -1,0 +1,1 @@
+select * from itemestoque WHERE ITEMESTOQUE.SISCOMEXid IS NOT NULL

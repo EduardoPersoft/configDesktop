@@ -1,0 +1,6 @@
+select 
+*
+from 
+    C_REQUISICAOMATERIAL
+WHERE
+    C_REQUISICAOMATERIAL.idmovimentoestoque is null

@@ -1,0 +1,2 @@
+select * from ITEMCUSTODATA where filial=110
+and datainventario='29.02.2024'

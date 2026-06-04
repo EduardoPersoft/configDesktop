@@ -1,0 +1,8 @@
+select 
+    pedido.idnota,
+    pedido.OBSENTREGARETIRA
+from 
+    pedido
+where
+    pedido.filial=1 and
+    pedido.idnota=322975

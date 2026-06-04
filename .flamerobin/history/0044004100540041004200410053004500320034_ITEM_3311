@@ -1,0 +1,2 @@
+select * from cadastroparceiros 
+where cadastro=357501

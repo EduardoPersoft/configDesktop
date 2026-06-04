@@ -1,0 +1,83 @@
+select
+    cadfor.cadastro,
+    cadfor.nome,
+    count(distinct notacompra.idnota) as qtdCompras,
+    count(distinct mercadoriasnotacompra.codigo) qtdItensComprados,   
+    (select 
+        COUNT(FORNECEDORESITEM.IDITEM)
+    FROM
+        MATERIALFILIAL
+    INNER join
+        FORNECEDORESITEM ON
+            FORNECEDORESITEM.IDITEM=MATERIALFILIAL.IDITEM
+    WHERE
+        MATERiALFILIAL.FILIAL=5 AND
+        fornecedoresitem.FORNECEDOr=cadfor.cadastro and
+        not exists (
+            select
+                *
+            from 
+                MERCADORIASPEDCOMPRA
+            where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and
+                COALESCE(MATERIALFILIAL.SALDOMAXIMO,MATERIALFILIAL.CONSUMOMEDIO)*0.4<
+                (select 
+                    SUM(MATERIALLOCAL.SALDOTOTAL)    
+                 from
+                    MATERIALLOCAL
+                 where
+                    MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+                    materiallocal.idlocal=1 and
+                    MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM)) as falta,
+
+    (select 
+        COUNT(itemestoque.codigo)
+     FROM
+        materialfilial
+     inner join
+        itemestoque on
+            materialfilial.iditem=itemestoque.codigo       
+     WHERE
+        MATERiALFILIAL.FILIAL=notacompra.filial AND
+        itemestoque.FORNECEDORPADRAO=cadfor.cadastro and
+        not exists (
+            select
+                *
+            from 
+                MERCADORIASPEDCOMPRA
+            where   
+                mercadoriaspedcompra.filial=materialfilial.filial and
+                mercadoriaspedcompra.codigo=materialfilial.iditem and
+                mercadoriaspedcompra.baixa='N') and
+        COALESCE(MATERIALFILIAL.SALDOMAXIMO,MATERIALFILIAL.CONSUMOMEDIO)*0.4<
+             (select 
+                  SUM(MATERIALLOCAL.SALDOTOTAL)    
+              from
+                  MATERIALLOCAL
+              where
+                  MATERIALLOCAL.FILIAL=MATERIALFILIAL.FILIAL and
+                  materiallocal.idlocal=1 and
+                  MATERIALLOCAL.IDITEM=MATERIALFILIAL.IDITEM))
+    
+                    
+                    
+                    
+                    
+from
+    pedidocompra NOTACOMPRA
+inner join
+    CADASTROPARCEIROS cadfor
+        on cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    mercadoriaspedcompra mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.idnota
+where
+    notacompra.filial=5 and
+    notacompra.datacadastro between '01.08.2021' and '31.07.2022'
+group by         
+    cadfor.cadastro,
+    cadfor.nome
+order by 4 desc

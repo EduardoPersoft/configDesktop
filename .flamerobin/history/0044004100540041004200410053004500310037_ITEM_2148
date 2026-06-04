@@ -1,0 +1,6 @@
+select
+    *
+from
+    ITEMESTOQUECODIGOS
+where   
+    codigoalternativo='01743'

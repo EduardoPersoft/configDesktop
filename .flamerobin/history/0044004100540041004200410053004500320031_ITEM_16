@@ -1,0 +1,14 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materiallote."DATA",
+    materiallote.lote,
+    materiallote.QUANTIDADE
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materiallote on
+        materiallote.filial=1 AND
+        materiallote.iditem=itemestoque.CODIGO
+WHERE
+    materiallote.quantidade > 0.09

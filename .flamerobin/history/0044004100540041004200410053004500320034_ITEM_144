@@ -1,0 +1,7 @@
+SELECT
+    codigo,
+    arquivopadrao
+FROM
+    ITEMESTOQUE
+where 
+    codigo='33409'

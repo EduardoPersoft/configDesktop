@@ -1,0 +1,7 @@
+select
+    *
+from
+    MATERIALmovimentoestoque
+where
+    filial=110 and 
+    lote like '10516/010101%'

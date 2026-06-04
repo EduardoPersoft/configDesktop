@@ -1,0 +1,12 @@
+select 
+    cast(0 as integer) qtd,
+    cast(1 as integer) total,
+    itemestoque.codigo,
+    itemestoque.DESCRICAO
+from 
+    consultas
+inner join
+    itemestoque on
+        consultas.UUIDSELECIONADO=itemestoque.CODIGO
+where
+    consultas.uuid='0dac590d-5b72-4564-99f5-1559f438a0f0'

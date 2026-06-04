@@ -1,0 +1,3 @@
+select * from lantocontpag
+where filial=110
+order by contacontabil

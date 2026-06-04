@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    NOTAFISCAL
+WHERE
+    numeronota=3003

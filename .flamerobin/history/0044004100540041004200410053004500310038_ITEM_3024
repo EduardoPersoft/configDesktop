@@ -1,0 +1,4 @@
+select filial,pedido.datacadastro,idnota,pedido.IDORCAMENTO from PEDIDO
+where pedido.DATAREFERENCIa>='2024-11-30'
+order by idorcamento
+

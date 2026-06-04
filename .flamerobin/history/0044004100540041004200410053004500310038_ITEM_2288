@@ -1,0 +1,2 @@
+select * from ITEMCUSTODATA 
+where itemcustodata.DATAINVENTARIO='31.03.2024'

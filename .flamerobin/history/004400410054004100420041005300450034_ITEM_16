@@ -1,0 +1,1 @@
+update materialmovimentoestoque set sinal=-1  where filial=1 and idmovimento=99800

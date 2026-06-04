@@ -1,0 +1,1 @@
+select * from C_LOGPRODUTOECOMMERCE where code_status <> 200

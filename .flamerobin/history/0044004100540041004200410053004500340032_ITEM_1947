@@ -1,0 +1,7 @@
+select
+    *
+from 
+    SERVICOSNOTACOMPRA
+where
+    servicosnotacompra.filial=110 and
+    servicosnotacompra.IDPEDIDO=2157

@@ -1,0 +1,2 @@
+select * from pedido
+where pedido.APELIDOENTREGA='TEO'

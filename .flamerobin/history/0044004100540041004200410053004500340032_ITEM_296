@@ -1,0 +1,7 @@
+select * from MOVIMENTOESTOQUE
+where filial=110
+and movimentoestoque.IDNOTACOMPRA is null
+and not exists (
+select * from NOTACOMPRA
+where notacompra.filial=movimentoestoque.FILIAL
+and notacompra.IDNOTA=movimentoestoque.idnotacompra)

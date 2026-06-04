@@ -1,0 +1,2 @@
+alter table mercadoriasnota 
+alter descricao character set iso8859_1

@@ -1,0 +1,16 @@
+select
+    sum(movtitulorec.VALORPAGO*
+           case movtitulorec.TIPOMOVTO when 'D'
+           then 1 else -1 end )
+from 
+    movtitulorec
+where
+    movtitulorec.dtmovtotitulo between '01.05.2024' and '31.05.2024' and
+    not exists (
+        select 
+            *
+        from
+            ESTABELECIMENTO
+        where
+            estabelecimento.cadastro=MOVTITULOREC.Parceiro)
+        

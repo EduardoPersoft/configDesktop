@@ -1,0 +1,3 @@
+select * from prazomercpedcompra where not exists 
+(select * from PEDIDOCOMPRA where prazomercpedcompra.filial=1
+and pedidocompra.idnota=PRAZOMERCPEDCOMPRA.idnota)

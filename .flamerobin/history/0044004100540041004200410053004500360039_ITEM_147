@@ -1,0 +1,43 @@
+SELECT 
+    TIPOCOBRANCA.DISTRIBLOQUETO,
+    TIPOCOBRANCA.PRAZOBAIXADEVOL, 
+    TIPOCOBRANCA.CODPROTESTO,   
+    TIPOCOBRANCA.CODBAIXADEVOLUCAO, 
+    TIPOCOBRANCA.INSTRUCAO1, 
+    TIPOCOBRANCA.INSTRUCAO2,
+    TIPOCOBRANCA.EMISSAOBLOQUETO, 
+    TIPOCOBRANCA.MENSAGEN, 
+    TIPOCOBRANCA.PRAZOPROTESTO, 
+    TIPOCOBRANCA.CODJUROSMORA,   
+    TIPOCOBRANCA.DESCONTOPADRAO, 
+    COBRANCABANCARIA.NUMEROBOLETO,
+    COBRANCABANCARIA.PREFIXO, 
+    COBRANCABANCARIA.POSFIXO,
+    COBRANCABANCARIA.PREFIXOCODBARRA,
+    COBRANCABANCARIA.POSFIXOCODBARRA,
+    banco.CODCAMARACOMP,
+    planocontas.TITULORECAVISTA,
+    planocontas.TITULORECEBERDEFAULT
+FROM 
+  estabelecimento
+inner join 
+    planocontas on
+        planocontas.IDPLANO=ESTABELECIMENTO.PLANOCONTAS
+inner join
+    TIPOCOBRANCA on
+        TIPOCOBRANCA.TIPOCOBRANCA=9
+inner join
+    contacorrente on
+        contacorrente.filial=ESTABELECIMENTO.CADASTRO and
+        contacorrente.CODIGO=5
+inner join
+    banco on
+        banco.BANCO=contacorrente.banco
+left join 
+    cobrancabancaria on 
+        (cobrancabancaria.TIPOCOBRANCA=TIPOCOBRANCA.TIPOCOBRANCA and         
+        COBRANCABANCARIA.FILIAL=contacorrente.filial    and
+        COBRANCABANCARIA.CONTACORRENTE=contacorrente.codigo)      
+
+where     
+    estabelecimento.cadastro=1

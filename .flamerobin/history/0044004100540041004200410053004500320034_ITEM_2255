@@ -1,0 +1,1 @@
+select * from nfectrl where nfectrl.filial=1 and nfectrl.idnota=20929

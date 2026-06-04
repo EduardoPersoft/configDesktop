@@ -1,0 +1,2 @@
+select * from materialmovimentoestoque
+where idmovimento=134192

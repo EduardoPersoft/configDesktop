@@ -1,0 +1,2 @@
+select c_coletas.*, c_coletas.VALORMEDIO*c_coletas.QTDEXPEDICOES from c_coletas
+where c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025'

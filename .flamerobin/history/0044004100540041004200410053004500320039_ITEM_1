@@ -1,0 +1,50 @@
+CREATE TABLE ACESSOS
+(
+  PATH varchar(250) NOT NULL,
+  CONSTRAINT PK_ACESSOS PRIMARY KEY (PATH)
+);
+CREATE TABLE REGRAS
+(
+  ID integer NOT NULL,
+  PATH varchar(250) NOT NULL,
+  ACESSO smallint,
+  CONSTRAINT PK_REGRAS PRIMARY KEY (ID,PATH)
+);
+
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/margens/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/compartilhar/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/criticosFaturados/');
+INSERT INTO ACESSOS (PATH) VALUES ('/consultaCompras/');
+INSERT INTO ACESSOS (PATH) VALUES ('/consultaCompras/followUp/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/financeiro/liberacao/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/acoes/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/manutencao/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/_');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/orcamentos/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/pedidos/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/cadastros/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/_');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/itens/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/ordensProducao/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/mapaProducao/');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/_');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/recebimento/');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/separacoes/');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/apontamentoExpedicoes/');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/expedicoes/');
+INSERT INTO ACESSOS (PATH) VALUES ('/logistica/pedido2Expedicao/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/_');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/necessidadeCompras/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/followUp/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/pedidosCompras/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/variacoesComprasCustos/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/fornecedores/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/resumoCliente/');
+INSERT INTO ACESSOS (PATH) VALUES ('/vendas/followUp/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/cargaMaquina/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/entradas/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/listaItens/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/kardex/');
+INSERT INTO ACESSOS (PATH) VALUES ('/compras/necessidadeComponentes/');
+INSERT INTO ACESSOS (PATH) VALUES ('/estoque/zerados/');
+

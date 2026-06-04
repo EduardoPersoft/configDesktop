@@ -1,0 +1,2 @@
+select max(C_FATORES.IDFATOR)+1
+from c_Fatores

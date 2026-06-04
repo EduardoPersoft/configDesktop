@@ -1,0 +1,6 @@
+update
+    local
+set 
+    prioridade = 1
+where 
+    local.descricao like 'Z2-%'

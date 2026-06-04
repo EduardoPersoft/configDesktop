@@ -1,0 +1,24 @@
+ select
+                FILIAL,
+                RAZAOSOCIAL,
+                datainicial,
+                datafinal ,
+                contacontabili ,
+                contacontabilf,
+                centrocustoi ,
+                centrocustof,
+                origem ,
+                registro ,
+                movimento ,
+                lancamento ,
+                contacontabil ,
+                centrocusto,
+                descricao,
+                debito ,
+                credito,
+                saldo ,
+                debitosoma ,
+                creditosoma ,
+                saldosoma
+            
+            from planctocontabeispagos2(1)

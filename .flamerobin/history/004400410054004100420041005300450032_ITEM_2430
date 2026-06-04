@@ -1,0 +1,1 @@
+select * from mercadoriaspedcompra where baixa='N' and mercadoriaspedcompra.qtdeentregue>0

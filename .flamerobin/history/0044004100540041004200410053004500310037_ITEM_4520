@@ -1,0 +1,6 @@
+select 
+    notafiscal.FILIAL,
+    notafiscal.idnota,
+    notafiscal.idvendacartao,
+    notafiscal.BANDEIRACARTAO
+from notafiscal

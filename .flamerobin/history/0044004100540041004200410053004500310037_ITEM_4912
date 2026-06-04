@@ -1,0 +1,5 @@
+select * from titulorec 
+where 
+    titulorec.filial=12826 and
+    titulorec.VALOREMABERTO=0 and
+    titulorec.baixa is null

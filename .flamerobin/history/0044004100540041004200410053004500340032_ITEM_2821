@@ -1,0 +1,2 @@
+select filial,idnota,vendedor,notafiscal.operacao, NOTAFISCAL.cfop, NOTAFISCAL.numero,
+notafiscal.DATAEMISSAO from notafiscal where filial=110 and idnota=3929

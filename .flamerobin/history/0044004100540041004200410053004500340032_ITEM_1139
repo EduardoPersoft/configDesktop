@@ -1,0 +1,9 @@
+update 
+    itemCustoData 
+set  
+    custoUnitario = (select 
+                        C_CUSTOMEDIO.custo 
+                     from 
+                        c_customedio
+                     where 
+                        c_customedio.codigo=itemcustodata.codigo)

@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    titulorec 
+where 
+    titulorec.filial = 5 and
+    titulorec.dataenvio <> cast(titulorec.dataenvio as date) and
+    titulorec.baixa is null

@@ -1,0 +1,4 @@
+select * from VENDEDORESPED
+
+where vendedor=20 
+order by idnota desc

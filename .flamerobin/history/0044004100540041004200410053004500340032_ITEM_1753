@@ -1,0 +1,34 @@
+update
+    ITEMCUSTODATA
+set
+    custototal = custototal + (select
+                                 sum(MATERIALMOVIMENTOESTOQUE.valor*materialmovimentoestoque.sinal)
+                               from
+                                  MOVIMENTOESTOQUE
+                               inner join
+                                   MATERIALMOVIMENTOESTOQUE ON
+                                  movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                                  movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento 
+                               where
+                                  MOVIMENTOESTOQUE.FILIAL=110 and
+                                  MOVIMENTOESTOQUE.TIPOMOVIMENTO NOT IN ('01','10','11') and
+                                  MOVIMENTOESTOQUE.EMISSAO between '01.02.2024' and '29.02.2024' and
+                                  MATERIALMOVIMENTOESTOQUE.IDITEM=ITEMCUSTODATA.CODIGO),
+                                    
+    quantidade = quantidade + (select
+                                 sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal)
+                               from
+                                  MOVIMENTOESTOQUE
+                               inner join
+                                    MATERIALMOVIMENTOESTOQUE ON
+                                  movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                                  movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento 
+                               where
+                                  MOVIMENTOESTOQUE.FILIAL=110 and
+                                  MOVIMENTOESTOQUE.TIPOMOVIMENTO NOT IN ('01','10','11') and
+                                  MOVIMENTOESTOQUE.EMISSAO between '01.02.2024' and '29.02.2024' and
+                                  MATERIALMOVIMENTOESTOQUE.IDITEM=ITEMCUSTODATA.CODIGO)
+where
+   itemcustodata.FILIAL=110 and
+   itemcustodata.DATAINVENTARIO='29.02.2024' and
+   itemcustodata.codigo like 'MPP%'

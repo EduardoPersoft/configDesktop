@@ -1,0 +1,12 @@
+select 
+    case TAXASCARTAO.MODALIDADE when 4 then 'Debito' else 'Credito' end,
+    CARTAOBANDEIRAS.descricao,
+    TAXASCARTAO.*
+from 
+    TAXASCARTAO
+left join 
+    CARTAOBANDEIRAS on 
+        CARTAOBANDEIRAS.id=taxascartao.bandeira
+left join
+    tipocobranca on
+        tipocobranca.TIPOCOBRANCA=taxascartao.MODALIDADE

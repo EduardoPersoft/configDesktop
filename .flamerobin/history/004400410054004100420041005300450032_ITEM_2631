@@ -1,0 +1,32 @@
+select 
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    familia.id familia,
+    familia.descricao descricaoFamilia,
+    sum(mercadoriasnota.quantidade as integer) TOTAL,
+    cast(sum(mercadoriasnota.quantidade)/6 as integer) as MEDIA,
+    count(mercadoriasnota.idnota) as qtdvendas
+FROM
+    NOTAFISCAL
+inner join 
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial AND
+        notafiscal.idnota=mercadoriasnota.idnota
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+inner JOIN
+    familia on
+        familia.id=itemestoque.familia
+WHERE
+    notafiscal.filial=5 AND
+    notafiscal.DATAEMISSAO between '01.01.2021' and '31.05.2021' 
+group by
+        itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    familia.id,
+    familia.descricao
+order by
+    6 desc

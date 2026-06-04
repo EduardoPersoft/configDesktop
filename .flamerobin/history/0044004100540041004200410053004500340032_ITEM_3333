@@ -1,0 +1,6 @@
+update  
+    FORNECEDORESITEM
+set
+    fornecedoresitem.STATUS='H'
+where
+    coalesce(FORNECEDORESITEM.preco,0)>0

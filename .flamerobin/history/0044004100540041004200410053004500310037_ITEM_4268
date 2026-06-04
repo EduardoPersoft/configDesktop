@@ -1,0 +1,5 @@
+select * from NFECTRL
+where  not exists (select * from NOTAFISCAL
+where notafiscal.filial=nfectrl.filial and
+notafiscal.idnota=nfectrl.idnota)
+order by filial,idnota

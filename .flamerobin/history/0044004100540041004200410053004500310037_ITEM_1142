@@ -1,0 +1,4 @@
+update
+    ITEMESTOQUE
+set 
+    itemestoque.REFERENCIA=itemestoque.C_MRFORNECEDOR

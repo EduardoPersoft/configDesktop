@@ -1,0 +1,6 @@
+select
+    *
+from 
+    C_I_REGISTROINVENTARIO
+where
+    C_I_REGISTROINVENTARIO.CODIGO like '%09200%'

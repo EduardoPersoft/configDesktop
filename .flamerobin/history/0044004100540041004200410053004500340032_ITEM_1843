@@ -1,0 +1,10 @@
+select
+    itemcustodata.CODIGO,
+    itemcustodata.QUANTIDADE,
+    itemcustodata.CUSTOTAL,
+    itemcustodata.custounitario
+from
+    ITEMCUSTODATA
+where
+    itemcustodata.FILIAL=110 and
+    itemcustodata.DATAINVENTARIO='31.01.2024'

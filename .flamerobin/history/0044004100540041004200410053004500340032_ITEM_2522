@@ -1,0 +1,2 @@
+select * from itemestoque 
+where codigo='EsPRO3396FLI008'

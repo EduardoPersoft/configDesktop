@@ -1,0 +1,2 @@
+select * from materiallocal
+where materiallocal.quantidade is null

@@ -1,0 +1,18 @@
+select 
+    pedidocompra.idnota,
+    pedidocompra.DATACADASTRO,
+    cadfor.nome,
+    mercadoriaspedcompra.PRECOLISTA
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+inner JOIN
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO=pedidocompra.DESTINATARIO
+where
+    pedidocompra.filial=5 AND
+    pedidocompra.codigo='14480'
+    

@@ -1,0 +1,6 @@
+SELECT
+    C_LOGSALDOECOMMERCE.*, cast(substring(content from 1 for 100) as varchar(100))
+FROM
+    C_LOGSALDOECOMMERCE
+WHERE
+    c_logsaldoecommerce.STATUS_CODE<>200

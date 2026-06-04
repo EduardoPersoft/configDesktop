@@ -1,0 +1,9 @@
+SELECT
+    LOCAL.ID,
+    LOCAL.EAN,
+    LOCAL.DESCRICAO,
+    LOCAL.PODEZERAR
+FROM
+    LOCAL
+order by
+    local.id

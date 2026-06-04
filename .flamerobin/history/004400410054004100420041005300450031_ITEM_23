@@ -1,0 +1,9 @@
+select
+    recurso,
+    inicio,
+    fim
+from
+    turnos
+where
+    turnos.recurso = '20.01.2021' and
+    turnos.fim >= '31.12.2999'

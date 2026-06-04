@@ -1,0 +1,4 @@
+select c_i_movestx.idnota, c_i_movestx.CODPECA, count(c_i_movestx.CODPECA)
+from C_I_MOVESTX
+group by c_i_movestx.idnota, c_i_movestx.CODPECA
+having count(c_i_movestx.*)>1

@@ -1,0 +1,8 @@
+select 
+    codigo,
+    count(*)
+from
+    MERCADORIASNOTA
+where
+    filial=1 and
+    idnota=334606 

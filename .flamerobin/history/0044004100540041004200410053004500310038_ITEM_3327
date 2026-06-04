@@ -1,0 +1,10 @@
+select
+    extract(month from movimentoestoque.emissao),
+    extract(year from movimentoestoque.emissao),
+    count(movimentoestoque.idmovimento)
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao >= '01.01.2025' and
+    movimentoestoque.TIPOMOVIMENTO ='13'

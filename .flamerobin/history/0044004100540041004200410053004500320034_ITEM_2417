@@ -1,0 +1,1 @@
+update pedido set numeronota = idnota where numeronota is null

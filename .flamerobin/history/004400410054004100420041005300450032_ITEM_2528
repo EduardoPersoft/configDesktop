@@ -1,0 +1,1 @@
+select * from mercadoriaspedcompra where filial=5 and codigo='05200'order by idnota desc

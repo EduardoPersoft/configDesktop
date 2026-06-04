@@ -1,0 +1,10 @@
+select 
+    * 
+from 
+    NOTAFISCAL
+inner join 
+    fatped on
+        fatped.filial=notafiscal.filial and 
+        fatped.idnota=notafiscal.IDNOTA
+where
+    notafiscal.DATAEMISSAO>='01.01.2025' 

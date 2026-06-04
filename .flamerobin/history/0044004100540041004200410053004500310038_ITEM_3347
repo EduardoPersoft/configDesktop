@@ -1,0 +1,6 @@
+select 
+    *
+from
+    C_ORDEMSERVICO
+where 
+    idordem=2010

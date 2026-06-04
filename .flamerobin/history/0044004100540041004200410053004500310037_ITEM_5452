@@ -1,0 +1,4 @@
+update TITULOREC
+set titulorec.codretorno='02'
+where titulorec.EMISSAO='03.09.2025'
+and titulorec.CODRETORNO='03'

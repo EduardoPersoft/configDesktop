@@ -1,0 +1,8 @@
+select 
+    cast ((MERCADORIASNOTA.DESCRICAO) as varchar (1000)),
+    CAST (coalesce(substring(MERCADORIASNOTA.DESCRICAO from 1 for 4096), '')as blob sub_type 0 character set iso8859_1)  
+from 
+    mercadoriasnota 
+where 
+    filial=1 and 
+    idnota=78629

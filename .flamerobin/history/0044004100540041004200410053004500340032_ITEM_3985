@@ -1,0 +1,4 @@
+select * from TITULOSANEXADOS
+where titulosanexados.filial=110
+and titulosanexados.IDCONTACORRENTE=341
+and titulosanexados.IDMOVTOBANC=12901

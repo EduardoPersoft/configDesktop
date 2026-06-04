@@ -1,0 +1,3 @@
+delete from apontamentomat 
+where filial=110 and
+idmovimento=27605

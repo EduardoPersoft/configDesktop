@@ -1,0 +1,10 @@
+SELECT
+    filial,
+    idnota,
+    idmercadoria,
+    cast(substring(descricao from 1 for 400) as varchar(400)) as descricao
+from 
+    mercadoriasped 
+where 
+    filial=1 AND
+    idnota=63816

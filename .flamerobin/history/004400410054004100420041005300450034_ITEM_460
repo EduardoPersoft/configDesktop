@@ -1,0 +1,6 @@
+select 
+    codigo,
+    descricao,
+    unidade 
+from
+    servico

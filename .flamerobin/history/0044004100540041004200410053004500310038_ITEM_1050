@@ -1,0 +1,5 @@
+SELECT c_pedidodatafinfilial.Idnota
+             
+    FROM c_pedidodatafinfilial_v1(1,'01.11.2022','30.11.2022') c_pedidodatafinfilial
+    
+    ORDER BY c_pedidodatafinfilial.IDNOTA

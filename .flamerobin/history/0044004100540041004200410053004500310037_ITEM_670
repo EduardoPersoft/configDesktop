@@ -1,0 +1,22 @@
+select 
+    mercadoriasnota.*
+FROM
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on 
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+
+UPDATE
+    MERCADORIASNOTA
+SET
+    mercadoriasnota.cstpi=50,
+    mercadoriasnota.cstcofins=50
+WHERE
+    mercadoriasnota.filial=1 AND
+    mercadoriasnota.idnota>29004 and
+    substring(mercadoriasnota.cfop from 1 for 1) in (1, 2) AND
+    mercadoriasnota.cstpis<50 and 
+    mercadoriasnota.CHAVEREFERENCIADA is null
+order by
+    idnota

@@ -1,0 +1,1 @@
+select * from notafiscal where filial=5 and dataemissao='14.05.2022'

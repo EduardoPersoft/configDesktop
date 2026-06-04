@@ -1,0 +1,13 @@
+update
+    titulorec
+set
+    titulorec.PJUROS = 0.00225783,
+    titulorec.VALORJUROS=cast(titulorec.VALORTITULO*0.00225783 as decimal(12,2)),
+    titulorec.instrucao1=6,
+    titulorec.instrucao2=5
+    
+where titulorec.filial=12826 and
+titulorec.baixa is null and
+titulorec.CONTACORRENTE=20 and
+titulorec.TIPOTRANSACAO=13 and
+titulorec.DATAENVIO is null

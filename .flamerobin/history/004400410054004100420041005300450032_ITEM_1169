@@ -1,0 +1,8 @@
+SELECT
+    distinct
+    mercadoriasnota.codigo,
+    mercadoriasnota.descricao,
+    mercadoriasnota.cfop,
+    mercadoriasnota.SITUACAOTRIBUT
+from
+    mercadoriasnota

@@ -1,0 +1,31 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO
+from 
+    C_ITENSAZERO
+inner join
+    itemestoque on
+        itemestoque.codigo=c_itensazero.codigo
+inner join
+    materialfilial on
+        materialfilial.filial=5 and
+        materialfilial.iditem=itemestoque.codigo
+where
+    not exists (
+    select 
+        *
+    from 
+        mercadoriaspedcompra
+    where
+        mercadoriaspedcompra.codigo=itemestoque.codigo and
+        mercadoriaspedcompra.baixa='N')
+and 
+    (select 
+        materiallocal.SALDOTOTAL
+    from
+        materiallocal
+     where
+        materiallocal.filial=5 and
+        materiallocal.iditem=itemestoque.codigo and
+        materiallocal.IDLOCAL=1) <= 0.009

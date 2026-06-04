@@ -1,0 +1,30 @@
+select
+    clientes.cadastro,
+    clientes.condicaoPagamento,
+    condicaoPagamento.descricao,
+    clientes.tipoCobranca,
+    tipoCobranca.descricao,
+    clientes.banco,
+    contacorrente.NOME,
+    clientes.listaPrecoDefault,
+    listapreco.nomeLista,
+    clientes.vendedor,
+    cadven.nome,
+    clientes.consumidorFinal
+from    
+    clientes
+left join
+    condicaoPagamento on
+        condicaoPagamento.id = clientes.condicaoPagamento
+left join
+    tipoCobranca on
+        tipoCobranca.tipoCobranca = clientes.tipoCobranca
+left join
+    BANCO on
+        BANCO.BANCO = clientes.banco
+left join
+    listaPreco on
+        listaPreco.lista = clientes.listaPrecoDefault
+left join
+    cadastroparceiros cadven on
+        cadven.cadastro=clientes.vendedor

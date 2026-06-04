@@ -1,0 +1,2 @@
+select * from c_cores
+where c_cores='AB0318003'

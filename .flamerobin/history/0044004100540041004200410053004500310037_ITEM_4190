@@ -1,0 +1,5 @@
+select titulorec.CODIGOBARRA,
+titulorec.LINHADIGITAVEL,
+titulorec.NUMBOLBANCO
+from TITULOREC
+where filial=12826 and idtitulo=459591

@@ -1,0 +1,14 @@
+update
+    LANTOCONTPAG
+set 
+    lantocontpag.CENTROCUSTO='5105'
+where 
+    exists (
+        select 
+            *
+        from 
+            TITULOPAG
+        where 
+            titulopag.filial=LANTOCONTPAG.filial and
+            titulopag.idtitulo=lantocontpag.IDMOVTOBANC and
+            titulopag.parceiro in (24955, 41439, 40673))

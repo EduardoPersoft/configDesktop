@@ -1,0 +1,9 @@
+select 
+    filial,
+    idmovimento,
+    imprimir
+from 
+    movimentoestoque 
+where 
+    tipomovimento='13' and 
+    MOVIMENTOESTOQUE.emissao='07.05.2025'

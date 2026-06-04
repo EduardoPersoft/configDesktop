@@ -1,0 +1,79 @@
+Summary | Triggers | Privileges | Dependencies | DDL 
+SALDOANTERIORESTOQUELOCAL
+Owner: SYSDBA
+No description [edit] 
+Field
+Type
+Description
+FILIAL
+integer
+No description [edit]
+DATAINICIAL
+timestamp
+No description [edit]
+DATAFINAL
+timestamp
+No description [edit]
+MATERIALINICIAL
+varchar(15)
+No description [edit]
+MATERIALFINAL
+varchar(15)
+No description [edit]
+IDITEM
+varchar(15)
+No description [edit]
+SALDOANTERIOR
+double precision
+No description [edit]
+VALORANTERIOR
+double precision
+No description [edit]
+SINAL
+integer
+No description [edit]
+LOCAL
+smallint
+No description [edit]
+
+Source [alter]
+
+select materiallocal.filial, Estsin.Datainicial, Estsin.Datafinal,
+       Estsin.Materialinicial, Estsin.Materialfinal, materiallocal.iditem,
+       sum(materiallocal.saldototal) as saldoanterior,
+       SUM(materiallocal.saldototal)*
+       CASE WHEN MATERIALFILIAL.valortotalestocado BETWEEN -0.009 AND 0.001
+       THEN 0
+       ELSE MATerialfilial.customedio END AS VALORanterior, 1 AS SINAL,
+       MATERIALLOCAL.idlocal
+from materiallocal
+inner join ESTSIN on (estsin.estabelecimento=materiallocal.filial)
+INNER JOIN MATERIALFILIAL ON (MATERIALFILIAL.filial=MATERIALLOCAL.FILIAL AND 
+                              MATERIALFILIAL.iditem=MATERIALLOCAL.iditem)
+where 
+      (materiallocal.IDLOCAL between estsin.MATERIALLOCALINICIO  and estsin.MATERIALLOCALFIM) and 
+       estsin.relatorio='SALDOANTERIORESTOQUE' 
+group by materiallocal.filial, Estsin.Datainicial, Estsin.Datafinal,
+         Estsin.Materialinicial, Estsin.Materialfinal, materiallocal.iditem, 
+         estsin.MATERIALLOCALINICIO  , estsin.MATERIALLOCALFIM,
+         MATERIALLOCAL.idlocal, MATERIALFILIAL.customedio,
+         MATERIALFILIAL.valortotalestocado
+union
+select materialmovimentoestoque.filial, Estsin.Datainicial, Estsin.Datafinal,
+       Estsin.Materialinicial, Estsin.Materialfinal, materialmovimentoestoque.iditem,
+       sum(materialmovimentoestoque.quantidade*sinal) as saldoanterior,
+       SUM(MATERIALMOVIMENTOESTOQUE.VALOR*sinal) AS VALORANTERIOR, -1 AS SINAL,
+       materialmovimentoestoque.localarmazenamento
+from materialmovimentoestoque
+inner join estsin on  (estsin.estabelecimento=materialmovimentoestoque.filial )
+inner join movimentoestoque on (movimentoestoque.filial=materialmovimentoestoque.filial and 
+                                movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+where estsin.estabelecimento=movimentoestoque.filial and
+      estsin.relatorio='SALDOANTERIORESTOQUE' and
+ 
+      (materialmovimentoestoque.localarmazenamento between estsin.MATERIALLOCALINICIO  and estsin.MATERIALLOCALFIM) and 
+      estsin.datafinal<movimentoestoque.emissao
+group by materialmovimentoestoque.filial, Estsin.Datainicial, Estsin.Datafinal,
+       Estsin.Materialinicial, Estsin.Materialfinal, materialmovimentoestoque.iditem,
+       estsin.MATERIALLOCALINICIO  , estsin.MATERIALLOCALFIM,
+       MATERIALMOVIMENTOESTOQUE.localarmazenamento

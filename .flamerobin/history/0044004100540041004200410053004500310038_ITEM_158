@@ -1,0 +1,32 @@
+SELECT
+    pedido.idnota,
+    titulorec.fatura,
+    case C_FATURASPED.DESTINO when 'M' then 'Mercadorias' else 'Servico' end as destino,
+    cadastroparceiros.nome,
+    TIPOCOBRANCA.DESCRICAO,
+    titulorec.emissao,
+    titulorec.baixa,
+    titulorec.VALORTITULO,
+    pedido.VLRTOTALNOTA
+FROM
+    c_faturasped
+inner JOIN
+    TITULOREC on 
+        c_faturasped.filial=titulorec.filial AND
+        c_faturasped.IDTITULO=titulorec.IDTITULO
+inner JOIN
+    pedido on
+        pedido.filial=c_faturasped.filial AND
+        pedido.IDNOTA=c_faturasped.idnota
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=pedido.DESTINATARIO
+inner JOIN
+    TIPOCOBRANCA on
+        TIPOCOBRANCA.TIPOCOBRANCA=titulorec.TIPOTRANSACAO
+        
+
+WHERE
+    titulorec.baixa between '01.10.2021' and '31.10.2021' AND
+    titulorec.emissao between '01.10.2021' and '31.10.2021' AND
+    titulorec.TIPOBAIXA = 'P'    

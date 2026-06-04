@@ -1,0 +1,14 @@
+select
+   materiallocal.filial,
+   itemestoque.codigo,
+   itemestoque.CODIGOBARRA,
+   materiallocal.saldototal  
+from 
+    MATERIALLOCAL
+inner join 
+    itemestoque on
+        itemestoque.codigo=materiallocal.iditem
+where
+    
+    materiallocal.idlocal=109 and
+    itemestoque.CODIGOBARRA='4025258469412'

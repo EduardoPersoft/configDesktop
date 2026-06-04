@@ -1,0 +1,1 @@
+select * from titulorec where contacorrente=422 order by emissao

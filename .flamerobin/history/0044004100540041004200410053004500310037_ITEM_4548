@@ -1,0 +1,9 @@
+update
+    NOTAFISCAL
+set
+    frete = coalesce(frete,0),
+    seguro = coalesce(seguro,0),
+    despesasacessorias = coalesce(despesasacessorias,0)
+where
+    notafiscal.filial=1 and 
+    notafiscal.DATAEMISSAO>='01.03.2025'

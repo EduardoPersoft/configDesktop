@@ -1,0 +1,7 @@
+select 
+    *
+from
+    MERCADORIASNOTA
+where
+    mercadoriasNota.filialped=5 and
+    mercadoriasnota.idpedido=65275

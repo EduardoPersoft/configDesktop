@@ -1,0 +1,5 @@
+ALTER TABLE MERCADORIASPED
+drop  C_ARTE,
+drop C_DATAARTE,
+drop provaCorOk ,
+drop dataprevistaProvaCor 

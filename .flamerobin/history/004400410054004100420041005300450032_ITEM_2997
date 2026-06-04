@@ -1,0 +1,12 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.estocado = 'N'
+WHERE
+    coalesce(itemestoque.itembase, itemestoque.codigo)<>itemestoque.CODIGO
+    and not exists (
+        select * from materiallocal
+        where materiallocal.filial=5 
+        and materiallocal.iditem=itemestoque.codigo
+        and materiallocal.SALDOTOTAL>0
+    )

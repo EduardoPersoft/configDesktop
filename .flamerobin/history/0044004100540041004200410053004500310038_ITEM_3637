@@ -1,0 +1,2 @@
+select * from C_COMISSOES
+where C_COMISSOES.id=796

@@ -1,0 +1,8 @@
+update
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.impresso = 'S'
+where
+    movimentoestoque.tipomovimento='13'
+    
+    

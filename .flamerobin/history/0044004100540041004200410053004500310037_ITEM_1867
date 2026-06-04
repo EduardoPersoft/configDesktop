@@ -1,0 +1,6 @@
+delete
+from 
+    PEDIDO
+where
+    filial=1 and
+    idnota=291855

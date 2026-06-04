@@ -1,0 +1,2 @@
+select * from mercadoriasorc
+order by idnota desc, idmercadoria

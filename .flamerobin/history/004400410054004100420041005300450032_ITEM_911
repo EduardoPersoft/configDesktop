@@ -1,0 +1,1 @@
+update t_titulorec set impoartado ='S' where importado is null

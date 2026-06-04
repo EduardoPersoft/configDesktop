@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    FATPED
+WHERE
+    fatped.filial=1 and fatped.idnota=279427

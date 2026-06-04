@@ -1,0 +1,91 @@
+   SELECT
+        C_COMISSAOPEDIDOPAGA.FILIAL, 
+        C_COMISSAOPEDIDOPAGA.ID,
+        C_COMISSAOPEDIDOPAGA.VENDEDOR,
+        CADVEN.NOME,
+        SUM(C_COMISSAOPEDIDOPAGA.BASECOMISSAO) BASECOMISSAO,
+        SUM(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO) VALORCOMISSAO,
+        CASE CADVEN.C_TABELACOMISSAO WHEN 3 THEN
+            (SELECT CADLOJA.NOME FROM CADASTROPARCEIROS CADLOJA,PEDIDO
+             WHERE PEDIDO.FILIAL=MIN(C_COMISSAOPEDIDOPAGA.FILIAL )
+             AND PEDIDO.IDNOTA=MIN(C_COMISSAOPEDIDOPAGA.IDNOTA)
+             AND CADLOJA.CADASTRO=PEDIDO.C_LOJA)
+        ELSE
+            (SELECT CADLOJA.NOME FROM CADASTROPARCEIROS CADLOJA
+             WHERE CADLOJA.CADASTRO=VENDEDOR.CANALRELACIONADO) 
+        END AS LOJA,
+        MIN(COALESCE(C_COMISSAOPEDIDOPAGA.IMPRESSA ,'N')) AS IMPRESSA,
+        
+        CASE CADVEN.C_TABELACOMISSAO WHEN 3 THEN
+            (SELECT CADLOJA.C_CENTROCUSTOS FROM CADASTROPARCEIROS CADLOJA,PEDIDO
+             WHERE PEDIDO.FILIAL=MIN(C_COMISSAOPEDIDOPAGA.FILIAL )
+             AND PEDIDO.IDNOTA=MIN(C_COMISSAOPEDIDOPAGA.IDNOTA)
+             AND CADLOJA.CADASTRO=PEDIDO.C_LOJA)
+        ELSE
+            (SELECT CADLOJA.C_CENTROCUSTOS FROM CADASTROPARCEIROS CADLOJA
+             WHERE CADLOJA.CADASTRO=VENDEDOR.CANALRELACIONADO) 
+        END AS CENTROCUSTOS,
+        
+        C_TABELASCOMISSAO.CONTACONTABIL,
+       
+
+        f.BANCO ,            
+        f.AGENCIACOBRADORA,
+        f.DIGAGENCIACOBRADORA,    
+        f.NUMCONTACORRENTE, 
+        f.DIGITOCONTACORRENTE,
+        f.DIGITOAGCC, 
+        f.FINALIDADEDOCTO, 
+        f.TIPOCONTA,
+        f.CODCAMARACOMPENSACAO, 
+        f.DOCUMENTOCONTA, 
+        f.PIX, 
+
+        c_titpagarcomissoes.idpagar,
+         cast('N' as char(1)) p_check
+    FROM
+        C_COMISSAOPEDIDOPAGA
+    INNER join
+        CADASTROPARCEIROS CADVEN ON  CADVEN.CADASTRO = C_COMISSAOPEDIDOPAGA.VENDEDOR
+    LEFT JOIN
+        VENDEDOR ON     
+           VENDEDOR.CADASTRO=CADVEN.CADASTRO
+    left join
+        c_comissoes on
+            c_comissoes.id=c_comissaopedidopaga.id
+    left join
+        c_tabelascomissao on
+            c_tabelascomissao.id=c_comissoes.TABELA
+    LEFT join
+        titulopag on
+            titulopag.filial=c_comissaopedidopaga.filial and
+            titulopag.idComissao=c_comissaopedidopaga.id and
+            titulopag.parceiro=c_comissaopedidopaga.vendedor 
+    left join
+        fornecedores f on
+            vendedor.cadastro=f.cadastro
+    WHERE
+        C_COMISSAOPEDIDOPAGA.ID = 504 and
+        C_COMISSAOPEDIDOPAGA.IMPRESSA='S'
+    GROUP BY
+        C_COMISSAOPEDIDOPAGA.FILIAL,
+        C_COMISSAOPEDIDOPAGA.ID,
+        C_COMISSAOPEDIDOPAGA.VENDEDOR,
+        CADVEN.C_TABELACOMISSAO,
+        VENDEDOR.CANALRELACIONADO,
+        CADVEN.NOME,
+        f.BANCO ,            
+        f.AGENCIACOBRADORA,
+        f.DIGAGENCIACOBRADORA,    
+        f.NUMCONTACORRENTE, 
+        f.DIGITOCONTACORRENTE,
+        f.DIGITOAGCC, 
+        f.FINALIDADEDOCTO, 
+        f.TIPOCONTA,
+        f.CODCAMARACOMPENSACAO, 
+        f.DOCUMENTOCONTA, 
+        f.PIX, 
+        c_titpagarcomissoes.idpagar,
+        C_TABELASCOMISSAO.CONTACONTABIL
+   ORDER BY 5,
+        CADVEN.NOME

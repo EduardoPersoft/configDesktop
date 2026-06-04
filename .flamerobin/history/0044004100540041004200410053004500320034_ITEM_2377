@@ -1,0 +1,9 @@
+SELECT
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao
+FROM
+    MERCADORIASPEDCOMPRA
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa='N'

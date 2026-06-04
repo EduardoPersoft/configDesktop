@@ -1,0 +1,2 @@
+select * from mercadoriasnota 
+where mercadoriasnota.idpedido=76274

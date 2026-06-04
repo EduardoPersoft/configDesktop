@@ -1,0 +1,1 @@
+select * from nfectrl where filial=1 and idnota=5734

@@ -1,0 +1,9 @@
+select  
+    C_fretecliente.*,
+    CADASTROPARCEIROS.bairro,
+    CADASTROPARCEIROS.cidade,
+    CADASTROPARCEIROS.uf,
+    CADASTROPARCEIROS.cep from c_fretecliente
+inner join 
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=c_fretecliente.id

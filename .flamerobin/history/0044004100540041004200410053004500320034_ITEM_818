@@ -1,0 +1,20 @@
+SELECT
+    m1.codigo,
+    m1.precolista,
+    m2.precolista,
+    mp.precolista
+FROM
+    mercadoriasnota m1
+inner JOIN
+    mercadoriasnota m2 on
+        (m2.filial=m1.filial AND
+         m2.idnota=26009 AND
+         m2.idmercadoria=m1.idmercadoria)
+inner JOIN
+    mercadoriasped mp on
+        mp.filial=m2.filial AND
+        mp.idnota=m2.IDPEDido AND
+        mp.IDMERCADORIa=m2.IDMERCADORIA
+WHERE
+    m1.filial=5 AND
+    m1.idnota=26009

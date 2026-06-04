@@ -1,0 +1,7 @@
+select 
+    mercadoriasped.QTDEENVIADA,
+    mercadoriasped.vlrfinalmercad,
+    mercadoriasped.qtdeenviada*mercadoriasped.PRECOUNITARIO,
+    mercadoriasped.*
+from
+    mercadoriasped

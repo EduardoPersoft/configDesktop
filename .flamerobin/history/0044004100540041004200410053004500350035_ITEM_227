@@ -1,0 +1,30 @@
+select
+    itemestoque.filialPadrao,
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    itemestoque.c_nomeNoFornecedor,
+    FABRICANTE.CADASTRO FABRICANTECADASTRO,
+    FABRICANTE.NOME FABRICANTENOME,
+    TIPOITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.DESCRICAO,
+     CASE WHEN EXISTS (SELECT * FROM ITEMESTOQUEXARQUIVO WHERE ITEMESTOQUEXARQUIVO.CODIGO=ITEMESTOQUE.CODIGO) THEN 'S' ELSE 'N' END AS ITEMARQUIVO,
+    CASE WHEN EXISTS (select * from c_listacusto where c_listacusto.iditem=itemestoque.codigo) THEN 'S' ELSE 'N' END AS preco,
+    CASE WHEN itemestoque.c_dimensoes IS NULL THEN 'N' ELSE 'S' END as c_dimensoes,
+    cast('N' as char(1)) as p_char
+from
+    itemestoque
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+LEFT JOIN
+    CADASTROPARCEIROS FABRICANTE ON
+    FABRICANTE.CADASTRO=itemestoque.FABRICANTE
+left join 
+    GRUPOMERCADORIA on 
+    ITEMESTOQUE.GRUPO=GRUPOMERCADORIA.GRUPO
+where
+    itemestoque.tipoProduto<>'5'
+order by
+    itemestoque.codigo

@@ -1,0 +1,8 @@
+update
+    titulpag
+set
+    titulopag.VALORTITULO = 5596.31,
+    TITULOPAG.VALOREMABERTO = 5596.31
+where filial=110 and
+titulo='8872850' and
+fatura<>'1'

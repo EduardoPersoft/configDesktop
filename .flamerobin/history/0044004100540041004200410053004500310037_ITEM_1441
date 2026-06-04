@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    INVENTARIOESTOQUEDATA
+WHERE
+    codigo='1593005
+'

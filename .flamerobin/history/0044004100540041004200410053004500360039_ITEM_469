@@ -1,0 +1,25 @@
+SET TERM ^ ;
+CREATE or alter TRIGGER NOTAFISCAL_CANCELAEXPEDICAO FOR NOTAFISCAL ACTIVE
+AFTER update POSITION 1
+
+AS
+begin
+  /* Trigger text */
+  if (coalesce (new.CANCELAMENTO,'N') = 'S') then begin
+
+      update movimentoestoque set movimentoestoque.idnotaexpedicao = NULL
+      where movimentoestoque.filial=new.FILIAL
+      and movimentoestoque.IDNOTAEXPEDICAO=new.IDNOTA
+      and movimentoestoque.COLETADATA is null 
+      and movimentoestoque.DATAENTREGA is null;
+
+      update movimentoestoque set movimentoestoque.CANCELADO = 'S'
+      where movimentoestoque.filial=new.FILIAL
+      and movimentoestoque.IDNOTAEXPEDICAO=new.IDNOTA
+      and (movimentoestoque.COLETADATA is not null 
+           or movimentoestoque.DATAENTREGA is not null);
+
+  end
+end
+^
+SET TERM ; ^

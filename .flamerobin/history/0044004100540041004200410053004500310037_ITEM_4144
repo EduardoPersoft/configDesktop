@@ -1,0 +1,5 @@
+select * from MERCADORIASNOTACOMPRA where 
+exists (select * from notacompra 
+where notacompra.filial=mercadoriasnotacompra.filial and
+notacompra.idnota=mercadoriasnotacompra.idnota and
+NOTACOMPRA.DATACADASTRO='2025-01-23')

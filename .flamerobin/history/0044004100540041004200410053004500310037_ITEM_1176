@@ -1,0 +1,8 @@
+select
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    materialmovimentoestoque.filial=1 and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=9 and
+    materialmovimentoestoque.iditem='2087729'

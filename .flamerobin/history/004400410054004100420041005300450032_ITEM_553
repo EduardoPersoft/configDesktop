@@ -1,0 +1,3 @@
+select * from notafiscal where filial=5 and destinatario=2742 order by datacadastro desc
+
+select * from mercadoriasnota where filial=5 and idnota=173743

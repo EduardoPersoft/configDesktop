@@ -1,0 +1,23 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    GRUPOMERCADORIA.descricao,
+    CADASTROPARCEIROS.nome,
+    itemestoque.C_NOMENOFORNECEDOR,
+    itemestoque.C_DETALHES,
+    itemestoque.C_DIMENSOES,
+    ITEMESTOQUE.C_MEDIDA,
+    C_LISTACUSTO.DESCRICAO,
+    C_LISTACUSTO.CUSTO,
+    C_LISTACUSTO.MEDIDA
+from
+    ITEMESTOQUE
+inner join
+    GRUPOMERCADORIA on
+        GRUPOMERCADORIA.grupo=itemestoque.GRUPO
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro=ITEMESTOQUE.FABRICANTE
+INNER join
+    C_LISTACUSTO ON
+        C_LISTACUSTO.IDITEM=ITEMESTOQUE.CODIGO

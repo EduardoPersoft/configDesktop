@@ -1,0 +1,10 @@
+select 
+    extract(month from notafiscal.dataemissao) as mes,
+    extract(year from notafiscal.dataemissao) as ano,
+    count(notafiscal.idnota)
+from
+    NOTAFISCAL
+where
+    notafiscal.DATAEMISSAO between '01.09.2021' and '31.08.2022'
+group by
+    1,2

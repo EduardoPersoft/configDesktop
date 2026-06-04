@@ -1,0 +1,35 @@
+alter table MERCADORIASORC
+
+add CSTIBSCBS varchar(3),
+add cClassTrib char(6),
+
+add vBC decimal(15,2),
+
+add pIBSUF decimal(6,2),
+add pIBSUFRedAliq decimal(7,4),
+add pIBSUFaliqEfet decimal(7,4),
+add vIBSUF decimal(15,2),
+
+add pIBSMun decimal(6,2),
+add pIBSMunRedAliq decimal(7,4),
+add pIBSMunaliqEfet decimal(7,4),
+add vIBSMun decimal(15,2),
+
+add vIBS decimal(15,2),
+
+add pCBS decimal(6,2),
+add pCBSRedAliq decimal(7,4),
+add pCBSaliqEfet decimal(7,4),
+add vCBS decimal(15,2),
+
+add CSTReg varchar(3),
+add cClassTribReg char(6)
+
+add paliqEfetRegIBSUF decimal(7,4),
+add vTribRegIBSUF decimal(15,2),
+add paliqEfetRegIBSMun decimal(7,4),
+add vTribRegIBSMun decimal(15,2),
+add paliqEfetRegCBS decimal(7,4),
+add vTribRegCBS decimal(15,2),
+
+add vItem decimal(12,2)

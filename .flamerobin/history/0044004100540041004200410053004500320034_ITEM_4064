@@ -1,0 +1,15 @@
+select 
+    titulopag.titulo,
+    titulopag.fatura,
+    titulopag.vencimento,
+    titulopag.baixa,
+    titulopag.TIPOBAIXA,
+    titulopag.valortitulo,
+    cast(substring(titulopag.OBSERVACOES from 1 for 1000) as varchar(1000)),
+    titulopag.usuario
+from 
+    TITULOPAG
+where
+    titulopag.fiLial=5 and
+    titulopag.parceiro=19848 and
+    titulopag.vencimento between '01.10.2022' and '31.12.2022'

@@ -1,0 +1,7 @@
+select
+    *
+from 
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.TIPOMOVIMENTO = '10'
+    and movimentoestoque.IDMOVTOTRANSFERENCIA is null

@@ -1,0 +1,1 @@
+select * from FATURAS where filial=1

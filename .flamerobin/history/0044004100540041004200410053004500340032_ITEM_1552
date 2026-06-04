@@ -1,0 +1,43 @@
+select 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    inventarioestoquedata.lote,
+    inventarioestoquedata."LOCAL",
+    inventarioestoquedata.data,
+    sum (coalesce (inventarioestoquedata.QUANTIDADEESTOQUE,0)) as QUANTIDADEANTERIOR, 
+    sum (coalesce (inventarioestoquedata.QUANTIDADE,0)) AS QUANTIDADEINVENTARIO,
+    sum (coalesce (inventarioestoquedata.QUANTIDADEESTOQUE,0)) -
+    sum (coalesce (inventarioestoquedata.QUANTIDADE,0)) diferencaQuantidade,
+    ITEMCUSTODATA.CUSTOUNITARIO, 
+    sum (coalesce (inventarioestoquedata.QUANTIDADEESTOQUE,0)) * coalesce (ITEMCUSTODATA.CUSTOUNITARIO,0) as CUSTOANTERIOR , 
+    sum (coalesce (inventarioestoquedata.QUANTIDADE,0)) * coalesce (ITEMCUSTODATA.CUSTOUNITARIO,0) AS CUSTOINVENTARIO,
+    (sum (coalesce (inventarioestoquedata.QUANTIDADEESTOQUE,0)) * coalesce (ITEMCUSTODATA.CUSTOUNITARIO,0)) - 
+    (sum (coalesce (inventarioestoquedata.QUANTIDADE,0)) * coalesce (ITEMCUSTODATA.CUSTOUNITARIO,0)) diferencacusto
+   
+    
+from 
+    inventarioestoquedata
+inner join 
+      ITEMCUSTODATA on
+            (ITEMCUSTODATA.filial=inventarioestoquedata.filial and 
+            ITEMCUSTODATA.CODIGO=inventarioestoquedata.CODIGO and 
+            ITEMCUSTODATA.DATAINVENTARIO=inventarioestoquedata.data 
+            )           
+INNER JOIN 
+    ITEMESTOQUE ON 
+        (ITEMESTOQUE.CODIGO=inventarioestoquedata.CODIGO)
+where 
+    itemcustodata.DATAINVENTARIO='31.01.2024' and
+    inventarioestoquedata.filial=110  and
+    inventarioestoquedata.iditem like 'MPP%'
+    -- and inventarioestoquedata.data =  
+    
+group by 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    inventarioestoquedata.lote,
+    inventarioestoquedata."LOCAL",    
+    inventarioestoquedata.data,   
+    ITEMCUSTODATA.CUSTOUNITARIO, 
+    ITEMESTOQUE.DESCRICAO

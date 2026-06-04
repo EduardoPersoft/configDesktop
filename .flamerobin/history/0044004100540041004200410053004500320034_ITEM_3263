@@ -1,0 +1,12 @@
+select
+    apontamentomat.filial,
+    apontamentomat.idmovimento,
+    apontamentomat.idmaterial,
+    apontamentomat.id,
+    apontamentomat.lote,
+    apontamentomat.quantidade
+from
+    apontamentomat
+where  
+    apontamentomat.filial=? and
+    apontamentomat.idmovimento=?

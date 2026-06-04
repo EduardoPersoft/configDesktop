@@ -1,0 +1,14 @@
+update 
+    MERCADORIASNOTA
+set
+    mercadoriasnota.ICMSORIGEMVALOR=0,
+    mercadoriasnota.ICMSDESTINOVALOR=0,
+    mercadoriasnota.VLRPISPASEP=0,
+    mercadoriasnota.VLRCOFINS=0,
+    mercadoriasnota.valoripi
+where 
+    exists (
+        select * from NOTAFISCAL
+        where MERCADORIASNOTA.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota and
+        notafiscal.modelo=16)

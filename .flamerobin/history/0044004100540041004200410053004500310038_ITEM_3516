@@ -1,0 +1,6 @@
+select
+    *
+from 
+    MATERIALMOVIMENTOESTOQUE
+where 
+    lote='1843/25'

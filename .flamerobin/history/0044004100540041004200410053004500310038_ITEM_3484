@@ -1,0 +1,4 @@
+select filial,idnota,orcamento.datacadastro,ORCAMENTO.IDRELACAo, coalesce(orcamento.idrelacao, orcamento.idnota) 
+from ORCAMENTO
+--where idrelacao is not null
+order by 4 desc

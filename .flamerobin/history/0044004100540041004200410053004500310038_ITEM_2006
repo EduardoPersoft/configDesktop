@@ -1,0 +1,25 @@
+SELECT C_Pedido2op.Filial,
+       C_PEDIDO2OP.Idmovimento,
+       MERCADORIASPED.Idmercadoria,
+       COALESCE( C_Mercadoriaspedfios.Regiao,0)+1,
+       COALESCE(C_Mercadoriaspedfios.Fio, ITEMESTOQUE.C_MODELO),
+       CAST(COALESCE(ITEMESTOQUE.C_Pesoconsumo,0) *
+       COALESCE(mercadoriasped.C_M2,0) *
+       COALESCE(C_Itemregioes.Percentual,0) /100 AS DECIMAL(12,3)),
+       CASE WHEN ITEMESTOQUE.C_MODELO IS NOT NULL THEN 'M' ELSE 'F' END,
+       MERCADORIASPED.QUANTIDADE,
+       ITEMESTOQUE.C_MODELO,
+       MERCADORIASPED.IDNOTA
+    from C_Pedido2op
+    INNER JOIN MERCADORIASPED ON (
+        MERCADORIASPED.FILIAL=C_PEDIDO2OP.FILIAL
+        AND MERCADORIASPED.IDNOTA=C_PEDIDO2OP.IDPEDIDO)
+    INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MERCADORIASPED.CODIGO)
+    LEFT JOIN C_Mercadoriaspedfios ON
+        (C_Mercadoriaspedfios.Filial=MERCADORIASPED.FILIAL
+        AND C_Mercadoriaspedfios.Idnota=MERCADORIASPED.Idnota
+        AND C_Mercadoriaspedfios.Idmercadoria=MERCADORIASPED.Idmercadoria)
+    LEFT JOIN C_Itemregioes ON (C_ITEMREGIOES.Codigo=ITEMESTOQUE.CODIGO
+        AND C_ITEMREGIOES.Regiao=C_Mercadoriaspedfios.Regiao+1)            
+    --WHERE Itemestoque.TIPOPRODUTO='4'  
+   -- AND COALESCE(C_Mercadoriaspedfios.Fio, ITEMESTOQUE.C_MODELO) IS NOT NULL

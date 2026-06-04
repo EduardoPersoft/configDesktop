@@ -1,0 +1,13 @@
+SELECT
+    itemestoque.codigo,   
+    itemestoque.descricao,    
+    itemestoque.referencia,
+    itemestoque.CODIGOBARRA,
+    case substring(coalesce(itemestoque.codigobarra, '') from 1 for 12)  when  itemestoque.codigobarra  then 'N' else 'S' end as eanOk
+    
+FROM
+    itemestoque 
+where   
+   ITEMESTOQUE.TIPOPRODUTO='3'
+order by
+        itemestoque.codigo

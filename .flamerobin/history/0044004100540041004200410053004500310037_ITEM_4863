@@ -1,0 +1,2 @@
+alter table NOTAFISCAL
+add c_icmsoriginalvlrinterestadual decimal(12,2)

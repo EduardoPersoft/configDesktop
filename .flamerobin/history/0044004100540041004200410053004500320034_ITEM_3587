@@ -1,0 +1,6 @@
+update 
+    SPEDFISCAL_C
+set
+    spedfiscal_c.cfop = '1156'
+where
+    spedfiscal_c.cfop = '1103'

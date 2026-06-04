@@ -1,0 +1,3 @@
+select * from materialmovimentoestoque
+where materialmovimentoestoque.iditem ='05319' and filial=5
+order by idmovimento desc

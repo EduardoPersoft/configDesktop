@@ -1,0 +1,1 @@
+select * from movimentoestoque where filial=1 and documento='65085'

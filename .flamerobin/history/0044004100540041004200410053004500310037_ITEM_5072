@@ -1,0 +1,3 @@
+select * from LOCALLOTE
+left local on local.id=locallote.local
+where locallote.IDITEM='2154905' and quantidade>0

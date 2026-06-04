@@ -1,0 +1,14 @@
+select 
+    * 
+from 
+    faturasnotacompra
+where 
+    faturasnotacompra.DATAVENCIMENTO < (
+        select 
+            notacompra.DATAEMISSAO
+        from
+            NOTACOMPRA
+        where
+            notacompra.filial=faturasnotacompra.filial and
+            notacompra.idnota=faturasnotacompra.idnota and
+            notacompra.DATAEMISSAO between '01.01.2022' and '31.12.2022')

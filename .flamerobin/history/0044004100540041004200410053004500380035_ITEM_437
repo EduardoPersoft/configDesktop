@@ -1,0 +1,7 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where
+(select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.FILIAL
+and movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+and movimentoestoque.EMISSAO >= '25.05.2026'
+and movimentoestoque.TIPOMOVIMENTO in ('04', '09'))

@@ -1,0 +1,14 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO,
+    sum(materiallocal.saldototal)/materialfilial.CUSTOMEDIO/20 dias
+FROM
+    materiallocal    
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial AND
+        materialfilial.iditem=materiallocal.iditem
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem

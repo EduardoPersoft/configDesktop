@@ -1,0 +1,2 @@
+select * from materialmovimentoestoque 
+order by valor desc

@@ -1,0 +1,9 @@
+
+update
+    TITULOREC
+set 
+    titulorec.CODRETORNO=null
+
+where titulorec.filial=5 and
+titulorec.EMISSAO='18.10.2022' and 
+titulorec.contacorrente=707

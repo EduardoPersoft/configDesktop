@@ -1,0 +1,4 @@
+update
+    ITEMESTOQUE
+set
+    ean=codigo

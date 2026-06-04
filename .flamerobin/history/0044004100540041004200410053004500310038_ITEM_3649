@@ -1,0 +1,2 @@
+select * from INVENTARIOESTOQUEDATA
+order by data desc

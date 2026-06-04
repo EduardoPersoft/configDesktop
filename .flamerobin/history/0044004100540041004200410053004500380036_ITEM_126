@@ -1,0 +1,6 @@
+update 
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFICACAOCONTABIL='210401'
+where
+    substring(itemestoque.codigo from 1 for 1)='M'

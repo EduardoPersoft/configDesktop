@@ -1,0 +1,1 @@
+select * from notafiscal where dataemissao='01.11.2024'

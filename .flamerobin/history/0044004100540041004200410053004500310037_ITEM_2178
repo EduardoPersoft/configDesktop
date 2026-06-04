@@ -1,0 +1,11 @@
+select
+    itemestoque.codigo,
+    itemestoque.REFERENCIA
+from
+    itemestoque
+union
+select
+    itemestoque.codigo,
+    itemestoque.C_ORIGINAL
+from 
+    itemestoque

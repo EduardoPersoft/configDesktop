@@ -1,0 +1,26 @@
+SELECT
+    MERCADORIASPED.FILIAL,
+    MERCADORIASPED.IDMERCADORIA,
+    MERCADORIASPED.CODIGO,
+    MERCADORIASPED.QUANTIDADE - MERCADORIASPED.QTDEENVIADA,
+    0,
+    0,
+    'N',
+    (select first 1 materiallocal.idlocal from MATERIALLOCAL
+     where materiallocal.filial=mercadoriasped.FILIAL
+     and materiallocal.IDITEM=mercadoriasped.iditem
+     and materiallocal.SALDOTOTAL<=mercadoriasped.QUANTIDADE
+     order by mercadoriasped.saldototal desc) as local,
+    MERCADORIASPED.IDMERCADORIA,
+    '.',
+    '',
+    '',
+    1,
+    MERCADORIASPED.IDNOTA,
+    'N'
+FROM
+    MERCADORIASPED
+WHERE
+    MERCADORIASPED.FILIAL = 1
+    AND MERCADORIASPED.IDNOTA = 281029
+    AND MERCADORIASPED.BAIXA = 'N'

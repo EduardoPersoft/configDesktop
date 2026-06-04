@@ -1,0 +1,2 @@
+select * from local
+where local.descricao='Z2-A-1-3-3'

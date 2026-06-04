@@ -1,0 +1,24 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    materialmovimentoestoque.setup = 
+            coalesce(( 
+                select FIRST 1
+                    C_LAMINACAO.C_SETUP
+                from
+                    C_LAMINACAO
+                where
+                    C_LAMINACAO.CODIGO=MATERIALMOVIMENTOESTOQUE.produto),1)/60, 
+    MATERIALMOVIMENTOESTOQUE.tempo= materialmovimentoestoque.c_metros/
+        coalesce((
+            select FIRST 1
+                C_LAMINACAO.c_VELOCIDADE
+            from
+                C_LAMINACAO
+            where
+                C_LAMINACAO.CODIGO=MATERIALMOVIMENTOESTOQUE.produto),1)/60
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=110 and
+    MATERIALMOVIMENTOESTOQUE.concluido='N' and
+    MATERIALMOVIMENTOESTOQUE.idcentrocusto='101'
+    

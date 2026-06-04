@@ -1,0 +1,6 @@
+select
+    *
+from
+   CADASTROPARCEIROS
+ORDER BY
+    CADASTRO DESC

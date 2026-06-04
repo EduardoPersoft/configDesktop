@@ -1,0 +1,9 @@
+select 
+    c_destinoavulso.*,c_coletas.*
+from 
+    c_destinoavulso
+left join
+    c_coletas on
+        C_COLETAS.coleta=C_DESTINOAVULSO.coleta
+where  
+   C_COLETAS.DATACOLETA between '30.04.2026' and '14.05.2026'

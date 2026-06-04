@@ -1,0 +1,12 @@
+select 
+NFECTRL.FILIAL,
+NFECTRL.IDNOTA,
+NFECTRL.NFE,
+NFECTRL.NFEASSINADA
+from NFECTRL
+where  exists (
+select * from NOTAFISCAL
+where notafiscal.filial=NFECTRL.filial
+and notafiscal.idnota=NFECTRL.IDNOTA
+and notafiscal.dataemissao>='2025-01-23')
+order by filial,idnota

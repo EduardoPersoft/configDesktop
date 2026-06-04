@@ -1,0 +1,24 @@
+select distinct
+    NOTAFISCAL.FILIAL,
+    NOTAFISCAL.NUMERONOTA, 
+    NOTAFISCAL.DATAEMISSAO,
+    NOTAFISCAL.VLRTOTALNOTA,
+    NOTAFISCAL.UUID
+FROM 
+    NOTAFISCAL
+WHERE 
+    NOTAFISCAL.DESTINATARIO = 39070 /*and
+    --AND NOTAFISCAL.ENTRADASAIDA = 'S' AND 
+   (exists 
+        (select idnota from mercadoriasnota
+          where mercadoriasnota.filial=notafiscal.filial and
+          mercadoriasnota.idnota=notafiscal.idnota and
+          mercadoriasnota.idpedido is null) or
+     exists
+        (select idnota from servicosnota
+          where servicosnota.filial=notafiscal.filial and
+          servicosnota.idnota=notafiscal.idnota and
+          servicosnota.idpedido is null) )
+*/     
+ORDER BY 
+    NOTAFISCAL.DATAEMISSAO DESC;

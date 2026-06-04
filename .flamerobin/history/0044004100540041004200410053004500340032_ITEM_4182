@@ -1,0 +1,4 @@
+select * from TITULOPAG
+where titulopag.titulo='3306433'
+and coalesce(titulopag.TIPOBAIXA,'')<>'C'
+order by fatura

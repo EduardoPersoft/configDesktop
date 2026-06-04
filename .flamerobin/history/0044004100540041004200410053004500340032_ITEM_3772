@@ -1,0 +1,2 @@
+select * from c_movfinanceiro mov 
+where mov.contacorrenteimportada=2020

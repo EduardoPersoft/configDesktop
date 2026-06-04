@@ -1,0 +1,21 @@
+select 
+        MERCADORIASPED.CODIGO,
+        sum (MERCADORIASPED.QUANTIDADE),
+        MERCADORIASPED.UNIDADE
+    from 
+        mercadoriasnota MERCADORIASped
+    inner join 
+        notafiscal pedido ON
+            (MERCADORIASPED.FILIAL=PEDIDO.FILIAL and 
+            MERCADORIASPED.IDNOTA=PEDIDO.IDNOTA)
+    where   
+        pedido.filial=5
+        and PEDIDO.DESTINATARIO=4436
+        and PEDIDO.DATAEMISSAO '22.12.2021'
+        
+     group BY 
+            MERCADORIASPED.CODIGO,
+         MERCADORIASPED.UNIDADE,
+         MERCADORIASPED.filial,
+         PEDIDO.DESTINATARIO
+         

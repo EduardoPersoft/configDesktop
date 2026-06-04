@@ -1,0 +1,1 @@
+select first 10 * from registroContato

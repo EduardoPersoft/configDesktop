@@ -1,0 +1,1 @@
+select * from movimentoestoque wher filial=12836 and idnota in (143008, 143009,143010)

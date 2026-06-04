@@ -1,0 +1,2 @@
+select * from LISTAPRECOSERVICO
+where listaprecoservico.lista=179

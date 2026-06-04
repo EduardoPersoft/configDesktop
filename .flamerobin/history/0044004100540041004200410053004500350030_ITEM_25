@@ -1,0 +1,8 @@
+alter table itemestoque
+  c_LADOLAMINAR1_1 varchar(20),
+  c_LADOLAMINAR1_2 varchar(20),
+  c_LADOLAMINAR2_1 varchar(20),
+  c_LADOLAMINAR2_2 varchar(20), 
+  c_APLICARTRATADOR varchar(20),  
+  c_LARGURAROLO numeric(8,3),
+  c_ITEMRIGOROSO varchar(20)  

@@ -1,0 +1,2 @@
+select filial,idnota,vendedor from PEDIDO
+order by idnota desc

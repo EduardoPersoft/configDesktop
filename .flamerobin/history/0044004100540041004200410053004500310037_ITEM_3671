@@ -1,0 +1,22 @@
+select
+    orcamento.vendedor,
+    cadven.nome,
+    count(orcamento.idnota) qtdorc,
+    sum((select 
+            count(mercadoriasorc.idnota)
+         from
+            MERCADORIASORC
+         where
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota)) qtdorcItens,
+    sum(orcamento.VLRTOTALnota) valorOrcado
+from
+    orcamento
+inner join
+    CADASTROPARCEIROS cadven on
+        cadve.CADASTRO=orcamento.vendedor
+where 
+    orcamento.DATAREFERENCIA between '24.09.2024' and '24.09.2024'
+group by 
+    orcamento.vendedor,
+    cadven.nome

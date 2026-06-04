@@ -1,0 +1,65 @@
+select
+    cadven.cadastro,
+    cadven.nome,
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') qtdorc ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') qtditemorc ,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') valororc,
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') qtdPED ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') qtditemPED,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.VENDEDOR=cadven.cadastro and
+        orcamento.DATACADASTRO between '24.09.2024' and '24.09.2024') valorPED
+        
+      
+from
+    VENDEDOR
+inner join
+    CADASTROPARCEIROS cadven  on
+        vendedor.cadastro=cadven.CADASTRO
+where
+    cadven.status=1
+    

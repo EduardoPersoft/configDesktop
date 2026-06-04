@@ -1,0 +1,10 @@
+update 
+    orcamento PEDIDO
+set 
+    pedido.VBRUTOFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0),
+    pedido.VliquidoFATURA=coalesce((select sum(fatped.VALORFATURA) from fatped 
+                                 where fatped.filial=pedido.FILIAL
+                                 and fatped.idnota=pedido.idnota),0)
+where pedido.DATACADASTRO>='01.01.2024'

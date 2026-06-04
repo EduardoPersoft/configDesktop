@@ -1,0 +1,6 @@
+update
+    ORCAMENTO
+set
+    orcamento.MOTIVOPERDA=1
+where
+    orcamento.DATAPERDA  is not null

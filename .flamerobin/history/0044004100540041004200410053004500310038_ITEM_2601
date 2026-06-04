@@ -1,0 +1,2 @@
+select * from ITEMCUSTODATA where itemcustodata.filial=1 and iditem='01.12.0595'
+

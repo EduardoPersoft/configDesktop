@@ -1,0 +1,7 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.TIPOMOVIMENTO='13'
+and indnotaexpedicao is null
+and exists (
+select * from MERCADORIASNOTA
+where mercadoriasnota.filial=movimentoestoque.filial and
+meecadoriasnota.idpedido=movimentoestoque.idpedido)

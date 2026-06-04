@@ -1,0 +1,2 @@
+select * from notafiscal
+where filial=110 and vendedor=14

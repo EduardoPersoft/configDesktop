@@ -1,0 +1,16 @@
+SELECT case a.CODIGO 
+    when 'PRO1265PO001' then 'PL0020P001'
+    when 'PRO4760FLI001' then 'PL0019F001'
+    when 'PRO3211FLI007' then 'PL0022F001'
+    when 'PRO4861SUP001' then 'PL0024P001'
+    when 'PRO4847SUP001' then 'PL0025P001'
+    when 'PRO4847SUP002' then 'PL0025P002' codigo, a.SEQUENCIA, a.COR, a.PANTONE, a.ANILOX, a.LINEATURA,
+    a.DUPLAFACE, a.VISCOSIDADE, a.CODIGOCOR, a.GRAVAR, a.SECAGEM
+FROM C_CORES a 
+WHERE
+    a.CODIGO in ('PRO1265PO001',
+                           'PRO4760FLI001',
+                           'PRO3211FLI007',
+                           'PRO4861SUP001',
+                           'PRO4847SUP001',
+                           'PRO4847SUP002')

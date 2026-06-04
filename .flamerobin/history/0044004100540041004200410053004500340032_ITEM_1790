@@ -1,0 +1,2 @@
+select * from locallote
+where quantidade is null order by idmovimento desc

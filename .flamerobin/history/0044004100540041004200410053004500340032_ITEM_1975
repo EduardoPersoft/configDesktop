@@ -1,0 +1,1 @@
+select filial,idnota,numeronota,uuid from notafiscal where filial>110 and uuid='{A9215CD3-51DA-4A29-AF65-90226C088FE' order by idnota desc

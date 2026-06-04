@@ -1,0 +1,6 @@
+update
+    itemestoque
+set 
+    itemestoque.C_LOCALIMPORTACAO = 13
+where
+    itemestoque.c_localimportacao in (1, 11, 12)

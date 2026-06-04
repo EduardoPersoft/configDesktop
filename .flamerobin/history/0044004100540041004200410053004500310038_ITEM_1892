@@ -1,0 +1,7 @@
+SELECT 
+    *
+from
+    LOCALLOTE
+WHERE 
+    LOCALLOTE.IDITEM LIKE 'M-%' and
+    LOCALLOTE.QUANTIDADE < 0

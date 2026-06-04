@@ -1,0 +1,2 @@
+select first 100 filial,idnota,cancelamento,datacancelamento,dataalteracao,usuario from pedido where datacancelamento is not null
+order by datacancelamento desc

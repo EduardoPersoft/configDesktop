@@ -1,0 +1,3 @@
+update LANTOCONTPAG
+set lantocontpag.CONTACONTABIL='2020201'
+where lantocontpag.CONTACONTABIL='201010101'

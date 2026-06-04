@@ -1,0 +1,2 @@
+select notafiscal.DEVOLUCAO
+from notafiscal

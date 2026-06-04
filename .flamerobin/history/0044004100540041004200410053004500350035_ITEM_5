@@ -1,0 +1,4 @@
+update 
+    VENDEDOR
+set
+    tipovendedor = tipovendedor + 2

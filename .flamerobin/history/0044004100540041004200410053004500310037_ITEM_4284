@@ -1,0 +1,5 @@
+update 
+    MERCADORIASNOTA
+set
+    mercadoriasnota.descricao = mercadoriasnota.DESREDUZIDA
+where filial=12826 and idnota=346184         

@@ -1,0 +1,16 @@
+update
+    materiallocal
+set 
+    materiallocal.saldototal=
+(select 
+    sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.filial=1 and 
+    materialmovimentoestoque.iditem='1369324' and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=296)
+where 
+    materiallocal.filial=1 and 
+    materiallocal.iditem='1369324' and
+    materiallocal.IDLOCAL=296

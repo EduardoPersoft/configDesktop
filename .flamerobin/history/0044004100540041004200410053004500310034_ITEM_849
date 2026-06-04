@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    pedido
+where 
+    substring(pedido.codigo from 1 for 1)=''

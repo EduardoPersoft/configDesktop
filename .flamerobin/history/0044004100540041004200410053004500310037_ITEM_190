@@ -1,0 +1,10 @@
+UPDATE
+    TITULOREC
+SET
+    titulorec.dataenvio='31.12.2021'
+WHERE
+    titulorec.DATAENVIO is null
+    and titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+

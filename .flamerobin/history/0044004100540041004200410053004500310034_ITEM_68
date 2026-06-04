@@ -1,0 +1,7 @@
+select
+    itemestoque.codigo,
+    itemestoque.C_CLICHE
+from
+    ITEMESTOQUE
+where 
+    itemestoque.codigo='PRO1569SUP005'

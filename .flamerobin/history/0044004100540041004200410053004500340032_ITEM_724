@@ -1,0 +1,5 @@
+create table c_customedio(
+iditem varchar(15) not null,
+custo decimal(12,3),
+constraint pk_c_customedio 
+primary key(iditem))

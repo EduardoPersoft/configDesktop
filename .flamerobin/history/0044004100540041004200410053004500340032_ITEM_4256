@@ -1,0 +1,24 @@
+SELECT c_laminacao.CODIGO, c_laminacao.SEQUENCIA, filme1.C_CODIGONOVO, c_laminacao.GRAMATURAFILME, c_laminacao.ADESIVO,
+    c_laminacao.GRAMATURAADESIVO, c_laminacao.APLICARTRATADOR, c_laminacao.LADOLAMINAR, c_laminacao.SAIDAREBOBINADEIRA,
+    c_laminacao.LARGURAROLO, c_laminacao.ITEMRIGOROSO, c_laminacao.OBSERVACAO, c_laminacao.C_VELOCIDADE, c_laminacao.C_SETUP,
+    c_laminacao.C_TENSAREBOBINADOR, c_laminacao.C_TENSAOPELICULA, c_laminacao.C_TENSAODESBOBINADORA,
+    c_laminacao.C_TENSAODESBOBINADORB, c_laminacao.C_PERDAPROCESSO, c_laminacao.C_PERDAAJUSTEMAQUINA,
+    c_laminacao.FORCASELAGEM, c_laminacao.FORCALAMINACAO, c_laminacao.LADOLAMINAR2, c_laminacao.APLICACAOADESIVOMINIMO,
+    c_laminacao.APLICACAOADESIVOMAXIMO, c_laminacao.C_VELOCIDADEL10, c_laminacao.C_SETUPL10,
+    c_laminacao.C_TENSAREBOBINADORL10, c_laminacao.C_TENSAOPELICULAL10, c_laminacao.C_TENSAODESBOBINADORAL10,
+    c_laminacao.C_TENSAODESBOBINADORBL10, c_laminacao.C_PERDAPROCESSOL10, c_laminacao.C_PERDAAJUSTEMAQUINAL10,
+    c_laminacao.FORCASELAGEML10, c_laminacao.FORCALAMINACAOL10, c_laminacao.TEMPERATURACONJUNTOL7,
+    c_laminacao.TEMPERATURANIPL10, c_laminacao.TEMPERATURAAPLICADOSL10, filme2.C_CODIGONOVO, c_laminacao.GRAMATURAFILME2,
+    c_laminacao.FILME1BOBINADOR, c_laminacao.FILME2BOBINADOR, c_laminacao.C_FILMESALVO, c_laminacao.C_FILME2SALVO,
+    c_laminacao.C_GRAMATURAFILMES, c_laminacao.C_GRAMATURA2FILMS, c_laminacao.C_FILME1BOBINADORS,
+    c_laminacao.C_FILME2BOBINADORS, c_laminacao.C_BOBINAMENTOLAMINACAO
+FROM C_LAMINACAO
+inner join 
+    c_Expedicao2 on 
+        (c_Expedicao2.CODIGO=C_LAMINACAO.CODIGO)
+inner join
+    itemestoque filme1 on
+        filme1.codigo=c_laminacao.FILME
+inner join
+    itemestoque filme2 on
+        filme2.codigo=c_laminacao.FILME2

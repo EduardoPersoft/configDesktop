@@ -1,0 +1,1 @@
+select * from T_CADASTRO WHERE CODIGO=14653

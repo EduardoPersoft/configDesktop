@@ -1,0 +1,26 @@
+ select
+    coalesce(sum(fatped.valorfatura),0) totalpedido
+from
+    pedido
+inner join  
+    fatped on
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota
+inner join
+    tipocobranca on
+        tipocobranca.tipocobranca = 
+            coalesce(fatped.tipocobranca,
+                     pedido.tipocobranca)
+where
+    pedido.destinatario=3272 and
+    coalesce (tipocobranca.tpag,'') not in ('3','4') and
+    pedido.cancelamento = 'N' and
+    exists 
+        (select 
+            * 
+         from 
+            mercadoriasped
+         where 
+            mercadoriasped.idnota=pedido.idnota and
+            mercadoriasped.baixa='N')
+ 

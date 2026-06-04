@@ -1,0 +1,41 @@
+insert into t_mapa(
+filial,
+idmovimento,
+idmovimentoMaterial,
+idnota,
+idmercadoria,
+baixa,
+substituido,
+datafaturamento,
+tipo)
+SELECT 
+    C_MAPAPRODUCAO.filial,
+    
+    c_mapaproducao.idmovimento,
+    c_mapaproducao.IDMOVIMENTOMATERIAL,
+    
+    c_mapaproducao.idnota,
+    c_mapaproducao.IDMERCADORIA,
+
+   (select mercadoriasped.baixa from MERCADORIASPED
+    where mercadoriasped.filial=C_MAPAPRODUCAO.FILIAL AND
+    mercadoriasped.idnota=C_MAPAPRODUCAO.idnota AND
+    mercadoriasped.IDMERCADORIA=c_mapaproducao.idmercadoria) as baixa,
+
+   (select first 1 pedido.idnota from pedido
+    where pedido.filial=C_MAPAPRODUCAO.FILIAL AND
+    pedido.C_PEDIDOSUBSTITUIDO=C_MAPAPRODUCAO.IDNOTA) as substituto,
+
+    c_mapaproducao.DATAFATURAMENTO,
+    C_MAPAPRODUCAO.tce
+FROM C_MAPAPRODUCAO(1,'01.01.2000','31.12.2021')
+left join itemestoque on itemestoque.codigo=C_MAPAPRODUCAO.codigo 
+where C_MAPAPRODUCAO.C_REVISAOFINAL IS NULL and 
+    (select mercadoriasped.baixa from MERCADORIASPED
+    where mercadoriasped.filial=C_MAPAPRODUCAO.FILIAL AND
+    mercadoriasped.idnota=C_MAPAPRODUCAO.idnota AND
+    mercadoriasped.IDMERCADORIA=c_mapaproducao.idmercadoria)='N' AND
+    exists (select pedido.idnota from pedido
+    where pedido.filial=C_MAPAPRODUCAO.FILIAL AND
+    pedido.C_PEDIDOSUBSTITUIDO=C_MAPAPRODUCAO.IDNOTA) 
+    

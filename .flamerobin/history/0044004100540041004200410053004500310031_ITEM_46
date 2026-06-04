@@ -1,0 +1,2 @@
+select * from lantocontpag
+where lantocontpag.CONTACONTABIL LIKE '0105%'

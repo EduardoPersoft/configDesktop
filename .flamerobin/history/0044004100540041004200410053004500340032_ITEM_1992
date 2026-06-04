@@ -1,0 +1,8 @@
+select 
+    movimentoestoque.filial,
+    movimentoestoque.documento
+where
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=110 and
+    movimentoestoque.tipomovimento='12'

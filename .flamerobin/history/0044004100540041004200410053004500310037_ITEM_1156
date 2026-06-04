@@ -1,0 +1,7 @@
+select 
+    *
+from
+    movimentoestoque
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.TIPOMOVIMENTO=11

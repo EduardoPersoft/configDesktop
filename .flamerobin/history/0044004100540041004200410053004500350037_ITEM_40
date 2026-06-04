@@ -1,0 +1,2 @@
+select * from itemestoquexarquivo 
+where itemestoquexarquivo.codigo='04240031'

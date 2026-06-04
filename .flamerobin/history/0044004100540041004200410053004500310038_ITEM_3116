@@ -1,0 +1,23 @@
+select 
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.DESCRICAO,
+    cast(sum(locallote.quantidade) as decimal(12,3)) as saldo,
+     0 as opsAbertas,
+    0 as opsProduzidaMes,
+    0 as totalConsumo,
+    0 as  requisitadas,
+    cast('now' as date) dataRequisicao,
+    0 as saldoFinal
+from
+    ITEMESTOQUE
+inner join 
+    LOCALLOTE on 
+    locallote.iditem=itemestoque.codigo
+
+where 
+    ITEMESTOQUE.FAMILIA=10001
+group by 
+     ITEMESTOQUE.CODIGO, 
+     ITEMESTOQUE.DESCRICAO
+order by 
+     ITEMESTOQUE.CODIGO 

@@ -1,0 +1,17 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.descricao,
+    CLASSIFICACAOFISCAL.CSTPIS
+from
+    ITEMESTOQUE
+inner join 
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL
+inner join 
+    MATERIALLOCAL on
+        materiallocal.filial=5 and
+        materiallocal.iditem=itemestoque.codigo and
+        materiallocal.SALDOTOTAL>0
+where
+    CLASSIFICACAOFISCAL.CSTPIS is null

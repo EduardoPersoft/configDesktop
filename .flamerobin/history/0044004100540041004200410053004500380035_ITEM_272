@@ -1,0 +1,6 @@
+select
+    *
+FROM 
+    RETORNOCNAB
+where   
+    BANCO=104

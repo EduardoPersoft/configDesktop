@@ -1,0 +1,6 @@
+select 
+    *
+from
+    materialfilial
+order by 
+    materialfilial.CONSUMOMEDIO desc

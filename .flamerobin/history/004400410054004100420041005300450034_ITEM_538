@@ -1,0 +1,4 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    c_antron = null

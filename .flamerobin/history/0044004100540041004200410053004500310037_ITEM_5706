@@ -1,0 +1,2 @@
+select * from MOVTOTITULOPAG
+where filial=12826 and idtitulo=496768

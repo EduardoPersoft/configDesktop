@@ -1,0 +1,2 @@
+select mercadoriasorc.* from mercadoriasorc
+where idnota=24

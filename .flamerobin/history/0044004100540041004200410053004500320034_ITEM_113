@@ -1,0 +1,97 @@
+ SELECT
+    mercadoriasnotacompra.idpedido,
+    mercadoriasnotacompra.idMercPedido,
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    mercadoriasnotacompra.idnota,
+    mercadoriasnotacompra.idmercadoria,
+    cadfor.nome,
+    notacompra.NRNOTAFORNECEDOR,
+    NATUREZAOPERACAO.DESCRICAOoperacao,
+    mercadoriasnotacompra.quantidade,
+    mercadoriasnotacompra.unidade,
+    mercadoriaspedcompra.codigo,
+    case when MERCADORIASPEDCOMPRA.idnota is null then 's/pedido'
+    when mercadoriaspedcompra.codigo<>mercadoriasnotacompra.codigo then 'item errado'
+    when NATUREZAOPERACAO.DESCRICAOOPERACAO = 'X-COMPLEMENTO' then 'só valor'
+    else 'ok'
+    end
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial AND
+        mercadoriasnotacompra.idnota=notacompra.idnota
+inner join 
+    itemestoque on 
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+inner JOIN
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+left JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=mercadoriasnotacompra.filial AND
+        mercadoriaspedcompra.idnota=mercadoriasnotacompra.idpedido AND
+        mercadoriaspedcompra.IDMERCADORIA=mercadoriasnotacompra.IDMERCPEDIDO
+left JOIN
+    NATUREZAOPERACAO on
+        naturezaoperacao.id=notacompra.OPERACAO
+
+WHERE
+    notacompra.filial=5 AND
+    notacompra.dataentrada='11.10.2021'
+order by
+    14, 8, 9 
+ SELECT
+    mercadoriasnotacompra.idpedido,
+    mercadoriasnotacompra.idMercPedido,
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    mercadoriasnotacompra.idnota,
+    mercadoriasnotacompra.idmercadoria,
+    cadfor.nome,
+    notacompra.NRNOTAFORNECEDOR,
+    NATUREZAOPERACAO.DESCRICAOoperacao,
+    mercadoriasnotacompra.quantidade,
+    mercadoriasnotacompra.unidade,
+    mercadoriaspedcompra.codigo,
+    (select 
+        sum(COMPOSICAOITEM.iditem) 
+     FROM
+        COMPOSICAOITEM
+     WHERE
+        composicaoitem.IDMATERIAL=itemestoque.codigo) as qtdAplicacoes,
+    case when MERCADORIASPEDCOMPRA.idnota is null then 's/pedido'
+    when mercadoriaspedcompra.codigo<>mercadoriasnotacompra.codigo then 'item errado'
+    when NATUREZAOPERACAO.DESCRICAOOPERACAO = 'X-COMPLEMENTO' then 'só valor'
+    else 'ok'
+    end
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial AND
+        mercadoriasnotacompra.idnota=notacompra.idnota
+inner join 
+    itemestoque on 
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+inner JOIN
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+left JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=mercadoriasnotacompra.filial AND
+        mercadoriaspedcompra.idnota=mercadoriasnotacompra.idpedido AND
+        mercadoriaspedcompra.IDMERCADORIA=mercadoriasnotacompra.IDMERCPEDIDO
+left JOIN
+    NATUREZAOPERACAO on
+        naturezaoperacao.id=notacompra.OPERACAO
+
+WHERE
+    notacompra.filial=? AND
+    notacompra.dataentrada=?
+order by
+    14, 8, 9 
+

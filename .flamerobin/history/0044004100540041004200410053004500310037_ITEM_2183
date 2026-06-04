@@ -1,0 +1,1 @@
+select codigo, descricao, itemestoque.METATAG from itemestoque

@@ -1,0 +1,261 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_LISTARORCAMENTO (
+    PFILIAL integer,
+    PDATAINICIAL timestamp,
+    PDATAFINAL timestamp,
+    PVENDEDOR integer,
+    PLOJA integer,
+    PSTATUS varchar(20),
+    PSOMENTEPRINCIPAL smallint,
+    PMODOFILTRO smallint,
+    PFILTRO varchar(50) )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    DATACADASTRO timestamp,
+    DATAEMISSAO timestamp,
+    NUMERONOTA integer,
+    DATAVALIDADE timestamp,
+    DESTINATARIO integer,
+    AOSCUIDADOS varchar(50),
+    EMAIL varchar(50),
+    TELEFONE varchar(30),
+    VLRTOTALNOTA double precision,
+    NOME varchar(60),
+    DOCUMENTO varchar(14),
+    LOJA integer,
+    NOME_LOJA varchar(40),
+    STATUS varchar(20),
+    VENDEDOR varchar(40),
+    P_STATUSCOR integer,
+    IDRELACAO integer,
+    RAZAOSOCIAL varchar(60) )
+
+AS
+Declare Variable V_Loja Smallint;
+Declare Variable V_Vendedor Smallint;
+Declare Variable V_Status Smallint;
+Declare Variable V_Relacionado Smallint;
+Declare Variable V_Filtro Smallint;
+Declare Variable V_STATUS Smallint;
+Declare Variable V_CANCELAMENTO CHAR(1);
+BEGIN
+if (pmodofiltro=0 and pfiltro<>'') then begin
+    SELECT ORCAMENTO.FILIAL,
+       ORCAMENTO.IDNOTA,
+       ORCAMENTO.C_Loja,
+       ORCAMENTO.DATACADASTRO,
+       ORCAMENTO.DATAEMISSAO,
+       ORCAMENTO.NUMERONOTA,
+       ORCAMENTO.DATAVALIDADE,
+       ORCAMENTO.DESTINATARIO,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.NOME END AS   AOSCUIDADOS,
+
+       case orcamento.cadastrar when 'S' then ORCAMENTO.EMAIL
+       else cadcli.email end as email,
+       case orcamento.cadastrar when 'S' then ORCAMENTO.TELEFONE
+       else cadcli.telefone end as telefone,
+       ORCAMENTO.VLRTOTALNOTA,
+       CADCLI.NOME,
+       CADCLI.RAZAOSOCIAL,
+       CADCLI.DOCUMENTO,
+       CADLOJA.NOME AS NOME_LOJA,
+       CASE when ORCAMENTO.dataemissao IS NULL THEN 'SEM APROVAÇĂO'
+       WHEN EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.IDNOTA)
+                or EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.idrelacao)  THEN 'FECHADO'
+       ELSE
+        CASE COALESCE(ORCAMENTO.c_status,0) WHEN 0 THEN 'ABERTO'
+        WHEN 1 THEN 'ABERTO' WHEN 2 THEN 'SUSPENSO' WHEN 3 THEN 'PERDIDO'
+        WHEN 4 THEN 'FECHADO' END
+      END STATUS,
+      (select cadven.NOME FROM vendedoresorc
+       INNER JOIN CADASTROPARCEIROS CADVEN ON (CADVEN.cadastro=VENDEDORESORC.vendedor)
+       WHERE VENDEDORESORC.filial=ORCAMENTO.FILIAL
+       AND VENDEDORESORC.idnota=ORCAMENTO.IDNOTA
+       AND VENDEDORESORC.Vendedor=ORCAMENTO.VENDEDOR) VENDEDOR,
+       case when ORCAMENTO.cancelamento='S' then 255
+       when exists (select * from PEDIDO
+                      where PEDIDO.filial=ORCAMENTO.filial
+                      and PEDIDO.idORCAMENTO=ORCAMENTO.idnota
+                      and PEDIDO.CANCELAMENTO='N') then 8421504
+        WHEN ORCAMENTO.datavalidade<CAST('NOW' AS TIMESTAMP) THEN -16777208
+        else 0 end AS P_STATUSCOR,
+        COALESCE(ORCAMENTO.idrelacao,0)
+    FROM ORCAMENTO
+    INNER JOIN CADASTROPARCEIROS cadcli ON (CADCLI.CADASTRO = ORCAMENTO.DESTINATARIO)
+    LEFT JOIN CADASTROPARCEIROS CADLOJA ON (CADLOJA.CADASTRO = ORCAMENTO.c_loja)
+    WHERE ORCAMENTO.FILIAL=:pfilial
+    AND ORCAMENTO.idnota = :pfiltro
+    INTO :FILIAL,
+     :IDNOTA,
+     :LOJA,
+     :DATACADASTRO,
+     :DATAEMISSAO,
+     :NUMERONOTA,
+     :DATAVALIDADE,
+     :DESTINATARIO,
+     :AOSCUIDADOS,
+     :EMAIL,
+     :TELEFONE,
+     :VLRTOTALNOTA,
+     :NOME,
+     :RAZAOSOCIAL,
+     :DOCUMENTO,
+     :NOME_LOJA,
+     :STATUS,
+     :VENDEDOR ,
+     :P_STATUSCOR ,
+     :IDRELACAO;
+     suspend;
+end else begin
+    FOR SELECT ORCAMENTO.FILIAL,
+       ORCAMENTO.IDNOTA,
+       ORCAMENTO.C_Loja,
+       ORCAMENTO.DATACADASTRO,
+       ORCAMENTO.DATAEMISSAO,
+       ORCAMENTO.NUMERONOTA,
+       ORCAMENTO.DATAVALIDADE,
+       ORCAMENTO.DESTINATARIO,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.NOME END AS AOSCUIDADOS,
+       case orcamento.cadastrar when 'S' then ORCAMENTO.EMAIL
+       else cadcli.email end as email,
+       case orcamento.cadastrar when 'S' then ORCAMENTO.TELEFONE
+       else cadcli.telefone end as telefone,
+       ORCAMENTO.VLRTOTALNOTA,
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.NOME END AS AOSCUIDADOS,
+
+       case orcamento.cadastrar when 'S' then oRCAMENTO.AOSCUIDADOS
+       else CADCLI.razaosocial END AS RAZAOSOCIAL,
+
+
+       CADCLI.DOCUMENTO,
+       CADLOJA.NOME AS NOME_LOJA,
+       ORCAMENTO.C_STATUS,
+        COALESCE(ORCAMENTO.idrelacao,0),
+        ORCAMENTO.CANCELAMENTO
+    FROM ORCAMENTO
+    INNER JOIN CADASTROPARCEIROS cadcli ON (CADCLI.CADASTRO = ORCAMENTO.DESTINATARIO)
+    LEFT JOIN CADASTROPARCEIROS CADLOJA ON (CADLOJA.CADASTRO = ORCAMENTO.c_loja)
+    LEFT JOIN CADASTROPARCEIROS CADVEN ON CADVEN.cadastro=ORCAMENTO.VENDEDOR
+    WHERE ORCAMENTO.FILIAL=:pfilial
+    AND ORCAMENTO.DATACADASTRO BETWEEN :pdataINICIAL AND :PDATAFINAL
+    INTO :FILIAL,
+     :IDNOTA,
+     :LOJA,
+     :DATACADASTRO,
+     :DATAEMISSAO, 
+     :NUMERONOTA,
+     :DATAVALIDADE,
+     :DESTINATARIO,
+     :AOSCUIDADOS,
+     :EMAIL,
+     :TELEFONE,
+     :VLRTOTALNOTA,
+     :NOME,
+     :RAZAOSOCIAL,
+     :DOCUMENTO,
+     :NOME_LOJA,
+     :V_STATUS,
+     :VENDEDOR ,
+     :IDRELACAO,
+     :V_CANCELAMENTO
+    DO BEGIN
+        
+        STATUS = 'ABERTO';
+
+        IF(COALESCE(ORCAMENTO.C_STATUS,0) IN (0, 1) ) THEN 
+            STATUS = 'ABERTO';
+        IF(COALESCE(ORCAMENTO.C_STATUS,0) =2 ) THEN             
+            STATUS = 'SUSPENSO';        
+        IF(COALESCE(ORCAMENTO.C_STATUS,0) =3 ) THEN             
+            STATUS = 'PERDIDO';        
+        IF(COALESCE(ORCAMENTO.C_STATUS,0) =4 ) THEN             
+            STATUS = 'FECHADO';        
+        IF(ORCAMENTO.DATAEMISSAO IS NULL) THEN         
+            STATUS = 'SEM APROVAÇĂO';
+        IF( EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.IDNOTA) OR
+            EXISTS (SELECT * FROM PEDIDO
+                    WHERE PEDIDO.FILIAL=ORCAMENTO.FILIAL
+                    AND PEDIDO.IDORCAMENTO=ORCAMENTO.idrelacao))  THEN  
+           STATUS = 'FECHADO';
+
+        IF(datavalidade<CAST('NOW' AS TIMESTAMP)) THEN 
+            P_STATUSCOR = -16777208;
+        IF(STATUS='FECHADO') THEN
+            P_STATUSCOR = 8421504;
+        IF(V_CANCELAMENTO='S') THEN
+            P_STATUSCOR = 255;
+
+
+        V_VENDEDOR=1;
+        IF(PVENDEDOR<>-1) THEN BEGIN
+            V_VENDEDOR=0;
+            SELECT COUNT(vendedoresorc.IDNOTA) FROM VENDEDORESORC
+            WHERE VENDEDORESORC.FILIAL=:FILIAL
+            AND VENDEDORESORC.IDNOTA=:IDNOTA
+            AND VENDEDORESORC.vendedor=:PVENDEDOR
+            INTO V_VENDEDOR;
+        END
+
+        v_loja = 1;
+        IF(Ploja<>-1) THEN BEGIN
+            V_loja=0;
+            if (LOJA=PLOJA) then
+                V_LOJA=1;
+        END
+
+
+        V_STATUS=1;
+        if (PSTATUS<>'') then BEGIN
+            V_STATUS=0;
+            if(PSTATUS=STATUS) then
+                V_STATUS=1;
+        END
+
+        v_relacionado=1;
+        if (psomenteprincipal=1) then BEGIN
+            V_RELACIONADO = 0;
+            if (idrelacao=0) then
+                V_RELACIONADO = 1;
+        END
+
+        v_filtro = 1;
+        if(pfiltro<>'') then begin
+            if(pmodofiltro=1) then
+                if(not upper(nome) like '%'||upper(pfiltro)||'%') then begin
+                    if(not upper(RAZAOSOCIAL) like '%'||upper(pfiltro)||'%') then begin
+                        v_filtro=0;
+                    END
+                end
+            if(pmodofiltro=2) then
+                if(not coalesce(telefone,'') like '%'||pfiltro||'%') then begin
+                    v_filtro=0;
+                end
+            if(pmodofiltro=3) then
+                if(not coalesce(email,'') like '%'||pfiltro||'%') then begin
+                    v_filtro=0;
+                end
+            
+        end
+
+            
+        IF(V_VENDEDOR<>0 AND V_STATUS<>0 AND v_relacionado<>0 and v_filtro<>0 AND V_LOJA<>0) THEN
+           SUSPEND;
+   END
+end
+END
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE C_LISTARORCAMENTO TO  SYSDBA;
+

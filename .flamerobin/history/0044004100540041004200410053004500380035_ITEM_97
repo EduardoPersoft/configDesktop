@@ -1,0 +1,2 @@
+update orcamentos
+set pedido.ESPECIEVOLUME='CAIXAS'

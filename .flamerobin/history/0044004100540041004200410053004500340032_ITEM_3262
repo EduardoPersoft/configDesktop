@@ -1,0 +1,24 @@
+select 
+    cadfor.cadastro,
+    cadfor.nome,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    fornecedoresitem.STATUS,
+    case itemestoque.FORNECEDORPADRAO when cadfor.cadastro then '*' else '' end as padrao,    
+    FORNECEDORESITEM.CODIGOFORNEC,
+    fornecedoresitem.preco,
+    fornecedoresitem.custo
+from
+    ITEMESTOQUE
+inner join 
+    FORNECEDORESITEM on
+        fornecedoresitem.IDITEM=itemestoque.codigo
+inner join
+    CADASTROPARCEIROS cadfor on
+        FORNECEDORESITEM.FORNECEDOR=cadfor.cadastro
+where
+    itemestoque.TIPOPRODUTO=1 and
+    itemestoque.grupo=2
+order by
+    cadastro,
+    codigo

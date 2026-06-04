@@ -1,0 +1,41 @@
+select 
+    cast(MOVBANCARIOS.MOVIMENTACAO as date) as movimentacao,
+    'W',
+    'Transferencias',
+    'W',
+    1,
+    'S',
+    sum(movbancarios.VALORMOVIMENTO*case movbancarios.tipomovimento when 'D' then -1 else 1 end),
+    case movbancarios.TIPOMOVIMENTO when 'D' then principal.descricaoconta||' >>> '||transferencia.descricaoconta 
+    else transferencia.descricaoconta||' >>> '||principal.descricaoconta end,
+    MOVBANCARIOS.NRDOCUMENTO,
+    CAST('EXTRATO' AS VARCHAR(10))
+from 
+    MOVBANCARIOS
+INNER JOIN 
+    ESTABELECIMENTO ON
+      movbancarios.filial= ESTABELECIMENTO.CADASTRO 
+Inner join 
+    contacorrente principal on 
+    MOVBANCARIOS.FILIAL=principal.FILIAL and
+    MOVBANCARIOS.IDCONTACORRENTE=principal.CODIGO
+Inner join 
+    contacorrente transferencia on 
+    MOVBANCARIOS.FILIAL=transferencia.FILIAL and
+    MOVBANCARIOS.CONTACORRENTEDEST=transferencia.CODIGO
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=principal.codigo 
+where
+    MOVBANCARIOS.FILIAL=110 and
+    MOVBANCARIOS.MOVIMENTACAO between '2023-09-01' and '2023-09-30'
+group by 
+    MOVBANCARIOS.MOVIMENTACAO,
+    8,
+       MOVBANCARIOS.NRDOCUMENTO
+having 
+    sum(movbancarios.VALORMOVIMENTO*
+        case movbancarios.tipomovimento when 'D' then -1 else 1 end)>0.009 or
+    sum(movbancarios.VALORMOVIMENTO*
+        case movbancarios.tipomovimento when 'D' then -1 else 1 end)<-0.009

@@ -1,0 +1,6 @@
+SELECT 
+    *
+from
+   inventarioestoquedata
+where
+    FILIAL=110 

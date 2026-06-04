@@ -1,0 +1,8 @@
+update 
+    ITEMCUSTODATA
+set 
+    itemcustodata.CUSTOUNITARIO=
+        itemcustodata.CUSTOTOTAL/
+        itemcustodata.QUANTIDADE
+where 
+    itemcustodata.DATAINVENTARIO='31.03.2024'

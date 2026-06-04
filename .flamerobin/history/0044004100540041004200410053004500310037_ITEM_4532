@@ -1,0 +1,35 @@
+select 
+
+    materiaprima.codigo as codigomateriaprima,
+    materiaprima.DESCRICAO as descricaomateriaprima,
+    materiaprima.unidade as unidademateriaprima,
+    sum (mateiralmovsaida.QUANTIDADE) quantidadesaida,
+    (select (sum (locallote.quantidade)) from locallote 
+            where locallote.FILIAL=movimentosaida.filial and 
+                  locallote.iditem=materiaprima.CODIGO) 
+        as saldo
+from 
+    movimentoestoque movimentosaida
+inner join 
+    MATERIALMOVIMENTOESTOQUE mateiralmovsaida on 
+        (movimentosaida.filial=mateiralmovsaida.filial and 
+         movimentosaida.IDMOVIMENTO=mateiralmovsaida.idmovimento)
+inner join 
+        itemestoque materiaprima on         
+            (materiaprima.codigo=mateiralmovsaida.IDITEM  )
+
+inner join
+        materialfilial on 
+            (materialfilial.FILIAL=movimentosaida.filial and 
+            materialfilial.iditem=materiaprima.CODIGO)            
+where 
+    movimentosaida.filial=1 and 
+    movimentosaida.TIPOMOVIMENTO=9 
+group by 
+  
+    materiaprima.codigo,
+    materiaprima.DESCRICAO ,
+    materiaprima.unidade
+    
+order by 
+    materiaprima.codigo

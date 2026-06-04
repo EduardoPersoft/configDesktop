@@ -1,0 +1,16 @@
+select 
+    t1.IDTITULO,
+    t1.NUMBOLBANCO,
+    t2.idtitulo,
+    t2.NUMBOLBANCO
+from 
+    titulorec t1
+inner join 
+    titulorec t2 on 
+        (t1.filial=t2.filial)
+where 
+    t1.filial=12826 and 
+    t1.EMISSAO > '22.01.2025' and 
+    t2.EMISSAO > '22.01.2025' and 
+    t1.IDTITULO <> t2.idtitulo and 
+    t1.NUMBOLBANCO=t2.NUMBOLBANCO

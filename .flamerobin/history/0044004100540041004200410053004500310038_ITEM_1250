@@ -1,0 +1,22 @@
+update
+    PEDIDO
+set
+    pedido.datareferencia=coalesce(pedido.c_datacomissao,
+       cast((select
+        min(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota) as date))
+where 
+    pedido.dataemissao is not null and 
+    pedido.datacadastro >= '01.07.2022' and
+    pedido.DATAREFERENCIA<>coalesce(pedido.c_datacomissao,
+       cast((select
+        min(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota) as date))

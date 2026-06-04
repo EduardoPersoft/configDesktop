@@ -1,0 +1,20 @@
+select 
+    * 
+from 
+    MATERIALMOVIMENTOESTOQUE
+where
+    exists (
+        select
+            *
+        from 
+            MOVIMENTOESTOQUE 
+        INNER JOIN
+            DOCUMENTOSNAOASSOCIADOS ON
+                DOCUMENTOSNAOASSOCIADOS.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL and
+                DOCUMENTOSNAOASSOCIADOS.IDMOVIMENTOENTRADA=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+                DOCUMENTOSNAOASSOCIADOS.IDMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+        where 
+            movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+            movimentoestoque.TIPOMOVIMENTO='04' and
+            movimentoestoque.emissao between '01.10.2023' and '31.10.2023')

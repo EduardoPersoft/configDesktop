@@ -1,0 +1,9 @@
+update
+    movtotitulopag
+set
+    movtotitulopag.VALORTITULO = 5596.31,
+    movtotitulopag.VALOREMABERTO = 5596.31
+where 
+    filial=110 and
+    titulo='8872850' and
+    fatura<>'1'

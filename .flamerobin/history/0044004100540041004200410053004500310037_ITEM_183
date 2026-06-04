@@ -1,0 +1,15 @@
+select * from INVENTARIOESTOQUEDATA WHERE
+exists (
+    SELECT
+        *
+    FROM
+        MATERIALMOVIMENTOESTOQUE
+    inner JOIN
+        movimentoestoque on
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+    where 
+        materialmovimentoestoque.filial=inventarioestoquedata.filial AND
+        materialmovimentoestoque.LOCALARMAZENAMENTO=inventarioestoquedata.local AND
+        MOVIMENTOESTOQUE.EMISSAO=inventarioestoquedata.data and
+        materialmovimentoestoque.iditem=inventarioestoquedata.codigo)

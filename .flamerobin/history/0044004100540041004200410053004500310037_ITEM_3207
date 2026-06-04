@@ -1,0 +1,11 @@
+select
+    LOCAL.EAN,
+    COUNT(LOCAL.ID)
+from
+    LOCAL 
+GROUP BY
+LOCAL.EAN
+having
+    COUNT(LOCAL.ID)>1
+
+    

@@ -1,0 +1,11 @@
+select 
+    materialmovimentoestoque.iditem,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal),
+    sum(materialmovimentoestoque.valor*MATERIALMOVIMENTOESTOQUE.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+group by
+    MATERIALMOVIMENTOESTOQUE.iditem
+where
+    MATERIALMOVIMENTOESTOQUE.iditem='CAM1C00G'
+    

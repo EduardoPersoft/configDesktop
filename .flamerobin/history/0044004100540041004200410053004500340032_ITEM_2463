@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+where localote.lote = '80481/1/4'

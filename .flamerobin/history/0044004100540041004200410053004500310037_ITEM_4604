@@ -1,0 +1,5 @@
+update  
+    ORCAMENTO
+set
+    orcamento.INDPRES=0
+where orcamento.datacadastro>='01.01.2025'    

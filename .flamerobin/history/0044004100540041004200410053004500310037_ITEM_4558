@@ -1,0 +1,1 @@
+select * from TIPOMOVIMENTOESTOQUE order by id

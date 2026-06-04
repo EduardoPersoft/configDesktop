@@ -1,0 +1,3 @@
+alter table mercadoriasnota 
+alter descricao
+type domain D_TEXTO

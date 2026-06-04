@@ -1,0 +1,7 @@
+select 
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.IDMOVIMENTO,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    MATERIALMOVIMENTOESTOQUE.c_status
+from 
+    MATERIALMOVIMENTOESTOQUE

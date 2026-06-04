@@ -1,0 +1,25 @@
+/*
+update
+    VENDEDORESPED
+set
+    comissaorecebimento = (select vendedor.COMISSAORECEBIMENTO 
+                           from VENDEDOR
+                           where vendedor.cadastro=vendedoresped.cadastro),
+    comissaovenda = (select vendedor.COMISSAOvenda
+                           from VENDEDOR
+                           where vendedor.cadastro=vendedoresped.cadastro)
+*/
+select * from vendedoresped
+where
+    exists (
+        select
+            *
+        from
+            pedido
+        where 
+            pedido.filial=vendedoresped.filial and
+            pedido.idnota=vendedoresped.idnota and
+            pedido.datacadastro>='01.01.2023')
+order by
+    vendedoresped.idnota 
+                           

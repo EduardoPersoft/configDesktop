@@ -1,0 +1,12 @@
+update 
+    notacompra
+set
+    notacompra.valorcofins = (select sum(mercadoriasnotacompra.VLRCOFINS) from mercadoriasnotacompra
+                              where mercadoriasnotacompra.filial=notacompra.filial and
+                              mercadoriasnotacompra.idnota=notacompra.idnota),
+    notacompra.valorpis = (select sum(mercadoriasnotacompra.VLRPISPASEP) from mercadoriasnotacompra
+                              where mercadoriasnotacompra.filial=notacompra.filial and
+                              mercadoriasnotacompra.idnota=notacompra.idnota) 
+where
+    notacompra.filial=1 and 
+    notacompra.idnota>=5219 

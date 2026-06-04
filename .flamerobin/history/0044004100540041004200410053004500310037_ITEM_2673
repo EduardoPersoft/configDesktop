@@ -1,0 +1,22 @@
+select
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    extract(year from movimentoestoque.emissao) ano,
+    extract(month from movimentoestoque.emissao) mes,
+    MATERIALMOVIMENTOESTOQUE.quantidade
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    MATERIALMOVIMENTOESTOQUE.filial=12826 and
+    MATERIALMOVIMENTOESTOQUE.iditem<'6' and
+    movimentoestoque.TIPOMOVIMENTO not in ('01', '02', '05')
+order by    
+    MATERIALMOVIMENTOESTOQUE.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL

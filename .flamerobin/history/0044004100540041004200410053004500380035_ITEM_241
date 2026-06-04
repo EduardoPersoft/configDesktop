@@ -1,0 +1,15 @@
+select
+    composicaoitem.iditem,
+    produto.descricao,
+    composicaoite.idmaterial,
+    mp.descricao,
+    composicaoitem.quantidade
+from
+    COMPOSICAOITEM
+left join
+    itemestoque produto on
+        produto.codigo=composicaoitem.IDITEM
+left join
+    itemestoque mp on
+        mp.codigo=composicaoitem.idmaterial
+    

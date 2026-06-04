@@ -1,0 +1,8 @@
+update
+    ITEMESTOQUE
+SET
+    itemestoque.TRIBUTACAOICMS=2
+WHERE
+    not exists (
+    select * from c_classificacaofiscalst
+    where c_classificacaofiscalst.classifiscal=itemestoque.CLASSIFISCAL)

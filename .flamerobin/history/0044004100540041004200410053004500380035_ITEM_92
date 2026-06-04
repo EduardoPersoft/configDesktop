@@ -1,0 +1,12 @@
+update 
+    mercadoriasped
+set 
+    mercadoriasped.ptottribfed=(select first 1 IBPTIMPMEDIO.ALIQNAC from CLASSIFICACAOFISCAL
+                                inner join IBPTIMPMEDIO on IBPTIMPMEDIO.CODIGO=CLASSIFICACAOFISCAL.DESCRICAO 
+                                where CLASSIFICACAOFISCAL.CFISCAL=mercadoriasped.CLASSIFISCAL),
+    mercadoriasped.ptottribmun=(select first 1 IBPTIMPMEDIO.ALIQMUN from CLASSIFICACAOFISCAL
+                                inner join IBPTIMPMEDIO on IBPTIMPMEDIO.CODIGO=CLASSIFICACAOFISCAL.DESCRICAO 
+                                where CLASSIFICACAOFISCAL.CFISCAL=mercadoriasped.CLASSIFISCAL),
+    mercadoriasped.ptottribest=(select first 1 IBPTIMPMEDIO.ALIQEST from CLASSIFICACAOFISCAL
+                                inner join IBPTIMPMEDIO on IBPTIMPMEDIO.CODIGO=CLASSIFICACAOFISCAL.DESCRICAO 
+                                where CLASSIFICACAOFISCAL.CFISCAL=mercadoriasped.CLASSIFISCAL)

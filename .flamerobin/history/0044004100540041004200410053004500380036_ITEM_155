@@ -1,0 +1,8 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.c_tinta='M020100'
+where itemestoque.codigo in (
+'PL0020P001', 'PL0019F001', 'PL0024P001',
+'PL0025P001','PL0025P002','PL0022F001')
+ 

@@ -1,0 +1,15 @@
+select
+    cep.cidade,
+    cep.uf,
+    cep.CEP,
+    count(cep.id)
+from
+    CADASTROPARCEIROS
+inner join
+    cep on cep.cep=CADASTROPARCEIROS.cep
+group by
+    cep.cidade,
+    cep.uf,
+    cep.CEP
+having
+    count(cep.id)>1

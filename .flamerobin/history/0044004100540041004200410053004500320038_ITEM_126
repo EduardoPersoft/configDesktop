@@ -1,0 +1,4 @@
+select pedido.VLRFINALMERCADORIAS,
+       pedido.VLRTOTALMERCADORIAS,
+       pedido.vlrtotalnota from pedido where filial=1 
+and idnota=18444

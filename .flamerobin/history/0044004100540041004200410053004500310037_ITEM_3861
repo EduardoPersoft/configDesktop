@@ -1,0 +1,6 @@
+select
+filial,
+idnota,
+qrcodeentrega
+from NOTAFISCAL
+where qrcodeentrega is not null

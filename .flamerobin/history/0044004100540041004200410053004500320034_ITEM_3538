@@ -1,0 +1,6 @@
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000'
+where
+    coalesce(cod_ncm, '')='0000000'

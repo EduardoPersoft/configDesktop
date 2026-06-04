@@ -1,0 +1,2 @@
+select * from locallote
+where locallote.lote='116078/1/1'

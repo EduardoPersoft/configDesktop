@@ -1,0 +1,1 @@
+update titulorec set codretorno='02' where codretorno='01' and filial=5 and contacorrente=707

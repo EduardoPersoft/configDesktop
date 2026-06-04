@@ -1,0 +1,4 @@
+select * from itemcustodata
+where filial=1
+and codigo='000006'
+and datainventario='31.10.2025'

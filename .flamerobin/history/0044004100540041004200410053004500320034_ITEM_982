@@ -1,0 +1,15 @@
+select 
+    distinct
+    t1.TITULO,
+    t1.MENSAGEM,
+    t1.OBSERVACOES
+from 
+    titulorec t2
+inner JOIN
+    titulorec t1 on
+        t1.filial=t2.filial AND
+        t1.documento=t2.documento AND
+        t1.parceiro=t2.PARCEIRO
+where 
+    t2.filial=5 AND
+    t2.EMISSAO='26.12.2021'

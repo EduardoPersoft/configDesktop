@@ -1,0 +1,4 @@
+UPDATE
+    ITEMESTOQUE
+SET 
+    referencia=c_mrfornecedor

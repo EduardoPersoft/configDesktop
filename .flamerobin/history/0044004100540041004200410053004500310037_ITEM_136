@@ -1,0 +1,4 @@
+select filial,idnota,idmercadoria,cstipi from mercadoriasnotacompra where filial=1 and cstpis=49 and EXISTS
+(select * from notacompra where filial=1
+and notacompra.DATAEMISSAO>='01.06.2021' 
+and notacompra.NRNOTAFORNECEDOR in ('000072089', '000072355', '000072356', '000073448', '000073768'))

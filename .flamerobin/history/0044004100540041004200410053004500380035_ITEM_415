@@ -1,0 +1,18 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    localarmazenamento = 2
+where
+    materialmovimentoestoque.filial=7 and
+    materialmovimentoestoque.iditem like 'INT%' and
+    materialmovimentoestoque.idmovimento>=986 and
+    exists (
+        select
+            *
+        from
+            MOVIMENTOESTOQUE
+        where 
+            movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+            movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+            movimentoestoque.TIPOMOVIMENTO in ('09', '04'))
+order by idmovimento

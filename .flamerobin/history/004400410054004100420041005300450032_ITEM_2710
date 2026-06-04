@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    mercadoriaspedcompra 
+where 
+    mercadoriaspedcompra.MINIMOBAIXA>mercadoriaspedcompra.QUANTIDADE

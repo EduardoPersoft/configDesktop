@@ -1,0 +1,23 @@
+select 
+    movimentoestoque.filial,
+    movimentoestoque.emissao,
+    materialmovimentoestoque.iditem,
+    sum(materialmovimentoestoque.quantidade),
+    sum(materialmovimentoestoque.valor)
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+    movimentoestoque.filial=? and
+    movimentoestoque.emissao between ? and ? and
+    ( movimentoestoque.TIPOMOVIMENTO = '08' or
+      (movimentoestoque.tipomovimento = '17' and 
+      (materialmovimentoestoque.quantidade*materialmovimentoestoque.sina)>0))
+group by
+    movimentoestoque.filial,
+    movimentoestoque.emissao,
+    MATERIALMOVIMENTOESTOQUE.iditem    
+

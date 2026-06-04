@@ -1,0 +1,5 @@
+update
+    CADASTROPARCEIROS
+SET
+    CADASTROPARCEIROS.STATUS=1
+where status is null

@@ -1,0 +1,11 @@
+update 
+    titulorec 
+set 
+    contacorrente=9999,
+    tipotransacao=9, 
+    numbolbanco=null, 
+    codigobarra=null,
+    linhadigitavel=null 
+where 
+    codretorno is null and 
+    emissao='29.06.2021'

@@ -1,0 +1,2 @@
+select * from ORCAMENTO
+where idnota in (10610, 10611)

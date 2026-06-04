@@ -1,0 +1,1 @@
+select * from C_CORES where CODIGO='AS0441002'

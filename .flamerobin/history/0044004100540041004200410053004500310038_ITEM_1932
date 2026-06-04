@@ -1,0 +1,2 @@
+select * from MERCADORIASPEDCOMPRA
+order by idnota desc

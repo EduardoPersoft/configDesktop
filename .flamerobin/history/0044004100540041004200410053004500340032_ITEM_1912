@@ -1,0 +1,20 @@
+select 
+    materialmovimentoestoque.iditem,
+    movimentoestoque.tipomovimento,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    sum(materialmovimentoestoque.quantidade*
+        materialmovimentoestoque.SINAl)
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner join 
+    MOVIMENTOESTOQUE on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.TIPOMOVIMENTO in ('17') and
+    movimentoestoque.emissao = '31.01.2024' and
+    MATERIALMOVIMENTOESTOQUE.iditem like 'MP%'
+group by    
+    materialmovimentoestoque.iditem,
+        movimentoestoque.tipomovimento,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO

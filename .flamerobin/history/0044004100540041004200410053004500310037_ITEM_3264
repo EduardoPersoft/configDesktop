@@ -1,0 +1,8 @@
+select 
+    sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.filial=1 and 
+    materialmovimentoestoque.iditem='1369324' and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=296

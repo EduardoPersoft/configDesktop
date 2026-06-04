@@ -1,0 +1,17 @@
+select
+    * 
+from 
+    itemestoque
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO = 5 and
+    (itemestoque.C_MATERIAPRIMABASE like 'MPP04%' OR
+    exists (select 
+                    * 
+                from 
+                    C_LAMINACAO
+                where 
+                    C_LAMINACAO.CODIGO=itemestoque.codigo and
+                    (c_laminacao.FILME like 'MPP04%' or
+                    C_LAMINACAO.FILME2 like 'MPP04%')))
+    

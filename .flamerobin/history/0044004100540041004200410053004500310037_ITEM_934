@@ -1,0 +1,17 @@
+select  
+    * 
+from 
+    notafiscal
+where 
+    filial=12826 and 
+    notafiscal.DATAEMISSAO between '01.08.2021' and '31.08.2021' AND
+    notafiscal.valorpis=0 AND
+    exists (
+        select 
+            *
+        FROM
+            MERCADORIASNOTA
+        where 
+            mercadoriasnota.filial=notafiscal.filial AND
+            mercadoriasnota.idnota=notafiscal.idnota AND
+            mercadoriasnota.vlrpis>0)

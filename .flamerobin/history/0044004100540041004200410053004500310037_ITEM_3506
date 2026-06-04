@@ -1,0 +1,11 @@
+select 
+    mercadoriasnota.SISTEMACALCULAII, -- ['importacao', "ii", "calcula"]
+    mercadoriasnota.BASEII,-- ['importacao',"ii", "base"]
+    mercadoriasnota.pii, -- ['importacao',"ii",  "aliquota"]
+    mercadoriasnota.VLRIMPOSTOIMPORT, -- ['importacao',"ii","valor"]
+    mercadoriasnota.SISTEMACALCULADESPESAADUANEIRA, -- ['importacao', "aduaneiras", "calcula"]
+    mercadoriasnota.VLRDESPADUANEIRAS,  -- ['importacao', "aduaneiras", "valor"]
+    mercadoriasnota.SISTEMACALCULASISCOMEX, -- ['importacao', "siscomex", "calcula"]
+    mercadoriasnota.VLRTAXASISCOMEX -- ['importacao', "siscomex", "valor"]
+from 
+    mercadoriasnota

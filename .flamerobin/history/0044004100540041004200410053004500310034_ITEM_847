@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    C_LAMINACAO 
+where 
+    substring(C_LAMINACAO.codigo from 1 for 1)=''

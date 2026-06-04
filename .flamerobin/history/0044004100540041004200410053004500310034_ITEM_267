@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    datacadastro,
+    dataemissao,
+    datareferencia
+from 
+    PEDIDO
+where
+    pedido.DATACADASTRO<'01.11.2022' and
+    pedido.DATAEMISSAO >='01.11.2022'

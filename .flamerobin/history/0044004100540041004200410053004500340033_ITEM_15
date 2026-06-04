@@ -1,0 +1,7 @@
+update 
+    c_laminacao
+set 
+    c_filmesalvo = null,
+    c_filme2salvo = null,
+    c_gramaturaFilmes = null,
+    c_gramatura2Filmes = null

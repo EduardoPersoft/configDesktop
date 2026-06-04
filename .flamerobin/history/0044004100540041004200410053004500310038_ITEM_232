@@ -1,0 +1,7 @@
+select 
+    *
+from
+    servicosNOTA
+where
+    servicosNota.filialped=1 and
+    servicosnota.idpedido=65275

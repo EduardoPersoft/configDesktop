@@ -1,0 +1,17 @@
+select
+    (select first 1
+        materiallocal.filial
+     from
+        materiallocal.iditem=itemestoque.codigo
+     group by
+        materiallocal.filial
+     order by
+        sum(materiallocal.saldototal)),
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao
+from
+    itemestoque
+order by
+    itemestoque.codigo

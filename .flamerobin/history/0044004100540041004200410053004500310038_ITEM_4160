@@ -1,0 +1,2 @@
+select * FROM MATERIALLOCAL
+where IDITEM='PE-25531'

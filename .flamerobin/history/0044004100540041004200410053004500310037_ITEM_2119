@@ -1,0 +1,4 @@
+update ITEMESTOQUE
+set filialpadrao=12826
+where codigo like '6%' 
+and itemestoque.FILIALPADRAO=1

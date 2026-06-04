@@ -1,0 +1,1 @@
+update c_listacusto  set custo=custo*1000 where custo<100

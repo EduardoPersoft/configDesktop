@@ -1,0 +1,7 @@
+select 
+    municipio,
+    count(uf)
+from
+    MUNICIPIO
+group by municipio
+having count(uf)>1

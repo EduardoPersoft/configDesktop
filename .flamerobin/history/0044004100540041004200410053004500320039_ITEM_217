@@ -1,0 +1,3 @@
+select filial,idnota,numeronota,simples,notafiscal.uuid from NOTAFISCAL
+where notafiscal.DATAcadastro>'01.02.2025' 
+order by NOTAFISCAL.uuid

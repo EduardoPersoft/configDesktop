@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    C_cores
+where 
+    substring(C_cores.codigo from 1 for 1)=''

@@ -1,0 +1,7 @@
+update
+    PEDIDO
+set 
+    pedido.NUMERONOTA=pedido.IDNOTA
+where
+    pedido.DATAEMISSAO is not null and
+    pedido.numeronota is null

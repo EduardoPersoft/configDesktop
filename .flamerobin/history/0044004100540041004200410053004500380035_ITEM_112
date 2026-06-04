@@ -1,0 +1,71 @@
+select 
+    LANTOCONTPAG.Centrocusto,
+    CENTROCUSTOs.descricao descricaocentro,
+    lantocontPag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO descricaoconta,
+    extract(month from titulopag.vencimento) ano,
+    extract(month from titulopag.vencimento) mes,
+    sum(lantocontpag.VALOR) valor
+       
+from 
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=TITULOPAG.FILIAL
+inner join
+    CONTASCONTABEIS on 
+        CONTASCONTABEIS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        lantocontpag.CONTACONTABIL like contascontabeis.CONTACONTABIL||'%'  and
+        CONTASCONTABEIS.C_MOSTRARFLUXOCAIXA='S'
+left join
+    CENTROCUSTOS on 
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCENTROCUSTOS and
+        CENTROCUSTOS.CENTROCUSTO=lantocontpag.CENTROCUSTO
+select 
+    LANTOCONTPAG.Centrocusto,
+    CENTROCUSTOs.descricao descricaocentro,
+    lantocontPag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO descricaoconta,
+    extract(month from titulopag.vencimento) ano,
+    extract(month from titulopag.vencimento) mes,
+    sum(lantocontpag.VALOR) valor
+       
+from 
+    TITULOPAG
+inner join
+    lantocontpag on
+        lantocontpag.filial=titulopag.filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.IDTITULO
+inner join
+    estabelecimento on
+        estabelecimento.cadastro=TITULOPAG.FILIAL
+inner join
+    CONTASCONTABEIS on 
+        CONTASCONTABEIS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS and
+        lantocontpag.CONTACONTABIL like contascontabeis.CONTACONTABIL||'%'  and
+        CONTASCONTABEIS.C_MOSTRARFLUXOCAIXA='S'
+left join
+    CENTROCUSTOS on 
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCENTROCUSTOS and
+        CENTROCUSTOS.CENTROCUSTO=lantocontpag.CENTROCUSTO
+where 
+    titulopag.filial=7 and 
+    titulopag.vencimento between '2026-01-01' and '2026-12-31'
+group by        
+    lantocontpag.CENTROCUSTO,
+    CENTROCUSTOs.descricao,
+    lantocontpag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    extract(month from titulopag.vencimento),
+    extract(month from titulopag.vencimento)    
+order by
+    lantocontpag.CENTROCUSTO,
+    CENTROCUSTOs.descricao,
+    lantocontpag.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    extract(month from titulopag.vencimento),
+    extract(month from titulopag.vencimento)

@@ -1,0 +1,33 @@
+select
+    TIPOMOVIMENTOESTOQUE.descricao,
+    movimentoestoque.emissao,
+    movimentoestoque.documento,
+    materialmovimentoestoque.iditem,
+    itemestoque.DESCRICAO,
+    MATERIALMOVIMENTOESTOQUE.quantidade,
+    itemestoque.unidade,
+    materialmovimentoestoque.valor,
+    materialmovimentoestoque.valor/
+    materialmovimentoestoque.quantidade
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+    tipomovimentoestoque on
+        TIPOMOVIMENTOESTOQUE.ID=movimentoestoque.TIPOMOVIMENTO
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.EMISSAO between '01.10.2023' and '31.10.2023' and
+    movimentoestoque.TIPOMOVIMENTO not in ('12', '13') and 
+    upper(itemestoque.descricao) like '%PLACA%'
+order by
+    
+    materialmovimentoestoque.iditem,
+    movimentoestoque.emissao
+    

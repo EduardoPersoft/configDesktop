@@ -1,0 +1,16 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    fornecedoresitem.CODIGOFORNEC,
+    itemestoquexarquivo.NOMEARQUIVO
+from 
+    FORNECEDORESITEM
+inner join
+    itemestoque on
+        itemestoque.codigo=FORNECEDORESITEM.iditem
+inner join
+    itemestoquexarquivo.CODIGO=itemestoque.codigo and
+    itemestoquexarquivo.ORDEM =0
+where
+    fornecedoresitem.FORNECEDOR = 1596

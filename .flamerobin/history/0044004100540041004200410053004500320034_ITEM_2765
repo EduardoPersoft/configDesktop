@@ -1,0 +1,11 @@
+select 
+    titulorec.titulo,
+    titulorec.fatura,
+    count(titulorec.IDTITULO)
+from 
+    TITULOREC
+group by
+    titulorec.titulo,
+    titulorec.fatura
+having    
+    count(titulorec.IDTITULO)>1

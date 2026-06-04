@@ -1,0 +1,7 @@
+select
+    *
+from
+    MERCADORIASORC
+where
+    filial=5 and
+    mercadoriasped.codigo='105866'

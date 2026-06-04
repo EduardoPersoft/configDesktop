@@ -1,0 +1,6 @@
+update 
+    TItulorec
+set 
+    titulorec.CODPROTESTO=1
+where 
+titulorec.CODPROTESTO is null

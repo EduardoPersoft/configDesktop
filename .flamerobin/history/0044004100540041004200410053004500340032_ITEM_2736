@@ -1,0 +1,2 @@
+select filial,idnota,filialped,idpedido,idmercped,qtdbaixa,quantidade from MERCADORIASNOTA
+where filial=110 and idnota=3855

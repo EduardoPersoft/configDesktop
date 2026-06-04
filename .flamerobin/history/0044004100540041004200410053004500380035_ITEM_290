@@ -1,0 +1,2 @@
+select * MOVIMENTOESTOQUE
+order by idmovimento desc

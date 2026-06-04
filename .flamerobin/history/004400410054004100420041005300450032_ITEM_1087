@@ -1,0 +1,14 @@
+select 
+    codigo,
+    CLASSIFICACAOFISCAL.DESCRICAO,
+    quantidade,
+    precolista,
+    mercadoriasorc.VLRICMSRECOLHIDO 
+from 
+    MERCADORIASORC
+left JOIN
+    CLASSIFICACAOFISCAL on 
+        CLASSIFICACAOFISCAL.CFISCAL=mercadoriasorc.CLASSIFISCAL
+where 
+    filial=5 and 
+    idnota=198695

@@ -1,0 +1,10 @@
+select 
+    cfiscal,
+    descricao,
+    c_tributacaoicms
+from 
+    CLASSIFICACAOFISCAL
+WHERE 
+    CLASSIFICACAOFISCAL.DESCRICAO='74152900'
+order by
+    descricao

@@ -1,0 +1,117 @@
+select 
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.idpedido,
+    pedido.datacadastro,
+    movimentoestoque.emissao,
+    movimentoestoque.documento,    
+    cadcli.cadastro,
+    cadcli.nome,
+    materialmovimentoestoque.produto,
+    materialmovimentoestoque.quantidade,    
+    produto.descricao descricaoproduto,
+    produto.unidade as produtounidade,
+    processo.unidade as processounidade,
+    mercadoriasped.quantidade pedidoquantidade,
+    mercadoriasped.unidade,
+    produto.C_LARGURAMATERIAPRIMA,
+    materialmovimentoestoque.CENTROCUSTO,
+    centrocustos.descricao descricaoCentrocusto,
+    COMPOSICAOOP.IDCOMPOSICAO,
+    composicaoop.codigo componente,
+    componente.descricao componentedescricao,
+    componente.unidade componenteunidade,
+    composicaoop.especificacao epsecificacaocom,
+    composicaoop.quantidade componentequantidade,
+    C_ACABAMENTO.DESCRICAO,
+    C_ITEMESTOQUEXACABAMENTO.OBSERVACAO ,
+
+            PRODUTO.CODIGO, 
+        PRODUTO.c_pouche,
+        PRODUTO.c_tipopouche,
+        PRODUTO.c_fornecedorpouche,
+        PRODUTO.c_alturapouche,
+        PRODUTO.c_largurapouche,
+        PRODUTO.c_ziperes,
+        PRODUTO.c_sanfonalateral,
+        PRODUTO.c_sanfonafundo,
+        PRODUTO.c_paineisfv,
+        PRODUTO.c_solda,
+        PRODUTO.c_soldalateralrefile,
+        PRODUTO.c_tipoembalagem,
+        PRODUTO.C_OBSERVACAOPOUCH ,
+        PRODUTO.C_OBSERVACAOVERNIZ,
+        C_ITEMESTOQUEXACABAMENTO.OBSERVACAO as ACABAMENTOOBS,
+        C_ITEMESTOQUEXACABAMENTO.ACABAMENTO,
+        C_ACABAMENTO.DESCRICAO AS ACABAMENTODESC,
+        PRODUTO.C_SETUPPOUCHE,
+        PRODUTO.C_VELOCIDADEPOUCHE,
+        PRODUTO.C_PESOPOREMBALAGEM * 1000 AS KGPORMILHEIRO,
+        CAST ( 'Perda no Pouche: 300 metros + 3%' as varchar (50))   as perdaPOUCH,
+  CAST( ((composicaoop.quantidade * 1000) / (composicaoop.gramatura)) / (produto.c_larguramateriaprima/1000) AS DECIMAL(10,2)) AS METROS         
+
+
+
+from 
+    materialmovimentoestoque 
+
+INner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+
+inner join 
+        estabelecimento on 
+            estabelecimento.cadastro = materialmovimentoestoque.FILIAL
+    
+inner JOIN
+    centrocustos on
+        centrocustos.IDPLANO = estabelecimento.PLANOCENTROCUSTOS AND
+        centrocustos.centrocusto = materialmovimentoestoque.IDCENTROCUSTO
+        
+inner JOIN
+        itemestoque produto on
+            produto.codigo=materialmovimentoestoque.produto
+
+inner join
+        composicaoop on
+            composicaoop.filial=materialmovimentoestoque.filial AND
+            composicaoop.IDMOVIMENTO=materialmovimentoestoque.idmovimento AND
+            composicaoop.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+inner JOIN
+        itemestoque componente on 
+            componente.codigo=composicaoop.codigo
+inner join itemestoque processo on
+        processo.codigo=materialmovimentoestoque.IDITEM
+
+LEFT JOIN
+        C_ITEMESTOQUEXACABAMENTO ON
+            C_ITEMESTOQUEXACABAMENTO.CODIGO=PRODUTO.CODIGO
+LEFT JOIN
+    C_ACABAMENTO ON
+        C_aCABAMENTO.ACABAMENTO=C_ITEMESTOQUEXACABAMENTO.ACABAMENTO
+left join 
+        pedido on
+            pedido.filial=materialmovimentoestoque.filial AND
+            pedido.idnota=materialmovimentoestoque.idpedido
+left JOIN
+    mercadoriasped on
+        mercadoriasped.filial=MATERIALMOVIMENTOESTOQUE.filial AND
+        mercadoriasped.idnota=materialmovimentoestoque.idpedido and 
+        mercadoriasped.idmercadoria=materialmovimentoestoque.idmercadoria
+left JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.destinatario
+				
+where 
+    materialmovimentoestoque.filial=1 and 
+    materialmovimentoestoque.idmovimento = 6146 and
+    materialmovimentoestoque.centrocusto = '106' and
+    PRODUTO.C_POUCHE='S'
+order by 
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.idmovimentomaterial,
+    materialmovimentoestoque.IDCOMPOSICAO
+

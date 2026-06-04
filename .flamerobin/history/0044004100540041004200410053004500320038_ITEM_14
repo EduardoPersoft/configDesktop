@@ -1,0 +1,8 @@
+SELECT 
+    *
+FROM
+    MOVIMENTOESTOQUE
+where 
+    filial=1
+order by
+    IDMOVIMENTO desc

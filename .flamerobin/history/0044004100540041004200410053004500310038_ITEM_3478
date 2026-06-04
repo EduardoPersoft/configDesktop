@@ -1,0 +1,13 @@
+select 
+    ORCAMENTO.filial,
+    orcamento.idnota,
+    orcamento.datacadastro,
+    orcamento.C_MENSAGEM1,
+    orcamento.c_mensagem2,
+    orcamento.C_MENSAGEMSERVICO
+from
+    ORCAMENTO
+where
+        c_mensagem1 is not null
+order by
+    orcamento.datacadastro desc

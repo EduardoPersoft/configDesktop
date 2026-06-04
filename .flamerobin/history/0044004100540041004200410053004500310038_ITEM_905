@@ -1,0 +1,7 @@
+select 
+    * 
+from
+    MOVIMENTOESTOQUE
+where 
+    filial=1 and
+    idmvoimento=115027

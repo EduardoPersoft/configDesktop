@@ -1,0 +1,9 @@
+update
+    NOTAFISCAL
+set
+    notafiscal.destinatario=3231
+where
+    notafiscal.destinatario=4042 and
+    notafiscal.filial=5 and
+    notafiscal.DATAEMISSAO between '01.09.2022' and '01.09.2022'
+    

@@ -1,0 +1,16 @@
+SELECT
+    i1.codigo,
+    i1.TRIBUTACAOICMS,
+    i1.CLASSIFISCAL
+FROM
+    ITEMESTOQUE i1
+where 
+    i1.TRIBUTACAOICMS = 1
+    and EXISTS
+    (select 
+        *
+    from 
+        itemestoque i2
+     where
+        i1.CLASSIFISCAL=i2.classifiscal 
+        and i2.TRIBUTACAOICMS=2)

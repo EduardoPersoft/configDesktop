@@ -1,0 +1,7 @@
+update
+    MERCADORIASNOTA
+set
+    mercadoriasnota.FILIALPED=110
+where
+    mercadoriasnota.filial=110 and
+    mercadoriasnota.idnota=1316

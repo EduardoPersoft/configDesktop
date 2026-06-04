@@ -1,0 +1,13 @@
+select lantocontpag.*
+from LANTOCONTPAG
+where filial>=110 and
+lantocontpag.CONTACONTABIL in (
+'11209',
+'112',
+'11201',
+'11203',
+'11204',
+'11205',
+'11207',
+'125',
+'11211')

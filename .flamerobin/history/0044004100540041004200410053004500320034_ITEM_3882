@@ -1,0 +1,63 @@
+SELECT
+    mercadoriasnota.idpedido,
+    mercadoriasnota.idnota,
+    mercadoriasnota.IDMERCPEDIDO,
+    notafiscal.DATAEMISSAO,
+    cadcli.documento documento,
+    cadcli.nome nomeClientes,
+    cadcli.RAZAOSOCIAL razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome nomeVendedor,
+    cadate.nome nomeAtendente,
+    mercadoriasnota.codigo,
+    mercadoriasnota.DESREDUZIDA,  
+    (mercadoriasnota.VLRFINALMERCAD-
+    ((case NATUREZAOPERACAO.ESTOQUE when 'S' then mercadoriasnota.CUSTO*mercadoriasnota.quantidade else 0 end)+
+     mercadoriasnota.VLRPISPASEP+
+     mercadoriasnota.VLRCOFINS+    
+     mercadoriasnota.VALORICMS+
+     mercadoriasnota.VLRFINALMERCAD*mercadoriasnota.COMISSAO/100)) as valormargem ,
+  
+    (mercadoriasnota.VLRFINALMERCAD-
+    ((case NATUREZAOPERACAO.ESTOQUE when 'S' then mercadoriasnota.CUSTO*mercadoriasnota.quantidade else 0 end)+
+     (mercadoriasnota.VLRPISPASEP)+
+     (mercadoriasnota.VLRCOFINS)+    
+     (mercadoriasnota.VALORICMS)+
+     (mercadoriasnota.VLRFINALMERCAD*mercadoriasnota.COMISSAO/100)))/(mercadoriasnota.VLRFINALMERCAD)*100 as magem, 
+      mercadoriasnota.quantidade,
+     (mercadoriasnota.VLRPISPASEP),
+     (mercadoriasnota.VLRCOFINS),    
+     (mercadoriasnota.VALORICMS),
+     mercadoriasnota.CUSTO,
+
+    (case NATUREZAOPERACAO.ESTOQUE when 'S' then mercadoriasnota.CUSTO*mercadoriasnota.quantidade else 0 end) custototal,
+    mercadoriasnota.vlrFinalMercad valorVendas 
+    
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+inner join        
+    NATUREZAOPERACAO on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= 5 and
+    mercadoriasnota.idpedido = 650 and
+    notafiscal.vlrtotalNota >0
+

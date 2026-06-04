@@ -1,0 +1,20 @@
+select
+    titulorec.filial,
+    titulorec.idtitulo,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.TIPOBAIXA,
+    titulorec.DATAPAGAMENTO,
+    titulorec.baixa,
+    titulorec.VALORTITULO,
+    titulorec.totalpago,
+    titulorec.TOTALjuros,
+    titulorec.totalDESCONTO,
+    TITULOREC.VALOREMABERTO
+from
+    TITULOREC
+WHERE 
+    titulosrec.baixa='20.08.2025' and
+    titulosrec.contacorrente=1 and
+    titulsorec.tipobaixa='P' and
+    titulosrec.codigoretorno='06'

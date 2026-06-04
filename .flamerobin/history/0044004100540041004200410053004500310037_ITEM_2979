@@ -1,0 +1,6 @@
+select 
+    filial,
+    idnota,
+    hotaalteracao
+from 
+    orcamento

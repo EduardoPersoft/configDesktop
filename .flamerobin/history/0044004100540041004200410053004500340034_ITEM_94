@@ -1,0 +1,14 @@
+SET TERM ^;
+
+CREATE TRIGGER C_FATORES_BI FOR C_FATORES
+ACTIVE BEFORE INSERT POSITION 0
+AS
+BEGIN
+    if(new.IDFATOR is null) then
+        select max(C_FATORES.IDFATOR)+1
+        from c_Fatores    
+        into :new.idfator;
+    /* enter trigger code here */ 
+END^
+
+SET TERM ;^

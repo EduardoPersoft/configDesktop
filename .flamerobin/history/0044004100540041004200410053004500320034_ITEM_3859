@@ -1,0 +1,5 @@
+select * from NOTAFISCAL
+where notafiscal.MODELO=16 
+and notafiscal.filial=5 
+and notafiscal.DATAEMISSAO between '01.09.2022' and '30.09.2022' 
+and notafiscal.calculada='S'

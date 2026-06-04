@@ -1,0 +1,18 @@
+select
+    mercadoriasped.idmercadoria,
+    itemestoquexarquivo.ordem,
+    itemestoquexarquivo.codigo,
+    itemestoque.descricao,
+    ITEMESTOQUEXARQUIVO.NOMEARQUIVO
+from
+    MERCADORIASPED
+inner join
+    itemestoquexarquivo on
+        itemestoquexarquivo.codigo=mercadoriasped.codigo
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasped.codigo
+where
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=1 and
+    itemestoquexarquivo.PEDIDOCOMERCIAL='S'

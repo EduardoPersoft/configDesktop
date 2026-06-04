@@ -1,0 +1,219 @@
+SET TERM ^ ;
+ALTER PROCEDURE LANCAMENTOMOVIMENTOESTOQUE (
+    PFILIAL INTEGER,
+    PMATERIALINICIAL VARCHAR(15),
+    PMATERIALFINAL VARCHAR(15),
+    PDATAINICIAL TIMESTAMP,
+    PDATAFINAL TIMESTAMP,
+    PLOTEINICIAL VARCHAR(15),
+    PLOTEFINAL VARCHAR(15),
+    PLOCALINICIAL INTEGER,
+    PLOCALFINAL INTEGER,
+    PMATERIALPRIMA CHAR(1),
+    PREVENDA CHAR(1),
+    PCONSUMO CHAR(1),
+    PINDUSTRIALIZADO CHAR(1),
+    PINATIVO CHAR(1) )
+RETURNS (
+    FILIAL INTEGER,
+    CODIGO VARCHAR(15),
+    IDMOVIMENTO INTEGER,
+    SIGLAMOVIMENTO CHAR(3),
+    EMISSAO TIMESTAMP,
+    DOCUMENTO VARCHAR(10),
+    ENTRADASAIDA CHAR(1),
+    IDMOVIMENTOMATERIAL INTEGER,
+    IDNOTA INTEGER,
+    IDNOTACOMPRA INTEGER,
+    IDMERCADORIA INTEGER,
+    LOTE VARCHAR(15),
+    LOCALARMAZENAMENTO INTEGER,
+    SINAL INTEGER,
+    QUANTIDADESALDOINICIAL DOUBLE PRECISION,
+    UNITARIOSALDOINICIAL DOUBLE PRECISION,
+    CUSTOSALDOINICIAL DOUBLE PRECISION,
+    QUANTIDADE DOUBLE PRECISION,
+    UNITARIO DOUBLE PRECISION,
+    CUSTO DOUBLE PRECISION,
+    QUANTIDADEENTRADA DOUBLE PRECISION,
+    UNITARIOENTRADA DOUBLE PRECISION,
+    CUSTOENTRADA DOUBLE PRECISION,
+    QUANTIDADESAIDA DOUBLE PRECISION,
+    UNITARIOSAIDA DOUBLE PRECISION,
+    CUSTOSAIDA DOUBLE PRECISION )
+
+AS
+begin
+
+    filial=pfilial;
+    idmovimento = 0;
+    DOCUMENTO = 'SALDO';
+    SIGLAMOVIMENTO = '';
+    ENTRADASAIDA = '';
+    IDMOVIMENTOMATERIAL=0;
+    LOCALARMAZENAMENTO=0;
+    LOTE='';
+    Quantidade =0;
+    Unitario =0;
+    Custo =0;
+    Quantidadeentrada =0;
+    Unitarioentrada =0;
+    Custoentrada =0;
+    Quantidadesaida =0;
+    Unitariosaida =0;
+    Custosaida =0;
+    SINAL = 1;
+    EMISSAO = Pdatainicial;
+    IDNOTA = -1;
+    IDMERCADORIA = -1;
+    
+
+
+
+
+    FOR SELECT MATERIALMOVIMENTOESTOQUE.iditem,
+               sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal),
+               sum(MATERIALMOVIMENTOESTOQUE.valor*materialmovimentoestoque.sinal),
+               MATERIALMOVIMENTOESTOQUE.LOTE,
+               materialmovimentoestoque.localarmazenamento
+     FROM MOVIMENTOESTOQUE
+     INNER JOIN MATERIALMOVIMENTOESTOQUE ON (MATERIALMOVIMENTOESTOQUE.filial = MOVIMENTOESTOQUE.FILIAL
+            AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO = MOVIMENTOESTOQUE.IDMOVIMENTO)
+     INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MATERIALMOVIMENTOESTOQUE.IDITEM)
+     WHERE MOVIMENTOESTOQUE.filial = :pfilial
+     AND MOVIMENTOESTOQUE.emissao < :pdatainicial
+     AND MATERIALMOVIMENTOESTOQUE.iditem BETWEEN :pmaterialinicial AND :pmaterialfinal
+     AND MATERIALMOVIMENTOESTOQUE.lote BETWEEN :ploteinicial AND :plotefinal
+     AND MATERIALMOVIMENTOESTOQUE.Localarmazenamento BETWEEN :Plocalinicial AND :PLOCALFINAL
+     AND ITEMESTOQUE.estocado = 'S'
+     AND ( (ITEMESTOQUE.Tipoproduto='1' AND :Pmaterialprima='S') OR
+           (ITEMESTOQUE.Tipoproduto='3' AND :PREVENDA='S') OR
+           (ITEMESTOQUE.Tipoproduto='2' AND :PCONSUMO='S') OR
+           (ITEMESTOQUE.Tipoproduto='4' AND :PINDUSTRIALIZADO='S') OR
+           (ITEMESTOQUE.Tipoproduto='5' AND :PINATIVO='S'))
+     group by MATERIALMOVIMENTOESTOQUE.iditem,
+               MATERIALMOVIMENTOESTOQUE.LOTE,
+               materialmovimentoestoque.localarmazenamento
+     HAVING sum(MATERIALMOVIMENTOESTOQUE.quantidade*materialmovimentoestoque.sinal)<>0
+     or sum(MATERIALMOVIMENTOESTOQUE.VALOR*materialmovimentoestoque.sinal)<>0
+     PLAN JOIN (MOVIMENTOESTOQUE INDEX (MOVIMENTOESTOQUE_DATA),
+                MATERIALMOVIMENTOESTOQUE INDEX (FK_MATERIALMOVIMENTOESTOQUE_1),
+                ITEMESTOQUE INDEX (RDB$PRIMARY21))
+     into    :codigo,
+             :QuantidadesaldoInicial,
+             :CustosaldoInicial DO begin
+
+        if(coalesce(QuantidadeSaldoInicial,0)<>0) then
+            UnitariosaldoInicial = custosaldoinicial / quantidadesaldoinicial;
+        elseON PROCEDURE 
+            unitariosaldoinicial = 0;
+        suspend;
+    end
+
+    QuantidadesaldoInicial = 0;
+    CustosaldoInicial = 0;
+    unitariosaldoinicial = 0;
+    localarmazenamento = 0;
+    lote = '';
+
+    FOR SELECT MOVIMENTOESTOQUE.filial,
+           MOVIMENTOESTOQUE.idmovimento,
+           MOVIMENTOESTOQUE.documento,
+           TIPOMOVIMENTOESTOQUE.sigla,
+           TIPOMOVIMENTOESTOQUE.tipomovimento,
+           MOVIMENTOESTOQUE.EMISSAO,
+           movimentoestoque.IDNOTA,
+           MOVIMENTOESTOQUE.IDNOTACOMPRA
+    FROM MOVIMENTOESTOQUE
+    INNER JOIN TIPOMOVIMENTOESTOQUE ON (TIPOMOVIMENTOESTOQUE.id = MOVIMENTOESTOQUE.tipomovimento)
+    WHERE MOVIMENTOESTOQUE.filial = :pfilial
+    AND MOVIMENTOESTOQUE.emissao BETWEEN :pdatainicial AND :pdatafinal
+    
+    INTO :filial,
+         :idmovimento,
+         :documento,
+         :siglamovimento,
+         :entradasaida,
+         :EMISSAO,
+         :idnota,
+         :idnotacompra DO BEGIN
+         
+        FOR SELECT MATERIALMOVIMENTOESTOQUE.idmovimentomaterial,
+                   MATERIALMOVIMENTOESTOQUE.IDMERCADORIA, 
+                   MATERIALMOVIMENTOESTOQUE.iditem,
+                   MATERIALMOVIMENTOESTOQUE.lote,
+                   MATERIALMOVIMENTOESTOQUE.localarmazenamento,
+                   MATERIALMOVIMENTOESTOQUE.sinal,
+                   MATERIALMOVIMENTOESTOQUE.quantidade,
+                   MATERIALMOVIMENTOESTOQUE.valor,
+                   CASE COALESCE(MATERIALMOVIMENTOESTOQUE.quantidade, 0) WHEN 0 THEN 0
+                    ELSE (MATERIALMOVIMENTOESTOQUE.valor / MATERIALMOVIMENTOESTOQUE.quantidade) END
+        FROM MATERIALMOVIMENTOESTOQUE
+        INNER JOIN ITEMESTOQUE ON ( ITEMESTOQUE.CODIGO = MATERIALMOVIMENTOESTOQUE.IDITEM)
+        WHERE MATERIALMOVIMENTOESTOQUE.filial = :pfilial
+        AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=:IDMOVIMENTO
+        AND MATERIALMOVIMENTOESTOQUE.iditem BETWEEN :pmaterialinicial AND :pmaterialfinal
+        AND MATERIALMOVIMENTOESTOQUE.lote BETWEEN :ploteinicial AND :plotefinal
+        AND MATERIALMOVIMENTOESTOQUE.Localarmazenamento BETWEEN :Plocalinicial AND :PLOCALFINAL
+        AND (MATERIALMOVIMENTOESTOQUE.SINAL=1 or MATERIALMOVIMENTOESTOQUE.SINAL=-1)
+        AND ITEMESTOQUE.estocado = 'S'
+        AND ( (ITEMESTOQUE.Tipoproduto='1' AND :Pmaterialprima='S') OR
+           (ITEMESTOQUE.Tipoproduto='3' AND :PREVENDA='S') OR
+           (ITEMESTOQUE.Tipoproduto='2' AND :PCONSUMO='S') OR
+           (ITEMESTOQUE.Tipoproduto='4' AND :PINDUSTRIALIZADO='S') OR
+           (ITEMESTOQUE.Tipoproduto='5' AND :PINATIVO='S'))
+        plan join (materialmovimentoestoque index (RDB$PRIMARY199),
+                   ITEMESTOQUE INDEX (RDB$PRIMARY21))
+        INTO :idmovimentomaterial,
+             :IDMERCADORIA,
+             :codigo,
+             :lote,
+             :localarmazenamento,
+             :sinal,
+             :quantidade,
+             :Custo,
+             :Unitario DO BEGIN
+
+               quantidadesaida = 0;
+               unitariosaida = 0;
+               custosaida = 0;
+               quantidadeentrada = 0;
+               unitarioentrada = 0;
+               custoentrada = 0;
+
+
+                quantidade = quantidade * sinal;
+                custo = custo * sinal;
+
+                if (:entradasaida = 'E') then BEGIN
+                    quantidadeentrada = quantidade;
+                    unitarioentrada = unitario ;
+                    custoentrada = custo ;
+                    quantidadesaida = 0;
+                    unitariosaida = 0;
+                    custosaida = 0;
+                END
+
+                if (:entradasaida = 'S') then BEGIN
+                    quantidadesaida = quantidade;
+                    unitariosaida = unitario;
+                    custosaida = custo;
+                    quantidadeentrada = 0;
+                    unitarioentrada = 0;
+                    custoentrada = 0;
+                END
+
+                suspend;
+
+        END
+
+     END
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE LANCAMENTOMOVIMENTOESTOQUE TO  SYSDBA;
+

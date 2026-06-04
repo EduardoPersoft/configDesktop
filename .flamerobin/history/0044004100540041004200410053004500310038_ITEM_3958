@@ -1,0 +1,2 @@
+select * from mercadoriasnota
+order by idnota desc 

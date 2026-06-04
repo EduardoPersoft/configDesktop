@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    mercadoriasnota
+where 
+    filial=5 and
+    idpedido=557

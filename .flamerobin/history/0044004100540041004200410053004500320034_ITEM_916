@@ -1,0 +1,12 @@
+update 
+    MATERIALLOCAL
+set 
+    materiallocal.SALDOTOTAL = coalesce((select 
+                                    C_I_POSICAOESTOQUE.ESTOQUE
+                                FROM
+                                    C_I_POSICAOESTOQUE
+                                WHERE   
+                                    C_I_POSICAOESTOQUE.codigo=materiallocal.iditem),0)
+WHERE
+    materiallocal.filial=5 AND
+    materiallocal.IDLOCAL=1

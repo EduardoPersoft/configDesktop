@@ -1,0 +1,14 @@
+update 
+    LOCALLOTE
+set
+    quantidade = (select 
+                    sum(materialmovimentoestoque.quantidade*
+                        materialmovimentoestoque.sinal)
+                  from 
+                    MATERIALMOVIMENTOESTOQUE
+                  where
+                     materialmovimentoestoque.filial=110 and
+                     materialmovimentoestoque.idite=locallote.iditem and
+                     materialmovimentoestoque.LOCALARMAZENAMENTO=locallote."LOCAL" and
+                     MATERIALMOVIMENTOESTOQUE.lote=locallote.lote)
+ 

@@ -1,0 +1,67 @@
+ SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(materiallocal.saldototal) as saldototal,
+    materialfilial.consumoMedio,
+    (materialfilial.consumomedio/20) mediadias,
+    sum(materiallocal.saldototal)/(materialfilial.consumomedio/20) diasprazerar,
+    pedidocompra.idnota,
+    CADASTROPARCEIROS.nome,
+    cast(pedidocompra.datacadastro + (select
+                                    max(PRAZOMERCPEDCOMPRA.dias) 
+                                 from
+                                    PRAZOMERCPEDCOMPRA
+                                 where 
+                                    prazomercpedcompra.filial=pedidocompra.filial and
+                                    prazomercpedcompra.idnota=pedidocompra.idnota and
+                                    prazomercpedcompra.iditem=mercadoriaspedcompra.idmercadoria) as date) as entrega,
+    
+    cast(pedidocompra.datacadastro + (select
+                                    max(PRAZOMERCPEDCOMPRA.diasoriginal) 
+                                 from
+                                    PRAZOMERCPEDCOMPRA
+                                 where 
+                                    prazomercpedcompra.filial=pedidocompra.filial and
+                                    prazomercpedcompra.idnota=pedidocompra.idnota and
+                                    prazomercpedcompra.iditem=mercadoriaspedcompra.idmercadoria) as date) as entrega
+FROM
+    materialLocal    
+inner join 
+    local on    
+        local.id=materiallocal.idlocal
+inner JOIN
+    materialfilial on
+        materialfilial.filial=materiallocal.filial AND
+        materialfilial.iditem=materiallocal.iditem
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+left JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=materialfilial.filial AND
+        mercadoriaspedcompra.codigo=materialfilial.iditem AND
+        mercadoriaspedcompra.baixa='N'
+left JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+left JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=pedidocompra.destinatario
+        
+WHERE
+    materialfilial.filial=5 and
+    local.saldoDisponivel='S' and
+    materialfilial.consumomedio>0 and consumomedio<10000 and
+    itemestoque.itembase is null and 
+    materiallocal.saldototal/(materialfilial.consumomedio/20)  <= 15
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.filial,
+    materialfilial.consumomedio,
+    pedidocompra.idnota,
+    pedidocompra.datacadastro,
+    CADASTROPARCEIROS.nome
+order by 
+    materialfilial.consumomedio desc, 6, 1

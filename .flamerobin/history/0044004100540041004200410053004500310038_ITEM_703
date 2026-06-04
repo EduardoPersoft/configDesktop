@@ -1,0 +1,6 @@
+select
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.c_empenh=160

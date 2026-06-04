@@ -1,0 +1,8 @@
+update
+    movimentoestoque.c_empenho=-1
+where
+where
+    movimentoestoque.c_empenho is null and
+    movimentoestoque.filial=46 and
+    movimentoestoque.TIPOMOVIMENTO='12' and
+    movimentoestoque.EMISSAO<'01.07.2022'

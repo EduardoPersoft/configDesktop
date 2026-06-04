@@ -1,0 +1,1 @@
+select * from transportadora where cadastro in (15154, 238, 309, 4283, 7969, 133)

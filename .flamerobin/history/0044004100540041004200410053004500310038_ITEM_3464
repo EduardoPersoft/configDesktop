@@ -1,0 +1,15 @@
+select
+     (select first 1
+         arquiteto.VENDEDOR
+      from
+         VENDEDORESORC arquiteto
+      inner join
+         VENDEDOR  on
+              vendedor.cadastro=arquiteto.VENDEDOR
+      where
+        arquiteto.filial=orcamento.FILIAL and
+        arquiteto.idnota=orcamento.idnota and
+        vendedor.TIPOVENDEDOR>=4) as arquiteto,
+     orcamento.*
+from
+    orcamento

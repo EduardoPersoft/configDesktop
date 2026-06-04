@@ -1,0 +1,20 @@
+select 
+    coalesce(
+        (select 
+            count(movimentoestoque.IDMOVIMENTO)
+         from
+            MOVIMENTOESTOQUE
+         where 
+            movimentoestoque.COLETA=c_coletas.COLETA),0)+
+    coalesce(
+        (select 
+            count(c_destinoavulso.id)
+         from
+            c_destinoavulso
+         where  
+            c_destinoavulso.COLETA=c_coletas.COLETA),0),
+    c_coletas.* 
+from 
+    c_coletas
+where 
+    c_coletas.DATACOLETA between '30.04.2026' and '14.05.2026'

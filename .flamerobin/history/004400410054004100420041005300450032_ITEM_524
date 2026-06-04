@@ -1,0 +1,10 @@
+select 
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.valor,
+    cast(materialmovimentoestoque.valor / materialmovimentoestoque.quantidade as decimal(12,2)) as preco
+FROM
+    MATERIALMOVIMENTOESTOQUE
+where 
+    materialmovimentoestoque.filial=1 AND
+    materialmovimentoestoque.idmovimento=171319

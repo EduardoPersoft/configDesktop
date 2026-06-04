@@ -1,0 +1,13 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    mercadoriasnotacompra.vlrfinalmercad,
+    mercadoriasnotacompra.ICMSBASE,
+    mercadoriasnotacompra.icmsoutros,
+    mercadoriasnotacompra.ICMSISENTO,
+    mercadoriasnotacompra.SITUACAOTRIBUT
+from mercadoriasnotacompra 
+where mercadoriasnotacompra.SITUACAOTRIBUT='020' and vlrfinalmercad>icmsbase
+order by codigo

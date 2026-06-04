@@ -1,0 +1,23 @@
+select
+    materialmovimentoestoque.filial,
+    movimentoestoque.emissao,
+    materialmovimentoestoque.IDITEM,
+    sum(MATERIALMOVIMENTOESTOQUE.quantidade*
+        materialmovimentoestoque.sinal) as quantidade,
+    sum(MATERIALMOVIMENTOESTOQUE.valor*
+        materialmovimentoestoque.sinal) as custototal
+from
+    movimentoestoque
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.filial=110 and
+    (movimentoestoque.TIPOMOVIMENTO in ('05', '01') or
+     (movimentoestoque.TIPOMOVIMENTO = '01' and movimentoestoque.idnota is not null)
+    movimentoestoque.EMISSAO between '01.02.2024' and '29.02.2024'
+group by
+    materialmovimentoestoque.filial,
+    movimentoestoque.emissao,
+    materialmovimentoestoque.IDITEM

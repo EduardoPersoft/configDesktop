@@ -1,0 +1,14 @@
+select 
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    exists (
+        select  
+            *
+        from
+            NOTAFISCAL
+        where 
+            movimentoestoque.filial=notafiscal.filial and
+            movimentoestoque.idnota=notafiscal.idnota AND
+            notafiscal.DATACANCELAMENTO>='01.01.2025')

@@ -1,0 +1,10 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.CUSTOUNITARIO=
+        cast(ITEMCUSTODATA.custototal /
+             itemcustodata.QUANTIDADE 
+             as decimal(12,3)) 
+where
+    itemcustodata.FILIAL=110 and
+    itemcustodata.DATAINVENTARIO='29.02.2024'

@@ -1,0 +1,11 @@
+ select
+    contaCorrente.filial,
+    contacorrente.codigo,
+    contaCorrente.descricaoConta
+from
+    contaCorrente
+where
+    contacorrente.tipoConta = 'S'
+order by
+    contaCorrente.filial,
+    ContaCorrente.DESCRICAOCONTA

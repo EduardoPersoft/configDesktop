@@ -1,0 +1,4 @@
+delete from COMPOSICAOITEM
+where not exists
+(select * from ITEMESTOQUE
+where itemestoque.codigo=composicaoitem.iditem)

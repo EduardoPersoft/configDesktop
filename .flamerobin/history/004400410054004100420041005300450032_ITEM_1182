@@ -1,0 +1,6 @@
+SELECT
+    mercadoriasped.*
+from
+    mercadoriasped
+WHERE
+    filial=5 and idnota=198695

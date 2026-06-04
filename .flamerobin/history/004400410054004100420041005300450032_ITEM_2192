@@ -1,0 +1,6 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.itembase = NULL
+WHERE
+    itemestoque.itembase = ''

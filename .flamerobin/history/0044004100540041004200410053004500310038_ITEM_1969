@@ -1,0 +1,3 @@
+select * from vendedoresped
+where filial=1
+and idnota=70523

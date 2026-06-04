@@ -1,0 +1,9 @@
+update
+    C_ITENSNOVOS
+set
+    CODFOR = (SELECT 
+                CADASTROPARCEIROS.CADASTRO
+              from
+                CADASTROPARCEIROS
+              where
+                upper(CADASTROPARCEIROS.NOME)=upper(c_itensnovos.fornecedor))

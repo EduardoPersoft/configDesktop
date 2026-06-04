@@ -1,0 +1,9 @@
+UPDATE
+    itemestoque
+set
+    itemestoque.TRIBUTACAOICMS = 2
+WHERE
+    exists (
+    select * from C_SITUACAO
+    where c_situacao.codigo=itemestoque.codigo AND
+    c_situacao.SITUACAOTRIBUTARIA='010' )

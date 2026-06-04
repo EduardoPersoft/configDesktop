@@ -1,0 +1,3 @@
+select * from MERCADORIASNOTA
+where filial=233
+and pedvendev in (55,56,57,58)

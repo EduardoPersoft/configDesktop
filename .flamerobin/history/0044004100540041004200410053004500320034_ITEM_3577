@@ -1,0 +1,7 @@
+        
+update
+    mercadoriasnotacompra
+set
+    cfop = '1556'
+where 
+    cfop ='1103';

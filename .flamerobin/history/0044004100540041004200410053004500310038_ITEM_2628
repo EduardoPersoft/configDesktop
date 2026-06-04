@@ -1,0 +1,2 @@
+select * from pCONTACORRENTE
+where CONTACORRENTE=1341

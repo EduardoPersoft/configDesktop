@@ -1,0 +1,75 @@
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    nota.modelo,
+    MODELODOCTO.MODELO,
+    nota.dataemissao,
+    cadpar.razaosocial,
+    nota.numeronota,
+    mercadorias.cfop,
+    itemestoque.TIPOPRODUTO,
+    sum(mercadorias.quantidade) as quantidade,
+    sum(mercadorias.vlrfinalmercad) as vlrfinalmercad ,
+    
+    sum(mercadorias.frete+
+    mercadorias.seguro+
+    mercadorias.OUTDESPACESSOR) FRETE,
+    
+    sum(MERCADORIAS.VALORIPI) as valoripi,
+    sum(case itemestoque.tipoproduto when '1' then mercadorias.valoripi else 0 end) valoripiCredito,
+    
+    sum(mercadorias.vlrfinalmercad+
+    mercadorias.frete+
+    mercadorias.seguro+
+    mercadorias.OUTDESPACESSOR+
+    MERCADORIAS.VALORIPI) TOTAL,
+   
+    sum(case when itemestoque.tipoproduto in ('1', '3') then mercadorias.valoricms else 0 end) as valoricms,
+    
+    sum(coalesce(MATERIALMOVIMENTOESTOQUE.valor,0)) as valorestoque
+       
+from 
+    notafiscal nota
+inner join
+    mercadoriasnotas mercadorias on
+        mercadorias.filial=nota.filial and
+        mercadorias.idnota=nota.IDNOTA
+inner join
+    cadastroparceiros cadpar on
+        cadpar.cadastro=nota.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+left join
+    modelodocto on
+        modelodocto.id=notacompra.modelo
+left join
+    movimentoestoque on
+        movimentoestoque.filial=nota.filial and
+        movimentoestoque.IDNOTA=nota.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadorias.idmercadoria
+where
+    nota.filial=110 and
+    nota.dataemissao between '2023-08-01' and '2023-08-31'
+group by    
+    nota.modelo,
+    MODELODOCTO.MODELO,
+    mercadorias.cfop,
+    nota.dataemissao,
+    cadfor.razaosocial,
+    nota.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO
+order by 
+    1,2,nota.modelo,
+    MODELODOCTO.MODELO,
+    mercadorias.cfop,
+    nota.dataemissao,
+    cadfor.razaosocial,
+    nota.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO    
+
+

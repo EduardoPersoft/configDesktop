@@ -1,0 +1,2 @@
+select c_revisaofinal from MOVIMENTOESTOQUE
+where idpedido=71955

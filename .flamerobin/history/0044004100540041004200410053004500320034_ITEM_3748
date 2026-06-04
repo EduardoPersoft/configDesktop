@@ -1,0 +1,4 @@
+update
+    contacorrente
+set
+    contacorrente.saldoreal=0

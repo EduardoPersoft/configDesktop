@@ -1,0 +1,17 @@
+SELECT
+    objeto.id,
+    objeto.tipo,
+    objeto.descricao
+FROM
+    USUARIO
+inner JOIN
+    GRUPOXUSUARIO on
+        grupoxusuario.IDUSUARIO=usuario.id
+inner JOIN
+    USUARIOXOBJETO ON
+        USUARIOXOBJETO.IDUSUARII=GRUPOXUSUARIO.IDGRUPO
+INNER JOIN 
+    OBJETO ON
+        OBJETO.ID=USUARIOXOBJETO.IDOBJETO
+where 
+    usuario.id=39

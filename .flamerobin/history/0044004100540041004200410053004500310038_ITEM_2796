@@ -1,0 +1,1 @@
+select * from c_transferenciaitem where idtransferencia=1277

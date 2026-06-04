@@ -1,0 +1,23 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    grupomercadoria.descricao as grupo,
+    sum(materiallocal.SALDOtotal)
+from
+    itemestoque
+inner join
+    grupomercadoria on
+        grupomercadoria.grupo=itemestoque.GRUPO
+left join
+    materiallocal on
+        materiallocal.iditem=itemestoque.codigo and 
+        materiallocal.filial=1
+where
+    materiallocal.saldototal>0
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    grupomercadoria.descricao
+    

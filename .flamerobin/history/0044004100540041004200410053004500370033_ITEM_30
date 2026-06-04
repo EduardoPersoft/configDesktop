@@ -1,0 +1,15 @@
+select
+    distinct
+    cadcli.cadastro,
+    cadcli.nome,
+    cadtrans.nome transportadora
+from
+    NOTAFISCAL
+inner join
+    cadastroparceiros cadcli on
+        notafiscal.DESTINATARIO=cadcli.cadastro
+inner join 
+    cadastroparceiros  cadtrans on
+        NOTAFISCAL.CODIGOTRANSP=cadtrans.cadastro
+order by
+    notafiscal.DATAEMISSAO desc

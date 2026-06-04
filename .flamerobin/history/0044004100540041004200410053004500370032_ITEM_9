@@ -1,0 +1,7 @@
+delete from materialmovimentoestoque
+where MATERIALMOVIMENTOESTOQUE.filial=1
+and materialmovimentoestoque.idmovimento in
+(select movimentoestoque.idmovimento 
+from MOVIMENTOESTOQUE
+where movimentoestoque.filial=1 and
+movimentoestoque.idnota=1)

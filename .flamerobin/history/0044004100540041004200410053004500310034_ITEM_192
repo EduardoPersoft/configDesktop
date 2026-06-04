@@ -1,0 +1,2 @@
+select pedido.entrega,pedido.* from pedido
+where filial=110

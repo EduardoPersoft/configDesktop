@@ -1,0 +1,3 @@
+update movimentoestoque set idpedido = null
+where movimentoestoque.idpedido = 66999 
+and movimentoestoque.TIPOMOVIMENTO='13'

@@ -1,0 +1,17 @@
+SELECT 
+    a.LISTA, 
+    a.PRODUTO, 
+    a.VARIAVEL, 
+    a.CUSTOCONSIDERADO,
+    a.COMISSAO, 
+    a.MARGEMLUCRO, 
+    a.MARGEMCONTRIBUICAO, 
+    a.PRECO, 
+    a.DESCONTOITEM,
+    a.QUANTIDADE
+FROM 
+    LISTAPRECOPRODUTO a 
+order by
+    a.lista,
+    a.produto
+

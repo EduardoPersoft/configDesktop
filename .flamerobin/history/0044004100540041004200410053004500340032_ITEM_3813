@@ -1,0 +1,7 @@
+update 
+    C_MOVFINANCEIRO 
+set 
+    documento='000'||substring(entrada from 2 for 4),
+    fatura=substring(entrada from 7 for 1)
+where 
+    processamento is null

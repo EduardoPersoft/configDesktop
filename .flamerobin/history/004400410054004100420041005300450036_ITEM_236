@@ -1,0 +1,5 @@
+select  
+            VBCSTRET,
+            VICMSSUBSTITUTO,
+            VICMSSTRET 
+        from IMP_NFEITEMSTANTERIOR(1, 70742, 1)

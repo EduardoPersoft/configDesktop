@@ -1,0 +1,13 @@
+select 
+    bandeira.descricao,
+    tipocobranda.descricao,
+    TAXASCARTAO.parcelas,
+    tacascartao.taxa
+from 
+    TAXASCARTAO
+left join 
+    bandeira on 
+        bandeira.bandeira=taxascartao.bandeira
+left join
+    tipocoranca on
+        tipocobranca.TIPOCOBRANCA=taxascartao.MODALIDADE

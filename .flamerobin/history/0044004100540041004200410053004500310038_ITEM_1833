@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    c_datadevolucao
+from 
+    mercadoriasped
+where
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=69879

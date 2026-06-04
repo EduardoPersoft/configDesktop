@@ -1,0 +1,11 @@
+select 
+    estabelecimento.cadastro,
+    estabelecimento.LOCALFATURAMENTO,
+    l.DESCRICAO
+from
+    ESTABELECIMENTO
+left join
+    local l on
+        l.id=ESTABELECIMENTO.LOCALFATURAMENTO
+where
+    ESTABELECIMENTO.cadastro=7

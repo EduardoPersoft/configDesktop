@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    LOTERELATORIOS
+ORDER by
+    id desc

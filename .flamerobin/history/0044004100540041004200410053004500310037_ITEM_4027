@@ -1,0 +1,3 @@
+select * from vendedoresnota
+where vendedoresnota.filial=110 
+and vendedoresnota.vendedor=14

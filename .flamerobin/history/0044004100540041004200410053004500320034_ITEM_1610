@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and titulorec.EMISSAO='23.03.2022' and titulorec.parceiro is null

@@ -1,0 +1,88 @@
+select
+    MOVBANCARIOS.filial,
+    MOVBANCARIOS.idcontacorrente as contacorrente,
+    ccMovto.DESCRICAOCONTA,
+    movbancarios.IDMOVTOBANCARIO,
+    movbancarios.NRDOCUMENTO,
+    movbancarios.DATAEXTRATO,
+    movbancarios.HISTORICOEXTRATO,
+    movbancarios.VALORMOVIMENTO*case movbancarios.TIPOMOVIMENTO when 'C' then 1 else -1 end as valor,
+    movbancarios.tipomovimento cd,
+    case 
+        when movbancarios.TRANSFERENCIA = 'S' then 'Transferencia' 
+        when contascontabeis.CONTACONTABIL is not null then 'lancamento' 
+        when titulosanexados.TIPOTITULO = 'R' then 'Contas a Receber'
+        when titulosanexados.TIPOTITULO = 'P' then 'Contas a Pagar'
+        else '' 
+    end as tipo,
+    coalesce(ccTransf.DESCRICAOCONTA, COALESCE(contascontabeis.descricao, CADDETALHE.NOME)) as detalhe,
+    CASE CADDETALHE.TIPOPESSOA WHEN 'F'  THEN SUBSTRING(CADDETALHE.DOCUMENTO FROM 1 FOR 3)||'.'||
+                                              SUBSTRING(CADDETALHE.DOCUMENTO FROM 4 FOR 3)||'.'||
+                                              SUBSTRING(CADDETALHE.DOCUMENTO FROM 7 FOR 3)||'-'||
+                                              SUBSTRING(CADDETALHE.DOCUMENTO FROM 10 FOR 2)
+                               WHEN 'J' THEN SUBSTRING(CADDETALHE.DOCUMENTO FROM 1 FOR 2)||'.'|| 
+                                    SUBSTRING(CADDETALHE.DOCUMENTO FROM 4 FOR 3)||'.'||
+                                    SUBSTRING(CADDETALHE.DOCUMENTO FROM 6 FOR 3)||'/'||
+                                    SUBSTRING(CADDETALHE.DOCUMENTO FROM 9 FOR 4)||'-'||
+                                    SUBSTRING(CADDETALHE.DOCUMENTO FROM 13 FOR 2)
+                               ELSE ''      
+    END AS DOCUMENTO,
+    case 
+        when movbancarios.TRANSFERENCIA = 'S' then MOVBANCARIOS.valormovimento
+        when contascontabeis.CONTACONTABIL is not null then LANTOCONTBANC.valor
+        when titulosanexados.TIPOTITULO in ('R', 'P') then TITULOSANEXADOS.valor
+        else 0
+    end * case movbancarios.TIPOMOVIMENTO when 'C' then 1 else -1 end as valordetalhe,
+    (coalesce(TITULOSANEXADOS.VALORJUROS,0)+
+    coalesce(titulosanexados.MVLRACRESCIMOELETRON,0)) * 
+    case movbancarios.TIPOMOVIMENTO when 'C' then 1 else -1 end as juros,
+    (coalesce(TITULOSANEXADOS.VALORDESCONTO,0)+
+    coalesce(titulosanexados.MVLRDESCONTOELETRON,0)+
+    coalesce(titulosanexados.MOUTROSDESCONTOS,0))*
+    case movbancarios.TIPOMOVIMENTO when 'C' then 1 else -1 end *(-1) as DESCONTO
+        
+from
+    MOVBANCARIOS
+inner join
+    estabelecimento on
+        estabelecimento.cadastro = MOVBANCARIOS.FILIAL
+inner join
+    contacorrente ccMovto on 
+        ccMovto.filial=movbancarios.filial and
+        ccMovto.codigo=movbancarios.idcontacorrente
+left join
+    contacorrente ccTransf on 
+        ccTransf.filial=movbancarios.filial and
+        ccTransf.codigo=movbancarios.CONTACORRENTEDEST
+left join
+     LANTOCONTBANC on
+            LANTOCONTBANC.FILIAL=MOVBANCARIOS.filial and
+            LANTOCONTBANC.IDCONTACORRENTE=MOVBANCARIOS.IDCONTACORRENTE and
+            LANTOCONTBANC.IDMOVTOBANC=MOVBANCARIOS.IDMOVTOBANCARIO
+left join 
+    CONTASCONTABEIS on
+        CONTASCONTABEIS.IDPLANO=estabelecimento.PLANOCONTAS and
+        contascontabeis.CONTACONTABIL = lantocontbanc.CONTACONTABIL
+left join
+     titulosanexados on
+            titulosanexados.FILIAL=MOVBANCARIOS.filial and
+            titulosanexados.IDCONTACORRENTE=MOVBANCARIOS.IDCONTACORRENTE and
+            titulosanexados.IDMOVTOBANC=MOVBANCARIOS.IDMOVTOBANCARIO
+left join
+     TITULOREC on
+        titulorec.filial=titulosanexados.filial and
+        titulorec.idtitulo = TITULOSANEXADOS.idtitulo and
+        titulosanexados.tipoTitulo = 'R'
+left join
+     TITULOPAG on
+        tituloPAG.filial=titulosanexados.filial and
+        tituloPAG.idtitulo = TITULOSANEXADOS.idtitulo and
+        titulosanexados.tipoTitulo = 'P'
+left join
+    CADASTROPARCEIROS CADDETALHE ON
+        CADDETALHE.CADASTRO = COALESCE(TITULOREC.PARCEIRO, TITULOPAG.PARCEIRO)
+
+where 
+    MOVBANCARIOS.filial=1 and
+    MOVBANCARIOS.IDCONTACORRENTE = 341 and
+    MOVBANCARIOS.DATAEXTRATO between '01.01.2022' and '31.01.2022'

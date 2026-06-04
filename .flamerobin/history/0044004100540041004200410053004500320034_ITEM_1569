@@ -1,0 +1,1 @@
+select * from FATURASPEDCOMPRA where filial=5 and idnota=57467

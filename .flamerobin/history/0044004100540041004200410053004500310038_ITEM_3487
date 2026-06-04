@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    orcamento orcLeitura
+where 
+    orcleitura.filial=1 and
+    orcleitura.idnota=201649

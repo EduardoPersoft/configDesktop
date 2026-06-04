@@ -1,0 +1,7 @@
+select * from itemestoque item
+inner join
+    itemestoque itemcusto on
+        itemcusto.codigo = case when coalesce(item.VALORULTIMACOMPRA,0) >0 then item.CODIGO
+                     else coalesce(item.itembase, item.codigo) end
+
+where ITEM.codigo=   'PE-24832'

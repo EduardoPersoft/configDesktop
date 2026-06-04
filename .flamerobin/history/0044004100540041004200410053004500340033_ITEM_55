@@ -1,0 +1,7 @@
+select
+    contacorrente.codigo,
+    contacorrente.DESCRICAOCONTA
+from
+    CONTACORRENTE
+where
+    contacorrente.filial=1

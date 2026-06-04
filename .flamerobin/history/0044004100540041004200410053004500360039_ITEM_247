@@ -1,0 +1,6 @@
+select 
+    pedido.idnota,
+    pedido.OBSENTREGARETIRA
+from 
+    pedido.filial=1 and
+    pedido.idnota=322975

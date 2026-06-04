@@ -1,0 +1,2 @@
+select contacontabil,descricao,contadestino from CONTASCONTABEIS
+where idplano=2 

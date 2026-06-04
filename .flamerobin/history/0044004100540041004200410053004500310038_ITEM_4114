@@ -1,0 +1,307 @@
+select
+             NOTAFISCAL.IDNOTA,
+             NOTAFISCAL.NUMERONOTA,
+             NOTAFISCAL.DATAHORAEMISSAO,
+             NOTAFISCAL.DATACADASTRO,
+             NOTAFISCAL.DESTINATARIO,
+             NOTAFISCAL.DEVOLUCAO,
+             CADASTROPARCEIROS.RAZAOSOCIAL,
+             CADASTROPARCEIROS.NOME,
+             CADASTROPARCEIROS.LOGRADOURO,
+             case coalesce(CADASTROPARCEIROS.NUMERO, 0)
+               when 0 then 'SN'
+               else CADASTROPARCEIROS.NUMERO
+             end,
+             CADASTROPARCEIROS.COMPLEMENTO, CADASTROPARCEIROS.BAIRRO, CADASTROPARCEIROS.CIDADE, CADASTROPARCEIROS.UF,
+             substring(CADASTROPARCEIROS.CEP from 1 for 5) || '-' || substring(CADASTROPARCEIROS.CEP from 6 for 3),
+             CADASTROPARCEIROS.CEP,
+             case
+               when (CADASTROPARCEIROS.DOCUMENTO <> '') and (not CADASTROPARCEIROS.DOCUMENTO is null) then case CADASTROPARCEIROS.TIPOPESSOA
+                                                                                                             when 'F' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 4 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 7 for 3) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 10 for 2) as varchar(18))
+                                                                                                             when 'J' then cast(substring(CADASTROPARCEIROS.DOCUMENTO from 1 for 2) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 3 for 3) || '.' || substring(CADASTROPARCEIROS.DOCUMENTO from 6 for 3) || '/' || substring(CADASTROPARCEIROS.DOCUMENTO from 9 for 4) || '-' || substring(CADASTROPARCEIROS.DOCUMENTO from 13 for 2) as varchar(18))
+                                                                                                             else null
+                                                                                                           end
+               else null
+             end as DOCUMENTO,
+             case CADASTROPARCEIROS.TIPOPESSOA
+               when 'J' then CADASTROPARCEIROS.INSCESTADUAL
+               else case CADASTROPARCEIROS.CONTRIBUINTE
+                      when 'S' then CADASTROPARCEIROS.INSCESTADUAL
+                      else ''
+                    end
+             end,
+             CADASTROPARCEIROS.INSCMUNICIPAL,
+             case
+               when coalesce(NOTAFISCAL.EMAIL, '') <> '' then NOTAFISCAL.EMAIL
+               else CADASTROPARCEIROS.EMAIL
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.TELEFONE
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.TELEFONECOMERCIAL
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.CELULAR
+               else ''
+             end,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+               when '1058' then CADASTROPARCEIROS.FAX
+               else ''
+             end,
+             case
+               when coalesce(NOTAFISCAL.CONTATO, '') <> '' then NOTAFISCAL.CONTATO
+               else CADASTROPARCEIROS.PRINCIPALCONTATO
+             end,
+             NOTAFISCAL.LOGRADOUROENTREGA,
+             case coalesce(NOTAFISCAL.NUMEROENTREGA, 0)
+               when 0 then 'SN'
+               else NOTAFISCAL.NUMEROENTREGA
+             end,
+             NOTAFISCAL.COMPLEMENTOENTREGA,
+             NOTAFISCAL.BAIRROENTREGA,
+             NOTAFISCAL.CIDADEENTREGA,
+             NOTAFISCAL.UFENTREGA,
+             substring(NOTAFISCAL.CEPENTREGA from 1 for 5) || '-' || substring(NOTAFISCAL.CEPENTREGA from 6 for 3),
+             NOTAFISCAL.OBSENTREGARETIRA,
+             NOTAFISCAL.CEPENTREGA,
+             
+             USUARIO.NOMECOMPLETO,
+             USUARIO.TELEFONE,
+             USUARIO.FAX,
+             USUARIO.EMAIL,
+             USUARIO.DEPARTAMENTO,
+             USUARIO.CARGO,
+             NOTAFISCAL.CFOP,
+             NOTAFISCAL.NATUREZAOPERACAO,
+             TIPOCOBRANCA.DESCRICAO,
+             CONDICAOPAGAMENTO.DESCRICAO,
+             NOTAFISCAL.VLRDESCMERCADORIAS,
+             substring(NOTAFISCAL.MSGDESCMERCADORIAS from 1 for 120),
+             NOTAFISCAL.VLRDESCINDPRODUTO,
+             substring(NOTAFISCAL.MSGDESCPRODUTOS from 1 for 120),
+             NOTAFISCAL.VLRACRESCMERCAD,
+             substring(NOTAFISCAL.MSGACRESCMERCADORIA from 1 for 120),
+             NOTAFISCAL.VLRTOTNOTAEXTENSO,
+             NOTAFISCAL.VLRTOTALMERCADORIAS,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) in ('6', '2') and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' and NOTAFISCAL.SIMPLES = 'N' then NOTAFISCAL.ICMSORIGEMVALOR
+               else case NOTAFISCAL.ZONAFRANCA
+                      when 'S' then 0
+                      else NOTAFISCAL.icmsorigemvalor
+                    end
+             end,
+             case NOTAFISCAL.ZONAFRANCA
+               when 'N' then 0
+               else NOTAFISCAL.icmsorigemvalor
+             end,
+             NOTAFISCAL.VALORIPI,
+             NOTAFISCAL.VLRICMSRECOLHIDO,
+             NOTAFISCAL.VALORFRETE,
+             NOTAFISCAL.VALORSEGURO,
+             NOTAFISCAL.VLROUTDESPACESSORIA +
+             coalesce(NOTAFISCAL.JUROSMULTAIMPOSTOS, 0) +
+             coalesce(NOTAFISCAL.VLRTAXASISCOMEX, 0) +
+             coalesce(NOTAFISCAL.VLRACRESCMERCAD, 0) +
+             coalesce(NOTAFISCAL.VLRACRESCSERVICOS, 0) +
+             coalesce(NOTAFISCAL.VLRDESPADUANEIRAS, 0),
+             NOTAFISCAL.VLRFINALSERVICOS,
+             NOTAFISCAL.VLRTOTALNOTA,
+             NOTAFISCAL.CODIGOTRANSP,
+             NOTAFISCAL.QUANTIDADEVOLUME,
+             NOTAFISCAL.PESOLIQUIDO,
+             NOTAFISCAL.PESOBRUTO,
+             case NOTAFISCAL.ENTRADASAIDA
+               when 'E' then '0'
+               else '1'
+             end,
+             cast(NOTAFISCAL.FRETE as varchar(1)),
+             case NOTAFISCAL.FRETE
+               when '0' then 'REMETENTE'
+               when '1' then 'DESTINATARIO'
+               when '2' then 'TERCEIROS'
+               when '3' then 'REMETENTE'
+               when '4' then 'DESTINATARIO'
+               else 'SEM FRETE'
+             end as REM_DEST_DESC,
+             NOTAFISCAL.PLACAVEICULO,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) = '6' and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' and NOTAFISCAL.SIMPLES = 'N' then NOTAFISCAL.ICMSORIGEMBASE
+               else case NOTAFISCAL.ZONAFRANCA
+                      when 'S' then 0
+                      else NOTAFISCAL.TOTBASEICMS
+                    end
+             end,
+             NOTAFISCAL.VLRBASESUBSTITUTO,
+             NOTAFISCAL.DATAENTRADASAIDA,
+             --NOTAFISCAL.INSCRICAOSUBSTITUTO,
+             case (notafiscal.filial )
+                when 1 then estado.INSCRICAOSUBSTITUTO else 
+                NOTAFISCAL.INSCRICAOSUBSTITUTO end,
+             NOTAFISCAL.NUMEROVOLUME,
+             NOTAFISCAL.MARCAVOLUME,
+             NOTAFISCAL.ESPECIEVOLUME,
+             NOTAFISCAL.VLRTOTALSERVICOS,
+             NOTAFISCAL.ISS,
+             MODELODOCTO.SERIE,
+             NOTAFISCAL.CHAVE,
+             NOTAFISCAL.ALEATORIO,
+             MODELODOCTO.CODMODELOFISCAL,
+             CADASTROPARCEIROS.DOCUMENTOENTREGA,
+             case coalesce(PAISES.CODIGOPAIS, '1058')
+           when '1058' then 
+               case coalesce (cadastroparceiros.MUNICIPIO,'') 
+                    when '' then MUNICIPIO.UF || MUNICIPIO.MUNICIPIO
+                    else MUNICIPIO.UF || cadastroparceiros.MUNICIPIO end
+           else '9999999'
+         end,
+             case
+               when CADASTROPARCEIROS.TIPOEMPRESA = 'N' and CADASTROPARCEIROS.TIPOPESSOA = 'J' then CADASTROPARCEIROS.DOCUMENTO
+               else ''
+             end,
+             case
+               when CADASTROPARCEIROS.TIPOEMPRESA = 'N' and CADASTROPARCEIROS.TIPOPESSOA = 'F' then CADASTROPARCEIROS.DOCUMENTO
+               else ''
+             end,
+             case CADASTROPARCEIROS.TIPOEMPRESA
+               when 'E' then CADASTROPARCEIROS.IDESTRANGEIRO
+               else ''
+             end,
+             coalesce(NOTAFISCAL.VLRDESCMERCADORIAS, 0) + coalesce(NOTAFISCAL.VLRDESCINDPRODUTO, 0),
+             NOTAFISCAL.UFPLACAVEICULO, coalesce(PAISES.CODIGOPAIS, '1058'), PAISES.DESCRICAOPAIS, substring(extract(year from NOTAFISCAL.DATAEMISSAO) from 3 for 2) ||
+             case extract(month from NOTAFISCAL.DATAEMISSAO)
+               when 1 then '01'
+               when 2 then '02'
+               when 3 then '03'
+               when 4 then '04'
+               when 5 then '05'
+               when 6 then '06'
+               when 7 then '07'
+               when 8 then '08'
+               when 9 then '09'
+               when 10 then '10'
+               when 11 then '11'
+               when 12 then '12'
+             end,
+             substring(NOTAFISCAL.CHAVE from 44 for 1), MODELODOCTO.AMBIENTE,
+             case
+               when NOTAFISCAL.DEVOLUCAO = 'S' then 4
+               when NOTAFISCAL.TIPONOTA = 2 then 2
+               else 1
+             end,
+             NOTAFISCAL.VLRIMPOSTOIMPORT, MODELODOCTO.TIPOIMPDANFE, NOTAFISCAL.VLRPISPASEPMERC,
+             NOTAFISCAL.VLRCOFINSMERC, NOTAFISCAL.BASEPISPASEPMERC,
+             substring(NOTAFISCAL.MSGDESCRMERCADORIAS from 1 for 1000), NOTAFISCAL.MCODIGO, NOTAFISCAL.MDESCRICAO,
+             NOTAFISCAL.MCF, NOTAFISCAL.MCST, NOTAFISCAL.MCFOP, NOTAFISCAL.MUN, NOTAFISCAL.MQTD, NOTAFISCAL.MVLRUNI,
+             NOTAFISCAL.MVLRTOT, NOTAFISCAL.MBASEICMS, NOTAFISCAL.MVLRICMS, NOTAFISCAL.MVLRIPI, NOTAFISCAL.MALIQICMS,
+             NOTAFISCAL.MALIQIPI, NOTAFISCAL.MAODEOBRA as PNOTAFISCALMAODEOBRA, MODELODOCTO.REMONTARDESCRICAO,
+             NOTAFISCAL.SIMPLES, NOTAFISCAL.ALIQUOTASIMPLES, NOTAFISCAL.CRT, MODELODOCTO.FORMAEMISSAONFE,
+             MODELODOCTO.LOCALENTREGANOTA, NFECTRL.AMBIENTE,
+             case coalesce(NFECTRL.PROTOCOLO, ' ')
+               when ' ' then null
+               else NFECTRL.ENVIO
+             end,
+             case coalesce(NOTAFISCAL.CANCELAMENTO, ' ')
+               when ' ' then null
+               else NOTAFISCAL.CANCELAMENTO
+             end,
+             case
+               when NOTAFISCAL.ENTRADASAIDA = 'S' and NOTAFISCAL.DEVOLUCAO = 'N' then 'S'
+               else 'N'
+             end,
+             NOTAFISCAL.VTOTTRIB,
+             case NOTAFISCAL.TIPONOTA
+               when 3 then 1
+               when 2 then case CADASTROPARCEIROS.CONTRIBUINTE
+                             when 'N' then 1
+                             else 0
+                           end
+               else 0
+             end,
+             NOTAFISCAL.INDPRES,
+             case CADASTROPARCEIROS.CONTRIBUINTE
+               when 'N' then '9'
+               when 'S' then case CADASTROPARCEIROS.INSCESTADUAL
+                               when 'ISENTO' then 2
+                               else 1
+                             end
+             end,
+             NOTAFISCAL.XLOCDESEMB, NOTAFISCAL.XLOCDESPACHO,
+             case substring(NOTAFISCAL.CFOP from 1 for 1)
+               when '7' then NOTAFISCAL.UFDI
+               else ''
+             end,
+             case
+               when substring(NOTAFISCAL.CFOP from 1 for 1) in ('6', '2') and coalesce(CADASTROPARCEIROS.CONTRIBUINTE, 'N') = 'N' then 'S'
+               else 'N'
+             end as NCONTRIBUINTEINTER,
+             coalesce(NOTAFISCAL.ICMSDESTINOFCP, 0), coalesce(NOTAFISCAL.ICMSDESTINOVALOR, 0),
+             coalesce(NOTAFISCAL.ICMSORIGEMVALORINTERESTADUAL, 0), coalesce(NOTAFISCAL.ICMSDESTINOPARTILHA, 0),
+             coalesce(NOTAFISCAL.VALORRETIDOPIS, 0), coalesce(NOTAFISCAL.VALORRETIDOCOFINS, 0),
+             coalesce(NOTAFISCAL.VALORRETIDOCSLL, 0), coalesce(NOTAFISCAL.BASERETENCAOIRRF, 0),
+             coalesce(NOTAFISCAL.VALORRETENCAOIRRF, 0), coalesce(NOTAFISCAL.BASERETENCAOPREVSOCIAL, 0),
+             coalesce(NOTAFISCAL.VALORRETENCAOPREVSOCIAL, 0), NOTAFISCAL.NDRAW, NOTAFISCAL.CHNFEEXPORTACAO,
+             NOTAFISCAL.VTOTTRIBFED, NOTAFISCAL.VTOTTRIBEST, NOTAFISCAL.TIPOCOBRANCA, NOTAFISCAL.VFCP,
+             NOTAFISCAL.VFCPST, NOTAFISCAL.VFCPSTRET, notafiscal.tiponota,         
+             notafiscal.INFADFISCO,
+             CASE (:PNFENOMEFANTASIA)
+                WHEN 'S' THEN CADASTROPARCEIROS.NOME
+                ELSE ''
+             END AS nfenomefantasia,
+             NATUREZAOPERACAO.MOTDESICMS,
+             NOTAFISCAL.UUID,
+             TIPOCOBRANCA.TPAG,
+             NOTAFISCAL.vBCIBSCBS,
+             NOTAFISCAL.vDif ,
+             NOTAFISCAL.vIBSUF ,
+             NOTAFISCAL.vIBSMun ,
+             NOTAFISCAL.vIBS ,
+             NOTAFISCAL.vCBS,
+             NOTAFISCAL.vNFTot,
+             notafiscal.vBrutoFatura,
+             notafiscal.vLiquidoFatura,
+             (COALESCE (notafiscal.vDescFatura,0)+ COALESCE (notafiscal.adiantamento,0)),
+             notafiscal.adiantamento,
+             coalesce(cadastroparceiros.cfNaoIdentificado,'N') as cfNaoIdentificado,
+             NOTAFISCAL.DOCUMENTOCUPOM
+
+             
+      from NOTAFISCAL
+      inner join 
+            ESTABELECIMENTO on 
+                (NOTAFISCAL.FILIAL = ESTABELECIMENTO.CADASTRO)
+      inner join 
+            CADASTROPARCEIROS on 
+                (NOTAFISCAL.DESTINATARIO = CADASTROPARCEIROS.CADASTRO)
+      inner join 
+            MODELODOCTO on 
+                (MODELODOCTO.ID = NOTAFISCAL.MODELO)      
+      inner join 
+            NATUREZAOPERACAO on 
+                (NATUREZAOPERACAO.ID = NOTAFISCAL.OPERACAO)
+      inner join 
+            estado on 
+                (estado.estado=notafiscal.uf)
+                
+      left join NFECTRL on 
+                    (NFECTRL.IDNOTA = NOTAFISCAL.IDNOTA and
+                    NFECTRL.FILIAL = NOTAFISCAL.FILIAL)
+      left join 
+            TIPOCOBRANCA on 
+                (TIPOCOBRANCA.TIPOCOBRANCA = NOTAFISCAL.TIPOCOBRANCA)
+      left join 
+            CONDICAOPAGAMENTO on (
+                CONDICAOPAGAMENTO.ID = NOTAFISCAL.CONDICAOPAGAMENTO)
+      left join 
+            USUARIO on 
+                (NOTAFISCAL.USUARIOEMISSAO = USUARIO.USUARIO)
+      left join 
+            MUNICIPIO on 
+                (MUNICIPIO.UF_SIGLA = CADASTROPARCEIROS.UF and
+                upper(MUNICIPIO.MUNICIPIO_NOME) = upper(CADASTROPARCEIROS.CIDADE))
+      left join 
+            PAISES on (PAISES.CODIGOPAIS = CADASTROPARCEIROS.CODIGOPAIS)
+      where NOTAFISCAL.FILIAL = 7 and
+            NOTAFISCAL.IDNOTA between 654 and 654

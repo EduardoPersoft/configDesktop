@@ -1,0 +1,1 @@
+SELECT * FROM REGRAS order by id

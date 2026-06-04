@@ -1,0 +1,17 @@
+select
+    m1.C_LOCALIMPORTACAO,
+    itemestoque.C_LOCALIMPORTACAO,
+    itemestoque.*
+from    
+    ITEMESTOQUE
+inner join 
+    materialfilial m1 on
+        m1.filial=1 and
+        itemestoque.codigo=m1.iditem
+inner join 
+    materialfilial m2 on
+        m2.filial=12826 and
+        itemestoque.codigo=m2.iditem
+
+where
+    m1.C_LOCALIMPORTACAO<>m1.C_LOCALIMPORTACAO

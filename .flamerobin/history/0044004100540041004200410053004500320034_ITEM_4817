@@ -1,0 +1,1 @@
+delete from c_i_movest3 where c_data is null

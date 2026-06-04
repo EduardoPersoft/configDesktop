@@ -1,0 +1,10 @@
+update
+    TITULOREC
+set 
+    titulorec.contacorrente=422,
+    linhadigitavel = null,
+    codigobarra = null,
+    codretorno = null
+WHERE
+    TITULOREC.CODRETORNO='03' AND
+    titulorec.baixa is null

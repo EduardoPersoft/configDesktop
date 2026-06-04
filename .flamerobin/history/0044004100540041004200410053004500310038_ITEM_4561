@@ -1,0 +1,2 @@
+select * from CONTAsCOntabeis
+where idplano=4

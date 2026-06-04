@@ -1,0 +1,5 @@
+SELECT 
+    INVENTARIOESTOQUEDATA.*
+where   
+    FILIAL=110 and
+    LOTE LIKE '62480%'

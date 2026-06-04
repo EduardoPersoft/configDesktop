@@ -1,0 +1,3 @@
+update ITEMESTOQUE
+set filialpadrao=12826
+where filialpadrao=6

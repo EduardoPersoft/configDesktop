@@ -1,0 +1,6 @@
+select 
+    *
+from
+    itemestoque
+where 
+    itemestoque.c_pouce='S'

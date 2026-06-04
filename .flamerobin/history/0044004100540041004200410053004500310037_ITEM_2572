@@ -1,0 +1,8 @@
+select
+    CADASTROPARCEIROS.cadastro,
+    cadastroparceiros.NOME
+from
+    CADASTROPARCEIROS
+inner join
+    TRANSPORTADORA on
+        transportadora.CADASTRO=CADASTROPARCEIROS.CADASTRO

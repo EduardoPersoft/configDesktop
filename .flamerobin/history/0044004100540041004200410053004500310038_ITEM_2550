@@ -1,0 +1,3 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.idnota=36798 and
+MERCADORIASNOTA.FILIAL=1

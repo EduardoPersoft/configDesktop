@@ -1,0 +1,2 @@
+select * from C_COMISSAOVENDEDORES
+where filial=1 and idnota = 70523

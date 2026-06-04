@@ -1,0 +1,13 @@
+select 
+    distinct
+    itemestoque.codigo,
+    itemestoque.descricao,
+    ITEMESTOQUE.VALORULTIMACOMPRA
+from    
+    INVENTARIOESTOQUEDATA
+inner join
+    itemestoque on
+        itemestoque.codigo=INVENTARIOESTOQUEDATA.codigo
+where
+    INVENTARIOESTOQUEDATA.filial=110 and
+    inventarioestoquedata."DATA"='30.09.2023'

@@ -1,0 +1,9 @@
+select
+    *
+from
+    MOVBANCARIOS
+where
+    filial=110 and
+    dataalteracao>='04.08.2023'
+order by
+    horaalteracao

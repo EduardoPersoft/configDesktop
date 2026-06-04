@@ -1,0 +1,6 @@
+select
+    *
+from 
+    c_faturamentonota('01.03.2022', '31.03.2022', 1)
+where
+        idnota=20360

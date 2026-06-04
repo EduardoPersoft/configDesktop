@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and titulorec.DATAENVIO='23.12.2021'

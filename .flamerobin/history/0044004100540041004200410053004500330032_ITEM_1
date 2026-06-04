@@ -1,0 +1,6 @@
+update
+    spedfiscal_c
+set 
+    cst_ipi=49
+where
+    substring(cfop from 1 for 1) in ('1', '2')

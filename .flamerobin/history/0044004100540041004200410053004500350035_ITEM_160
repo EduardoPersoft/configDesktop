@@ -1,0 +1,2 @@
+select * from ITEMESTOQUEXARQUIVO
+where itemestoquexarquivo.codigo='10240065'

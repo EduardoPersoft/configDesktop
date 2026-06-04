@@ -1,0 +1,4 @@
+update 
+    movimentoestoque
+set
+    c_coletafinanceiro = movimentoestoque.COLETADATA

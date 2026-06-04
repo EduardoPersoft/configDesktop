@@ -1,0 +1,12 @@
+update orcamento pedido set vendedor = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresorc vendedoresped 
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota),
+atendente = 
+(select first 1 
+vendedoresped.vendedor 
+from vendedoresorc vendedoresped
+where vendedoresped.filial=pedido.filial
+and vendedoresped.idnota=pedido.idnota)

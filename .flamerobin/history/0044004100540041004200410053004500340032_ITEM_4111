@@ -1,0 +1,9 @@
+update
+    FATPED
+set 
+    datavencimento=null,
+    idtitulo=null,
+    geradorTitulo=null
+where
+    fatped.filial=110 and
+    fatped.idnota in (11367,11368,11372)

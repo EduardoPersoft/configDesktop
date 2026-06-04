@@ -1,0 +1,5 @@
+select itemestoque.codigo,itemestoque.referencia,itemestoque.itembase,
+       itemestoque.descricao,familia.descricao familia
+from itemestoque 
+left join familia on familia.id=itemestoque.FAMILIA
+where referencia='375527'

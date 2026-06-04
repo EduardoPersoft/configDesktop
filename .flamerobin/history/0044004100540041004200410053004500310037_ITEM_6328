@@ -1,0 +1,3 @@
+select * from c_coletas 
+where coleta between  '1945' and '1970'
+order by coleta desc

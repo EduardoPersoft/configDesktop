@@ -1,0 +1,183 @@
+SET TERM ^ ;
+ALTER PROCEDURE LANCTOSALDOMOVTOESTOQUE (
+    PFILIAL integer,
+    PMATERIALINICIAL varchar(15),
+    PMATERIALFINAL varchar(15),
+    PDATAINICIAL timestamp,
+    PDATAFINAL timestamp,
+    PLOTEINICIAL varchar(15),
+    PLOTEFINAL varchar(15),
+    PLOCALINICIAL integer,
+    PLOCALFINAL integer,
+    PMATERIAPRIMA char(1),
+    PREVENDA char(1),
+    PCONSUMO char(1),
+    PINDUSTRIALIZADO char(1),
+    PINATIVO char(1) )
+RETURNS (
+    FILIAL integer,
+    RAZAOSOCIAL varchar(60),
+    CODIGO varchar(15),
+    DESCRICAO varchar(240),
+    UNIDADE varchar(3),
+    IDMOVIMENTO integer,
+    SIGLAMOVIMENTO char(3),
+    EMISSAO timestamp,
+    DOCUMENTO varchar(10),
+    ENTRADASAIDA char(1),
+    IDMOVIMENTOMATERIAL integer,
+    LOTE varchar(15),
+    LOCALARMAZENAMENTO integer,
+    LOCALDESTINO integer,    
+    IDPEDIDO integer,
+    SINAL integer,
+    QUANTIDADESALDOINICIAL double precision,
+    UNITARIOSALDOINICIAL double precision,
+    CUSTOSALDOINICIAL double precision,
+    QUANTIDADE double precision,
+    UNITARIO double precision,
+    CUSTO double precision,
+    QUANTIDADEENTRADA double precision,
+    UNITARIOENTRADA double precision,
+    CUSTOENTRADA double precision,
+    QUANTIDADESAIDA double precision,
+    UNITARIOSAIDA double precision,
+    CUSTOSAIDA double precision,
+    QUANTIDADESALDO double precision,
+    UNITARIOSALDO double precision,
+    CUSTOSALDO double precision,
+    IDNOTA integer,
+    DIASZERADOS double precision,
+    SEQUENCIA integer )
+
+AS
+declare variable materialanterior varchar(15);
+declare variable loteanterior varchar(15);
+declare variable dataInicioZerado TIMESTAMP;
+begin
+
+    sequencia = 0;
+
+    SELECT CADASTROPARCEIROS.Razaosocial
+    FROM CADASTROPARCEIROS
+    WHERE CADASTROPARCEIROS.CADASTRO=:PFILIAL
+    INTO :Razaosocial;
+
+    dataInicioZerado = null;
+    materialAnterior='';
+    loteAnterior='';
+
+    FOR SELECT  Filial,
+                Codigo,
+                Idmovimento,
+                Siglamovimento,
+                Documento,
+                Entradasaida,
+                emissao,
+                Idmovimentomaterial,
+                Lote,
+                Localarmazenamento,
+                Localdestino,
+                idpedido,
+                Sinal,
+                QuantidadeSaldoINICIAL,
+                UnitarioSaldoINICIAL,
+                CustoSaldoINICIAL,
+                Quantidade,
+                Unitario,
+                Custo,
+                Quantidadeentrada,
+                Unitarioentrada,
+                Custoentrada,
+                Quantidadesaida,
+                Unitariosaida,
+                Custosaida ,
+                IDNOTA
+    FROM Lancamentomovimentoestoque(:PFILIAL,:PMATERIALINICIAL,:PMATERIALFINAL,
+        :PDATAINICIAL,:PDATAFINAL,:PLOTEINICIAL,:PLOTEFINAL,:PLOCALINICIAL,
+        :PLOCALFINAL,:Pmateriaprima,:Prevenda,:PCONSUMO,:Pindustrializado,
+         :PINATIVO  )
+    ORDER BY Filial ,
+             Codigo ,
+             emissao,
+             Entradasaida,
+             Siglamovimento,
+             Documento
+    INTO :Filial,
+         :Codigo,
+         :Idmovimento,
+         :Siglamovimento,
+         :Documento,
+         :Entradasaida,
+         :emissao,
+         :Idmovimentomaterial,
+         :Lote,
+         :Localarmazenamento,
+         :Localdestino,         
+         :idpedido,
+         :Sinal,
+         :QuantidadeSaldoINICIAL,
+         :UnitarioSaldoINICIAL,
+         :CustoSaldoINICIAL,
+         :Quantidade,
+         :Unitario,
+         :Custo,
+         :Quantidadeentrada,
+         :Unitarioentrada,
+         :Custoentrada,
+         :Quantidadesaida,
+         :Unitariosaida,
+         :Custosaida,
+         :IDNOTA DO BEGIN
+
+
+              if (materialAnterior<>codigo) then begin
+                 quantidadesaldo =  coalesce(quantidadesaldoinicial,0);
+                 custosaldo =       COALESCE(custosaldoinicial,0);
+                 materialAnterior=codigo;
+                 loteanterior=lote;
+                 SELECT ITEMESTOQUE.DESCRICAO,ITEMESTOQUE.UNIDADE
+                 FROM ITEMESTOQUE
+                 WHERE ITEMESTOQUE.CODIGO=:CODIGO
+                 INTO DESCRICAO,UNIDADE;
+              end
+
+              quantidadesaldo =   COALESCE(quantidadesaldo,0)+
+                                  COALESCE(QUANTIDADE,0) ;
+
+              custosaldo =       coalesce(custosaldo,0)+
+                                 coalesce(CUSTO,0);
+
+              if(quantidadesaldo<>0) then
+                 Unitariosaldo = custosaldo/quantidadesaldo;
+              else
+                 Unitariosaldo=0;
+    
+             diasZerados = 0;
+             if(dataInicioZerado is not null) then BEGIN
+                if(quantidadeSaldo>0) THEN BEGIN
+                    diasZerados = emissao - dataInicioZerado;
+                    dataInicioZerado = null;
+                end
+             end else begin          
+                if(quantidadeSaldo<=0) THEN
+                    dataInicioZerado = emissao;
+             end
+                
+                
+             SUSPEND;
+            
+             sequencia = sequencia + 1;
+         END
+         
+
+
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE LANCTOSALDOMOVTOESTOQUE TO  SYSDBA WITH GRANT OPTION;
+

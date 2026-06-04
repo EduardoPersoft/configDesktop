@@ -1,0 +1,6 @@
+SELECT 
+    *
+from
+    ITEMCUSTODATA
+where
+     DATAINVENTAIO='31.12.2023'

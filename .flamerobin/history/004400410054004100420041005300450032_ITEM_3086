@@ -1,0 +1,4 @@
+
+update clientes (dataalteração)
+select max (data)
+from c_limte

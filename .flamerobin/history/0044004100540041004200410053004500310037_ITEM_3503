@@ -1,0 +1,10 @@
+select notafiscal.DEVOLUCAO, -- devolucao
+       notafiscal.EMBUTIRICMS, -- embutirIcms
+       notafiscal.baseii, -- ["Totais", "importacao", "base"]
+       notafiscal.VLRIMPOSTOIMPORT, -- ["Totais", "importacao", "valor"]
+       notafiscal.VLRTAXASISCOMEX, -- ["Totais", "importacao", "taxaSiscomex"]
+       notafiscal.VLRDESPADUANEIRAS, -- ["Totais", "importacao", "despesaAduneras"]
+       notafiscal.ValorDespesasImportacao1 -- ["Totais", "importacao", "despesasImportacao"]
+
+       
+from notafiscal

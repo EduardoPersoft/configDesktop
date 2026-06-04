@@ -1,0 +1,3 @@
+alter table c_itensSelecao
+constraint pk_c_itensSelecao
+primary key (codigo)

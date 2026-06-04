@@ -1,0 +1,2 @@
+select * from C_LAMINACAO
+WHERE CODIGO='AB0318002'

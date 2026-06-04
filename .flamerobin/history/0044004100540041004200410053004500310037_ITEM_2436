@@ -1,0 +1,9 @@
+select
+    ORCAMENTO.DATACADASTRO,
+    count(orcamento.idnota)
+from
+    orcamento
+where 
+    ORCAMENTO.DATACADASTRO>='10.07.2023'
+group by
+    ORCAMENTO.DATACADASTRO

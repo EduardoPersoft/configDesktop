@@ -1,0 +1,24 @@
+SELECT
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    notacompra.dataentrada,
+    mercadoriasnotacompra.codigo,
+    mercadoriasnotacompra.DESCRICAO,
+    mercadoriasnotacompra.PRECOLISTA,
+    cast(
+        materialmovimentoestoque.valor/MATERIALMOVIMENTOESTOQUE.QUANTIDADE
+        as
+        decimal(12,3))
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+inner JOIN
+    CADASTROPARCEIROS cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+WHERE
+    notacompra.filial=5
+    and notacompra.DATAENTRADA between '01.01.2021' and '31.12.2021'
+          

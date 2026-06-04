@@ -1,0 +1,7 @@
+select
+    VERSAOALTERACAO.*,
+    cast(substring(sql from 1 for 1000) as varchar(1000))
+from
+    VERSAOALTERACAO
+where
+    upper(substring(sql from 1 for 1000)) like '%UUID%'

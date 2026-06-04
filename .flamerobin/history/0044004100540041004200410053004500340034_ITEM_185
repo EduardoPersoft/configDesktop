@@ -1,0 +1,2 @@
+select datareferencia from notafiscal 
+where filial=1 and idnota=333474

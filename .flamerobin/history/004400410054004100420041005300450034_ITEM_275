@@ -1,0 +1,16 @@
+select 
+       extract(month from movimentoestoque.EMISSAO) as mes, 
+       sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)  m2,
+       sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)/
+       count(extract(day from movimentoestoque.EMISSAO))  m2medio,
+       count(distinct extract(day from movimentoestoque.EMISSAO)),
+       sum(coalesce(materialmovimentoestoque.c_up,itemestoque.c_up)) upm2,
+       sum((coalesce(materialmovimentoestoque.c_up,itemestoque.c_up) * materialmovimentoestoque.quantidade)) UP
+from MOVIMENTOESTOQUE
+inner join materialmovimentoestoque on (MATERIALMOVIMENTOESTOQUE.FILIAL = MOVIMENTOESTOQUE.FILIAL and
+           MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO = MOVIMENTOESTOQUE.IDMOVIMENTO)
+inner join ITEMESTOQUE on (itemestoque.codigo=materialmovimentoestoque.iditem)
+where MOVIMENTOESTOQUE.TIPOMOVIMENTO = '04' and
+      movimentoestoque.emissao >= '01.01.2021'
+group by
+    extract(month from movimentoestoque.EMISSAO)

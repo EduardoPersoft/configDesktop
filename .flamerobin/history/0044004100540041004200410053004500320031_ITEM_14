@@ -1,0 +1,6 @@
+SELECT
+    *
+from 
+    NOTAFISCAL
+WHERE
+    notafiscal.DATAEMISSAO+7 < notafiscal.DATACANCELAMENTO

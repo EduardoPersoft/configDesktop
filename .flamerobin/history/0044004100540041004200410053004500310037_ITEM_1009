@@ -1,0 +1,3 @@
+select C_LOGPRODUTOEsaldo.*,
+        substring(cast(C_LOGPRODUTOEsaldo.CONTENT as varchar(100)) from 1 for 100) 
+        from C_LOGPRODUTOEsaldo where C_LOGPRODUTOEsaldo.codigo='2133128'

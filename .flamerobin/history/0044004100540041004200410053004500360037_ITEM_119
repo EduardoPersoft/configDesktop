@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where tipoMovimento is null

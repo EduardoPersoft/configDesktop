@@ -1,0 +1,52 @@
+  SELECT
+            mercadoriasped.filial,
+            mercadoriasped.idnota,
+            mercadoriasped.idmercadoria,
+            MATERIALLOCAL.IDLOCAL,
+            '.' as lote,
+            materiallocal.FILIAL,
+            MATERIALLOCAL.SALDOTOTAL-
+            COALESCE(
+            (SELECT sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+             FROM MATERIALMOVIMENTOESTOQUE
+             INNER JOIN MOVIMENTOESTOQUE ON 
+                MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+                MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+             WHERE MATERIALMOVIMENTOESTOQUE.FILIAL=MATERIALLOCAL.FILIAL
+             AND MATERIALMOVIMENTOESTOQUE.IDITEM=mercadoriasped.codigo
+             AND MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+             AND MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=MATERIALLOCAL.IDLOCAL
+             /*AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO<>-1*/
+             AND MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'),0)
+        FROM
+            MERCADORIASPED
+        inner join 
+            MATERIALLOCAL on
+                materiallocal.iditem=mercadoriasped.codigo
+        INNER JOIN
+            LOCAL ON 
+                LOCAL.ID=MATERIALLOCAL.IDLOCAL
+        WHERE 
+            mercadoriasped.filial=? and
+            mercadoriasped.idnota=? and 
+            LOCAL.DISPONIVEL = 'S' AND
+            MATERIALLOCAL.SALDOTOTAL-
+            COALESCE(
+                (SELECT sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+                 FROM MATERIALMOVIMENTOESTOQUE
+                 INNER JOIN MOVIMENTOESTOQUE ON 
+                    MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+                    MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+                 WHERE MATERIALMOVIMENTOESTOQUE.FILIAL=MATERIALLOCAL.FILIAL
+                 AND MATERIALMOVIMENTOESTOQUE.IDITEM=mercadoriasped.codigo
+                 AND MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+                 AND MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=MATERIALLOCAL.IDLOCAL
+                 /*AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO<>:EXPEDICAO*/
+                 AND MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'),0)>0            
+        ORDER BY
+            mercadoriasped.filial,
+            mercadoriasped.idnota,
+            mercadoriasped.idmercadoria,
+            coalesce(local.prioridade,9999), 
+            MATERIALLOCAL.SALDOTOTAL,
+            local.id

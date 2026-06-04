@@ -1,0 +1,8 @@
+select
+    *
+from
+    MOVBANCARIOS
+where  
+    filial=1 and
+    MOVBANCARIOS.IDCONTACORRENTe=1 and
+    MOVBANCARIOS.IDMOVTOBANCARIO=15244

@@ -1,0 +1,1 @@
+select * from movimentoestoque where emissao between '01.12.2020' and '31.12.2020'

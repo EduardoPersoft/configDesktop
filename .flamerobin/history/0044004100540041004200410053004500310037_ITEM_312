@@ -1,0 +1,1 @@
+SELECT  * from itemestoque where itemestoque.codigo='6931109'

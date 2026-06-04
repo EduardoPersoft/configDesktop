@@ -1,0 +1,1 @@
+select * from itemestoque where referencia='11422981'

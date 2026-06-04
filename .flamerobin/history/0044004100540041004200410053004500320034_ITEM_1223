@@ -1,0 +1,18 @@
+ SELECT
+    notafiscal.NUMERONOTA,
+    faturas.idfatura,
+    faturas.DATAVENCIMENTO,
+    faturas.VALORFATURA
+from
+    NOTAFISCAL
+inner join
+    FATURAS on 
+        faturas.filial=notafiscal.filial AND
+        faturas.idnota=notafiscal.IDNOTA
+WHERE
+    notafiscal.filial= 5 and
+    notafiscal.destinatario = 2591 and
+    notafiscal.dataemissao = '2022-01-18'
+order by
+    notafiscal.numeronota,
+    faturas.idfatura

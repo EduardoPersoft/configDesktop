@@ -1,0 +1,20 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.c_up,
+    itemestoque.C_PESOCONSUMO,
+    (select 
+        C_ITEMREGIOES.PERCENTUAL
+     from
+        C_ITEMREGIOES
+     where  
+        C_ITEMREGIOES.CODIGO=itemestoque.CODIGO and
+        c_itemregioes.REGIAO=1) as regiao1
+from
+    ITEMESTOQUE
+where 
+    itemestoque.TIPOPRODUTO='4' and 
+    itemestoque.codigo between '1000' and '3'
+order by
+        itemestoque.codigo
+    

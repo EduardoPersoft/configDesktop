@@ -1,0 +1,15 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    desreduzida,
+    quantidade,
+    pesoliquido,
+    pesobruto,
+    quantidadeestoque,
+    quantidadeestoque*(select itemestoque.pesoliquido from itemestoque where itemestoque.codigo=mercadoriasnota.codigo),
+    quantidadeestoque*(select itemestoque.pesobruto from itemestoque where itemestoque.codigo=mercadoriasnota.codigo)
+from MERCADORIASNOTA
+where filial=1 and idnota=77890
+

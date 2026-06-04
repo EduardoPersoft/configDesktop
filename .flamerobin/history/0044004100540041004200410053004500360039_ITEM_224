@@ -1,0 +1,8 @@
+create table taxascartao(
+bandeira smallint not null,
+contaCorrente integer not null,
+modalidade smallint not null,
+parcelas smallint not null,
+taxa decimal(12,3),
+constraint pk_taxasCartao 
+primary key (bandeira,contacorrente,modalidade,parcelas)

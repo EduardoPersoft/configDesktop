@@ -1,0 +1,21 @@
+select 
+    materiallocal.*
+from
+    MATERIALLOCAL
+where 
+    materiallocal.local=1
+    exists (
+        select
+            *
+        from 
+            NOTAFISCAL
+        inner join
+            mercadoriasnota on
+                mercadoriasnota.filial=notafiscal.filial and
+                mercadoriasnota.idnota=notafiscal.idnota
+        where
+            notafiscal.filial=5 and 
+            notafiscal.DATAEMISSAO between '03.08.2022' and '03.08.2022' AND
+            mercadoriasnota.idpedido is not null and
+            mercadoriasnota.codigo=materiallocal.iditem            
+    )

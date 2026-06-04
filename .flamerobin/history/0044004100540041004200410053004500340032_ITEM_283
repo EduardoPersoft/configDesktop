@@ -1,0 +1,3 @@
+select * from TITULOPAG
+where fatura is null
+and filial=110

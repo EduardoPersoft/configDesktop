@@ -1,0 +1,1 @@
+select * from mercadoriasorc where idnota=56081

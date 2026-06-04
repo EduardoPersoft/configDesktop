@@ -1,0 +1,25 @@
+select 
+    listaprecoproduto.produto,
+    (select
+        FIRST 1
+        cast(materialmovimentoestoque.valor/materialmovimentoestoque.quantidade 
+             as decimal(12,2))
+     from 
+        MATERIALMOVIMENTOESTOQUE
+     inner JOIN
+        movimentoestoque on 
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+     WHERE 
+         movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02') AND
+         MATERIALMOVIMENTOESTOQUE.IDITEM = MERCADORIASPED.CODIGO
+    ORDER BY
+        EMISSAO DESC
+        ),
+    listaprecoproduto.CUSTOCONSIDERADO
+from 
+    MERCADORIASPED
+inner JOIN
+    listaprecoproduto on
+        listaprecoproduto.lista=1 and 
+        listaprecoproduto.produto=materialmovimentoestoque.iditem

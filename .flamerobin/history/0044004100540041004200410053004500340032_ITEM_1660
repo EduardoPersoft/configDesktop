@@ -1,0 +1,7 @@
+select
+    *
+from
+    faturas
+where 
+    faturas.filial=3941 and
+    faturas.idnota=221

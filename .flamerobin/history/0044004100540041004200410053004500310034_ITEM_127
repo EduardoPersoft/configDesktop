@@ -1,0 +1,11 @@
+update
+    ITEMESTOQUE
+set 
+    ITEMESTOQUE.CLASSIFICACAOCONTABIL=case substring(ITEMESTOQUE.CODIGO from 1 for 4) when 'MPSV' then '1120102'
+                                                                                      when 'MPST' then '1120102'
+                                                                                      when 'MPSA' then '1120102'
+                                                                                      else '1120101' end 
+                                                                                      
+
+
+    

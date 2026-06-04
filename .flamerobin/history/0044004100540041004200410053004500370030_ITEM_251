@@ -1,0 +1,4 @@
+update 
+    NOTAFISCAL
+set
+    uuid = notafiscal.filial||'|'notafiscal.idnota

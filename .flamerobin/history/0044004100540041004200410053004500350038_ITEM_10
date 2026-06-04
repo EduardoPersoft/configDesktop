@@ -1,0 +1,10 @@
+update 
+    MERCADORIASPED
+set 
+    filialped=1,
+    idpedido=202,
+    idmercpedido=idmercadoria,
+    qtdbaixa=quantidade
+where
+    filial=1 and
+    idnota=47178

@@ -1,0 +1,3 @@
+select * from TITULOREC
+where titulorec.VALOREMABERTO=titulorec.VALORTITULO
+and titulorec.TOTALPAGO>0

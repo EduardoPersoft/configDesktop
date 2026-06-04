@@ -1,0 +1,7 @@
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/estoque/c_carteira/edicao/*', '0');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/estoque/*', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/compras/*', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/vendas/_', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/vendas/pedidos/', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/vendas/manutencao', '0');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('281', '/estoque/c_carteira/edicao/arteCliche/', '1');

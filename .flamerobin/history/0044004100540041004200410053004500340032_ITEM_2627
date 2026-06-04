@@ -1,0 +1,19 @@
+select
+    locallote.IDITEM,
+    ITEMESTOQUE.DESCRICAO,
+    locallote.LOTE,
+    MATERIALLOTE.C_GRAMATURA,
+    MATERIALLOTE.C_LARGURA,
+    locallote.QUANTIDADE
+from 
+    locallote
+inner join 
+    ITEMESTOQUE on 
+        locallote.iditem=ITEMESTOQUE.codigo  
+inner join 
+    MATERIALLOTE ON 
+        locallote.filial=materiallote.filial and
+        locallote.iditem=MATERIALLOTE.IDITEM and 
+        locallote.lote=materiallote.lote   
+where 
+    locallote.FILIAL=110 

@@ -1,0 +1,2 @@
+select * from RCONTACORRENTE
+where CONTACORRENTE=1341

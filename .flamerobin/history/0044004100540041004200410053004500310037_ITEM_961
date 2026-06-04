@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    C_LOGprodutoecommerce
+WHERE
+    status_code is null

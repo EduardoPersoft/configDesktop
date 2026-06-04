@@ -1,0 +1,1 @@
+select filial,idtitulo,titulo,fatura,emissao,vencimento,provavel from TITULOREC where filial=1 and baixa is null and vencimento=provavel and titulorec.TIPOTRANSACAO=6

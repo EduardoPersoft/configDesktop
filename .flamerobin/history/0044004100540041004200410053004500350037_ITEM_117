@@ -1,0 +1,12 @@
+select
+    cadesp.cadastro,
+    cadesp.nome
+from
+    vendedor
+inner join
+    cadastroparceiros cadesp on
+        vendedor.cadastro=cadesp.CADASTRO
+where
+    vendedor.CANALRELACIONADO=105
+    
+    

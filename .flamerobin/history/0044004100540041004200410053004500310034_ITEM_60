@@ -1,0 +1,1 @@
+create index i_mapaProducao on mapaProducao(filial,idmovimento,idmovimentomaterial)

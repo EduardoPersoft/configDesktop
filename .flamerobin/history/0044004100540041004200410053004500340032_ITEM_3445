@@ -1,0 +1,7 @@
+select 
+     coalesce(max(fornecedoresitem.id),0)+1
+from 
+     FORNECEDORESITEM
+where
+     fornecedoresitem.iditem='-9'
+   

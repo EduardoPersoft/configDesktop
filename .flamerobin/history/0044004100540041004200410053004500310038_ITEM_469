@@ -1,0 +1,1 @@
+select * from materialfilial where materialfilial.c_custodefinido is not null

@@ -1,0 +1,12 @@
+select 
+    MATERIALMOVIMENTOESTOQUE.*
+from 
+    MATERIALMOVIMENTOESTOQUE
+inner JOIN
+    MOVIMENTOESTOQUE on 
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial AND
+        MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.idmovimento
+        
+    
+WHERE
+    materialmovimentoestoque.LOCALARMAZENAMENTO <> movimentoestoque.LOCALARMAZENAMENTO

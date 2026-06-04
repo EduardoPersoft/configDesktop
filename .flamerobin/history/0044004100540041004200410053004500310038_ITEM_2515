@@ -1,0 +1,4 @@
+insert into itemcustodata(filial,datainventario,codigo,quantidade, custounitario, custototal)
+SElect filial,'30.06.2024',codigo, quantidade, itemcustodata.CUSTOUNITARIO, custototal
+from ITEMCUSTODATA
+where itemcustodata.filial=1 and itemcustodata.datainventario='31.05.2024'

@@ -1,0 +1,15 @@
+select
+        'C',
+        i2.codigo,
+        i1.referencia,
+        i1.c_original
+    from
+        itemestoque i1
+    inner join
+        itemestoque i2 on
+            i1.c_original=i2.C_ORIGINAL and
+            i1.codigo<>i2.codigo
+    where
+        coalesce(i1.referencia,'')<>'' and
+        coalesce(i1.c_original,'')<>'' and
+        i1.referencia='02 11411 02'

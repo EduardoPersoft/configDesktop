@@ -1,0 +1,1 @@
+update materialmovimentoestoque set VALOR = VALOR/1000000 where filial=1 and idmovimento=299780

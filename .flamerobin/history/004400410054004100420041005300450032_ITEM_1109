@@ -1,0 +1,19 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.TRIBUTACAOICMS = 2
+
+SELECT
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    ITEMESTOQUE.CODIGO='100222' AND
+    exists (
+        SELECT
+            *
+        from 
+            CLASSIFICACAOFISCAL
+        WHERE
+            classificacaofiscal.CFISCAL = itemestoque.CLASSIFISCAL
+            and CLASSIFICACAOFISCAL.C_TRIBUTACAOICMS<>2)

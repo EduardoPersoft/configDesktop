@@ -1,0 +1,22 @@
+UPDATE
+ inventarioestoquedata 
+set 
+    idmovimento=-1
+where idmovimento is null 
+and quantidade<>quantidadeestoque
+and EXISTS
+(select 
+    *
+ from 
+    MATERIALMOVIMENTOESTOQUE
+ inner JOIN
+    movimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento
+ WHERE
+    materialmovimentoestoque.filial=INVENTARIOESTOQUEDATA.filial AND
+    materialmovimentoestoque.iditem=inventarioestoquedata.codigo and
+    movimentoestoque.EMISSAO>=INVENTARIOESTOQUEDATA."DATA" AND
+    movimentoestoque.LOCALARMAZENAMENTO in (inventarioestoquedata."LOCAL", 8) and
+    movimentoestoque.LOCALTRANSFERENCIA in (inventarioestoquedata."LOCAL", 8) and
+    movimentoestoque.TIPOMOVIMENTO = '10')

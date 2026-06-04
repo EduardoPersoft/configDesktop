@@ -1,0 +1,6 @@
+delete from mapaproducao
+where not exists (
+select * from MATERIALMOVIMENTOESTOQUE
+where materialmovimentoestoque.filial=mapaproducao.FILIAL
+and materialmovimentoestoque.idmovimento=mapaproducao.IDMOVIMENTO
+and materialmovimentoestoque.IDMOVIMENTOMATERIAL=mapaproducao.IDMOVIMENTOMATERIAL)

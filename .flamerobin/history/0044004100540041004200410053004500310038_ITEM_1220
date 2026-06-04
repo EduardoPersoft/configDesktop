@@ -1,0 +1,501 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_PLANCTOCONTABEISPAGOS (
+    RELATORIO varchar(20) )
+RETURNS (
+    FILIAL integer,
+    RAZAOSOCIAL varchar(200),
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    CONTACONTABILI varchar(15),
+    CONTACONTABILF varchar(15),
+    CENTROCUSTOI varchar(15),
+    CENTROCUSTOF varchar(15),
+    ORIGEM char(1),
+    REGISTRO integer,
+    MOVIMENTO integer,
+    LANCAMENTO integer,
+    CONTACONTABIL varchar(15),
+    CENTROCUSTO varchar(15),
+    DESCRICAO varchar(50),
+    DEBITO double precision,
+    CREDITO double precision,
+    SALDO double precision,
+    DEBITOSOMA double precision,
+    CREDITOSOMA double precision,
+    SALDOSOMA double precision,
+    CONSOLIDADO integer,
+    NIVEL smallint,
+    TIPOCONTA char(1),
+    CONTACORRENTE integer,
+    datamovto timestamp )
+
+AS
+Declare Variable Tipomovimento Char(1);
+Declare Variable Mvlrdescontoeletron Double Precision;
+Declare Variable Mvlracrescimoeletron Double Precision;
+Declare Variable Moutrosdescontos Double Precision;
+Declare Variable Valorjurosmovto Double Precision;
+Declare Variable Valordescontomovto Double Precision;
+Declare Variable Crmvlrdescontoeletron Varchar(15);
+Declare Variable Crmvlracrescimoeletron Varchar(15);
+Declare Variable Crmoutrosdescontos Varchar(15);
+Declare Variable Crvalorjurosmovto Varchar(15);
+Declare Variable Crvalordescontomovto Varchar(15);
+Declare Variable Cpmvlrdescontoeletron Varchar(15);
+Declare Variable Cpmvlracrescimoeletron Varchar(15);
+Declare Variable Cpmoutrosdescontos Varchar(15);
+Declare Variable Cpvalorjurosmovto Varchar(15);
+Declare Variable Cpvalordescontomovto Varchar(15);
+BEGIN
+
+
+SELECT ESTSIN.datainicial,ESTSIN.datafinal,
+       estsin.contacontabili,estsin.contacontabilf,estsin.centrocustoi,
+       estsin.centrocustof, estsin.ESTABELECIMENTO
+FROM ESTSIN
+WHERE ESTSIN.relatorio=:relatorio
+INTO :datainicial,:datafinal,:CONTACONTABILI,:CONTACONTABILF,
+:CENTROCUSTOI,:CENTROCUSTOF, filial;
+
+SELECT planocontas.CONTADESCREC,
+       PLANOCONTAS.taxadescrec,
+       PLANOCONTAS.outrosdescrec,
+       PLANOCONTAS.JurosFinRec,
+       PLANOCONTAS.AcrescTaxaRec,
+       PLANOCONTAS.CONTADESCPAG,
+       PLANOCONTAS.taxadescpag,
+       PLANOCONTAS.outrosdescpag,
+       PLANOCONTAS.jurosfinpag,
+       PLANOCONTAS.acresctaxapag
+FROM ESTABELECIMENTO
+INNER JOIN planocontas ON (ESTABELECIMENTO.planocontas=PLANOCONTAS.idplano)
+WHERE ESTABELECIMENTO.cadastro=:FILIAL
+INTO :crvalordescontomovto,:crmvlrdescontoeletron,:crmoutrosdescontos,
+     :crvalorjurosmovto,:crmvlracrescimoeletron,
+     :cpvalordescontomovto,:cpmvlrdescontoeletron,:cpmoutrosdescontos,
+     :cpvalorjurosmovto,:cpmvlracrescimoeletron;
+
+FOR select cadastroparceiros.razaosocial as razaosocial,
+           'P' AS ORIGEM,
+           movtotitulopag.idtitulo as documento,
+           movtotitulopag.idmovimento as movimento,
+           lantocontpag.idlancamento as lancamento,
+           coalesce(contascontabeis.contacontabil,lantocontpag.CONTACONTABIL),
+           contascontabeis.nivel,
+           lantocontpag.centrocusto,
+
+           contascontabeis.descricao,
+
+           case movtotitulopag.tipomovto when 'D' then lantocontpag.valor
+               *  (movtotitulopag.valorpago/titulopag.valortitulo)
+          else lantocontpag.valor*(-1)
+               * (movtotitulopag.valorpago/titulopag.valortitulo) end as debito,
+
+          CAST(0 AS DOUBLE PRECISION) as credito,
+
+          case movtotitulopag.tipomovto when 'D' then lantocontpag.valor*(-1)
+                *  (movtotitulopag.valorpago/titulopag.valortitulo)
+          else lantocontpag.valor
+               *  (movtotitulopag.valorpago/titulopag.valortitulo) end as saldo,
+
+          case contascontabeis.tipoconta when 'A' then
+          case movtotitulopag.tipomovto when 'D' then lantocontpag.valor
+               *  (movtotitulopag.valorpago/titulopag.valortitulo)
+          else lantocontpag.valor*(-1)
+               *  (movtotitulopag.valorpago/titulopag.valortitulo) end
+          else 0 end as debitosoma,
+
+          CAST(0 AS DOUBLE PRECISION) as creditosoma,
+
+          case contascontabeis.tipoconta when 'A' then
+          case movtotitulopag.tipomovto when 'D' then lantocontpag.valor*(-1)
+                  *  (movtotitulopag.valorpago/titulopag.valortitulo)
+          else lantocontpag.valor
+                  *  (movtotitulopag.valorpago/titulopag.valortitulo) end
+          else 0 end as saldosoma,
+          case Lantocontpag.Contacontabil when Contascontabeis.Contacontabil
+          then coalesce(movtotitulopag.mvlrdescontoeletron,0) else 0 end,
+          case Lantocontpag.Contacontabil when Contascontabeis.Contacontabil
+          then coalesce(movtotitulopag.mvlracrescimoeletron,0) else 0 end,
+          case Lantocontpag.Contacontabil when Contascontabeis.Contacontabil
+          then coalesce(movtotitulopag.moutrosdescontos,0) else 0 end,
+          case Lantocontpag.Contacontabil when Contascontabeis.Contacontabil
+          then coalesce(movtotitulopag.valorjurosmovto,0) else 0 end,
+          case Lantocontpag.Contacontabil when Contascontabeis.Contacontabil
+          then coalesce(movtotitulopag.valordescontomovto,0) else 0 end,
+          movtotitulopag.tipomovto,
+          contascontabeis.tipoconta,
+          movtotitulopag.CONTACORRENTE,
+          movtotitulopag.dtmovtotitulo
+from movtotitulopag
+inner join titulopag on (movtotitulopag.filial=titulopag.filial
+                     and movtotitulopag.idtitulo=titulopag.idtitulo)
+inner join lantocontpag on (titulopag.filial=lantocontpag.filial
+                        and titulopag.idtitulo=lantocontpag.idmovtobanc)
+inner join estabelecimento on (lantocontpag.filial=estabelecimento.cadastro)
+inner join cadastroparceiros on (cadastroparceiros.cadastro=estabelecimento.cadastro)
+LEFT join contascontabeis
+                           on (estabelecimento.planocontas=contascontabeis.idplano
+                          and lantocontpag.contacontabil  like contascontabeis.contacontabil||'%'  )
+where movtotitulopag.filial=:filial
+and movtotitulopag.dtmovtotitulo between :datainicial and :datafinal
+and lantocontpag.centrocusto between :CENTROCUSTOI and :CENTROCUSTOF
+and movtotitulopag.tipomovto in ('D','F')
+INTO
+:RAZAOSOCIAL,
+:ORIGEM,:REGISTRO,:MOVIMENTO,:LANCAMENTO,:CONTACONTABIL, :nivel, :CENTROCUSTO,:DESCRICAO,
+:DEBITO,:CREDITO,:SALDO,:DEBITOSOMA,:CREDITOSOMA,:SALDOSOMA,
+:mvlrdescontoeletron,:mvlracrescimoeletron,:moutrosdescontos,:valorjurosmovto,
+:valordescontomovto,:tipomovimento, :tipoconta,:contacorrente, datamovto DO begin
+
+  suspend;
+
+  if (mvlrdescontoeletron>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :cpmvlrdescontoeletron like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil,:nivel,:descricao,:tipoconta do begin
+        debito = 0;
+        debitosoma = 0;
+        credito = case tipomovimento when 'D' then mvlrdescontoeletron
+                  else mvlrdescontoeletron*(-1) end;
+        creditosoma = case tipoconta when 'A' then credito else 0 end;
+        saldo = credito;
+        saldosoma = case tipoconta when 'A' then credito else 0 end;
+        suspend;
+     end
+  end
+  if (moutrosdescontos>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :cpmoutrosdescontos like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        debito = 0;
+        debitosoma = 0;
+        credito = case tipomovimento when 'D' then moutrosdescontos
+                  else moutrosdescontos*(-1) end;
+        creditosoma = case tipoconta when 'A' then credito else 0 end;
+        saldo = credito;
+        saldosoma = case tipoconta when 'A' then credito else 0 end;
+        suspend;
+     end
+  end
+  if (valordescontomovto>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :cpvalordescontomovto like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        debito = 0;
+        debitosoma = 0;
+        credito = case tipomovimento when 'D' then valordescontomovto
+                  else valordescontomovto*(-1) end;
+        creditosoma = case tipoconta when 'A' then credito else 0 end;
+        saldo = credito;
+        saldosoma = case tipoconta when 'A' then credito else 0 end;
+        suspend;
+     end
+  end
+  if (valorjurosmovto>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :cpvalorjurosmovto like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        credito = 0;
+        creditosoma = 0;
+        debito = case tipomovimento when 'D' then valorjurosmovto
+                  else valorjurosmovto*(-1) end;
+        debitosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        saldo = debito*(-1);
+        saldosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        suspend;
+     end
+  end
+  if (mvlracrescimoeletron>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :cpmvlracrescimoeletron like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil,nivel,:descricao,:tipoconta do begin
+        credito = 0;
+        creditosoma = 0;
+        debito = case tipomovimento when 'D' then mvlracrescimoeletron
+                  else mvlracrescimoeletron*(-1) end;
+        debitosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        saldo = debito*(-1);
+        saldosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        suspend;
+     end
+  end
+
+end
+
+
+
+for select cadastroparceiros.razaosocial as razaosocial,
+           'R' AS ORIGEM,
+           movtitulorec.idtitulo as documento,
+           movtitulorec.idmovimento as movimento,
+           lantocontrec.idlancamento as lancamento,
+           coalesce(contascontabeis.contacontabil,lantocontrec.CONTACONTABIL),
+           contascontabeis.nivel,
+           lantocontrec.centrocusto,
+           contascontabeis.descricao,
+
+           CAST(0 AS DOUBLE PRECISION) as debito,
+
+           case movtitulorec.tipomovto when 'D' then lantocontrec.valor
+               *  (movtitulorec.valorpago/titulorec.valortitulo)
+           else lantocontrec.valor*(-1)
+               *  (movtitulorec.valorpago/titulorec.valortitulo) end as credito,
+
+           case movtitulorec.tipomovto when 'D' then lantocontrec.valor
+               *  (movtitulorec.valorpago/titulorec.valortitulo)
+           else lantocontrec.valor*-1
+               *  (movtitulorec.valorpago/titulorec.valortitulo) end as saldo,
+
+           CAST(0 AS DOUBLE PRECISION) as debitosoma,
+
+           case contascontabeis.tipoconta when 'A' then
+           case movtitulorec.tipomovto when 'D' then lantocontrec.valor
+              *  (movtitulorec.valorpago/titulorec.valortitulo)
+           else lantocontrec.valor*(-1)
+               *  (movtitulorec.valorpago/titulorec.valortitulo) end
+           else 0 end as creditosoma,
+
+           case contascontabeis.tipoconta when 'A' then
+           case movtitulorec.tipomovto when 'D' then lantocontrec.valor
+               *  (movtitulorec.valorpago/titulorec.valortitulo)
+           else lantocontrec.valor*-1
+              *  (movtitulorec.valorpago/titulorec.valortitulo)  end
+           else 0 end as saldosoma,
+          case Lantocontrec.Contacontabil when Contascontabeis.Contacontabil then coalesce(movtitulorec.mvlrdescontoeletron,0) else 0 end,
+          case Lantocontrec.Contacontabil when Contascontabeis.Contacontabil then coalesce(movtitulorec.mvlracrescimoeletron,0) else 0 end,
+          case Lantocontrec.Contacontabil when Contascontabeis.Contacontabil then coalesce(movtitulorec.moutrosdescontos,0) else 0 end,
+          case Lantocontrec.Contacontabil when Contascontabeis.Contacontabil then coalesce(movtitulorec.valorjurosmovto,0) else 0 end,
+          case Lantocontrec.Contacontabil when Contascontabeis.Contacontabil then coalesce(movtitulorec.valordescontomovto,0) else 0 end,
+          movtitulorec.tipomovto,
+          movtitulorec.CONTACORRENTE,
+          movtitulorec.DTMOVTOTITULO
+
+from movtitulorec
+inner join titulorec on (movtitulorec.filial=titulorec.filial
+                     and movtitulorec.idtitulo=titulorec.idtitulo)
+inner join lantocontrec on (titulorec.filial=lantocontrec.filial
+                        and titulorec.idtitulo=lantocontrec.idmovtobanc)
+inner join estabelecimento on (lantocontrec.filial=estabelecimento.cadastro)
+inner join cadastroparceiros on (cadastroparceiros.cadastro=estabelecimento.cadastro)
+LEFT join contascontabeis
+                      on (estabelecimento.planocontas=contascontabeis.idplano
+                     and lantocontrec.contacontabil  like contascontabeis.contacontabil||'%'  )
+where movtitulorec.filial=:FILIAL
+and movtitulorec.dtmovtotitulo between :datainicial and :datafinal
+and lantocontrec.CENTROCUSTO  between :CENTROCUSTOI and :CENTROCUSTOF
+and movtitulorec.tipomovto in ('D','F')
+INTO :RAZAOSOCIAL,:ORIGEM,:REGISTRO,:MOVIMENTO,:LANCAMENTO,:CONTACONTABIL, :nivel,
+:CENTROCUSTO,:DESCRICAO,:DEBITO,:CREDITO,:SALDO,:DEBITOSOMA,:CREDITOSOMA,
+:SALDOSOMA,:mvlrdescontoeletron,:mvlracrescimoeletron,:moutrosdescontos,
+:valorjurosmovto,:valordescontomovto,:tipomovimento,:contacorrente, datamovto DO begin
+  SUSPEND;
+  if (mvlrdescontoeletron>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :crmvlrdescontoeletron like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        credito = 0;
+        creditosoma = 0;
+        debito = case tipomovimento when 'D' then mvlrdescontoeletron
+                  else mvlrdescontoeletron*(-1) end;
+        debitosoma = case tipoconta when 'A' then debito else 0 end;
+        saldo = debito*(-1);
+        saldosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        suspend;
+     end
+  end
+  if (moutrosdescontos>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :crmoutrosdescontos like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil,:nivel, :descricao,:tipoconta do begin
+        credito = 0;
+        creditosoma = 0;
+        debito = case tipomovimento when 'D' then moutrosdescontos
+                  else moutrosdescontos*(-1) end;
+        debitosoma = case tipoconta when 'A' then debito else 0 end;
+        saldo = debito*(-1);
+        saldosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        suspend;
+     end
+  end
+  if (valordescontomovto>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :crvalordescontomovto like contascontabeis.contacontabil||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        credito = 0;
+        creditosoma = 0;
+        debito = case tipomovimento when 'D' then valordescontomovto
+                  else valordescontomovto*(-1) end;
+        debitosoma = case tipoconta when 'A' then debito else 0 end;
+        saldo = debito*(-1);
+        saldosoma = case tipoconta when 'A' then debito*(-1) else 0 end;
+        suspend;
+     end
+  end
+
+  if (valorjurosmovto>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :crvalorjurosmovto like  contascontabeis.contacontabil||'%' )
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel,:descricao,:tipoconta do begin
+        debito = 0;
+        debitosoma = 0;
+        credito = case tipomovimento when 'D' then valorjurosmovto
+                  else valorjurosmovto*(-1) end;
+        creditosoma = case tipoconta when 'A' then credito else 0 end;
+        saldo = credito;
+        saldosoma = case tipoconta when 'A' then credito else 0 end;
+        suspend;
+     end
+  end
+
+  if (mvlracrescimoeletron>0) then begin
+     FOR SELECT contascontabeis.contacontabil,
+                contascontabeis.nivel,
+                contascontabeis.descricao,
+                contascontabeis.tipoconta
+     from estabelecimento
+     inner join planocontas on (estabelecimento.planocontas=planocontas.idplano)
+     inner join contascontabeis on (contascontabeis.idplano=planocontas.idplano
+            and :crmvlracrescimoeletron  like contascontabeis.contacontabil ||'%')
+     where estabelecimento.cadastro=:filial
+     into :contacontabil, :nivel, :descricao,:tipoconta do begin
+        debito = 0;
+        debitosoma = 0;
+        credito = case tipomovimento when 'D' then mvlracrescimoeletron
+                  else mvlracrescimoeletron*(-1) end;
+        creditosoma = case tipoconta when 'A' then credito else 0 end;
+        saldo = credito;
+        saldosoma = case tipoconta when 'A' then credito else 0 end;
+        suspend;
+     end
+  end
+end
+
+
+
+FOR select cadastroparceiros.razaosocial as razaosocial,
+       'C' AS ORIGEM,
+       lantocontbanc.idmovtobanc as documento,
+       0 as movimento,
+       lantocontbanc.idlancamento as lancamento,
+       coalesce(contascontabeis.contacontabil,lantocontbanc.CONTACONTABIL),
+       contascontabeis.nivel,
+       lantocontbanc.centrocusto,
+       contascontabeis.descricao,
+case movbancarios.tipomovimento when 'D' then lantocontbanc.valor
+       else 0 end as debito,
+case movbancarios.tipomovimento when 'D' then 0
+       else lantocontbanc.valor end as credito,
+case movbancarios.tipomovimento when 'D' then lantocontbanc.valor*(-1)
+       else lantocontbanc.valor end as saldo,
+case contascontabeis.tipoconta when 'A' then
+case movbancarios.tipomovimento when 'D' then lantocontbanc.valor
+       else 0 end
+       else 0 end as debitosoma,
+case contascontabeis.tipoconta when 'A' then
+case movbancarios.tipomovimento when 'D' then 0
+       else lantocontbanc.valor end
+       else 0 end as creditosoma,
+case contascontabeis.tipoconta when 'A' then
+case movbancarios.tipomovimento when 'D' then lantocontbanc.valor*(-1)
+       else lantocontbanc.valor end
+       else 0 end as saldosoma,
+       MOVBANCARIOS.IDCONTACORRENTE,
+       movbancarios.movimentacao
+from MOVBANCARIOS
+/*from estsin
+inner join movbancarios on (movbancarios.filial=estsin.estabelecimento
+                        and movbancarios.movimentacao
+                    between estsin.datainicial and estsin.datafinal)
+*/
+inner join lantocontbanc on (movbancarios.filial=lantocontbanc.filial
+                        and movbancarios.idcontacorrente=lantocontbanc.idcontacorrente
+                        and movbancarios.idmovtobancario=lantocontbanc.idmovtobanc)
+inner join estabelecimento on (lantocontbanc.filial=estabelecimento.cadastro)
+inner join cadastroparceiros on (cadastroparceiros.cadastro=estabelecimento.cadastro)
+LEFT join contascontabeis
+    on (estabelecimento.planocontas=contascontabeis.idplano
+                        and lantocontbanc.contacontabil  like contascontabeis.contacontabil||'%'  )
+where
+--estsin.relatorio='LANCTOPAG'
+MOVBANCARIOS.FILIAL=:FILIAL
+and movbancarios.movimentacao between :datainicial and :datafinal
+and lantocontbanc.CENTROCUSTO  between :CENTROCUSTOI and :CENTROCUSTOF
+
+INTO
+:RAZAOSOCIAL,:ORIGEM,:REGISTRO,:MOVIMENTO,:LANCAMENTO,:CONTACONTABIL, :nivel,
+:CENTROCUSTO,:DESCRICAO,:DEBITO,:CREDITO,:SALDO,:DEBITOSOMA,:CREDITOSOMA,
+:SALDOSOMA,:contacorrente, datamovto DO
+ SUSPEND;
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_PLANCTOCONTABEISPAGOS TO  SYSDBA;
+

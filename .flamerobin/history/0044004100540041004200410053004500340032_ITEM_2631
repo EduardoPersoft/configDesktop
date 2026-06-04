@@ -1,0 +1,55 @@
+select
+    locallote.IDITEM,
+    ITEMESTOQUE.DESCRICAO,
+    locallote.LOTE,
+    MATERIALLOTE.C_GRAMATURA,
+    MATERIALLOTE.C_LARGURA,
+    0 as q,
+    locallote.QUANTIDADE
+from 
+    locallote
+inner join 
+    ITEMESTOQUE on 
+        locallote.iditem=ITEMESTOQUE.codigo  
+inner join 
+    MATERIALLOTE ON 
+        locallote.filial=materiallote.filial and
+        locallote.iditem=MATERIALLOTE.IDITEM and 
+        locallote.lote=materiallote.lote   
+where 
+    locallote.FILIAL=110 and 
+    locallote.local=1095 and
+    locallote.quantidade <> 0
+union
+select
+    MATERIALMOVIMENTOESTOQUE.IDITEM,
+    ITEMESTOQUE.DESCRICAO,    
+    materialmovimentoestoque.LOTE,
+    MATERIALLOTE.C_GRAMATURA,
+    MATERIALLOTE.C_LARGURA,
+    1 as q,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal)*(-1)
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+inner join 
+    ITEMESTOQUE on 
+        MATERIALMOVIMENTOESTOQUE.iditem=ITEMESTOQUE.codigo  
+inner join 
+    MATERIALLOTE ON 
+        MATERIALMOVIMENTOESTOQUE.filial=materiallote.filial and
+        MATERIALMOVIMENTOESTOQUE.iditem=MATERIALLOTE.IDITEM and 
+        MATERIALMOVIMENTOESTOQUE.lote=materiallote.lote   
+where 
+    movimentoestoque.FILIAL=110 and 
+    movimentoestoque.emissao>='30.06.2024' and
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=1095
+group by
+    MATERIALMOVIMENTOESTOQUE.IDITEM,
+    ITEMESTOQUE.DESCRICAO,    
+    materialmovimentoestoque.LOTE,
+    MATERIALLOTE.C_GRAMATURA,
+    MATERIALLOTE.C_LARGURA

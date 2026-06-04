@@ -1,0 +1,7 @@
+select
+    *
+from
+    TITULOREC
+where
+    titulorec.filial=1
+    titulorec.DATAENVIO='22.08.2022'

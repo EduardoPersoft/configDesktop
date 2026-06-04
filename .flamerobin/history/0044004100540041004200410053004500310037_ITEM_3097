@@ -1,0 +1,3 @@
+select * from CADASTROPARCEIROS
+where grupoempresarial is null
+and status=1

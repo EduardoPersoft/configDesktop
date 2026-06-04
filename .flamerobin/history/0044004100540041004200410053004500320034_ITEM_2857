@@ -1,0 +1,22 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.DESCRICAO,
+    CLASSIFICACAOFISCAL.PRODUTO,
+    count(mercadoriasnota.idnota),
+    sum(mercadoriasnota.quantidade)
+from
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join 
+    itemestoque on
+        itemestoque.codigo=mercadoriasnota.CODIGO
+inner join 
+    CLASSIFICACAOFISCAL on
+        classificacaofiscal.CFISCAL=itemestoque.CLASSIFISCAL
+where 
+    notafiscal.filial=5 and
+    

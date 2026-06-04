@@ -1,0 +1,2 @@
+select * from c_laminacao
+where c_laminacao.C_FILME2SALVO is not null

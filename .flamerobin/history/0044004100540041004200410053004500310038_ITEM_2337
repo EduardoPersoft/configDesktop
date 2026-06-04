@@ -1,0 +1,4 @@
+
+select * from C_COMISSAOPEDIDOPAGA
+where 
+VENDEDOR = 21 and FILIAL = 1 and IDNOTA = 53067

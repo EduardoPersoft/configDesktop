@@ -1,0 +1,56 @@
+SELECT
+    itemestoque.codigo,   
+    itemestoque.descricao,    
+    itemestoque.referencia,
+    local.descricao as local,
+   
+   
+    (select 
+        sum(m2.saldototal) 
+     from 
+        materiallocal m2
+     inner join
+        local on
+            m2.IDLOCAL=l1.id and
+            l1.descricao like 'Z1%'
+     where 
+        m2.filial=materialfilial.filial and
+        m2.iditem=materialfilial.iditem),
+
+    
+    (select 
+        sum(m2.saldototal) 
+     from 
+        materiallocal m2
+     inner join
+        local l2 on
+            m2.IDLOCAL=l2.id and
+            l2.descricao like 'Z2%'
+     where 
+        m2.filial=materialfilial.filial and
+        m2.iditem=materialfilial.iditem)
+        
+    
+FROM
+    materialfilial
+inner JOIN
+    itemestoque on
+        itemestoque.codigo = materialfilial.IDITEM
+inner join
+    materiallocal m1 on
+       m1.filial=materialfilial.filial and
+       m1.iditem=materialfilial.iditem  and
+       m1.saldototal>0
+inner join
+    local l1
+        l1.id=m1.IDLOCAL and
+        l1.descricao like 'Z1%'
+       
+WHERE
+
+
+    materialfilial.filial=? AND
+    coalesce(materialfilial.saldominimo, 0) = 0 and
+    m2.SALDOTOTAL>0
+order by
+    itemestoque.referencia

@@ -1,0 +1,5 @@
+update 
+    c_laminacao
+set 
+    c_laminacao.FILME1BOBINADOR='A',
+    c_laminacao.FILME2BOBINADOR='B'

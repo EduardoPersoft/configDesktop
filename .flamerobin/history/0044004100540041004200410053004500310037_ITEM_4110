@@ -1,0 +1,48 @@
+/*
+select * from orcamento pedido
+where pedido.DATACADASTRO='2025-01-23'
+
+
+select * from MERCADORIASorc a
+where exists (
+select * from orcamento PEDIDO
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)
+
+
+select * from composicaomercorc a
+where exists (
+select * from orcamento pedido
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)
+
+
+select * from fatorc a
+where exists (
+select * from orcamento pedido
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)
+
+
+select * from vendedoresorc a
+where exists (
+select * from orcamento pedido
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)
+*/
+
+select * from prazomercorc a
+where exists (
+select * from orcamento pedido
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)

@@ -1,0 +1,7 @@
+select * from fatped a
+where exists (
+select * from PEDIDO
+where pedido.filial=a.FILIAL
+and pedido.idnota=a.IDNOTA
+and pedido.DATACADASTRO='2025-01-23'
+)

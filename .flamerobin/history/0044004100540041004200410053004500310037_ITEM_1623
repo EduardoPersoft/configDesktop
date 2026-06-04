@@ -1,0 +1,16 @@
+select
+    (select first 1
+        materiallocal.filial
+     from
+        materiallocal
+     where
+        materiallocal.iditem=itemestoque.codigo
+     ),
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao
+from
+    itemestoque
+order by
+    itemestoque.codigo

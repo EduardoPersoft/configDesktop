@@ -1,0 +1,9 @@
+update
+    mercadoriasped
+set
+    MERCADORIASPED.baixa='S',
+    mercadoriasped.minimo=0
+where
+    mercadoriasped.baixa='N' and
+    mercadoriasped.filial=110 and
+    mercadoriasped.idnota <= 9205

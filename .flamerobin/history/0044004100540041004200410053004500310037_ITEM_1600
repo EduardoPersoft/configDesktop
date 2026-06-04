@@ -1,0 +1,9 @@
+
+update
+    MERCADORIASNOTA
+set
+    mercadoriasnota.cstipi=49
+where
+    mercadoriasnota.cstipi=0 and
+    mercadoriasnota.valoripi=0;
+    

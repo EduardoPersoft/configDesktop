@@ -1,0 +1,6 @@
+select 
+titulopag.VALORTITULO,
+TITULOPAG.VALOREMABERTO,
+TITULOPAG.* from TITULOPAG
+where filial=110 and
+titulo='8872850'

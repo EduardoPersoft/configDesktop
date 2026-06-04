@@ -1,0 +1,3 @@
+select * from titulorec
+where titulorec.parceiro is null
+and titulorec.EMISSAO='16.12.2022'

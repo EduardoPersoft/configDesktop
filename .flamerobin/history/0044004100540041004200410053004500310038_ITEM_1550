@@ -1,0 +1,6 @@
+select * from vendoresped
+where not exists (
+select * from C_COMISSAOPEDIDOPAGA
+where c_comissaopedidopaga.filial=vendedoresped.FILIAL
+and C_COMISSAOPEDIDOPAGA.IDNOTA=vendedoresped.IDNOTA
+and C_COMISSAOPEDIDOPAGA.VALORCOMISSAO=VENDEDORESPED.vendedor)

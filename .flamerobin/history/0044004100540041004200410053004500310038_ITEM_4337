@@ -1,0 +1,5 @@
+select * from MERCADORIASPED
+where mercadoriased.filial=1
+and mercadoriasped.c_loja=7
+and mercadoriasped.codigo like 'PE-%'
+order by idntoa desc

@@ -1,0 +1,2 @@
+select * from C_DESTINOAVULSO
+where C_DESTINOAVULSO.coleta='14110'

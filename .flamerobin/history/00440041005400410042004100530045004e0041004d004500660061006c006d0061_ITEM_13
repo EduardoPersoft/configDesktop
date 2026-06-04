@@ -1,0 +1,14 @@
+SELECT
+    prazomercpedcompra.*,
+    mercadoriaspedcompra.quantidade
+FROM
+    PRAZOMERCPEDCOMPRA
+INNER JOIN
+    mercadoriaspedcompra on 
+        mercadoriaspedcompra.filial=prazomercpedcompra.filial AND
+        mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+        mercadoriaspedcompra.IDMERCADORIA=prazomercpedcompra.IDITEM
+WHERE
+    mercadoriaspedcompra.quantidade<>prazomercpedcompra.qtde AND
+    mercadoriaspedcompra.baixa = 'N'
+    

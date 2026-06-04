@@ -1,0 +1,15 @@
+UPDATE 
+    ORCAMENTO
+set
+    ORCAMENTO.C_ARQUITETO = 
+            (SELECT first 1
+                VENDEDORESORC.VENDEDOR
+             from
+                VENDEDORESORC
+             inner join 
+                vendedor on
+                    vendedor.cadastro=VENDEDORESORC.VENDEDOR
+             where
+                vendedoresorc.filial=orcamento.filial and
+                vendedoresorc.idnota=orcamento.idnota and
+                vendedor.TIPOVENDEDOR>=5)

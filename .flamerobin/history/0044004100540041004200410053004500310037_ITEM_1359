@@ -1,0 +1,9 @@
+update 
+    movimentoestoque.IDMOVTOTRANSFERENCIA = movimentoestoque.idmovimento +1
+where
+    m1.TIPOMOVIMENTO = '10'
+    and m1.IDMOVTOTRANSFERENCIA is null
+    and exists (
+        select * from movimentoestoque m2
+        where m1.filial=m2.filial and m2.idmovimento=m1.idmovimento+1
+        and m2.TIPOMOVIMENTO='11')

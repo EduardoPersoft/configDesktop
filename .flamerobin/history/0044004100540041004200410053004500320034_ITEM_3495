@@ -1,0 +1,6 @@
+select 
+    uf_sigla,
+    municipio_nome,
+    municipio
+from 
+    municipio

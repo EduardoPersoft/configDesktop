@@ -1,0 +1,24 @@
+select
+    itemestoque.filialPadrao,
+    itemestoque.codigo,
+    itemestoque.codigoBarra,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    TIPOITEMESTOQUE.DESCRICAO,
+    itemestoquexarquivo.NOMEsalvo,
+    itemestoquexarquivo.nomearquivo,
+    cast('N' as char(1)) as p_char 
+from
+    itemestoque
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+left join
+    itemestoquexarquivo on 
+    itemestoque.codigo=itemestoquexarquivo.codigo 
+    and itemestoquexarquivo.ordem=0
+
+where
+    itemestoque.tipoProduto<>'5'
+order by
+    itemestoque.codigo

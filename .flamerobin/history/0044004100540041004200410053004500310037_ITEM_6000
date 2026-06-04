@@ -1,0 +1,31 @@
+select
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.iditem,
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)
+from
+    MOVIMENTOESTOQUE
+inner join
+    tipomovimentoestoque on 
+        tipomovimentoestoque.id=movimentoestoque.TIPOMOVIMENTO
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=MOVIMENTOESTOQUE.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+    MOVIMENTOESTOQUE.filial=1 and
+    movimentoestoque.EMISSAO >= cast('now' as date) - 90 and 
+    tipomovimentoestoque.TIPOMOVIMENTO='S'
+group by
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.iditem
+having 
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)/12>(select sum(locallote.quantidade)
+                                                      from LOCALLOTE
+                                                      inner join 
+                                                        local local on
+                                                            local.id = MATERIALMOVIMENTOESTOQUE.local
+                                                      where locallote.filial=materialmovimentoestoque.filial and
+                                                      locallote.iditem=materialmovimentoestoque.iditem and
+                                                      substring(local.descricao from 1 for 2) = 'Z2')

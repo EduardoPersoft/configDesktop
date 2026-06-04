@@ -1,0 +1,13 @@
+select 
+    *
+from
+    C_REQUISICAOMATERIALITEM
+where 
+    codigo in  ('60005',
+                '60004',
+                '60007',
+                '60013',
+                '60012',
+                '60011',
+                '60010',
+                '60002')

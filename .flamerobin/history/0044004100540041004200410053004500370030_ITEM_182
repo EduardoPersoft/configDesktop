@@ -1,0 +1,2 @@
+select * from servicosped
+where servicosped.baixa='N' and servicosped.filial>=110

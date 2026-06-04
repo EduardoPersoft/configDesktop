@@ -1,0 +1,2 @@
+insert into ITEMESTOQUEXARQUIVO(codigo,ordem,nomearquivo,imagem,pedidocomercial,descricaoarquivo,nomesalva,dataalteracao)
+select codigo,0,codigo||'.jpeg', 'S', 'S', '', codigo||'.jpeg',null) from itemestoque

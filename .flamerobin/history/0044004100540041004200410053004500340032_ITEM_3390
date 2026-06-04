@@ -1,0 +1,2 @@
+select filial,idnota,idmercadoria,codigo, cfop from MERCADORIASNOTA
+where filial=110 and idpedido=11771

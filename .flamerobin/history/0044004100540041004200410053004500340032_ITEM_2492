@@ -1,0 +1,2 @@
+select * from MOVTOTITULOREC
+where filial=12826 and idtitulo=435145

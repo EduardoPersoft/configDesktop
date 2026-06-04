@@ -1,0 +1,3 @@
+select filial,idnota,destinatario,uuid from NOTAFISCAL
+where filial>110
+order by idnota desc

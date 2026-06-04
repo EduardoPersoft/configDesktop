@@ -1,0 +1,6 @@
+select  
+    *
+from
+    LANTOCONTPAG
+where 
+    lantocontpag.CONTACONTABIL='20403'

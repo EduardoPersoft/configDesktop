@@ -1,0 +1,29 @@
+select
+    CONTASCONTABEIS.CONTACONTABIL,
+    contascontabeis.descricao,
+    sum(lantocontpag.valor)
+from 
+    TITULOPAG
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulopag.PARCEIRO
+inner join 
+    lantocontpag on 
+        (lantocontpag.FILIAL=titulopag.filial and 
+         lantocontpag.idmovtobanc=titulopag.idtitulo)
+inner join 
+    ESTABELECIMENTO on 
+        (ESTABELECIMENTO.cadastro = titulopag.filial)
+LEFT join 
+    contascontabeis on 
+        (estabelecimento.planocontas=contascontabeis.idplano
+        and contascontabeis.contacontabil like lantocontpag.contacontabil||'%' )            
+left join
+    tipoPagamento on
+        tipoPagamento.id=titulopag.tipoTransacao
+where    
+    titulopag.filial = 1 and 
+    titulopag.vencimento  between '01.10.2025' and '31.10.2025' and
+    coalesce(titulopag.tipobaixa, '') in ('', 'P') 
+
+

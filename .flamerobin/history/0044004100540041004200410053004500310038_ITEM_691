@@ -1,0 +1,9 @@
+SELECT
+    filial,
+    idnota,
+    pedido.c_tipo
+FROM
+    PEDIDO
+WHERE
+    filial=1 AND
+    idnota=66847

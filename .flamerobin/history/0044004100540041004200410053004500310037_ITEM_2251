@@ -1,0 +1,9 @@
+select 
+    distinct
+    CADASTROPARCEIROS.nome,
+    CONTASCONTABEIS.DESCRICAO
+from
+    TITULOPAG
+where
+    titulopag.EMISSAO>='01.01.2023' and
+    coalesce(titulopag.tipobaixa, '')<>'C'

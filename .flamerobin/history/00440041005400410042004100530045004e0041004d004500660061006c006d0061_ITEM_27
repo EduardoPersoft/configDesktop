@@ -1,0 +1,6 @@
+SELECT
+    l1.*
+FROM
+    LISTAPRECOPRODUTO l1
+where 
+    l1.lista=1

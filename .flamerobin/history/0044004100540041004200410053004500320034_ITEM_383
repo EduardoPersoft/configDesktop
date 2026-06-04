@@ -1,0 +1,23 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    materiallocal.SALDOTOTAL,
+    materialfilial.CONSUMOMEDIO
+
+from 
+    itemestoque 
+
+inner join
+    materiallocal on
+        materiallocal.filial=5 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.idlocal=1
+
+inner join
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo        
+where 
+
+    itemestoque.descricao like 'CATRACA%'

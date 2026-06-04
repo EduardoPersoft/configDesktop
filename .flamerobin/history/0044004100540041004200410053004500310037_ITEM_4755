@@ -1,0 +1,2 @@
+update clientes.limitecredito=0.01 from CLIENTES
+where clientes.LIMITECREDITO=0

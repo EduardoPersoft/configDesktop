@@ -1,0 +1,15 @@
+select 
+    datacreditodebito,
+    previsao,
+    emissao,
+    documento,
+    faturas2,
+    valorconta,
+    juros,
+    multa,
+    desconto,
+    valorpago,
+    contacontabil,
+    CADASTRO 
+from 
+    t_liquidados

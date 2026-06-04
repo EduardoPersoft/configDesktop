@@ -1,0 +1,27 @@
+select 
+    orcRelacionado.filial,
+    orcRelacionado.idNota,
+    orcRelacionado.uuid
+from 
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        orcRelacionado.idrelacao=orcLeitura.idnota
+where 
+    orcleitura.filial=1 and
+    orcleitura.idnota=201649
+union    
+select 
+    orcRelacionado.filial,
+    orcRelacionado.idNota,
+    orcRelacionado.uuid
+from 
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        orcRelacionado.idrelacao=orcLeitura.idnota
+where 
+    orcleitura.filial=1 and
+    orcleitura.idnota=201649

@@ -1,0 +1,4 @@
+SET TERM ^ ;
+drop TRIGGER COMENTARIOS_BI 
+^
+SET TERM ; ^

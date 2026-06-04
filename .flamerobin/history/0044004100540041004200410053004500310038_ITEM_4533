@@ -1,0 +1,7 @@
+update 
+    CONTASCONTABEIS
+set
+    contascontabeis.descricao = lower(descricao)
+
+where
+    contacontabil between '2040201' and '2040201x'

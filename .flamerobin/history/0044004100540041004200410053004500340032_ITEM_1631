@@ -1,0 +1,2 @@
+select first 10 * from logalteracao
+where objeto='ESTOQUE' AND CODIGO='PRO4183FLI001'

@@ -1,0 +1,28 @@
+SET TERM ^ ;
+ALTER PROCEDURE SPEDFISCALDELETE
+
+AS
+BEGIN
+
+  delete from SPEDFISCAL_0;
+  delete from SPEDFISCAL_A;
+  delete from SPEDFISCAL_B;  
+  delete from SPEDFISCAL_C;
+  delete from SPEDFISCAL_D;
+  delete from SPEDFISCAL_E;
+  delete from SPEDFISCAL_F;
+  delete from SPEDFISCAL_G;
+  delete from SPEDFISCAL_H;
+  delete from SPEDFISCAL_K;
+  delete from SPEDFISCAL_M;
+  delete from SPEDFISCAL_1;
+  delete from SPEDFISCAL_9;
+
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE SPEDFISCALDELETE TO  SYSDBA;
+

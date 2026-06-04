@@ -1,0 +1,3 @@
+select * from colaboradores
+inner join cadastroparceiros on CADASTROPARCEIROS.cadastro=colaboradores.id
+order by cadastro

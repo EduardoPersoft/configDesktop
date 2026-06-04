@@ -1,0 +1,3 @@
+select * from LISTAPRECOPRODUTO
+where produto in ('PE-25207', '20011')
+order by lista

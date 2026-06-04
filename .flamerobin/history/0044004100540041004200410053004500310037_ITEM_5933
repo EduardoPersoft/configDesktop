@@ -1,0 +1,14 @@
+select pedido.* from PEDIDO
+inner join 
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=pedido.filial and
+        materialmovimentoestoque.idpedido=pedido.idnota 
+inner join
+    MOVIMENTOESTOQUE on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+where 
+    pedido.datacadastro>='01.01.2026' and 
+    coalesce(pedido.LOGRADOUROENTREGA,'')<>'' and 
+    coalesce(movimentoestoque.COLETA,'')<>''
+order by pedido.DATACADASTRO desc

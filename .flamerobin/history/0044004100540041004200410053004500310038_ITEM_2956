@@ -1,0 +1,18 @@
+select    
+    principal.dataemissao,
+    principal.filial,
+    principal.idnota,
+    principal.c_status
+from
+    orcamento principal
+where
+    principal.c_status<2 and
+    exists(select 
+        * 
+     from 
+        orcamento alternativo
+     where 
+        alternativo.filial=principal.FILIAL and
+        alternativo.IDRELACAO=principal.IDNOTA and
+        alternativo.c_status=2)
+ order by principal.idnota   

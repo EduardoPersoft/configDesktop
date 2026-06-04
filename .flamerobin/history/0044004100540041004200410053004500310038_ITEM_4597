@@ -1,0 +1,38 @@
+select 
+    contaDre.natureza,
+    extract(month from TITULOPAG.DATAREFERENCIA) as mes,
+    extract(year from TITULOPAG.DATAREFERENCIA) as ano,
+    contaDre.contacontabil,
+    contaDre.descricao,
+    sum (lantocontpag.VALOR)
+from
+    TITULOPAG
+
+inner join 
+    ESTABELECIMENTO on 
+    TITULOPAG.FILIAL=ESTABELECIMENTO.CADASTRO 
+inner join
+    LANTOCONTPAG on 
+        lantocontpag.filial=titulopag.Filial and 
+        lantocontpag.IDMOVTOBANC=titulopag.idtitulo
+inner join 
+    CONTASCONTABEIS contaDre on
+    ESTABELECIMENTO.PLANOCONTAS=contaDre.IDPLANO and 
+    lantocontpag.contacontabil like contaDre.CONTACONTABIL||'%' 
+inner join 
+    CONTASCONTABEIS contaLcto on
+    ESTABELECIMENTO.PLANOCONTAS=contaLcto.IDPLANO and 
+    lantocontpag.contacontabil = contaLcto.CONTACONTABIL and
+    contalcto.NATUREZA=contadre.NATUREZA
+
+where
+    TITULOPAG.DATAREFERENCIA between '01.01.2026'  and '31.01.2026' and
+    coalesce(titulopag.TIPOBAIXA,'') not in ('C', 'E')
+
+Group by 
+    contaDre.natureza,
+    extract(month from TITULOPAG.DATAREFERENCIA),
+    extract(year from TITULOPAG.DATAREFERENCIA),
+    contaDre.contacontabil,
+    contaDre.descricao
+

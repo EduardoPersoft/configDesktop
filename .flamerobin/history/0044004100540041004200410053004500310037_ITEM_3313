@@ -1,0 +1,11 @@
+select
+    itemestoque.codigo,
+    itemestoque.CODIGOBARRA,
+    itemestoque.DESCRICAO
+from
+    ITEMESTOQUE
+inner join
+    ITEMESTOQUE.C_FORNECEDOR=c_fornecedor.id
+where
+    itemestoque.CODIGOBARRA=substring(itemestoque.CODIGOBARRA from 1 for 10) and
+    itemestoque.TIPOPRODUTO ='3'

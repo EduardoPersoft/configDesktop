@@ -1,0 +1,38 @@
+select 
+    itemestoque.codigo,
+    itemestoque.referencia,
+    C_FORNECEDORPECA.descricao,
+    itemestoque.descricao,
+    count(mercadoriasorc.idnota) qtdOrcamento,
+    sum(case when mercPedConvertido.idnota is null then 0 else 1 end) qtdConversao 
+from 
+    orcamento
+inner join
+    mercadoriasorc on
+        orcamento.filial=mercadoriasorc.filial and
+        orcamento.idnota=mercadoriasorc.idnota 
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasorc.CODIGO
+inner join
+    C_FORNECEDORPECA on
+        C_FORNECEDORPECA.id=itemestoque.C_FORNECEDOR
+left join
+    pedido pedConvertido on
+        pedConvertido.filial=orcamento.filial and
+        pedConvertido.idorcamento=orcamento.idnota and
+        pedConvertido.CANCELAMENTO='N'
+left join
+    mercadoriasped mercPedConvertido on
+        pedconvertido.filial=mercPedConvertido.filial and
+        pedConvertido.idnota=mercPedconvertido.idnota and
+        mercadoriaOrc.codigo=mercPedconvertido.codigo
+where 
+    orcamento.DATACADASTRO between '01.08.2023' and '31.08.2023' and
+    orcamento.CANCELAMENTO='N'
+group by    
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    C_FORNECEDORPECA.descricao    
+order by 5 desc

@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    codigo,
+    mercadoriasnotacompra.pipi
+from 
+    mercadoriasnotacompra 
+where 
+    filial=5
+order by
+    idnota desc

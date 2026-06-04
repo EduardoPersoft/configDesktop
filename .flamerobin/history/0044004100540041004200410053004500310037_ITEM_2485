@@ -1,0 +1,2 @@
+select
+    cast('now' as timestamp) as hora

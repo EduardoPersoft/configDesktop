@@ -1,0 +1,7 @@
+select * from titulorec
+where tipobaixa is null
+and not exists (
+select * from FATURAS
+where faturas.filial=titulorec.filial 
+and faturas.idtitulo=titulorec.idtitulo) 
+and titulorec.titulo not like '%SDX'

@@ -1,0 +1,13 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.definicao,
+    itemestoque.referencia,
+    itemestoquexarquivo.NOMEARQUIVO
+from
+    itemestoquexarquivo
+inner join
+    itemestoque on
+        itemestoque.codigo=itemestoquexarquivo.CODIGO
+where
+    ITEMESTOQUEXARQUIVO.ordem=0

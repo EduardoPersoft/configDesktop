@@ -1,0 +1,200 @@
+select
+    cast(c_pedidodatafinLIB."DATA" as date) as "data",
+    pedido.idnota idpedido,
+    pedido.IDORCAMENTO,
+    case when  cadlojaped.c_grupoInformativo = 'Loja' then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME Loja,
+    cadven.nome Vendedor,
+    (select 
+        first 1
+        cadger.nome
+     from 
+        vendedor gerente 
+     inner join
+        CADASTROPARCEIROS cadger on
+            cadger.cadastro=gerente.cadastro and
+            cadger.status = 1                        
+     where
+        gerente.canalrelacionado = CADloja.cadastro and
+        gerente.tipovendedor = 2) as gerente,
+    cadcli.nome cliente,
+    cadcli.cidade,
+    cadcli.uf,
+    'Fechado' status,
+    cast((pedido.vlrtotalnota-(coalesce(pedido.C_CREDITOCLIENTE,0)
+                               ))*coalesce(vped.COMISSAOVENDA,0)/100*c_pedidodatafinLIB.sinal as decimal(12,2)) vlrpedido,
+    cast((pedido.vlrtotalnota-(coalesce(pedido.C_CREDITOCLIENTE,0)
+                               ))*coalesce(vped.COMISSAOVENDA,1)/100*c_pedidodatafinLIB.sinal as decimal(13,2)) vlrorcto,
+
+    (select first 1
+        cadage.nome
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) Agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE
+      where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4      ) Atividade,
+    pedido.VLRTOTALNOTA as vlrtotalnotapedido,             
+    coalesce (orcamento.VLRTOTALNOTA,pedido.VLRTOTALNOTA) as vlrtotalnotaorc,
+    'https://erp.persoft.com.br/sm/impressao.html?d=orcamentosVenda&id='||orcamento.uuid as urlorcamento,
+    'https://erp.persoft.com.br/sm/impressao.html?d=pedidossVenda&id='||pedido.uuid as urlpedido
+from
+    c_pedidodatafinLIB('01.01.2021','31.12.2099') 
+inner join 
+    pedido on
+        c_pedidodatafinLIB.filial=pedido.filial and
+        c_pedidodatafinLIB.idnota=pedido.idnota
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+left join
+    orcamento on
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.IDORCAMENTO
+left join
+    vendedoresped vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor
+left join
+    vendedor loja  on
+        loja.CADASTRO=vendedorPed.CANALRELACIONADO
+
+
+left join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=loja.cadastro
+left join
+    cadastroparceiros cadlojaped  on
+        cadlojaped.CADASTRO=pedido.c_loja
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+where
+    pedido.DATACANCELAMENTO is null  and
+    pedido.c_tipo in (0,1) and
+    vendedorPed.TIPOVENDEDOR<=4  and
+    cadloja.cadastro<>184
+union   
+select
+    cast(pedido.dataCadastro as date) as "data",
+    null idpedido,
+    pedido.idnota idorcamento,
+    case cadloja.c_grupoinformativo when 'Loja' then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME,
+    cadven.nome,    
+    (select 
+        first 1
+        cadger.nome
+     from 
+        vendedor gerente 
+     inner join
+        CADASTROPARCEIROS cadger on
+            cadger.cadastro=gerente.cadastro and
+            cadger.status = 1                        
+     where
+        gerente.canalrelacionado = CADloja.cadastro and
+        gerente.tipovendedor = 2) as gerente,    
+    cadcli.nome,
+    cadcli.cidade,
+    cadcli.uf,
+    case pedido.C_STATUS when 0 then 'Rascunho'
+    when 1 then 'Aberto'
+    when 2 then 'Suspenso'
+    when 3 then 'Perdido'
+    else 'Fechado' end,
+    cast(0 as decimal(12,2)) vlrpedido,
+    case when pedido.IDRELACAO is not null then 0 else
+        cast(coalesce(pedido.VLRTOTALNOTA,pedido.vlrtotalnota)*coalesce(vped.COMISSAOVENDA,100)/100 as decimal(12,2)) 
+    end as vlrorcamento,
+    (select first 1
+        cadage.nome
+     from
+        vendedoresorc aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresorc aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR 
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE
+    where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) ramoagente,
+    0 as vlrtotalnotapedido,             
+    pedido.VLRTOTALNOTA as vlrtotalnotaorc,
+    'https://erp.persoft.com.br/sm/impressao.html?d=orcamentosVenda&id='||pedido.uuid as urlorcamento,
+    null as urlpedido
+
+from
+    orcamento PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=pedido.C_LOJA
+left join
+    vendedoresorc vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor 
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+where
+    pedido.DATAEMISSAO>='01.01.2021' and
+    pedido.DATACANCELAMENTO is null  and
+    vendedorPed.TIPOVENDEDOR<=4 and
+    pedido.c_tipo=0 and
+    pedido.c_status<4 and
+    cadloja.cadastro<>184
+

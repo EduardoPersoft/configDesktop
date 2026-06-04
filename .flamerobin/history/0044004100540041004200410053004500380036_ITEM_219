@@ -1,0 +1,2 @@
+select * from TITULOREC
+where titulorec.TITULO like '%17%'

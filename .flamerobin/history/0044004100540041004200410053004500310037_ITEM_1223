@@ -1,0 +1,25 @@
+select   
+    materiallocal.filial,
+    materiallocal.idlocal,
+    local.DESCRICAO,    
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    materiallocal.SALDOTOTAL,
+    INVENTARIOESTOQUEDATA."DATA"    
+from
+    MATERIALLOCAL
+inner join
+    local on 
+        materiallocal.IDLOCAL=local.ID
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.IDITEM
+left join
+    INVENTARIOESTOQUEDATA on
+        inventarioestoquedata.filial=materiallocal.filial and
+        inventarioestoquedata.CODIGO=materiallocal.iditem and
+        inventarioestoquedata."LOCAL"=materiallocal.IDLOCAL
+where
+    materiallocal.filial=1 and
+    materiallocal.SALDOtotal <> 0

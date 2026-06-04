@@ -1,0 +1,35 @@
+select
+    notafiscal.DESTINATARIO,
+    sum(mercadoriasnota.VLRFINALMERCAD)
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque on
+        mercadoriasnota.codigo=itemestoque.codigo
+inner join
+    naturezaoperacao on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+where
+    notafiscal.filial=1 
+    and notafiscal.DATAEMISSAO between '01.07.2023' and '03.07.2023'
+    and notafiscal.CANCELAMENTO is not null 
+    and notafiscal.ENTRADASAIDA = 'S'
+    and not exists (select
+                        *
+                    from
+                        ESTABELECIMENTO
+                    where
+                        estabelecimento.cadastro=notafiscal.destinatario)
+    and exists (select 
+                    *
+                from
+                    faturas
+                where
+                    faturas.filial=notafiscal.filial and
+                    faturas.idnota=notafiscal.idnota)
+group by
+    notafiscal.DESTINATARIO

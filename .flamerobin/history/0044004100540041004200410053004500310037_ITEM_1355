@@ -1,0 +1,13 @@
+select
+    *
+from 
+    MOVIMENTOESTOQUE m1
+where
+    m1.TIPOMOVIMENTO=11
+    and not exists
+    (select
+        *
+     from
+        movimentoestoque m2
+     where
+        m2.filial=m1.filial and m2.idmovimento=m1.IDMOVTOTRANSFERENCIA)

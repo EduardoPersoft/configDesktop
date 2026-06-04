@@ -1,0 +1,4 @@
+insert into itemestoquecodigos
+select * from c_itemestoquecodigos
+
+--deete from itemestoquecodigos

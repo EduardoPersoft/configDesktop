@@ -1,0 +1,4 @@
+
+select movimentoestoque.idmovimento MOVIMENTOESTOQUE
+where movimentoestoque.filial=? and
+movimentoestoque.idnota=?

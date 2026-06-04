@@ -1,0 +1,23 @@
+select  
+    item.codigo,
+    item.descricao,
+    item.CODIGOTRIBUTACAO,
+    itemcusto.codigo,
+    itemcusto.valorultimacompra,
+    itemcusto.valorultimacompra / (1-(TRIBUTACAOICMSUF.ALIQUOTA*(1-TRIBUTACAOICMSUF.REDUCAO/100))/100)
+
+from 
+    itemestoque item
+inner join
+    itemestoque itemcusto on
+        itemcusto.codigo = case when coalesce(item.VALORULTIMACOMPRA,0) >0 then item.CODIGO
+                     else coalesce(item.itembase, item.codigo) end
+inner join 
+    TRIBUTACAOICMSUF ON
+     (item.CODIGOTRIBUTACAO=TRIBUTACAOICMSUF.ID)   
+where 
+    TRIBUTACAOICMSUF.uf='SP' and
+    item.tipoproduto in (3,4)
+order by
+    item.codigo
+ 

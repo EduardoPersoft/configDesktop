@@ -1,0 +1,1 @@
+delete from locallote where local>=1790

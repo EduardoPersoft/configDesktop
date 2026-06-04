@@ -1,0 +1,4 @@
+select 
+    substring(versaoalteracao.sql from 1 for 200) as sql
+from
+    VERSAOALTERACAO

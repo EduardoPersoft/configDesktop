@@ -1,0 +1,1 @@
+select * from CADASTROPARCEIROS where CADASTROPARCEIROS.c_codcliente=14956

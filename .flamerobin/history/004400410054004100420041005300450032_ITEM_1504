@@ -1,0 +1,6 @@
+update 
+    mercadoriasnota
+set
+    mercadoriasnota.cfop='5101'
+WHERE
+    mercadoriasnota.cfop is null

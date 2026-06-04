@@ -1,0 +1,2 @@
+select * from INVENTARIOESTOQUEDATA
+where data='06.12.2023'

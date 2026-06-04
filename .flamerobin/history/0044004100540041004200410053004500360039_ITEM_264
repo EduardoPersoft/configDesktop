@@ -1,0 +1,9 @@
+create table c_paradasColeta(
+    COLETA varchar(20) not null,
+    ID smallint not null,
+    DATACOLETA date,
+    TIPOPARADA smallint,
+    OBSERVACAO varchar(100),
+    LOCALIZACAO varchar(400),
+    constraint pk_c_paradasColeta
+    primary key(coleta,id))

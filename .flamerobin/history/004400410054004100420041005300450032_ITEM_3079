@@ -1,0 +1,24 @@
+select 
+    materiallocal.*,
+    (select sum(mercadoriasnotacompra.quantidade) from notacompra
+         inner join MERCADORIASNOTACOMPRA on
+            notacompra.filial=mercadoriasnotacompra.filial AND
+            notacompra.idnota=mercadoriasnotacompra.IDNOTA
+         where
+            notacompra.filial=materiallocal.filial AND
+            mercadoriasnotacompra.codigo=materiallocal.iditem)
+
+
+from 
+    MATERIALLOCAL
+WHERE
+    materiallocal.filial=5 and
+    EXISTS
+        (select * from notacompra
+         inner join MERCADORIASNOTACOMPRA on
+            notacompra.filial=mercadoriasnotacompra.filial AND
+            notacompra.idnota=mercadoriasnotacompra.IDNOTA
+         where
+            notacompra.filial=materiallocal.filial AND
+            mercadoriasnotacompra.codigo=materiallocal.iditem)
+

@@ -1,0 +1,53 @@
+SELECT
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    locallote.local,
+    locallote.lote as lote,
+    locallote.FILIAL,
+    locallote.QUANTIDADE-
+    COALESCE(
+    (SELECT sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+     FROM MATERIALMOVIMENTOESTOQUE
+     INNER JOIN MOVIMENTOESTOQUE ON 
+        MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+     WHERE /*MATERIALMOVIMENTOESTOQUE.FILIAL=MATERIALLOCAL.FILIAL
+     AND*/ MATERIALMOVIMENTOESTOQUE.IDITEM=mercadoriasped.codigo
+     AND MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+     AND MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=locallote."LOCAL"
+     and materialmovimentoestoque.lote=locallote.lote
+     /*AND MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO<>-1*/
+     AND MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'),0),
+     locallote.datalocacao, local.prioridade
+FROM
+    MERCADORIASPED
+inner join 
+    locallote on
+        locallote.iditem=mercadoriasped.codigo
+INNER JOIN
+    LOCAL ON 
+        LOCAL.ID=locallote.local
+WHERE 
+    mercadoriasped.filial=1 and
+    mercadoriasped.idnota=322051 and 
+    LOCAL.DISPONIVEL = 'S' AND
+    locallote.quantidade-
+    COALESCE(
+    (SELECT sum(MATERIALMOVIMENTOESTOQUE.QUANTIDADE)
+     FROM MATERIALMOVIMENTOESTOQUE
+     INNER JOIN MOVIMENTOESTOQUE ON 
+        MOVIMENTOESTOQUE.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+        MOVIMENTOESTOQUE.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+     WHERE MATERIALMOVIMENTOESTOQUE.IDITEM=mercadoriasped.codigo
+     AND MATERIALMOVIMENTOESTOQUE.CONCLUIDO='N'
+     AND MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=locallote."LOCAL"
+     and materialmovimentoestoque.lote=locallote.lote 
+     AND MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'),0)>0          
+ORDER BY
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    coalesce(local.prioridade,9999), 
+    locallote.datalocacao,
+    local.id

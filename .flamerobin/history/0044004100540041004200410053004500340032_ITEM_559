@@ -1,0 +1,6 @@
+select * from inventarioestoquedata 
+where not exists
+(select * from MATERIALLOTE
+where materiallote.filial=inventarioestoquedata.filial and
+materiallote.iditem=INVENTARIOESTOQUEDATA.codigo and
+materiallote.lote=inventarioestoquedata.lote)

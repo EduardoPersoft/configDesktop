@@ -1,0 +1,13 @@
+select 
+    pedido.c_loja,
+    movimentoestoque.*
+from 
+    MOVIMENTOESTOQUE
+inner join
+    pedido on
+        pedido.filial=movimentoestoque.filial and
+        pedido.idnota=movimentoestoque.idpedido
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.01.2022' and '30.06.2022'
+    

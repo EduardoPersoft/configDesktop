@@ -1,0 +1,12 @@
+delete from resumocompras 
+WHERE
+    exists (
+        SELECT
+            *
+        FROM
+            MOVIMENTOESTOQUE
+        WHERE
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento AND
+            movimentoestoque.FORNECEDOR=1310 AND
+            movimentoestoque.emissao>='01.11.2020')

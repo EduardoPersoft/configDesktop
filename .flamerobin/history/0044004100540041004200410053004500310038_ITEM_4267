@@ -1,0 +1,2 @@
+select distinct tipodocumento
+from pedido

@@ -1,0 +1,20 @@
+select
+    orcamento.filial,
+    orcamento.idnota,
+    orcamento.DATAreferencia,
+    cadcli.cadastro,
+    cadcli.nome,
+    cadesp.cadastro,
+    cadesp.nome,
+    orcamento.VLRTOTALNOTA
+from
+    ORCAMENTO
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=orcamento.destinatario
+inner join
+    CADASTROPARCEIROS cadesp on
+        cadesp.cadastro=orcamento.C_ARQUITETO
+where
+    orcamento.vendedor = 5 and
+    orcamento.DATACADASTRO between '01.01.2024' and '31.12.2024'

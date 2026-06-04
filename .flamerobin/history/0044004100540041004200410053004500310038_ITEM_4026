@@ -1,0 +1,2 @@
+select * from QRCODEnfce
+where uuidnfe='6787c38a-0e34-4fad-a776-a3ef10df43a2'

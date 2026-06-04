@@ -1,0 +1,10 @@
+select 
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.NOME
+
+from 
+    CADASTROPARCEIROS 
+where 
+cadastroparceiros.status = 1 and
+(exists (select * from estabelecimento where estabelecimento.cadastro=cadastroparceiros.caddastro)
+or exists (select * from vendedor where vendedor.cadastro=cadastrparceiros.cdastro and tipovendedor=1))

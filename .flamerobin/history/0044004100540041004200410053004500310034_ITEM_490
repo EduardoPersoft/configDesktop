@@ -1,0 +1,73 @@
+update
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFISCAL='1',
+    itemestoque.TRIBUTACAOICMS=2
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO = 5 and
+    (not itemestoque.C_MATERIAPRIMABASE like 'MPP04%') and
+    not exists (select 
+                    * 
+                from 
+                    C_LAMINACAO
+                where 
+                    C_LAMINACAO.CODIGO=itemestoque.codigo and
+                    (c_laminacao.FILME like 'MPP04%' or
+                    C_LAMINACAO.FILME2 like 'MPP04%'));
+
+update
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFISCAL='5',
+    itemestoque.TRIBUTACAOICMS=1
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO = 6 and
+    (not itemestoque.C_MATERIAPRIMABASE like 'MPP04%') and
+    not exists (select 
+                    * 
+                from 
+                    C_LAMINACAO
+                where 
+                    C_LAMINACAO.CODIGO=itemestoque.codigo and
+                    (c_laminacao.FILME like 'MPP04%' or
+                    C_LAMINACAO.FILME2 like 'MPP04%'));
+
+update
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFISCAL='58',
+    itemestoque.TRIBUTACAOICMS=1
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO = 6 and
+    (itemestoque.C_MATERIAPRIMABASE like 'MPP04%' OR
+    exists (select 
+                    * 
+                from 
+                    C_LAMINACAO
+                where 
+                    C_LAMINACAO.CODIGO=itemestoque.codigo and
+                    (c_laminacao.FILME like 'MPP04%' or
+                    C_LAMINACAO.FILME2 like 'MPP04%')));
+        
+    
+update
+    ITEMESTOQUE
+set 
+    itemestoque.CLASSIFISCAL='39',
+    itemestoque.TRIBUTACAOICMS=1
+where
+    itemestoque.TIPOPRODUTO = 4 and
+    itemestoque.GRUPO = 5 and
+    (itemestoque.C_MATERIAPRIMABASE like 'MPP04%' OR
+    exists (select 
+                    * 
+                from 
+                    C_LAMINACAO
+                where 
+                    C_LAMINACAO.CODIGO=itemestoque.codigo and
+                    (c_laminacao.FILME like 'MPP04%' or
+                    C_LAMINACAO.FILME2 like 'MPP04%')));
+        

@@ -1,0 +1,8 @@
+select * from VENDEDORESPED
+where coalesce(vendedoresped.C_IDCOMISSAO,0)=441
+and not exists (
+select * from C_COMISSAOPEDIDOPAGA
+where c_comissaopedidopaga.filial=vendedoresped.filial AND
+c_comissaopedidopaga.idnota=vendedoresped.idnota AND
+c_comissaopedidopaga.vendedor=vendedoresped.vendedor AND
+c_comissaopedidopaga.id=vendedoresped.C_IDCOMISSAO)

@@ -1,0 +1,6 @@
+select
+    *
+from
+    itemestoque
+where
+    codigo='PRO4183FLI004'

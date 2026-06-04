@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    mercadoriasped
+WHERE
+    mercadoriasped.filial=1 AND
+    mercadoriasped.baixa = 'N' 

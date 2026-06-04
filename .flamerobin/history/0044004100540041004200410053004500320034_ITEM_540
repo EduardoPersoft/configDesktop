@@ -1,0 +1,22 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.DESCRICAO,
+    GRUPOMERCADORIA.DESCRICAO AS GRUPO,
+    FAMILIAL.DESCRICAO AS FAMILIA
+FROM
+    ITEMESTOQUE
+LEFT JOIN
+    GRUPOMERCADORIA ON
+        GRUPOMERCADORIA.GRUPO=ITEMESTOQUE.GRUPO
+LEFT JOIN
+    FAMILIA ON
+        FAMILIA.ID=ITEMESTOQUE.FAMILIA
+WHERE
+    exists (
+        SELECT
+            *
+        FROM
+            COMPOSICAOITEM
+        where
+            composicaoitem.iditem=itemestoque.codigo)

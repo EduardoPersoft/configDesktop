@@ -1,0 +1,10 @@
+select 
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.DESCRICAO
+from
+    itemestoque
+where
+    cast(itemestoque.codigo as integer) >= 17966
+order by
+    cast(itemestoque.codigo as integer)

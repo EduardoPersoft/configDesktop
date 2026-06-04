@@ -1,0 +1,5 @@
+select
+    *
+from
+    C_CREDITOS
+ORDER BY IDPEDIDO

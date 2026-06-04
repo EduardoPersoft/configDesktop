@@ -1,0 +1,1 @@
+select * from Cmovimentoestoque order by idmovimento desc

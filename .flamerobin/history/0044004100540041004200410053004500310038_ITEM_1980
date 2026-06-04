@@ -1,0 +1,3 @@
+select * from MOVIMENTOESTOQUE 
+where tipomovimento='12'
+and movimentoestoque.emissao between '28.10.2023' and '31.10.2023'

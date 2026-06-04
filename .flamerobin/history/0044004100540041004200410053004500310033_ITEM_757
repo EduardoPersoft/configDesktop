@@ -1,0 +1,13 @@
+select 
+    mercadoriasnota.codigo,
+    mercadoriasnota.DESREDUZIDA,
+    mercadoriasnota.VLRFINALMERCAD,
+    mercadoriasnota.plucro,
+    mercadoriasnota.VLRBASESUBST,
+    mercadoriasnota.VLRFINALMERCAD*(1+plucro/100)
+    
+from
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial = 1 and
+    mercadoriasnota.idnota= 37589

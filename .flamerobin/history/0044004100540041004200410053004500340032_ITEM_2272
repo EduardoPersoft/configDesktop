@@ -1,0 +1,43 @@
+SELECT DISTINCT C_PEDIDOSEMABERTO.filial,
+                C_PEDIDOSEMABERTO.idnota,
+                C_PEDIDOSEMABERTO.idmercadoria,
+                C_PEDIDOSEMABERTO.filialnome ,
+                C_PEDIDOSEMABERTO.datacadastro,
+                C_PEDIDOSEMABERTO.dataentrega ,
+                C_PEDIDOSEMABERTO.datareferencia,
+                C_PEDIDOSEMABERTO.clientecadastro ,
+                C_PEDIDOSEMABERTO.clientenome ,
+                C_PEDIDOSEMABERTO.quantidadeproduzir ,
+                C_PEDIDOSEMABERTO.precounitario ,
+                C_PEDIDOSEMABERTO.vlrtotalmercad,
+                C_PEDIDOSEMABERTO.produto,
+                C_PEDIDOSEMABERTO.descricaoproduto,
+                C_PEDIDOSEMABERTO.qtdeenviada,
+--                C_PEDIDOSEMABERTO.valorsaldo,
+                case coalesce (c_pedidosemaberto.VALORIPI,0)
+                    when 0 then C_PEDIDOSEMABERTO.valorsaldo else 
+                    C_PEDIDOSEMABERTO.valorsaldo * (1+(coalesce (C_PEDIDOSEMABERTO.pipi,0)/100))end as valorsaldo,   
+                C_PEDIDOSEMABERTO.qtdsaldo,
+                C_PEDIDOSEMABERTO.qtdpedido,
+                C_PEDIDOSEMABERTO.ATRASODIAS,
+                C_PEDIDOSEMABERTO.DIA,
+                C_PEDIDOSEMABERTO.mes,
+                C_PEDIDOSEMABERTO.ano,
+                C_PEDIDOSEMABERTO.IDNOTAFISCAL ,
+                COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME,
+                c_pedidosemaberto.pipi,
+                c_pedidosemaberto.vlrabertosemicms,
+                c_pedidosemaberto.unidade,
+                c_pedidosemaberto.C_NOVOREPETICAOALTERADO,
+                c_pedidosemaberto.DATAPREVISTA,
+                c_pedidosemaberto.VLRFATNAOBAIXADO
+FROM C_PEDIDOSEMABERTO(110)
+LEFT JOIN VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                           AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+LEFT JOIN CADASTROPARCEIROS VENDEDOR ON (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+where c_pedidosemaberto.dataprevista between '01.01.2024' and '31.12.2024'
+AND C_PEDIDOSEMABERTO.DATAEMISSAO IS NOT NULL and
+c_pedidoemaberto.clientecadastro=1567
+ORDER BY c_pedidosemaberto.DATAPREVISTA,
+         C_PEDIDOSEMABERTO.IDNOTA,
+         C_PEDIDOSEMABERTO.IDCOMPOSICAO

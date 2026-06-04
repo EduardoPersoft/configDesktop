@@ -1,0 +1,2 @@
+alter table notafiscal 
+add c_transp_logradouro varchar(120)

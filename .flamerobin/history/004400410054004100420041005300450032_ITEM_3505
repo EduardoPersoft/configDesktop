@@ -1,0 +1,37 @@
+
+select
+    materiallocal.iditem,
+    materiallocal.saldototal + coalesce(
+(select
+    sum(mercadoriasnotacompra.quantidade)
+FROM
+    notacompra
+INNER JOIN
+    mercadoriasnotacompra on 
+        mercadoriasnotacompra.filial=notacompra.filial AND 
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA 
+WHERE
+    notacompra.filial=5 AND
+    notacompra.DATAEntrada='17.08.2021' and
+    mercadoriasnotacompra.codigo=materiallocal.IDITEM
+group by
+    mercadoriasnotacompra.codigo),0)
+where 
+    materiallocal.filial=5 and 
+    exists (
+        sum(mercadoriasnotacompra.quantidade)
+FROM
+    notacompra
+INNER JOIN
+    mercadoriasnotacompra on 
+        mercadoriasnotacompra.filial=notacompra.filial AND 
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA 
+WHERE
+    notacompra.filial=5 AND
+    notacompra.DATAEntrada='17.08.2021'
+    merc
+    adoriasnotacompra.codigo=materiallocal.IDITEM
+group by
+    mercadoriasnotacompra.codigo))
+    
+    

@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set 
+    codigobarra=CODIGOBARRA
+where 
+    codigobarra = null

@@ -1,0 +1,1 @@
+select filial,idnota,idmercadoria,comissao from mercadoriasnota where filial=5 and idnota=300014 order by comissao

@@ -1,0 +1,42 @@
+select 
+    followupCOMPRAS.FILIAL,
+    followupCOMPRAS.IDNOTA,
+    followupCOMPRAS.IDMERCADORIA,
+    followupCOMPRAS.DATACADASTRO,
+    followupCOMPRAS.DATAAPROVACAO,
+    followupCOMPRAS.DESTINATARIO,
+    followupCOMPRAS.NOME,
+    cadfor.uf,
+    followupCOMPRAS.CONTATO,
+    followupCOMPRAS.EMAIL,
+    followupCOMPRAS.TELEFONE,
+    followupCOMPRAS.FATURAMENTOMINIMO,
+    followupCOMPRAS.CONDICAOPAGAMENTOFORNECEDOR,
+    followupCOMPRAS.CODIGO,
+    followupCOMPRAS.REFERENCIA,
+    followupCOMPRAS.DESREDUZIDA,
+    ITEMESTOQUE.TRIBUTACAOICMS,
+    ITEMESTOQUE.CLASSIFISCAL,
+    ITEMESTOQUE.TIPOPRODUTO,
+    ITEMESTOQUE.CLASSIFICACAOCONTABIL,
+    followupCOMPRAS.UNIDADE,
+    cast(followupCOMPRAS.ESTOQUELIQUIDO as integer),
+    coalesce(followupCOMPRAS.CONSUMO, 0),
+    followupCOMPRAS.QUANTIDADE,
+    cast(followupCOMPRAS.PRECO as decimal(12,2)),
+    cast(followupCOMPRAS.VALOR as decimal(12,2)),
+    followupCOMPRAS.SALDO,
+    followupCOMPRAS.DATAENTREGA,
+    cast('N' as char(1)) as P_MARCA
+from 
+    followupCOMPRAS(5)
+left join 
+    itemestoque on
+        itemestoque.codigo=FOLLOWUPCOMPRAS.codigo
+left JOIN
+    cadastroparceiros cadfor on
+        cadfor.cadastro=followupcompras.destinatario
+WHERE
+    destinatario=1745
+ ORDER BY
+    nome

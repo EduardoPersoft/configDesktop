@@ -1,0 +1,3 @@
+delete from C_COMISSAOPEDIDOPAGA
+where id =597 and vendedor=175
+

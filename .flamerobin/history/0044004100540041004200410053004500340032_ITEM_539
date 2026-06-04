@@ -1,0 +1,34 @@
+select
+    materiallote.filial,
+    materiallote.iditem,
+    materiallote.lote,
+    local.descricao,
+    locallote.quantidade,
+    materiallote.C_GRAMATURA,
+    materiallote.c_largura
+from
+    MATERIALLOTE
+inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+inner join
+    local on
+        local.id=locallote."LOCAL"
+where 
+    exists 
+        (select
+            *
+         from
+            t_lotes
+         where 
+            t_lotes.filial=materiallote.filial and
+            t_lotes.iditem=materiallote.iditem and
+            t_lotes.lote=materiallote.lote)
+    and locallote.quantidade > 0
+order by
+    materiallote.filial,
+    local.descricao,
+    materiallote.iditem,
+    materiallote.lote

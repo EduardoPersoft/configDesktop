@@ -1,0 +1,2 @@
+select * from servicosnota
+where idpedido=70162

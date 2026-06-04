@@ -1,0 +1,7 @@
+select 
+    itemcustodata.* 
+from 
+    itemcustodata 
+where 
+    datainventario='31.12.2023' and 
+    CODIGO LIKE 'MPP%'

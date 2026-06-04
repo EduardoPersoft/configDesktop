@@ -1,0 +1,26 @@
+update
+    INVENTARIOESTOQUEDATA
+set
+    quantidade = 
+    
+    coalesce((
+    
+select
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)
+    
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.idmovimento
+where
+    materialmovimentoestoque.filial=INVENTARIOESTOQUEDATA.filial and
+    materialmovimentoestoque.iditem=INVENTARIOESTOQUEDATA.CODIGO and
+    materialmovimentoestoque.LOCALARMAZENAMENTO=INVENTARIOESTOQUEDATA.local and
+    materialmovimentoestoque.lote=INVENTARIOESTOQUEDATA.lote and
+    movimentoestoque.emissao between '01.01.2024' and '31.01.2024' 
+HAVING 
+   sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)>0.001 ),0)
+where    
+    INVENTARIOESTOQUEDATA='31.01.2024' and filial=110

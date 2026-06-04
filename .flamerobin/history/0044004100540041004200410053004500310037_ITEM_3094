@@ -1,0 +1,11 @@
+select 
+        * 
+    from 
+        cadastroparceiros cadgrupo
+    inner join    
+        pedido on
+            pedido.destinatario = cadgrupo.cadastro
+    where        
+       cadgrupo.grupoempresarial = 206
+        and pedido.dataCancelamento is null
+        and pedido.dataCadastro >='01.01.2022'

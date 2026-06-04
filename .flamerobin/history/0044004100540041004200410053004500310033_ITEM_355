@@ -1,0 +1,1 @@
+select * from PRAZOMERCPEDCOMPRA where filial=1 and idnota=4656

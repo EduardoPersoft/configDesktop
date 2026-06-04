@@ -1,0 +1,5 @@
+select * from MOVIMENTOESTOQUE
+where movimentoestoque.filial=1 
+and (movimentoestoque.LOCALARMAZENAMENTO=9 or
+movimentoestoque.LOCALTRANSFERENCIA=9)
+order by movimentoestoque.idmovimento

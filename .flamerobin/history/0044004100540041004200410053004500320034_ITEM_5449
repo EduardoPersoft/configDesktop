@@ -1,0 +1,12 @@
+select 
+    MERCADORIASpedCOMPRA.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    mercadoriaspedcompra.tributacaoicms,
+    mercadoriaspedcompra.QUANTIDADE
+from
+    mercadoriaspedcompra
+where 
+    filial=5 
+    and idnota= 67279
+

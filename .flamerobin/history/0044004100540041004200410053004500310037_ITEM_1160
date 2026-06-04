@@ -1,0 +1,10 @@
+select 
+    *
+from
+    movimentoestoque
+where
+    movimentoestoque.filial=1 and    
+    movimentoestoque.TIPOMOVIMENTO in (10, 11) and
+    movimentoestoque.LOCALARMAZENAMENTO=9
+order by
+    documento

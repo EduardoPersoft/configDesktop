@@ -1,0 +1,2 @@
+select * from C_PEDIDOSEMABERTOPRODUCAO(110)
+where idpedido=12424 and op=69690

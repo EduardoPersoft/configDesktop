@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    INVENTARIOESTOQUEDATA   
+where 
+    INVENTARIOESTOQUEDATA.CODIGO='2083428'

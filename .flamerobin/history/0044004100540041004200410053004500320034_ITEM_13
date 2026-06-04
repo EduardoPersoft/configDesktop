@@ -1,0 +1,7 @@
+SELECT
+    FILIAL,
+    IDNOTA
+FROM
+    orcamento
+WHERE
+    orcamento.UUID = 'f4216adc-398b-46cb-b1da-76c552ef53f0'

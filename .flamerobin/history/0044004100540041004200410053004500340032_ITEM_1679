@@ -1,0 +1,6 @@
+update 
+    MOVIMENTOESTOQUE
+set
+    movimentoestoque.LOCALARMAZENAMENTO=1
+where
+    movimentoestoque.TIPOMOVIMENTO=12

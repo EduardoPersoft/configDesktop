@@ -1,0 +1,8 @@
+select 
+    filial,idnota,idmercadoria,codigo,quantidade,qtdeenviada,baixa
+from 
+    MERCADORIASPED
+where
+    baixa='N' and qtdeenviada>0
+order by
+    idnota desc

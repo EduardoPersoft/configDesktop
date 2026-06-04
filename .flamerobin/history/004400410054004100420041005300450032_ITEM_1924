@@ -1,0 +1,1 @@
+select * from ITEMESTOQUECODIGOS where codigo='20325'

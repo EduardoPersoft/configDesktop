@@ -1,0 +1,7 @@
+select 
+    distinct movimentoestoque.tipomovimento 
+from 
+    MOVIMENTOESTOQUE
+where 
+    movimentoestoque.filial=110 and
+    movimentoestoque.EMISSAO>'30.04.2023' 

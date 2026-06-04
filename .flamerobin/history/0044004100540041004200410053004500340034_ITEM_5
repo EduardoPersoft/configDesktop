@@ -1,0 +1,8 @@
+select itemestoque.codigo,
+itemestoque.CODIGOBARRA,
+itemestoque.descricao from materiallocal
+inner join
+itemestoque on
+    itemestoque.codigo=materiallocal.iditem
+where materiallocal.idlocal=103
+and materiallocal.saldototal>0

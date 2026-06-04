@@ -1,0 +1,2 @@
+select * from itemestoque
+where nomecomercial is not null

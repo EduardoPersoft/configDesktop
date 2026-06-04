@@ -1,0 +1,32 @@
+select 
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome vendedor,
+    count(orcamento.idnota) qtdOrcamento,
+    sum(case when pedConvertido.idnota is null then 0 else 1 end) qtdConversao,
+    sum(case when pedConvertido.idnota is null then 0 else 1 end)  / count(ORCAMENTO.idnota)  * 100 as pConversao,
+    sum(coalesce(pedConvertido.VLRTOTALNOTA,0)) as totalPedido
+from 
+    orcamento
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=orcamento.destinatario
+inner join
+    clientes on 
+        cadcli.cadastro=clientes.CADASTRO
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=clientes.vendedor
+left join
+    pedido pedConvertido on
+        pedConvertido.filial=orcamento.filial and
+        pedConvertido.idorcamento=orcamento.idnota and
+        pedConvertido.CANCELAMENTO='N'
+where 
+    orcamento.DATACADASTRO between '2025-01-01' and '2025-05-31' and
+    orcamento.CANCELAMENTO='N' and cadcli.NOME like 'NEX%'
+group by    
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome
+order by 5 desc,4 desc

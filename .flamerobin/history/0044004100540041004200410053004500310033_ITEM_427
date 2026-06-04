@@ -1,0 +1,16 @@
+select 
+    uuid,
+    count(idnota)
+FROM
+    pedidocompra
+where 
+    exists 
+    (select * from MERCADORIASPEDCOMPRA
+     where mercadoriaspedcompra.filial=pedidocompra.filial AND
+     mercadoriaspedcompra.idnota=pedidocompra.idnota AND
+     mercadoriaspedcompra.baixa='N')
+group by
+    uuid
+having 
+    count(idnota)>1
+ 

@@ -1,0 +1,7 @@
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/estoque/c_carteira/edicao/*', '0');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/estoque/*', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/compras/*', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/vendas/_', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/vendas/pedidos/', '1');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/vendas/manutencao', '0');
+INSERT INTO REGRAS (ID, PATH, ACESSO) VALUES ('194', '/estoque/c_carteira/edicao/empenho/', '1');

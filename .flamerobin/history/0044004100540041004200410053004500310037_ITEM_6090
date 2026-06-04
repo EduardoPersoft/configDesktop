@@ -1,0 +1,12 @@
+
+update 
+    MOVIMENTOESTOQUE
+set
+    coleta = case coleta when '1013' then '1291' 
+                         when '1014' then '1292'
+                         when '1015' then '1293'
+                         when '1016' then '1294'
+                         else coleta end 
+where 
+    movimentoestoque.emissao>='06.04.2026'
+    

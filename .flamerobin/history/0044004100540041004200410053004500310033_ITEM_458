@@ -1,0 +1,4 @@
+select 
+    cast(substring(versaoalteracao.sql from 1 for 200) as varcahr(200)) as sql
+from
+    VERSAOALTERACAO

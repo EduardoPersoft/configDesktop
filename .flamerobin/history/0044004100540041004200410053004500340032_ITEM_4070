@@ -1,0 +1,4 @@
+select * from NOTACOMPRA
+where extract(year from notacompra.DATAENTRADA)||'-'||extract(month from notacompra.DATAENTRADA)<>
+extract(year from notacompra.DATAEMISSAO)||'-'||extract(month from notacompra.DATAEMISSAO)
+AND NOTACOMPRA.DATAENTRADA>='01.01.2024'

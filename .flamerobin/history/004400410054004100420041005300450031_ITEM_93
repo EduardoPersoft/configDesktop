@@ -1,0 +1,1 @@
+select codigo,descrico,c_codigoant from itemestoque where descricao like 'COADOR DE CAFÉ MC FLANELA%' 

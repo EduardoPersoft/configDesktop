@@ -1,0 +1,27 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialmovimentoestoque.lote,
+    materialfilial.CUSTOMEDIO,
+    sum(materaialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL),
+    sum(materaialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)*
+    materialfilial.CUSTOMEDIO
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+inner join
+    materialfilial on
+        materialfilial.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        materialfilial.iditem=materialmovimentoestoque.iditem 
+where
+    MATERIALMOVIMENTOESTOQUE.IDITEM LIKE 'MPP%' and
+    MATERIALMOVIMENTOESTOQUE.LOTE <> '.'
+group by 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialmovimentoestoque.lote,
+    materialfilial.CUSTOMEDIO,
+
+    

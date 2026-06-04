@@ -1,0 +1,16 @@
+SELECT
+ distinct    titulorec.filial,TITULOREC.titulo
+FROM
+        TITULOREC
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro = titulorec.PARCEIRO
+inner JOIN
+    clientes on
+        clientes.cadastro = cadcli.CADASTRO
+WHERE
+    titulorec.baixa is null 
+	and titulorec.linhadigitavel is not null 
+	and coalesce(titulorec.codretorno,'03') <> '03'
+	and coalesce(COALESCE(CLIENTES.EMAILCOBRANCA,COALESCE(CADCLI.EMAILNFE, CADCLI.EMAIL)),'') <> ''
+	and titulorec.DATAENVIO='09.08.2021'

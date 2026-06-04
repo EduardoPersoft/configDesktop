@@ -1,0 +1,2 @@
+select filial,idtitulo,titulorec.JUROSMORA,titulorec.VALORJUROS,titulorec.valortitulo from titulorec 
+where titulorec.emissao='04.03.2021'

@@ -1,0 +1,7 @@
+update
+    servicosnotacompra
+set 
+    servicosnotacompra.CONTACONTABIL='1120401'                                                                                      
+where filial=110                                                                                      
+
+    

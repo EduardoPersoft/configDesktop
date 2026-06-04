@@ -1,0 +1,4 @@
+
+delete from MOVIMENTOESTOQUE
+where movimentoestoque.filial=? and
+movimentoestoque.idnota=?

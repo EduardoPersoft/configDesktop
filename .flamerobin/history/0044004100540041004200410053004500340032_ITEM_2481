@@ -1,0 +1,3 @@
+update materiallocal
+set saldototal=0
+where materiallocal.saldototal is null

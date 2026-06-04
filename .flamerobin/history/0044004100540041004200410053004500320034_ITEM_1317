@@ -1,0 +1,8 @@
+select
+    CADASTROPARCEIROS.CADASTRO,
+    CADASTROPARCEIROS.nome
+from 
+    FORNECEDORESITEM
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=fornecedoresitem.FORNECEDOR

@@ -1,0 +1,2 @@
+select filial, idnota, pedido.c_malote from pedido where filial=1
+and pedido.idnota=70024

@@ -1,0 +1,10 @@
+select 
+    CADASTROPARCEIROS.cadastro,
+    CADASTROPARCEIROS.nome
+from
+    VENDEDOR
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=vendedor.CADASTRO
+where
+    vendedor.TIPOVENDEDOR=5

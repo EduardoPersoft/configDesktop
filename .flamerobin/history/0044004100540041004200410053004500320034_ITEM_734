@@ -1,0 +1,49 @@
+select 
+    listaprecoproduto.produto,
+    (select
+        FIRST 1
+        cast(materialmovimentoestoque.valor/materialmovimentoestoque.quantidade 
+             as decimal(12,2))
+     from 
+        MATERIALMOVIMENTOESTOQUE
+     inner JOIN
+        movimentoestoque on 
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+     WHERE 
+         movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02') AND
+         materialmovimentoestoque.filial=5 and
+         MATERIALMOVIMENTOESTOQUE.IDITEM = MERCADORIASorc.CODIGO
+    ORDER BY
+        EMISSAO DESC
+        ),
+    listaprecoproduto.CUSTOCONSIDERADO,
+    listaprecoproduto.CUSTOCONSIDERADO-
+    (select
+        FIRST 1
+        cast(materialmovimentoestoque.valor/materialmovimentoestoque.quantidade 
+             as decimal(12,2))
+     from 
+        MATERIALMOVIMENTOESTOQUE
+     inner JOIN
+        movimentoestoque on 
+            movimentoestoque.filial=materialmovimentoestoque.filial AND
+            movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+     WHERE 
+         movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02') AND
+         materialmovimentoestoque.filial=5 and
+         MATERIALMOVIMENTOESTOQUE.IDITEM = MERCADORIASorc.CODIGO
+    ORDER BY
+        EMISSAO DESC
+        ) as dif
+from 
+    MERCADORIASorc
+inner JOIN
+    listaprecoproduto on
+        listaprecoproduto.lista=1 and 
+        listaprecoproduto.produto=mercadoriasorc.codigo
+WHERE
+    mercadoriasorc.filial=5 and
+    mercadoriasorc.idnota=284
+order by 
+4

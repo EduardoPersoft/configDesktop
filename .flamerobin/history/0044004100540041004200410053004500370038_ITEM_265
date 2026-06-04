@@ -1,0 +1,5 @@
+insert into itemcustodata(filial,codigo,datainventario,custounitario,quantidade,custotal)
+select 1,itemestoque.codigo,'30.09.2025',0,0,0 from itemestoque
+where not exists (select * from itemcustodata
+where itemcustodata.codigo=itemestoque.CODIGO
+and itemcustodata.DATAINVENTARIO='30.09.2025')

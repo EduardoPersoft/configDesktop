@@ -1,0 +1,2 @@
+select filial,codigo,lote,local, max(data) from inventarioestoquedata
+group by filial,codigo,lote,local

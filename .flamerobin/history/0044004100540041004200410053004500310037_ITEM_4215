@@ -1,0 +1,2 @@
+select uuid from NOTAFISCAL
+where uuid='235d7d1d-82c3-4c5b-b992-3b537e8c1086'

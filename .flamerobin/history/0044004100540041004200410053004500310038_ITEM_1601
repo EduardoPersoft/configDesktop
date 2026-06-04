@@ -1,0 +1,81 @@
+SELECT
+    C_COMISSAOPEDIDOPAGA.ID,
+    C_COMISSAOPEDIDOPAGA.VENDEDOR,
+    C_COMISSAOPEDIDOPAGA.FILIAL,
+    C_COMISSAOPEDIDOPAGA.IDNOTA,
+    C_COMISSAOPEDIDOPAGA.VALORCOMISSAO,
+    C_COMISSOES.DATALIMITE,
+    cadfil.razaosocial AS razaofilial,
+    CASE WHEN (cadfil.DOCUMENTO<>'') AND
+          (NOT cadfil.DOCUMENTO IS NULL) THEN
+    CASE cadfil.TIPOPESSOA WHEN 'F' THEN
+    CAST(SUBSTRING(cadfil.DOCUMENTO FROM 1 FOR 3)||'.'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 4 FOR 3)||'.'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 7 FOR 3)||'-'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+       WHEN 'J' THEN
+    CAST(SUBSTRING(cadfil.DOCUMENTO FROM 1 FOR 2)||'.'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 3 FOR 3)||'.'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 6 FOR 3)||'/'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 9 FOR 4)||'-'||
+     SUBSTRING(cadfil.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+    ELSE NULL END
+    ELSE NULL END AS documentofilial,
+    cadfil.LOGRADOURO,
+    cadfil.NUMERO,
+    cadfil.COMPLEMENTO,
+    cadfil.BAIRRO,
+    cadfil.CIDADE,
+    cadfil.UF, 
+    cadfil.INSCESTADUAL,
+    cadfil.INSCMUNICIPAL,
+    cadven.razaosocial AS razaovendedor,
+    CASE WHEN (cadven.DOCUMENTO<>'') AND
+          (NOT cadven.DOCUMENTO IS NULL) THEN
+    CASE cadven.TIPOPESSOA WHEN 'F' THEN
+    CAST(SUBSTRING(cadven.DOCUMENTO FROM 1 FOR 3)||'.'||
+    SUBSTRING(cadven.DOCUMENTO FROM 4 FOR 3)||'.'||
+    SUBSTRING(cadven.DOCUMENTO FROM 7 FOR 3)||'-'||
+    SUBSTRING(cadven.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+       WHEN 'J' THEN
+    CAST(SUBSTRING(cadven.DOCUMENTO FROM 1 FOR 2)||'.'||
+    SUBSTRING(cadven.DOCUMENTO FROM 3 FOR 3)||'.'||
+    SUBSTRING(cadven.DOCUMENTO FROM 6 FOR 3)||'/'||
+    SUBSTRING(cadven.DOCUMENTO FROM 9 FOR 4)||'-'||
+    SUBSTRING(cadven.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+    ELSE NULL END
+    ELSE NULL END AS documentovendedor,
+    cadven.C_CCTITULAR,
+    cadven.C_CCBANCO,
+    cadven.C_CCAGENCIA,
+    cadven.C_CCNUMERO,
+    coalesce (FORNECEDORES.PERCENTUALIRF,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100,
+    cadcli.RAZAOSOCIAL,
+    pedido.c_loja,
+    c_comissaopedidopaga.basecomissao,
+    coalesce (FORNECEDORES.percentualinss,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100,
+    coalesce (FORNECEDORES.percentualcsll,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100,
+    coalesce (FORNECEDORES.percentualpis,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100,
+    coalesce (FORNECEDORES.percentualcofins,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100,
+    coalesce (FORNECEDORES.PERCENTUALISS,0)*(C_COMISSAOPEDIDOPAGA.VALORCOMISSAO)/100
+from 
+    C_COMISSAOPEDIDOPAGA
+inner join 
+    C_COMISSOES on 
+        (C_COMISSAOPEDIDOPAGA.ID=C_COMISSOES.id)
+inner join 
+    CADASTROPARCEIROS cadfil on 
+        (C_COMISSAOPEDIDOPAGA.FILIAL=cadfil.cadastro)
+inner join 
+    CADASTROPARCEIROS cadven on 
+        (C_COMISSAOPEDIDOPAGA.VENDEDOR=cadven.CADASTRO)
+inner join pedido on 
+    (pedido.filial=C_COMISSAOPEDIDOPAGA.filial AND
+     pedido.IDNOTA=C_COMISSAOPEDIDOPAGA.IDNOTA)
+inner join 
+    CADASTROPARCEIROS cadcli on 
+        (cadcli.CADASTRO=pedido.DESTINATARIO)
+left join FORNECEDORES on 
+    (cadven.CADASTRO=fornecedores.CADASTRO)
+where 
+    C_COMISSAOPEDIDOPAGA.id = 595

@@ -1,0 +1,6 @@
+UPDATE
+    TITULOREC
+SET
+    titulorec = NULL
+where
+    titulorec.DATAENVIO='15.07.2021'

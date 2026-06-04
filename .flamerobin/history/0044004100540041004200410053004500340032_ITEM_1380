@@ -1,0 +1,5 @@
+update movimentoestoque set movimentoestoque.c_dataanterior=emissao
+where filial=110
+and (movimentoestoque.LOCALARMAZENAMENTO in (2,6)
+ or movimentoestoque.LOCALTRANSFERENCIA in (2,6))
+and movimentoestoque.emissao>='01.02.2024'

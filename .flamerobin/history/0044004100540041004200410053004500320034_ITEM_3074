@@ -1,0 +1,31 @@
+select        
+
+    count(
+        case when coalesce(materialfilial.saldomaximo, materialfilial.consumomedio)*0.4>
+                  (select 
+                        SUM(materiallocal.saldototal)        
+                   from 
+                        MATERIALLOCAL
+                   where 
+                        materiallocal.filial=materialfilial.filial and
+                        materiallocal.iditem=materiallocal.iditem)
+              then 1 else 0 end)
+from 
+    fornecedoresitem
+inner join
+    materialfilial on
+        materialfilial.filial=5 and
+        materialfilial.iditem=fornecedoresitem.iditem
+inner join
+    itemestoque on
+        itemestoque.codigo=materialfilial.iditem
+where 
+    fornecedoresitem.FORNECEDOR=1082 and
+    materialfilial.filial=5 and
+    itemestoque.itembase is null and
+    not exists (
+        select * from MERCADORIASPEDCOMPRA
+        where MERCADORIASPEDCOMPRA.filial=materialfilial.filial and
+        mercadoriaspedcompra.codigo=materialfilial.iditem and
+        mercadoriaspedcompra.baixa='N')
+    

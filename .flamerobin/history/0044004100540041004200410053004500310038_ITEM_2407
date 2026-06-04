@@ -1,0 +1,27 @@
+    select
+      MATERIALMOVIMENTOESTOQUE.FILIAL,
+      MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+      MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL,
+      ITEMESTOQUE.CODIGO,
+      ITEMESTOQUE.DESCRICAO,
+      COALESCE(MATERIALMOVIMENTOESTOQUE.QUANTIDADE,0),
+      COALESCE(COALESCE(MATERIALMOVIMENTOESTOQUE.C_UP,ITEMESTOQUE.C_UP),0) UP,
+      COALESCE(ITEMESTOQUE.C_PESOLATEX,0) LATES,
+      COALESCE(
+       COALESCE(
+         MATERIALMOVIMENTOESTOQUE.C_PESOCONSUMO,
+         ITEMESTOQUE.C_PESOCONSUMO),0) CONSUMOFIO,
+      COALESCE(ITEMESTOQUE.C_PENCOLHIMENTOTELA,0) TELA
+    from
+      MATERIALMOVIMENTOESTOQUE
+    inner join
+      movimentoestoque on (
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL
+        and materialmovimentoestoque.idmovimento =
+            movimentoestoque.idmovimento)
+    inner join
+      itemestoque on (itemestoque.codigo=materialmovimentoestoque.iditem)
+    where
+      movimentoestoque.tipomovimento='04'
+      and movimentoestoque.emissao between '01.04.2024' and '30.04.2024'
+      and itemestoque.c_modelo is null

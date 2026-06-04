@@ -1,0 +1,9 @@
+select 
+    *
+FROM
+    MERCADORIASNOTA
+inner JOIN
+    CLASSIFICACAOFISCAL on
+        classificacaofiscal.CFISCAL=mercadoriasnota.CLASSIFISCAL
+WHERE
+    CLASSIFICACAOFISCAL.DESCRICAO='4579970545'

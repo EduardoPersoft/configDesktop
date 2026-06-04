@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where idpedido=328680

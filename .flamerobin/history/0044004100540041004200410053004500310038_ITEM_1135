@@ -1,0 +1,24 @@
+select
+    pedido.idnota,
+    pedido.datareferencia,
+    c_faturasped.sequencia,
+    titulorec.emissao,
+    titulorec.baixa,
+    titulorec.valortitulo,
+    pedido.VLRTOTALNOTA
+from 
+    PEDIDO
+inner join
+    c_faturasped on
+        c_faturasped.filial=pedido.filial and
+        c_faturasped.idnota=pedido.idnota 
+inner join
+    titulorec on
+        titulorec.filial=c_Faturasped.filial and
+        titulorec.idtitulo=c_faturasped.IDTITULO
+where
+    c_faturasped.sequencia=0 and
+    pedido.filial=1 and
+    pedido.destinatario = 29472 
+order by 
+    emissao desc

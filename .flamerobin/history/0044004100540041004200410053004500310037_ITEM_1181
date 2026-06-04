@@ -1,0 +1,1 @@
+select * from mercadoriasnotacompra where mercadoriasnotacompra.codigo='USO CONSUMO'

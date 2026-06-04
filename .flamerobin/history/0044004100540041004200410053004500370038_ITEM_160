@@ -1,0 +1,6 @@
+select
+    *
+from
+    itemcustodata
+where 
+    datainventario = '30.09.2025'

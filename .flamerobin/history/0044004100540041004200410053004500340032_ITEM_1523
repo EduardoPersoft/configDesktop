@@ -1,0 +1,34 @@
+select 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    inventarioestoquedata.data,
+    sum (inventarioestoquedata.QUANTIDADEESTOQUE) as QUANTIDADEANTERIOR, 
+    sum (inventarioestoquedata.QUANTIDADE) AS QUANTIDADEINVENTARIO,
+    ITEMCUSTODATA.CUSTOUNITARIO, 
+    sum (inventarioestoquedata.QUANTIDADEESTOQUE) * ITEMCUSTODATA.CUSTOUNITARIO as CUSTOANTERIOR , 
+    sum (inventarioestoquedata.QUANTIDADE) * ITEMCUSTODATA.CUSTOUNITARIO AS CUSTOINVENTARIO
+   
+    
+from 
+    inventarioestoquedata
+inner join 
+      ITEMCUSTODATA on
+            (ITEMCUSTODATA.filial=inventarioestoquedata.filial and 
+            ITEMCUSTODATA.CODIGO=inventarioestoquedata.CODIGO and 
+            ITEMCUSTODATA.DATAINVENTARIO=inventarioestoquedata.data 
+            )           
+INNER JOIN 
+    ITEMESTOQUE ON 
+        (ITEMESTOQUE.CODIGO=inventarioestoquedata.CODIGO)
+where 
+    itemcustodata.DATAINVENTARIO='31.01.2024' and
+    inventarioestoquedata.filial=110 
+    -- and inventarioestoquedata.data =  
+    
+group by 
+    inventarioestoquedata.filial,
+    inventarioestoquedata.codigo,
+    inventarioestoquedata.data,   
+    ITEMCUSTODATA.CUSTOUNITARIO, 
+    ITEMESTOQUE.DESCRICAO

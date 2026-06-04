@@ -1,0 +1,22 @@
+select 
+    NOTACOMPRA.filial,
+    NOTACOMPRA.idnota,
+    notacompra.DATAEMISSAO,
+    NOTACOMPRA.NRNOTAFORNECEDOR,
+    CADASTROPARCEIROS.RAZAOSOCIAL,
+    CADASTROPARCEIROS.DOCUMENTO,
+    notacompra.CHAVE,
+    notacompra.VLRTOTALNOTA
+from 
+    NOTACOMPRA
+inner join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.CADASTRO=notacompra.DESTINATARIO
+where 
+    notacompra.DATAEMISSAO between '01.03.2025' and '31.03.2025' and
+    notacompra.chave is not null
+order by
+    NOTACOMPRA.DATAEMISSAO,
+    CADASTROPARCEIROS.RAZAOSOCIAL
+
+    

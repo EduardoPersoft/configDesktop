@@ -1,0 +1,2 @@
+select * from MERCADORIASorc
+where filial=1 and idnota=60725

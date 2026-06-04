@@ -1,0 +1,2 @@
+select first 200 * from ORCAMENTO
+order by datacadastro desc

@@ -1,0 +1,3 @@
+select codigo,descricao,itemestoque.C_CODIGOANT from itemestoque where 
+
+escricao like 'COADOR DE CAFÉ MC FLANELA%' 

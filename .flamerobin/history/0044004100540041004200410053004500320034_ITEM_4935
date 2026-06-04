@@ -1,0 +1,3 @@
+delete from MATERIALMOVIMENTOESTOQUE
+where filial=5 and idmovimento
+between 400468 and 400501

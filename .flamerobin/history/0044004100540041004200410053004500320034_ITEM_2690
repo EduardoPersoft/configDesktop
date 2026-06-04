@@ -1,0 +1,7 @@
+select 
+    LISTAPRECO.LISTA,
+    listapreco.NOMELISTA
+from
+    listapreco
+order by
+    listapreco.lista

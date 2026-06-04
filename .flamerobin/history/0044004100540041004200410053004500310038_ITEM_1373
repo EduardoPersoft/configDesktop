@@ -1,0 +1,28 @@
+SET TERM ^;
+
+CREATE TRIGGER C_FATURASPED_FECHAMENTO FOR C_FATURASPED
+ACTIVE BEFORE INSERT OR UPDATE POSITION 0
+AS
+DECLARE VARIABLE INCIO DATE;
+DECLARE VARIABLE FIM DATE;
+BEGIN
+    /* enter trigger code here */ 
+    IF(NEW.IDTITULO IS NOT NULL and 
+       OLD.IDTITULO IS NULL) then begin
+        select 
+            estabelecimento.VENDASINICIO,
+            estabelecimento.VENDASFIM
+        from
+            ESTABELECIMENTO
+        where 
+            estabelecimento.cadastro=new.FILIAL
+        into inicio, fim;
+        /*
+        if(new.DATA<:inicio or new.data>:fim) then
+            exception C_DATAFECHAMENTOVENDAS;
+        */
+    END
+       
+END^
+
+SET TERM ;^

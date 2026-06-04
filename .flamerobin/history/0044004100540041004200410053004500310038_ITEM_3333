@@ -1,0 +1,12 @@
+select * from C_FATURASPED
+where filial=1 and
+idnota in (
+74492,
+74493,
+74494,
+74530,
+74546,
+74547,
+74560,
+74588,
+74596)

@@ -1,0 +1,13 @@
+select 
+    mercadoriasnota.codigo, 
+    mercadoriasnota.desreduzida,
+    mercadoriasnota.PRECOLISTA,
+    mercadoriasnota.quantidade,
+    mercadoriasnota.VLRFINALMERCAD,
+    mercadoriasnota.ppis,
+    mercadoriasnota.VALORIPI,
+    mercadoriasnota.VLRFINALMERCAD+valoripi as total 
+from
+    MERCADORIASNOTA
+where
+    mercadoriasnota.idnota=7470

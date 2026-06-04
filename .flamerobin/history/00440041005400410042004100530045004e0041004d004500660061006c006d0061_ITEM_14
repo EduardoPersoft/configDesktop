@@ -1,0 +1,30 @@
+SELECT
+    prazomercpedcompra.*,
+    (select
+        mercadoriaspedcompra.QUANTIDADE
+     FROM
+        MERCADORIASPEDCOMPRA
+     where 
+        exists (
+            mercadoriaspedcompra.filial=prazomercpedcompra.filial AND
+            mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+            mercadoriaspedcompra.IDMERCADORIA=prazomercpedcompra.IDITEM
+        )
+    )
+FROM
+    PRAZOMERCPEDCOMPRA
+WHERE 
+    EXISTS (select
+        mercadoriaspedcompra.QUANTIDADE
+     FROM
+        MERCADORIASPEDCOMPRA
+     where 
+        exists (
+            mercadoriaspedcompra.filial=prazomercpedcompra.filial AND
+            mercadoriaspedcompra.idnota=prazomercpedcompra.IDNOTA AND
+            mercadoriaspedcompra.IDMERCADORIA=prazomercpedcompra.IDITEM AND
+            mercadoriaspedcompra.baixa='N' AND
+            mercadoriaspedcompra.quantidade<>prazomercpedcompra.qtde
+        )
+    )
+    

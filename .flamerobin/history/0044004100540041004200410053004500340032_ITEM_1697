@@ -1,0 +1,6 @@
+update Mercadoriasped
+set mercadoriasped.CLASSIFISCAL='150',
+mercadoriaped.pipi=9.75
+where filial=110 and 
+mercadoriasped.CLASSIFISCAL in ('0','5') and
+mercadoriasped.baixa='N'

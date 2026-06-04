@@ -1,0 +1,1 @@
+alter table C_TABELASCOMISSAO add centrocustos varchar(15)

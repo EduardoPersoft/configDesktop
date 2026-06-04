@@ -1,0 +1,4 @@
+update
+    MERCADORIASNOTACOMPRA
+set 
+    unidade = upper(unidade)

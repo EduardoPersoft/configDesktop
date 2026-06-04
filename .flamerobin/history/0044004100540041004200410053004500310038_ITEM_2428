@@ -1,0 +1,75 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    LOCAL.DESCRICAO,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    CLASSIFICACAOFISCAL.DESCRICAO ncm,
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) AS QUANTIDADE,
+    itemestoque.UNIDADE,
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3))*ITEMCUSTODATA.CUSTOUNITARIO as custo,
+    itemcustodata.CUSTOUNITARIO,
+    CASE  materialmovimentoestoque.localarmazenamento WHEN 1 THEN
+        case itemestoque.tipoproduto     
+           when '1' then case coalesce(itemestoque.EMBALAGEM,'N') when 'S' then '02' else '01' END 
+           when '3' then '00'
+           when '4' then case coalesce(itemestoque.SEMIACABADO,'N') when 'S' then '03' else '04' END 
+        end 
+    ELSE '00' END as tipoitem,
+    CASE ITEMESTOQUE.CODIGOTRIBUTACAO
+        WHEN 0 THEN 'Nacional'
+        WHEN 1 THEN 'Importado'
+        WHEN 2 THEN 'Estrangeiro'
+        WHEN 3 THEN 'Nacional'
+        WHEN 4 THEN 'Nacional'
+        WHEN 5 THEN 'Nacional'
+        WHEN 6 THEN 'Importado'
+        WHEN 7 THEN 'Estrangeira'
+        WHEN 8 THEN 'Nacional'
+        ELSE itemestoque.codigoTributacao
+    end origem,
+    0 indicador_propriedade,
+   ''  cnpj_particip,
+   '' INSCESTADUAL_particip
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+inner join
+    itemcustodata on
+        itemcustodata.filial=materialmovimentoestoque.filial and
+        itemcustodata.codigo=materialmovimentoestoque.iditem
+inner join 
+    CLASSIFICACAOFISCAL on 
+    ITEMESTOQUE.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+inner join 
+    LOCAL on 
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=local.ID
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL =1 AND
+    itemcustodata.DATAINVENTARIO= '30.04.2024' and
+    MOVIMENTOESTOQUE.EMISSAO <= itemcustodata.datainventario and
+    itemestoque.TIPOPRODUTO in (1, 3, 4) AND 
+    itemcustodata.CUSTOUNITARIO>0 and
+    (not (itemestoque.tipoproduto = 4 and itemestoque.codigo between '00000' and '99999' or substring(itemestoque.codigo from 1 for 1)='X') )
+group BY
+    itemestoque.codigo,
+    itemestoque.descricao,
+    LOCAL.DESCRICAO,
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,
+    CLASSIFICACAOFISCAL.DESCRICAO,
+    itemestoque.UNIDADE,
+    itemestoque.tipoproduto,
+    ITEMESTOQUE.embalagem,
+    ITEMESTOQUE.semiacabado,
+    ITEMESTOQUE.codigotributacao,
+    itemestoque.embalagem,
+    itemestoque.semiacabado,
+    itemcustodata.CUSTOUNITARIO
+having 
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) > 0.009 and
+    sum(materialmovimentoestoque.VALOR*MATERIALMOVIMENTOESTOQUE.SINAL)>0.09

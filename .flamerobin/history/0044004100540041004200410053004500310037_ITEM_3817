@@ -1,0 +1,3 @@
+select
+codigo,metatag
+from itemestoque where metatag like '%.%'

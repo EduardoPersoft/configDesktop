@@ -1,0 +1,2 @@
+select * from INVENTARIOESTOQUEDATA
+where data ='31.01.2024'

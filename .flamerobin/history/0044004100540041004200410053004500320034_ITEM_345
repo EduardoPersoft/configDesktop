@@ -1,0 +1,1 @@
+select cadastro, nome from CADASTROPARCEIROS order by nome

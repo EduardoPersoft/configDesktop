@@ -1,0 +1,6 @@
+update 
+    PLANILHAORC
+set
+    resolvido = case codigo is null then 'N' else 'S' end
+where
+    filial=5 and idnota=974

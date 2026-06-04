@@ -1,0 +1,20 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.CONSUMOMEDIO
+FROM
+    ITEMESTOQUE
+inner JOIN
+    MATERIALLOCAL on
+        materiallocal.filial=5 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.idlocal=1
+inner JOIN
+    MATERIALFILIAL on
+        materialFILIAL.filial=5 AND
+        materialFILIAL.iditem=itemestoque.codigo
+
+WHERE
+    materiallocal.saldototal=0 AND
+    itemestoque.TIPOPRODUTO=3 AND
+    itemestoque.itembase is null 

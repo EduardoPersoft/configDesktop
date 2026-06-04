@@ -1,0 +1,2 @@
+alter table c_movfinanceiro alter column entrada not null
+add constraint pk_c_movfinanceiro primary key(entrada)

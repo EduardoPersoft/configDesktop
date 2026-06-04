@@ -1,0 +1,1 @@
+select * from logalteracao where OBJETO='ESTOQUE' WHERE CHAVE=' PRO3055FLI001'

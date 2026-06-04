@@ -1,0 +1,7 @@
+select
+    i1.codigo
+from
+    ITEMESTOQUECODIGOS i1
+where
+    i1.CODIGOALTERNATIVO = '9012412513'
+    and coalesce(i1.codigo, '')<>''

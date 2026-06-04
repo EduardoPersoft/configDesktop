@@ -1,0 +1,2 @@
+select notafiscal.idvendacartao from NOTAFISCAL
+where filial=110 and numeronota=4987	

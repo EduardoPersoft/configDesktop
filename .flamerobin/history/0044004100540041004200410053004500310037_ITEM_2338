@@ -1,0 +1,4 @@
+update
+    LANTOCONTBANC
+set
+    lantocontbanc.CONTACONTABIL='9'

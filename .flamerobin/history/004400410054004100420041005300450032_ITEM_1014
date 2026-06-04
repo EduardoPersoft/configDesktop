@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    MERCADORIASNOTA
+WHERE
+    mercadoriasnota.CLASSIFISCAL=68

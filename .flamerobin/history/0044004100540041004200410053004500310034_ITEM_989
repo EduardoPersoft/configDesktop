@@ -1,0 +1,482 @@
+SET TERM ^ ;
+ALTER PROCEDURE MOVIMENTOBANCARIOLANCAMENTOS (
+    P_FILIAL integer,
+    P_DATAINICIAL date,
+    P_DATAFINAL date,
+    P_CODIGO integer,
+    P_RAZAOSOCIAL varchar(60),
+    P_IDPLANO integer )
+RETURNS (
+    MODO smallint,
+    MOVIMENTACAO timestamp,
+    VALORMOVIMENTO double precision,
+    TIPOMOVIMENTO char(1),
+    FILIAL integer,
+    RAZAOSOCIAL varchar(60),
+    CODIGO smallint,
+    AGENCIA varchar(6),
+    DIGITOAGENCIA char(1),
+    NUMCCORRENTE varchar(10),
+    DIGITOCCORRENTE char(1),
+    BANCO smallint,
+    DESCRICAO varchar(30),
+    SALDOBLOQUEADO double precision,
+    SALDOEXTRATO double precision,
+    DEBITOSACOMP double precision,
+    HISTORICOEXTRATO varchar(1500),
+    NRDOCUMENTO varchar(150),
+    IDMOVTOBANCARIO integer,
+    DATAEXTRATO timestamp,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    DESCRICAOCONTA varchar(30),
+    DEBITO double precision,
+    CREDITO double precision,
+    TITULOPAGMSG varchar(40),
+    CONTACONTABIL varchar(15),
+    DESCRICAOCONTACONTABIL varchar(50),
+    TRANSFERENCIA char(1),
+    CONTACORRENTETRANSFERENCIA integer,
+    DESCRICAOCONTATRANSFERENCIA varchar(60),
+    IDPLANO smallint,
+    IDTITULO integer )
+
+AS
+declare variable documento varchar(15);
+declare variable fatura varchar(2);
+declare variable nomemovimento varchar(60);
+declare variable valorlancamento double precision;
+declare variable valortitulo double precision;
+declare variable phistoricoextrato varchar(150);
+declare variable vcontadescontofinanceirorec varchar(15);
+declare variable vcontadescontotaxapagtorec varchar(15);
+declare variable vcontaoutrosdescontosrec varchar(15);
+declare variable vcontajurosfinanceirorec varchar(15);
+declare variable vcontaacrescimotaxapagtorec varchar(15);
+declare variable vcontadescontofinanceiropag varchar(15);
+declare variable vcontadescontotaxapagtopag varchar(15);
+declare variable vcontaoutrosdescontospag varchar(15);
+declare variable vcontajurosfinanceiropag varchar(15);
+declare variable vcontaacrescimotaxapagtopag varchar(15);
+declare variable vdescdescontofinanceirorec varchar(50);
+declare variable vdescdescontotaxapagtorec varchar(50);
+declare variable vdescoutrosdescontosrec varchar(50);
+declare variable vdescjurosfinanceirorec varchar(50);
+declare variable vdescacrescimotaxapagtorec varchar(50);
+declare variable vdescdescontofinanceiropag varchar(50);
+declare variable vdescdescontotaxapagtopag varchar(50);
+declare variable vdescoutrosdescontospag varchar(50);
+declare variable vdescjurosfinanceiropag varchar(50);
+declare variable vdescacrescimotaxapagtopag varchar(50);
+declare variable vvalordescontofinanceirorec double precision;
+declare variable vvalordescontotaxapagtorec double precision;
+declare variable vvaloroutrosdescontosrec double precision;
+declare variable vvalorjurosfinanceirorec double precision;
+declare variable vvaloracrescimotaxapagtorec double precision;
+declare variable vvalordescontofinanceiropag double precision;
+declare variable vvalordescontotaxapagtopag double precision;
+declare variable vvaloroutrosdescontospag double precision;
+declare variable vvalorjurosfinanceiropag double precision;
+declare variable vvaloracrescimotaxapagtopag double precision;
+begin
+    FILIAL = P_FILIAL;
+    DATAINICIAL = P_DATAINICIAL;
+    DATAFINAL = P_DATAFINAL;
+    CODIGO = P_CODIGO;
+    RAZAOSOCIAL = P_RAZAOSOCIAL;
+    IDPLANO = P_IDPLANO;
+    --DESCRICAOCONTATRANSFERENCIA='';
+
+    Select planocontas.Contadescrec,
+           planocontas.Taxadescrec,
+           planocontas.Outrosdescrec,
+           planocontas.Jurosfinrec,
+           planocontas.Acresctaxarec,
+           planocontas.Contadescpag,
+           planocontas.Taxadescpag,
+           planocontas.Outrosdescpag,
+           planocontas.Jurosfinpag,
+           planocontas.Acresctaxapag
+    from planocontas
+    where planocontas.Idplano=:Idplano
+    INTO :VCONTADESCONTOFINANCEIROrec,
+         :VCONTADESCONTOTAXApagtorec,
+         :VCONTAOUTROSDESCONTOSrec,
+         :VCONTAJUROSFINANCEIROrec,
+         :VCONTAACRESCIMOTAXApagtorec,
+         :VCONTADESCONTOFINANCEIROpag,
+         :VCONTADESCONTOTAXApagtopag,
+         :VCONTAOUTROSDESCONTOSpag,
+         :VCONTAJUROSFINANCEIROpag,
+         :VCONTAACRESCIMOTAXApagtopag;
+
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTADESCONTOFINANCEIROrec
+    INTO :vdescDescontoFinanceirorec;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTADESCONTOTAXApagtorec
+    INTO :vdescDescontoTaxapagtorec;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAOUTROSDESCONTOSrec
+    INTO :vdescOutrosDescontosrec;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAJUROSFINANCEIROrec
+    INTO :vdescJurosFinanceirorec;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAACRESCIMOTAXApagtorec
+    INTO :vdescAcrescimoTaxapagtorec;
+
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTADESCONTOFINANCEIROpag
+    INTO :vdescDescontoFinanceiropag;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTADESCONTOTAXApagtopag
+    INTO :vdescDescontoTaxapagtopag;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAOUTROSDESCONTOSpag
+    INTO :vdescOutrosDescontospag;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAJUROSFINANCEIROpag
+    INTO :vdescJurosFinanceiropag;
+
+    select contascontabeis.descricao from contascontabeis
+    where contascontabeis.Idplano=:idplano
+    and contascontabeis.Contacontabil=:VCONTAACRESCIMOTAXApagtopag
+    INTO :vdescAcrescimoTaxapagtopag;
+
+
+    FOR SELECT 1 AS MODO,MOVBANCARIOS.Dataextrato,
+       (CASE MOVBANCARIOS.TIPOMOVIMENTO
+       WHEN 'C' THEN MOVBANCARIOS.VALORMOVIMENTO
+       ELSE MOVBANCARIOS.VALORMOVIMENTO*(-1) END ) AS VALORMOVIMENTO,
+       MOVBANCARIOS.TIPOMOVIMENTO,
+       MOVBANCARIOS.HISTORICOEXTRATO,
+       MOVBANCARIOS.NRDOCUMENTO,
+       MOVBANCARIOS.IDMOVTOBANCARIO,
+       MOVBANCARIOS.DATAEXTRATO,
+       case movbancarios.tipomovimento when 'D' then movbancarios.valormovimento
+         else NULL end as debito,
+       case movbancarios.tipomovimento when 'C' then movbancarios.valormovimento
+         else NULL end as credito,
+       Movbancarios.Transferencia,
+       movbancarios.Contacorrentedest
+    FROM MOVBANCARIOS
+    WHERE MOVBANCARIOS.Filial=:FILIAL
+    AND MOVBANCARIOS.Idcontacorrente=:Codigo
+    AND MOVBANCARIOS.Dataextrato BETWEEN :Datainicial AND :Datafinal
+    ORDER BY MOVBANCARIOS.FILIAL,MOVBANCARIOS.IDCONTACORRENTE,MOVBANCARIOS.DATAEXTRATO,MOVBANCARIOS.IDMOVTOBANCARIO
+    INTO MODO,MOVIMENTACAO,VALORMOVIMENTO,TIPOMOVIMENTO,pHISTORICOEXTRATO,
+         NRDOCUMENTO,IDMOVTOBANCARIO,DATAEXTRATO,debito,credito,Transferencia,
+         Contacorrentetransferencia DO BEGIN
+
+         contacontabil=null;
+         descricaocontacontabil=null;
+         CONTACORRENTETRANSFERENCIA=null;
+         DESCRICAOCONTATRANSFERENCIA=null;
+         
+
+         if (transferencia='S') then begin
+            SELECT CONTACORRENTE.Descricaoconta
+            FROM CONTACORRENTE
+            WHERE CONTACORRENTE.FILIAL=:FILIAL
+            AND CONTACORRENTE.CODIGO=:CONTACORRENTETRANSFERENCIA
+            INTO DescricaoContaTransferencia;
+            if (TipoMovimento='D') then
+                historicoextrato=phistoricoextrato||' '||'TRANSFERENCIA PARA '||descricaoContaTransferencia;
+            else
+                historicoextrato=phistoricoextrato||' '||'TRANSFERENCIA DE '||descricaoContaTransferencia;
+            SUSPEND;
+            DEBITO=NULL;
+            CREDITO=NULL;
+         end
+
+         FOR SELECT Contascontabeis.Contacontabil,
+                    contascontabeis.Descricao,
+                    sum(coalesce(Lantocontbanc.Valor,0)) valor
+         FROM Lantocontbanc
+         LEFT JOIN CONTASCONTABEIS ON (Contascontabeis.Idplano=:IDPLANO and
+              CONTASCONTABEIS.Contacontabil=Lantocontbanc.Contacontabil)
+         WHERE LANTOCONTBANC.FILIAL=:FILIAL
+         AND LANTOCONTBANC.Idcontacorrente=:Codigo
+         AND LANTOCONTBANC.Idmovtobanc=:Idmovtobancario
+         group by Contascontabeis.Contacontabil,
+                    contascontabeis.Descricao
+         INTO contacontabil,descricaocontacontabil,valormovimento do begin
+            if (tipomovimento='D') then
+                VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+            Historicoextrato = phistoricoextrato||' '||' ('||contacontabil||') '||descricaocontacontabil;
+            suspend;
+            DEBITO = NULL;
+            CREDITO = NULL;
+         end
+
+         FOR SELECT Titulosanexados.Idtitulo,
+
+                SUM( COALESCE(TITULOSANEXADOS.Valor,0) ),
+                SUM( Coalesce(Titulosanexados.Valordesconto,0) ),
+                SUM( Coalesce(Titulosanexados.Mvlrdescontoeletron,0)  ),
+                SUM( Coalesce(Titulosanexados.Moutrosdescontos,0)  ),
+                SUM( COALESCE(TITULOSANEXADOS.Valorjuros,0) ),
+                SUM( COALESCE(TITULOSANEXADOS.Mvlracrescimoeletron,0) )
+        FROM titulosanexados
+
+
+        WHERE TITULOSANEXADOS.FILIAL=:FILIAL
+        AND TITULOSANEXADOS.idcontacorrente=:CODIGO
+        AND TITULOSANEXADOS.idmovtobanc=:Idmovtobancario
+        AND TITULOSANEXADOS.Tipotitulo='R'
+        GROUP BY Titulosanexados.Idtitulo
+        into idtitulo,valorlancamento,
+             VVALORDESCONTOFINANCEIROrec,VVALORDESCONTOTAXApagtorec,
+             VVALOROUTROSDESCONTOSrec,VVALORJUROSFINANCEIROrec,
+             VVALORACRESCIMOTAXApagtorec
+
+
+        do begin
+
+              select
+              TITULOREC.Titulo,
+              TITULOREC.FATURA,
+              coalesce(TITULOREC.Valortitulo,0),
+              CADASTROPARCEIROS.RAZAOSOCIAL
+              from titulorec
+              inner join cadastroparceiros on (cadastroparceiros.cadastro=titulorec.Parceiro)
+              where titulorec.filial=:filial
+              and titulorec.Idtitulo=:IDTITULO
+              into documento,fatura,valortitulo,nomemovimento;
+
+
+        documento = substring(:DOCUMENTO||case when coalesce (fatura,'')<>'' then '/' else '' END||coalesce(:FATURA,'') from 1 for 15);
+
+
+
+            for SELECT  Contascontabeis.Contacontabil,
+                        Contascontabeis.Descricao,
+                        SUM(coalesce(Lantocontrec.Valor,0))
+            FROM LANTOCONTREC
+            LEFT JOIN CONTASCONTABEIS ON (CONTASCONTABEIS.Idplano=:IDPLANO and
+              CONTASCONTABEIS.Contacontabil=LANTOCONTREC.Contacontabil)
+            WHERE LANTOCONTREC.Filial=:FILIAL AND LANTOCONTREC.Idmovtobanc=:IdTITULO
+            GROUP BY Contascontabeis.Contacontabil,
+                        Contascontabeis.Descricao
+            INTO CONTACONTABIL,DESCRICAOCONTACONTABIL,VALORMOVIMENTO DO BEGIN
+                VALORMOVIMENTO = (VALORMOVIMENTO / VALORTITULO) * VALORLANCAMENTO;
+                if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                ' ('||contacontabil||') '||descricaocontacontabil from 1 for 150);
+                SUSPEND;
+                DEBITO = NULL;
+                CREDITO = NULL;
+
+            END
+            IF ( VVALORDESCONTOFINANCEIROrec > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORDESCONTOFINANCEIROrec;
+                 if (tipomovimento='C') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                 ' ('||VCONTADESCONTOFINANCEIROrec||') '||
+                   VdescDESCONTOFINANCEIROrec from 1 for 150);
+                 contacontabil = VCONTADESCONTOFINANCEIROrec;
+                 descricaocontacontabil = VdescDESCONTOFINANCEIROrec;
+                 SUSPEND;
+             END
+
+             IF ( VVALORDESCONTOTAXApagtorec > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORDESCONTOTAXApagtorec;
+                 if (tipomovimento='C') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                 ' ('||VCONTADESCONTOTAXApagtorec||') '||
+                   VdescDESCONTOTAXApagtorec from 1 for 150);
+                 contacontabil = VCONTADESCONTOTAXApagtorec;
+                 descricaocontacontabil = VdescDESCONTOTAXApagtorec;
+                 SUSPEND;
+             END
+
+             IF ( VVALOROUTROSDESCONTOSrec > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALOROUTROSDESCONTOSrec;
+                 if (tipomovimento='C') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                 ' ('||VCONTAOUTROSDESCONTOSrec||') '||
+                   VdescOUTROSDESCONTOSrec from 1 for 150);
+                 contacontabil = VCONTAOUTROSDESCONTOSrec;
+                 descricaocontacontabil = VdescOUTROSDESCONTOSrec;
+                 SUSPEND;
+             END
+
+             IF ( VVALORJUROSFINANCEIROrec > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORJUROSFINANCEIROrec;
+                 if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                 ' ('||VCONTAJUROSFINANCEIROrec||') '||
+                   VdescJUROSFINANCEIROrec from 1 for 150);
+                 contacontabil = VCONTAJUROSFINANCEIROrec;
+                 descricaocontacontabil = VdescJUROSFINANCEIROrec;
+                 SUSPEND;
+             END
+
+             IF ( VVALORACRESCIMOTAXApagtorec > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORACRESCIMOTAXApagtorec;
+                 if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||
+                 ' ('||VCONTAACRESCIMOTAXApagtorec||') '||
+                   VdescACRESCIMOTAXApagtorec from 1 for 150);
+                 contacontabil = VCONTAACRESCIMOTAXApagtorec;
+                 descricaocontacontabil = VdescACRESCIMOTAXApagtorec;
+                 SUSPEND;
+             END
+
+        end
+
+
+        FOR SELECT Titulosanexados.Idtitulo,
+
+
+                SUM( COALESCE(TITULOSANEXADOS.Valor,0) ),
+                SUM( Coalesce(Titulosanexados.Valordesconto,0) ),
+                SUM( Coalesce(Titulosanexados.Mvlrdescontoeletron,0)  ),
+                SUM( Coalesce(Titulosanexados.Moutrosdescontos,0)  ),
+                SUM( COALESCE(TITULOSANEXADOS.Valorjuros,0) ),
+                SUM( COALESCE(TITULOSANEXADOS.Mvlracrescimoeletron,0) )
+        FROM titulosanexados
+
+        WHERE TITULOSANEXADOS.FILIAL=:FILIAL
+        AND TITULOSANEXADOS.idcontacorrente=:CODIGO
+        AND TITULOSANEXADOS.Idmovtobanc=:Idmovtobancario
+        AND TITULOSANEXADOS.Tipotitulo='P'
+        GROUP BY Titulosanexados.Idtitulo
+        into idtitulo, valorlancamento,
+             VVALORDESCONTOFINANCEIROpag,VVALORDESCONTOTAXApagtopag,
+             VVALOROUTROSDESCONTOSpag,VVALORJUROSFINANCEIROpag,
+             VVALORACRESCIMOTAXApagtopag do begin
+
+             select
+                TITULOPAG .Titulo,
+                TITULOPAG .FATURA,
+                TITULOPAG .Valortitulo,
+                case  coalesce (TITULOPAG .MENSAGEMSEGA,'')
+                when '' then ''
+                else substring (TITULOPAG .MENSAGEMSEGA from 1 for 37)||' - '  end as titulopagmsg,
+                CADASTROPARCEIROS.RAZAOSOCIAL
+                from titulopag
+                inner join cadastroparceiros on (cadastroparceiros.cadastro=TITULOPAG .Parceiro)
+                where titulopag.FILIAL=:FILIAL and
+                      titulopag.IDTITULO=:IDTITULO
+                into documento,fatura,valortitulo,titulopagmsg, nomemovimento;
+
+            documento = :DOCUMENTO||case when coalesce (fatura,'')<>'' then '/' else '' END||coalesce(:FATURA,'');
+            for SELECT  Contascontabeis.Contacontabil,
+                        Contascontabeis.Descricao,
+                        SUM(coalesce(Lantocontrec.Valor,0))
+            FROM LANTOCONTPAG LANTOCONTREC
+            LEFT JOIN CONTASCONTABEIS ON (CONTASCONTABEIS.Idplano=:IDPLANO and
+              CONTASCONTABEIS.Contacontabil=LANTOCONTREC.Contacontabil)
+            WHERE LANTOCONTREC.Filial=:FILIAL AND LANTOCONTREC.Idmovtobanc=:IdTITULO
+            GROUP BY Contascontabeis.Contacontabil,
+                        Contascontabeis.Descricao
+            INTO CONTACONTABIL,DESCRICAOCONTACONTABIL,VALORMOVIMENTO DO BEGIN
+                VALORMOVIMENTO = (VALORMOVIMENTO / VALORTITULO) * VALORLANCAMENTO;
+                if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                '('||contacontabil||') '||descricaocontacontabil from 1 for 150);
+                SUSPEND;
+                DEBITO = NULL;
+                CREDITO = NULL;
+            END
+            IF ( VVALORDESCONTOFINANCEIROpag > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORDESCONTOFINANCEIROpag;
+                 if (tipomovimento='C') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                 '('||VCONTADESCONTOFINANCEIROpag||') '||
+                   VdescDESCONTOFINANCEIROpag from 1 for 150);
+                 contacontabil = VCONTADESCONTOFINANCEIROpag;
+                 descricaocontacontabil = VdescDESCONTOFINANCEIROpag;
+                 SUSPEND;
+             END
+
+             IF ( VVALORDESCONTOTAXApagtopag > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORDESCONTOTAXApagtopag;
+                 if (tipomovimento='C') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                 '('||VCONTADESCONTOTAXApagtopag||') '||
+                   VdescDESCONTOTAXApagtopag from 1 for 150);
+                 contacontabil = VCONTADESCONTOTAXApagtopag;
+                 descricaocontacontabil = VdescDESCONTOTAXApagtopag;
+                 SUSPEND;
+             END
+
+             IF ( VVALOROUTROSDESCONTOSpag > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALOROUTROSDESCONTOSpag;
+                 if (tipomovimento='C') then
+                     VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                 '('||VCONTAOUTROSDESCONTOSpag||') '||
+                     VdescOUTROSDESCONTOSpag from 1 for 150);
+                 contacontabil = VCONTAOUTROSDESCONTOSpag;
+                 descricaocontacontabil = VdescOUTROSDESCONTOSpag;
+                 SUSPEND;
+             END
+
+             IF ( VVALORJUROSFINANCEIROpag > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORJUROSFINANCEIROpag;
+                 if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                 '('||VCONTAJUROSFINANCEIROpag||') '||
+                   VdescJUROSFINANCEIROpag from 1 for 150);
+                 contacontabil = VCONTAJUROSFINANCEIROpag;
+                 descricaocontacontabil = VdescJUROSFINANCEIROpag;
+                 SUSPEND;
+             END
+
+             IF ( VVALORACRESCIMOTAXApagtopag > 0) THEN BEGIN
+                 VALORMOVIMENTO = VVALORACRESCIMOTAXApagtopag;
+                 if (tipomovimento='D') then
+                    VALORMOVIMENTO = VALORMOVIMENTO * (-1);
+                 Historicoextrato = phistoricoextrato||' '||substring(documento||' - '||nomemovimento||' - '||titulopagmsg||
+                 '('||VCONTAACRESCIMOTAXApagtopag||') '||
+                       VdescACRESCIMOTAXApagtopag from 1 for 150);
+                 contacontabil = VCONTAACRESCIMOTAXApagtopag;
+                 descricaocontacontabil = VdescACRESCIMOTAXApagtopag;
+                 SUSPEND;
+             END
+
+        end
+
+
+
+    END
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE MOVIMENTOBANCARIOLANCAMENTOS TO  SYSDBA;
+

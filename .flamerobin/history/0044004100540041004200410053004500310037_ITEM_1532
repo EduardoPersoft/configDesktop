@@ -1,0 +1,6 @@
+select
+    *
+from 
+    SPEDFISCAL_C
+order by
+        sequenacia

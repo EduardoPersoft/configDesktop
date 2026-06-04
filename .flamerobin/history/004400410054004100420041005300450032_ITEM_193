@@ -1,0 +1,5 @@
+select 
+    cast(titulopag.vencimento as date) as vencto,
+    titulopag.* 
+from 
+    titulopag

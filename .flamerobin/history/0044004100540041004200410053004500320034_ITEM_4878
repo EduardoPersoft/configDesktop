@@ -1,0 +1,22 @@
+select
+    produto.codigo,
+    produto.descricao,
+    sum(mercadoriasnota.quantidade)
+from
+    notafiscal
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota
+inner join
+    itemestoque codigonota on
+        codigonota.codigo=mercadoriasnota.CODIGO
+inner join
+    itemestoque produto on
+        produto.codigo = coalesce(codigonota.itembase,codigonota.codigo)
+where        
+    notafiscal.filial=5 and
+    notafiscal.dataemissao>=2020
+group by    
+        produto.codigo,
+    produto.descricao

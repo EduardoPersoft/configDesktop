@@ -1,0 +1,6 @@
+select
+    *
+from 
+    estsin
+where
+    relatorio='RESUMOPERIODO'

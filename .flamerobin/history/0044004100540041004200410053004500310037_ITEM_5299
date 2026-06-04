@@ -1,0 +1,24 @@
+select 
+    locallote.filial,
+    locallote."LOCAL",
+    local.descricao,
+    local.ean,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.CODIGOBARRA,
+    locallote.lote,
+    locallote.QUANTIDADE
+from
+    LOCALLOTE
+inner join
+    local on
+        local.id=locallote."LOCAL"
+inner join
+    itemestoque on
+        itemestoque.codigo=locallote.iditem
+        
+where
+    locallote.quantidade>0
+order by
+    local.ean,
+    itemestoque.codigobarra

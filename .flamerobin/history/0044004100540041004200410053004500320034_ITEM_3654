@@ -1,0 +1,3 @@
+update MERCADORIASNOTACOMPRA
+set cfop='1556'
+where cfop='1156'

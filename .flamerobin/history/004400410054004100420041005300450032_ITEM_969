@@ -1,0 +1,8 @@
+SELECT
+    *
+from 
+    MATERIALFILIAL
+where 
+    materialfilial.filial=5
+order by
+    materialfilial.st desc

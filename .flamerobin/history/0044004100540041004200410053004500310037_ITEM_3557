@@ -1,0 +1,4 @@
+select  *
+from INVENTARIOESTOQUEDATA
+where filial= and codigo='1837932'  
+and local=108 and data='2024-07-04'

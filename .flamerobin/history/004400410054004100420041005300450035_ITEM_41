@@ -1,0 +1,4 @@
+DELETE from
+    materiallocal
+where 
+    idlocal >= 1790

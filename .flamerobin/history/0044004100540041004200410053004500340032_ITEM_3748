@@ -1,0 +1,6 @@
+select titulorec.VALORTITULO, titulorec.* from C_MOVFINANCEIRO 
+inner join 
+    titulorec on
+        titulorec.titulo=C_MOVFINANCEIRO.documento and
+        titulorec.fatura=c_movfinanceiro.fatura
+where c_movfinanceiro.contacorrenteimportada=2016 

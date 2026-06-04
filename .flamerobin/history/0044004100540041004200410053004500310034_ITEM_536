@@ -1,0 +1,1 @@
+select * from itemestoque order by itemestoque.datacadastro desc

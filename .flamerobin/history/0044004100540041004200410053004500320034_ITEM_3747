@@ -1,0 +1,4 @@
+update
+    TITULOPAG
+set
+    titulopag.vencimento=cast(titulopag.vencimento as date)

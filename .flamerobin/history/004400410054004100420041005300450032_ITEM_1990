@@ -1,0 +1,11 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    materialfilial.CUSTOMEDIO
+FROM
+    ITEMESTOQUE
+inner JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        materialfilial.iditem=itemestoque.codigo

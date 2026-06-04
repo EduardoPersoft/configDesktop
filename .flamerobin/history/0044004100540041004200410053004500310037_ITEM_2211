@@ -1,0 +1,43 @@
+ Select C_ESTOQUE.Codigo,
+       C_ESTOQUE.Descricao,
+       C_ESTOQUE.C_original,
+       C_ESTOQUE.Marca,
+       C_ESTOQUE.C_aplicacao,
+       c_estoque.TIPOPRODUTO,
+       C_ESTOQUE.Fornecedor,
+       C_ESTOQUE.C_mrfornecedor,
+       C_ESTOQUE.Precoa,
+       C_ESTOQUE.Precob,
+       C_ESTOQUE.PRECOC,
+       c_estoque.metatag,
+       --(C_ESTOQUE.Mlocal-C_ESTOQUE.Reservado) as Mlocal,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0) AS MLOCAL,
+       COALESCE ( c_estoque.ESTOQUEIMPORTADORA,0)  as ESTOQUEIMPORTADORA,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0) ESTOQUEDISTRIBUIDORA ,
+       C_ESTOQUE.Clocal,
+       c_estoque.descricaolocal,
+       c_estoque.DESCRICAO NCM,
+       c_estoque.DESCRICAO tributacaoIcms--,
+/*
+(select
+        min(pedidocompra.DATACADASTRO+
+        PRAZOMERCPEDCOMPRA.dias)
+from 
+     MERCADORIASPEDCOMPRA
+inner join 
+        PRAZOMERCPEDCOMPRA on
+        prazomercpedcompra.filial=mercadoriaspedcompra.FILIAL
+        and prazomercpedcompra.idnota=MERCADORIASpedCOMPRA.idnota 
+        and prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA
+inner join
+        pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial and
+        pedidocompra.idnota=mercadoriaspedcompra.idnota
+where 
+        mercadoriaspedcompra.codigo=itemestoque.codigo and
+        mercadoriaspedcompra.baixa='N') as dataPrevista,
+            grupomercadoria.C_COR*/
+from
+    C_ESTOQUE(?)
+WHERE 
+      ((COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0)>0))

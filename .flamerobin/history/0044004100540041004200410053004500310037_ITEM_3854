@@ -1,0 +1,8 @@
+select 
+    codigo,
+    referencia,
+    metatag
+from 
+    itemestoque
+where
+    codigo='1546706'

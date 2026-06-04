@@ -1,0 +1,1 @@
+select * from servicosorc order by idnota desc

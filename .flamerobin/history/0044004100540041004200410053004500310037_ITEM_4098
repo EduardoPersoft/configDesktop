@@ -1,0 +1,2 @@
+select * from pedido
+where pedido.DATACADASTRO='2025-01-23'

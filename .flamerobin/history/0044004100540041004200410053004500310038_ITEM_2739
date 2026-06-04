@@ -1,0 +1,1 @@
+select * from c_faturasped where filial=1 and c_malote is null and idtitulo is not null

@@ -1,0 +1,16 @@
+select
+    *
+from
+    SERVICOSnota
+where
+    notafiscal.filial=110 and
+    exists (
+        select
+            *
+        from
+            notafiscal
+        where
+            notafiscal.filial=servicosnota.filial and
+            notafiscal.idnota=servicosnota.idnota and
+            notafiscal.CANCELAMENTO='S')
+    

@@ -1,0 +1,8 @@
+select 
+    filial,
+    idnota,
+    numeronota
+from
+    pedido
+where
+    pedido.idnota=76586

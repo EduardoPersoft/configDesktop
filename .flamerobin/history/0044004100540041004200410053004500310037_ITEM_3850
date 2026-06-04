@@ -1,0 +1,10 @@
+select 
+            sum(coalesce(materiallocal.saldototal,0))
+        from 
+            MATERIALLOCAL 
+        inner JOIN
+            local on
+                local.ID=materiallocal.IDLOCAL
+        where
+            MATERIALLOCAL.IDITEM='2261532' and
+            local.SALDODISPONIVEL='S'

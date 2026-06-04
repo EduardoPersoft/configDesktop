@@ -1,0 +1,13 @@
+update 
+    C_CUSTOMEDIO
+set
+    C_CUSTOMEDIO.CUSTO = (SELECT 
+                            MATERIALFILIAL.CUSTOMEDIO
+                          from
+                            MATERIALFILIAL
+                          WHERE 
+                            MATERIALFILIAL.FILIAL=110 and
+                            MATERIALFILIAL.IDITEM=C_CUSTOMEDIO.IDITEM)
+where
+    C_CUSTOMEDIO.CUSTO=0
+                            

@@ -1,0 +1,13 @@
+SELECT 
+    p.FILIAL, 
+    p.IDNOTA, 
+    p.DATACADASTRO, 
+    p.DATAEMISSAO,  
+    p.STATUS, 
+    p.VENDEDOR, 
+    p.NOME_LOJA,
+    p.VLRTOTALNOTA, 
+    p.TIPO, 
+    p.AGENTENOME,
+    p.uuid
+FROM C_LISTAORCCANAL (?, ?) p

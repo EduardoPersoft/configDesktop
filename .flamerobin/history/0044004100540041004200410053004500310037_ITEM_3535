@@ -1,0 +1,6 @@
+select 
+    first 10
+    composicaomercnota.*
+from
+    COMPOSICAOMERCNOTA
+    

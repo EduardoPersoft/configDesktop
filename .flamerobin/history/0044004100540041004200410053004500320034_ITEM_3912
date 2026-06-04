@@ -1,0 +1,1 @@
+select * from pedidocompra where uuid='9af0818c-d129-4718-8450-9216c88f4879'

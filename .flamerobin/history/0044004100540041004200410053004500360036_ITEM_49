@@ -1,0 +1,8 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.custounitario=0
+where
+    itemcustodata.custounitario is null
+        
+        

@@ -1,0 +1,2 @@
+select * from mercadoriasnotacompra 
+where MERCADORIASNOTACOMPRA.filial=1 and mercadoriasnotacompra.idnota>5219

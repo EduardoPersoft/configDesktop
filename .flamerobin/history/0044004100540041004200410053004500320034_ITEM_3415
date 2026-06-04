@@ -1,0 +1,2 @@
+select * from C_I_MOVEST3 where c_Data is null
+ 

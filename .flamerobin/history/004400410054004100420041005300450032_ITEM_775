@@ -1,0 +1,13 @@
+SELECT
+    sum(faturas.VALORFATURA) totalPedido
+from
+    notafiscal
+inner JOIN  
+    faturas on
+        faturas.filial=notafiscal.filial AND
+        faturas.idnota=notafiscal.idnota
+WHERE
+    notafiscal.filial=5 and
+    notafiscal.destinatario=5 and
+    notafiscal.cancelamento = 'N' and
+    notafiscal.DATAEMISSAO is null

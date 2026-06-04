@@ -1,0 +1,4 @@
+delete from nfectrl where
+not exists (select * from NOTAFISCAL
+where NOTAFISCAL.filial=nfectrl.FILIAL and
+notafiscal.idnota=nfectrl.idnota)

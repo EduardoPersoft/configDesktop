@@ -1,0 +1,9 @@
+UPDATE LISTAPRECOPRODUTO L1 SET 
+L1.VARIAVEL=2, 
+L1.CUSTOCONSIDERADO=(SELECT L2.CUSTOCONSIDERADO
+                     FROM LISTAPRECOPRODUTO L2
+                     where L2.LISTA=1
+                     AND L2.PRODUTO=L1.PRODUTO)
+WHERE 
+L1.LISTA=2
+                               

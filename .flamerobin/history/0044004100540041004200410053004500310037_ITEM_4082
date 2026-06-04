@@ -1,0 +1,7 @@
+select * from vendedoresnota
+where  exists (
+select * from NOTAFISCAL
+where notafiscal.filial=vendedoresnota.filial
+and notafiscal.idnota=vendedoresnota.IDNOTA
+and notafiscal.dataemissao>='2025-01-23')
+order by filial,idnota

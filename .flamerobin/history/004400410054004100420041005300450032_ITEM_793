@@ -1,0 +1,1 @@
+SELECT * FROM TITULOREC WHERE FILIAL=5 and titulorec.emissao='02.02.2021' order by contacorrente

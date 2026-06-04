@@ -1,0 +1,75 @@
+select
+    0 as ordem,
+    'E' as entradaSaida,
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,
+    '' AS CFOP,
+    SERVICOSNOTACOMPRA.codigo,
+    TIPOITEMESTOQUE.DESCRICAO tipomaterial,
+    sum(SERVICOSNOTACOMPRA.quantidade) as quantidade,
+    sum(SERVICOSNOTACOMPRA.vlrfinalmercad) as vlrfinalmercad,
+    
+    0 FRETE,
+    
+    0 as valoripi,
+    s0 valoripiCredito,
+    
+    sum(SERVICOSNOTACOMPRA.VLRFINALSERVICO) TOTAL,
+   
+    0 valoricms,
+    
+    0 as valorestoque,
+    'N' as devolucao
+       
+from 
+    notacompra
+inner join
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial and
+        mercadoriasnotacompra.idnota=notacompra.IDNOTA
+inner join
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+left join
+    modelodocto on
+        modelodocto.id=notacompra.modelo
+left join
+    movimentoestoque on
+        movimentoestoque.filial=notacompra.filial and
+        movimentoestoque.IDNOTACOMPRA=notacompra.idnota
+left join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento and
+        materialmovimentoestoque.idmovimentomaterial=mercadoriasnotacompra.idmercadoria
+left join 
+    TIPOITEMESTOQUE on
+    itemestoque.TIPOPRODUTO=TIPOITEMESTOQUE.ID
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.05.2024' and '31.05.2024' 
+group by    
+    notacompra.modelo,
+    MODELODOCTO.MODELO,
+mercadoriasnotacompra.codigo,    
+    mercadoriasnotacompra.cfop,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO,
+    TIPOITEMESTOQUE.DESCRICAO
+order by 
+    1,2,notacompra.modelo,
+    MODELODOCTO.MODELO,
+    mercadoriasnotacompra.codigo,
+    mercadoriasnotacompra.cfop,
+    notacompra.dataemissao,
+    cadfor.razaosocial,
+    notacompra.NRNOTAFORNECEDOR,    
+    itemestoque.TIPOPRODUTO

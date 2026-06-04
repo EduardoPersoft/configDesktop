@@ -1,0 +1,17 @@
+select * from  LANCAMENTOMOVIMENTOESTOQUE (
+
+
+    1,
+   ' ',
+    'zzz',
+    '01.10.2024',
+    '31.10.2024',
+    ' ',
+    'zzz' ,
+    1 ,
+    9999 ,
+    'S',
+    'S',
+    'S',
+    'S',
+    'S')

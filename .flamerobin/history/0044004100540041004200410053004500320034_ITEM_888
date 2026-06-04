@@ -1,0 +1,6 @@
+update 
+    T_CADASTRO
+SET
+    t_cadastro = (select cadastroparceiros.CADASTRO
+                  from CADASTROPARCEIROS
+                  where cadastroparceiros.C_CODCLIENTEANTIGO=t_cadastro.CODIGO)

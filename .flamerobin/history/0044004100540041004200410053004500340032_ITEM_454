@@ -1,0 +1,16 @@
+SELECT 
+    I1.*
+from
+    INVENTARIOESTOQUEDATA I1
+where   
+    I1. LOCAL = 2 and
+    EXISTS (
+        select  
+            *
+        FROM 
+            INVENTARIOESTOQUEDATA I2
+        WHERE 
+            I1.FILIAL=I2.FILIAL AND
+            I1.CODIGO=I2.CODIGO and
+            I1.LOTE=I2.LOTE and
+            I1.LOCAL<>2)

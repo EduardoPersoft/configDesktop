@@ -1,0 +1,17 @@
+SET TERM ^ ;
+alter PROCEDURE C_TRANSFEREAGENTE (
+    ORIGEM integer,
+    DESTINO integer )
+
+AS
+begin
+update vendedor set vendedor.Canalrelacionado = :destino
+where vendedor.canalrelacionado = :origem 
+and vendedor.tipovendedor>4;
+end
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE C_TRANSFEREAGENTE TO  SYSDBA;
+

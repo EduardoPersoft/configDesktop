@@ -1,0 +1,3 @@
+select filial,
+idnota, c_loja,vendedor from orcamento
+where filial=1 and idnota in (207268, 207179, 207181)

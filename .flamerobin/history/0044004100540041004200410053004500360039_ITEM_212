@@ -1,0 +1,2 @@
+select * from CLIENTES
+where cadastro=8156

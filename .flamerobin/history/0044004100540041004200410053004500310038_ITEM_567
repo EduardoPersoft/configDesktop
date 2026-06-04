@@ -1,0 +1,7 @@
+select * from materialmovimentoestoque where filial=1
+and iditem in ('PE-23970', 'PE-24007', 'PE-24057', 
+'PE-24247', 'PE-24021', 'PE-24065', 'PE-24068', 'PE-24069',
+'PE-24353', 'PE-16894', 'PE-19083', 'PE-21767', 'PE-21773',
+'PE-21889', 'PE-21919')
+order by iditem
+

@@ -1,0 +1,50 @@
+select 
+    cast(titulopag.programacao as date),
+    CONTASCONTABEIS.contacontabil,
+    contascontabeis.descricao,
+    LANTOCONTPAG.CONTACONTABIL,
+    contascontabeis.NIVEL,
+    contascontabeis.TIPOCONTA,
+    sum(lantocontpag.VALOR / titulopag.VALORTITULO * titulopag.valoremaberto) * (-1) ValorEmAberto,
+    cadastroparceiros.RAZAOSOCIAL,
+    TITULOPAG.IDTITULO,
+    titulopag.titulo,
+    titulopag.FATURA,
+    cast ('Pagar' as varchar(10)),
+    titulopag.FILIAL
+from 
+    titulopag
+inner join 
+    LANTOCONTPAG on 
+    titulopag.FILIAL = LANTOCONTPAG.FILIAL and
+    titulopag.IDTITULO= LANTOCONTPAG.idmovtobanc
+inner join 
+    ESTABELECIMENTO on 
+    titulopag.FILIAL = ESTABELECIMENTO.CADASTRO
+inner join 
+    CONTASCONTABEIS ON 
+    ESTABELECIMENTO.PLANOCONTAS= contascontabeis.IDPLANO and
+    LANTOCONTPAG.contacontabil like contascontabeis.CONTACONTABIL||'%'
+inner join 
+    CADASTROPARCEIROS on 
+    TITULOPAG.PARCEIRO= CADASTROPARCEIROS.CADASTRO
+inner join
+    RCONTACORRENTE on 
+    rcontacorrente.relatorio='FLUXOCAIXA' and
+    rcontacorrente.contacorrente=titulopag.contacorrente
+    
+where 
+    titulopag.baixa is null and 
+    titulopag.programacao between '16.03.2024' and '31.12.2024'
+group by
+    titulopag.programacao,
+    CONTASCONTABEIS.contacontabil,
+    contascontabeis.descricao,
+    LANTOCONTPAG.CONTACONTABIL,
+    contascontabeis.NIVEL,
+    contascontabeis.TIPOCONTA,
+    cadastroparceiros.RAZAOSOCIAL,
+    TITULOPAG.IDTITULO,
+    titulopag.titulo,
+    titulopag.FATURA,
+    titulopag.FILIAL

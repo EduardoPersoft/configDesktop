@@ -1,0 +1,2 @@
+select * from CLIENTES
+where coalesce(clientes.DESCONTOCOMUM,0)>0

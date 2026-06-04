@@ -1,0 +1,8 @@
+insert into c_classifiscalst(classifiscal)
+SELECT
+    distinct 
+        mercadoriasnota.CLASSIFISCAL
+FROM
+    MERCADORIASNOTA
+WHERE
+    mercadoriasnota.VLRICMSRECOLHIDO>0

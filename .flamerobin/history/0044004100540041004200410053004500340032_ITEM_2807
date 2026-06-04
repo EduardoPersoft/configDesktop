@@ -1,0 +1,25 @@
+select
+    movtobancariolancamentos.FILIAL,
+    movtobancariolancamentos.CODIGO CONTACORRENTE,
+    movtobancariolancamentos.MOVIMENTACAO,
+    movtobancariolancamentos.HISTORICOEXTRATO,
+    movtobancariolancamentos.NRDOCUMENTO,
+    movtobancariolancamentos.CONTACONTABIL,
+    coalesce(movtobancariolancamentos.DESCRICAOCONTACONTABIL,movtobancariolancamentos.DESCRICAOCONTATRANSFERENCIA) Descricao,
+    movtobancariolancamentos.VALORMOVIMENTO,
+    cast(0 as decimal(12,2)) saldo
+    
+    
+    
+from
+    movtobancariolancamentos(110,'2024-07.01','2024-07.31',  'PRIMEFLEX', 4)
+where    
+    movtobancariolancamentos.codigo=341 and
+    movtobancarioLancamentos.filial=110
+
+order by
+    filial,
+    contacorrente,
+    movimentacao,
+    nrdocumento,
+    contacontabil

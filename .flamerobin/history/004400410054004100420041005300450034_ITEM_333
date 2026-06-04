@@ -1,0 +1,33 @@
+create table t_mapa(
+filial integer not null,
+idmovimento integer not null,
+idmovimentoMaterial integer not null,
+idnota integer,
+idmercadoria integer,
+baixa char(1),
+substituido char(1),
+datafaturamento date,
+tipo char(2),
+constraint pk_t_mapa primary key(filial, idmovimento,idmovimentomaterial))
+
+
+
+SELECT 
+   (select mercadoriasped.baixa from MERCADORIASPED
+    where mercadoriasped.filial=C_MAPAPRODUCAO.FILIAL AND
+    mercadoriasped.idnota=C_MAPAPRODUCAO.idnota AND
+    mercadoriasped.IDMERCADORIA=c_mapaproducao.idmercadoria) as baixa,
+    (select pedido.idnota from pedido
+    where pedido.filial=C_MAPAPRODUCAO.FILIAL AND
+    pedido.C_PEDIDOSUBSTITUIDO=C_MAPAPRODUCAO.IDNOTA) as substituto,
+   c_mapaproducao.concluido,
+   C_MAPAPRODUCAO.*,
+  CAST('N' AS CHAR(1)) AS P_MARCA
+FROM C_MAPAPRODUCAO(1,'01.01.2000','31.12.2021')
+left join itemestoque on itemestoque.codigo=C_MAPAPRODUCAO.codigo 
+where C_MAPAPRODUCAO.C_REVISAOFINAL IS NULL and 
+
+(select mercadoriasped.baixa from MERCADORIASPED
+    where mercadoriasped.filial=C_MAPAPRODUCAO.FILIAL AND
+    mercadoriasped.idnota=C_MAPAPRODUCAO.idnota AND
+    mercadoriasped.IDMERCADORIA=c_mapaproducao.idmercadoria)='S'

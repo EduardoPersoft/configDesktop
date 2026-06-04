@@ -1,0 +1,18 @@
+select 
+    mercadoriasnota.codigo,
+    mercadoriasnota.DESREDUZIDA,
+    mercadoriasnota.VLRFINALMERCAD,
+    mercadoriasnota.icmsbase,
+    MERCADORIASNOTA.VALORICMS,
+    mercadoriasnota.plucro,
+    mercadoriasnota.VLRBASESUBST,
+    mercadoriasnota.ALIQUOTASUBSTITUTO,
+    mercadoriasnota.VLRICMSSUBST,
+    mercadoriasnota.VLRICMSRECOLHIDO
+    
+    
+from
+    MERCADORIASNOTA
+where 
+    mercadoriasnota.filial = 1 and
+    mercadoriasnota.idnota= 37589

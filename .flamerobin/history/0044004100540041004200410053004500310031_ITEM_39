@@ -1,0 +1,33 @@
+select 
+    lantocontpag.filial,
+    lantocontpag.idmovtobanc,
+    lantocontpag.idlancamento,
+    CADASTROPARCEIROS.nome,
+    lantocontpag.contacontabil,
+    contascontabeis.DESCRICAO,     
+    titulopag.titulo,
+    titulopag.fatura,
+    titulopag.emissao,
+    titulopag.vencimento,
+    titulopag.VALORTITULO
+from 
+    lantocontrec LANTOCONTpag
+inner join 
+    titulorec titulopag on
+        titulopag.filial=lantocontpag.filial and
+        titulopag.idtitulo=lantocontpag.IDMOVTOBANC
+inner join 
+    cadastroparceiros on
+        CADASTROPARCEIROS.cadastro=titulopag.PARCEIRO
+inner join 
+    contascontabeis on
+        contascontabeis.idplano=3 and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+where  lantocontpag.filial = 2098 and 
+COALESCE (lantocontpag.CENTROCUSTO,'')='' 
+order by 
+    CADASTROPARCEIROS.nome,
+    lantocontpag.contacontabil,
+    titulopag.titulo,
+    titulopag.fatura,
+    titulopag.vencimento

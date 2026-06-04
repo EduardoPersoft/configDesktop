@@ -1,0 +1,7 @@
+select * from PEDIDO
+where 
+pedido.VLRTOTALNOTA>0 and
+not exists (select * from  fatped
+where fatped.filial=pedido.filial and 
+fatped.idnota=pedido.idnota)
+order by datacadastro desc

@@ -1,0 +1,6 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.tipoproduto='3'
+where
+    substring(itemestoque.codigo from 1 for 2)='M-'

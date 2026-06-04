@@ -1,0 +1,3 @@
+select filial,idnota,orcamento.LIBERADOFINANCEIRO from orcamento 
+where filial=1 
+and idnota=308

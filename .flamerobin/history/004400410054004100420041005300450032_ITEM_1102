@@ -1,0 +1,4 @@
+SSELECT
+    *
+FROM
+    ITEMESTOQUE

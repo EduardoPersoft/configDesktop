@@ -1,0 +1,3 @@
+update locallote
+set quantidade=0
+where locallote.quantidade is null

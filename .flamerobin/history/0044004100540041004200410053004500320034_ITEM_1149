@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    CADASTROPARCEIROS
+WHERE
+    cadastro=34145

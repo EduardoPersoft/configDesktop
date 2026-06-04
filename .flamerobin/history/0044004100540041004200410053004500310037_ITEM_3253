@@ -1,0 +1,44 @@
+SELECT
+               Itemestoque.C_mrfornecedor As CODIGO,
+               MERCADORIASPED.DESCRICAO,
+               --- PRAZOMERCPED.QTDE,
+               --coalesce (MATERIALMOVIMENTOESTOQUE.QUANTIDADE,PRAZOMERCPED.QTDE),
+               MERCADORIASPED.UNIDADE,
+               MERCADORIASPED.PRECOUNITARIO,
+               MERCADORIASPED.VALORIPI,
+               MERCADORIASPED.VLRTOTALMERCAD--,
+  --             (PRAZOMERCPED.DIAS+cast('2024-04-08' as date)) AS ENTREGA,
+    --           MERCADORIASPED.IDMERCADORIA,
+      --         local.DESCRICAO as local,
+        --       C_FORNECEDORPECA.DESCRICAO
+
+         FROM
+             MERCADORIASPED
+         INNER JOIN PRAZOMERCPED ON
+                    (MERCADORIASPED.FILIAL=PRAZOMERCPED.FILIAL AND
+                    MERCADORIASPED.IDNOTA=PRAZOMERCPED.IDNOTA AND
+                    MERCADORIASPED.IDMERCADORIA=PRAZOMERCPED.IDITEM)
+                    
+         Inner join itemestoque on
+                                (mercadoriasped.Codigo=itemestoque.Codigo)
+                                /*
+         left join
+               MATERIALMOVIMENTOESTOQUE on
+                                            (MATERIALMOVIMENTOESTOQUE.FILIAL=mercadoriasped.FILIAL and
+                                            MATERIALMOVIMENTOESTOQUE.IDPEDIDO=mercadoriasped.idnota and
+                                            MATERIALMOVIMENTOESTOQUE.IDMERCADORIA=mercadoriasped.IDMERCADORIA)
+         left join MOVIMENTOESTOQUE on
+                                       (MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.FILIAL and
+                                        MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO )
+         left join local on
+                            (local.ID=coalesce (MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO,1))
+
+         left JOIN
+             C_FORNECEDORPECA
+                                ON (ITEMESTOQUE.C_FORNECEDOR=C_FORNECEDORPECA.ID)
+*/
+         WHERE
+              MERCADORIASPED.FILIAL=12826 AND
+              MERCADORIASPED.IDNOTA=149369 --AND
+              --coalesce(MOVIMENTOESTOQUE.TIPOMOVIMENTO,'13') = '13'
+         

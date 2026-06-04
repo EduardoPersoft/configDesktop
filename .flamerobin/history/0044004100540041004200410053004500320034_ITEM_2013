@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    CADASTROPARCEIROS
+WHERE
+    CADASTROPARCEIROS.cadastro=35393

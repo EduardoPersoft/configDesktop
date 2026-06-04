@@ -1,0 +1,24 @@
+select
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.C_PEDIDOSUBSTITUIDO,
+    pedido.dataemissao,
+    pedido.c_datacomissao,
+    pedido.DATAREFERENCIA,    
+    (select first 1 
+        c_Faturasped.LIBERACAO
+     from 
+        c_faturasped
+     where 
+        c_faturasped.filial=pedido.filial and
+        c_faturasped.idnota=pedido.idnota and
+        c_Faturasped.liberacao is not null
+     order by
+        c_faturasped.liberacao)
+from
+    PEDIDO
+where
+    pedido.datacadastro>='01.01.2023'
+order by
+    pedido.DATAREFERENCIA 

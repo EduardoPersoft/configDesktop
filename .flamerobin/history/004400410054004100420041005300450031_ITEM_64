@@ -1,0 +1,4 @@
+delete from materialfilial
+WHERE not exists
+(select * from ITEMESTOQUE
+ where itemestoque.codigo=materialfilial.iditem)

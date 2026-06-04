@@ -1,0 +1,5 @@
+select * from TITULOREC
+where titulorec.filial=5
+and titulorec.baixa is null
+and titulorec.dataenvio is not null
+and cast(titulorec.dataenvio as date) in ('17.03.2022', '21.03.2022')

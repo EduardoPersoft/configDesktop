@@ -1,0 +1,4 @@
+update
+    MERCADORIASPEDCOMPRA
+set
+    mercadoriaspedcompra.CONTACONTABIL='101010101'

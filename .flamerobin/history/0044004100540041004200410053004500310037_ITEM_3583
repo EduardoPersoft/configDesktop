@@ -1,0 +1,4 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.IPIBASE>0
+and mercadoriasnota.filial=12826
+--and mercadoriasnota.idnota>10000

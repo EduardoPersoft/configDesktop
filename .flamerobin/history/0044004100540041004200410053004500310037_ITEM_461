@@ -1,0 +1,6 @@
+update
+    TITULOREC
+SET
+    dataenvio = null
+where 
+    titulorec.DATAENVIO='30.08.2021'

@@ -1,0 +1,11 @@
+update 
+    MERCADORIASNOTA
+set 
+    idpedido = null,
+    mercadoriasnota.IDMERCPEDIDO=null,
+    filialped=null,
+    mercadoriasnota.IDPEDVENDEV=null,
+    mercadoriasnota.IDPEDVENMERCDEV=null
+where filial=233
+and (idpedvendev in (55,56,57,58)
+or idpedido in (55,56,57,58))

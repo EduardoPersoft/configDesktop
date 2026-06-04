@@ -1,0 +1,24 @@
+update
+    COMPOSICAOMERCPED
+set
+    COMPOSICAOMERCPED.IDITEM=(SELECT 
+                                MERCADORIASPED.CODIGO
+                              from
+                                MERCADORIASPED
+                              WHERE 
+                                MERCADORIASPED.FILIAL=COMPOSICAOMERCPED.FILIAL and
+                                MERCADORIASPED.IDNOTA=COMPOSICAOMERCPED.IDNOTA and
+                                MERCADORIASPED.IDMERCADORIA=COMPOSICAOMERCPED.IDMERCADORIA),
+
+    COMPOSICAOMERCPED.QUANTIDADE=(SELECT 
+                                MERCADORIASPED.QUANTIDADE
+                              from
+                                MERCADORIASPED
+                              WHERE 
+                                MERCADORIASPED.FILIAL=COMPOSICAOMERCPED.FILIAL and
+                                MERCADORIASPED.IDNOTA=COMPOSICAOMERCPED.IDNOTA and
+                                MERCADORIASPED.IDMERCADORIA=COMPOSICAOMERCPED.IDMERCADORIA)
+where
+    FILIAL=1 AND 
+    IDNOTA IN (20256, 20289, 20584, 20684, 20705)
+    --idnota = 20256

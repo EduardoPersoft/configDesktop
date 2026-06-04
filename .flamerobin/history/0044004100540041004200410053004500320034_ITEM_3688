@@ -1,0 +1,8 @@
+select 
+    sum(mercadoriasnota.CUSTO*
+    mercadoriasnota.QUANTIDADE)
+from
+    MERCADORIASNOTA
+where
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idnota=301893

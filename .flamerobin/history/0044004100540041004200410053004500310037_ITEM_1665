@@ -1,0 +1,6 @@
+select
+    movimentoestoque.idmovimento,
+    movimentoestoque.SAIDAPRODUCAO-
+    movimentoestoque.ENTRADAPRODUCAO
+from
+    movimentoestoque

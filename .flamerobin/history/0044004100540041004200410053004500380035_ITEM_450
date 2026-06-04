@@ -1,0 +1,24 @@
+update
+    ITEMESTOQUE
+set
+    itemestoque.descricao = upper(itemestoque.descricao)
+where
+    itemestoque.codigo in ('INT0016',
+'INT0012',
+'INT0013',
+'INT0014',
+'INT0015',
+'P057',
+'P058',
+'P059',
+'P060',
+'P061',
+'P062',
+'P063',
+'P064',
+'P065',
+'P066',
+'P067',
+'P068',
+'P069',
+'P056')

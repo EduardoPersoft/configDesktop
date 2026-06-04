@@ -1,0 +1,8 @@
+select 
+    cadastroparceiros.cadasatro,
+    cadastroparceiros.nome
+FROM    
+    VENDEDOR
+inner JOIN
+    CADASTROPARCEIROS on
+        cadastroparceiros.cadastro=vendedor.cadastro

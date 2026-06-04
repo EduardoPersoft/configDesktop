@@ -1,0 +1,2 @@
+insert regras(id, path, acesso)
+values(62,'/*', 1)

@@ -1,0 +1,3 @@
+select * from c_faturasped
+where idtitulo is null
+ order by idtitulo

@@ -1,0 +1,4 @@
+SELECT a.CODIGO, a.QUANTIDADE, a.VALORTOTAL, a."LOCAL", local.descricao
+FROM T_LOCAL052022 a 
+inner join local on local.id=a."LOCAL"
+order by a.codigo

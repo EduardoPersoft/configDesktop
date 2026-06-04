@@ -1,0 +1,15 @@
+select 
+    ls.lista,
+    ls.PRODUTO,
+    lc.produto,
+    lc.preco
+FROM
+    listaprecoproduto ls
+inner JOIN  
+    COMPOSICAOITEM on
+        composicaoitem.IDITEM=ls.PRODUTO
+inner JOIN
+    listaprecoproduto lc on
+        lc.produto=composicaoitem.IDMATERIAL
+where 
+    ls.produto like '%s'

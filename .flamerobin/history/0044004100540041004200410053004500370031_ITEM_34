@@ -1,0 +1,59 @@
+update 
+    mercadoriasnota
+set 
+    mercadoriasnota.CSTIBSCBS='000',
+    mercadoriasnota.CCLASSTRIB='000001',
+    mercadoriasnota.PCBS=0.9,
+    mercadoriasnota.PIBSUF=0.1,
+    mercadoriasnota.PCBSALIQEFET=0.9,
+    mercadoriasnota.PIBSUFALIQEFET=0.1    
+where
+    exists  ( select * from NOTAFISCAL
+              where notafiscal.filial=mercadoriasnota.filial 
+              and notafiscal.idnota=mercadoriasnota.idnota 
+              and notafiscal.dataemissao is null);
+    
+
+update 
+    mercadoriasped mercadoriasnota
+set 
+    mercadoriasnota.CSTIBSCBS='000',
+    mercadoriasnota.CCLASSTRIB='000001',
+    mercadoriasnota.PCBS=0.9,
+    mercadoriasnota.PIBSUF=0.1,
+    mercadoriasnota.PCBSALIQEFET=0.9,
+    mercadoriasnota.PIBSUFALIQEFET=0.1    
+where
+    mercadoriasnota.baixa='N';
+
+update 
+    mercadoriasped mercadoriasnota
+set 
+    mercadoriasnota.CSTIBSCBS='000',
+    mercadoriasnota.CCLASSTRIB='000001',
+    mercadoriasnota.PCBS=0.9,
+    mercadoriasnota.PIBSUF=0.1,
+    mercadoriasnota.PCBSALIQEFET=0.9,
+    mercadoriasnota.PIBSUFALIQEFET=0.1    
+where
+    exists  ( select * from NOTAFISCAL
+              where notafiscal.filial=mercadoriasnota.filial 
+              and notafiscal.idnota=mercadoriasnota.idnota 
+              and notafiscal.dataemissao >= '01.01.2010');
+
+
+
+update 
+    mercadoriasorc mercadoriasnota
+set 
+    mercadoriasnota.CSTIBSCBS='000',
+    mercadoriasnota.CCLASSTRIB='000001',
+    mercadoriasnota.PCBS=0.9,
+    mercadoriasnota.PIBSUF=0.1,
+    mercadoriasnota.PCBSALIQEFET=0.9,
+    mercadoriasnota.PIBSUFALIQEFET=0.1    
+where
+    exists  ( select * from NOTAFISCAL
+              where notafiscal.filial=mercadoriasnota.filial 
+              and notafiscal.idnota=mercadoriasnota.idnota 
+              and notafiscal.dataemissao >= '01.01.2010');

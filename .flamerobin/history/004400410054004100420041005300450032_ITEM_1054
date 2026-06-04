@@ -1,0 +1,7 @@
+alter table notafiscal 
+add c_transp_documento varchar(14),
+add c_transp_nome varchar(60),
+add c_transp_ie varchar(20),
+add c_transp_logradouro varchar(60),
+add c_transp_cidade varchar(30),
+add c_transp_uf varchar(2)

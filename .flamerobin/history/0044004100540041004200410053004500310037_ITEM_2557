@@ -1,0 +1,28 @@
+select
+    1 as id,
+    min(cast('now' as timestamp)) momento,
+    SUM( (COALESCE(MOVIMENTOESTOQUE.SAIDAPRODUCAO, CAST('NOW' AS TIMESTAMP)) -
+    MOVIMENTOESTOQUE.ENTRADAPRODUCAO)*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS PICKING,
+    
+    
+    SUM((COALESCE(NOTAFISCAL.datahoraemissao, CAST('NOW' AS TIMESTAMP)) -
+    coalesce(MOVIMENTOESTOQUE.SAIDAPRODUCAO, cast('NOW' as datetime))*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS NF,
+    
+
+    SUM((COALESCE(movimentoestoque.COLETADATA, CAST('NOW' AS TIMESTAMP)) -
+    coalesce(NOTAFISCAL.datahoraemissao, cast('now' as datetime))*24*60)/COUNT(MOVIMENTOESTOQUE.IDMOVIMENTO) AS Shipping    
+    
+from
+    MOVIMENTOESTOQUE
+INNER join
+    PEDIDO ON
+        MOVIMENTOESTOQUE.FILIAL=PEDIDO.FILIAL and
+        MOVIMENTOESTOQUE.IDPEDIDO=PEDIDO.IDNOTA
+left join        
+    NOTAFISCAL on
+        notafiscal.filial=movimentoestoque.filial and
+        notafiscal.idnota=movimentoestoque.IDNOTAEXPEDICAO
+where
+    MOVIMENTOESTOQUE.EMISSAO = cast('now' as date) and
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13' and
+    MOVIMENTOESTOQUE.transportadora=15154

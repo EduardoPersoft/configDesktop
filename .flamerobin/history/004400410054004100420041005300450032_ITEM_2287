@@ -1,0 +1,2 @@
+SELECT filial,idnota,idmercadoria,mercadoriasnotacompra.contacontabil FROM mercadoriasnotacompra
+order by idnota desc

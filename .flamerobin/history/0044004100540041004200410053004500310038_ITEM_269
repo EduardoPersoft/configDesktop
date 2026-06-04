@@ -1,0 +1,8 @@
+select
+    * 
+from
+    MOVIMENTOBANCARIO
+where 
+    movimentobancario.filial=1 and
+    movimentobancario.CODIGO = 341 and
+    movimentobancario.DATAEXTRATO between '01.01.2022' and '31.01.2022'

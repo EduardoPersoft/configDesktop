@@ -1,0 +1,3 @@
+select filial, idnota, c_tipo from PEDIDO
+where pedido.filial=1 
+and pedido.DATAEMISSAO between '01.03.2024' and '31.03.2024'

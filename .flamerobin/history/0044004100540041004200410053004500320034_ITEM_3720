@@ -1,0 +1,10 @@
+update
+    TITULOREC
+set
+    titulorec.dataenvio = null
+where 
+    titulorec.filial=5 and
+    titulorec.DATAENVIO is not null and
+    titulorec.dataenvio <>  cast(titulorec.dataenvio as date) and
+    titulorec.emissao = '13.09.2022' and
+    titulorec.baixa is null

@@ -1,0 +1,37 @@
+SELECT 
+    contacorrente.codigo,
+    tipocobranca.tipocobranca,
+    TIPOCOBRANCA.DISTRIBLOQUETO,
+    TIPOCOBRANCA.PRAZOBAIXADEVOL, 
+    TIPOCOBRANCA.CODPROTESTO,   
+    TIPOCOBRANCA.CODBAIXADEVOLUCAO, 
+    TIPOCOBRANCA.INSTRUCAO1, 
+    TIPOCOBRANCA.INSTRUCAO2,
+    TIPOCOBRANCA.EMISSAOBLOQUETO, 
+    TIPOCOBRANCA.MENSAGEN, 
+    TIPOCOBRANCA.PRAZOPROTESTO, 
+    TIPOCOBRANCA.CODJUROSMORA,   
+    TIPOCOBRANCA.DESCONTOPADRAO/*, 
+    COBRANCABANCARIA.NUMEROBOLETO,
+    COBRANCABANCARIA.PREFIXO, 
+    COBRANCABANCARIA.POSFIXO,
+    banco.CODCAMARACOMP*/
+FROM 
+  TIPOCOBRANCA
+inner join
+    contacorrente on
+        contacorrente.filial=1 and
+        contacorrente.CODIGO=5
+/*
+inner join
+    banco on
+        contacorrente.banco=contacorrente.banco
+        
+left join 
+    cobrancabancaria on 
+        (cobrancabancaria.TIPOCOBRANCA=TIPOCOBRANCA.TIPOCOBRANCA and         
+        COBRANCABANCARIA.FILIAL=contacorrente.filial    and
+        COBRANCABANCARIA.CONTACORRENTE=contacorrente.codigo)      
+*/
+where     
+    tipocobranca.TIPOCOBRANCA=11

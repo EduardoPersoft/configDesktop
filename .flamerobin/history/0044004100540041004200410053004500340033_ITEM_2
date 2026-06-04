@@ -1,0 +1,421 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_PEDIDOABERTO2PLAN1 (
+    RELATORIO varchar(20) )
+RETURNS (
+    ORDEM integer,
+    REFERENCIA varchar(31),
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    FILIALNOME varchar(60),
+    DATACADASTRO timestamp,
+    DATAENTREGA timestamp,
+    DATAREFERENCIA timestamp,
+    DATAEMISSAO date,
+    CLIENTECADASTRO integer,
+    CLIENTENOME varchar(60),
+    QUANTIDADEPRODUZIR double precision,
+    PRECOUNITARIO double precision,
+    VLRTOTALMERCAD double precision,
+    PRODUTO varchar(15),
+    DESCRICAOPRODUTO varchar(240),
+    QTDEENVIADA double precision,
+    VALORSALDO double precision,
+    QTDSALDO double precision,
+    QTDPEDIDO double precision,
+    ATRASODIAS integer,
+    DIA integer,
+    MES integer,
+    ANO integer,
+    IDNOTAFISCAL integer,
+    VENDEDORNOME varchar(40),
+    VLRABERTOSEMICMS double precision,
+    TIPODETALHE varchar(20),
+    SEMANA varchar(20),
+    PINICIOMES timestamp,
+    PINICIASEMANA timestamp,
+    DETALHEFATURAMENTO integer,
+    DATAPREVISTA date )
+
+AS
+declare variable LS1 TIMESTAMP;
+declare variable LS2 TIMESTAMP;
+declare variable LS3 TIMESTAMP;
+declare variable LS4 TIMESTAMP;
+declare variable LS5 TIMESTAMP;
+
+BEGIN
+
+     select estsin.estabelecimento,
+            cadastroparceiros.razaosocial
+     from estsin
+     inner join cadastroparceiros on
+             (cadastroparceiros.cadastro=estsin.estabelecimento)
+     where estsin.relatorio=:relatorio
+     into :filial,:filialnome;
+
+     UPDATE ESTSIN
+     SET --DATAINICIAL = 1||'.'||:mes||'.'||:ano,
+         DATAINICIAL = current_date + 1 - (EXTRACT (DAY FROM current_date)),
+         DATAFINAL = current_date -
+                EXTRACT(DAY FROM current_date) + 32 -
+                EXTRACT(DAY FROM current_date -
+                EXTRACT(DAY FROM current_date) + 32),
+         ESTABELECIMENTO = :filial,
+         INC = 'N',
+         CONSOLIDADO = 1,
+         HORIZONTAL = '0',
+         VERTICAL = 'N',
+         AOSCUIDADOS = 'Sem Separa????o',
+         DESCRICAO = 'Clientes',
+         IDNOTAINICIAL = NULL,
+         IDNOTAFINAL = NULL,
+         CANCELADA = NULL,
+         NAOEMITIDA = NULL,
+         FATURADA = 'D',
+         NUMERONOTAINICIAL = NULL,
+         NUMERONOTAFINAL = NULL,
+         MATERIALINICIAL = '',
+         MATERIALFINAL = 'zzzzzzzzzzzzzzz',
+         SERVICOINICIAL = 0,
+         SERVICOFINAL = 9999,
+         OPCAO = 0,
+         DTBASE = NULL,
+         TITULOINICIAL = NULL,
+         TITULOFINAL = NULL,
+         TIPOMOVIMENTO = NULL,
+         PAGINA = NULL,
+         MESREF = NULL,
+         ANOREF = NULL,
+         ANOFINAL = NULL,
+         MESFINAL = NULL,
+         DTBASEFINAL = NULL,
+         MATERIAPRIMA = NULL,
+         CONSUMO = 'S',
+         REVENDA = NULL,
+         INDUSTRIALIZADO = NULL,
+         INATIVO = NULL,
+         CONTACONTABILI = NULL,
+         CONTACONTABILF = NULL,
+         CENTROCUSTOI = NULL,
+         CENTROCUSTOF = NULL,
+         LOTEINICIAL = '.',
+         LOTEFINAL = '.',
+         VALORINICIAL = NULL,
+         VALORFINAL = NULL,
+         MATERIALLOCALINICIO = 1,
+         MATERIALLOCALFIM = 1,
+         USUARIO = 'ADMPERSOFT',
+         COLUNA1 = NULL,
+         COLUNA2 = NULL,
+         COLUNA3 = NULL,
+         COLUNA4 = NULL,
+         COLUNA5 = NULL,
+         COLUNA6 = NULL,
+         COLUNA7 = NULL,
+         COLUNA8 = NULL,
+         COLUNA9 = NULL,
+         COLUNA10 = NULL,
+         COLUNA11 = NULL,
+         COLUNA12 = NULL,
+         DATA1 = NULL,
+         DATA2 = NULL,
+         DATA3 = NULL,
+         DATA4 = NULL,
+         DATA5 = NULL,
+         DATA6 = NULL,
+         VENDEDOR = NULL,
+         FILTROESTATISTICA = NULL
+     WHERE (RELATORIO = 'ESTATSIN');
+
+     update FILTRO_ESTATISTICA
+     SET ESTABELECIMENTO = NULL,
+         FCLIENTE = 0,
+         FAREAGEOGRAFICA = 0,
+         FRAMOATIVIDADE = 0,
+         FCANALDISTRIBUICAO = 0,
+         FGRUPO = 0,
+         FPRODUTO = 0,
+         FSERVICO = 0,
+         FVENDEDOR = 0,
+         FESTADO = 0,
+         GRUPO1 = NULL,
+         GRUPO2 = NULL,
+         DATAINICIO1 = current_date + 1 - (EXTRACT (DAY FROM current_date)),
+         DATAFIM1 = current_date -
+                    EXTRACT(DAY FROM current_date) + 32 -
+                    EXTRACT(DAY FROM current_date -
+                    EXTRACT(DAY FROM current_date) + 32),
+         DATAINICIO2 = NULL,
+         DATAFIM2 = NULL,
+         DATAINICIO3 = NULL,
+         DATAFIM3 = NULL,
+         DATAINICIO4 = NULL,
+         DATAFIM4 = NULL,
+         DATAINICIO5 = NULL,
+         DATAFIM5 = NULL,
+         DATAINICIO6 = NULL,
+         DATAFIM6 = NULL,
+         DATAINICIO7 = NULL,
+         DATAFIM7 = NULL,
+         DATAINICIO8 = NULL,
+         DATAFIM8 = NULL,
+         DATAINICIO9 = NULL,
+         DATAFIM9 = NULL,
+         DATAINICIO10 = NULL,
+         DATAFIM10 = NULL,
+         DATAINICIO11 = NULL,
+         DATAFIM11 = NULL,
+         DATAINICIO12 = NULL,
+         DATAFIM12 = NULL,
+         DATAINICIO = NULL,
+         DATAFIM = NULL,
+         TIPO = NULL,
+         FGRUPOSERVICO = 0,
+         FFAMILIA = NULL,
+         FCFOP = 0
+     WHERE (RELATORIO = 'ESTATSIN');
+
+     valorsaldo=0;
+     ordem=-3;
+     referencia = 'FATURAMENTO';
+     detalhefaturamento=0;
+
+     SELECT
+           SUM(COALESCE(ESTATISTICA.VALOR1,0) + COALESCE(ESTATISTICA.VALOR2,0) + COALESCE(ESTATISTICA.VALOR3,0) +
+           COALESCE(ESTATISTICA.VALOR4,0) + COALESCE(ESTATISTICA.VALOR5,0) + COALESCE(ESTATISTICA.VALOR6,0) +
+           COALESCE(ESTATISTICA.VALOR7,0) + COALESCE(ESTATISTICA.VALOR8,0) + COALESCE(ESTATISTICA.VALOR9,0) + 
+           COALESCE(ESTATISTICA.VALOR10,0) + COALESCE(ESTATISTICA.VALOR11,0) + COALESCE(ESTATISTICA.VALOR12,0)) AS TOTAL
+     FROM ESTATISTICA ('ESTATSIN')
+     WHERE (NOT COALESCE(ESTATISTICA.pdevolucaofaturamento,'N') = 'S') AND
+     not exists(select 1 from notafiscal
+                         inner join naturezaoperacao on (notafiscal.operacao=naturezaoperacao.id)
+                         where estatistica.filial=notafiscal.filial and
+                               estatistica.idnota=notafiscal.idnota and
+                               naturezaoperacao.c_refaturamento = 'S')
+     into :valorsaldo;
+     tipodetalhe='ATUAL';
+     suspend;
+     tipodetalhe=null;
+
+     valorsaldo=0;
+     ordem=-2;
+     referencia = 'DEVOLU????ES';
+     detalhefaturamento=0;
+     SELECT
+           SUM(COALESCE(ESTATISTICA.VALOR1,0) + COALESCE(ESTATISTICA.VALOR2,0) + COALESCE(ESTATISTICA.VALOR3,0) +
+           COALESCE(ESTATISTICA.VALOR4,0) + COALESCE(ESTATISTICA.VALOR5,0) + COALESCE(ESTATISTICA.VALOR6,0) +
+           COALESCE(ESTATISTICA.VALOR7,0) + COALESCE(ESTATISTICA.VALOR8,0) + COALESCE(ESTATISTICA.VALOR9,0) + 
+           COALESCE(ESTATISTICA.VALOR10,0) + COALESCE(ESTATISTICA.VALOR11,0) + COALESCE(ESTATISTICA.VALOR12,0)) AS TOTAL
+     FROM ESTATISTICA ('ESTATSIN')
+     WHERE ESTATISTICA.pdevolucaofaturamento = 'S'
+     into :valorsaldo;
+     tipodetalhe='ATUAL';
+     suspend;
+     tipodetalhe=null;
+
+     valorsaldo=0;
+     ordem=-1;
+     referencia = 'REFATURAMENTO';
+     detalhefaturamento=0;
+     SELECT
+           SUM(COALESCE(ESTATISTICA.VALOR1,0) + COALESCE(ESTATISTICA.VALOR2,0) + COALESCE(ESTATISTICA.VALOR3,0) +
+           COALESCE(ESTATISTICA.VALOR4,0) + COALESCE(ESTATISTICA.VALOR5,0) + COALESCE(ESTATISTICA.VALOR6,0) +
+           COALESCE(ESTATISTICA.VALOR7,0) + COALESCE(ESTATISTICA.VALOR8,0) + COALESCE(ESTATISTICA.VALOR9,0) + 
+           COALESCE(ESTATISTICA.VALOR10,0) + COALESCE(ESTATISTICA.VALOR11,0) + COALESCE(ESTATISTICA.VALOR12,0)) AS TOTAL
+     FROM ESTATISTICA ('ESTATSIN')
+     where exists(select 1 from notafiscal
+                         inner join naturezaoperacao on (notafiscal.operacao=naturezaoperacao.id)
+                         where estatistica.filial=notafiscal.filial and
+                               estatistica.idnota=notafiscal.idnota and
+                               naturezaoperacao.c_refaturamento = 'S')
+     into :valorsaldo;
+     tipodetalhe='ATUAL';
+     suspend;
+     tipodetalhe=null;
+
+/*     valorsaldo=0;
+     ordem=0;
+     referencia = 'FATURAMENTO TOTAL';
+     SELECT
+           SUM(COALESCE(ESTATISTICA.VALOR1,0) + COALESCE(ESTATISTICA.VALOR2,0) + COALESCE(ESTATISTICA.VALOR3,0) +
+           COALESCE(ESTATISTICA.VALOR4,0) + COALESCE(ESTATISTICA.VALOR5,0) + COALESCE(ESTATISTICA.VALOR6,0) +
+           COALESCE(ESTATISTICA.VALOR7,0) + COALESCE(ESTATISTICA.VALOR8,0) + COALESCE(ESTATISTICA.VALOR9,0) + 
+           COALESCE(ESTATISTICA.VALOR10,0) + COALESCE(ESTATISTICA.VALOR11,0) + COALESCE(ESTATISTICA.VALOR12,0)) AS TOTAL
+     FROM ESTATISTICA ('ESTATSIN')
+
+     into :valorsaldo;
+     tipodetalhe='ATUAL';
+     suspend;
+*/
+     tipodetalhe=null;
+     ordem=null;
+     referencia='';
+     mes=null;
+     ano=null;
+     detalhefaturamento=null;
+
+  FOR
+    SELECT DISTINCT C_PEDIDOSEMABERTO.idnota,
+                    C_PEDIDOSEMABERTO.idmercadoria,
+                    C_PEDIDOSEMABERTO.datacadastro,
+                    C_PEDIDOSEMABERTO.dataPREVISTA ,
+                    C_PEDIDOSEMABERTO.datareferencia,
+                    c_pedidosemaberto.dataemissao,
+                    C_PEDIDOSEMABERTO.clientecadastro ,
+                    C_PEDIDOSEMABERTO.clientenome ,
+                    C_PEDIDOSEMABERTO.quantidadeproduzir ,
+                    C_PEDIDOSEMABERTO.precounitario ,
+                    C_PEDIDOSEMABERTO.vlrtotalmercad,
+                    C_PEDIDOSEMABERTO.produto,
+                    C_PEDIDOSEMABERTO.descricaoproduto,
+                    C_PEDIDOSEMABERTO.qtdeenviada,
+                    C_PEDIDOSEMABERTO.valorsaldo,
+                    C_PEDIDOSEMABERTO.qtdsaldo,
+                    C_PEDIDOSEMABERTO.qtdpedido,
+                    C_PEDIDOSEMABERTO.ATRASODIAS,
+                    C_PEDIDOSEMABERTO.DIA,
+                    C_PEDIDOSEMABERTO.mes,
+                    C_PEDIDOSEMABERTO.ano,
+                    C_PEDIDOSEMABERTO.IDNOTAFISCAL ,
+                    COALESCE(VENDEDOR.nome,'SEM VENDEDOR') AS VENDEDORNOME,
+                    c_pedidosemaberto.vlrabertosemicms,
+                    c_pedidosemaberto.DATAPREVISTA
+    FROM C_PEDIDOSEMABERTO(:FILIAL)
+    LEFT JOIN VENDEDORESPED ON (VENDEDORESPED.filial = C_PEDIDOSEMABERTO.filial
+                               AND VENDEDORESPED.idnota = C_PEDIDOSEMABERTO.idnota)
+    LEFT JOIN CADASTROPARCEIROS VENDEDOR ON (VENDEDOR.cadastro = VENDEDORESPED.vendedor)
+    where C_PEDIDOSEMABERTO.DATAEMISSAO IS NOT NULL
+--    order by C_PEDIDOSEMABERTO.valorsaldo desc
+    INTO :IDNOTA,
+         :IDMERCADORIA,
+         :DATACADASTRO,
+         :DATAENTREGA,
+         :DATAREFERENCIA,
+         :dataemissao,
+         :CLIENTECADASTRO,
+         :CLIENTENOME,
+         :QUANTIDADEPRODUZIR,
+         :PRECOUNITARIO,
+         :VLRTOTALMERCAD,
+         :PRODUTO,
+         :DESCRICAOPRODUTO,
+         :QTDEENVIADA,
+         :VALORSALDO,
+         :QTDSALDO,
+         :QTDPEDIDO,
+         :ATRASODIAS,
+         :DIA,
+         :MES,
+         :ANO,
+         :IDNOTAFISCAL,
+         :VENDEDORNOME,
+         :VLRABERTOSEMICMS,
+         :DATAPREVISTA
+  DO
+    begin
+
+            mes=extract(month from dataentrega);
+            ano=extract(year from dataentrega);
+
+            PINICIOMES = :DATAENTREGA +1 - (EXTRACT (DAY FROM DATAENTREGA));
+
+            LS1 = PINICIOMES + 7 - EXTRACT (WEEKDAY FROM :PINICIOMES);
+            LS2 = LS1+7;
+            LS3 = LS2+7;
+            LS4 = LS3+7;
+
+            SEMANA = 'SEMANA 1';
+            IF (:DATAENTREGA > :LS1) THEN SEMANA = 'SEMANA 2';
+            IF (:DATAENTREGA > :LS2) THEN SEMANA = 'SEMANA 3';
+            IF (:DATAENTREGA > :LS3) THEN SEMANA = 'SEMANA 4';
+            IF (:DATAENTREGA > :LS4) THEN SEMANA = 'SEMANA 5';
+
+
+
+         ordem = 1;
+         if(:dataentrega<current_date) then begin
+         referencia = 'ATRASO';
+         tipodetalhe='ATUAL';
+         suspend;
+         end
+         tipodetalhe=null;
+
+         ordem=2;
+         if(:dataentrega=current_date) then begin
+         referencia = 'HOJE';
+         tipodetalhe='ATUAL';
+         suspend;
+         end
+         tipodetalhe=null;
+
+         ordem=3;
+         if(:dataentrega=(current_date+1) and mes=extract(month from current_date)) then begin
+         referencia = 'AMANH??';
+         tipodetalhe='ATUAL';
+         suspend;
+         end
+         tipodetalhe=null;
+
+         ordem=3;
+         if(:dataentrega=(current_date+1) and mes>extract(month from current_date) and
+                                              ano>=extract(year from current_date)) then begin
+         referencia = 'AMANH??';
+         tipodetalhe='FUTURO';
+         suspend;
+         end
+         tipodetalhe=null;
+
+         ordem=4;
+         if(:dataentrega>(current_date+1) and mes=extract(month from current_date) and
+                                              ano=extract(year from current_date)) then begin
+         referencia = :ano||'/'||case cast(:mes as varchar(02)) when 1 then '01'
+                                                     when 2 then '02'
+                                                     when 3 then '03'
+                                                     when 4 then '04'
+                                                     when 5 then '05'
+                                                     when 6 then '06'
+                                                     when 7 then '07'
+                                                     when 8 then '08'
+                                                     when 9 then '09'
+                                                     when 10 then '10'
+                                                     when 11 then '11'
+                                                     when 12 then '12'
+                                 end;
+         tipodetalhe='ATUAL';
+         suspend;
+         end
+         tipodetalhe=null;
+
+         ordem=5;
+         if(:dataentrega>(current_date+1) and not(mes=extract(month from current_date) and
+                                                  ano=extract(year from current_date))) then begin
+         referencia = :ano||'/'||case cast(:mes as varchar(02)) when 1 then '01'
+                                                     when 2 then '02'
+                                                     when 3 then '03'
+                                                     when 4 then '04'
+                                                     when 5 then '05'
+                                                     when 6 then '06'
+                                                     when 7 then '07'
+                                                     when 8 then '08'
+                                                     when 9 then '09'
+                                                     when 10 then '10'
+                                                     when 11 then '11'
+                                                     when 12 then '12'
+                                 end;
+         tipodetalhe='FUTURO';
+         suspend;
+         end
+         tipodetalhe=null;
+
+
+     end
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_PEDIDOABERTO2PLAN1 TO  SYSDBA;
+

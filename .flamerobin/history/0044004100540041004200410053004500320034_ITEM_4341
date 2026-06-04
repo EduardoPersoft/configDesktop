@@ -1,0 +1,14 @@
+select 
+    cadastroparceiros.razaoSocial,
+    cadastroparceiros.nome,
+    cadastroparceiros.pessoacontato,
+    cadastroparceiros.telefone,
+    cadastroparceiros.email
+from
+    cadastroparceiros
+inner join
+    FORNECEDORESITEM on
+        cadastroparceiros.cadastro=
+        fornecedoresitem.fornecedor
+
+    

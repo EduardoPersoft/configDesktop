@@ -1,0 +1,6 @@
+select 
+    cfiscal,
+    descricao,
+    c_tributacaoicms
+from 
+    CLASSIFICACAOFISCAL

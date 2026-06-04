@@ -1,0 +1,2 @@
+select filial,codigo,lote,local,data from inventarioestoquedata
+order by 5

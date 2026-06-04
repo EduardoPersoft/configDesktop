@@ -1,0 +1,14 @@
+SELECT 
+    MERCADORIASPEDcompra.codigo,
+    itemestoque.descricao,
+    (sum(mercadoriaspedcompra.VLRFINALMERCAD)-sum(mercadoriaspedcompra.VALORICMS))/sum(mercadoriaspedcompra.quantidade)
+from
+    MERCADORIASPEDCOMPRA
+inner join
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo
+where
+    itemestoque.tipoproduto='1'
+group by
+    MERCADORIASPEDcompra.codigo,
+   itemestoque.descricao

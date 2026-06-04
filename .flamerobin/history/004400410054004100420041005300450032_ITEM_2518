@@ -1,0 +1,2 @@
+select filial,idnota,idmercadoria,quantidade,qtdeentrega,minimobaixa,baixa from mercadoriaspedcompra 
+where filial=5 and idnota in (50431,50448,50467,50491)

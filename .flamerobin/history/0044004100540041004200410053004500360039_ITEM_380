@@ -1,0 +1,6 @@
+select
+    *
+from
+    regras
+where
+    id = 112

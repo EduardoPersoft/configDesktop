@@ -1,0 +1,2 @@
+select * from TRANSPORTADORA
+where TRANSPORTADORA.cadastro in (150,19495)

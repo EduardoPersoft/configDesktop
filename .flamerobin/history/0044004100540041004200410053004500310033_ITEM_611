@@ -1,0 +1,1 @@
+create table c_localizacao(codigo varchar(15) not null, localizacao varchar(100), constraint pk_c_localizacao primary key(codigo))

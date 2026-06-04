@@ -1,0 +1,9 @@
+select 
+    filial,
+    idnota,
+    pedido.C_PEDIDOSUBSTITUIDO
+from 
+    pedido 
+where 
+    filial = 1
+    and idnota in (70674,70790,70674,70991)

@@ -1,0 +1,7 @@
+select 
+    * 
+from 
+    TITULOREC
+where
+    filial=5 and 
+    dataenvio = '01.01.2022'

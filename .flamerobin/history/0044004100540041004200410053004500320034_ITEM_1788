@@ -1,0 +1,389 @@
+SET TERM ^ ;
+ALTER PROCEDURE CNAB (
+    IFILIAL INTEGER,
+    ICONTACORRENTE INTEGER,
+    IDATAINICIAL TIMESTAMP,
+    IDATAFINAL TIMESTAMP,
+    ITIPO CHAR(1) )
+RETURNS (
+    CONVENIO VARCHAR(20),
+    BANCO SMALLINT,
+    NUMCONTACORRENTE VARCHAR(10),
+    DIGITOCCORRENTE CHAR(1),
+    AGENCIA VARCHAR(6),
+    DIGITOAGENCIA CHAR(1),
+    ARQUIVO INTEGER,
+    DESCRICAOCONTA VARCHAR(30),
+    NOMEBANCO VARCHAR(30),
+    RAZAOSOCIAL VARCHAR(60),
+    LOGRADOURO VARCHAR(70),
+    DOCUMENTO VARCHAR(14),
+    TIPOPESSOA CHAR(1),
+    BAIRRO VARCHAR(72),
+    CEP VARCHAR(8),
+    CIDADE VARCHAR(50),
+    UF VARCHAR(2),
+    NUMERO INTEGER,
+    COMPLEMENTO VARCHAR(60),
+    CADASTRO INTEGER,
+    NOME VARCHAR(40),
+    CARTEIRA CHAR(1),
+    EMISSAOBLOQUETO CHAR(1),
+    RAZAOFILIAL VARCHAR(60),
+    TPESFILIAL CHAR(1),
+    DOCUMENTOFILIAL VARCHAR(14),
+    ACEITE CHAR(1),
+    TITULO VARCHAR(10),
+    FATURA VARCHAR(2),
+    IDTITULO INTEGER,
+    NUMBOLBANCO VARCHAR(20),
+    CODREMESSA VARCHAR(2),
+    VALORNOMINAL DOUBLE PRECISION,
+    VENCIMENTO TIMESTAMP,
+    ESPECIE VARCHAR(2),
+    EMISSAO TIMESTAMP,
+    INSTRUCAO1 SMALLINT,
+    INSTRUCAO2 SMALLINT,
+    FILIAL INTEGER,
+    VALORJUROS DOUBLE PRECISION,
+    DESCONTOATE TIMESTAMP,
+    VALORDESCONTO DOUBLE PRECISION,
+    VALORIOF DOUBLE PRECISION,
+    TOTALABATIDO DOUBLE PRECISION,
+    PRAZOPROTESTO VARCHAR(2),
+    MENSAGEM VARCHAR(240),
+    CODPROTESTO CHAR(1),
+    CODJUROSMORA CHAR(1),
+    VALORGERAL DOUBLE PRECISION,
+    QTDETITULOS INTEGER,
+    TITULOFATURA VARCHAR(13),
+    DESCRICAOCARTEIRA VARCHAR(30),
+    CODIGOCARTEIRA SMALLINT,
+    IDENTIFICACAO VARCHAR(20),
+    PMULTA INTEGER,
+    MULTA DOUBLE PRECISION,
+    TEMMULTA CHAR(1),
+    CEPPRE VARCHAR(5),
+    CEPSUF VARCHAR(3),
+    TIPOCOBRANCA SMALLINT,
+    DESCRICAOCOBRANCA VARCHAR(50),
+    NOSSONUMERO VARCHAR(40),
+    BANCOCOBRANCA SMALLINT,
+    AGENCIACOBRANCA VARCHAR(6),
+    DATAINICIOMULTA DATE,
+    NOMESACADORAVALISTA VARCHAR(40),
+    DOCUMENTOSACADORAVALISTA VARCHAR(14),
+    LITERALCPFCNPJ VARCHAR(4),
+    INDICATIVOSACADORAVALISTA CHAR(1),
+    NOTAFISCAL INTEGER,
+    CHAVE VARCHAR(44),
+    VALORNOTA DOUBLE PRECISION,
+    DIANOTA INTEGER,
+    MESNOTA INTEGER,
+    ANONOTA INTEGER )
+
+AS
+declare variable v_contacorrespondente integer;
+declare variable cnumero integer;
+declare variable ccomplemento varchar(60);
+declare variable cbairro varchar(72);
+declare variable ccep varchar(8);
+declare variable ccidade varchar(50);
+declare variable cuf varchar(2);
+declare variable clogradouro varchar(70);
+declare variable conumero integer;
+declare variable cocomplemento varchar(60);
+declare variable cobairro varchar(72);
+declare variable cocep varchar(8);
+declare variable cocidade varchar(50);
+declare variable couf varchar(2);
+declare variable cologradouro varchar(70);
+declare variable v_filialcobranca smallint;
+BEGIN
+  VALORGERAL=0;
+  QTDETITULOS=0;
+  datainiciomulta=null;
+  indicativosacadoravalista='';
+
+  For SELECT contacorrente.identificacaoempresa, contacorrente.convenio, contacorrente.banco,
+             contacorrente.numccorrente,contacorrente.digitoccorrente,
+             contacorrente.agencia, contacorrente.digitoagencia,
+             contacorrente.narquivo,
+             CONTACORRENTE.DESCRICAOCONTA,
+             BANCO.DESCRICAO AS NOMEBANCO, cliente.razaosocial,
+             cliente.logradouro, Clientes.Logradourocobranca,
+             cliente.documento, cliente.tipopessoa,
+             cliente.bairro, Clientes.Bairrocobranca,
+             cliente.cep, Clientes.Cepcobranca,
+             cliente.cidade, Clientes.Cidadecobranca,
+             cliente.uf, Clientes.Ufcobranca,
+             cliente.numero, clientes.Numerocobranca,
+             cliente.complemento, Clientes.Complementocobranca,
+             cliente.CADASTRO, cliente.NOME,
+             CAST (clientes.MULTATRASO as integer),
+             tipocobranca.carteira, tipocobranca.EMISSAOBLOQUETO,
+             filial.razaosocial as razaofilial, filial.Tipopessoa as tpesfilial,
+             filial.Documento as documentofilial, tipocobranca.aceite,
+             titulorec.titulo, titulorec.fatura,titulorec.idtitulo,
+             titulorec.numbolbanco,
+             COALESCE (TITULOREC.CODREMESSA, cast('01' as varchar(2))) as codremessa,
+            (titulorec.valoremaberto) as valornominal,
+             titulorec.vencimento, titulorec.especie, titulorec.emissao,
+             titulorec.instrucao1, titulorec.instrucao2, titulorec.filial,
+             titulorec.valorjuros,
+             case when coalesce(titulorec.valordesconto,0)>0 then titulorec.descontoate else null end,
+             titulorec.valordesconto,
+             titulorec.valoriof, titulorec.totalabatido, titulorec.prazoprotesto,
+             titulorec.mensagem,
+             titulorec.Codprotesto, Titulorec.Codjurosmora,
+             (TITULOREC.TITULO||'/'||TITULOREC.FATURA) AS TITULOFATURA,
+             tipocobranca.descricaocarteira,tipocobranca.codigocarteira,
+             titulorec.despesasbancarias,
+             case when coalesce(titulorec.despesasbancarias,0)>0 then 'S'
+             else 'N' end,
+             TIPOCOBRANCA.TIPOCOBRANCA,
+             TIPOCOBRANCA.DESCRICAO,
+             contacorrente.filialcobranca
+      from cadastroparceiros cliente
+           inner join Clientes on (Clientes.Cadastro=cliente.Cadastro)
+           inner join Titulorec on(cliente.cadastro=titulorec.parceiro)
+           inner join Contacorrente on (contacorrente.filial=titulorec.filial and
+                                        contacorrente.codigo=titulorec.contacorrente)
+           inner join cadastroparceiros filial on (coalesce(contacorrente.filialcobranca, contacorrente.filial)=filial.cadastro)
+--           inner join cadastroparceiros filial on (contacorrente.filial=filial.cadastro)
+           inner join Estabelecimento on (filial.cadastro=estabelecimento.cadastro)
+           inner join banco on (contacorrente.banco=banco.banco)
+           inner join tipocobranca on (tipocobranca.tipocobranca=titulorec.tipotransacao)
+      where titulorec.filial=:Ifilial and
+            titulorec.contacorrente=:Icontacorrente and
+            tipocobranca.transmitirboletocnab='S' and
+            titulorec.baixa is null and
+            titulorec.codreMESSA in ('01', '31', '09', '42', '12')  and
+          --  titulorec.emissao BETWEEN :IDATAINICIAL AND :IDATAFINAL and
+           coalesce(titulorec.codretorno,'') = ''     
+      UNION
+ 
+      select contacorrente.identificacaoempresa, contacorrente.convenio, contacorrente.banco,
+             contacorrente.numccorrente,contacorrente.digitoccorrente,
+             contacorrente.agencia, contacorrente.digitoagencia,
+             contacorrente.narquivo,
+             CONTACORRENTE.DESCRICAOCONTA,
+             banco.descricao as nomebanco, cliente.razaosocial,
+             cliente.logradouro, Clientes.Logradourocobranca,
+             cliente.documento, cliente.tipopessoa,
+             cliente.bairro,  Clientes.Bairrocobranca,
+             cliente.cep, Clientes.Cepcobranca,
+             cliente.cidade, Clientes.Cidadecobranca,
+             cliente.uf, Clientes.Ufcobranca,
+             cliente.numero, clientes.Numerocobranca,
+             cliente.complemento, Clientes.Complementocobranca,
+             cliente.cadastro, cliente.nome,
+             CAST (clientes.MULTATRASO as integer),
+             tipocobranca.carteira, tipocobranca.emissaobloqueto,
+             filial.razaosocial as razaofilial, filial.tipopessoa as tpesfilial,
+             filial.documento as documentofilial, tipocobranca.aceite,
+             movtitulorec.titulo, movtitulorec.fatura, movtitulorec.idtitulo,
+             movtitulorec.numbolbanco, movtitulorec.codremessa,
+             (movtitulorec.valoremaberto) as valornominal,
+             movtitulorec.vencimento, movtitulorec.especie, movtitulorec.emissao,
+             movtitulorec.instrucao1, movtitulorec.instrucao2, movtitulorec.filial,
+             movtitulorec.valorjuros, /*movtitulorec.descontoate*/
+             case when coalesce(titulorec.valordesconto,0)>0 then titulorec.descontoate else null end,
+             movtitulorec.valordescontoant, movtitulorec.valoriof,
+             movtitulorec.totalabatido, movtitulorec.prazoprotesto,
+             movtitulorec.mensagem,
+             movtitulorec.codprotesto, movtitulorec.Codjurosmora,
+            (MOVTITULOREC.TITULO||'/'||MOVTITULOREC.FATURA) AS tITULOFATURA,
+             tipocobranca.descricaocarteira, tipocobranca.codigocarteira,
+             movtitulorec.despesasbancarias,
+             case when coalesce(movtitulorec.despesasbancarias,0)>0 then 'S'
+             else 'N' end,
+             TIPOCOBRANCA.TIPOCOBRANCA,
+             TIPOCOBRANCA.DESCRICAO,
+             contacorrente.filialcobranca
+      from cadastroparceiros cliente
+           inner join Clientes on (Clientes.Cadastro=Cliente.Cadastro)
+           inner join Movtitulorec on (cliente.cadastro=MOVTITULOREC.parceiro)
+           inner join Contacorrente on (contacorrente.filial=MOVTITULOREC.filial and
+                                        contacorrente.codigo=MOVTITULOREC.contacorrente)
+           inner join cadastroparceiros filial on (coalesce(contacorrente.filialcobranca, contacorrente.filial)=filial.cadastro)
+--           inner join cadastroparceiros filial on (contacorrente.filial=filial.cadastro)
+           inner join Estabelecimento on (filial.cadastro=estabelecimento.cadastro)
+           inner join banco on (contacorrente.banco=banco.banco)
+           inner join tipocobranca on (tipocobranca.tipocobranca=Movtitulorec.tipotransacao)
+           inner join titulorec on (titulorec.filial = movtitulorec.filial
+                                and titulorec.idtitulo = movtitulorec.idtitulo)
+      where MOVTITULOREC.filial=:Ifilial and
+            MOVTITULOREC.contacorrente=:Icontacorrente and
+            tipocobranca.FormaCadastr=1 and
+            titulorec.codremessa='s' and
+            movtitulorec.tipomovto <> 'A' AND
+            tipocobranca.transmitirboletocnab='N' and
+            MOVTITULOREC.DTMOVTOTITULO BETWEEN :IDATAINICIAL AND :IDATAFINAL
+  INTO :identificacao,:CONVENIO, :BANCO, :NUMCONTACORRENTE, :DIGITOCCORRENTE, :AGENCIA, :digitoagencia,
+       :ARQUIVO, :DESCRICAOCONTA, :NOMEBANCO, :RAZAOSOCIAL, :cLOGRADOURO, :coLOGRADOURO,
+       :DOCUMENTO, :TIPOPESSOA,:cBAIRRO, :coBAIRRO,:cCEP, :coCEP,
+       :cCIDADE, :coCIDADE,:cUF, :coUF,:cNUMERO, :coNUMERO,
+       :cCOMPLEMENTO, :coCOMPLEMENTO,:CADASTRO, :NOME,   :PMULTA,
+       :CARTEIRA, :EMISSAOBLOQUETO, :RAZAOFILIAL, :TPESFILIAL, :DOCUMENTOFILIAL,
+       :ACEITE, :TITULO, :FATURA, :IDTITULO, :NUMBOLBANCO, :CODREMESSA,
+       :VALORNOMINAL, :VENCIMENTO, :ESPECIE, :EMISSAO, :INSTRUCAO1, :INSTRUCAO2,
+       :FILIAL, :VALORJUROS, :DESCONTOATE, :VALORDESCONTO, :VALORIOF,
+       :TOTALABATIDO, :PRAZOPROTESTO, :MENSAGEM, :CODPROTESTO,
+       :CODJUROSMORA,:TITULOFATURA, :descricaocarteira,:codigocarteira,
+       :multa,:temmulta, :TIPOCOBRANCA, :DESCRICAOCOBRANCA, :v_filialcobranca
+  DO BEGIN
+
+      AGENCIACOBRANCA=:AGENCIA;
+      BANCOCOBRANCA=:BANCO;
+      
+      notafiscal=NULL;
+      chave=NULL;
+      valorNota=NULL;
+      diaNota=NULL;
+      mesNota=NULL;
+      anoNota=NULL;
+      
+      select 
+        distinct
+        notafiscal.NUMERONOTA,
+        notafiscal.CHAVE,
+        notafiscal.VLRTOTALNOTA,
+        extract(day from notafiscal.DATAEMISSAO) as diaNota,
+        extract(month from notafiscal.DATAEMISSAO) as mesNota,
+        extract(year from notafiscal.DATAEMISSAO) as anoNota
+      from 
+        notafiscal
+      where 
+        notafiscal.filial=:filial and
+        notafiscal.NUMERONOTA=:titulo
+      into
+        :notafiscal, chave, valorNota, diaNota, mesNota, anoNota;
+      
+
+      if (:temmulta='S') then
+      datainiciomulta=vencimento+1;
+
+      --SELECT COBRANCABANCARIA.prefixo||COBRANCABANCARIA.numeroboleto
+      SELECT COBRANCABANCARIA.prefixo||:NUMBOLBANCO,
+             cobrancabancaria.contacorrespondente
+      FROM COBRANCABANCARIA
+      WHERE COBRANCABANCARIA.filial = :ifilial
+      AND COBRANCABANCARIA.contacorrente = :icontacorrente
+      AND COBRANCABANCARIA.tipocobranca = :tipocobranca
+      INTO :nossonumero, :v_contacorrespondente;
+
+      if(:v_contacorrespondente is not null) then
+      begin
+           select contacorrente.agencia, banco.codcamaracomp from contacorrente
+           inner join banco on (contacorrente.banco=banco.banco)
+           inner join cobrancabancaria on (contacorrente.filial=cobrancabancaria.filial and
+                                                contacorrente.codigo=cobrancabancaria.contacorrente)
+           where contacorrente.filial=:ifilial and contacorrente.codigo=:v_contacorrespondente
+           into :agenciacobranca, :bancocobranca;
+      end
+
+      if (:coLOGRADOURO <> '') then begin
+         logradouro=coLogradouro;
+         NUMERO=coNUMERO;
+         COMPLEMENTO=coCOMPLEMENTO;
+         BAIRRO=coBAIRRO;
+         CEP=coCEP;
+         CIDADE=coCIDADE;
+         UF=coUF;
+      end else begin
+         logradouro=cLogradouro;
+         NUMERO=cNUMERO;
+         COMPLEMENTO=cCOMPLEMENTO;
+         BAIRRO=cBAIRRO;
+         CEP=cCEP;
+         CIDADE=cCIDADE;
+         UF=cUF;
+      end
+      titulofatura=:titulo;
+      if (not (:fatura is null)) then
+         titulofatura=:titulofatura||'/'||:fatura;
+      VALORGERAL=VALORGERAL+VALORNOMINAL;
+      QTDETITULOS=QTDETITULOS+1;
+      CEPPRE = SUBSTRING(CEP FROM 1 FOR 5);
+      CEPSUF = SUBSTRING(CEP FROM 6 FOR 3);
+
+      if (not (:v_filialcobranca is null)) then
+      begin
+           select
+                 cadastroparceiros.nome,
+                 cadastroparceiros.documento,
+                 'CNPJ' as literalcpfcnpj,
+                 'A' as indicativosacadoravalista
+           from
+               cadastroparceiros
+           where
+                cadastroparceiros.cadastro = :ifilial
+           into
+               :nomesacadoravalista, :documentosacadoravalista, :literalcpfcnpj, :indicativosacadoravalista;
+      end
+      
+      IF (CODREMESSA='31') THEN
+      BEGIN
+            ACEITE = NULL;
+            especie = null;
+            emissao = null;
+            nome = null;
+            razaosocial = null;
+           notaFiscal = null;     
+           chave = null;
+           valorNota = null; 
+           TITULO = NULL;
+           FATURA = NULL;
+           FILIAL = NULL;
+           IDTITULO = NULL;
+           --VALORNOMINAL = NULL;
+           VENCIMENTO = NULL;
+           INSTRUCAO1= NULL;
+            INSTRUCAO2=NULL ;
+           VALORJUROS = NULL;
+            DESCONTOATE = NULL;
+            VALORDESCONTO  = NULL;
+            VALORIOF  = NULL;
+            TOTALABATIDO  = NULL;
+            PRAZOPROTESTO  = NULL;
+            MENSAGEM  = NULL;
+            CODPROTESTO  = NULL;
+            CODJUROSMORA = NULL;
+            --VALORGERAL  = NULL;
+            TITULOFATURA  = NULL;
+            PMULTA  = NULL;
+            MULTA  = NULL;
+            TEMMULTA = NULL;
+            DATAINICIOMULTA  = NULL;
+            
+            logradouro=null;
+            NUMERO=null;
+            COMPLEMENTO=null;
+            BAIRRO=null;
+            CEP=null;
+            CIDADE=null;
+            UF= null;
+            
+            documento=null;
+            tipopessoa = null;
+
+      END
+      
+      IF (CODREMESSA='31') THEN
+        suspend;  
+      else 
+      if(:itipo = 'E' and :emissao between :idatainicial and :idatafinal) then
+         suspend;
+      else
+      if(:itipo = 'V' and :vencimento between :idatainicial and :idatafinal) then
+         suspend;
+
+  END
+END
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE CNAB TO  SYSDBA;
+

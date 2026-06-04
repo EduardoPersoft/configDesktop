@@ -1,0 +1,7 @@
+select 
+    * 
+from 
+    movtitulorec 
+where 
+    movtitulorec.filial=5 and 
+    movtitulorec.emissao='15.07.2022'

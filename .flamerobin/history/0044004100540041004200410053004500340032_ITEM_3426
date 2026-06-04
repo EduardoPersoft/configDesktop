@@ -1,0 +1,2 @@
+select * from C_PEDIDOSEMABERTOPRODUCAO(110)
+where filial=12424

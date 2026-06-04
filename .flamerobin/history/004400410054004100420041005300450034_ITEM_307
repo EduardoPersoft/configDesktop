@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM   
+    MERCADORIASservico
+where 
+    filial=1 and idnota=26791

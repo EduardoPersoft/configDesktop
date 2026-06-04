@@ -1,0 +1,18 @@
+SELECT DISTINCT MOVIMENTOESTOQUE.filial, 
+                MOVIMENTOESTOQUE.idmovimento,
+                MOVIMENTOESTOQUE.emissao,
+                PEDIDO.idnota,
+                PEDIDO.numeronota,
+                CADASTROPARCEIROS.nome,
+                MATERIALMOVIMENTOESTOQUE.CONCLUIDO/*,
+                2100000000000+PEDIDO.idnota as codigoBarra*/
+FROM MOVIMENTOESTOQUE
+INNER JOIN MATERIALMOVIMENTOESTOQUE ON (MATERIALMOVIMENTOESTOQUE.filial = MOVIMENTOESTOQUE.filial
+                                       AND MATERIALMOVIMENTOESTOQUE.idmovimento = MOVIMENTOESTOQUE.idmovimento)
+inner join itemestoque on (materialmovimentoestoque.iditem=itemestoque.codigo)
+LEFT JOIN PEDIDO ON (PEDIDO.filial = MATERIALMOVIMENTOESTOQUE.filial
+                    AND PEDIDO.idnota = MATERIALMOVIMENTOESTOQUE.idpedido)
+LEFT JOIN CADASTROPARCEIROS ON
+    CADASTROPARCEIROS.cadastro = PEDIDO.destinatario
+WHERE MOVIMENTOESTOQUE.tipomovimento = 13
+AND materialmovimentoestoque.concluido = 'N'

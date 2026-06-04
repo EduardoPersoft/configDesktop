@@ -1,0 +1,1 @@
+select filial,idtitulo,contacorrente from titulorec where titulorec.filial=5 and titulorec.CONTACORRENTE=422

@@ -1,0 +1,5 @@
+delete from T_CADASTRODOCTITULO
+
+update t_titulorec set importado='S' where importado is null
+
+EXECUTE PROCEDURE IMPORTATITULOREC('01.02.2022')

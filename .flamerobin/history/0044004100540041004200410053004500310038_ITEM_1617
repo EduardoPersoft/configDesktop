@@ -1,0 +1,2 @@
+select filial,idnota,idmercadoria,baixa,qtdeenviada
+  from MERCADORIASped where filial=1 and idnota=68925

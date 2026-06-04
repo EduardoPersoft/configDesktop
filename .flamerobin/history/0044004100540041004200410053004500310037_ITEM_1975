@@ -1,0 +1,2 @@
+update movimentoestoque set movimentoestoque.SAIDAPRODUCAO=null, MOVIMENTOESTOQUE.ENTRADAPRODUCAO=null
+where not movimentoestoque.tipomovimento in (12, 13)

@@ -1,0 +1,2 @@
+select * from vendedor 
+where vendedor.cadaso=21811

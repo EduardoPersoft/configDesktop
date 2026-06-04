@@ -1,0 +1,20 @@
+SELECT 
+    mercadoriasnota.codigo ITEMESTOQUE_CODIGO,
+    NOTAFISCAL.dataEMISsAO, 
+    MERCADORIASNOTA.PRECOUNITARIO
+
+FROM 
+    notafiscal
+INNER JOIN 
+    mercadoriasnota on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.IDNOTA
+WHERE 
+    notafiscal.destinatario = 1 and
+    notafiscal.datacancelamento is null and
+    notafiscal.entradasaida='S' and
+    mercadoriasnota.codigo = '01240004'
+order by 
+    notafiscal.dataemissao
+
+

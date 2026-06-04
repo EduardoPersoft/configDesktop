@@ -1,0 +1,4 @@
+insert into QRCODENFCE(uuidnfe, urlchave)
+select NOTAFISCAL.uuid , 'https://uol.com.br'
+from NOTAFISCAL
+where filial=3691 and dataemissao>='01.01.2025'

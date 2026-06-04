@@ -1,0 +1,8 @@
+UPDATE
+    comentarios
+SET
+    comentarios.uuid=pedidocompra.filial||'-'||pedidocompra.DESTINATARIO||'-'||pedidocompra.idnota
+where 
+    comentarios.uuid='{42A7A015-6CE5-4A94-BEAB-36E48D90852'  
+    
+

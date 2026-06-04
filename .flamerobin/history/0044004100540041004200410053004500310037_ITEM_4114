@@ -1,0 +1,2 @@
+select * from materialmovimentoestoque
+where processamento='2025-01-23'

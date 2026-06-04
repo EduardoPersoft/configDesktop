@@ -1,0 +1,6 @@
+select
+    *
+from
+    ITEMESTOQUE
+where 
+    codigo='14885'

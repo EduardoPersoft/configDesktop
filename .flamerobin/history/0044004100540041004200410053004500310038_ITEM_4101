@@ -1,0 +1,2 @@
+select * from MUNICIPIO
+WHERE UF_SIGLA='SP' and MUNICIPIO_NOME='São Paulo'

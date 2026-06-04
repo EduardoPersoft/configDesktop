@@ -1,0 +1,4 @@
+select
+    max(CONTASCONTABEIS.CODIGOREDUZIDO)
+from 
+    contascontabeis

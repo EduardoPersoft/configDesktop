@@ -1,0 +1,45 @@
+update
+    SPEDFISCAL_C
+set
+    SPEDFISCAL_C.UNID = (SELECT ITEMESTOQUE.UNIDADE FROM ITEMESTOQUE WHERE ITEMESTOQUE.CODIGO=SPEDFISCAL_C.COD_ITEM);
+
+update 
+    SPEDFISCAL_0
+set
+    SPEDFISCAL_0.COD_MUN = (SELECT
+                                ESTADO.CODIGOIBGE
+                             from   
+                                CADASTROPARCEIROS
+                             INNER JOIN
+                                ESTADO ON
+                                    ESTADO.ESTADO=CADASTROPARCEIROS.UF
+                             where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)||
+                            (select
+                                CADASTROPARCEIROS.MUNICIPIO
+                             from
+                                CADASTROPARCEIROS
+                            where
+                                CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART)
+WHERE                                
+    SEGMENTO='0150';
+    
+    
+update 
+    MERCADORIASNOTACOMPRA
+set
+    mercadoriasnotacompra.cstipi=50;
+    
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000'
+where
+    cod_ncm='99999999';
+
+update
+    SPEDFISCAL_0
+set
+    cod_ncm='00000000'
+where
+    coalesce(cod_ncm, '')='0000000';   

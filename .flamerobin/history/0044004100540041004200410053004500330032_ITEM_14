@@ -1,0 +1,15 @@
+update 
+    SPEDFISCAL_0
+set
+    SPEDFISCAL_0.COD_MUN = '9999999'
+WHERE                                
+    SEGMENTO='0150' and
+    exists 
+        (select
+            *
+         from
+            CADASTROPARCEIROS
+         where
+            CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_0.COD_PART and
+            CADASTROPARCEIROS.uf='EX');
+    

@@ -1,0 +1,18 @@
+SELECT *
+      from cadastroparceiros cliente
+           inner join Clientes on (Clientes.Cadastro=cliente.Cadastro)
+           inner join Titulorec on(cliente.cadastro=titulorec.parceiro)
+           inner join Contacorrente on (contacorrente.filial=titulorec.filial and
+                                        contacorrente.codigo=titulorec.contacorrente)
+           inner join cadastroparceiros filial on (coalesce(contacorrente.filialcobranca, contacorrente.filial)=filial.cadastro)
+--           inner join cadastroparceiros filial on (contacorrente.filial=filial.cadastro)
+           inner join Estabelecimento on (filial.cadastro=estabelecimento.cadastro)
+           inner join banco on (contacorrente.banco=banco.banco)
+           inner join tipocobranca on (tipocobranca.tipocobranca=titulorec.tipotransacao)
+      where titulorec.filial=5 and
+            titulorec.contacorrente=1342 and
+            tipocobranca.transmitirboletocnab='S' and
+            titulorec.baixa is null and
+            titulorec.codreMESSA in ('01', '31', '09', '42', '12')  and
+          --  titulorec.emissao BETWEEN :IDATAINICIAL AND :IDATAFINAL and
+           coalesce(titulorec.codretorno,'') = ''     

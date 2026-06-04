@@ -1,0 +1,7 @@
+select 
+    *
+from
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.filial=184
+order by idmovimento desc

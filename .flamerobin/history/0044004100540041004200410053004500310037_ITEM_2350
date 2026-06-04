@@ -1,0 +1,6 @@
+select
+    distinct lantocontrec.CONTACONTABIL
+from    
+    LANTOCONTREC
+where
+    lantocontrec.IDLANCAMENTO=2 and LANTOCONTREC.CONTACONTABIL<>'101010201'

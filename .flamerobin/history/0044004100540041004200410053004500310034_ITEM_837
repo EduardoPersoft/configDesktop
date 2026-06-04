@@ -1,0 +1,8 @@
+select
+    *
+from
+    TITULOPAG
+where 
+    titulopag.filial=110 and
+    titulopag.EMISSAO>'01.01.2023' and
+    titulopag.TITULO='0158'

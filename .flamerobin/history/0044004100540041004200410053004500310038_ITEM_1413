@@ -1,0 +1,21 @@
+select
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.dataemissao,
+    pedido.c_datacomissao,
+    pedido.DATAREFERENCIA,    
+    (select first 1 
+        c_Faturasped.LIBERACAO
+     from 
+        c_faturasped
+     where 
+        c_faturasped.filia=pedido.filial and
+        c_faturasped.idnota=pedido.idnota and
+        c_Faturasped.liberacao is not null
+     order by
+        c_faturasped.liberacao)
+from
+    PEDIDO
+order by
+    pedido.DATAREFERENCIA

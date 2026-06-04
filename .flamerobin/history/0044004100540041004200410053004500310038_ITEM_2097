@@ -1,0 +1,49 @@
+SELECT
+           RESUMOLANCAMENTOSLOCAL.filial,
+           RESUMOLANCAMENTOSLOCAL.pmaterialinicial,
+           RESUMOLANCAMENTOSLOCAL.pmaterialfinal,
+           RESUMOLANCAMENTOSLOCAL.pdatainicial,
+           RESUMOLANCAMENTOSLOCAL.pdatafinal,
+           RESUMOLANCAMENTOSLOCAL.ploteinicial,
+           RESUMOLANCAMENTOSLOCAL.plotefinal,
+           RESUMOLANCAMENTOSLOCAL.plocalinicial,
+           RESUMOLANCAMENTOSLOCAL.plocalfinal,
+           RESUMOLANCAMENTOSLOCAL.pmateriaprima,
+           RESUMOLANCAMENTOSLOCAL.prevenda,
+           RESUMOLANCAMENTOSLOCAL.pconsumo,
+           RESUMOLANCAMENTOSLOCAL.pindustrializado,
+           RESUMOLANCAMENTOSLOCAL.pinativo,
+           RESUMOLANCAMENTOSLOCAL.codigo,
+           RESUMOLANCAMENTOSLOCAL.localarmazenamento,
+           RESUMOLANCAMENTOSLOCAL.qtdinicial,
+           RESUMOLANCAMENTOSLOCAL.custoinicial,
+           RESUMOLANCAMENTOSLOCAL.qtdentrada,
+           RESUMOLANCAMENTOSLOCAL.custoentrada,
+           RESUMOLANCAMENTOSLOCAL.qtdsaida,
+           RESUMOLANCAMENTOSLOCAL.custosaida,
+           RESUMOLANCAMENTOSLOCAL.qtdfinal,
+           RESUMOLANCAMENTOSLOCAL.custofinal,
+           CASE WHEN cast(RESUMOLANCAMENTOSLOCAL.qtdfinal as decimal(12,3))> 0
+           THEN      (RESUMOLANCAMENTOSLOCAL.custofinal/ RESUMOLANCAMENTOSLOCAL.qtdfinal)
+                ELSE 0 END AS VALORUNITARIOATUAL,
+           CADASTROPARCEIROS.razaosocial,
+           LOCAL.descricao AS DESCRICAOLOCAL,
+           ITEMESTOQUE.descricao,
+           ITEMESTOQUE.unidade,
+           substring (RESUMOLANCAMENTOSLOCAL.codigo from 1 for 2) as quebra1,
+           substring (RESUMOLANCAMENTOSLOCAL.codigo from 1 for 5) as quebra2,
+           c_subgrupo.descricao as descsubgrupo,
+           c_subgrupo.id as subgrupo
+
+           FROM  RESUMOLANCAMENTOSLOCAL
+           INNER JOIN CADASTROPARCEIROS ON (CADASTROPARCEIROS.cadastro = RESUMOLANCAMENTOSLOCAL.filial)
+           INNER JOIN LOCAL ON (LOCAL.id = RESUMOLANCAMENTOSLOCAL.localarmazenamento)
+           INNER JOIN ITEMESTOQUE ON (ITEMESTOQUE.codigo = RESUMOLANCAMENTOSLOCAL.codigo)
+           left join c_subgrupo on (c_subgrupo.id=itemestoque.c_subgrupo)
+--           left join c_ultimopreco on (itemestoque.codigo=c_ultimopreco.codigo)
+where RESUMOLANCAMENTOSLOCAL.codigo='01.12.1487'
+           ORDER BY RESUMOLANCAMENTOSLOCAL.filial,
+           RESUMOLANCAMENTOSLOCAL.localarmazenamento,
+           substring (RESUMOLANCAMENTOSLOCAL.codigo from 1 for 2),
+           substring (RESUMOLANCAMENTOSLOCAL.codigo from 1 for 5),
+           RESUMOLANCAMENTOSLOCAL.codigo

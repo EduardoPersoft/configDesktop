@@ -1,0 +1,103 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_INFORMATIVOVENDAS4
+RETURNS (
+    CADASTRO integer,
+    NOME varchar(50),
+    RAZAOSOCIAL varchar(60),
+    C_INFORMATIVOCLIENTELOJA smallint,
+    C_GRUPOINFORMATIVO varchar(20),
+    VLRTOTALMERCADORIAS double precision,
+    SOMAGRUPO double precision,
+    SOMATOTAL double precision,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp )
+
+AS
+DECLARE VARIABLE P_GRUPOINFORMATIVO VARCHAR(20);
+begin
+
+
+    SELECT ESTSIN.Datainicial,ESTSIN.DATAFINAL
+    FROM ESTSIN
+    WHERE ESTSIN.RELATORIO = 'C_INFORMATIVOVENDA'
+    INTO :DATAINICIAL,:DATAFINAL;
+
+    SOMAGRUPO=0;
+    somatotal=0;
+    P_GRUPOINFORMATIVO='';
+
+    FOR SELECT
+
+        CADLOJAPEDIDO.C_informativoclienteloja,
+        CASE COALESCE(CADLOJAPEDIDO.C_informativoclienteloja,-1)
+        WHEN 1 THEN
+             CADLOJA.cadastro
+        ELSE
+            CADGRUPOEMPRESARIAL.cadastro
+        END AS CADASTRO ,
+
+        CASE COALESCE(CADLOJAPEDIDO.C_informativoclienteloja,-1)
+        WHEN 1 THEN
+            CADLOJA.NOME
+        ELSE
+            CADGRUPOEMPRESARIAL.NOME
+        END AS NOME,
+
+        CADLOJAPEDIDO.C_grupoinformativo,
+        --CADLOJA.C_grupoinformativo,
+
+        sum ( 
+                (Pedido.Vlrtotalnota - COALESCE(PEDIDO.C_CREDITOCLIENTE,0) )*
+                c_pedidodatafin.SINAL*vendedoresped.comissaovenda/100
+            )
+
+        FROM C_PEDIDODATAFINLIB(:DATAINICIAL,:DATAFINAL) C_PEDIDODATAFIN
+        INNER JOIN PEDIDO ON (PEDIDO.FILIAL=c_pedidodatafin.FILIAL
+            AND PEDIDO.IDNOTA=c_pedidodatafin.Idnota)
+        INNER JOIN CADASTROPARCEIROS CADCLI ON (PEDIDO.DESTINATARIO=CADCLI.CADASTRO)
+        INNER JOIN CADASTROPARCEIROS CADGRUPOEMPRESARIAL ON  (CADGRUPOEMPRESARIAL.CADASTRO=COALESCE(CADCLI.GRUPOEMPRESARIAL,CADCLI.CADASTRO))
+        INNER JOIN VENDEDORESPED ON (PEDIDO.FILIAL=VENDEDORESPED.FILIAL
+                AND PEDIDO.IDNOTA=VENDEDORESPED.IDNOTA)
+        INNER JOIN VENDEDOR ON (VENDEDOR.cadastro=VENDEDORESPED.vendedor)
+        INNER JOIN CADASTROPARCEIROS CADLOJA ON (vendedor.canalrelacionado=CADLOJA.CADASTRO)
+        INNER JOIN CADASTROPARCEIROS CADLOJAPEDIDO ON (CADLOJApedido.CADASTRO=CASE WHEN CADLOJA.CADASTRO IN (45,21278) THEN CADLOJA.CADASTRO ELSE PEDIDO.c_loja END)
+        WHERE PEDIDO.DATAEMISSAO IS NOT NULL
+        AND COALESCE(PEDIDO.C_Consignacao,'N')='N'
+        AND COALESCE(PEDIDO.cancelamento,'N')='N'
+        AND coalesce(VENDEDOR.Tipovendedor,1) IN (1,2,3,4)
+        AND PEDIDO.FILIAL < 59
+
+
+        group by
+            CADLOJAPEDIDO.C_Grupoinformativo,
+            CADLOJAPEDIDO.C_informativoclienteloja,
+            2,3,
+            CADLOJA.C_Grupoinformativo,
+            CADLOJA.C_informativoclienteloja
+        ORDER by CADLOJA.C_Grupoinformativo desc
+
+        INTO
+           :C_informativoclienteloja, :cadastro, :nome,
+           :C_grupoinformativo,:vlrtotalmercadorias DO BEGIN
+
+           somatotal=somatotal+vlrtotalmercadorias;
+
+           if  (C_Grupoinformativo=P_Grupoinformativo) THEN
+             SOMAGRUPO=SOMAGRUPO+vlrtotalmercadorias;
+           else
+             SOMAGRUPO=vlrtotalmercadorias;
+
+           P_Grupoinformativo=C_Grupoinformativo;
+
+           SUSPEND;
+
+
+   end
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_INFORMATIVOVENDAS4 TO  SYSDBA;
+

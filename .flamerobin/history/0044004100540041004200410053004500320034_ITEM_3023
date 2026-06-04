@@ -1,0 +1,14 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    mercadoriasnota.valoricms,
+    mercadoriasnota.VLRPISPASEP,
+    mercadoriasnota.vlrcofins,
+    mercadoriasnota.custo
+from 
+    mercadoriasnota 
+where 
+    filial=5 and 
+    idnota=300006
+order by comissao

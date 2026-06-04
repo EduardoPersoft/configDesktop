@@ -1,0 +1,24 @@
+select
+    notafiscal.NUMERONOTA,
+    notafiscal.dataemissao,
+    cadcli.nome,
+    notafiscal.VLRTOTALNOTA
+from
+    C_PEDIDOITENSESTIMADO
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=C_PEDIDOITENSESTIMADO.filial and
+        mercadoriasnota.IDpedido=C_PEDIDOITENSESTIMADO.IDNOTA and
+        mercadoriasnota.IDMERCPEDIDO=c_pedidoitensestimado.IDMERCADORIA
+inner join
+    notafiscal on
+        notafiscal.filial=mercadoriasnota.filial and
+        notafiscal.idnota=mercadoriasnota.idnota
+inner join
+    NATUREZAOPERACAO on
+        NATUREZAOPERACAO.id=NOTAFISCAL.OPERACAO
+inner join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=NOTAFISCAL.DESTINATARIO
+where
+    NATUREZAOPERACAO.BAIXARPEDIDO='S'

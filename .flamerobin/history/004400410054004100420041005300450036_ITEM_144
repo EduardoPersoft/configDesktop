@@ -1,0 +1,16 @@
+select 
+    m1.*,
+    (SELECT 
+        first 1 m2.idlocal
+     FROM
+        materiallocal m2
+     where
+        m1.filial=m2.filial AND
+        m1.iditem=m2.iditem AND
+        m2.saldototal>0)
+from 
+    MATERIALLOCAL m1
+WHERE
+    m1.filial=1
+    and m1.idlocal=1
+    and m1.saldototal<0

@@ -1,0 +1,3 @@
+select * from localote
+where filial=110
+and iditem='MPP01METBIG17'

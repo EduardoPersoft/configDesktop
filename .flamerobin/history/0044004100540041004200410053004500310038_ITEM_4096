@@ -1,0 +1,1 @@
+select filial,idnota,numeronota,dataemissao,NOTAFISCAL.DOCUMENTOCUPOM from notafiscal order by dataemissao desc

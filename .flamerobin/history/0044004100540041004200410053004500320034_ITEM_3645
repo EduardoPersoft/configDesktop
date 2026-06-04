@@ -1,0 +1,7 @@
+
+update
+    MERCADORIASNOTACOMPRA
+set
+    icmsoutros=mercadoriasnotacompra.vlrfinalmercad-mercadoriasnotacompra.ICMSBASE
+where mercadoriasnotacompra.SITUACAOTRIBUT='020' and vlrfinalmercad>icmsbase
+order by codigo

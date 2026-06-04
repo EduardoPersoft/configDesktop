@@ -1,0 +1,10 @@
+SELECT
+    c_i_movest3.filial,
+    c_i_movest3.IDMOVIMENTO,
+    c_i_movest3.IDMOVIMENTOMATERIAL,
+    c_i_movest3.MEDTOTAL
+from 
+    c_i_movest3
+WHERE
+    c_i_movest3.codtiposaida <> 1 and 
+    c_i_movest3.data>='01.04.2021'

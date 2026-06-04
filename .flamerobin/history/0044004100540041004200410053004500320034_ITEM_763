@@ -1,0 +1,6 @@
+select 
+    * 
+FROM
+    ITEMESTOQUECODIGOS
+where 
+    itemestoquecodigos.CODIGOALTERNATIVO='5193'

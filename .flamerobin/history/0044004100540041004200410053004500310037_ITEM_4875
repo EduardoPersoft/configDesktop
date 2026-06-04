@@ -1,0 +1,7 @@
+ select 
+         count (movimentoestoque.COLETA) as soma    
+         from 
+             movimentoestoque
+         where                                       
+             movimentoestoque.coleta = new.coleta and 
+             coalesce (movimentoestoque.coleta,'') <> ''

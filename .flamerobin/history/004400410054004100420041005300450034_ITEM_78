@@ -1,0 +1,7 @@
+select 
+    *
+from 
+    MOVIMENTOESTOQUE
+WHERE   
+    movimentoestoque.filial=1 
+    and movimentoestoque.idmovimento between 102053 and 102059

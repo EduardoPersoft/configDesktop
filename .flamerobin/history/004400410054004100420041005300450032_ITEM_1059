@@ -1,0 +1,1 @@
+create index c_i_numeronota on notafiscal(filial,numeronota)

@@ -1,0 +1,3 @@
+select * from MOVTOTITULOPAG
+where valorpago=0 and 
+tipomovto='D'

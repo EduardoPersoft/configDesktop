@@ -1,0 +1,10 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.DATAREFERENCIA,
+    pedido.DATAEMISSAO
+from
+    PEDIDO
+order by
+    idnota desc

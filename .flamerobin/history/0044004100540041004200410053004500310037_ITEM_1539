@@ -1,0 +1,17 @@
+update 
+    mercadoriasnota
+set
+    mercadoriasnota.CSTCOFINS=4,
+    mercadoriasnota.PCOFINS=0,
+    mercadoriasnota.basecofins=0,
+    mercadoriasnota.VLRCOFINS=0,
+    
+    mercadoriasnota.cstpis=4,
+    mercadoriasnota.ppis=4,
+    mercadoriasnota.basepis=0,
+    mercadoriasnota.VLRPISPASEP=0
+where
+    mercadoriasnota.filial=1 and
+    mercadoriasnota.idnota>=306406
+    mercadoriasnota.cstpis=2 and
+    substring(mercadoriasnota.cfop from 1 for 1) in ('5', '6', '7')

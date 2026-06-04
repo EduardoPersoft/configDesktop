@@ -1,0 +1,90 @@
+SET TERM ^ ;
+
+CREATE PROCEDURE C_LOTESEMPENHO(
+  filial integer) 
+RETURNS 
+ ( CODIGO VARCHAR(15),
+   DESCRICAO VARCHAR(240),
+   GRUPOMERCADORIA INTEGER,
+   localid integer,
+   localdescricao varchar(40),
+   grupoDescricao varchar(40),
+   unidade varchar(3),
+   lote varchar(15),
+   uuid varchar(36),
+   codigobarra varchar(13),
+   c_gramatura decimal(12,3),
+   c_largura decimal(12,3),
+   p_check char(1),
+   op varchar(10),
+   idmaterial integer ) 
+ 
+AS 
+
+BEGIN
+  for select 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.GRUPO,
+    local.id,
+    local.descricao,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    locallote.QUANTIDADE,
+    MATERIALLOTE.UUID,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    cast('N' as char(1)) as p_check,
+    cast(0 as integer) as op,
+    cast(0 as integer) as idMaterial
+  from 
+    ITEMESTOQUE
+  inner join 
+    MATERIALLOTE on 
+    ITEMESTOQUE.CODIGO=MATERIALLOTE.IDITEM
+  inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+  inner join
+    local on
+        local.id=locallote.local
+  inner join 
+    MATERIALFILIAL on 
+    LOCALLOTE.FILIAL=MATERIALFILIAL.FILIAL and
+    LOCALLOTE.IDITEM=MATERIALFILIAL.IDITEM        
+  left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO        
+  where
+     materiallote.filial=:filial and 
+     locallote.quantidade>0
+  order by
+    ITEMESTOQUE.codigo,
+    MATERIALLOTE.LOTE
+  into
+   :CODIGO,
+   :DESCRICAO,
+   :GRUPOMERCADORIA,
+   :localid,
+   :localdescricao,
+   :grupoDescricao,
+   :unidade,
+   :lote,
+   :uuid,
+   :codigobarra,
+   :c_gramatura,
+   :c_largura,
+   :p_check,
+   :op,
+   :idmaterial do begin
+   suspend;
+end
+
+
+END^
+
+SET TERM ; ^

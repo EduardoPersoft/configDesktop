@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    movimentoestoque 
+WHERE
+    movimentoestoque.filial = 5 and 
+    movimentoestoque.tipomovimento='13' AND
+    movimentoestoque.EMISSAO between '01.05.2022' and '31.05.2022'

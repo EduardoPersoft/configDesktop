@@ -1,0 +1,76 @@
+delete from c_saldoz2;
+insert into c_SALDOZ2(codigo,saldo)
+select locallote.iditem,sum(locallote.quantidade)
+from LOCALLOTE
+inner join 
+     local local on
+          local.id = locallote."LOCAL"
+where 
+     substring(local.descricao from 1 for 2) = 'Z2'
+group by
+locallote.iditem;
+delete from c_consumo;
+
+insert into c_consumo(codigo,consumo)
+select
+    materialmovimentoestoque.iditem,
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)
+from
+    MOVIMENTOESTOQUE
+inner join
+    tipomovimentoestoque on 
+        tipomovimentoestoque.id=movimentoestoque.TIPOMOVIMENTO
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=MOVIMENTOESTOQUE.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+where
+  
+    movimentoestoque.EMISSAO >= cast('now' as date) - 84 and 
+    tipomovimentoestoque.TIPOMOVIMENTO='S'
+group by
+    materialmovimentoestoque.iditem
+having 
+    sum(MATERIALMOVIMENTOESTOQUE.sinal*
+        MATERIALMOVIMENTOESTOQUE.quantidade)*(-1)/12>(select sum(locallote.quantidade)
+                      ;                                from LOCALLOTE
+                                                      inner join 
+                                                        local local on
+                                                            local.id = locallote."LOCAL"
+                                                      where 
+                                                      locallote.iditem=materialmovimentoestoque.iditem and
+                                                      substring(local.descricao from 1 for 2) = 'Z2')
+
+select
+    c_consumo.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    c_fornecedorpeca.DESCRICAO,
+    c_consumo.consumo,
+    c_saldoz2.saldo,
+    cast(c_consumo.consumo/12 as integer) + 1 saldominimo,
+    cast(c_consumo.consumo/3 as integer) + 1 saldomaximo,
+    (cast(c_consumo.consumo/3 as integer) + 1)-c_saldoz2.saldo quantidade,
+    materialfilial.SALDOMINIMO,
+    materialfilial.SALDOMAXIMO,
+    materialfilial.saldoMaximo-c_saldoz2.saldo tranfere
+from
+    C_CONSUMO
+inner join
+    c_saldoz2 on
+        c_saldoz2.codigo=c_consumo.codigo
+inner join
+    itemestoque on
+        itemestoque.codigo=C_CONSUMO.codigo
+inner join
+    materialfilial on
+        materialfilial.filial = case substring(c_consumo.codigo from 1 for 1) 
+                                when '6' then 12826
+                                else 1 end and
+        materialfilial.iditem = c_consumo.codigo
+left join
+    C_FORNECEDORPECA on
+        c_fornecedorpeca.id = itemestoque.C_FORNECEDOR
+order by
+    c_consumo.codigo

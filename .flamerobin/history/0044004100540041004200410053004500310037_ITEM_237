@@ -1,0 +1,3 @@
+
+INSERT INTO C_LOGPRODUTOECOMMERCE
+select * from itemestoque where ITEMESTOQUE.TIPOPRODUTO<>5 AND  not exists (select * from C_LOGPRODUTOECOMMERCE where C_LOGPRODUTOECOMMERCE.codigo = itemestoque.codigo)

@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO where lista=2
+                               

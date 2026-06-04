@@ -1,0 +1,3 @@
+select * from clientes
+where cadastro>=20622
+and cadastro<>20626

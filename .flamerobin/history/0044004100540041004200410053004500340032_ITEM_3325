@@ -1,0 +1,7 @@
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 0, 6, 0, 21, 59);
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 1, 6, 0, 21, 59);
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 2, 6, 0, 21, 59);
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 3, 6, 0, 21, 59);
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 4, 6, 0, 21, 59);
+insert into turnodefault(recurso, dia, horainicio, minutoinicio, horafim, minutofim) values (1, 5, 6, 0, 13, 59);
+commit ;

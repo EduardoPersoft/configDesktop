@@ -1,0 +1,5 @@
+select 
+    cadfor.cadastro,
+    cadfor.nome
+from
+    CADASTROPARCEIROS cadfor

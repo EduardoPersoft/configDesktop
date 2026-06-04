@@ -1,0 +1,10 @@
+select
+    orcamento.idnota,
+    orcamento.AOSCUIDADOS,
+    orcamento.VLRTOTALNOTA
+    orcamento.UUID
+from
+    ORCAMENTO
+where
+    orcamento.vlrtotalnota>150000 and
+    orcamento.DATACADASTRO>='18.09.2025'

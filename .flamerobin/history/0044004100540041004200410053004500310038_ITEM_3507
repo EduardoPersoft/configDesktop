@@ -1,0 +1,38 @@
+select 
+    orcLeitura.filial filial,
+    orcLeitura.idnota idnota,
+    orcRelacionado.filial filialRelacionado,
+    orcRelacionado.idNota idNotaRelacionado,
+    orcRelacionado.uuid,
+    orcRelacionado.vlrtotalnota,
+    '' as principal,
+    orcRelacionado.c_status
+from
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        orcRelacionado.idrelacao=coalesce(orcleitura.idrelacao,orcLeitura.idnota)
+where 
+    orcleitura.filial=? and
+    orcleitura.idnota=?
+union    
+select 
+    orcLeitura.filial filial,
+    orcLeitura.idnota idnota,
+    orcRelacionado.filial filialRelacionado,
+    orcRelacionado.idNota idNotaRelacionado,
+    orcRelacionado.uuid,
+    orcRelacionado.vlrtotalnota,
+    '*' as principal,
+    orcRelacionado.c_status    
+from 
+    orcamento orcLeitura
+inner join
+    orcamento orcRelacionado on
+        orcRelacionado.filial=orcLeitura.filial and
+        orcRelacionado.idnota=coalesce(orcleitura.idrelacao,orcLeitura.idnota)
+where 
+    orcleitura.filial=? and
+    orcleitura.idnota=?
+    

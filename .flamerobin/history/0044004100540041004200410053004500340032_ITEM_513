@@ -1,0 +1,15 @@
+SELECT 
+    MATERIALLOTE.iditem,
+    ITEMESTOQUE.DESCRICAO,
+    materiallote.LOTE,
+    'ESTOQUE' LOCAL,
+    MATERIALLOTE.C_GRAMATURA,
+    MATERIALLOTE.C_LARGURA,
+    materiallote.QUANTIDADE
+FROM 
+    materiallote
+INNER join
+    itemestoque on
+        itemestoque.codigo=materiallote.iditem
+WHERE 
+     MATERIALLOTE.IDITEM='MPP04SOFTG22'   

@@ -1,0 +1,5 @@
+select
+    itemestoque.codigo,
+    itemestoque.REFERENCIA
+from
+    itemestoque

@@ -1,0 +1,12 @@
+UPDATE 
+    ITEMCUSTODATA
+set
+    CUSTOUNITARIO = (SELECT 
+                        CAST(MATERIALFILIAL.CUSTOMEDIO AS NUMERIC(12,3))
+                     FROM 
+                        MATERIALFILIAL
+                     WHERE 
+                        MATERIALFILIAL.FILIAL=1 and
+                        MATERIALFILIAL.IDITEM=ITEMCUSTODATA.CODIGO)
+where
+    ITEMCUSTODATA.CUSTOUNITARIO IS NULL 

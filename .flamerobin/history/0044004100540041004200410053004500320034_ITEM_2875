@@ -1,0 +1,4 @@
+select * from TITULOREC
+where filial=5 and 
+emissao='27.07.2022' and
+not exists (select * from t_teste where t_teste.id=titulorec.idtitulo)

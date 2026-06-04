@@ -1,0 +1,62 @@
+select 
+    notafiscal.NUMERONOTA,
+    cadcli.razaosocial as razao,
+    case
+           when (CADCLI.DOCUMENTO <> '') 
+           and (not CADCLI.DOCUMENTO is null) 
+           then 
+            case CADCLI.TIPOPESSOA
+                   when 'F' then cast(substring(CADCLI.DOCUMENTO from 1 for 3) || '.' || substring(CADCLI.DOCUMENTO from 4 for 3) || '.' || substring(CADCLI.DOCUMENTO from 7 for 3) || '-' || substring(CADCLI.DOCUMENTO from 10 for 2) as varchar(18))
+                   when 'J' then cast(substring(CADCLI.DOCUMENTO from 1 for 2) || '.' || substring(CADCLI.DOCUMENTO from 3 for 3) || '.' || substring(CADCLI.DOCUMENTO from 6 for 3) || '/' || substring(CADCLI.DOCUMENTO from 9 for 4) || '-' || substring(CADCLI.DOCUMENTO from 13 for 2) as varchar(18))
+                   else null
+                 end 
+                else null END as documento,
+    substring ( notafiscal.VLRTOTNOTAEXTENSO from 1 for 50 ) as VLRTOTEXTENSO,
+    cast (notafiscal.DATAEMISSAO as date),
+    case
+      when (CADCLI.DOCUMENTO <> '') and 
+      (not CADCLI.DOCUMENTO is null) then 
+        case CADCLI.TIPOPESSOA
+            when 'F' then 'CPF'
+            when 'J' then 'CNPJ'
+            else null
+          end
+       else null END   as tipodocumento,
+       notafiscal.VLRTOTALNOTA,
+       notafiscal.DATAEMISSAO,
+       USUARIO.NOMECOMPLETO as nomeusuario,
+       cadfil.RAZAOSOCIAL as nomefilial,
+    case
+           when (cadfil.DOCUMENTO <> '') 
+           and (not cadfil.DOCUMENTO is null) 
+           then 
+            case cadfil.TIPOPESSOA
+                   when 'F' then cast(substring(cadfil.DOCUMENTO from 1 for 3) || '.' || substring(cadfil.DOCUMENTO from 4 for 3) || '.' || substring(cadfil.DOCUMENTO from 7 for 3) || '-' || substring(cadfil.DOCUMENTO from 10 for 2) as varchar(18))
+                   when 'J' then cast(substring(cadfil.DOCUMENTO from 1 for 2) || '.' || substring(cadfil.DOCUMENTO from 3 for 3) || '.' || substring(cadfil.DOCUMENTO from 6 for 3) || '/' || substring(cadfil.DOCUMENTO from 9 for 4) || '-' || substring(cadfil.DOCUMENTO from 13 for 2) as varchar(18))
+                   else null
+                 end 
+                else null END as documentofilial,       
+
+        ESTABELECIMENTO.logo 
+            
+from 
+    ESTSIN
+          
+inner join
+         notafiscal
+          on (NOTAFISCAL.FILIAL = ESTSIN.ESTABELECIMENTO and 
+             notafiscal.idnota between estsin.IDNOTAINICIAL and estsin.IDNOTAFINAL)
+inner join 
+    CADASTROPARCEIROS cadcli on 
+        (cadcli.cadastro=notafiscal.DESTINATARIO)    
+inner join 
+    CADASTROPARCEIROS CADFIL on 
+        (CADFIL.cadastro=notafiscal.filial)               
+inner join   
+        ESTABELECIMENTO
+          on (ESTABELECIMENTO.CADASTRO = notafiscal.filial)
+inner join
+       USUARIO
+           on (USUARIO.USUARIO = ESTSIN.USUARIO)
+where 
+    estsin.relatorio='RECIBO'

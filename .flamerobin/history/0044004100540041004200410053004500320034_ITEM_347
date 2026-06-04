@@ -1,0 +1,8 @@
+select 
+    * 
+from 
+    CADASTROPARCEIROS 
+WHERE
+    TIPOPESSOA='F'
+order by 
+    nome

@@ -1,0 +1,7 @@
+select 
+    *
+from
+    mercadoriaspedcompra
+where
+    mercadoriaspedcompra.filial=110 and
+    mercadoriaspedcompra.idnota=644

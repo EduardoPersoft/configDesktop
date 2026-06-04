@@ -1,0 +1,26 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.DATAREFERENCIA,
+    pedido.DATAEMISSAO,
+    (select
+        max(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota),
+    pedido.C_DATACOMISSAO,
+    coalesce(cast(pedido.C_DATACOMISSAO as date),
+            (select
+        max(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota)) as datafinal
+from
+    PEDIDO
+where 
+    pedido.datacadastro>='01.01.2020'

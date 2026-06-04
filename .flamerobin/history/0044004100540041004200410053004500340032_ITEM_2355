@@ -1,0 +1,2 @@
+select * from movimentoestoque where filial=110 and EMISSAO>='01.06.2024' and 
+coalesce(usuario,'ELIANE')='ELIANE'

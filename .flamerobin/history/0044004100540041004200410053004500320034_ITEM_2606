@@ -1,0 +1,18 @@
+select
+    familia.ordemdestaque,
+    count(itemestoque.CODIGO)
+from
+    itemestoquexarquivo
+inner join
+    itemestoque on
+        itemestoque.codigo=itemestoquexarquivo.CODIGO
+inner join
+    familia on
+        familia.id=itemestoque.familia
+where
+    ITEMESTOQUEXARQUIVO.ordem=0 and
+    familia.ordemdestaque is not null and
+    itemestoque.referencia is not null and
+    itemestoquexarquivo.nomeArquivo is not null
+group by
+    familia.ORDEMDESTAQUE

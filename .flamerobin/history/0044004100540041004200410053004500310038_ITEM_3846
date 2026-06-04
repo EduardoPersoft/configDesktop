@@ -1,0 +1,2 @@
+select * from C_LISTAXCADASTRO
+order by datafinal

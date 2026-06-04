@@ -1,0 +1,7 @@
+UPDATE
+    ITEMESTOQUE
+SET
+    itemestoque.DISPONIVELECOMMERCE = 'S'
+
+where 
+    itemestoque.codigo in ('16014')

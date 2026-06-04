@@ -1,0 +1,36 @@
+select
+    titulorec.titulo,
+    titulorec.fatura,    
+    cad.nome,
+    titulorec.emissao,
+    titulorec.vencimento,
+    titulorec.VALORTITULO,
+    titulorec.baixa dtBaixa,
+    contaOriginal.descricaoconta CONTAORIGINAL
+from
+    titulorec
+left join
+    CADASTROPARCEIROS cad on
+        cad.cadastro=titulorec.parceiro
+left join
+    contacorrente contaOriginal on
+        contaOriginal.filial=110 and
+        contaOriginal.CODIGO=titulorec.CONTACORRENTE
+
+where
+    titulorec.filial=110 and
+    titulorec.vencimento>='09.05.2025'
+    titulorec.baixa is null and
+    not exists (
+        select
+            *
+        from 
+            C_MOVFINANCEIRO movdup
+        where
+            movdup.documento=titulorec.TITULO and
+            movdup.fatura=titulorec.fatura)
+order by
+    titulorec.emissao,
+    titulorec.titulo,
+    titulorec.fatura
+    

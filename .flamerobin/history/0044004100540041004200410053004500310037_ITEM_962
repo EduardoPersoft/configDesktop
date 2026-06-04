@@ -1,0 +1,4 @@
+UPDATE
+    C_LOgprodutoecommerce
+SET
+    status_code = 200

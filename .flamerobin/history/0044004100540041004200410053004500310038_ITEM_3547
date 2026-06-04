@@ -1,0 +1,2 @@
+update titulopag set tipotransacao=2
+where tipotransacao is null

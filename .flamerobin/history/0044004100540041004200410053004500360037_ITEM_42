@@ -1,0 +1,2 @@
+select cadastroparceiros.cadastro,CADASTROPARCEIROS.CADASTRO/10 from cadastroparceiros
+order by cadastroparceiros.cadastro

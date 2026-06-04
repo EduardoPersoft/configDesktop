@@ -1,0 +1,6 @@
+UPDATE
+    C_LOGSALDOproduto
+SET
+    status_code = NULL
+WHERE 
+    C_LOGSALDOECOMMERCE.CODIGO IN ('2154505')

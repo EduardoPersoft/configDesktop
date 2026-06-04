@@ -1,0 +1,11 @@
+update
+    centrocustositem 
+set
+    centrocustositem.IDCENTROCUSTO=case when idcentrocusto when '3006' then '101'
+    when '3008' then '103'
+    when '3007' then '102'
+    when '3009' then '104'
+    when '3010' then '106'
+    else idcentrocusto
+when
+    filial=110

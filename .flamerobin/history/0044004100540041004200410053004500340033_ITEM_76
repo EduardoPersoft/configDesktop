@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where materiallote.quantidade>0

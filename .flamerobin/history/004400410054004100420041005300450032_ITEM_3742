@@ -1,0 +1,1 @@
+select * from fornecedoresitem where fornecedoresitem.fornecedor=3872

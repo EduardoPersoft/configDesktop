@@ -1,0 +1,6 @@
+select
+    *
+from 
+    MOVIMENTOESTOQUE
+where
+    movimentoestoque.TIPOMOVIMENTO in ('10', '11')

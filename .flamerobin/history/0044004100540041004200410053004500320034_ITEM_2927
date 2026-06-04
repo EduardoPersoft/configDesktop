@@ -1,0 +1,10 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.descricao,
+    CLASSIFICACAOFISCAL.CSTPIS
+from
+    ITEMESTOQUE
+inner join 
+    CLASSIFICACAOFISCAL on
+        CLASSIFICACAOFISCAL.CFISCAL=itemestoque.CLASSIFISCAL

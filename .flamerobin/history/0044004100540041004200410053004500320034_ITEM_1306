@@ -1,0 +1,4 @@
+update
+    acessos
+set 
+    path = path||'/'

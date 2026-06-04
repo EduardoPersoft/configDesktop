@@ -1,0 +1,8 @@
+update
+    MERCADORIASNOTA
+set
+    pesoliquido=quantidadeestoque*(select itemestoque.pesoliquido from itemestoque where itemestoque.codigo=mercadoriasnota.codigo),
+    pesobruto=quantidadeestoque*(select itemestoque.pesobruto from itemestoque where itemestoque.codigo=mercadoriasnota.codigo)
+
+where filial=1 and idnota=77890
+

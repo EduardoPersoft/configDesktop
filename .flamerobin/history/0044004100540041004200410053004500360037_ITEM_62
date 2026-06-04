@@ -1,0 +1,3 @@
+select * from logalteracao
+
+where chave='52000189'

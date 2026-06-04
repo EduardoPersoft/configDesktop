@@ -1,0 +1,15 @@
+select 
+    materialmovimentoestoque.idcentrocusto,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.concluido,
+    materialmovimentoestoque.tempo,
+    materialmovimentoestoque.setup
+   
+from 
+    materialmovimentoestoque
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where
+    movimentoestoque.TIPOMOVIMENTO='12'

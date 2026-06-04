@@ -1,0 +1,95 @@
+select 
+    mp.codigo,
+    mp.descricao,
+    composicaoop.LARGURA,
+    composicaoop.GRAMATURA,
+    composicaoop.quantidade,
+
+    mercadoriasped.idnota pedidoVenda,
+    mercadoriasped.idmercadoria,
+    movimentoestoque.SAIDAPRODUCAO,
+    cadcli.nome,
+    produto.descricao,
+
+    
+    pedidocompra.idnota pedidocompra,    
+    cadfor.nome as fornecedor,
+    (select 
+        max(PRAZOMERCPEDCOMPRA.dias) 
+     from
+        PRAZOMERCPEDCOMPRA
+     where
+        PRAZOMERCPEDCOMPRA.filial=mercadoriaspedcompra.filial and
+        prazomercpedcompra.idnota=mercadoriaspedcompra.idnota and
+        prazomercpedcompra.IDITEM=mercadoriaspedcompra.IDMERCADORIA)+pedido.DATACADASTRO as entregacompra,
+    MERCADORIASPEDCOMPRA.quantidade - mercadoriaspedcompra.QTDEENTREGUE as qtdComprada
+from
+    mercadoriasped
+inner join
+    pedido on
+        mercadoriasped.filial=pedido.filial and
+        mercadoriasped.idnota=pedido.idnota
+inner join 
+    cadastroparceiros cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    itemestoque produto on
+        produto.codigo=mercadoriasped.codigo
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=mercadoriasped.filial and
+        materialmovimentoestoque.idpedido=mercadoriasped.idnota and
+        materialmovimentoestoque.IDMERCADORIA=mercadoriasped.IDMERCADORIA
+inner join
+    movimentoestoque on
+        MOVIMENTOESTOQUE.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner join 
+    composicaoop on
+        composicaoop.filial=materialmovimentoestoque.filial and
+        composicaoop.idmovimento=materialmovimentoestoque.idmovimento and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+inner join
+    itemestoque mp on
+        mp.codigo=composicaoop.CODIGO
+left join
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=mercadoriasped.filial and
+        mercadoriaspedcompra.IDPEDVEN=mercadoriasped.idnota and
+        mercadoriaspedcompra.IDMERCPEDVEN=mercadoriasped.IDMERCADORIA and
+        mercadoriaspedcompra.baixa='N'
+left join
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial and
+        pedidocompra.idnota=mercadoriaspedcompra.idnota 
+left join
+    CADASTROPARCEIROS cadfor on    
+        cadfor.cadastro=pedidocompra.DESTINATARIO
+where
+    mercadoriasped.filial=110 and
+    mercadoriasped.baixa='N' and
+    mp.TIPOPRODUTO = 1 and
+    mp.grupo=2
+order by        
+    mp.codigo,
+    mp.descricao,
+    composicaoop.LARGURA,
+    composicaoop.GRAMATURA
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+

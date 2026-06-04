@@ -1,0 +1,1 @@
+select * from itemestoque where CODIGOBARRA like '105888%'

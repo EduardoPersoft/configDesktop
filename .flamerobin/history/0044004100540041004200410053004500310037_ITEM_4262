@@ -1,0 +1,2 @@
+select * from NFECTRL
+where coalesce(nfectrl.idresultado,0)<>100

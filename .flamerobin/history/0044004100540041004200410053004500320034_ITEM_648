@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    ORCAMENTO
+order by
+    idnota desc

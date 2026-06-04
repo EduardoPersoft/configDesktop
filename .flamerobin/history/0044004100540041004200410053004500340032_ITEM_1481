@@ -1,0 +1,4 @@
+update 
+    INVENTARIOESTOQUEDATA
+set
+    c_qtd = quantidade

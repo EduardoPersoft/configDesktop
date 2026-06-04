@@ -1,0 +1,10 @@
+SELECT
+    ITEMESTOQUE.CODIGO,
+    ITEMESTOQUE.REFERENCIA,
+    ITEMESTOQUE.DESCRICAO
+FROM
+    ITEMESTOQUE
+WHERE 
+    FAMILIA = 8
+order by
+    cast(itemestoque.codigo as integer)

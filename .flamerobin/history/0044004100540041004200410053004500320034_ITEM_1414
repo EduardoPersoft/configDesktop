@@ -1,0 +1,1 @@
+execute procedure importatitulorec('24.02.2022')

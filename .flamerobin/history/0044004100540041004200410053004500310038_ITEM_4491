@@ -1,0 +1,1 @@
+select filial, idnota, c_malote, pedido.C_CONDICAOMATERIAIS, pedido.C_CONDICAOSERVICOS from pedido where idnota=77208

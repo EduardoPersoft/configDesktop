@@ -1,0 +1,2 @@
+select * from contacorrente where filial=5
+order by codigo

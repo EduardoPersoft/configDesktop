@@ -1,0 +1,12 @@
+SELECT DISTINCT
+    r.CODIGONOVO, 
+    max(coalesce(ITEMCUSTODATA.CUSTOUNITARIO,0))
+        
+FROM 
+    C_CONVERSAOMP r
+inner join 
+    itemcustodata on
+        ITEMCUSTODATA.CODIGO=r.CODIGO
+group by 
+
+    r.codigonovo

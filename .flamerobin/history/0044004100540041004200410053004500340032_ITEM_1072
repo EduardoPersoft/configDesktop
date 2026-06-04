@@ -1,0 +1,1 @@
+update materialmovimentoestoque set valor=0 where materialmovimentoestoque.valor is null

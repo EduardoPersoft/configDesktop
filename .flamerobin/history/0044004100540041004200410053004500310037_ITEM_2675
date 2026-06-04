@@ -1,0 +1,15 @@
+select
+    sum(MATERIALMOVIMENTOESTOQUE.valor)
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        MATERIALMOVIMENTOESTOQUE.idmovimento=movimentoestoque.idmovimento
+where
+    movimentoestoque.filial=12826 and
+    movimentoestoque.TIPOMOVIMENTO in ('01', '02', '05') and
+    movimentoestoque.emissao between '01.07.2023' and '31.07.2023' and
+    movimentoestoque.FORNECEDOR<>1
+
+    

@@ -1,0 +1,10 @@
+update
+    itemestoque 
+set
+    c_codigonovo = (select
+                        c_estruturas.CODIGO2
+                    from
+                        c_estruturas
+                    where
+                        c_estruturas.CODIGO2=itemestoque.codigo)
+                        

@@ -1,0 +1,17 @@
+select MercadoriasPed.* from MercadoriasPed
+           Inner Join Pedido On (Mercadoriasped.Filial=Pedido.Filial And
+                                 Mercadoriasped.Idnota=Pedido.Idnota)
+           Inner Join Naturezaoperacao On (Pedido.Operacao=Naturezaoperacao.Id And
+                                           Naturezaoperacao.Estoque='S' And
+                                           Naturezaoperacao.Entradasaida='S')
+           Where
+                 mercadoriasped.filial=12826 and
+                 mercadoriasped.Codigo='1011303' and
+                 MercadoriasPed.Baixa='N'  And
+                 Pedido.Datacancelamento Is Null And
+                 Pedido.Entradasaida='S'
+
+
+           Plan  (MERCADORIASPED INDEX (MERCADORIASPED_IDX1),
+                  PEDIDO INDEX (rdb$primary50),
+                  NATUREZAOPERACAO INDEX (rdb$primary25))

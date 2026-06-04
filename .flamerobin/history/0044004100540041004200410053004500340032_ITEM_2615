@@ -1,0 +1,13 @@
+SELECT 
+    materiallocal.*,
+    local.DESCRICAO
+FROM 
+    materiallocal
+inner join
+    local on
+        local.ID=materiallocal.IDLOCAL
+WHERE 
+    FILIAL=110 AND 
+    IDITEM='MPP01TRART'
+order by
+    quantidade

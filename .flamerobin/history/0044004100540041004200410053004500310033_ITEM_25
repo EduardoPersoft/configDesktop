@@ -1,0 +1,11 @@
+ SELECT
+    orcamento.idnota,
+    orcamento.DESTINATARIO
+ FROM
+    ORCAMENTO
+ where  
+    ORCAMENTO.filial=:1
+    and ORCAMENTO.DATACADASTRO between '01.05.2021' and '31.05.2021'
+    and ORCAMENTO.DATAEMISSAO IS NOT NULL
+
+    AND coalesce  (ORCAMENTO.CANCELAMENTO,'N')<>'S'

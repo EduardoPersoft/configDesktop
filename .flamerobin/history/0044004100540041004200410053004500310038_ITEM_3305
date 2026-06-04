@@ -1,0 +1,7 @@
+update 
+    pedido ORCAMENTO
+set
+    orcamento.uuid = orcamento.filial||'-'||orcamento.idnota
+where
+    ORcamento.datacadastro between '01.01.2021  ' and '31.12.2021'
+    

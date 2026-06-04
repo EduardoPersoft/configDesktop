@@ -1,0 +1,1 @@
+select * from materialmovimentoestoque where sinal<>-1 and sinal<>1

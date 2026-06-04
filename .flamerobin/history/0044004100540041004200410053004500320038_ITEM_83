@@ -1,0 +1,75 @@
+SELECT distinct
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.NUMERONOTA, 
+       CP_VENDEDOR.CADASTRO VENDEDOR, 
+       NOTAFISCAL.DATAEMISSAO,
+       
+       CP_CLIENTE.CADASTRO AS CADCLIENTE, 
+       CP_CLIENTE.RAZAOSOCIAL AS NOMECLIENTE,
+       VENDEDORESNOTA.VENDEDOR AS CADVENDEDOR, 
+       CP_VENDEDOR.razaosocial AS NOMEVENDEDOR, 
+     
+       (notafiscal.vlrfinalmercadorias + coalesce(notafiscal.vlrfinalservicos, 0)) AS VALOR,
+       (((notafiscal.vlrfinalmercadorias + coalesce(notafiscal.vlrfinalservicos, 0)) * VENDEDORESNOTA.COMISSAOVENDA)/100) AS VALORCOMISSAO,
+       
+       VENDEDORESNOTA.COMISSAOVENDA,
+       ---NOTAFISCAL.NUMEROPEDCONTR,
+       CP_EMPRESA.RAZAOSOCIAL,
+       ESTSIN.CONSOLIDADO,
+       ESTSIN.DATAINICIAL,
+       ESTSIN.DATAFINAL, 
+       ESTSIN.ESTABELECIMENTO,
+       CP_EMPRESA.NOME,
+     (select  FIRST 1 pedido.dataemissao 
+            from 
+                MERCADORIASNOTA
+            INNER JOIN 
+                pedido ON
+                    pedido.filial=mercadoriasnota.filial and 
+                    pedido.idnota=mercadoriasnota.idpedido
+            where 
+                MERCADORIASNOTA.FILIAL=NOTAFISCAL.FILIAL and
+                MERCADORIASNOTA.IDNOTA=NOTAFISCAL.IDNOTA
+            ORDER BY pedido.dataemissao  DESC ) as emissaopedido,
+     (select  FIRST 1 pedido.NUMERONOTA
+            from 
+                MERCADORIASNOTA
+            INNER JOIN 
+                pedido ON
+                    pedido.filial=mercadoriasnota.filial and 
+                    pedido.idnota=mercadoriasnota.idpedido
+            where 
+                MERCADORIASNOTA.FILIAL=NOTAFISCAL.FILIAL and
+                MERCADORIASNOTA.IDNOTA=NOTAFISCAL.IDNOTA
+            ORDER BY pedido.dataemissao  DESC ) as numeropedido
+
+        
+FROM 
+    ESTSIN
+inner JOIN NOTAFISCAL ON 
+                (NOTAFISCAL.FILIAL=ESTSIN.ESTABELECIMENTO)
+INNER JOIN 
+        VENDEDORESNOTA ON 
+                (VENDEDORESNOTA.FILIAL = NOTAFISCAL.FILIAL
+                AND VENDEDORESNOTA.IDNOTA = NOTAFISCAL.IDNOTA)
+INNER JOIN 
+        CADASTROPARCEIROS CP_CLIENTE ON 
+                (NOTAFISCAL.DESTINATARIO = CP_CLIENTE.CADASTRO)
+INNER JOIN 
+        CADASTROPARCEIROS CP_VENDEDOR ON 
+                (VENDEDORESNOTA.VENDEDOR = CP_VENDEDOR.CADASTRO)
+INNER JOIN 
+        NATUREZAOPERACAO ON 
+                (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+INNER JOIN 
+        CADASTROPARCEIROS CP_EMPRESA ON 
+                (NOTAFISCAL.FILIAL = CP_EMPRESA.CADASTRO)
+WHERE
+    ESTSIN.RELATORIO='FATURAMENTO' AND 
+    ((ESTSIN.CONSOLIDADO = 2) OR (NOTAFISCAL.FILIAL = ESTSIN.ESTABELECIMENTO)) AND 
+    NOTAFISCAL.DATAEMISSAO BETWEEN ESTSIN.DATAINICIAL AND ESTSIN.DATAFINAL AND 
+    (NOTAFISCAL.CANCELAMENTO='N') AND (NATUREZAOPERACAO.FATURA='S')
+    --- and COALESCE(vendedoresnota.vendedor,0) = COALESCE(ESTSIN.vendedor,0)
+ORDER BY 
+    NOTAFISCAL.FILIAL, VENDEDORESNOTA.VENDEDOR, NOTAFISCAL.DATAEMISSAO,
+    CP_CLIENTE.CADASTRO, notafiscal.NUMERONOTA

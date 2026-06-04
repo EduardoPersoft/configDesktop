@@ -1,0 +1,19 @@
+update 
+    NOTAFISCAL
+    set 
+        NOTAFISCAL.TOTBASEICMS=(case (NOTAFISCAL.ICMSDESTINOBASE)
+                        when 0 THEN ICMSORIGEMBASE
+                        ELSE ICMSDESTINOBASE END),
+        NOTAFISCAL.TOTVALORICMS=(case (NOTAFISCAL.ICMSDESTINOVALOR)
+                        when 0 THEN ICMSORIGEMVALOR
+                        ELSE ICMSDESTINOVALOR END),
+        NOTAFISCAL.TOTOUTROSICMS=TOTOUTROSICMS - (case (NOTAFISCAL.ICMSDESTINOBASE)
+                        when 0 THEN ICMSORIGEMBASE
+                        ELSE ICMSDESTINOBASE END)
+                        
+where 
+    NOTAFISCAL.filial=1 and 
+    NOTAFISCAL.DATAEMISSAO> '01.01.2026' AND
+    NOTAFISCAL.TOTBASEICMS=0 and 
+    tiponota <> 2 and
+    NOTAFISCAL.idnota=52823;

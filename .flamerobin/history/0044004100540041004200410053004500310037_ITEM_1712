@@ -1,0 +1,14 @@
+select
+    materialfilial.filial,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    materialfilial.c_localimportacao,
+    itemestoque.C_LOCALIMPORTACAO
+from
+    MATERIALFILIAL
+inner join
+    itemestoque on
+        materialfilial.iditem=itemestoque.codigo
+where
+    materialfilial.C_LOCALIMPORTACAO<>itemestoque.C_LOCALIMPORTACAO
+    and not exists (select * from c_localimportacao where c_localimportacao.idlocal=materialfilial.C_LOCALIMPORTACAO)

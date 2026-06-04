@@ -1,0 +1,4 @@
+select MATERIALMOVIMENTOESTOQUE.*
+ from MATERIALMOVIMENTOESTOQUE
+inner join itemestoque on itemestoque.codigo=materialmovimentoestoque.produto
+where MATERIALMOVIMENTOESTOQUE.IDCENTROCUSTO='103'

@@ -1,0 +1,12 @@
+select 
+    sum(coalesce(c_destinoavulso.valor, 0)), 
+    sum(case coalesce(c_destinoavulso.valor,0) when 0 then 1 else 0 end) qtdDestino,
+    sum(coalesce(c_Coletas.VALORMEDIO, 0)),
+    sum(case coalesce(c_coletas.valorMedio,0) when 0 then 0 else 1 end) qtdColetas
+from 
+    c_destinoavulso
+left join
+    c_coletas on
+        C_COLETAS.coleta=C_DESTINOAVULSO.coleta
+where  
+    c_coletas.datacoleta between '30.04.2026' and '14.05.2026'

@@ -1,0 +1,49 @@
+SELECT 
+    a.FILIAL, 
+    a.IDCONTACORRENTE, 
+    a.IDMOVTOBANC, 
+    a.IDTITULO,
+    a.IDMOVTOTITULO, 
+    a.TIPOTITULO, 
+    case a.tipoTitulo when 'R'
+        then titulorec.titulo
+        else titulopag.titulo
+    end,
+    case a.tipoTitulo when 'R'
+        then titulorec.fatura
+        else titulopag.fatura
+    end,
+    case a.tipoTitulo when 'R'
+        then titulorec.emissao
+        else titulopag.emissao
+    end,
+    case a.tipoTitulo when 'R'
+        then titulorec.vencimento 
+        else titulopag.vencimento
+    end,
+    cadcli.cadastro,
+    cadcli.nome,
+    a.VALOR,
+    a.VALORDESCONTO, 
+    a.VALORJUROS, 
+    a.MVLRDESCONTOELETRON, 
+    a.MVLRACRESCIMOELETRON, 
+    a.MOUTROSDESCONTOS,
+    a.VALORPAGO
+FROM 
+    TITULOSANEXADOS a 
+left join
+    titulorec on
+        titulorec.filial=a.filial and
+        titulorec.idtitulo=a.idtitulo and
+        a.tipoTitulo='R'
+left join
+    titulopag on
+        titulopag.filial=a.filial and
+        titulopag.idtitulo=a.idtitulo and
+        a.tipoTitulo='P'
+left join
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro = case a.tipoTitulo when 'R'
+                      then titulorec.PARCEIRO,
+                      else titulopag.parceiro end

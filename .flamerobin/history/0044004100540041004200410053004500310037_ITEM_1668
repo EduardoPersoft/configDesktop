@@ -1,0 +1,10 @@
+select
+    movimentoestoque.idmovimento,
+    movimentoestoque.ENTRADAPRODUCAO,
+    movimentoestoque.SAIDAPRODUCAO,
+    movimentoestoque.SAIDAPRODUCAO-
+    movimentoestoque.ENTRADAPRODUCAO
+from
+    movimentoestoque
+where
+    movimentoestoque.entradaproducao is not null

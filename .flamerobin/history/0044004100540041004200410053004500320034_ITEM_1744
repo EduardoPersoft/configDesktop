@@ -1,0 +1,13 @@
+select
+    u_usuario.id,
+    u_usuario.usuario,
+    u_usuario.nomeCompleto,
+    p_usuario.usuario perfil, 
+    u_usuario.SERNOTIFICADO notificacoes,
+    u_usuario.USUARIOATIVO tivo
+from
+   usuario u_usuario
+left join
+   usuario p_usuario on
+     u_usuario.id = p_usuario.id
+    

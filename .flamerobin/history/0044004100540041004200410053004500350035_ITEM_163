@@ -1,0 +1,1 @@
+update  ITEMESTOQUEXARQUIVO set ordem=0 where ordem=1

@@ -1,0 +1,14 @@
+
+update
+    SPEDFISCAL_C
+set
+    cfop = '1' || substring(cfop from 2 for 3)
+where
+    SPEDFISCAL_C.SEGMENTO IN ('C170', 'C190') and
+    SUBSTRING(SPEDFISCAL_C.CFOP FROM 1 FOR 1) = '2' and
+    (select
+        CADASTROPARCEIROS.ESTADO
+     from
+        CADASTROPARCEIROS
+     where
+        CADASTROPARCEIROS.CADASTRO=SPEDFISCAL_C.COD_PART)='SP';

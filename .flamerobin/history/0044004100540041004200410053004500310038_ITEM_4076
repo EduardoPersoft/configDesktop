@@ -1,0 +1,2 @@
+select * from notafiscal 
+where filial=7 and idnota=651

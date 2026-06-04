@@ -1,0 +1,2 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.IDPEDIDO=71335

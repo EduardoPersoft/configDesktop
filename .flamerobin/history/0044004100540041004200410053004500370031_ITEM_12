@@ -1,0 +1,144 @@
+SET TERM ^ ;
+CREATE PROCEDURE C_ORDEMEXPEDICAO (
+    RELATORIO varchar(20) )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    IDMERCADORIA integer,
+    DATAENTREGA timestamp,
+    QUANTIDADE double precision,
+    RAZAOSOCIAL varchar(60),
+    NUMERONOTA integer,
+    DATAEMISSAO timestamp,
+    CODIGO varchar(15),
+    DESCRICAO varchar(240),
+    COMPUNID varchar(3),
+    DESREDUZIDA varchar(50),
+    UNIDADE varchar(3),
+    COMENTARIO blob sub_type 0,
+    QUANTIDADEVOLUME integer,
+    PESOBRUTO double precision,
+    PESOLIQUIDO double precision,
+    DATACADASTRO timestamp,
+    CADASTRO integer,
+    NOME varchar(40),
+    DOCUMENTO varchar(14),
+    LOGRADOURO varchar(50),
+    NUMERO integer,
+    BAIRRO varchar(30),
+    CEP varchar(8),
+    CIDADE varchar(30),
+    UF varchar(2),
+    TELEFONE varchar(20),
+    FAX varchar(20),
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    IDNOTAINICIAL integer,
+    IDNOTAFINAL integer,
+    VENDEDOR integer,
+    NOMEVENDEDOR varchar(60),
+    RAZAOVENDEDOR varchar(60),
+    PESOLIQUIDOMERC double precision,
+    PESOBRUTOMERC double precision,
+    CODBARRAPEDIDO varchar(20),
+    CODBARRAITEM varchar(20),
+    CODBARRAFIM varchar(20),
+    CUBAGEM double precision,
+    TRANSPORTADORA integer,
+    NOMETRANSPORTADORA varchar(60),
+    OBSPEDIDO varchar(500),
+    MSGDADOSADICIONAIS varchar(500),
+    LOCALIZACAO varchar(40) )
+
+AS
+declare variable v_volume double precision;
+
+Begin
+
+select ESTSIN.estabelecimento,ESTSIN.datainicial,ESTSIN.datafinal,ESTSIN.idnotainicial,ESTSIN.idnotafinal
+
+from estsin
+where ESTSIN.RELATORIO=:RELATORIO
+--'EXPEDICAO'
+INTO :filial,:datainicial, :DATAFINAL,:idnotainicial,:idnotafinal;
+
+
+
+
+For Select situacaosaldodopedido.Idnota,
+           situacaosaldodopedido.Idmercadoria,
+           situacaosaldodopedido.Dataentrega,
+           situacaosaldodopedido.Quantidade,
+           Estab.Razaosocial,
+           Pedido.Numeronota,
+           Pedido.Dataemissao,
+           Mercadoriasped.Codigo,
+           itemestoque.Descricao,
+           Itemestoque.Unidade As Compunid,
+           Mercadoriasped.Desreduzida,
+           Mercadoriasped.Unidade,
+           Pedido.Comentario,
+           --Pedido.Quantidadevolume,
+           mercadoriasped.qtdevolume,
+           Pedido.Pesobruto,
+           Pedido.Pesoliquido,
+           Pedido.Datacadastro,
+           Cliente.Cadastro,
+           Cliente.Nome, Cliente.Documento, Cliente.Logradouro, 
+           Cliente.Numero,
+           Cliente.Bairro, Cliente.Cep, Cliente.Cidade, Cliente.Uf,
+           Cliente.Telefone, Cliente.Fax,
+           mercadoriasped.pesobruto,
+           mercadoriasped.pesoliquido,
+           'INICIAR-'||pedido.FILIAL||'/'||pedido.idnota as codbarrapedido,
+           'ITEM-'||mercadoriasped.idmercadoria as codbarraitem,
+           'TERMINAR-'||pedido.FILIAL||'/'||pedido.idnota as codbarrapedido,
+           itemestoque.volume,
+           cadtrans.CADASTRO,
+           cadtrans.NOME,
+           cast ( substring (pedido.OBSERVACAo from 1 for 500) as varchar (500)) ,
+           cast ( substring (pedido.MSGDADOSADICIONAIS from 1 for 500) as varchar (500)),
+           itemestoque.LOCALIZACAO
+From situacaosaldodopedido(:filial,:datainicial,:datafinal)
+Inner Join Pedido On (situacaosaldodopedido.Filial=Pedido.Filial And
+                      situacaosaldodopedido.Idnota=Pedido.Idnota)
+Inner Join Mercadoriasped On  (situacaosaldodopedido.Filial = Mercadoriasped.Filial And
+                               situacaosaldodopedido.Idnota = Mercadoriasped.Idnota And
+                               situacaosaldodopedido.Idmercadoria=Mercadoriasped.Idmercadoria)
+Inner Join Itemestoque On (Mercadoriasped.Codigo=Itemestoque.Codigo)
+Inner Join Estabelecimento On (situacaosaldodopedido.Filial=Estabelecimento.Cadastro)
+Inner Join Cadastroparceiros Estab On (Estab.Cadastro = Estabelecimento.Cadastro)
+Inner Join Cadastroparceiros Cliente On (Pedido.Destinatario = Cliente.Cadastro)
+left join CADASTROPARCEIROS cadtrans on (pedido.CODIGOTRANSP = cadtrans.CADASTRO)
+where /*situacaosaldodopedido.Idnota*/ pedido.IDNOTA Between :Idnotainicial And :Idnotafinal
+/*and situacaosaldodopedido.fisica >= situacaosaldodopedido.reservado */
+Order By situacaosaldodopedido.Filial, Pedido.Numeronota, Mercadoriasped.Idmercadoria
+Into   :Idnota, :Idmercadoria, :Dataentrega, :Quantidade, :Razaosocial,
+       :Numeronota, :Dataemissao,  :Codigo, :Descricao, :Compunid, :Desreduzida,
+       :Unidade, :Comentario, :Quantidadevolume, :Pesobruto, :Pesoliquido, :Datacadastro,
+       :Cadastro, :Nome, :Documento, :Logradouro, :Numero, :Bairro, :Cep, :Cidade, :Uf, :Telefone, :Fax,
+       :pesobrutomerc, :pesoliquidomerc, :codbarrapedido, :codbarraitem, :codbarrafim,
+       :v_volume, :TRANSPORTADORA, :NOMETRANSPORTADORA, :OBSPEDIDO, :MSGDADOSADICIONAIS, :LOCALIZACAO
+   do
+   begin
+   cubagem = :quantidadevolume * :v_volume;
+   vendedor=null;
+   razaovendedor='SEM VENDEDOR';
+   nomevendedor='SEM VENDEDOR';
+   select first 1 vendedoresped.vendedor,
+                       cadastroparceiros.razaosocial,
+                       cadastroparceiros.nome
+        from vendedoresped
+        inner join cadastroparceiros on (cadastroparceiros.cadastro=vendedoresped.vendedor)
+        where vendedoresped.filial=:filial
+        and vendedoresped.idnota=:idnota
+        into :vendedor,:razaovendedor,:nomevendedor;
+   Suspend;
+   end
+end
+^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE C_ORDEMEXPEDICAO TO  SYSDBA;
+

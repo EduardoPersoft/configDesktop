@@ -1,0 +1,1 @@
+select * from lotesnfe where cast(datahora as date) = cast('now' as date) order by liberado desc 

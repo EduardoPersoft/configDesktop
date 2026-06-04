@@ -1,0 +1,1 @@
+select * from DOCUMENTOSASSOCIADOS order by idmovimentoentrada desc

@@ -1,0 +1,16 @@
+select 
+    notafiscal.filial,
+    notafiscal.vlrtotalnota,
+    notafiscal.DATAEMISSAO,
+    count(notafiscal.idnota)
+from
+    NOTAFISCAL
+group by
+    notafiscal.filial,
+    notafiscal.vlrtotalnota,
+    notafiscal.TIPOCOBRANCA,
+    notafiscal.DATAEMISSAO
+having
+    count(notafiscal.idnota)>1
+order by
+    3 desc

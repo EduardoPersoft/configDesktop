@@ -1,0 +1,9 @@
+select * from materialmovimentoestoque
+where materialmovimentoestoque.IDITEM NOT LIKE 'M-%'
+AND exists
+(select * from movimentoestoque
+where movimentoestoque.filial=materialmovimentoestoque.filial
+and movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+and movimentoestoque.tipomovimento='09'
+and movimentoestoque.emissao>='01.10.2014'
+);

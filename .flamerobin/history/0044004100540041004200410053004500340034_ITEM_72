@@ -1,0 +1,7 @@
+select
+    orcamento.PJUROS
+from
+    ORCAMENTO
+where
+    filial=1 and
+    idnota=9822

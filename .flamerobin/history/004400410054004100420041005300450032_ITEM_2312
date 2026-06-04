@@ -1,0 +1,17 @@
+UPDATE
+    materiallocal
+set
+    materiallocal.saldototal = 
+        materiallocal.saldototal + 
+        coalesce((select 
+            sum(MERCADORIASNOTACOMPRA.quantidade) 
+         from
+            MERCADORIASNOTACOMPRA
+         inner JOIN
+            notacompra on
+                notacompra.filial=mercadoriasnota.filial AND
+                notacompra.idnota=mercadoirasnota.idnota
+         WHERE
+            notacompra.filial=materiallocal.filial AND
+            notacompra.DATAEMISSAO='18.05.2021' and
+            MERCADORIASNOTACOMPRA.codigo=materiallocal.iditem),0)

@@ -1,0 +1,29 @@
+create or ALTER PROCEDURE C_GENERATORESTABELECIMENTO (
+    FILIAL integer,
+    NOME varchar(20),
+    SALTO integer )
+RETURNS (
+    VALOR integer,
+    "DATA" date,
+    DATAHORA timestamp )
+
+AS
+BEGIN
+
+  data = cast('now' as date);
+  dataHora = cast('now' as timestamp); 
+  valor = null;
+
+  select 
+    generatorestabelecimento.VALOR
+  from 
+    generatorestabelecimento(:filial, :nome, :salto)
+  into :valor;
+
+   if(valor=null) then begin
+        if (NOME='C_FORADELISTA') then 
+            valor=GEN_ID("C_GFORADELISTA",salto);
+        VALOR = VALOR +1;
+   end        
+  SUSPEND;
+END

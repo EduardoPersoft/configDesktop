@@ -1,0 +1,20 @@
+select 
+    local.ean as localEan,
+    local.descricao local,
+    
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.codigobarra,
+
+    locallote.quantidade
+from 
+    LOCALLOTE
+inner join
+    itemestoque on
+        itemestoque.codigo=locallote.IDITEM
+inner join
+    local on
+        local.id=locallote."LOCAL"
+where
+    locallote.QUANTIDADE>0
+order by 1    

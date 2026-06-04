@@ -1,0 +1,2 @@
+delete from MOVIMENTOESTOQUE
+where idmovimento between 48708 and 49136

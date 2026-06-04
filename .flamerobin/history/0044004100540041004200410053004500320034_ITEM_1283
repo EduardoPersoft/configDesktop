@@ -1,0 +1,6 @@
+update 
+    TITULOPAG
+set 
+    titulopag.vencimento = cast(titulopag.vencimento as date)
+where
+    titulopag.vencimento <> cast(vencimento as date)

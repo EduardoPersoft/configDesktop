@@ -1,0 +1,1 @@
+select filial,idmovimento,coleta,coletadata from movimentoestoque where movimentoestoque.emissao>='06.04.2026'and coleta >='1200'

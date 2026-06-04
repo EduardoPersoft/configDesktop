@@ -1,0 +1,17 @@
+SELECT
+    codigo,
+    descricao,
+    CLASSIFIscal,
+    tributacaoicms
+from 
+    itemestoque
+WHERE
+    itemestoque.CLASSIFISCAL=130
+    and exists(
+        select * from mercadoriasnotacompra 
+        where mercadoriasnotacompra.filial=5 
+        and mercadoriasnotacompra.codigo=itemestoque.CODIGO
+        and mercadoriasnotacompra.VLRICMSRECOLHIDO>0)
+            
+order by
+    itemestoque.TRIBUTACAOICMS

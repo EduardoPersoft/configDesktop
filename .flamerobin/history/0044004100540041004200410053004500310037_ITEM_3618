@@ -1,0 +1,8 @@
+select 
+    *
+from
+    MERCADORIASNOTA
+where
+    filial=1 and
+    idnota=334606 and
+    codigo='1093620'

@@ -1,0 +1,8 @@
+select 
+    titulorec.CODIGOBARRA,
+    titulorec.LINHADIGITAVEL
+from
+    TITULOREC
+where
+    filial=1 and
+    idtitulo=884080

@@ -1,0 +1,7 @@
+SELECT 
+    *
+from
+    materialmovimentoestoque
+where
+    movimentoestoque.FILIAL=110 and
+    movimentoestoque.idmovimento=18814

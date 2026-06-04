@@ -1,0 +1,1 @@
+select * from materialmovimentoestoque where filial=12826 and idmovimento between 236511 and 236512

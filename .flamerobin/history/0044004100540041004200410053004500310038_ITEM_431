@@ -1,0 +1,25 @@
+select
+    movimentoestoque.IDMOVIMENTO,
+    movimentoestoque.emissao,
+    localOrigem.descricao,
+    localDestino.descricao,
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovmientoestoque.quantidade
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento        
+inner join
+    local localOrigem on
+        localOrigem.id = movimentoestoque.LOCALARMAZENAMENTO
+inner join
+    "local" localDestino on
+        localDestino.id = movimentoestoque.LOCALTRANSFERENCIA
+where
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao between '01.01.2021' and '31.12.2021' and
+    movimentoestoque.TIPOMOVIMENTO = '10' and
+    (movimentoestoque.LOCALARMAZENAMENTO = 3 or movimentoestoque.LOCALTRANSFERENCIA)
+    

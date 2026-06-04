@@ -1,0 +1,7 @@
+update 
+    C_MERCADORIASpedFIOS 
+set 
+    fio = '01.99.9996'
+where 
+    filial=1 and 
+    idnota=66346

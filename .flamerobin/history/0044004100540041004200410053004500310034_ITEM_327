@@ -1,0 +1,282 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_LAUDO (
+    PFILIAL integer,
+    PIDNOTA integer )
+RETURNS (
+    FILIAL integer,
+    IDNOTA integer,
+    NUMERONOTA integer,
+    DATAFABRICACAO timestamp,
+    DATACADASTRO timestamp,
+    DESTINATARIO integer,
+    RAZAOSOCIAL varchar(60),
+    NOME varchar(40),
+    IDMERCADORIA smallint,
+    CODIGO varchar(15),
+    DESCRICAO blob sub_type 0,
+    QUANTIDADE double precision,
+    UNIDADE varchar(3),
+    IDPEDIDO integer,
+    IDMERCPEDIDO smallint,
+    NUMEROPEDIDO integer,
+    DATAVALIDADE char(8),
+    ESTRUTURACODIGO varchar(15),
+    ESTRUTURADESCRICAO varchar(240),
+    GRAMATURA numeric(9,2),
+    PASSO numeric(12,3),
+    LARGURAFINAL numeric(12,3),
+    GRAMATURATOTAL numeric(9,2),
+    POSICIONAMENTO varchar(20),
+    IMPRESSAO char(1),
+    SEQUENCIA integer,
+    DIAMETROEXTERNO numeric(9,2),
+    DIAMETROINTERNO numeric(9,2),
+    FORCASELAGEM double precision,
+    FORCALAMINACAO double precision,
+    GRAMATURATINTA numeric(9,2),
+    METODOAPARENCIA varchar(25),
+    METODOCORES varchar(25),
+    METODOTEXTO varchar(25),
+    METODOLINEATURA varchar(25),
+    METODOADESAO varchar(25),
+    RESULTADOAPARENCIA varchar(25),
+    RESULTADOCORES varchar(25),
+    RESULTADOTEXTO varchar(25),
+    RESULTADOLINEATURA varchar(25),
+    RESULTADOADESAO varchar(25),
+    ESPECIFICACAOAPARENCIA varchar(25),
+    ESPECIFICACAOCORES varchar(25),
+    ESPECIFICACAOTEXTO varchar(25),
+    ESPECIFICACAOLINEATURA varchar(25),
+    ESPECIFICACAOADESAO varchar(25),
+    LOGO blob sub_type 0,
+    DESCRICAOESPECIFI varchar(40),
+    ESPECIFICADO varchar(20),
+    ENCONTRADODEFAULT varchar(20),
+    PAGINAESPECIFICACAO char(1),
+    LOTE char(12),
+    LADOLAMINAR varchar(20),
+    ITEMRIGOROSO varchar(20),
+    OBSERVACAO varchar(400),
+    C_TUBETEACABAMENTO numeric(6,3),
+    C_SENTIDOBOBINAMENTOACABAMENTO varchar(20),
+    C_LARGURAMATERIAPRIMA numeric(12,3),
+    C_LARGURAREFILE numeric(12,3),
+    C_PESOBOBINA numeric(12,3),
+    C_NOMECOMERCIAL varchar(30),
+    C_NAOPAGINAESTRUTURA varchar(1) )
+
+AS
+begin
+     METODOAPARENCIA='';
+     METODOCORES='';
+     METODOTEXTO='';
+     METODOLINEATURA='';
+     METODOADESAO='';
+     RESULTADOAPARENCIA='NA';
+     RESULTADOCORES='NA';
+     RESULTADOTEXTO='NA';
+     RESULTADOLINEATURA = 'NA';
+     RESULTADOADESAO='NA';
+     ESPECIFICACAOAPARENCIA='NA';
+     ESPECIFICACAOCORES='';
+     ESPECIFICACAOTEXTO='';
+     ESPECIFICACAOLINEATURA='';
+     ESPECIFICACAOADESAO='NA';
+     paginaespecificacao='N';
+
+
+for select 
+       NOTAFISCAL.FILIAL,
+       NOTAFISCAL.IDNOTA,
+       NOTAFISCAL.NUMERONOTA,
+       NOTAFISCAL.DATAEMISSAO DATAFABRICACAO,
+       NOTAFISCAL.DATACADASTRO,
+       NOTAFISCAL.DESTINATARIO,
+       estabelecimento.logo,
+       CADCLI.RAZAOSOCIAL,
+       CADCLI.NOME,
+       cadcli.C_NAOPAGINAESTRUTURA,
+       MERCADORIASNOTA.IDMERCADORIA,
+       MERCADORIASNOTA.CODIGO,
+       MERCADORIASNOTA.DESCRICAO,
+       MERCADORIASNOTA.QUANTIDADE,
+       MERCADORIASNOTA.UNIDADE,
+       MERCADORIASNOTA.IDPEDIDO,
+       MERCADORIASNOTA.IDMERCPEDIDO,
+       PEDIDO.idnota NUMEROPEDIDO,
+       '12 MESES' as DATAVALIDADE,
+       --ITEMESTOQUE.C_MATERIAPRIMABASE,
+       ITEMESTOQUE.itembase,
+       itemestoque.c_gramaturatotal,
+       itemestoque.c_passo,
+       itemestoque.c_largurafinal,
+       coalesce (itemestoque.c_posicionamento,'Conf. Arte'),
+       itemestoque.c_impressao,
+       coalesce(itemestoque.c_gramaturatinta,0),
+       itemestoque.c_diametrobobina,
+       itemestoque.c_tubeteacabamento,
+       itemestoque.c_lineaturalaudo,
+       coalesce (itemestoque.c_forcaselagem,'1000'),
+       coalesce (itemestoque.c_forcalaminacao,'700'),
+       '' as lote
+
+from
+      NOTAFISCAL
+inner join 
+      CADASTROPARCEIROS CADCLI on 
+          (NOTAFISCAL.DESTINATARIO = CADCLI.CADASTRO)
+inner join 
+      estabelecimento on 
+          (notafiscal.filial=estabelecimento.cadastro)
+inner join 
+      MERCADORIASNOTA on 
+          (NOTAFISCAL.FILIAL = MERCADORIASNOTA.FILIAL and 
+           NOTAFISCAL.IDNOTA = MERCADORIASNOTA.IDNOTA)
+inner join 
+      ITEMESTOQUE on 
+          (MERCADORIASNOTA.CODIGO = ITEMESTOQUE.CODIGO)
+inner join 
+      mercadoriasped on 
+              (mercadoriasped.FILIAL = MERCADORIASNOTA.FILIAL and 
+               mercadoriasped.idnota = MERCADORIASNOTA.IDPEDIDO and
+               mercadoriasped.codigo = MERCADORIASNOTA.codigo and
+               mercadoriasped.IDMERCADORIA=mercadoriasnota.IDMERCPEDIDO)
+inner join 
+      pedido on 
+              (pedido.FILIAL = mercadoriasped.FILIAL and 
+               pedido.idnota = mercadoriasped.idnota)                 
+               /*
+inner join 
+      materialmovimentoestoque on 
+              (mercadoriasped.filial = materialmovimentoestoque.filial and 
+               mercadoriasped.idnota = materialmovimentoestoque.idpedido and 
+               mercadoriasped.CODIGO = materialmovimentoestoque.IDITEM and
+               mercadoriasped.idmercadoria = materialmovimentoestoque.IDMERCADORIA)
+inner join 
+      movimentoestoque on 
+              (movimentoestoque.filial = materialmovimentoestoque.filial and 
+               movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento and 
+               movimentoestoque.tipomovimento=12)
+               */
+where 
+  notafiscal.filial=:pfilial and 
+  NOTAFISCAL.IDNOTA = :pidnota
+
+into :FILIAL, :IDNOTA, :NUMERONOTA, :DATAFABRICACAO, :DATACADASTRO, :DESTINATARIO, :logo,
+     :RAZAOSOCIAL, :NOME, :c_naopaginaestrutura, :IDMERCADORIA,
+     :CODIGO, :DESCRICAO, :QUANTIDADE, :UNIDADE, :IDPEDIDO, :IDMERCPEDIDO, :NUMEROPEDIDO, :DATAVALIDADE,
+     :estruturacodigo, :gramaturatotal, :passo, :largurafinal, :posicionamento, :impressao, gramaturatinta,
+     :diametroexterno, :diametrointerno, :resultadolineatura,
+     :forcaselagem, :forcalaminacao , :lote
+do begin
+    
+    if (:impressao='S') then begin
+    METODOAPARENCIA='';
+    METODOCORES='';
+    METODOTEXTO='';
+    METODOLINEATURA='';
+    METODOADESAO='';
+    RESULTADOAPARENCIA='OK';
+    RESULTADOCORES='Conf.Padrão';
+    RESULTADOTEXTO='Conf.Arte';
+    RESULTADOLINEATURA=coalesce(:resultadolineatura, '70')||' l/cm';
+    RESULTADOADESAO='OK';
+    ESPECIFICACAOAPARENCIA='Sem irregularidades';
+    ESPECIFICACAOCORES='';
+    ESPECIFICACAOTEXTO='';
+    ESPECIFICACAOLINEATURA='';
+    ESPECIFICACAOADESAO='SEM DESTACAMENTO';
+    end
+    
+    
+    select
+        case (coalesce (:C_NAOPAGINAESTRUTURA,'S'))
+            when 'N' then ITEMESTOQUE.descricao
+            else itemestoque.c_descricaoreduzida end ,
+        case (coalesce (:C_NAOPAGINAESTRUTURA,'S'))
+            when 'N' then  ITEMESTOQUE.C_GRAMATURA 
+            else :gramaturatotal end
+    from 
+        ITEMESTOQUE
+    where 
+        ITEMESTOQUE.CODIGO = :estruturacodigo
+    into 
+        :estruturadescricao, :GRAMATURA;
+    
+    select
+        itemestoque.c_tubeteacabamento,
+        itemestoque.c_sentidobobinamentoacabamento ,
+        itemestoque.c_larguramateriaprima,
+        itemestoque.c_largurafinal as c_largurarefile,
+        itemestoque.c_pesobobina
+    from 
+    ITEMESTOQUE
+    where 
+    ITEMESTOQUE.CODIGO = :codigo
+    into 
+    :c_tubeteacabamento,  c_sentidobobinamentoacabamento, c_larguramateriaprima,
+    :c_largurarefile,  c_pesobobina;
+
+    suspend;
+    
+    if (coalesce (:C_NAOPAGINAESTRUTURA,'S') = 'N') THEN
+    BEGIN
+        
+        for select
+            C_LAMINACAO.FILME, 
+            C_LAMINACAO.GRAMATURAFILME, 
+            coalesce (itemestoque.c_descricaoreduzida,
+            ITEMESTOQUE.descricao)
+        from 
+            C_LAMINACAO
+        inner join 
+            itemestoque on 
+                (c_laminacao.filme=itemestoque.codigo)
+        where 
+            C_LAMINACAO.CODIGO = :CODIGO
+        into  
+            :estruturacodigo, :GRAMATURA, :estruturadescricao
+        do begin
+            FOR select
+                c_laminacao.ladolaminar,
+                c_laminacao.itemrigoroso,
+                c_laminacao.observacao
+            from 
+                C_LAMINACAO
+            where 
+                C_LAMINACAO.filme = :estruturacodigo
+            INTO :ladolaminar, :itemrigoroso, :observacao DO
+                begin
+                end 
+            suspend;
+        end
+    
+    
+    
+        select sum(coalesce(C_LAMINACAO.GRAMATURAADESIVO,0))
+            from C_LAMINACAO
+            where C_LAMINACAO.CODIGO = :CODIGO
+        
+        into :gramatura;
+        gramatura = gramatura + gramaturatinta;
+        estruturadescricao = 'Adesivos e Tintas';
+        
+        suspend;
+    
+    END
+    
+
+    
+    estruturadescricao = null;
+    
+    end
+
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_LAUDO TO  SYSDBA;
+

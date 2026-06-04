@@ -1,0 +1,8 @@
+SELECT
+    pedidocompra.idnota,
+    --CADASTROPARCEIROS.nome,
+    pedidocompra.datacadastro,
+    pedidocompra.VLRTOTALNOTA
+FROM    
+    pedidocompra
+    

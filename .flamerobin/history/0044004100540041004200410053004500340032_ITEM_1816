@@ -1,0 +1,2 @@
+select * from locallote
+where lote='186042/1/3'

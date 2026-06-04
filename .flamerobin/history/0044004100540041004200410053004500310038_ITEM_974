@@ -1,0 +1,1 @@
+select pedido.vlrtotalnota, pedido.C_ADIANTAMENTOCLIENTE, pedido.* from pedido where filial=1 and idnota=68209

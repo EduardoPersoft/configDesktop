@@ -1,0 +1,10 @@
+select
+    filial,
+    idnota,
+    pedido.NUMPEDIDOCLIENTE
+from 
+    PEDIDO
+where
+    pedido.NUMPEDIDOCLIENTE is not null 
+order by
+    idnota desc

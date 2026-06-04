@@ -1,0 +1,3 @@
+alter table SPEDFISCAL_0
+add constraint PK_SPEDFISCAL_0
+primary key (SEQUENCIA)

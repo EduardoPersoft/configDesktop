@@ -1,0 +1,8 @@
+SELECT
+    i1.codigo,
+    i1.TRIBUTACAOICMS,
+    i1.CLASSIFISCAL
+FROM
+    ITEMESTOQUE i1
+where 
+    i1.TRIBUTACAOICMS = 1

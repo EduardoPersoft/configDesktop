@@ -1,0 +1,8 @@
+select 
+    sum(materialmovimentoestoque.quantidade*
+        materialmovimentoestoque.sinal)
+from 
+    materialmovimentoestoque
+where
+    materialmovimentoestoque.filial=1 and
+    materialmovimentoestoque.iditem='1975005'

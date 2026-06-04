@@ -1,0 +1,1 @@
+select filial,idnota,pedido.BLOQUEADOFATURAMENTO from pedido where filial=12826 and idnota=178833

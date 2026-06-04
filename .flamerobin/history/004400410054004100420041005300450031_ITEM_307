@@ -1,0 +1,32 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    sum(COMPOSICAOOP.QUANTIDADE) as quantidade,
+    itemestoque.unidade
+FROM
+    materialmovimentoestoque
+inner JOIN
+    composicaoop on 
+        composicaoop.filial=materialmovimentoestoque.filial AND
+        composicaoop.IDMOVIMENTO=materialmovimentoestoque.IDMOVIMENTO and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=composicaoop.CODIGO
+WHERE
+    MATERIALMOVIMENTOESTOQUE.filial = ? AND
+    materialmovimentoestoque.concluido = 'N' AND
+    itemestoque.TIPOPRODUTO = '1' AND
+    EXISTS (
+        SELECT 
+            * 
+        FROM
+            MAPAPRODUCAO
+        WHERE
+            MAPAPRODUCAO.FILIAL=MATERIALMOVIMENTOESTOQUE.FILIAL AND
+            MAPAPRODUCAO.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO AND
+            MAPAPRODUCAO.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL) 
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.unidade

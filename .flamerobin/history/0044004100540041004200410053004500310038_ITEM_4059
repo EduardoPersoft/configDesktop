@@ -1,0 +1,2 @@
+insert into regras(id,path,acesso)
+values(173,'/vendas/nfce',1)

@@ -1,0 +1,403 @@
+SET TERM ^ ;
+ALTER PROCEDURE MERCADORIASNOTASENTRADA (
+    RELATORIO VARCHAR(20) )
+RETURNS (
+    ORIGEM CHAR(3),
+    FILIAL INTEGER,
+    IDNOTA INTEGER,
+    DIAENTREGA INTEGER,
+    GRUPODIA INTEGER,
+    ESPECIE VARCHAR(5),
+    SERIE VARCHAR(3),
+    NUMERONOTA VARCHAR(10),
+    DATAEMISSAO TIMESTAMP,
+    DESTINATARIO INTEGER,
+    UFENTREGA VARCHAR(2),
+    CFOP VARCHAR(6),
+    VALORCONTABIL DOUBLE PRECISION,
+    ICMSBASE DOUBLE PRECISION,
+    ALIQUOTAICMS DOUBLE PRECISION,
+    VALORICMS DOUBLE PRECISION,
+    ICMSISENTO DOUBLE PRECISION,
+    ICMSOUTROS DOUBLE PRECISION,
+    RECOLHIDO DOUBLE PRECISION,
+    RECOLHIDOEPAGO DOUBLE PRECISION,
+    IPIBASE DOUBLE PRECISION,
+    VALORIPI DOUBLE PRECISION,
+    IPIISENTO DOUBLE PRECISION,
+    IPIOUTROS DOUBLE PRECISION,
+    CANCELADA CHAR(1),
+    DESCRICAOZF VARCHAR(15),
+    CONTRIBUINTE CHAR(1),
+    OUTROSIMPOSTOS DOUBLE PRECISION,
+    RETIDOESTADUAL DOUBLE PRECISION,
+    TIPOCALCULOIPI CHAR(1),
+    NUMERONOTAORDEM INTEGER,
+    EMISSORNOTA CHAR(1),
+    MODELO SMALLINT,
+    DATAENTRADASAIDA TIMESTAMP,
+    BASESUBSTITUICAO DOUBLE PRECISION,
+    DESPESASACESSORIAS DOUBLE PRECISION,
+    INSCESTADUAL VARCHAR(20),
+    VALORPIS DOUBLE PRECISION,
+    VALORCOFINS DOUBLE PRECISION,
+    VLRBASESUBST DOUBLE PRECISION,
+    DESCONTOS DOUBLE PRECISION,
+    TIPONOTA CHAR(1),
+    SUBSTRIB CHAR(1),
+    ZONAFRANCA CHAR(1),
+    GRUPOCFOP INTEGER,
+    TIPODESCONTO CHAR(1),
+    NOTAENTRADASAIDA CHAR(1),
+    NOTACOMPLEMENTAR CHAR(1),
+    TIPOPRODUTO CHAR(1),
+    SEMMOVIMENTO CHAR(1),
+    IDMERCADORIA SMALLINT,
+    DATAINICIAL TIMESTAMP,
+    DATAFINAL TIMESTAMP,
+    IDNOTAORIGINAL INTEGER,
+    IDMERCADORIAORIGINAL INTEGER,
+    CODIGO VARCHAR(15),
+    DESCRICAO VARCHAR(50),
+    ORIGEMITEM CHAR(1),
+    EMBUTIRICMS CHAR(1),
+    CONTACONTABIL VARCHAR(15),
+    UFESTABELECIMENTO VARCHAR(2),
+    VALORICMSSUBST DOUBLE PRECISION,
+    VALORICMSDIFAL DOUBLE PRECISION,
+    ALIQUOTAICMSFORNEC DOUBLE PRECISION,
+    ICMSBASEDIFAL DOUBLE PRECISION,
+    VALORCIMSINTERESTADUAL DOUBLE PRECISION,
+    ALIQUOTAICMSESTABELECIMENTO DOUBLE PRECISION,
+    PESTABELECIMENTOCOMERCIAL CHAR(1) )
+AS
+declare variable v_devolucao char(1);
+declare variable PVALORICMSESTABELECIMENTO DOUBLE PRECISION;
+declare variable PICMSORIGEMALIQUOTA  NUMERIC(6,3);
+declare variable pICMSORIGEMVALORINTERESTADUAL  NUMERIC(12,2);
+--declare variable pestabelecimentocomercial char (1);
+
+begin
+
+    SELECT ESTSIN.estabelecimento, ESTSIN.datainicial, ESTSIN.datafinal
+    FROM ESTSIN
+    WHERE ESTSIN.relatorio = :relatorio
+    INTO :filial, :datainicial, :datafinal;
+    
+            FOR SELECT DISTINCT CAST('NFE' AS CHAR(3)) AS ORIGEM,
+               EXTRACT(DAY FROM NOTAFISCAL.DATAEMISSAO) AS DIA,
+               NOTAFISCAL.FILIAL,
+               NOTAFISCAL.IDNOTA,
+               mercadoriasnota.idmercadoria,
+               MERCADORIASNOTA.codigo,
+               MERCADORIASNOTA.DESREDUZIDA,
+               MODELODOCTO.ESPECIE,
+               MODELODOCTO.SERIE,
+               CAST(NOTAFISCAL.numeronota AS VARCHAR(10)),
+               NOTAFISCAL.DATAEMISSAO,
+               NOTAFISCAL.DESTINATARIO,
+               NOTAFISCAL.UF,
+               NOTAFISCAL.TIPONOTA,
+               NOTAFISCAL.ZONAFRANCA,
+               NOTAFISCAL.SUBSTRIBUTARIA,
+               mercadoriasnota.ICMSBASE AS ICMSBASE,
+               mercadoriasnota.VALORICMS AS VALORICMS,
+               mercadoriasnota.ICMSISENTO AS ICMSISENTO,
+               mercadoriasnota.ICMSOUTROS AS ICMSOUTROS,
+               mercadoriasnota.IPIBASE AS IPIBASE,
+               mercadoriasnota.VALORIPI AS VALORIPI,
+               mercadoriasnota.IPIISENTO AS IPIISENTO,
+               mercadoriasnota.IPIOUTROS AS IPIOUTROS,
+               (mercadoriasnota.vlrfinalmercad+
+                    (COALESCE(mercadoriasnota.acrescimonota,0)+
+                     COALESCE(mercadoriasnota.frete,0)+
+                     COALESCE(mercadoriasnota.seguro,0)+
+                     COALESCE(mercadoriasnota.outdespacessor,0)+
+                     COALESCE(mercadoriasnota.vlricmsrecolhido,0)+
+/*NVH*/--                     COALESCE(mercadoriasnota.vlrdescproduto,0)+
+                     COALESCE(mercadoriasnota.valoripi,0)+
+                     COALESCE(mercadoriasnota.vlrtaxasiscomex,0)+
+                     COALESCE(mercadoriasnota.vlrdespaduaneiras,0)-
+/*NVH*/              COALESCE(mercadoriasnota.descontonota,0))),
+               parceiro.contribuinte,
+               CAST(SUBSTRING(NOTAFISCAL.CFOP FROM 1 FOR 1) AS INTEGER),
+               ESTABELECIMENTO.TIPOCALCULOIPI,
+               NOTAFISCAL.abaterdescontoicms,
+               COALESCE(mercadoriasnota.descontonota,0)+
+                   COALESCE(mercadoriasnota.vlrdescproduto,0) AS V_DESCONTO,
+               NOTAFISCAL.entradasaida,
+               CAST(NOTAFISCAL.numeronota AS VARCHAR(10)),
+               'P' as emitente,
+               modelodocto.codmodelofiscal,
+               COALESCE(NOTAFISCAL.dataentradasaida, NOTAFISCAL.dataemissao),
+               MERCADORIASNOTA.vlrbasesubst AS vlrbasesubst,
+               COALESCE(mercadoriasnota.frete,0)+
+               COALESCE(mercadoriasnota.seguro,0)+
+               COALESCE(mercadoriasnota.outdespacessor,0) AS DESPESASACESSORIAS,
+               coalesce(notafiscal.inscrestadentrega, parceiro.inscestadual),
+               mercadoriasnota.vlrbasesubst,
+               mercadoriasnota.vlrpispasep,
+               mercadoriasnota.vlrcofins,
+               ITEMESTOQUE.tipoproduto,
+               notafiscal.embutiricms,
+               CAST(SUBSTRING(ITEMESTOQUE.codigotributacao FROM 1 FOR 1) AS CHAR(1)),
+               case when coalesce(mercadoriasnota.cfop,'')<>'' then mercadoriasnota.cfop
+               else notafiscal.cfop end,
+               CASE WHEN mercadoriasnota.valoricms > 0 THEN mercadoriasnota.aliquotaicms
+               ELSE 0 END,
+               notafiscal.devolucao,
+               mercadoriasnota.VLRICMSRECOLHIDO,
+               mercadoriasnota.VLRICMSRECOLHIDO,
+               CAST (COALESCE (NATUREZAOPERACAO.CONTACONTABIL,'CFOP S/ CONTA') AS VARCHAR(15)),
+               filial.uf ,
+               cast ( mercadoriasnota.ICMSORIGEMVALORINTERESTADUAL as numeric (12,2)),
+               cast ( mercadoriasnota.icmsorigemaliquotA  as numeric (6,3)),
+               ESTABELECIMENTO.COMERCIALSOMENTE
+
+        FROM NOTAFISCAL
+        inner join naturezaoperacao on (naturezaoperacao.id=notafiscal.operacao)
+        INNER JOIN MERCADORIASNOTA ON (mercadoriasnota.FILIAL=NOTAFISCAL.FILIAL AND
+                                                            mercadoriasnota.IDNOTA=NOTAFISCAL.IDNOTA)
+        INNER JOIN MODELODOCTO ON (MODELODOCTO.ID=NOTAFISCAL.MODELO)
+        INNER JOIN CADASTROPARCEIROS parceiro ON (parceiro.CADASTRO = NOTAFISCAL.DESTINATARIO)
+        INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.CADASTRO = NOTAFISCAL.FILIAL)
+        LEFT JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MERCADORIASNOTA.CODIGO)
+        inner join cadastroparceiros filial on (filial.CADASTRO=notafiscal.filial)
+        WHERE NOTAFISCAL.cancelamento = 'N'
+        AND NOTAFISCAL.entradasaida = 'E'
+        AND NOTAFISCAL.filial = :filial
+        AND NOTAFISCAL.dataemissao BETWEEN :datainicial AND :datafinal
+        AND MODELODOCTO.CODMODELOFISCAL > 0
+        AND NOT (MODELODOCTO.CODMODELOFISCAL IS NULL)
+
+        UNION
+
+        SELECT DISTINCT CAST('NFC' AS CHAR(3)) AS ORIGEM,
+               EXTRACT(DAY FROM NOTACOMPRA.dataentrada) AS DIA,
+               NOTACOMPRA.FILIAL,
+               NOTACOMPRA.IDNOTA,
+               MERCADORIASNOTACOMPRA.idmercadoria,
+               MERCADORIASNOTACOMPRA.codigo,
+               MERCADORIASNOTACOMPRA.DESREDUZIDA,
+               COALESCE(NOTACOMPRA.ESPECIE, ''),
+               COALESCE(NOTACOMPRA.SERIE, ''),
+               NOTACOMPRA.nrnotafornecedor,
+               NOTACOMPRA.DATAEMISSAO,
+               NOTACOMPRA.DESTINATARIO,
+               NOTACOMPRA.UF,
+               NOTACOMPRA.TIPONOTA,
+               NOTACOMPRA.ZONAFRANCA,
+               NOTACOMPRA.SUBSTRIBUTARIA,
+               MERCADORIASNOTACOMPRA.ICMSBASE AS ICMSBASE,
+               MERCADORIASNOTACOMPRA.VALORICMS AS VALORICMS,
+               MERCADORIASNOTACOMPRA.ICMSISENTO AS ICMSISENTO,
+               MERCADORIASNOTACOMPRA.ICMSOUTROS AS ICMSOUTROS,
+               COALESCE(MERCADORIASNOTACOMPRA.IPIBASE,0) AS IPIBASE,
+               MERCADORIASNOTACOMPRA.VALORIPI AS VALORIPI,
+               MERCADORIASNOTACOMPRA.IPIISENTO AS IPIISENTO,
+               MERCADORIASNOTACOMPRA.IPIOUTROS AS IPIOUTROS,
+               (MERCADORIASNOTACOMPRA.vlrfinalmercad+
+                    (COALESCE(MERCADORIASNOTACOMPRA.acrescimonota,0)+
+                     COALESCE(MERCADORIASNOTACOMPRA.frete,0)+
+                     COALESCE(MERCADORIASNOTACOMPRA.seguro,0)+
+                     COALESCE(MERCADORIASNOTACOMPRA.outdespacessor,0)+
+                     COALESCE(MERCADORIASNOTACOMPRA.vlricmsrecolhido,0)+
+/*NVH*/--                     COALESCE(MERCADORIASNOTACOMPRA.vlrdescproduto,0)+
+                     COALESCE(MERCADORIASNOTACOMPRA.valoripi,0)-
+/*NVH*/              COALESCE(MERCADORIASNOTACOMPRA.descontonota,0))),
+               parceiro.contribuinte,
+               CAST(SUBSTRING(NOTACOMPRA.CFOP FROM 1 FOR 1) AS INTEGER),
+               ESTABELECIMENTO.TIPOCALCULOIPI,
+               NOTACOMPRA.abaterdescontoicms,
+               COALESCE(MERCADORIASNOTACOMPRA.descontonota,0)+
+                   COALESCE(MERCADORIASNOTACOMPRA.vlrdescproduto,0) AS V_DESCONTO,
+               NOTACOMPRA.entradasaida,
+               case when substring (NOTACOMPRA.nrnotafornecedor from 10 for 1) <> '' then
+               CAST(substring (NOTACOMPRA.nrnotafornecedor from 2 for 9) as varchar(10))
+               else notacompra.nrnotafornecedor end ,
+               'P' as emitente,
+               modelodocto.codmodelofiscal,
+               NOTACOMPRA.dataentrada,
+               MERCADORIASNOTACOMPRA.vlrbasesubst AS vlrbasesubst,
+               COALESCE(MERCADORIASNOTACOMPRA.frete,0)+
+               COALESCE(MERCADORIASNOTACOMPRA.seguro,0)+
+               COALESCE(MERCADORIASNOTACOMPRA.outdespacessor,0) AS DESPESASACESSORIAS,
+               coalesce(NOTACOMPRA.inscrestadentrega, parceiro.inscestadual),
+               MERCADORIASNOTACOMPRA.vlrbasesubst,
+               MERCADORIASNOTACOMPRA.vlrpispasep,
+               MERCADORIASNOTACOMPRA.vlrcofins,
+               ITEMESTOQUE.tipoproduto,
+               notacompra.embutiricms,
+               CAST(SUBSTRING(ITEMESTOQUE.codigotributacao FROM 1 FOR 1) AS CHAR(1)),
+               case when coalesce(MERCADORIASNOTACOMPRA.cfop,'')<>'' then MERCADORIASNOTACOMPRA.cfop
+               else NOTACOMPRA.cfop end,
+               CASE WHEN MERCADORIASNOTACOMPRA.valoricms > 0 THEN MERCADORIASNOTACOMPRA.aliquotaicms
+               ELSE 0 END,
+               notacompra.devolucao,
+               MERCADORIASNOTACOMPRA.vlricmsrecolhido,
+               MERCADORIASNOTACOMPRA.vlricmsrecolhido,
+               -- MERCADORIASNOTACOMPRA.contacontabil,
+               COALESCE (mercadoriasnotacompra.contacontabil,'00')  AS CONTACONTABIL,
+               filial.uf
+               , CAST(0 as numeric (12,2)), CAST(0 as numeric (6,3)),
+               ESTABELECIMENTO.COMERCIALSOMENTE
+
+        FROM NOTACOMPRA
+        INNER JOIN MERCADORIASNOTACOMPRA ON (mercadoriasnotacompra.FILIAL=notacompra.FILIAL AND
+                                            mercadoriasnotacompra.IDNOTA=notacompra.IDNOTA)
+        INNER JOIN MODELODOCTO ON (MODELODOCTO.id = notacompra.modelo)
+        INNER JOIN CADASTROPARCEIROS parceiro ON (parceiro.CADASTRO = NOTACOMPRA.destinatario)
+        INNER JOIN ESTABELECIMENTO ON (ESTABELECIMENTO.CADASTRO = notacompra.FILIAL)
+        inner join cadastroparceiros filial on (filial.CADASTRO=NOTACOMPRA.filial)
+        LEFT JOIN ITEMESTOQUE ON (ITEMESTOQUE.CODIGO=MERCADORIASNOTACOMPRA.codigo)
+        WHERE NOTACOMPRA.filial = :filial
+        AND NOTACOMPRA.dataemissao BETWEEN :datainicial AND :datafinal
+        AND MODELODOCTO.CODMODELOFISCAL > 0
+        AND NOT (MODELODOCTO.CODMODELOFISCAL IS NULL)
+
+        INTO :ORIGEM, :DIAENTREGA, :FILIAL, :IDNOTA, :idmercadoria, :codigo, :DESCRICAO,
+             ESPECIE, :SERIE, :NUMERONOTA, :DATAEMISSAO, :DESTINATARIO,
+             :UFENTREGA, :TIPONOTA, :ZONAFRANCA, :SUBSTRIB, :ICMSBASE,
+             :VALORICMS, :ICMSISENTO, :ICMSOUTROS, :IPIBASE, :VALORIPI, :IPIISENTO,
+             :IPIOUTROS, :valorcontabil, :CONTRIBUINTE,
+             :GRUPOCFOP, :TIPOCALCULOIPI, :tipodesconto, :descontos,
+             :NOTAentradasaida,:numeronotaordem,:emissornota,:modelo,:dataentradasaida,
+             :basesubstituicao,:despesasacessorias,:inscestadual, :vlrbasesubst,
+             :valorpis,:valorcofins, :tipoproduto, :embutiricms, :origemitem,
+             :CFOP, :ALIQUOTAICMS, :v_devolucao, :RECOLHIDO, :RECOLHIDOEPAGO,
+             :contacontabil, :UFESTABELECIMENTO,  :PICMSORIGEMVALORINTERESTADUAL,
+             :picmsorigemaliquota, :pestabelecimentocomercial
+              DO BEGIN
+
+             ICMSBASEDIFAL=0;
+             VALORICMSDIFAL=0;
+             ALIQUOTAICMSFORNEC=0;
+             VALORCIMSINTERESTADUAL=0;
+             ALIQUOTAICMSESTABELECIMENTO=0;
+
+            if (:v_devolucao = 'N') then begin
+               IF (:UFENTREGA<>:UFESTABELECIMENTO) THEN BEGIN
+
+                 ICMSBASEDIFAL=:ICMSBASE;
+                 VALORCIMSINTERESTADUAL=:VALORICMS;
+
+                 SELECT
+                 TRIBUTACAOICMSUF.ALIQUOTA,
+                 (TRIBUTACAOICMSUF.ALIQUOTA/100) * :ICMSBASE
+                 from itemestoque
+                 INNER JOIN tributacaoicms ON (itemestoque.tributacaoicms=tributacaoicms.id)
+                 INNER JOIN tributacaoicmsuf ON (tributacaoicmsuf.id = tributacaoicms.id)
+
+                 where itemestoque.codigo=:CODIGO AND
+                       TRIBUTACAOICMSUF.UF=:UFESTABELECIMENTO
+                 into :ALIQUOTAicmsestabelecimento, PVALORICMSESTABELECIMENTO;
+
+                 VALORICMSDIFAL=PVALORICMSESTABELECIMENTO-coalesce(VALORICMS,0);
+                 ALIQUOTAICMSFORNEC=:ALIQUOTAICMS;
+               END
+            end
+
+/*
+            if (:v_devolucao = 'S' AND :contribuinte = 'N' ) then begin
+               IF (:UFENTREGA<>:UFESTABELECIMENTO) THEN BEGIN
+                 VALORICMS=PICMSORIGEMVALORINTERESTADUAL;
+                 ALIQUOTAICMSFORNEC=picmsorigemaliquota;
+               end
+            end
+*/
+             IDNOTAORIGINAL = IDNOTA;
+             IDMERCADORIAORIGINAL = IDMERCADORIA;
+
+             if ((:v_devolucao = 'S') and (:grupocfop = 1)) then begin
+                recolhidoepago=0;
+             end else begin
+                recolhido=0;
+             end
+
+             if (:ZONAFRANCA = 'S') then begin
+                DESCRICAOZF = ' ZONA FRANCA';
+             end else begin
+                DESCRICAOZF = '';
+             end
+
+             if ((:RECOLHIDO > 0) or (:RECOLHIDOEPAGO > 0)) then begin
+                if (V_DEVOLUCAO<>'S') then BEGIN
+                    ICMSOUTROS = ICMSOUTROS + RECOLHIDO + RECOLHIDOEPAGO + icmsbase;
+                    icmsbase = 0;
+                    valoricms = 0;
+                END
+                IPIOUTROS = IPIOUTROS + RECOLHIDO + RECOLHIDOEPAGO;
+             end
+
+             if (:embutiricms = 'S') then begin
+                VALORCONTABIL = VALORCONTABIL + VALORICMS + VALORPIS + VALORCOFINS;
+             end
+
+
+             if (:tipoproduto in ('2', '5')) then begin
+                ICMSOUTROS = ICMSBASE + ICMSOUTROS;
+                IPIOUTROS = IPIBASE + IPIOUTROS;
+                ICMSBASE = 0;
+                ICMSISENTO = 0;
+                ALIQUOTAICMS = 0;
+                VALORICMS = 0;
+                IPIBASE = 0;
+                IPIISENTO = 0;
+                VALORIPI = 0;
+             end
+
+             if (:tipoproduto = '3') then begin
+                if (:origemitem not in ('1', '6', '7')) then begin
+                    IPIOUTROS = IPIOUTROS + IPIBASE;
+                    IPIBASE = 0;
+                    IPIISENTO = 0;
+                    VALORIPI = 0;
+                end
+             end
+
+
+
+             if ((icmsbase+icmsoutros+icmsisento)<>valorcontabil) then
+                icmsoutros = icmsoutros + (valorcontabil-(icmsbase+icmsoutros+icmsisento));
+
+             if ((:ipibase+:ipioutros+:ipiisento)<>(:valorcontabil-:valoripi)) then
+                ipioutros=ipioutros+((valorcontabil-:valoripi)-(:ipibase+:ipioutros+:ipiisento));
+
+             if (icmsoutros < 0) then
+                icmsoutros = 0;
+
+             if (icmsisento < 0) then
+                icmsisento = 0;
+
+             if (ipioutros < 0) then
+                ipioutros = 0;
+
+             if (ipiisento < 0) then
+                ipiisento = 0;
+
+
+             IF (:ZONAFRANCA = 'S') THEN BEGIN
+                VALORIPI = 0;
+                IPIISENTO = VALORCONTABIL;
+                IPIBASE = 0;
+                IPIOUTROS=0;
+                ICMSISENTO = VALORCONTABIL;
+                ICMSBASE = 0;
+                VALORICMS = 0;
+                ICMSOUTROS=0;
+             END
+
+             IF (PESTABELECIMENTOCOMERCIAL='S') THEN BEGIN
+                 IPIOUTROS=IPIOUTROS+VALORIPI;
+                 VALORIPI=0;
+                 END
+
+             suspend;
+         end
+end^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE MERCADORIASNOTASENTRADA TO  SYSDBA;
+

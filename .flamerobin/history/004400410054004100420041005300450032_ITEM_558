@@ -1,0 +1,20 @@
+ SELECT
+    first 4
+    notafiscal.DATAEMISSAO,
+    sum(mercadoriasnota.QUANTIDADE) as quantidade,
+    sum(mercadoriasnota.VLRFINALMERCAD) / 
+    sum(mercadoriasnota.quantidade) as PRECO
+FROM
+    MERCADORIASNOTA
+inner JOIN
+    NOTAFISCAL on
+        notafiscal.filial=mercadoriasnota.filial AND
+        notafiscal.idnota=mercadoriasnota.idnota
+WHERE
+    mercadoriasnota.filial=5
+    and mercadoriasnota.codigo='101786'
+    and notafiscal.destinatario = 2601
+group by
+    notafiscal.DATAEMISSAO
+order by
+    notafiscal.dataemissao desc

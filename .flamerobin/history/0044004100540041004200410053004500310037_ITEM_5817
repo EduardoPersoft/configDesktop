@@ -1,0 +1,3 @@
+select * from materialMOVIMENTOESTOQUE
+where idpedido='328670'
+order by idmovimento

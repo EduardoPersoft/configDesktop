@@ -1,0 +1,2 @@
+select itemcustodata.*,(custototal-custounitario*quantidade) from itemcustodata where datainventario='31.12.2025'
+and custototal<>custounitario*quantidade

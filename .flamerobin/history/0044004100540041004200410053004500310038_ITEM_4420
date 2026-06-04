@@ -1,0 +1,7 @@
+delete  from titulopag where filial=1 and idtitulo in (
+376869,
+376870,
+376871,
+376875
+)
+

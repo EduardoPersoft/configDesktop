@@ -1,0 +1,13 @@
+select 
+    ORCAMENTO.filial,
+    orcamento.idnota,
+    orcamento.datacadastro,
+    cast(orcamento.C_MENSAGEM1 as varchar(1000)),
+    cast(orcamento.C_MENSAGEM2 as varchar(1000)),    
+    cast(orcamento.C_MENSAGEMSERVICO as varchar(1000))
+from
+    ORCAMENTO
+where
+        c_mensagem1 is not null
+order by
+    orcamento.datacadastro desc

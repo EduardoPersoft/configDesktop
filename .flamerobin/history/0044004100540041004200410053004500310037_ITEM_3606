@@ -1,0 +1,5 @@
+SELECT
+ROW_NUMBER() OVER,
+CADASTROPARCEIROS.nome
+
+from cdastroparceiros

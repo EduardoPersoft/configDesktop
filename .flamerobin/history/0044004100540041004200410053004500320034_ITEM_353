@@ -1,0 +1,13 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    itemestoque.localizacao,
+    materiallocal.SALDOTOTAL
+from 
+    itemestoque
+    
+inner JOIN 
+    materiallocal on
+        materiallocal.IDLOCAL=1 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.filial=5

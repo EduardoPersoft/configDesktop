@@ -1,0 +1,7 @@
+select * from historia;
+
+/*
+select * from NEGOCIACAO
+where filial=1
+and idrelacionado=205983
+*/

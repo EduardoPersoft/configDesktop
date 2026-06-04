@@ -1,0 +1,6 @@
+select 
+    * 
+from 
+    COMPOSICAOMERCPED
+where 
+    substring(COMPOSICAOMERCPED.iditem from 1 for 1)=''

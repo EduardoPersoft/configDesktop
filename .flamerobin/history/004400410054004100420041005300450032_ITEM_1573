@@ -1,0 +1,8 @@
+SELECT
+    *
+FROM
+    RESUMOCOMPRAS
+WHERE
+    item='15078'
+order by
+    emissao desc

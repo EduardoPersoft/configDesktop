@@ -1,0 +1,9 @@
+select 
+    materilamovimentoestoque.codigo,
+    sum(materialmovimentoestoque.quantidde*MATERIALMOVIMENTOESTOQUE.sinal),
+    sum(materialmovimentoestoque.valor*MATERIALMOVIMENTOESTOQUE.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+group by
+    MATERIALMOVIMENTOESTOQUE.codigo
+    

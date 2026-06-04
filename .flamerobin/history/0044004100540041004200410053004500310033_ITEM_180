@@ -1,0 +1,34 @@
+select 
+        FILIAL,
+        IDNOTA,
+        IDMERCADORIA,
+        QUANTIDADE,
+        MERCADORIASPED.CODIGO,
+        mercadoriasped.QTDEENVIADA,
+        mercadoriasped.MINIMO,
+        mercadoriasped.baixa,
+        (SELECT SUM (MERCADORIASNOTA.QTDBAIXA) 
+                                          FROM 
+                                            MERCADORIASNOTA
+                                          WHERE 
+                                            MERCADORIASNOTA.FILIAL=MERCADORIASPED.FILIAL and
+                                            MERCADORIASNOTA.IDPEDIDO=MERCADORIASPED.IDNOTA AND
+                                            MERCADORIASNOTA.IDMERCPEDIDO=MERCADORIASPED.IDMERCADORIA)        
+from 
+    mercadoriasped 
+where 
+    filial=1 and 
+    mercadoriasped.baixa='N' AND
+    MERCADORIASPED.QTDEENVIADA <> (SELECT SUM (MERCADORIASNOTA.QTDBAIXA) 
+                                          FROM 
+                                            MERCADORIASNOTA
+                                          INNER JOIN 
+                                            NOTAFISCAL ON 
+                                                        (NOTAFISCAL.FILIAL=MERCADORIASNOTA.FILIAL AND
+                                                         NOTAFISCAL.IDNOTA=MERCADORIASNOTA.IDNOTA )
+                                          WHERE 
+                                            MERCADORIASNOTA.FILIAL=MERCADORIASPED.FILIAL and
+                                            MERCADORIASNOTA.IDPEDIDO=MERCADORIASPED.IDNOTA AND
+                                            MERCADORIASNOTA.IDMERCPEDIDO=MERCADORIASPED.IDMERCADORIA AND
+                                            NOTAFISCAL.DATACANCELAMENTO IS NULL)
+ORDER BY IDNOTA

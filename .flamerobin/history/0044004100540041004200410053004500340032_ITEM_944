@@ -1,0 +1,1 @@
+select * from notafiscal where uuid='{3AB58651-4361-47D2-9D94-092899FE015'

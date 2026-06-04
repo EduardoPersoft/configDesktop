@@ -1,0 +1,6 @@
+update
+    PEDIDOCOMPRA
+SET
+    pedidocompra.uuid=pedidocompra.filial||'-'||pedidocompra.destinatario||'-'||pedidocompra.idnota
+WHERE
+    pedidocompra.uuid is null

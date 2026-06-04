@@ -1,0 +1,6 @@
+create table c_preco(
+codigo varchar(15) not null,
+descricao varchar(50),
+custo decimal(12,3),
+constraint pk_c_preco
+primary key(codigo))

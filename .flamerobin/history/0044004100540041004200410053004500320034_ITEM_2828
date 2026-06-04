@@ -1,0 +1,7 @@
+select
+    *
+from
+    t_Cadastro
+where
+    codigo=7911
+    

@@ -1,0 +1,17 @@
+select distinct
+    NOTAFISCAL.FILIAL,
+    NOTAFISCAL.NUMERONOTA, 
+    NOTAFISCAL.DATAEMISSAO,
+    NOTAFISCAL.VLRTOTALNOTA,
+    NOTAFISCAL.UUID
+FROM 
+    NOTAFISCAL
+WHERE 
+    NOTAFISCAL.DESTINATARIO = 1 AND
+    not exists (
+        select * from movimentoestoque
+        where movimentoestoque.filial=notafiscal.filial and
+        movimentoestoque.idexpedicao=notafiscal.idnota
+    )
+ORDER BY 
+    NOTAFISCAL.DATAEMISSAO DESC;

@@ -1,0 +1,147 @@
+select
+    pedido.filial,
+    cast(pedido.DATAEMISSAO as date),
+    case when  cadloja.C_INFORMATIVOCLIENTELOJA = 1 
+    and cadloja.cadastro<>46 then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME,
+    cadven.nome,
+    pedido.idnota idpedido,
+    pedido.IDORCAMENTO,
+    cadcli.nome,
+    cadcli.cidade,
+    cadcli.uf,
+    'Fechado' status,
+    cast(pedido.vlrtotalnota*coalesce(vped.COMISSAOVENDA,100)/100 as decimal(12,2)) vlrpedido,
+    cast(coalesce(orcamento.VLRTOTALNOTA,
+             pedido.vlrtotalnota)*coalesce(vped.COMISSAOVENDA,100)/100 as decimal(12,2)) vlrorcamento,
+    (select first 1
+        cadage.nome
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro) agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE) ramoagente
+from
+    PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=pedido.C_LOJA
+left join
+    orcamento on
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.IDORCAMENTO
+left join
+    vendedoresped vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor and
+        vendedorPed.TIPOVENDEDOR<=4
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+
+where
+    pedido.DATAEMISSAO>='01.01.2021' and
+    pedido.filial<59 and 
+    pedido.DATACANCELAMENTO is null  and
+    pedido.c_tipo=0
+union        
+select
+    pedido.filial,
+    cast(pedido.DATAEMISSAO as date),
+    case cadloja.C_INFORMATIVOCLIENTELOJA when 1 then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME,
+    cadven.nome,
+    null idpedido,
+    pedido.idnota idorcamento,
+    cadcli.nome,
+    cadcli.cidade,
+    cadcli.uf,
+    case orcamento.DATAPERDA when null then 'Aberto' else 'Perdido' end,
+    cast(0 as decimal(12,2)) vlrpedido,
+    cast(coalesce(orcamento.VLRTOTALNOTA,
+             pedido.vlrtotalnota)*coalesce(vped.COMISSAOVENDA,100)/100 as decimal(12,2)) vlrorcamento,
+    (select first 1
+        cadage.nome
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro) agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE) ramoagente
+from
+    orcamento PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=pedido.C_LOJA
+left join
+    orcamento on
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.IDORCAMENTO
+left join
+    vendedoresorc vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor and
+        vendedorPed.TIPOVENDEDOR<=4
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+where
+    pedido.DATAEMISSAO>='01.01.2021' and
+    pedido.filial<59 and 
+    pedido.DATACANCELAMENTO is null  and
+    pedido.IDRELACAO is null and
+    pedido.c_tipo=0 and
+    not exists (
+        select * from PEDIDO ped
+        where ped.filial=pedido.filial 
+        and ped.idorcamento=pedido.idnota)
+    

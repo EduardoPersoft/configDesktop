@@ -1,0 +1,5 @@
+
+
+select * from MATERIALLOCAL
+where filial=1
+and iditem='1631499'

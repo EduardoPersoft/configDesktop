@@ -1,0 +1,2 @@
+select distinct titulorec.titulo from TITULOREC
+where titulorec.DATAENVIO='31.07.2021'

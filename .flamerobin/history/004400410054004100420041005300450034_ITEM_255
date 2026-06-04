@@ -1,0 +1,1 @@
+delete from regras where id<>39

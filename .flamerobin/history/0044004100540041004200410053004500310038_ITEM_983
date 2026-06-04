@@ -1,0 +1,3 @@
+select * from C_COMISSAOPEDIDOPAGA
+where filial=1 and
+idnota in (67734, 67738)

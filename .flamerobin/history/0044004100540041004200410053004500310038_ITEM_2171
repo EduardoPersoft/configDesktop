@@ -1,0 +1,14 @@
+select 
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.IDMERCADORIA,
+    mercadoriasped.baixa,
+    mercadoriasped.MINIMO
+from 
+    mercadoriasped
+where
+    mercadoriasped.filial=1 and 
+    mercadoriasped.idnota in (71285,
+71294,
+71295)
+        

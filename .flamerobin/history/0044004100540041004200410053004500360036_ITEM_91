@@ -1,0 +1,2 @@
+select * from ITEMESTOQUEFOTO
+where codigo= 'VEL0C25'

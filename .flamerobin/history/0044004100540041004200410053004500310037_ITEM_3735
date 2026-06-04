@@ -1,0 +1,181 @@
+
+select
+    cadven.cadastro,
+    cadven.nome,
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        )) qtdorc ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        )) qtditemorc ,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario            
+        )) valororc,
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        )) qtdPED ,
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+       not  exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario            
+        )) qtditemPED,
+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        )) valorPED            
+from
+    VENDEDOR
+inner join
+    CADASTROPARCEIROS cadven  on
+        vendedor.cadastro=cadven.CADASTRO
+where
+    cadven.status=1 AND
+    (select 
+        count(orcamento.idnota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        ))+
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        ORCAMENTO
+     inner join
+        mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario            
+        ))+        
+    (select 
+        sum(orcamento.vlrtotalNota) 
+     from
+        ORCAMENTO
+     where
+        orcamento.atendente=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario            
+        ))+                
+    (select 
+        count(orcamento.idnota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario            
+        ))+                
+    (select 
+        count(mercadoriasorc.IDMERCADORIA) 
+     from
+        PEDIDO ORCAMENTO
+     inner join
+        MERCADORIASPED mercadoriasorc on
+            mercadoriasorc.filial=orcamento.filial and
+            mercadoriasorc.idnota=orcamento.idnota
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        ))+        
+        
+        
+    (select
+        sum(orcamento.vlrtotalNota) 
+     from
+        PEDIDO ORCAMENTO
+     where
+        orcamento.vendedor=cadven.cadastro and
+        orcamento.datacancelamento is null and
+        orcamento.dataemissao is not null and
+        orcamento.datareferencia between '01.09.2024' and '30.09.2024' and
+        not exists (
+            select * from ESTABELECIMENTO
+            where estabelecimento.cadastro=orcamento.destinatario
+        ))> 0

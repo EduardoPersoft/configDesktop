@@ -1,0 +1,7 @@
+select 
+    * 
+from 
+    movimentoestoque
+where
+    movimentoestoque.tipomovimento='13' and
+    movimentoestoque.IMPRESSO is null

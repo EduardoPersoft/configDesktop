@@ -1,0 +1,2 @@
+select * from VENDEDOR
+where vendedor.USUARIORELACIONADO=429

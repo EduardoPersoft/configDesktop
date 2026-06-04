@@ -1,0 +1,21 @@
+update
+    NATUREZAOPERACAO
+set
+    ATIVO='N'
+where 
+    not exists(
+        select  
+            *
+        from
+            NOTACOMPRA
+        where 
+            notacompra.OPERACAO=NATUREZAOPERACAO.id
+    ) and 
+    not  exists (
+        select  
+            *
+        from
+            NOTAfiscal
+        where 
+            notafiscal.OPERACAO=NATUREZAOPERACAO.id
+    )

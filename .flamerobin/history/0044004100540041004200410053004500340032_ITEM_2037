@@ -1,0 +1,6 @@
+update 
+    ITEMESTOQUE
+set
+    descricao='SUPz com janela+Valvula - Cafe Yasmim Espresso Graos 500g'
+where 
+    codigo='PRO4738SUP001'

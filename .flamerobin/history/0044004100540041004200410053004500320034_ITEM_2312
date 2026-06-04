@@ -1,0 +1,12 @@
+select 
+    VENDEDOR.cadastro, 
+    VENDEDOR.comissaoVenda,
+    VENDEDOR.comissaoRecebimento,
+    VENDEDOR.notificarVendedor,
+    VENDEDOR.usuarioRelacionado,    
+    VENDEDOR.tipoVendedor,
+    VENDEDOR.canalRelacionado
+from 
+    VENDEDOR
+WHERE
+    vendedor.cadastro = ?

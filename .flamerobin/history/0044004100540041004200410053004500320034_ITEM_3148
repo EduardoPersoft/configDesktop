@@ -1,0 +1,7 @@
+select
+    *
+from
+    MERCADORIASORC
+where
+    filial=5 and
+    mercadoriasorc.codigo='105866'

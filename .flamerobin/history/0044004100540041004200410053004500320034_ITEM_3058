@@ -1,0 +1,22 @@
+select 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    sum (materiallocal.SALDOTOTAL) as quantidade
+    
+from 
+    materialfilial 
+inner join 
+    materiallocal on 
+        (materiallocal.FILIAL=materialfilial.filial and 
+        materiallocal.IDITEM=materialfilial.IDITEM)
+where 
+        materialfilial.filial=5 
+        
+group by 
+    materialfilial.iditem,
+    materialfilial.CONSUMOMEDIO,
+    materialfilial.SALDomaximo,
+    materialfilial.filial
+having 
+    coalesce(materialfilial.saldomaximo, materialfilial.consumomedio)*0.4>SUM(materiallocal.saldototal)

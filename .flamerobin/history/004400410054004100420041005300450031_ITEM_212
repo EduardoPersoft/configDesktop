@@ -1,0 +1,7 @@
+SELECT
+    count(itemestoque.codigo) as qtd,
+    itemestoque.C_CODIGOANT
+FROM
+    ITEMESTOQUE
+group by
+    itemestoque

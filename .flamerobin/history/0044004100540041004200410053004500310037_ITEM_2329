@@ -1,0 +1,17 @@
+select
+    lantocontbanc.CONTACONTABIL,
+    CONTASCONTABEIS.DESCRICAO,
+    MOVBANCARIOS.HISTORICOEXTRATO,
+    movbancarios.TIPOMOVIMENTO
+from
+    lantocontbanc
+inner join
+    MOVBANCARIOS on
+        MOVBANCARIOS.filial=LANTOCONTBANC.filial and
+        movbancarios.IDCONTACORRENTE=lantocontbanc.IDCONTACORRENTE and
+        movbancarios.IDMOVTOBANCARIO=LANTOCONTBANC.IDMOVTOBANC
+inner join
+
+    CONTASCONTABEIS on
+        CONTASCONTABEIS.IDPLANO=1 and
+        contascontabeis.CONTACONTABIL=LANTOCONTBANC.CONTACONTABIL

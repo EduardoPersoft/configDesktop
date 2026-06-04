@@ -1,0 +1,1 @@
+CREATE EXCEPTION C_DATAFECHAMENTOVENDAS 'Data da liberação inferior ao do fechamento de vendas';

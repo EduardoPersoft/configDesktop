@@ -1,0 +1,9 @@
+select 
+    CADASTROPARCEIROS.cadastro-354214
+    cadastroparceiros.*
+from
+    CADASTROPARCEIROS
+where
+    cadastroparceiros.cadastro>35000
+order by
+    cadastro

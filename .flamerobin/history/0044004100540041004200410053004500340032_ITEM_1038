@@ -1,0 +1,17 @@
+select 
+    contaSintetica.NATUREZA,
+    contaSintetica.CONTACONTABIL sintetica,
+    contaAnalitica.contacontabil,
+    contaAnalitica.descricao
+from 
+    contascontabeis contaAnalitica
+inner join
+    contasContabeis contaSintetica on
+        contaSintetica.idplano=contaAnalitica.IDPLANO and
+        contaAnalitica.CONTACONTABIL like contaSintetica.CONTACONTABIL||'%'
+where 
+    contaAnalitica.idplano=4 
+order by 
+    contaSintetica.natureza,
+    contaAnalitica.contacontabil,
+    contaAnalitica.contacontabil

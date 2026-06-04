@@ -1,0 +1,1 @@
+select * from materiallocal where locallote.IDITEM='6003219'

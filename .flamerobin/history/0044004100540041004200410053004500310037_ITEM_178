@@ -1,0 +1,1 @@
+select C_LOGPRODUTOECOMMERCE.*, substring(C_LOGPRODUTOECOMMERCE.content from 1 for 400) from C_LOGPRODUTOECOMMERCE where status_code<>'200'

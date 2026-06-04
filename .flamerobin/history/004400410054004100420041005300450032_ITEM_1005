@@ -1,0 +1,4 @@
+UPDATE
+    listaprecoproduto 
+SET
+    comissao = 5

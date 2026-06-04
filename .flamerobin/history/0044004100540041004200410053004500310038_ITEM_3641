@@ -1,0 +1,135 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_INFORMATIVOVENDAS3
+RETURNS (
+    FILIAL integer,
+    CADASTRO integer,
+    NOME varchar(50),
+    C_INFORMATIVOCLIENTELOJA smallint,
+    C_GRUPOINFORMATIVO varchar(20),
+    VLRTOTALMERCADORIAS double precision,
+    SOMAGRUPO double precision,
+    SOMATOTAL double precision,
+    DATAINICIAL timestamp,
+    DATAFINAL timestamp,
+    IDPEDIDO integer,
+    VALORPEDIDO double precision,
+    DATAEMISSAO timestamp,
+    CLIENTENOME varchar(50),
+    VENDEDOR integer )
+
+AS
+DECLARE VARIABLE P_GRUPOINFORMATIVO VARCHAR(20);
+DECLARE VARIABLE P_FILIAL INTEGER;
+DECLARE VARIABLE P_PARTICIPACAO DOUBLE PRECISION;
+begin
+
+
+    SELECT ESTSIN.Datainicial,ESTSIN.DATAFINAL
+    FROM ESTSIN
+    WHERE ESTSIN.RELATORIO = 'C_INFORMATIVOANAL'
+    INTO :DATAINICIAL,:DATAFINAL;
+
+    SOMAGRUPO=0;
+    somatotal=0;
+    P_GRUPOINFORMATIVO='';
+
+    FOR SELECT
+        CADLOJAPEDIDO.C_informativoclienteloja,
+
+        CASE PEDIDO.C_TIPO WHEN 1 THEN 0
+        ELSE
+            CASE COALESCE(CADLOJAPEDIDO.C_informativoclienteloja,-1)
+            WHEN 1 THEN
+                CADLOJA.cadastro
+            ELSE
+                CADGRUPOEMPRESARIAL.cadastro
+            END 
+        END AS CADASTRO ,
+
+        CASE PEDIDO.C_TIPO WHEN 1 THEN 'VENDA INTERNA'
+        ELSE
+            CASE COALESCE(CADLOJAPEDIDO.C_informativoclienteloja,-1)
+            WHEN 1 THEN
+                    CADLOJA.NOME
+            ELSE
+                CADGRUPOEMPRESARIAL.NOME
+            END 
+        END AS NOME,
+
+        CADLOJAPEDIDO.C_grupoinformativo,
+
+        SUM(
+            (pedido.Vlrtotalnota-COALESCE(PEDIDO.C_CREDITOCLIENTE,0))*
+            COALESCE(c_pedidodatafin.SINAL,0)*VENDEDORESPED.comissaovenda/100
+            ) ,
+        pedido.idnota,
+        SUM(
+            (pedido.Vlrtotalnota-COALESCE(PEDIDO.C_CREDITOCLIENTE,0))*
+            COALESCE(c_pedidodatafin.SINAL,0)*VENDEDORESPED.comissaovenda/100
+            )  as valorpedido,
+         PEDIDO.dataemissao,
+         CADCLI.NOME,
+         pedido.filial
+
+        FROM c_pedidodatafinLIB(:DATAINICIAL,:DATAFINAL) c_pedidodatafin
+        INNER JOIN PEDIDO ON (PEDIDO.FILIAL=c_pedidodatafin.FILIAL
+            AND PEDIDO.IDNOTA=c_pedidodatafin.Idnota)
+        INNER JOIN CADASTROPARCEIROS CADCLI ON (PEDIDO.DESTINATARIO=CADCLI.CADASTRO)
+        INNER JOIN CADASTROPARCEIROS CADGRUPOEMPRESARIAL ON (CADGRUPOEMPRESARIAL.CADASTRO=COALESCE(CADCLI.GRUPOEMPRESARIAL,CADCLI.CADASTRO))
+        INNER JOIN VENDEDORESPED ON (PEDIDO.FILIAL=VENDEDORESPED.FILIAL
+                AND PEDIDO.IDNOTA=VENDEDORESPED.IDNOTA)
+        INNER JOIN VENDEDOR ON (VENDEDOR.cadastro=VENDEDORESPED.vendedor)
+        INNER JOIN CADASTROPARCEIROS CADLOJA ON (vendedor.canalrelacionado=CADLOJA.CADASTRO)
+        INNER JOIN CADASTROPARCEIROS CADLOJAPEDIDO ON (CADLOJApedido.CADASTRO=CASE WHEN CADLOJA.CADASTRO IN (45,21278) THEN CADLOJA.CADASTRO ELSE PEDIDO.c_loja END)
+        WHERE PEDIDO.DATAEMISSAO IS NOT NULL
+        AND COALESCE(PEDIDO.C_Consignacao,'N')='N'
+        AND COALESCE(PEDIDO.cancelamento,'N')='N'
+        AND coalesce(VENDEDOR.Tipovendedor,1) IN (1,2,3,4)
+        AND PEDIDO.FILIAL<59
+        group by
+            CADLOJAPEDIDO.C_Grupoinformativo,
+            CADLOJAPEDIDO.C_informativoclienteloja,
+
+            2,3,pedido.idnota,
+            pedido.dataemissao, cadcli.nome,
+            CADLOJA.C_Grupoinformativo,
+            CADLOJA.C_informativoclienteloja ,
+            pedido.filial
+
+
+        ORDER by CADLOJA.C_Grupoinformativo desc
+        --, 2 desc
+
+        INTO
+           :C_informativoclienteloja, :cadastro, :nome,
+           :C_grupoinformativo,:vlrtotalmercadorias,
+           :idpedido, valorpedido, dataemissao, clientenome,
+           :filial
+           /*,:p_participacao,
+           :vendedor*/
+           DO BEGIN
+
+--           vlrtotalmercadorias = VLRTOTALMERCADORIAS * P_PARTICIPACAO / 100;
+--           valorpedido = valorpedido * P_PARTICIPACAO / 100;
+
+           somatotal=somatotal+vlrtotalmercadorias;
+
+           if  (C_Grupoinformativo=P_Grupoinformativo) THEN
+             SOMAGRUPO=SOMAGRUPO+valorpedido;
+           else
+             SOMAGRUPO=valorpedido;
+
+           P_Grupoinformativo=C_Grupoinformativo;
+
+           SUSPEND;
+
+
+   end
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_INFORMATIVOVENDAS3 TO  SYSDBA;
+

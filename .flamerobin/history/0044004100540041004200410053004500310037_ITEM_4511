@@ -1,0 +1,4 @@
+select * from INVENTARIOESTOQUEDATA 
+where 
+INVENTARIOESTOQUEDATA.CODIGO='1009527' and
+inventarioestoquedata."DATA"='31.03.2025'

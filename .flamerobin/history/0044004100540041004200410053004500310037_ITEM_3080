@@ -1,0 +1,5 @@
+select 
+    itemestoque.codigo,
+    itemestoque.CODIGOTRIBUTACAO,
+    itemestoque.TRIBUTACAOICMS
+   from itemestoque

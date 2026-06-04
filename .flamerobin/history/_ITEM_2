@@ -1,0 +1,19 @@
+update
+    TITULOPAG
+set
+    tipobaixa='E'
+where
+    baixa='31.12.2020'
+
+select 
+    titulopag.Tipobaixa,titulopag.* 
+from 
+    titulopag 
+where 
+    baixa='31.12.2020'
+    
+    and exists
+        (select * from titulopag where titulopag.filial=movtotitulopag.filial
+        and titulopag.idtitulo=movtotitulopag.idtitulo
+        and titulopag.baixa='31.12.2020')
+        

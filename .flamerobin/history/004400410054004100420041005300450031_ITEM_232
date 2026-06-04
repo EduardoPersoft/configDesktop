@@ -1,0 +1,1 @@
+select * from ITEMESTOQUE where itemestoque.C_CODIGOANT='3004230'

@@ -1,0 +1,5 @@
+select * from TITULOREC
+where titulorec.filial=5 and
+titulorec.EMISSAO='18.10.2022' and 
+titulorec.contacorrente=1 and
+titulorec.TIPOTRANSACAO=94

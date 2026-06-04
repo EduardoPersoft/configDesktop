@@ -1,0 +1,10 @@
+select 
+    INVENTARIOESTOQUEDATA.* ,
+    materiallocal.SALDOTOTAL
+from 
+    INVENTARIOESTOQUEDATA 
+inner JOIN
+    materiallocal on
+        materiallocal.filial=INVENTARIOESTOQUEDATA.filial AND
+        materiallocal.iditem=inventarioestoquedata.codigo AND
+        materiallocal.IDLOCAL=INVENTARIOESTOQUEDATA.local

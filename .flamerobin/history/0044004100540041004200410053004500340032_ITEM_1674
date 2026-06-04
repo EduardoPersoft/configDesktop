@@ -1,0 +1,11 @@
+select * from lantocontpag
+where exists (
+select 
+    *
+from 
+    TITULOPAG
+where
+    titulopag.filial=lantocontpag.FILIAL and
+    titulopag.IDTITULO=lantocontpag.IDMOVTOBANC and
+    titulopag.titulo='8872850' and
+    titulopag.fatura<>'1')

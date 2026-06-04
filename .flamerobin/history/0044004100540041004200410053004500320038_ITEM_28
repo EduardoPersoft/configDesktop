@@ -1,0 +1,15 @@
+select
+    apontamentocomp.filial,
+    apontamentocomp.idmovimento,
+    apontamentocomp.idmaterial,
+    apontamentocomp.IDCOMPOSICAO,
+    apontamentocomp.id,
+    apontamentocomp.lote,
+    apontamentocomp.quantidade
+from
+    apontamentocomp
+where  
+    apontamentocomp.filial=? and
+    apontamentocomp.idmovimento=?
+    
+    

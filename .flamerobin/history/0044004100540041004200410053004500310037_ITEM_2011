@@ -1,0 +1,12 @@
+select 
+    TRIBUTACAOICMS.id,
+    TRIBUTACAOICMS.descricao,
+    TRIBUTACAOICMSuf.uf
+from 
+    TRIBUTACAOICMSUF 
+left join
+    TRIBUTACAOICMS on 
+        tributacaoicmsuf.id=tributacaoicms.id
+where 
+    consumidorfinal='S' and
+    

@@ -1,0 +1,1 @@
+update t_TITULOREC SET IMPORTADO = 'S' where importado is null

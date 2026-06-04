@@ -1,0 +1,3 @@
+select * from CONTAsCOntabeis
+where idplano=4
+order by contacontabil

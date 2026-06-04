@@ -1,0 +1,15 @@
+select * from LOGALTERACAO 
+WHERE logalteracao.objeto in ('NOTACOMPRA', 
+                              'NOTAFISCAL', 
+                              'ORÇAMENTO', 
+                              'PEDIDO', 
+                              'PEDIDOCOMPRA',
+                              'TITULOSRECEBER', 
+                              'TITULOSPAGAR', 
+                              'VERSAOSQL',
+                              'LISTAPRECO',
+                              'CHEQUE',
+                              'MOVIMENTOESTOQUE',
+                              'AVISOCREDITO',
+                              'MOVIMENTOBANCARIO')
+AND LOGALTERACAO.DATA<'01.01.2025'

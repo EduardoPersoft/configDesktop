@@ -1,0 +1,12 @@
+select 
+    custo1.*, custo2.CUSTOUNITARIO uantes, custo2.quantidade qantes, custo2.custototal tantes
+from
+    ITEMCUSTODATA custo1
+left join
+    itemcustodata custo2 on
+        custo1.filial=custo2.filial and
+        custo1.codigo=custo2.codigo and
+        custo2.DATAINVENTARIO='31.01.2024'
+where
+    filial=110 and
+    datainventario='29.02.2024'

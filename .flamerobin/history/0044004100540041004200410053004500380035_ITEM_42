@@ -1,0 +1,14 @@
+update
+    pedido
+set
+    pedido.PESOBRUTO=(select sum(mercadoriasped.PESOBRUTO) from mercadoriasped 
+                      where mercadoriasped.filial=pedido.filial 
+                      and mercadoriasped.idnota=pedido.idnota), 
+    pedido.PESOLIQUIDO=(select sum(mercadoriasped.PESOBRUTO) from mercadoriasped 
+                      where mercadoriasped.filial=pedido.filial 
+                      and mercadoriasped.idnota=pedido.idnota),
+    PEDIDO.QUANTIDADEVOLUME=(select sum(mercadoriasped.QUANTIDADE) from mercadoriasped 
+                      where mercadoriasped.filial=pedido.filial 
+                      and mercadoriasped.idnota=pedido.idnota)
+
+                      

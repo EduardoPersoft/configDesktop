@@ -1,0 +1,2 @@
+select * from ITEMESTOQUEXARQUIVO
+where codigo='03240071'

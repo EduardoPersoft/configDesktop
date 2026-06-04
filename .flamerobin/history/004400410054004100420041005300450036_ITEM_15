@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    SPEDFISCAL_C
+WHERE
+    num_doc='0000010437'

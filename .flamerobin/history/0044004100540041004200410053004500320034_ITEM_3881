@@ -1,0 +1,11 @@
+select
+    filial,
+    idnota,
+    idmercadoria,
+    codigo,
+    CUSTO
+from   
+    MERCADORIASNOTA
+where 
+    filial=5 and
+    idnota=303320

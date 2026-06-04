@@ -1,0 +1,3 @@
+select * from notacompra 
+where notacompra.dataemissao<'01.08.2023'
+and notacompra.dataentrada>='01.08.2023'

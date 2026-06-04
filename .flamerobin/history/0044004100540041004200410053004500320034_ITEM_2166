@@ -1,0 +1,4 @@
+select codigo,descricao, itemestoque.TRIBUTACAOICMS 
+from itemestoque 
+where itemestoque.CLASSIFISCAL='130' 
+and itemestoque.TRIBUTACAOICMS=2

@@ -1,0 +1,15 @@
+select
+    i1.codigo,
+    i1.REFERENCIA,
+    i1.C_ORIGINAL,
+    i2.codigo,
+    i2.referencia,
+    i2.c_original
+from 
+    ITEMESTOQUE i1
+inner join
+    itemestoque i2 on
+        i1.c_original=i2.c_original
+where 
+    i1.codigo<>i2.codigo
+

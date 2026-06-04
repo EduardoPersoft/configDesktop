@@ -1,0 +1,2 @@
+select * from contacorrente
+where filial not in (110,3941)

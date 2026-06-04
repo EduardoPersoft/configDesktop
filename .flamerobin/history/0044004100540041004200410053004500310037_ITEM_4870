@@ -1,0 +1,8 @@
+update
+    NOTAFISCAL
+set
+   icmsorigemvalorinterestadual=0
+where
+    filial=1 and
+    dataemissao between '01.05.2025' and '31.05.2025' and
+    icmsorigemvalorinterestadual>0

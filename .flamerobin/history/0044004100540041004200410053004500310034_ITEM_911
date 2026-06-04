@@ -1,0 +1,2 @@
+select * from MATERIALMOVIMENTOESTOQUE
+where filial=110 and idpedido=10026 and idmercadoria=1

@@ -1,0 +1,4 @@
+delete from c_cores
+WHERE not exists
+(select * from ITEMESTOQUE
+ where itemestoque.codigo=c_cores.codigo)

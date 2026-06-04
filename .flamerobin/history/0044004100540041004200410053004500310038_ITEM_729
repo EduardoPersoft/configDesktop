@@ -1,0 +1,6 @@
+select 
+    *
+from
+    PEDIDO
+where
+    pedido.C_PEDIDOSUBSTITUIDO=65608

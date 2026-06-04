@@ -1,0 +1,1 @@
+select codigo,descricao,datacadastro from itemestoque order by itemestoque.datacadastro desc

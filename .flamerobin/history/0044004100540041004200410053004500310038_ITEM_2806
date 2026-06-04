@@ -1,0 +1,3 @@
+select * from servicosped
+where filial>100 and
+idnota in (675)

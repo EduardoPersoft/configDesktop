@@ -1,0 +1,1 @@
+select cadastro,nome,cidade,MUNICIPIO from CADASTROPARCEIROS order by cadastro

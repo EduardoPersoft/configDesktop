@@ -1,0 +1,2 @@
+select * from PEDIDOCOMPRA
+where filial=233 and idnota 1008

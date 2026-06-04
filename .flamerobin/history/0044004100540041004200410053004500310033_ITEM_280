@@ -1,0 +1,30 @@
+select 
+    FILIAL,
+    IDNOTA, 
+    idmercadoria,
+    DATACADASTRO,
+    DATAAPROVACAO,
+    DESTINATARIO,
+    NOME,
+    
+    CODIGO ,
+    DESREDUZIDA,
+    QUANTIDADE,
+    UNIDADE,
+
+    VALOR,
+    VLRTOTALNOTA,     
+    
+    SALDO,
+    DATAENTREGA,
+    DATAENTREGAORIGINAL,    
+    
+    saldototal,   
+    TOTALRESERVADO,
+    SOMACOMPRAS,
+    DATACHEGADA,
+    uuid,
+    comentario
+    
+from FOLLOWUPITEMVENDAS(1) 
+

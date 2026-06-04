@@ -1,0 +1,11 @@
+select 
+    filial,
+    idnota,
+    notafiscal.dataemissao,
+    notafiscal.DATAALTERACAO,
+    notafiscal.DATAENTRADASAIDA,
+    notafiscal.DATAHORAEMISSAO
+from 
+    notafiscal
+where 
+    notafiscal.dataemissao='18.07.2023'

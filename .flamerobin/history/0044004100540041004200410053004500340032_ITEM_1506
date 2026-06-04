@@ -1,0 +1,62 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.DESCRICAO ncm,
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) AS QUANTIDADE,
+    itemestoque.UNIDADE,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL)*ITEMCUSTODATA.CUSTOUNITARIO as custo ,
+    ITEMCUSTODATA.CUSTOUNITARIO  precomedio,
+    CASE ITEMESTOQUE.TIPOPRODUTO
+        WHEN 1 THEN 'Matéria prima'
+        WHEN 2 THEN 'Consumo'
+        WHEN 3 THEN 'Revenda'
+        WHEN 4 THEN 'Industrializado'
+        WHEN 5 THEN 'Inativo'
+        ELSE itemestoque.TIPOPRODUTO
+    end TIPOPRODUTO,
+     
+    CASE ITEMESTOQUE.CODIGOTRIBUTACAO
+        WHEN 0 THEN 'Nacional'
+        WHEN 1 THEN 'Importado'
+        WHEN 2 THEN 'Estrangeiro'
+        WHEN 3 THEN 'Nacional'
+        WHEN 4 THEN 'Nacional'
+        WHEN 5 THEN 'Nacional'
+        WHEN 6 THEN 'Importado'
+        WHEN 7 THEN 'Estrangeira'
+        WHEN 8 THEN 'Nacional'
+        ELSE itemestoque.codigoTributacao
+    end origem
+
+from 
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        materialmovimentoestoque.filial=movimentoestoque.FILIAL and
+        materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTO
+inner join
+    itemestoque on
+        itemestoque.codigo=materialmovimentoestoque.iditem
+inner join 
+    CLASSIFICACAOFISCAL on 
+    ITEMESTOQUE.CLASSIFISCAL=CLASSIFICACAOFISCAL.CFISCAL
+inner join
+    ITEMCUSTODATA on
+        itemcustodata.FILIAL=MATERIALMOVIMENTOESTOQUE.filial and
+        itemcustodata.CODIGO=MATERIALMOVIMENTOESTOQUE.IDITEM and
+        itemcustodata.DATAINVENTARIO='31.01.2024'
+where 
+    MATERIALMOVIMENTOESTOQUE.FILIAL = 110 AND
+    MOVIMENTOESTOQUE.EMISSAO <= '31.01.2024'
+group BY
+    itemestoque.codigo,
+    itemestoque.descricao,
+    CLASSIFICACAOFISCAL.DESCRICAO,
+    itemestoque.UNIDADE,
+    itemestoque.tipoproduto,
+    ITEMESTOQUE.embalagem,
+    ITEMESTOQUE.semiacabado,
+    ITEMESTOQUE.codigotributacao.
+    ITEMCUSTODATA.CUSTOUNITARIO
+having 
+    cast(sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.SINAL) AS decimal(12,3)) > 0

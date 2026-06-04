@@ -1,0 +1,6 @@
+update 
+    NOTAFISCAL
+set 
+    notafiscal.CANCELAMENTO='N'
+WHERE
+    notafiscal.DATAEMISSAO between '01.09.2021' and '30.11.2021' and cancelamento is null

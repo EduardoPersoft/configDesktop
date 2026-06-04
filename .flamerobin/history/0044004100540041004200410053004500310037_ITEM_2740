@@ -1,0 +1,2 @@
+select * from CONTASCONTABEIS
+where idplano=2 

@@ -1,0 +1,4 @@
+SELECT a.CODIGO, a.QUANTIDADE, a.VALORTOTAL, a."LOCAL"
+FROM T_LOCAL052022 a 
+order by 
+a.codigo, a."LOCAL"

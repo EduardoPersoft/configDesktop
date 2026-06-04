@@ -1,0 +1,8 @@
+select 
+    uuid,
+    count(idnota)
+FROM
+    pedidocompra
+group by
+    uuid
+ order by idnota

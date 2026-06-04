@@ -1,0 +1,1 @@
+select * from CADASTROPARCEIROS where CADASTROPARCEIROS.cadastro in (2376, 2375, 3914)

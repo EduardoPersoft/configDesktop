@@ -1,0 +1,89 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_MAPAPRODUCAOMOVOP (
+    MODO INTEGER,
+    PIDPEDIDO INTEGER,
+    PDATAINICIAL DATE,
+    PDATAFINAL DATE )
+RETURNS (
+    FILIAL INTEGER,
+    IDMOVIMENTO INTEGER,
+    IDMOVIMENTOMATERIAL INTEGER )
+AS
+BEGIN
+    IF (PIDPEDIDO IS NULL) THEN BEGIN
+        if(modo=0) THEN
+            FOR SELECT  MATERIALMOVIMENTOESTOQUE.FILIAL,
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+                MATERIALMOVIMENTOESTOQUE.Idmovimentomaterial
+            FROM MOVIMENTOESTOQUE
+            INNER JOIN MATERIALMOVIMENTOESTOQUE ON (
+                MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.Filial AND
+                Materialmovimentoestoque.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO)
+            WHERE 
+            materialmovimentoestoque.C_TUFTINGFUNDO IS NULL
+            and MATERIALMOVIMENTOESTOQUE.concluido = 'N'
+            AND MOVIMENTOESTOQUE.Tipomovimento=12
+            INTO        
+                Filial,
+                IdMovimento,
+                IdMovimentoMaterial
+            DO 
+                SUSPEND;
+        if(modo=1) THEN
+            FOR SELECT  MATERIALMOVIMENTOESTOQUE.FILIAL,
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+                MATERIALMOVIMENTOESTOQUE.Idmovimentomaterial
+            FROM MOVIMENTOESTOQUE
+            INNER JOIN MATERIALMOVIMENTOESTOQUE ON (
+                MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.Filial AND
+                Materialmovimentoestoque.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO)
+            WHERE MATERIALMOVIMENTOESTOQUE.C_TUFTINGFUNDO BETWEEN :PDATAINICIAL AND :PDATAFINAL
+            AND MOVIMENTOESTOQUE.Tipomovimento=12
+            INTO        
+                Filial,
+                IdMovimento,
+                IdMovimentoMaterial
+            DO 
+                SUSPEND;
+
+        if(modo=2) THEN
+            FOR SELECT  MATERIALMOVIMENTOESTOQUE.FILIAL,
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+                MATERIALMOVIMENTOESTOQUE.Idmovimentomaterial
+            FROM MOVIMENTOESTOQUE
+            INNER JOIN MATERIALMOVIMENTOESTOQUE ON (
+                MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.Filial AND
+                Materialmovimentoestoque.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO)
+            WHERE MOVIMENTOESTOQUE.EMISSAO BETWEEN :PDATAINICIAL AND :PDATAFINAL
+            AND MOVIMENTOESTOQUE.Tipomovimento=12
+            INTO        
+                Filial,
+                IdMovimento,
+                IdMovimentoMaterial
+            DO 
+                SUSPEND;
+    
+    END
+    IF (PIDPEDIDO IS NOT NULL) THEN
+        FOR SELECT  MATERIALMOVIMENTOESTOQUE.FILIAL,
+                MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO,
+                MATERIALMOVIMENTOESTOQUE.Idmovimentomaterial
+        FROM MOVIMENTOESTOQUE
+        INNER JOIN MATERIALMOVIMENTOESTOQUE ON (
+            MATERIALMOVIMENTOESTOQUE.FILIAL=MOVIMENTOESTOQUE.Filial AND
+            Materialmovimentoestoque.IDMOVIMENTO=MOVIMENTOESTOQUE.IDMOVIMENTO)
+        WHERE MATERIALMOVIMENTOESTOQUE.IDPEDIDO=:PIDPEDIDO
+        AND MOVIMENTOESTOQUE.Tipomovimento=12
+        INTO        
+            Filial,
+            IdMovimento,
+            IdMovimentoMaterial
+        DO 
+            SUSPEND;            
+END^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_MAPAPRODUCAOMOVOP TO  SYSDBA;
+

@@ -1,0 +1,9 @@
+select 
+    filial,
+    idnota,
+    c_tipo,
+    pedido.DATAEMISSAO,
+    pedido.cancelamento
+from pedido
+where c_tipo<>0
+

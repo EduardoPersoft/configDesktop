@@ -1,0 +1,1 @@
+select * from orcamentos order by idnota

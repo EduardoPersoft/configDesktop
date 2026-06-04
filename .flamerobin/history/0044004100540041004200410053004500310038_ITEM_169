@@ -1,0 +1,7 @@
+SELECT
+    filial,idnota,idmercadoria,mercadoriasnota.filialped,mercadoriasnota.idpedido,mercadoriasnota.IDMERCPEDIDO
+FROM
+    MERCADORIASNOTA
+WHERE
+    filial=7 AND
+    idnota in (445, 446, 447, 448)

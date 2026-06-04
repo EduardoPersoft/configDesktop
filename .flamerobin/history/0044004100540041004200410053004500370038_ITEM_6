@@ -1,0 +1,16 @@
+select
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    c_itemestoquexetapas.SEQUENCIA,
+    c_itemestoquexetapas.C_ETAPA
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    c_itemestoquexetapas on
+        c_itemestoquexetapas.CODIGO=
+             MATERIALMOVIMENTOESTOQUE.iditem
+        
+where
+    materialmovimentoestoque.filial=1 and
+    materialmovimentoestoque.idmovimento=12247

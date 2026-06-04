@@ -1,0 +1,21 @@
+update 
+    materiallote
+set
+    quantidade = coalesce((select 
+                    sum(materialmovimentoestoque.quantidade*
+                        materialmovimentoestoque.sinal)
+                  from 
+                    MATERIALMOVIMENTOESTOQUE
+                  where
+                     materialmovimentoestoque.filial=materiallote.filial and
+                     materialmovimentoestoque.iditem=materiallote.iditem and
+                     MATERIALMOVIMENTOESTOQUE.lote=materiallote.lote),0),
+     valor = coalesce((select 
+                    sum(materialmovimentoestoque.valor*
+                        materialmovimentoestoque.sinal)
+                  from 
+                    MATERIALMOVIMENTOESTOQUE
+                  where
+                     materialmovimentoestoque.filial=materiallote.filial and
+                     materialmovimentoestoque.iditem=materiallote.iditem and
+                     MATERIALMOVIMENTOESTOQUE.lote=materiallote.lote),0)

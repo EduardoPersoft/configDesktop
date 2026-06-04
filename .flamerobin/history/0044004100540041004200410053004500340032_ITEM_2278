@@ -1,0 +1,13 @@
+            select
+                    *
+            from
+                MERCADORIASNOTA
+            inner join
+                notafiscal on
+                    notafiscal.filial=mercadoriasnota.filial and
+                    notafiscal.idnota=mercadoriasnota.IDNOTA
+            where
+                
+                mercadoriasnota.IDPEDIDO=11003 and
+                mercadoriasnota.IDMERCPEDIDO=1 and
+                notafiscal.CANCELAMENTO='N' 

@@ -1,0 +1,29 @@
+select
+    CENTROCUSTOSITEM.IDITEM,
+    centrocustositem.SEQUENCIA,
+    CENTROCUSTOSITEM.IDCENTROCUSTO,
+    CENTROCUSTOS.DESCRICAO,
+    CENTROCUSTOS.CUSTOPRODUCAO,
+    CENTROCUSTOS.C_VELOCIDADEDEFAULT,
+    CENTROCUSTOS.C_SETUP
+    
+from 
+    CENTROCUSTOSITEM
+inner join 
+    itemestoque on 
+    CENTROCUSTOSITEM.IDITEM=itemestoque.CODIGO
+INNER JOIN 
+    cadastroparceiros E_CADASTROPARCEIROS ON 
+        (E_CADASTROPARCEIROS.CADASTRO=110)
+inner join
+    ESTABELECIMENTO ON 
+        ESTABELECIMENTO.CADASTRO=E_CADASTROPARCEIROS.CADASTRO
+inner join 
+    CENTROCUSTOS on 
+        centroCustos.idplano=estabelecimento.planoCentroCustos and
+        centrocustos.centroCusto=centrocustositem.idcentrocusto
+where
+    CENTROCUSTOSITEM.IDITEM='I3-11M2WM'  and
+    CENTROCUSTOSITEM.FILIAL = ESTABELECIMENTO.CADASTRO
+order by 
+     CENTROCUSTOSITEM.IDITEM

@@ -1,0 +1,2 @@
+select uuid from NOTAFISCAL
+where filial=1 and numeronota=318902

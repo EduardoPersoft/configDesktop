@@ -1,0 +1,1 @@
+select * from CADASTROPARCEIROS where email='filipecas_neto@hotmail.com'

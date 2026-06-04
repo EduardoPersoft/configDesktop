@@ -1,0 +1,2 @@
+select * from MATERIALFILIAL
+where iditem='MPP03MET1G27'

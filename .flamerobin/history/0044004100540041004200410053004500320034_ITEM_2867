@@ -1,0 +1,8 @@
+select
+    *
+from
+    TITULOREC
+where 
+    filial=5
+    and titulorec.EMISSAO='27.07.2022'
+    and titulorec.contacorrente=707

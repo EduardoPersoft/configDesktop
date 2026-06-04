@@ -1,0 +1,1 @@
+select * from itemestoque where not exists (select * from C_LOGPRODUTOECOMMERCE where C_LOGPRODUTOECOMMERCE.codigo = itemestoque.codigo)

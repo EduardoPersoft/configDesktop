@@ -1,0 +1,22 @@
+select
+    cadfor.cadastro,
+    cadfor.nome,
+    count(distinct notacompra.idnota) as qtdCompras,
+    count(distinct mercadoriasnotacompra.codigo) qtdItensComprados,
+    cast(sum((mercadoriasnotacompra.quantidade - mercadoriasnotacompra.QTDEENTREGUE)) as integer) as falta
+from
+    pedidocompra NOTACOMPRA
+inner join
+    CADASTROPARCEIROS cadfor
+        on cadfor.cadastro=notacompra.DESTINATARIO
+inner join
+    mercadoriaspedcompra mercadoriasnotacompra on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.idnota
+where
+    notacompra.filial=? and
+    notacompra.datacadastro between ? and ?
+group by         
+    cadfor.cadastro,
+    cadfor.nome
+order by 4 desc

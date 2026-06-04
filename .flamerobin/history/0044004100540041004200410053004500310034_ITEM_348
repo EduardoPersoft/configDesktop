@@ -1,0 +1,3 @@
+delete from MATERIALMOVIMENTOESTOQUE
+where filial=110
+and idmovimento in (6078, 6077)

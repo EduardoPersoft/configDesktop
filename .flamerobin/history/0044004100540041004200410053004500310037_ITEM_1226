@@ -1,0 +1,28 @@
+select   
+    materiallocal.filial,
+    materiallocal.idlocal,
+    local.DESCRICAO,    
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    materiallocal.SALDOTOTAL,
+    (select
+        max(INVENTARIOESTOQUEDATA.DATA)
+     from 
+        INVENTARIOESTOQUEDATA
+     where
+        inventarioestoquedata.filial=materiallocal.filial and
+        inventarioestoquedata.local=materiallocal.IDLOCAL and
+        inventarioestoquedata.codigo=materiallocal.iditem)
+from
+    MATERIALLOCAL
+inner join
+    local on 
+        materiallocal.IDLOCAL=local.ID
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.IDITEM
+                   
+where
+    materiallocal.filial=1 and
+    materiallocal.SALDOtotal <> 0

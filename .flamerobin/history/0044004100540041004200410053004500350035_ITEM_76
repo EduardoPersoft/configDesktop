@@ -1,0 +1,1 @@
+update itemestoque set filialpadrao=1 from itemestoque

@@ -1,0 +1,29 @@
+select
+    cadfor.razaosocial,
+    CONTASCONTABEIS.CONTACONTABIL,
+    contascontabeis.DESCRICAO,
+    titulopag.idtitulo,
+    titulopag.titulo,
+    titulopag.fatura,
+    titulopag.emissao
+from 
+    TITULOPAG
+inner join
+    CADASTROPARCEIROS cadfor on
+        cadfor.CADASTRO = titulopag.PARCEIRO
+inner join
+    LANTOCONTPAG on
+        lantocontpag.filial=titulopag.filial and
+        lantocontpag.IDMOVTOBANc=titulopag.IDTITULO
+inner join
+    CONTASCONTABEIS on
+        contascontabeis.IDPLANO=4 and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+where 
+    titulopag.filial=110 and
+    titulopag.baixa is null
+order by
+    cadfor.razaosocial,
+    CONTASCONTABEIS.CONTACONTABIL,
+    titulopag.documento,
+    titulopag.fatura

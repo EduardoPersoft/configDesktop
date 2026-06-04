@@ -1,0 +1,8 @@
+select
+    usuario.usuario,
+    regras.*
+from
+    regras
+inner join
+    usuario on
+        usuario.usuario=regras.id

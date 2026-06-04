@@ -1,0 +1,76 @@
+SELECT
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    cadcli.documento documento,
+    cadcli.nome nomeClientes,
+    cadcli.RAZAOSOCIAL razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome nomeVendedor,
+    cadate.nome nomeAtendente,
+  
+    (sum(mercadoriasnota.VLRFINALMERCAD)-
+    (case NATUREZAOPERACAO.ESTOQUE when 'S' then sum(mercadoriasnota.CUSTO*mercadoriasnota.quantidade) else 0 end+
+     sum(mercadoriasnota.VLRPISPASEP)+
+     sum(mercadoriasnota.VLRCOFINS)+    
+     sum(mercadoriasnota.VALORICMS)+
+     sum(mercadoriasnota.VLRFINALMERCAD*mercadoriasnota.COMISSAO/100))) as valormargem ,
+  
+    (sum(mercadoriasnota.VLRFINALMERCAD)-
+    (case NATUREZAOPERACAO.ESTOQUE when 'S' then sum(mercadoriasnota.CUSTO*mercadoriasnota.quantidade) else 0 end+
+     sum(mercadoriasnota.VLRPISPASEP)+
+     sum(mercadoriasnota.VLRCOFINS)+    
+     sum(mercadoriasnota.VALORICMS)+
+     sum(mercadoriasnota.VLRFINALMERCAD*mercadoriasnota.COMISSAO/100)))/sum(mercadoriasnota.VLRFINALMERCAD)*100 as magem, 
+
+    sum(mercadoriasnota.vlrFinalMercad) valorVenda,
+    sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100) comissao,
+    cast(sum(mercadoriasnota.vlrfinalmercad*mercadoriasnota.comissao/100)/ 
+         sum(mercadoriasnota.vlrFinalMercad)*100 as decimal(7,4)) pcomissao
+    
+from
+    NOTAFISCAL
+inner JOIN
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial AND
+        mercadoriasnota.idnota=notafiscal.idnota
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner JOIN
+    vendedoresnota on
+        vendedoresnota.filial=notafiscal.filial AND
+        vendedoresnota.idnota=notafiscal.IDNOTA
+inner join        
+    NATUREZAOPERACAO on
+        NATUREZAOPERACAO.id=notafiscal.OPERACAO
+left JOIN
+    cadastroparceiros cadven on 
+        cadven.cadastro=vendedoresnota.vendedor
+left JOIN
+    cadastroparceiros cadate on
+        cadate.cadastro=notafiscal.ATENDENTE
+where
+    notafiscal.filial= 5 and
+    notafiscal.dataemissao between '01.06.2022' and '30.06.2022' and
+    notafiscal.dataCancelamento is null and
+    notafiscal.calculada = 'S' and 
+    notafiscal.vlrtotalNota >0
+group by                       
+    notafiscal.NUMERONOTA,
+    notafiscal.DATAEMISSAO,
+    naturezaoperacao.estoque,
+    cadcli.documento,
+    cadcli.nome,
+    cadcli.razaosocial,
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.nome,
+    cadate.nome,
+    notafiscal.VLRFINALMERCADORIAS,
+    notafiscal.MARGEMCONTRIBUICAO,
+    notafiscal.custo,
+    notafiscal.valorpis,
+    notafiscal.valorcofins,
+    notafiscal.TOTVALORICMS
+

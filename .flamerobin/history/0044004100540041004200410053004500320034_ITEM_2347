@@ -1,0 +1,20 @@
+select 
+    filial,idnota,comissao
+from 
+    mercadoriasnota
+WHERE
+    mercadoriasnota.filial=5 AND
+    exists (
+        select 
+            * 
+        from 
+            NOTAFISCAL
+        inner JOIN
+            vendedoresnota on
+                notafiscal.filial=vendedoresnota.filial AND
+                notafiscal.idnota=vendedoresnota.IDNOTA
+        WHERE
+            vendedoresnota.vendedor=33176 and
+            notafiscal.filial=mercadoriasnota.filial AND
+            NOTAFISCAL.idnota=mercadoriasnota.idnota AND
+            notafiscal.DATAEMISSAO between '01.05.2022' and '31.05.2022')

@@ -1,0 +1,38 @@
+select
+    composicaoop.codigo,    
+    composicaoop.QUANTIDADE,
+    movimentoestoque.filial,
+    movimentoestoque.documento,
+    CADASTROPARCEIROS.cadastro,
+    CADASTROPARCEIROS.nome,
+    movimentoestoque.emissao
+from
+    movimentoestoque entrada
+inner join
+    movimentoestoque op on
+        entrada.filial=op.filial and
+        entrada.IDMOVIMENTO=op.IDOP 
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        op.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        op.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+        op.IDOPITEM=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+inner join
+    composicaoop on
+        composicaoop.filial=MATERIALMOVIMENTOESTOQUE.FILIAL and
+        composicaoop.IDMOVIMENTO=materialmovimentoestoque.idmovimento  and
+        composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL
+left join
+    itemestoque on
+        itemestoque.codigo=composicaoop.codigo
+left join
+    pedido on
+        pedido.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        pedido.idnota=MATERIALMOVIMENTOESTOQUE.IDPEDIDO
+left join
+    CADASTROPARCEIROS on
+        CADASTROPARCEIROS.cadastro = pedido.DESTINATARIO
+where
+    op.TIPOMOVIMENTO='04' and
+    op.emissao>='01.03.2025' and
+    MATERIALMOVIMENTOESTOQUE.concluido='N'

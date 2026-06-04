@@ -1,0 +1,8 @@
+update 
+    MERCADORIASorc
+set
+    mercadoriasorc.SITUACAOTRIBUT = '200'
+where
+    --mercadoriasorc.baixa='N' and
+    mercadoriasorc.SITUACAOTRIBUT='100'
+    

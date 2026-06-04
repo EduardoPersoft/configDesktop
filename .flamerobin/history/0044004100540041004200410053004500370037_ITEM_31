@@ -1,0 +1,6 @@
+select 
+    *
+from
+    ITEMESTOQUE
+where
+        itemestoque.codigo='IND1060SUP001'

@@ -1,0 +1,26 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    materialfilial.CONSUMOMEDIO,
+    sum(coalesce(materiallocal.saldototal, 0)) as saldo
+from 
+    ITEMESTOQUE
+INNER JOIN
+    materialfilial on
+        materialfilial.filial=5 AND
+        itemestoque.codigo=materialfilial.IDITEM
+inner JOIN
+    materiallocal on
+        materialfilial.filial=materiallocal.filial AND
+        materiallocal.iditem=materialfilial.iditem
+HAVING
+    sum(coalesce(materiallocal.saldototal, 0)) = 0
+group by
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.LOCALIZACAO,
+    materialfilial.CONSUMOMEDIO
+order by
+    materialfilial.CONSUMOMEDIO desc
+    

@@ -1,0 +1,5 @@
+select 
+    ITEMESTOQUE.codigo,
+    itemestoque.CODIGOBARRA
+from
+    itemestoque

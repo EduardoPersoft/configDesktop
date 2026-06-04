@@ -1,0 +1,1 @@
+select cfiscal, aliquota, cast(aliquota/.65) from CLASSIFICACAOFISCAL

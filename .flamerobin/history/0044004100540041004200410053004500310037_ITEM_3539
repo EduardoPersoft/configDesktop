@@ -1,0 +1,24 @@
+INSERT INTO COMPOSICAOMERCNOTA (FILIAL, IDNOTA, IDMERCADORIA, IDITEM, QUANTIDADE, VALORUNITARIO, COMPOSICAO, IDLOCAL, LOTE, IDCOMPOSICAO) 
+select 
+    mercadoriasnota.filial,
+    mercadoriasnota.idnota,
+    mercadoriasnota.idmercadoria,
+    mercadoriasnota.codigo,
+    mercadoriasnota.quantidade,
+    mercadoriasnota.precolista,
+   'N',
+    1,
+    '.',
+    1
+from 
+    mercadoriasnota 
+inner join
+    notafiscal on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.idnota 
+where notafiscal.DATACADASTRO>='10.07.2024' 
+and not exists (
+select * from COMPOSICAOMERCNOTA
+where mercadoriasnota.filial=composicaomercnota.FILIAL
+and mercadoriasnota.idnota=composicaomercnota.idnota 
+and mercadoriasnota.IDMERCADORIA=composicaomercnota.IDMERCADORIA)

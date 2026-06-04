@@ -1,0 +1,2 @@
+select * from ITEMESTOQUE
+where codigo IN ('PE-24859', 'PE-24860')

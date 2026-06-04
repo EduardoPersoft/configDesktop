@@ -1,0 +1,6 @@
+select 
+    filial,
+    idnota,
+    notafiscal.DATAENTRADASAIDA
+from 
+    notafiscal

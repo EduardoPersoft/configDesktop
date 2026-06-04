@@ -1,0 +1,1 @@
+select * from movimentoestoque where expedicoes.emissao>='06.04.2026'

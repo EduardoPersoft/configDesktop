@@ -1,0 +1,8 @@
+update MERCADORIASPED
+set codigoestoque=codigo
+where filial=1 and baixa='N' and 
+mercadoriasped.codigoestoque is null and
+exists (select * from pedido
+where pedido.filial=mercadoriasped.filial and
+pedido.idnota=mercadoriasped.idnota and
+pedido.CANCELAMENTO='N')

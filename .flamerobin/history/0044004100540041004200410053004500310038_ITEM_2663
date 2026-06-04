@@ -1,0 +1,25 @@
+select 
+    DISTINCT
+    notafiscal.filial,
+    notafiscal.idnota,
+    notafiscal.destinatario,
+    mercadoriasnota.idpedido,
+    MERCADORIASNOTA.VLRFINALMERCAD,
+    pedido.c_tipo
+from 
+    NOTAFISCAL
+inner join
+    mercadoriasnota on
+        mercadoriasnota.filial=notafiscal.filial and
+        mercadoriasnota.idnota=notafiscal.IDNOTA
+inner join
+    pedido on
+        pedido.filial=mercadoriasnota.filialped and
+        pedido.idnota=mercadoriasnota.idpedido
+where 
+    notafiscal.filial=1 
+    and notafiscal.DATAEMISSAO between '01.04.2024' and '30.04.2024'
+    and notafiscal.modelo =16
+    AND NOTAFISCAL.CANCELAMENTO='N'
+    and notafiscal.destinatario<>1
+    and pedido.c_tipo in (3,4,5)

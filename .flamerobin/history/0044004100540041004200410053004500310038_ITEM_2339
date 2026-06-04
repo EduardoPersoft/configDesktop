@@ -1,0 +1,3 @@
+
+select * from VENDEDORESPED
+where VENDEDOR = 21 and FILIAL = 1 and IDNOTA = 54086

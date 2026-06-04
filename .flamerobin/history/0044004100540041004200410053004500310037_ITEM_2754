@@ -1,0 +1,1 @@
+select * from CONDICAOPAGAMENTO order by id

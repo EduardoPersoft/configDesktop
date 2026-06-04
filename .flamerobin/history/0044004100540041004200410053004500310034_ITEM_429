@@ -1,0 +1,4 @@
+update
+    MATERIALLOTE
+set
+    materialLOTE.quantidade=CAST(MATERIALLOTE.QUANTIDADE AS DECIMAL(12,3))

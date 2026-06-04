@@ -1,0 +1,6 @@
+update
+    pedido
+set
+    pedido.DESTINATARIO =pedido.destinatario-354214
+where
+    pedido.destinatario>35000

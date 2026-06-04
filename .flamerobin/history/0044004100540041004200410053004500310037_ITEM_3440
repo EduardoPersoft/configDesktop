@@ -1,0 +1,2 @@
+select * from acessos
+where path like '%orcamento%'

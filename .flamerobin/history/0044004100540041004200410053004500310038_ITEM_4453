@@ -1,0 +1,73 @@
+SELECT
+          REGISTROCONTATO.registro,
+          REGISTROCONTATO.processamento,
+          USUARIOATENDENTE.usuario atendente,
+          USUARIORESPONSAVEL.usuario responsavel,
+          TIPOOCORRENCIA.descricao,
+          CADASTROPARCEIROS.nome,
+          CADASTROPARCEIROS.razaosocial,
+          CADASTROPARCEIROS.cadastro,
+          REGISTROCONTATO.contato,
+          REGISTROCONTATO.descricao ocorrencia,
+          REGISTROCONTATO.assunto,
+          REGISTROCONTATO.abertura,
+          REGISTROCONTATO.fechamento,
+          REGISTROCONTATO.previsaoresposta
+FROM 
+    REGISTROCONTATO
+INNER JOIN 
+    USUARIO USUARIOATENDENTE ON 
+            (REGISTROCONTATO.ATENDENTE=USUARIOATENDENTE.id)
+INNER JOIN 
+    tipoocorrencia ON 
+        (TIPOOCORRENCIA.id=REGISTROCONTATO.tipoocorrencia)
+INNER JOIN 
+    CADASTROPARCEIROS ON 
+        (REGISTROCONTATO.PARCEIRO=CADASTROPARCEIROS.CADASTRO)
+LEFT JOIN 
+    USUARIO USUARIORESPONSAVEL ON 
+        (registrocontato.responsavel=usuarioRESPONSAVEL.id)
+WHERE 
+    REGISTROCONTATO.PARCEIRO=12030
+
+union
+
+SELECT
+          REGISTROCONTATO.registro,
+          REGISTROCONTATO.processamento,
+          USUARIOATENDENTE.usuario atendente,
+          USUARIORESPONSAVEL.usuario responsavel,
+          TIPOOCORRENCIA.descricao,
+          CADASTROPARCEIROS.nome,
+          CADASTROPARCEIROS.razaosocial,
+          CADASTROPARCEIROS.cadastro,
+          REGISTROCONTATO.contato,
+          REGISTROCONTATO.descricao ocorrencia,
+          REGISTROCONTATO.assunto,
+          REGISTROCONTATO.abertura,
+          REGISTROCONTATO.fechamento,
+          REGISTROCONTATO.previsaoresposta
+
+FROM 
+    REGISTROCONTATO
+INNER JOIN 
+    USUARIO USUARIOATENDENTE ON 
+            (REGISTROCONTATO.ATENDENTE=USUARIOATENDENTE.id)
+INNER JOIN 
+    tipoocorrencia ON 
+        (TIPOOCORRENCIA.id=REGISTROCONTATO.tipoocorrencia)
+inner join 
+    VENDEDOR on 
+        (REGISTROCONTATO.PARCEIRO=VENDEDOR.CADASTRO)
+INNER JOIN 
+    CADASTROPARCEIROS ON 
+        (REGISTROCONTATO.PARCEIRO=CADASTROPARCEIROS.CADASTRO)
+LEFT JOIN 
+    USUARIO USUARIORESPONSAVEL ON 
+        (registrocontato.responsavel=usuarioRESPONSAVEL.id)
+
+WHERE 
+    VENDEDOR.CANALRELACIONADO = 12030
+   
+ORDER BY 
+    12 DESC

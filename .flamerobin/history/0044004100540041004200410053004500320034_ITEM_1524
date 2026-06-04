@@ -1,0 +1,41 @@
+ SELECT 
+    materialFilial.filial,
+    produto.CODIGO, 
+    produto.DESCRICAO descricaoproduto, 
+    produto.UNIDADE unidadeproduto,
+    localproduto.SALDOTOTAL,
+    cast(MATERIALFILIAL.CONSUMOMEDIO as integer) as consumomedio,
+    cast(materialfilial.CONSUMOMEDIO as integer) - localproduto.SALDOTOTAL qtdaproduzir,
+    COMPOSICAOITEM.SEQUENCIA,
+    COMPOSICAOITEM.IDMATERIAL,
+    COMPONENTE.DESCRICAO descricaocomponente, 
+    COMPONENTE.UNIDADE unidadecomponente,
+    LOCAlCOMPONENTE.SALDOTOTAL,
+    COMPOSICAOITEM.QUANTIDADE*(cast(materialfilial.CONSUMOMEDIO as integer) - localproduto.SALDOTOTAL) qtdnecessaria,
+    (COMPOSICAOITEM.QUANTIDADE*(cast(materialfilial.CONSUMOMEDIO as integer) - localproduto.SALDOTOTAL))-LOCAlCOMPONENTE.SALDOTOTAL as qtdfaltante
+FROM 
+    materialfilial
+inner join
+    ITEMESTOQUE produto  on
+        materialfilial.iditem=produto.codigo
+INNER JOIN
+    MATERIALLOCAL LOCALPRODUTO ON 
+        Localproduto.FILIAL = MATERIALFILIAL.filial 
+        and localproduto.IDITEM = materialfilial.IDITEM
+INNER Join 
+    COMPOSICAOITEM on 
+    COMPOSICAOITEM.IDITEM = produto.CODIGO  
+INNER JOIN
+    ITEMESTOQUE COMPONENTE on 
+    COMPONENTE.CODIGO = COMPOSICAOITEM.IDMATERIAL
+INNER JOIN
+    MATERIALLOCAL LOCALcomponente ON 
+        Localcomponente.FILIAL = MATERIALFILIAL.filial 
+        and localcomponente.IDITEM = componente.codigo
+WHERE
+     materialfilial.filial=5 AND 
+     materialfilial.CONSUMOMEDIO>localproduto.SALDOTOTAL and
+     (COMPOSICAOITEM.QUANTIDADE*(cast(materialfilial.CONSUMOMEDIO as integer) - localproduto.SALDOTOTAL))-LOCAlCOMPONENTE.SALDOTOTAL>0
+order by
+    materialfilial.consumoMedio desc,
+    produto.codigo

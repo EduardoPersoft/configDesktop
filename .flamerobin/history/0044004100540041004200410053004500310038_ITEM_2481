@@ -1,0 +1,3 @@
+select * from INVENTARIOESTOQUEDATA
+where filial=1
+and codigo='01.12.0595'

@@ -1,0 +1,3 @@
+delete from materialmovimentoestoque 
+where filial<110
+    

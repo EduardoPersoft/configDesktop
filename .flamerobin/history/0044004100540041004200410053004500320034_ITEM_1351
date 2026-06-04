@@ -1,0 +1,2 @@
+select * from regras where id=182
+order by path

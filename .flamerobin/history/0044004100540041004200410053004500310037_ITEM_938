@@ -1,0 +1,39 @@
+select  
+    * 
+from 
+    notacompra 
+where 
+    filial=12826 and 
+    notacompra.DATAENTRADA between '01.08.2021' and '31.08.2021' AND
+    notacompra.valorpispa=0 AND
+    exists (
+        select 
+            *
+        FROM
+            MERCADORIASNOTACOMPRA
+        where 
+            mercadoriasnotacompra.filial=notacompra.filial AND
+            mercadoriasnotacompra.idnota=notacompra.idnota AND
+            mercadoriasnotacompra.VLRPISPASEP>0)
+            
+UPDATE
+    notacompra
+SET
+    notacompra.valorpis=
+        coalesce((
+            select 
+                sum(mercadoriasnotacompra.valorpis)
+            FROM
+                MERCADORIASNOTACOMPRA
+            where   
+                mercadoriasnotacompra.filial=notacompra.filial and 
+                mercadoriasnotacompra.idnota=notacompra.idnota),0),
+    notacompra.valorcofins=
+        coalesce((
+            select 
+                sum(mercadoriasnotacompra.valorcofins)
+            FROM
+                MERCADORIASNOTACOMPRA
+            where   
+                mercadoriasnotacompra.filial=notacompra.filial and 
+                mercadoriasnotacompra.idnota=notacompra.idnota),0)                

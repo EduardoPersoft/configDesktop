@@ -1,0 +1,6 @@
+update
+    C_ITENSAZERO
+set
+    codigo = case substring(item from 6 for 1) when ' ' 
+    then substring(item from 1 for 5)
+    else substring(item from 1 for 6)

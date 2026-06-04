@@ -1,0 +1,6 @@
+select 
+    *
+from 
+    INVENTARIOESTOQUEDATA
+where
+    lote='61928%'

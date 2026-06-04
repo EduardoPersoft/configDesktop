@@ -1,0 +1,2 @@
+select * from ITEMESTOQUExarquivo
+where codigo='PRO3109FLI001'

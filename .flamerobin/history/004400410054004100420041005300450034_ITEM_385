@@ -1,0 +1,82 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ABASTECIMENTO (
+    DATAINICIAL TIMESTAMP,
+    DATAFINAL TIMESTAMP )
+RETURNS (
+    PLACA VARCHAR(10),
+    DATAABASTECIMENTO TIMESTAMP,
+    DATAPROXIMOABASTECIMENTO TIMESTAMP,
+    KMABASTECIMENTO NUMERIC(12,4),
+    KMPROXIMOABASTECIMENTO NUMERIC(12,4),
+    KMRODADA NUMERIC(12,4),
+    LITROS NUMERIC(12,4),
+    KMPLITROS NUMERIC(12,4) )
+AS
+declare variable pPlaca char (10);
+declare variable pdata date;
+declare variable pKm  numeric (12,4);
+declare variable pLitros  numeric (12,4);
+
+
+begin
+
+
+Placa = '';
+
+for select 
+   itinerarios.PLACA ,
+   cast (itinerarios.DATA as timestamp),
+   COALESCE (itinerarios.ABASTECIMENTOKM, 0),
+   COALESCE (itinerarios.ABASTECIMENTOLITROS, 0)
+from 
+   itinerarios 
+where 
+   itinerarios.ABASTECIMENTOLITROS is not null and
+   itinerarios.DATA between :datainicial  and :datafinal
+order by 
+   itinerarios.placa, itinerarios.data   
+into
+   :PPLACA, :PDATA, :pKM, :pLITROS
+
+do begin 
+
+   if (:placa<>:pplaca) then begin
+        select 
+            first 1
+            itinerarios.placa,
+            cast (itinerarios.DATA as timestamp),
+            COALESCE (itinerarios.ABASTECIMENTOKM, 0),
+            COALESCE (itinerarios.ABASTECIMENTOLITROS, 0)
+        from 
+            itinerarios 
+        where 
+            itinerarios.ABASTECIMENTOLITROS is not null and
+            itinerarios.placa = :pplaca and
+            itinerarios.DATA < :datainicial
+        order by 
+            itinerarios.data desc
+        into :placa, :dataAbastecimento, :kmABastecimento,:Litros;
+   end
+
+   :KmProximoAbastecimento = pkm;
+   :dataProximoAbastecimento = :Pdata;
+   :KmRodada = COALESCE(:KmProximoAbastecimento, 0) - 
+               COALESCE(:KmAbastecimento, 0);
+   if (coalesce (:litros,0)<>0) then 
+     :kmplitros =  coalesce (:KmRodada,0) / :Litros ;
+
+   suspend;
+
+   :KmAbastecimento = :kmProximoAbasteicimento;
+   :dataAbastecimento = :dataProximoAbasecimento;
+   :litros = plitros;
+
+ end
+ 
+end^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ABASTECIMENTO TO  SYSDBA WITH GRANT OPTION;
+

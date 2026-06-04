@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    pedido
+WHERE
+    pedido.idnota=76337

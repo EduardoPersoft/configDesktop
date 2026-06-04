@@ -1,0 +1,21 @@
+SELECT
+    codigo,
+    descricao,
+    CLASSIFIscal,
+    tributacaoicms
+from 
+    itemestoque
+WHERE
+    itemestoque.CLASSIFISCAL=130
+    and exists(
+        select * from mercadoriasnota
+        inner join notafiscal on 
+            notafiscal.filial=mercadoriasnota.filial AND
+            notafiscal.idnota=mercadoriasnota.idnota
+        where mercadoriasnota.filial=5 
+        and mercadoriasnota.codigo=itemestoque.CODIGO
+        and mercadoriasnota.VLRICMSRECOLHIDO>0
+        and notafiscal.uf='PR')
+            
+order by
+    itemestoque.TRIBUTACAOICMS

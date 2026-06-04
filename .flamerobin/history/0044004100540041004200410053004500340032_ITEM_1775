@@ -1,0 +1,7 @@
+select 
+    custo1.*
+from
+    ITEMCUSTODATA custo1
+where
+    filial=110 and
+    datainventario='29.02.2024'

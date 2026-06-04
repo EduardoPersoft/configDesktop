@@ -1,0 +1,3 @@
+select filial,idtitulo,titulorec.JUROSMORA,titulorec.VALORJUROS,titulorec.valortitulo,
+titulorec.valortitulo*0.001667 from titulorec 
+where titulorec.emissao='04.03.2021'

@@ -1,0 +1,47 @@
+select 
+    MOVIMENTOESTOQUE.IDMOVIMENTO,
+    movimentoestoque.DOCUMENTO,
+    MOVIMENTOESTOQUE.EMISSAO,
+    movimentoestoque.idpedido,
+    pedido.IDNOTA,
+    pedido.DATACADASTRO,
+    pedido.VLRTOTALNOTA,
+    CADCLI.NOME Cliente,
+    cadtrans.nome TRANSPORTADORA,
+    cadseparador.usuario SEPARADOR,
+    cadconferente.usuario CONFERENTE,
+    movimentoestoque.entradaproducao,
+    movimentoestoque.saidaproducao,
+    cast((movimentoestoque.saidaproducao-movimentoestoque.entradaproducao) *24*60 as integer) tempoPicking,
+    NOTAFISCAL.datahoraemissao,
+    cast((coalesce(NOTAFISCAL.datahoraemissao,CAST('NOW' AS TIMESTAMP))-movimentoestoque.saidaproducao) *24*60 as integer) tempoNf,
+    movimentoestoque.COLETADATA saida,
+    cast((coalesce(movimentoestoque.COLETADATA, CAST('NOW' AS TIMESTAMP)) -
+          coalesce(NOTAFISCAL.datahoraemissao,CAST('NOW' AS TIMESTAMP)) )*24*60 as integer) as tempoSaida
+
+from 
+    MOVIMENTOESTOQUE
+inner join 
+    pedido on
+    pedido.filial=movimentoestoque.filial and
+    pedido.idnota=movimentoestoque.idpedido         
+    
+inner join 
+  CADASTROPARCEIROS CADCLI ON
+       CADCLI.CADASTRO=PEDIDO.DESTINATARIO
+left join
+     usuario cadseparador on
+          cadseparador.id=movimentoestoque.idseparador
+left join
+     usuario cadconferente on
+          cadconferente.id=movimentoestoque.idconferente
+left join
+    CADASTROPARCEIROS CADTRANS on 
+    MOVIMENTOESTOQUE.TRANSPORTADORA = CADTRANS.CADASTRO
+left join        
+    NOTAFISCAL on
+        notafiscal.filial=movimentoestoque.filial and
+        notafiscal.idnota=movimentoestoque.IDNOTAEXPEDICAO
+where 
+    MOVIMENTOESTOQUE.EMISSAO between '25.10.2023' and '31.10.2023' and 
+    MOVIMENTOESTOQUE.TIPOMOVIMENTO='13'

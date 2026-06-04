@@ -1,0 +1,22 @@
+select 
+    movimentoestoque.emissao,
+    movimentoestoque.tipomovimento,
+    materialmovimentoestoque.valor/materialmovimentoestoque.quantidade,
+    listaprecoproduto.CUSTOCONSIDERADO
+from 
+    MERCADORIASPED
+inner join 
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.iditem=mercadoriasped.codigo
+inner JOIN
+    movimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial AND
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+inner JOIN
+    listaprecoproduto on
+        listaprecoproduto.lista=1 and 
+        listaprecoproduto.produto=materialmovimentoestoque.iditem
+where 
+    and movimentoestoque.TIPOMOVIMENTO in ('04', '01', '02')
+order by
+    emissao desc

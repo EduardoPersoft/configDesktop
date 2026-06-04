@@ -1,0 +1,5 @@
+update
+    C_LOGPRODUTOECOMMERCE
+SET
+    enviado = null,
+    status_code=null

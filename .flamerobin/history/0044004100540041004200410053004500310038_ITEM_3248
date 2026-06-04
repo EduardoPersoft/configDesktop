@@ -1,0 +1,6 @@
+update
+    LANTOCONTPAG
+set
+    lantocontpag.contacontabil='20518'
+where 
+    lantocontpag.CONTACONTABIL='20403'

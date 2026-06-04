@@ -1,0 +1,10 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.cfop,
+    pedido.uf,
+    pedido.ufentrega,
+    pedido.INDPRES,
+    pedido.CLCTRANSP
+from 
+    pedido

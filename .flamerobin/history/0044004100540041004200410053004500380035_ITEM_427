@@ -1,0 +1,12 @@
+update
+    MATERIALMOVIMENTOESTOQUE
+set
+    localarmazenamento=2
+where
+    MATERIALMOVIMENTOESTOQUE.LOCALARMAZENAMENTO=1 and
+    exists 
+        (select * from MOVIMENTOESTOQUE
+         where movimentoestoque.FILIAL=MATERIALMOVIMENTOESTOQUE.filial and
+         movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.idmovimento and
+         movimentoestoque.TIPOMOVIMENTO in (5, 9, 12) and
+         movimentoestoque.emissao>'01.05.2026')

@@ -1,0 +1,3 @@
+select filial,idnota,idmovimento,notafiscal.MOVIMENTOESTOQUEFILIAL from NOTAFISCAL
+where idnota=31910
+order by idnota desc

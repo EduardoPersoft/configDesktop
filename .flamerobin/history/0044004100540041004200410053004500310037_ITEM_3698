@@ -1,0 +1,3 @@
+select filial,idnota,datacadastro, vlrtotalnota from PEDIDO
+where (pedido.atendente=6675 or pedido.vendedor=6675) and datacadastro='27.09.2024'
+and pedido.dataemissao is not null and pedido.DATACANCELAMENTO is null

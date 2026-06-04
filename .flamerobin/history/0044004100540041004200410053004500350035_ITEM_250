@@ -1,0 +1,8 @@
+update itemestoquexarquivo i1 set i1.ordem=0
+where i1.ordem=1
+where
+not exists (
+select * from itemestoquexarquivo i2
+where
+i1.codigo=i2.codigo and
+i2.ordem=0)

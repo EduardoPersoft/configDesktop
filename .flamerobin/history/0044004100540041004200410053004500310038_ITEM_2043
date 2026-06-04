@@ -1,0 +1,3 @@
+select filial,idnota,c_datacomissao from pedido
+where filial=1 and
+idnota=70750

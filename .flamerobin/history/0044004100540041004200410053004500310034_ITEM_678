@@ -1,0 +1,2 @@
+update locallote
+set locallote.QUANTIDADE=coalesce(locallote.QUANTIDADE,0)

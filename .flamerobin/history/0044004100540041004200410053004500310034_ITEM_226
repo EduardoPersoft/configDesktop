@@ -1,0 +1,28 @@
+select 
+    titulopag.programacao,
+    contascontabeis.contacontabil,
+    contascontabeis.descricao,
+    sum(lantocontpag.VALOR / titulopag.VALORTITULO * titulopag.valoremaberto) ValorEmAberto
+    
+from 
+    titulopag
+inner join 
+    LANTOCONTPAG on 
+    titulopag.FILIAL = LANTOCONTPAG.FILIAL and
+    titulopag.IDTITULO= LANTOCONTPAG.idmovtobanc
+inner join 
+    ESTABELECIMENTO on 
+    titulopag.FILIAL = ESTABELECIMENTO.CADASTRO
+inner join 
+    CONTASCONTABEIS ON 
+    ESTABELECIMENTO.PLANOCONTAS= contascontabeis.IDPLANO and
+    LANTOCONTPAG.contacontabil like contascontabeis.CONTACONTABIL||'%'
+    
+where 
+    titulopag.baixa is null and 
+    titulopag.FILIAL = 110 and
+    titulopag.programacao between '2022-01-01' and '2022-12-31'
+group by
+    titulopag.programacao,
+    LANTOCONTPAG.contacontabil,
+    contascontabeis.descricao

@@ -1,0 +1,3 @@
+select first 10 * from logalteracao
+where objeto='ESTOQUE' AND 
+CAST(SUBSTRING(ALTERACOES FROM 1 FOR 50) AS VARCHAR(50)) LIKE '%PRO4183FLI001%'

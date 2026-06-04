@@ -1,0 +1,26 @@
+Select C_ESTOQUE.Codigo,
+       C_ESTOQUE.Descricao,
+       C_ESTOQUE.C_mrfornecedor,
+       C_ESTOQUE.C_original,
+       C_ESTOQUE.Marca,
+       C_ESTOQUE.C_aplicacao,
+       C_ESTOQUE.Fornecedor,
+       C_ESTOQUE.Precoa,
+       C_ESTOQUE.Precob,
+       C_ESTOQUE.PRECOC,
+       --(C_ESTOQUE.Mlocal-C_ESTOQUE.Reservado) as Mlocal,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0) AS MLOCAL,
+       C_ESTOQUE.Clocal,
+       c_estoque.descricaolocal as localorigem,
+      COALESCE ( c_estoque.ESTOQUEIMPORTADORA,0)  as ESTOQUEIMPORTADORA,
+       COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0) ESTOQUEDISTRIBUIDORA ,
+       CASE WHEN c_estoque.grupo in (93, 96) THEN 255
+       ELSE 0 END AS P_STATUSCOR,
+       itemestoque.TIPOPRODUTO
+from
+    C_ESTOQUE(1)
+inner join
+      itemestoque on
+                 (itemestoque.codigo=c_estoque.CODIGO)
+WHERE 
+      ((itemestoque.TIPOPRODUTO<>5)or(COALESCE (c_estoque.ESTOQUEDISTRIBUIDORA,0)+COALESCE (c_estoque.ESTOQUEIMPORTADORA,0)>0))

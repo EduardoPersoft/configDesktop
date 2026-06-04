@@ -1,0 +1,5 @@
+update 
+    ITEMESTOQUE
+set
+    itemestoque.C_LOCALIMPORTACAOANTES=
+        itemestoque.C_LOCALIMPORTACAO

@@ -1,0 +1,9 @@
+SELECT 
+    filial,
+    idmovtobanc,
+    idlancamento,
+    contacontabil,
+    centrocusto,
+    valor
+FROM 
+    LANTOCONTPAG 

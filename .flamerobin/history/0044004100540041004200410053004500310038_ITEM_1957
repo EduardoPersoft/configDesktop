@@ -1,0 +1,3 @@
+select * from titulopag 
+where titulopag.IDCOMISSAO=593
+and titulopag.parceiro=32341

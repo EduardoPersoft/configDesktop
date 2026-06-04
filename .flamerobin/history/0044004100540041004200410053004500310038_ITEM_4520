@@ -1,0 +1,1 @@
+update  CONTASCONTABEIS set natureza=2 where idplano=4

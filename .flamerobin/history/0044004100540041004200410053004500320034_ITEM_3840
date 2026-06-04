@@ -1,0 +1,3 @@
+delete from VENDEDORESNOTA
+where filial=5 and
+idnota=303352

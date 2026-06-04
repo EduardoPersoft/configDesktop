@@ -1,0 +1,23 @@
+select
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    extract(month from movimentoestoque.EMISSAO),
+    extract(year from movimentoestoque.EMISSAO),
+    sum(materialmovimentoestoque.quantidade*materialmovimentoestoque.sinal)
+from
+    MOVIMENTOESTOQUE
+inner join 
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+inner join
+    TIPOMOVIMENTOESTOQUE on
+        tipomovimentoestoque.id=movimentoestoque.TIPOMOVIMENTO
+where 
+    movimentoestoque.filial=5 and
+    movimentoestoque.EMISSAO between '01.09.2021' and '28.02.2022' and
+    TIPOMOVIMENTOESTOQUE.TIPOMOVIMENTO = 'S'
+group by
+    extract(month from movimentoestoque.EMISSAO),
+    extract(year from movimentoestoque.EMISSAO)
+    
+        

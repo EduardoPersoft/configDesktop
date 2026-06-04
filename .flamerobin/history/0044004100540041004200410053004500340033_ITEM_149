@@ -1,0 +1,2 @@
+delete MATERIALMOVIMENTOESTOQUE
+where filial=1 and idmovimento=20604

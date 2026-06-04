@@ -1,0 +1,34 @@
+select
+    notafiscal.FILIAL,    
+    notafiscal.idnota,
+    notafiscal.numeronota,    
+    notafiscal.DATAEMISSAO,
+    cadcli.nome,
+    cadcli.uf,
+    cadcli.cidade,
+    cadtrans.nome,
+    NOTAFISCAL.VALORFRETE,
+    notafiscal.VALORSEGURO,
+    notafiscal.VLROUTDESPACESSORIA,
+    NOTAFISCAL.VALORFRETE+
+    notafiscal.VALORSEGURO+
+    notafiscal.VLROUTDESPACESSORIA totalDespesas,
+    notafiscal.VLRTOTALNOTA
+
+from
+    NOTAFISCAL
+inner join
+    cadastroparceiros cadcli on
+        cadcli.cadastro=notafiscal.DESTINATARIO
+inner join
+    cadastroparceiros cadtrans on
+        cadtrans.cadastro=notafiscal.CODIGOTRANSP
+where
+    notafiscal.DATAEMISSAO between '01.03.2025' and '31.03.2025' and 
+    notafiscal.DESTINATARIO not in (select estabelecimento.CADASTRO from estabelecimento) and
+    (notafiscal.valorfrete+notafiscal.valorseguro+notafiscal.VLROUTDESPACESSORIA)>0 and
+    notafiscal.DATACANCELAMENTO is null
+order by
+    notafiscal.dataemissao,
+    notafiscal.filial,
+    notafiscal.numeronota

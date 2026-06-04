@@ -1,0 +1,50 @@
+select 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    --GRUPOMERCADORIA.GRUPO,
+    --local.id,
+    local.descricao,
+    --GRUPOMERCADORIA.DESCRICAO,
+    --itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    locallote.QUANTIDADE,
+    --MATERIALLOTE.UUID,
+    --MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    coalesce(customes.customedio, itemestoque.VALORULTIMACOMPRA) as unitario,
+    locallote.QUANTIDADE*coalesce(customes.customedio, itemestoque.VALORULTIMACOMPRA) total,
+    cast('N' as char(1)) as p_check
+ from 
+    ITEMESTOQUE
+inner join 
+    MATERIALLOTE on 
+    ITEMESTOQUE.CODIGO=MATERIALLOTE.IDITEM
+inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+inner join
+    local on
+        local.id=locallote.local
+inner join 
+    MATERIALFILIAL on 
+    LOCALLOTE.FILIAL=MATERIALFILIAL.FILIAL and
+    LOCALLOTE.IDITEM=MATERIALFILIAL.IDITEM    
+LEFT join
+    CUSTOMES ON
+        CUSTOMES.FILIAL=110 AND 
+        CUSTOMES.ANO=2023 AND 
+        CUSTOMES.MES=11 AND
+        CUSTOMES.IDITEM=ITEMESTOQUE.CODIGO
+left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO
+where
+     materiallote.filial=110 and 
+     locallote.quantidade>0 and
+     locallote.iditem like 'MPP%'
+
+
+

@@ -1,0 +1,11 @@
+select    
+    1 as id,
+    extract(weekday from pedido.datareferencia) as qtd,
+    count(pedido.idnota)    
+from
+    pedido
+where
+    pedido.datareferencia>cast('now' as date)-extract(weekday from cast('now' as date)) and
+    pedido.dataCancelamento is null
+group by
+    extract(weekday from pedido.datareferencia) 

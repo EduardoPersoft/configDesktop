@@ -1,0 +1,2 @@
+create table c_st (codigo varchar(15), quantidade decimal(12,2), 
+constraint pk_c_st primary key(codigo))

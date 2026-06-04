@@ -1,0 +1,34 @@
+insert into ITEMCUSTODATA(filial,datainventario,codigo,custounitario,quantidade,custototal)
+
+select 
+    mercadoriasnotacompra.filial,
+    '29.02.2024',
+    mercadoriasnotacompra.codigo,
+    0,
+    0,
+    0
+from
+    NOTACOMPRA
+inner join
+    MERCADORIASNOTACOMPRA on
+        notacompra.filial=mercadoriasnotacompra.filial and
+        notacompra.idnota=mercadoriasnotacompra.IDNOTA
+inner join
+    itemestoque on
+        itemestoque.codigo=MERCADORIASNOTACOMPRA.codigo
+where
+    notacompra.filial=110 and
+    notacompra.dataemissao between '01.02.2024' and '29.02.2024' and
+    itemestoque.TIPOPRODUTO='1' and
+    itemestoque.codigo like 'MPP%'
+    and not exists (
+        select
+            * 
+        from 
+            ITEMCUSTODATA
+        where
+            ITEMCUSTODATA.filial=mercadoriasnotacompra.filial and
+            ITEMCUSTODATA.DATAINVENTARIO='29.02.2024' and
+            itemcustodata.codigo=MERCADORIASNOTACOMPRA.codigo)
+    
+

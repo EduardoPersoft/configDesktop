@@ -1,0 +1,6 @@
+UPDATE
+    TITULOREC
+SET
+    titulorec.dataenvio = NULL
+where
+    titulorec.DATAENVIO='16.07.2021'and filial=1 and emissao = '12.07.2021' 

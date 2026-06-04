@@ -1,0 +1,2 @@
+select * from FORNECEDORESITEM
+where fornecedoresitem.FORNECEDOR=23

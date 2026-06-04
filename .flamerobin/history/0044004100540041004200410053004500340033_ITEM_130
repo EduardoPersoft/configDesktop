@@ -1,0 +1,3 @@
+delete from composicaoop
+where filial=110
+and idmovimento=20513

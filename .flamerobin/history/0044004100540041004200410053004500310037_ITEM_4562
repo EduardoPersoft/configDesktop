@@ -1,0 +1,2 @@
+select * from USUARIO where 
+USUARIO IN ('ROBERTA', 'ROBERTA2','FINANCEIRO')

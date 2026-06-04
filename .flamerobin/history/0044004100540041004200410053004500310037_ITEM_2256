@@ -1,0 +1,23 @@
+select 
+    distinct
+    CADASTROPARCEIROS.nome,
+    CONTASCONTABEIS.DESCRICAO
+from
+    TITULOPAG
+inner join
+    lantocontpag on
+        titulopag.filial=lantocontpag.filial and
+        titulopag.idtitulo=lantocontpag.IDMOVTOBANC
+inner join
+    estabelecimento on
+        ESTABELECIMENTO.cadastro=titulopag.filial
+inner join
+    contascontabeis on
+        CONTASCONTABEIS.idplano=estabelecimento.PLANOCONTAS and
+        contascontabeis.CONTACONTABIL=lantocontpag.CONTACONTABIL
+inner join
+    cadastroparceiros on
+        cadastroparceiros.cadastro=titulopag.parceiro
+where
+    titulopag.EMISSAO>='01.01.2000' and
+    coalesce(titulopag.tipobaixa, '')<>'C'

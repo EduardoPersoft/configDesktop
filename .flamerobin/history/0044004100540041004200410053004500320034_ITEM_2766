@@ -1,0 +1,13 @@
+select 
+    titulorec.titulo,
+    titulorec.fatura,
+    count(titulorec.IDTITULO)
+from 
+    TITULOREC
+where
+    titulorec.filial=5
+group by
+    titulorec.titulo,
+    titulorec.fatura
+having    
+    count(titulorec.IDTITULO)>1

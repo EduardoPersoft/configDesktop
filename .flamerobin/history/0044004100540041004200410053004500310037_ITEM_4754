@@ -1,0 +1,2 @@
+select * from CLIENTES
+where clientes.LIMITECREDITO=0

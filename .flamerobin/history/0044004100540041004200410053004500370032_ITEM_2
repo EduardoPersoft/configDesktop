@@ -1,0 +1,1 @@
+select * FROM OPERACAO WHERE ID>190

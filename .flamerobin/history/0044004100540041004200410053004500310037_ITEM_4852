@@ -1,0 +1,3 @@
+ select *
+      from SPEDFISCAL_C
+      group by 1

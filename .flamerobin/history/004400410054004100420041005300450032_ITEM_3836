@@ -1,0 +1,13 @@
+ select 
+    FILIAL,
+    IDNOTA,
+    IDITEM,
+    DIAS,
+    QTDE
+FROM
+    PRAZOMERCPEDCOMPRA
+/*
+WHERE
+    FILIAL = ? AND
+    IDNOTA = ?
+*/

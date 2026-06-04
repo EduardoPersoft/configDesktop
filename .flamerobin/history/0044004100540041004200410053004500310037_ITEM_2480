@@ -1,0 +1,29 @@
+select
+    movimentoestoque.filial,
+    movimentoestoque.documento,
+    movimentoestoque.emissao,
+    localorigem.descricao,
+    localdestino.descricao,
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    itemestoque.codigobarra,
+    MATERIALMOVIMENTOESTOQUE.QUANTIDADE
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+inner join
+    local localorigem on
+        movimentoestoque.LOCALARMAZENAMENTO=localorigem.id
+inner join
+    local localdestino on
+        movimentoestoque.LOCALTRANSFERENCIA=localodestino.id        
+inner join
+    itemestoque on
+        itemestoque.codigo=MATERIALMOVIMENTOESTOQUE.IDITEM
+order by
+    movimentoestoque.localorigem,
+    movimentoestoque.codigo

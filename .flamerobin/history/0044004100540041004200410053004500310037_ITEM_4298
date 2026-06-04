@@ -1,0 +1,2 @@
+select LOGALTERACAO.*, SUBSTRING(ALTERACOES FROM 1 FOR 100) from logalteracao
+where logalteracao.objeto='ESTOQUE'

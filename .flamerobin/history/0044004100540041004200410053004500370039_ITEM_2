@@ -1,0 +1,4 @@
+update notacompra
+set vlliquidofatura=vlrtotalnota,
+vlbrutofatura=vlrtotalnota
+where filial=1 and idnota=6

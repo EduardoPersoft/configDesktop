@@ -1,0 +1,1 @@
+create index i_locallote_material on locallote(iditem)

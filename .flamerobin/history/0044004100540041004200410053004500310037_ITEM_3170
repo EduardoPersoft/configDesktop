@@ -1,0 +1,8 @@
+select
+    itemestoque.codigo,
+    CLASSIFICACAOFISCAL.DESCRICAO
+from
+    ITEMESTOQUE
+left join
+    CLASSIFICACAOFISCAL on
+        classificacaofiscal.CFISCAL=itemestoque.CLASSIFISCAL

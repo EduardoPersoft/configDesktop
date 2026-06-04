@@ -1,0 +1,1 @@
+delete from vendedor where cadastro>1

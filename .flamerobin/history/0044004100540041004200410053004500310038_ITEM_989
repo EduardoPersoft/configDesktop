@@ -1,0 +1,1 @@
+select * from c_comissaopedidopaga where filial=1 and idnota=67742

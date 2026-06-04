@@ -1,0 +1,3 @@
+select  * from NOTACOMPRA
+where filial=12826 and
+idnota in (5999, 5990)

@@ -1,0 +1,1 @@
+select * from titulorec where filial=5 and titulorec.EMISSAO='28.07.2022'

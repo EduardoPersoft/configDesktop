@@ -1,0 +1,20 @@
+select 
+    COMPOSICAOITEM.IDITEM,
+    COMPOSICAOITEM.SEQUENCIA,
+    COMPOSICAOITEM.IDMATERIAL,
+    ITEMESTOQUE.DESCRICAO,
+    ITEMESTOQUE.UNIDADE
+    
+from 
+    COMPOSICAOITEM
+inner join 
+    ITEMESTOQUE on 
+    itemestoque.codigo=composicaoitem.idmaterial
+where 
+    composicaoitem.iditem LIKE 'I3-%' AND
+itemestoque.TIPOPRODUTO IN (3,4,5) 
+
+order by 
+    COMPOSICAOITEM.IDITEM
+
+    

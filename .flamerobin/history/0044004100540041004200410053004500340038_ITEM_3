@@ -1,0 +1,14 @@
+select
+    *
+from
+    LANTOCONTPAG
+WHERE 
+    EXISTS 
+    (SELECT 
+                                    T_CONVERTE.CONTACONTABIL
+                                from
+                                    T_CONVERTE
+                                where
+                                    T_CONVERTE.ID=LANTOCONTPAG.IDMOVTOBANC)
+    
+    

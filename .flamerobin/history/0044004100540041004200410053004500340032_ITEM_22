@@ -1,0 +1,4 @@
+select * from MERCADORIASNOTA
+where mercadoriasnota.cfop in ('5922', '6922') and
+mercadoriasnota.filial=110 and
+mercdaoriasnota.idpedido is not null

@@ -1,0 +1,6 @@
+SELECT
+    filial,codigo,contacorrente.DESCRICAOCONTA,saldoreal
+FROM
+    CONTACORRENTE
+where 
+    contacorrente.filial=1

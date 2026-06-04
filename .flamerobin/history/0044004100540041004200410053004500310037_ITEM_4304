@@ -1,0 +1,2 @@
+update tranportadora set notaautomatica='S'
+where cadastro = 133

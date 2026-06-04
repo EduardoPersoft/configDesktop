@@ -1,0 +1,24 @@
+SET TERM ^ ;
+CREATE TRIGGER C_CADASTROPREENCHIDO ACTIVE
+AFTER insert OR update POSITION 0
+
+
+AS
+BEGIN
+
+    IF (coalesce (NEW.NOME,'') = '') then EXCEPTION C_camponome;
+    IF (coalesce (NEW.RAZAOSOCIAL,'') = '') then EXCEPTION C_camporazao;
+    IF (coalesce (NEW.DOCUMENTO,'') = '') then EXCEPTION C_campodocumento;
+    IF (coalesce (NEW.LOGRADOURO,'') = '') then EXCEPTION C_campologradouro;
+    IF (coalesce (NEW.BAIRRO,'') = '') then EXCEPTION C_campodbairro;
+    IF (coalesce (NEW.CIDADE,'') = '') then EXCEPTION C_campocidade; 
+    IF (NEW.NUMERO IS NULL) then EXCEPTION C_camponumero;
+    IF (coalesce (NEW.UF,'') = '') then EXCEPTION C_campouf; 
+    IF (coalesce (NEW.CEP,'') = '') then EXCEPTION C_campocep; 
+    IF (coalesce (NEW.EMAIL,'') = '') then EXCEPTION C_campoemail;  
+    IF (coalesce (NEW.TELEFONE,'') = '') then EXCEPTION C_campotelefone;  
+  
+
+END
+^
+SET TERM ; ^

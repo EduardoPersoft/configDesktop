@@ -1,0 +1,6 @@
+update
+    TITULOREC
+set
+    titulorec.dataenvio=null
+where
+    titulorec.DATAENVIO='11.03.2022'

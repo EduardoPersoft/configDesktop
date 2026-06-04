@@ -1,0 +1,4 @@
+select filial,idnota,datacadastro,uuid 
+from PEDIDO
+where uuid is not null
+order by idnota

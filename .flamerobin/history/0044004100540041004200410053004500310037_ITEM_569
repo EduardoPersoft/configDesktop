@@ -1,0 +1,13 @@
+DELETE
+FROM
+    C_LOGSALDOECOMMERCE 
+where 
+    exists (
+        select 
+            * 
+        from 
+            itemestoque 
+        where 
+            itemestoque.codigo=C_LOGSALDOECOMMERCE.CODIGO AND
+            itemestoque.tipoproduto=5
+            )

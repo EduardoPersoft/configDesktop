@@ -1,0 +1,4 @@
+select * from MATERIALLOTE
+where
+iditem like 'MPP%' and
+quantidade>0

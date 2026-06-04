@@ -1,0 +1,76 @@
+select
+    venPed.VENDEDOR indicador,
+    cadind.NOME,
+    cadind.datacadastro,
+    cadInd.c_datanascimento,
+    cadInd.dataalteracao,
+    cadven.nome,
+    cadloja.nome,
+    ramoatividade.descricao ramoatividade,
+    extract(year from det.DATAreferencia) as ano,
+    sum(det.vlrTotalNota*venPed.comissaoVenda/100*case det.idnota when coalesce(master.C_PEDIDOSUBSTITUIDO,-1) then -1 else 1 end) totalAnoAnterior,
+     count(case det.idnota when coalesce(master.C_PEDIDOSUBSTITUIDO,-1) then null else det.idnota end) as qtd
+    
+from  
+ PEDIDO MASTER 
+
+inner join 
+    pedido det on
+    det.filial=master.FILIAL and 
+    det.IDNOTA in (master.idnota,master.C_PEDIDOSUBSTITUIDO)
+
+inner join 
+    VENDEDORESPED venped on 
+    venPed.FILIAL=det.FILIAL and
+    venPed.idnota=det.idnota
+    
+inner join 
+    VENDEDOR vendedorPedido on 
+    venPed.vendedor=vendedorPedido.cadastro
+
+inner join 
+    VENDEDOR indicador on 
+    indicador.cadastro=case vendedorPedido.tipoVendedor when 5 then vendedorPedido.CADASTRO 
+                       else vendedorPedido.canalrelacionado end 
+
+inner join  
+    CADASTROPARCEIROS cadind on 
+    cadind.CADASTRO=indicador.cadastro
+    
+inner join 
+    vendedor vend on 
+    vend.cadastro=det.vendedor
+    
+inner join 
+    CADASTROPARCEIROS cadven on 
+    cadven.CADASTRO=vend.cadastro 
+    
+inner join 
+    VENDEDOR loja on 
+    loja.cadastro=det.c_loja
+    
+inner join 
+    CADASTROPARCEIROS cadloja on 
+    loja.CADASTRO=cadloja.CADASTRO
+    
+left join 
+    RAMOATIVIDADE on 
+    ramoatividade.ramoatividade=cadind.ramoatividade
+    
+where 
+    MASTER.FILIAL = 1 and
+    vendedorPedido.TIPOVENDEDOR in (5,6) and
+    extract (year from MASTER.DATAreferencia) between 2021 and 2025 AND 
+    MASTER.c_tipo =0 and 
+    MASTER.DATAEMISSAO is not null and
+    MASTER.CANCELAMENTO ='N'  
+group by 
+    venPed.VENDEDOR,
+    cadind.NOME,
+    cadind.DATACADASTRO,
+    cadInd.c_datanascimento,
+    cadInd.dataalteracao,
+    cadven.nome,
+    cadloja.nome,
+    ramoatividade.descricao,
+    extract(year from det.DATAreferencia)

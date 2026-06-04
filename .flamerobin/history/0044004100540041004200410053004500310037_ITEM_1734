@@ -1,0 +1,22 @@
+
+
+select
+
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.C_LOCALIMPORTACAO,
+    itemestoque.DATAALTERACAO
+from
+    itemestoque
+where
+    itemestoque.codigo like '1%' and
+    itemestoque.C_LOCALIMPORTACAO <> 
+        (select 
+            materialfilial.C_LOCALIMPORTACAO 
+         from 
+            materialfilial 
+         where 
+            filial=1 and 
+            materialfilial.iditem=ITEMESTOQUE.codigo)
+order by
+    itemestoque.codigo

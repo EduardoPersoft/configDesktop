@@ -1,0 +1,1 @@
+select codigo,descricao,unidade,itemestoque.QUANTIDADEUNIDADE from itemestoque

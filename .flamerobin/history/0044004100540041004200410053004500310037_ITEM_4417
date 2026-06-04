@@ -1,0 +1,5 @@
+create table c_itensSelecaox(
+codigo varchar(15) not null, 
+busca varchar(30),
+constraint pk_c_itensSelecaox
+primary key(codigo))

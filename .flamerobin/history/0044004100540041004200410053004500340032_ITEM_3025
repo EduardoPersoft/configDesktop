@@ -1,0 +1,8 @@
+select
+    itemestoque.codigo,
+    itemestoque.descricao
+    itemestoque.C_CLICHE
+from
+    ITEMESTOQUE
+where
+    itemestoque.codigo like 'PRO%'

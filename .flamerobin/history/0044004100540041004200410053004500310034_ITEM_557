@@ -1,0 +1,6 @@
+select
+    *
+from
+    MATERIALLOTE
+where
+    materiallote.QUANTIDADE>0.09 and materiallote.filial=110

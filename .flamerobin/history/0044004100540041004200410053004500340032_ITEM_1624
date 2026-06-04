@@ -1,0 +1,2 @@
+select * from SERVICOSnota
+where filial>110 and idnota=184Cliche FLI - Bananinha Com adiçăo de açúcar 25g

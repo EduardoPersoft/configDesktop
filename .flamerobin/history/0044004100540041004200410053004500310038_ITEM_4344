@@ -1,0 +1,2 @@
+select * from LISTAPRECOPRODUTO
+where codigo='PE-25207'

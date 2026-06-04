@@ -1,0 +1,1 @@
+update itemestoque set qtdevolumes=1,pesobruto=pesoliquito

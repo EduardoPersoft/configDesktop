@@ -1,0 +1,7 @@
+select * from CADASTROPARCEIROS
+where parceirocliente is null or
+parceirofornecedor is null or
+parceirovendedor is null or
+parceirotransportadora is null ir
+parceirooutros is null or
+parceirocolaborador is null

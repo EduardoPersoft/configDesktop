@@ -1,0 +1,10 @@
+select I1.*,i2.custounitario
+from ITEMCUSTODATA i1 
+inner join
+    itemcusto i2 on
+        i1.filial=i2.filial and
+        i1.codigo=i2.codigo and
+        i2.datainventario='31.01.2024'
+where i1.filial=110
+and i1.datainventario='29.02.2024'
+order by i1.codigo

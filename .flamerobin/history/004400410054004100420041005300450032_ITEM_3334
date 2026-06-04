@@ -1,0 +1,43 @@
+SELECT
+ 
+    cadfor.nome,
+    notacompra.NRNOTAFORNECEDOR,
+    NATUREZAOPERACAO.DESCRICAOoperacao,
+    mercadoriasnotacompra.codigo,
+    itemestoque.descricao,
+    mercadoriasnotacompra.quantidade,
+    mercadoriasnotacompra.unidade,
+    mercadoriasnotacompra.idnota,
+    mercadoriasnotacompra.idmercadoria,
+    mercadoriaspedcompra.codigo,
+    case when MERCADORIASPEDCOMPRA.idnota is null then 's/pedido'
+    when mercadoriaspedcompra.codigo<>mercadoriasnotacompra.codigo then 'item errado'
+    when NATUREZAOPERACAO.DESCRICAOOPERACAO = 'X-COMPLEMENTO' then 'só valor'
+    else 'ok'
+    end
+FROM
+    NOTACOMPRA
+inner JOIN
+    mercadoriasnotacompra on
+        mercadoriasnotacompra.filial=notacompra.filial AND
+        mercadoriasnotacompra.idnota=notacompra.idnota
+inner join 
+    itemestoque on 
+        itemestoque.codigo=mercadoriasnotacompra.CODIGO
+inner JOIN
+    cadastroparceiros cadfor on
+        cadfor.cadastro=notacompra.DESTINATARIO
+left JOIN
+    mercadoriaspedcompra on
+        mercadoriaspedcompra.filial=mercadoriasnotacompra.filial AND
+        mercadoriaspedcompra.idnota=mercadoriasnotacompra.idpedido AND
+        mercadoriaspedcompra.IDMERCADORIA=mercadoriasnotacompra.IDMERCPEDIDO
+left JOIN
+    NATUREZAOPERACAO on
+        naturezaoperacao.id=notacompra.OPERACAO
+
+WHERE
+    notacompra.filial=5 AND
+    notacompra.dataentrada=cast('now' as date)
+order by
+    mercadoriasnotacompra.codigo

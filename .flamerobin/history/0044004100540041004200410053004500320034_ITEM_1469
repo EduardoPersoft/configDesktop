@@ -1,0 +1,1 @@
+update FORNECEDORESITEM set fornecedoresitem.iditem='100603' where fornecedoresitem.iditem='76'

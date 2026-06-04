@@ -1,0 +1,13 @@
+select 
+    filial,
+    iditem,
+    lote,
+    quantidade,
+    c_largura,
+    c_gramatura 
+from 
+    materiallote 
+where 
+filial=110 and 
+lote like 'I1023%' and
+ iditem='MPP6CPPW-HT'

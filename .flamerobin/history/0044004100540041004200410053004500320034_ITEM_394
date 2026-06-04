@@ -1,0 +1,15 @@
+select 
+    m1.idnota,
+    pedidocompra.DATACADASTRO,
+    CADASTROPARCEIROS.nome
+FROM
+    mercadoriaspedcompra m1
+inner join 
+    mercadoriaspedcompra m2 on
+        m1.filial=m2.filial and 
+        m1.codigo=m2.codigo AND
+        m1.idnota<>m2.idnota AND
+        m2.baixa='N'
+where
+    m1.filial = 5 and 
+    m1.baixa = 'N'

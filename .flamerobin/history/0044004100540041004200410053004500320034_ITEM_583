@@ -1,0 +1,13 @@
+select 
+    *
+from
+    titulorec 
+where 
+    titulorec.parceiro = 19231
+order by 
+    baixa
+    
+    
+    
+    
+    

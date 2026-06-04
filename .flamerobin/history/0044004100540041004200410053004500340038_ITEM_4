@@ -1,0 +1,19 @@
+update
+    LANTOCONTPAG
+set
+    LANTOCONTPAG.CONTACONTABIL=(SELECT 
+                                    T_CONVERTE.CONTACONTABIL
+                                from
+                                    T_CONVERTE
+                                where
+                                    T_CONVERTE.ID=LANTOCONTPAG.IDMOVTOBANC)
+WHERE 
+    EXISTS 
+    (SELECT 
+                                    T_CONVERTE.CONTACONTABIL
+                                from
+                                    T_CONVERTE
+                                where
+                                    T_CONVERTE.ID=LANTOCONTPAG.IDMOVTOBANC)
+    
+    

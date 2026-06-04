@@ -1,0 +1,11 @@
+INSERT INTO FORNECEDORESITEM (
+    IDITEM, 
+    ID)
+VALUES (
+    'ABC',
+    (select 
+        max(fornecedoresitem.id)
+     from 
+        fornecedoresite.iditem='ABC')
+)
+   

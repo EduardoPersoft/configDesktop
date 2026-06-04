@@ -1,0 +1,17 @@
+
+update
+    MERCADORIASPED
+set 
+    mercadoriasped.minimo=qtdeenviada
+where
+    filial=5 and
+    baixa = 'N' and 
+    exists 
+    (select
+        *
+     from
+        MERCADORIASNOTA
+     where
+        mercadoriasnota.filial=mercadoriasped.filial and
+        mercadoriasnota.idpedido=mercadoriasped.idnota and 
+        mercadoriasnota.idmercpedido=mercadoriasped.idmercadoria)

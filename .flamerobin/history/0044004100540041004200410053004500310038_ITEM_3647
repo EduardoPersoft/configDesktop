@@ -1,0 +1,2 @@
+select filial,idnota,datareferencia from pedido
+where filial=1 and idnota=75386

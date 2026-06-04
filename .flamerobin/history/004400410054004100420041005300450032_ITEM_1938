@@ -1,0 +1,1 @@
+select codigo,referencia,itembase,descricao from itemestoque where referencia='375527'

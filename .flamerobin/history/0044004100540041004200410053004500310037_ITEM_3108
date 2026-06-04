@@ -1,0 +1,6 @@
+update 
+    cadastroparceiros 
+set 
+    grupoempresarial=cadastro
+where 
+    grupoempresarial = 0

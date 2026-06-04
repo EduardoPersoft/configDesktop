@@ -1,0 +1,1 @@
+select * from C_I_posicaoestoque where codigo='08474'

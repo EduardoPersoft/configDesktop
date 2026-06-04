@@ -1,0 +1,5 @@
+select * from NOTAFISCAL
+where notafiscal.DATACADASTRO>'01.05.2026' and
+    simples='S'
+
+    

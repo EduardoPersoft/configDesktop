@@ -1,0 +1,4 @@
+select pedido.VLRFINALMERCADORIAS,pedido.* from PEDIDO
+where c_loja=4
+and datacadastro>='01.09.2023'
+order by idnota

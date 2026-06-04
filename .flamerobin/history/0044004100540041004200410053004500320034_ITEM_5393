@@ -1,0 +1,3 @@
+select * from 
+t_titulorec where importado is null
+order by idtitulo

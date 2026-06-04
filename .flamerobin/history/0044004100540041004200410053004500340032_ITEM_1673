@@ -1,0 +1,10 @@
+select * from lantocontpag
+where exists (
+select 
+    *
+from 
+    TITULOPAG
+where
+    titulopag.filial=110 and
+    titulopag.titulo='8872850' and
+    titulopag.fatura<>'1')

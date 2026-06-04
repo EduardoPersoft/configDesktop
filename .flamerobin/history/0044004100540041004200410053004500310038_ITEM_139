@@ -1,0 +1,19 @@
+SELECT
+    titulorec.TITULO,
+    cadastroparceiros.nome,
+    titulorec.emissao,
+    titulorec.vencimento,
+    titulorec.VALORTITULO
+FROM
+    TITULOREC
+inner JOIN
+    c_faturasped on 
+        c_faturasped.filial=titulorec.filial AND
+        c_faturasped.IDTITULO=titulorec.IDTITULO
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=titulorec.PARCEIRO
+WHERE
+    titulorec.emissao between '01.10.2021' and '31.10.2021' AND
+    titulorec.baixa between '01.10.2021' and '31.10.2021' AND
+    titulorec.TIPOBAIXA = 'P'    

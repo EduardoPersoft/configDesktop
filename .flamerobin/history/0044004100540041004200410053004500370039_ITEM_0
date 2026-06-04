@@ -1,0 +1,2 @@
+update MERCADORIASNOTACOMPRA
+set mercadoriasnotacompra.CONTACONTABIL='201010101'

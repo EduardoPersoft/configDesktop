@@ -1,0 +1,13 @@
+select 
+    itemestoque.CODIGOBARRA,
+    local.ean
+from
+    LOCALLOTE
+inner join
+    itemestoque on 
+        itemestoque.codigo=locallote.IDITEM
+inner join
+    local on    
+        local.id=locallote."LOCAL"
+where
+    locallote.QUANTIDADE>0

@@ -1,0 +1,1 @@
+select * from inventarioestoquedata where data='03.10.2023'

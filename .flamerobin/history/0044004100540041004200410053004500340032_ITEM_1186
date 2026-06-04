@@ -1,0 +1,16 @@
+update
+    ITEMCUSTODATA
+set
+    ITEMCUSTODATA.CUSTOUNITARIO=(SELECT
+                                    C_CUSTOMEDIO.CUSTO
+                                 from  
+                                    C_CUSTOMEDIO
+                                 WHERE 
+                                    C_CUSTOMEDIO.IDITEM=ITEMCUSTODATA.CODIGO)
+where
+    ITEMCUSTODATA.FILIAL=110 and
+    ITEMCUSTODATA.DATAINVENTARIO = '31.12.2023' and
+    ITEMCUSTODATA.CODIGO IN ('MPP02TRACHH', 'MPP02CPE/HRB', 'MPP02CPE/HRG40', 'MPP02TRM85OCT', 'MPP06CPPRTAR', 'MPP06CPPTERP',
+                             'MPP07PA22')
+    
+    

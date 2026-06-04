@@ -1,0 +1,28 @@
+select 
+    a.filial,
+    a.idcontaCorrente,
+    a.idMovtoBanc,
+    a.idLancamento,
+    a.contaContabil,
+    contascontabeis.DESCRICAO as descCContail,
+    a.centroCusto,
+    centrocustos.DESCRICAO as descCentroCusto,
+    a.VALOR
+from 
+    LANTOCONTBANC a
+inner join
+    estabelecimento on
+        estabelecimento.CADASTRO=a.FILIAL
+left join
+    contascontabeis on 
+        contascontabeis.IDPLANO=estabelecimento.PLANOCONTAS and
+        contascontabeis.CONTACONTABIL=a.CONTACONTABIL
+left join
+    centroCustos on 
+        centroCustos.IDPLANO=estabelecimento.PLANOCENTROCUSTOS and
+        centrocustos.CENTROCUSTO=a.CENTROCUSTO
+where
+    a.filial = 1 and
+    a.idcontaCorrente = 3 and
+    a.idMovtoBanc = 3784
+    

@@ -1,0 +1,6 @@
+select 
+    *
+from    
+    MOVBANCARIOS
+where 
+    movimentacao<>coalesce(dataextrato, cast('now' as date))

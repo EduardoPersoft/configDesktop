@@ -1,0 +1,1 @@
+update movimentoestoque set movimentoestoque.ENTRADAPRODUCAO = null

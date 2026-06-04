@@ -1,0 +1,11 @@
+update 
+    ITEMCUSTODATA
+set
+    itemcustodata.CUSTOUNITARIO=(
+        select
+            T_INVENTARIO2023NH.VALORUNITARIO
+        from
+            T_INVENTARIO2023NH
+        where
+            T_INVENTARIO2023NH.CODIGO=itemcustodata.CODIGO)
+            

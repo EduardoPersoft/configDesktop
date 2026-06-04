@@ -1,0 +1,1 @@
+select * from itemestoquecodigos where referencia='9582411013'

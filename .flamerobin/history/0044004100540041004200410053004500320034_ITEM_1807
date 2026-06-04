@@ -1,0 +1,10 @@
+select 
+    cadastroparceiros.nome,
+    fornecedoresitem.* 
+from 
+    fornecedoresitem 
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=fornecedoresitem.FORNECEDOR
+where 
+    fornecedoresitem.iditem='05021'

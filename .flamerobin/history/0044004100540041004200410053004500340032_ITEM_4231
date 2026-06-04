@@ -1,0 +1,6 @@
+select  
+    itemestoque.C_CODIGONOVO,
+    itemestoque.c_descricao,
+    min(itemestoque.codigo) codigoAtual
+from 
+    itemestoque

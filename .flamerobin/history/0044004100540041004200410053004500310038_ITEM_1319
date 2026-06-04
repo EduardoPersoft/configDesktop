@@ -1,0 +1,17 @@
+select materialmovimentoestoque.idmovimento,
+       materialmovimentoestoque.iditem,
+       materialmovimentoestoque.quantidade*sinal as saldoanterior,
+       MATERIALMOVIMENTOESTOQUE.VALOR*sinal AS VALORANTERIOR, -1 AS SINAL,
+       materialmovimentoestoque.localarmazenamento
+from materialmovimentoestoque
+inner join estsin on  (estsin.estabelecimento=materialmovimentoestoque.filial )
+inner join movimentoestoque on (movimentoestoque.filial=materialmovimentoestoque.filial and 
+                                movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+where estsin.estabelecimento=movimentoestoque.filial and
+      estsin.relatorio='SALDOANTERIORESTOQUE' and
+ 
+      (materialmovimentoestoque.localarmazenamento between estsin.MATERIALLOCALINICIO  and estsin.MATERIALLOCALFIM) and 
+      estsin.datafinal<movimentoestoque.emissao
+   
+
+

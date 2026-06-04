@@ -1,0 +1,2 @@
+select * from notafiscal 
+where uuid='{F67022CE-DC87-4DEA-8174-CAA650CD70A'

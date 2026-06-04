@@ -1,0 +1,15 @@
+select 
+    * 
+from 
+    MERCADORIASPED
+WHERE
+    mercadoriasped.baixa='N' AND
+    exists ( 
+        select
+            *
+        from 
+            PEDIDO
+        WHERE
+            pedido.filial=mercadoriasped.filial AND
+            pedido.C_PEDIDOSUBSTITUIDO=mercadoriasped.idnota)
+        

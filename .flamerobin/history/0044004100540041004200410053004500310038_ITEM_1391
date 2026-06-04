@@ -1,0 +1,10 @@
+update  
+    movimentoestoque 
+set
+    c_impressaoacompanhamento='17.03.2023',
+    movimentoestoque.C_IMPRESSAOOP='17.03.2023'
+where 
+    filial=1 and 
+    tipomovimento='12' 
+    and processamento='17.03.2023' 
+    

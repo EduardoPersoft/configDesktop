@@ -1,0 +1,7 @@
+select  
+    *
+from
+    MERCADORIASPED
+where
+    filial=5 and
+    baixa = 'N'

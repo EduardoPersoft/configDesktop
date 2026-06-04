@@ -1,0 +1,4 @@
+update
+   materiallocal
+set 
+   materiallocal.saldototal=cast(saldototal as decimal(12,2))

@@ -1,0 +1,1 @@
+select * from TITULOREC where filial=1 and baixa is null and vencimento=provavel and titulorec.TIPOTRANSACAO=6

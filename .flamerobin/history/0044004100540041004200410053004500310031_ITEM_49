@@ -1,0 +1,17 @@
+SELECT PLANCTOCUSTOPAGOS.filial,
+              PLANCTOCUSTOPAGOS.razaosocial,
+              PLANCTOCUSTOPAGOS.datainicial,
+              PLANCTOCUSTOPAGOS.datafinal,
+              PLANCTOCUSTOPAGOS.centrocusto,
+              PLANCTOCUSTOPAGOS.descricao, 
+              PLANCTOCUSTOPAGOS.contacontabili,
+              PLANCTOCUSTOPAGOS.contacontabilf,
+              PLANCTOCUSTOPAGOS.centrocustoi,
+              PLANCTOCUSTOPAGOS.centrocustof,
+              PLANCTOCUSTOPAGOS.*
+
+FROM PLANCTOCUSTOPAGOS
+WHERE PLANCTOCUSTOPAGOS.contacontabil BETWEEN
+             PLANCTOCUSTOPAGOS.contacontabili AND PLANCTOCUSTOPAGOS.contacontabilf
+AND PLANCTOCUSTOPAGOS.centrocusto BETWEEN
+        PLANCTOCUSTOPAGOS.centrocustoi AND PLANCTOCUSTOPAGOS.centrocustof

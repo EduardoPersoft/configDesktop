@@ -1,0 +1,5 @@
+update
+    CONTRATO
+set 
+    contrato.VLIQUIDOFATURA=contrato.vlrtotalnota,
+    contrato.VBRUTOFATURA=contrato.vlrtotalnota

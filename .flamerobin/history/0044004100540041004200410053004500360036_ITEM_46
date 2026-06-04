@@ -1,0 +1,8 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.CUSTOTOTAL=
+        coalesce(ITEMCUSTODATA.custounitario,0)*
+        coalesce(itemcustodata.quantidade,0)
+
+        

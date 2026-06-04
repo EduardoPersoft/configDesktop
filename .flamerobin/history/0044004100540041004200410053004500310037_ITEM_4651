@@ -1,0 +1,3 @@
+select * from  LOTESNFE 
+where mensagem=''
+order by liberado desc 

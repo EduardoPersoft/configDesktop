@@ -1,0 +1,4 @@
+select  *
+from INVENTARIOESTOQUEDATA
+where filial=1 and iditem='1837932' and 
+lote='.' and local=108 and data='2024-07-15'

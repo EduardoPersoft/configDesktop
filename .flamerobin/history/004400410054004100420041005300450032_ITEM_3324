@@ -1,0 +1,14 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.PESOBRUTO,
+    itemestoque.PESOLIQUIDO,
+    itemestoque.REFERENCIA,
+    FORNECEDORESITEM.FORNECEDOR
+FROM
+    FORNECEDORESITEM
+INNER JOIN
+    itemestoque on
+        itemestoque.codigo=fornecedoresitem.IDITEM
+where 
+    fornecedoresitem.FORNECEDOR=1745

@@ -1,0 +1,12 @@
+select 
+    locallote.iditem,
+    sum(case locallote.filial when 1 then locallote.quantidade else 0 end) as filial1,
+    sum(case locallote.filial when 1 then 0 else locallote.quantidade end) as filial12826
+from 
+    locallote
+inner join
+    local on 
+        local.id=locallote.local
+where  
+    local.DISPONIVEL='S'
+    

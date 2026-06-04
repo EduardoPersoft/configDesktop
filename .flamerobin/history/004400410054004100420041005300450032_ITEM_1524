@@ -1,0 +1,10 @@
+select 
+    filial,
+    idnota,
+    notafiscal.VLRTOTALMERCADORIAS
+FROM
+    NOTAFISCAL
+WHERE
+    notafiscal.filial=5 AND
+    notafiscal.DATAEMISSAO between '01.03.2021' and '31.03.2021' 
+    

@@ -1,0 +1,27 @@
+select
+    titulorec.filial,
+    titulorec.idtitulo,
+    titulorec.titulo,
+    titulorec.fatura,
+    titulorec.TIPOBAIXA,
+    titulorec.DATAPAGAMENTO,
+    titulorec.baixa,
+    titulorec.VALORTITULO,
+    titulorec.totalpago,
+    titulorec.TOTALjuros,
+    titulorec.totalDESCONTO,
+    TITULOREC.VALOREMABERTO
+from
+    TITULOREC
+WHERE 
+    titulorec.baixa='20.08.2025' and
+    titulorec.contacorrente=1 and
+    titulorec.tipobaixa='P' and
+    titulorec.codretorno='06' and
+    not exists (
+        select * from MOVtitulorec 
+        where movtitulorec.filial=titulorec.filial and
+        movtitulorec.idtitulo=titulorec.IDTITULO and
+        MOVTITULOREC.TIPOMOVTO='D' and
+        movtitulorec.DTMOVTOBANCARIO=titulorec.baixa)
+    

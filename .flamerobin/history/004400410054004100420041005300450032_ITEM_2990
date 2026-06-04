@@ -1,0 +1,6 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.ITEMBASE
+FROM
+    itemestoque

@@ -1,0 +1,19 @@
+select 
+    contacorrente.CODIGO,
+    contacorrente.DESCRICAOCONTA,
+    contacorrente.SALDOREAL-
+    sum(MOVBANCARIOS.VALORMOVIMENTO*
+        case movbancarios.TIPOMOVIMENTO when 'D' then -1 else 1 end)   
+FROM 
+    CONTACORRENTE
+inner join
+    MOVBANCARIOS on 
+    contacorrente.filial=MOVBANCARIOS.FILIAL and 
+    contacorrente.CODIGO=MOVBANCARIOS.IDCONTACORRENTE
+where 
+    contacorrente.FILIAL=110 and
+    MOVBANCARIOS.MOVIMENTACAO >= '01.11.2022'
+group by 
+    contacorrente.CODIGO,
+    contacorrente.DESCRICAOCONTA,
+    contacorrente.SALDOREAL

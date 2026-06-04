@@ -1,0 +1,5 @@
+select distinct
+    notafiscal.OPERACAO
+from NOTAFISCAL
+where notafiscal.FILIAL=1 and
+notafiscal.DATAEMISSAO>'01.01.2025'

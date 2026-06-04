@@ -1,0 +1,6 @@
+select
+    *
+FROM
+    MOVIMENTOESTOQUE
+where 
+    filial=1 and documento'81480'

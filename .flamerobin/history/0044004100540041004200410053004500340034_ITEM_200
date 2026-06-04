@@ -1,0 +1,6 @@
+update
+    mercadoriasped mercadoriasorc
+set 
+    mercadoriasorc.cfop='6108'
+where
+    mercadoriasorc.cfop= '6one'

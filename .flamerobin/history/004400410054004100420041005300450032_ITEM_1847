@@ -1,0 +1,13 @@
+select 
+    itemestoque.codigo,
+    ITEMESTOQUECODIGOS.CODIGOALTERNATIVO,
+    itemestoque.descricao,
+    itemestoque.referencia,
+    itemestoque.ITEMBASE
+from 
+    itemestoque
+left join 
+    ITEMESTOQUECODIGOS on
+        itemestoque.codigo=ITEMESTOQUECODIGOS.CODIGO
+order by
+    codigoalternativo

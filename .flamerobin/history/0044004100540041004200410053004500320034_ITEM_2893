@@ -1,0 +1,7 @@
+select
+    *
+from
+    PEDIDOCOMPRA
+where 
+    pedidocompra.filial=5 and
+    pedidocompra.idnota=60474

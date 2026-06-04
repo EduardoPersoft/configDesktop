@@ -1,0 +1,114 @@
+SELECT 
+    M1.FILIAL,
+    M1.IDMOVIMENTO,
+    M1.IDMOVIMENTOMATERIAL,
+    M1.IDITEM,
+    ITEMESTOQUE.CODIGOBARRA EAN,
+    ITEMESTOQUE.DESCRICAO,
+    ITEMESTOQUE.PESOLIQUIDO,
+    ITEMESTOQUE.REFERENCIA,
+    ITEMESTOQUE.DEFINICAO,
+    ITEMESTOQUE.LOCALIZACAO,
+    ITEMESTOQUEXARQUIVO.NOMEARQUIVO ITEMESTOQUE_NOMEARQUIVO,	   	   
+    GRUPOMERCADORIA.DESCRICAO AS GRUPO,
+    FAMILIA.DESCRICAO AS FAMILIA, 
+    M1.LOTE,
+    M1.QUANTIDADE,
+    ITEMESTOQUE.UNIDADE,
+    M1.VALOR,
+    M1.SINAL,
+    M1.LOCALARMAZENAMENTO, LOCAL.DESCRICAO, M1.FILIALLOCAL, M1.IDPEDIDO, M1.IDMERCADORIA,
+    M1.IDCOMPOSICAO,
+    MERCADORIASPED.codigo,
+    MERCADORIASPED.QUANTIDADE,
+    M1.PRODUTO,
+    M1.TEMPO,
+    M1.SETUP,
+    M1.IDCENTROCUSTO,
+    CENTROCUSTOS.DESCRICAO,
+    M1.CENTROCUSTO,
+    M1.RECURSO,
+    M1.PERDASPREVISTAS,
+    coalesce((
+     Select 
+        sum(M2.quantidade)
+     from
+        movimentoestoque
+     inner JOIN
+        MATERIALMOVIMENTOESTOQUE M2 on
+            movimentoestoque.filial=M2.filial AND
+            movimentoestoque.idmovimento=m2.idmovimento
+     where movimentoestoque.IDOP=m1.IDMOVIMENTO AND
+        movimentoestoque.tipomovimento ='04'  and
+        movimentoestoque.IDOPITEM=m1.IDMOVIMENTOMATERIAL),
+      0) as quantidadeApontada,  
+    M1.CONCLUIDO,
+    M1.RECALCULO,
+    case when 
+            (select sum(materiallocal.saldototal)
+            from materiallocal
+            inner join
+                local on
+                    local.id=materiallocal.IDLOCAL
+            where materiallocal.filial=m1.filial
+            and materiallocal.iditem=m1.iditem
+            and local.DISPONIVEL='S') < 
+            (select sum(mercadoriasnotacompra.QUANTIDADE)
+             from mercadoriasnotacompra
+             where mercadoriasnotacompra.filial=m1.filial
+             and mercadoriasnotacompra.codigo=m1.iditem
+             and COALESCE(mercadoriasnotacompra.STATUSCONFERENCIA,'0') IN ('0', '1', '2')) then 0 else 
+             (select sum(materiallocal.saldototal)
+            from materiallocal
+            inner join
+                local on
+                    local.id=materiallocal.IDLOCAL
+            where materiallocal.filial=m1.filial
+            and materiallocal.iditem=m1.iditem
+            and local.DISPONIVEL='S') - 
+            coalesce((select sum(mercadoriasnotacompra.QUANTIDADE)
+             from mercadoriasnotacompra
+             where mercadoriasnotacompra.filial=m1.filial
+             and mercadoriasnotacompra.codigo=m1.iditem
+             and COALESCE(mercadoriasnotacompra.STATUSCONFERENCIA,'0') IN ('0', '1', '2')),0) end as saldo,            
+            
+
+    (select sum(mercadoriasnotacompra.QUANTIDADE)
+     from mercadoriasnotacompra
+     where mercadoriasnotacompra.filial=m1.filial
+     and mercadoriasnotacompra.codigo=m1.iditem
+     and COALESCE(mercadoriasnotacompra.STATUSCONFERENCIA,'0') IN ('0', '1', '2')) conferencia,     
+    CAST('N' AS CHAR(1)) AS P_MARCA
+FROM 
+    MATERIALMOVIMENTOESTOQUE M1
+INNER JOIN
+    ITEMESTOQUE ON
+        ITEMESTOQUE.CODIGO=M1.IDITEM
+INNER JOIN
+    ESTABELECIMENTO ON
+        ESTABELECIMENTO.CADASTRO=M1.FILIAL
+LEFT JOIN
+    CENTROCUSTOS ON
+        CENTROCUSTOS.IDPLANO=ESTABELECIMENTO.PLANOCONTAS AND
+        CENTROCUSTOS.CENTROCUSTO=M1.idCENTROCUSTO
+LEFT JOIN 
+    GRUPOMERCADORIA ON 
+        GRUPOMERCADORIA.GRUPO=ITEMESTOQUE.GRUPO
+LEFT JOIN 
+    FAMILIA ON 
+        FAMILIA.ID=ITEMESTOQUE.FAMILIA
+LEFT JOIN 
+    ITEMESTOQUEXARQUIVO ON 
+        ITEMESTOQUEXARQUIVO.CODIGO=ITEMESTOQUE.CODIGO AND
+        ITEMESTOQUEXARQUIVO.ORDEM=0
+left join 
+    local on
+        local.id=M1.LOCALARMAZENAMENTO
+left join
+    mercadoriasped on
+        mercadoriasped.filial=M1.filial and
+        mercadoriasped.idnota=M1.idpedido and
+        mercadoriasped.idmercadoria=M1.idmercadoria
+WHERE
+    M1.FILIAL = 5
+    AND M1.IDMOVIMENTO = 222985

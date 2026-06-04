@@ -1,0 +1,6 @@
+UPDATE
+    CADASTROPARCEIROS
+SET
+    status=1
+where
+    CADASTROPARCEIROS.status = 1

@@ -1,0 +1,14 @@
+SELECT
+    EXTRACT(WEEKDAY from titulorec.vencimento),
+    titulorec.vencimento,
+    titulorec.PROVAVEL,
+    titulorec.vencimento+case extract(WEEKDAY from titulorec.vencimento + 1) when 0 then 2 when 6 then 3 else 1 end,
+    titulorec.*
+FROM
+    titulorec
+where 
+    titulorec.filial=1 
+    and titulorec.baixa is null 
+    and titulorec.TIPOTRANSACAO in (43, 31, 6, 35, 57, 34)
+
+    

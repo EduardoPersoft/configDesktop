@@ -1,0 +1,3 @@
+select * from ITEMCUSTODATA 
+where datainventario='30.09.2025'
+order by codigo

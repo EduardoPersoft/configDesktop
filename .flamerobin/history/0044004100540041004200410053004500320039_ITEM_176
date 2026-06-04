@@ -1,0 +1,1 @@
+select filial,idnota,numeronota,cdverificacao from notafiscal order by idnota desc

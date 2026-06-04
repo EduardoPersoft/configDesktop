@@ -1,0 +1,2 @@
+select cadastro,status from CADASTROPARCEIROS
+ where cadastro=43110

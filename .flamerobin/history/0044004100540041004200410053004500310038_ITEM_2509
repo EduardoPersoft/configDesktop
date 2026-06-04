@@ -1,0 +1,4 @@
+select * from MERCADORIASPED
+where filial=1
+and codigo='PE-3355'
+and baixa='N'

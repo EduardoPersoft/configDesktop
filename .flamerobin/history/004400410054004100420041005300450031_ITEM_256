@@ -1,0 +1,7 @@
+UPDATE
+    itemestoque 
+SET
+    itemestoque.FATORCONVERSAO = 1 / itemestoque.C_PESOPOREMBALAGEM 
+WHERE
+    itemestoque.unidade = 'MIL' AND
+    coalesce(itemestoque.C_PESOPOREMBALAGEM,0)>0

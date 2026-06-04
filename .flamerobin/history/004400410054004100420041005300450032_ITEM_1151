@@ -1,0 +1,16 @@
+SELECT
+    *
+FROM
+    NOTAFISCAL
+where 
+    not exists (
+        select 
+            *
+        FROM
+            MERCADORIASNOTA
+        WHERE
+            mercadoriasnota.filial=notafiscal.filial AND
+            mercadoriasnota.idnota=notafiscal.idnota)
+order by
+    notafiscal.emissao desc
+        

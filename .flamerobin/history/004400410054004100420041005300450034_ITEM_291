@@ -1,0 +1,2 @@
+select * from C_COMISSAOPEDIDOPAGA 
+where  idnota=63748

@@ -1,0 +1,4 @@
+UPDATE
+    MERCADORIASPEDCOMPRA
+SET
+    c_qtdeenviada=qtdeenviada

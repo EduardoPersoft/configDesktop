@@ -1,0 +1,2 @@
+select * from SERVICOSNOTA
+where servicosnota.IDPEDIDO=68968

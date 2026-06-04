@@ -1,0 +1,6 @@
+SELECT
+    *
+FROM
+    USUARIO
+where 
+    usuario.id=39

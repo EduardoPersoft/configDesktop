@@ -1,0 +1,17 @@
+insert into  CONTACORRENTE(
+    filial, codigo, banco, descontopadrao, saldodisponivel,
+    saldobloqueado, saldoextrato, saldoreal, 
+    creditosemitidos,debitosemitidos,saldofuturo, tipoconta,
+    descricaoconta, usuario,dataalteracao , obrigatorioparceiro,
+    pedeaprovacaofinanceirapedido)
+
+select 
+    110, codigo, banco, descontopadrao, saldodisponivel,
+    saldobloqueado, saldoextrato, saldoreal, 
+    creditosemitidos,debitosemitidos,saldofuturo, tipoconta,
+    descricaoconta, usuario,dataalteracao , obrigatorioparceiro,
+    pedeaprovacaofinanceirapedido
+from 
+    CONTACORRENTE 
+where 
+    filial=1 and codigo between 2000 and 2012

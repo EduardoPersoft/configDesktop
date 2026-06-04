@@ -1,0 +1,1 @@
+select * from titulorec where emissao='20.07.2021'

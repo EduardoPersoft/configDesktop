@@ -1,0 +1,8 @@
+create table t_lotes(
+filial integer not null,
+iditem varchar(15) not null,
+lote varchar(12) not null,
+gramatura decimal(12,2),
+largura decimal(12,2),
+constraint pk_t_lotes
+primary key (filial, iditem, lote))

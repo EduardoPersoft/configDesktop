@@ -1,0 +1,26 @@
+insert into itemcustodata(filial,datainventario,codigo,custounitario,quantidade,custototal)
+select
+    materialmovimentoestoque.filial,
+    '29.02.2024',
+    materialmovimentoestoque.iditem,
+    sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal),
+    sum(materialmovimentoestoque.valor*MATERIALMOVIMENTOESTOQUE.sinal)
+from
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on 
+        materialmovimentoestoque.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where 
+    movimentoestoque.filial=1 and
+    movimentoestoque.emissao <='29.02.2024' and
+    substring(materialmovimentoestoque.iditem from 1 for 2)='PE' and exists (
+    select * from itemcustodata
+    where itemcustodata.filial=materialmovimentoestoque.filial 
+    and itemcustodata.datainventario='29.02.2024'
+    and itemcustodata.codigo=MATERIALMOVIMENTOESTOQUE.iditem)
+group by    
+    materialmovimentoestoque.filial,
+    materialmovimentoestoque.iditem   
+having 
+sum(materialmovimentoestoque.quantidade*MATERIALMOVIMENTOESTOQUE.sinal)>0.01

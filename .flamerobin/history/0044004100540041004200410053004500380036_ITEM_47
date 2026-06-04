@@ -1,0 +1,1 @@
+update lantocontpag set centrocusto='1202' where filial=1 and CONTACOntabil='3'

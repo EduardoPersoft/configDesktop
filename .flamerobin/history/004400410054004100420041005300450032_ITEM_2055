@@ -1,0 +1,1 @@
+update t_tituloec set importado = 'S' where importado is null

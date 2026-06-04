@@ -1,0 +1,7 @@
+select 
+    *
+FROM
+    TITULOREC
+WHERE
+    titulorec.filial=5 AND
+    titulorec.DATAENVIO>='14.07.2021'

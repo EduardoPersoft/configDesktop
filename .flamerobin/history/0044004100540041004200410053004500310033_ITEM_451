@@ -1,0 +1,26 @@
+update 
+    MOVIMENTOESTOQUE
+SET
+    movimentoestoque.idpedido = 
+        (SELECT
+            min(materialmovimentoestoque.idpedido)
+         FROM
+            MATERIALMOVIMENTOESTOQUE
+         WHERE
+            materialmovimentoestoque.filial=movimentoestoque.filial AND
+            materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTo)
+SELECT
+    movimentoestoque.*,
+     (SELECT
+            min(materialmovimentoestoque.idpedido)
+         FROM
+            MATERIALMOVIMENTOESTOQUE
+         WHERE
+            materialmovimentoestoque.filial=movimentoestoque.filial AND
+            materialmovimentoestoque.idmovimento=movimentoestoque.IDMOVIMENTo
+        plan (materialmovimentoestoque index(RDB$PRIMARY199)))
+FROM    
+    movimentoestoque
+WHERE
+    movimentoestoque.filial=1 AND
+    movimentoestoque.tipomovimento='13'

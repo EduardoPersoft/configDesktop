@@ -1,0 +1,38 @@
+select
+    venPed.VENDEDOR,
+    CADASTROPARCEIROS.NOME,
+    det.DATAreferencia,
+    det.idnota,
+    det.filial,    
+    det.C_INDICADOR,
+    det.vlrTotalNota,
+    master.c_pedidosubstituido,
+    case det.idnota when coalesce(master.C_PEDIDOSUBSTITUIDO,-1) then -1 else 1 end
+    master.idnota,
+    det.C_TIPO
+    
+from  
+ PEDIDO MASTER 
+
+inner join 
+    pedido det on
+    det.filial=master.FILIAL and 
+    det.IDNOTA in (master.idnota,master.C_PEDIDOSUBSTITUIDO)
+
+inner join 
+    VENDEDORESPED venped on 
+    venPed.FILIAL=det.FILIAL and
+    venPed.idnota=det.idnota
+inner join  
+    CADASTROPARCEIROS on 
+    venPed.VENDEDOR=CADASTROPARCEIROS.CADASTRO
+inner join 
+    VENDEDOR vend on 
+    venPed.vendedor=vend.cadastro
+where 
+    MASTER.FILIAL =1 and
+    extract (year from MASTER.DATAreferencia) between 2022 and 2022 AND 
+    vend.cadastro=20 and 
+    MASTER.c_tipo =0 and 
+    MASTER.DATAEMISSAO is not null and
+    MASTER.CANCELAMENTO ='N'

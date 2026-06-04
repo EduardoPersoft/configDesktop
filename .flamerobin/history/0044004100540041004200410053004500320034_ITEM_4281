@@ -1,0 +1,4 @@
+select * from TITULOREC
+where titulorec.filial=5
+and titulorec.baixa is null
+and cast(titulorec.DATAENVIO as date)=cast(titulorec.emissao as date)

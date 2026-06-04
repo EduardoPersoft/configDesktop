@@ -1,0 +1,8 @@
+select * from pedidocompra where uuid='{42A7A015-6CE5-4A94-BEAB-36E48D90852'
+and exists 
+(select * from MERCADORIASPEDCOMPRA
+where MERCADORIASPEDCOMPRA.filial=PEDIDOCOMPRA.filial AND
+mercadoriaspedcompra.idnota=pedidocompra.idnota AND
+mercadoriaspedcompra.baixa='N')
+
+ order by idnota

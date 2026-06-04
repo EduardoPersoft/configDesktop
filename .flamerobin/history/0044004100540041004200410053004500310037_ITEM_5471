@@ -1,0 +1,3 @@
+select * from  NOTAFISCAL
+where icmsorigemvalorinterestadual>0
+and dataemissao>='01.09.2025'

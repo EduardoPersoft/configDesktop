@@ -1,0 +1,3 @@
+select * from ITEMESTOQUE
+where codigo in ('I001', 'I002', 'I003', 'I004')
+order by codigo

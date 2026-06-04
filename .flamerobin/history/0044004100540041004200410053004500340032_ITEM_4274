@@ -1,0 +1,35 @@
+SELECT case c_laminacao.CODIGO 
+    when 'PRO1265PO001' then 'PL0020P001'
+    when 'PRO4760FLI001' then 'PL0019F001'
+    when 'PRO3211FLI007' then 'PL0022F001'
+    when 'PRO4861SUP001' then 'PL0024P001'
+    when 'PRO4847SUP001' then 'PL0025P001'
+    when 'PRO4847SUP002' then 'PL0025P002' end codigo, c_laminacao.SEQUENCIA, coalesce(filme1.CODIGONOVO, C_LAMINACAO.filme) filme, 
+    c_laminacao.GRAMATURAFILME, NULL ADESIVO,
+    c_laminacao.GRAMATURAADESIVO, c_laminacao.APLICARTRATADOR, c_laminacao.LADOLAMINAR, c_laminacao.SAIDAREBOBINADEIRA,
+    c_laminacao.LARGURAROLO, c_laminacao.ITEMRIGOROSO, c_laminacao.OBSERVACAO, c_laminacao.C_VELOCIDADE, c_laminacao.C_SETUP,
+    c_laminacao.C_TENSAREBOBINADOR, c_laminacao.C_TENSAOPELICULA, c_laminacao.C_TENSAODESBOBINADORA,
+    c_laminacao.C_TENSAODESBOBINADORB, c_laminacao.C_PERDAPROCESSO, c_laminacao.C_PERDAAJUSTEMAQUINA,
+    c_laminacao.FORCASELAGEM, c_laminacao.FORCALAMINACAO, c_laminacao.LADOLAMINAR2, c_laminacao.APLICACAOADESIVOMINIMO,
+    c_laminacao.APLICACAOADESIVOMAXIMO, c_laminacao.C_VELOCIDADEL10, c_laminacao.C_SETUPL10,
+    c_laminacao.C_TENSAREBOBINADORL10, c_laminacao.C_TENSAOPELICULAL10, c_laminacao.C_TENSAODESBOBINADORAL10,
+    c_laminacao.C_TENSAODESBOBINADORBL10, c_laminacao.C_PERDAPROCESSOL10, c_laminacao.C_PERDAAJUSTEMAQUINAL10,
+    c_laminacao.FORCASELAGEML10, c_laminacao.FORCALAMINACAOL10, c_laminacao.TEMPERATURACONJUNTOL7,
+    c_laminacao.TEMPERATURANIPL10, c_laminacao.TEMPERATURAAPLICADOSL10, coalesce(filme2.CODIGONOVO, c_laminacao.filme2) filme2,
+    c_laminacao.FILME1BOBINADOR, c_laminacao.FILME2BOBINADOR, c_laminacao.C_FILMESALVO, c_laminacao.C_FILME2SALVO,
+    c_laminacao.C_GRAMATURAFILMES, c_laminacao.C_GRAMATURA2FILMeS, c_laminacao.C_FILME1BOBINADORS,
+    c_laminacao.C_FILME2BOBINADORS, c_laminacao.C_BOBINAMENTOLAMINACAO,gramaturafilme2
+FROM C_LAMINACAO
+left join
+    C_CONVERSAOMP filme1 on
+        filme1.codigo=c_laminacao.FILME
+left join
+    C_CONVERSAOMP filme2 on
+        filme2.codigo=c_laminacao.FILME2
+where 
+    c_laminacao.codigo in ('PRO1265PO001',
+                           'PRO4760FLI001',
+                           'PRO3211FLI007',
+                           'PRO4861SUP001',
+                           'PRO4847SUP001',
+                           'PRO4847SUP002')

@@ -1,0 +1,6 @@
+update 
+    mercadoriasped
+set 
+    mercadoriasped.ptottribfed=(select first 1 IBPTIMPMEDIO.ALIQNAC from IBPTIMPMEDIO where codigo=CLASSIFICACAOFISCAL.DESCRICAO),
+    mercadoriasped.ptottribmun=(select first 1 IBPTIMPMEDIO.ALIQMUN from IBPTIMPMEDIO where codigo=CLASSIFICACAOFISCAL.DESCRICAO),
+    mercadoriasped.ptottribest=(select first 1 IBPTIMPMEDIO.ALIQEST from IBPTIMPMEDIO where codigo=CLASSIFICACAOFISCAL.DESCRICAO)

@@ -1,0 +1,14 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.c_up,
+    itemestoque.C_PESOCONSUMO,
+    itemestoque.PESOBRUTO
+from
+    ITEMESTOQUE
+where 
+    itemestoque.TIPOPRODUTO='4' and 
+    itemestoque.codigo between '1000' and '3'
+order by
+        itemestoque.codigo
+    

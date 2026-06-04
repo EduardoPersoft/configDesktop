@@ -1,0 +1,2 @@
+select * from PEDIDO
+where vendedor=14

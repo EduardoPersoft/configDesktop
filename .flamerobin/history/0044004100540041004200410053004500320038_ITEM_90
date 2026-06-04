@@ -1,0 +1,2 @@
+select filial,idpedido,notafiscal.NUMPEDIDOCLIENTE from NOTAFISCAL
+where filial=1 and idnota=17733

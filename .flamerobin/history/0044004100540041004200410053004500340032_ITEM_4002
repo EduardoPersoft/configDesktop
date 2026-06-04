@@ -1,0 +1,1 @@
+select * from C_MOVFINANCEIRO where id=23565

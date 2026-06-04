@@ -1,0 +1,4 @@
+select
+    count(orcamento.idnota)
+from
+    orcamento.DATACADASTRO=cast('now' as date)

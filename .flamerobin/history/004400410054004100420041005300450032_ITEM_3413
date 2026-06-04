@@ -1,0 +1,54 @@
+select 
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao,
+    materiallocal.SALDOTOTAL,
+    mercadoriaspedcompra.quantidade,
+    mercadoriaspedcompra.QTDEENTREGUE,
+    mercadoriaspedcompra.baixa,
+    materiallocal.saldototal,
+    mercadoriaspedcompra.MINIMOBAIXA, (
+        select 
+            sum(mercadoriasnotacompra.QUANTIDADE) 
+        from 
+            MERCADORIASnotaCOMPRA
+        inner JOIN
+            notacompra on
+                notacompra.filial=mercadoriasnotacompra.filial AND
+                notacompra.idnota=mercadoriasnotacompra.idnota                
+        where 
+            notacompra.operacao<>312 and
+            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA)
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    itemestoque on
+        itemestoque.codigo=mercadoriaspedcompra.codigo
+left JOIN
+    materiallocal on
+        materiallocal.filial=mercadoriaspedcompra.filial AND
+        materiallocal.iditem=mercadoriaspedcompra.codigo AND
+        materiallocal.IDLOCAL=1
+WHERE
+    mercadoriaspedcompra.filial=5 AND
+    mercadoriaspedcompra.baixa = 'N' AND
+    mercadoriaspedcompra.minimobaixa <= (
+        select 
+            sum(mercadoriasnotacompra.QUANTIDADE) 
+        from 
+            MERCADORIASnotaCOMPRA
+        inner JOIN
+            notacompra on
+                notacompra.filial=mercadoriasnotacompra.filial AND
+                notacompra.idnota=mercadoriasnotacompra.idnota                
+        where         
+            notacompra.operacao<>312 and        
+            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.IDMERCADORIA)
+order by
+    idnota

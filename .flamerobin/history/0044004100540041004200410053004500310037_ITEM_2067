@@ -1,0 +1,2 @@
+select * from MOVIMENTOESTOQUE
+where filial=1 and idmovimento in (608062, 608063)

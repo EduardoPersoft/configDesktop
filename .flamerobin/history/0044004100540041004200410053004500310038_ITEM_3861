@@ -1,0 +1,2 @@
+select * from LOGALTERACAO where tipo='D'
+order by data desc

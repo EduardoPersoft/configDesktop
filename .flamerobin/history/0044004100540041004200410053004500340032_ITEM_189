@@ -1,0 +1,3 @@
+select * from LANTOCONTPAG
+where filial=110 and
+LANTOCONTPAG.CONTACONTABIL='1120901'

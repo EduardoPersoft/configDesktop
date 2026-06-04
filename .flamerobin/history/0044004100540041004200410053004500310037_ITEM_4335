@@ -1,0 +1,2 @@
+update titulorec set naolimitefinanceiro='N'
+where naolimitefinanceiro is null

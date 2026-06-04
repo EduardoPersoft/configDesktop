@@ -1,0 +1,3 @@
+select filial,idnota,uuid 
+from PEDIDO
+where uuid is not null

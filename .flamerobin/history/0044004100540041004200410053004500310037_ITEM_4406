@@ -1,0 +1,1 @@
+create table c_itensSelecao(codigo varchar(15), busca varchar(30))

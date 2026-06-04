@@ -1,0 +1,6 @@
+SELECT
+    *
+from
+    C_LAMINACAO
+where
+    C_LAMINACAO.CODIGO='PRO3303FLI002'

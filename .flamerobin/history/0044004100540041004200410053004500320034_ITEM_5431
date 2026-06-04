@@ -1,0 +1,6 @@
+update
+    PEDIDOCOMPRA
+set
+    pedidocompra.usuario=  'THAMYRES'
+where
+    pedidocompra.usuario='TAMYRES'

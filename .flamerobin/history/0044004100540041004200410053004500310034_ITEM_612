@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where materiallote.lote like '4324/1%'

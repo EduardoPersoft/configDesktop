@@ -1,0 +1,6 @@
+update
+    PEDIDO
+set 
+    pedido.CLCTRANSP='N'
+where
+        pedido.datacadastro between '01.01.2023' and '30.06.2023'

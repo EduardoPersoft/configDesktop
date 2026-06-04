@@ -1,0 +1,20 @@
+SELECT 
+    * 
+FROM 
+    NOTAFISCAL
+inner join 
+    naturezaoperacao on 
+        naturezaoperacao.id=notafiscal.OPERACAO
+where
+    NATUREZAOPERACAO.estoque='S'
+and notafiscal.cancelamento='N'    
+and notafiscal.dataemissao>='01.01.2025'    
+and not exists
+    (select 
+        * 
+     from 
+        movimentoestoque 
+     where 
+        movimentoestoque.filial=NOTAFISCAL.FILIAL and
+        movimentoestoque.idnota=notafiscal.idnota)
+order by datacadastro        

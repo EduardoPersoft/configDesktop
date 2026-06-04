@@ -1,0 +1,43 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_GENERATORESTABELECIMENTO (
+    FILIAL integer,
+    NOME varchar(20),
+    SALTO integer )
+RETURNS (
+    VALOR integer,
+    "DATA" date,
+    DATAHORA timestamp )
+
+AS
+BEGIN
+
+  data = cast('now' as date);
+  dataHora = cast('now' as timestamp); 
+  valor = null;
+
+  if (NOME='C_GFORADELISTA') then begin
+      valor=GEN_ID("C_GFORADELISTA",salto);      
+  end
+
+  VALOR = VALOR +1;   
+  
+  if(valor is null) then     
+    select 
+        valor,
+        data,
+        datahora,
+    from 
+        GENERATORESTABELECIMENTO(:filial,:nome,:salto)
+    into
+        :valor, data, datahora;
+
+
+  SUSPEND;
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_GENERATORESTABELECIMENTO TO  SYSDBA WITH GRANT OPTION;
+

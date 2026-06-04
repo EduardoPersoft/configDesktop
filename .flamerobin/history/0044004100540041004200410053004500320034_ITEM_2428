@@ -1,0 +1,5 @@
+SELECT
+    grupo.grupo,
+    grupo.descricao
+FROM
+    GRUPOMERCADORIA as grupo

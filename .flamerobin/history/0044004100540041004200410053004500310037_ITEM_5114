@@ -1,0 +1,13 @@
+select 
+    sum(C_COLETAS.valor),
+    sum(c_coletas.valormedio*C_COLETAS.QTDEXPEDICOES)
+    sum(c_coletas.QTDEXPEDICOES)
+from 
+    C_COLETAS
+/*
+left join 
+    movimentoestoque on
+        c_coletas.COLETA=movimentoestoque.COLETA
+*/
+where
+    c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025' 

@@ -1,0 +1,43 @@
+select 
+    locallote.filial,
+    locallote.iditem,
+    itemestoque.descricao,
+    locallote.lote,
+    locallote."LOCAL",
+    local.descricao,
+    locallote.quantidade saldoatual,
+    inventario.data dataInventario,
+    inventario.quantidade contado,
+    inventario.quantidadeEstoque esperado,
+    case when inventario.quantidade is null 
+        then null
+        else coalesce(inventario.quantidadeEstoque,0)-coalesce(inventario.quantidade,0)
+    end as diferenca,    
+    inventario.idmovimento
+from 
+    locallote
+inner join
+    itemestoque on
+        itemestoque.codigo=locallote.iditem
+left join
+    local on
+        local.id=locallote."LOCAL"
+left join
+    INVENTARIOESTOQUEDATA inventario on
+        inventario.filial=locallote.filial and
+        inventario.codigo=locallote.IDITEM and
+        inventario.lote=locallote.lote and
+        inventario."LOCAL"=locallote."LOCAL" and
+        inventario.data = (select 
+                                max(ultimoInventario.data)
+                           from
+                                INVENTARIOESTOQUEDATA ultimoInventario
+                           where    
+                                ultimoInventario.filial=inventario.filial and
+                                ultimoInventario.codigo=inventario.codigo and
+                                ultimoInventario.lote=inventario.lote and
+                                ultimoInventario.local=inventario.local)
+where
+    locallote.filial=1 and 
+    (locallote.quantidade>0 or (inventario.contado<>inventario.esperado and idmovimento is null))
+     

@@ -1,0 +1,2 @@
+alter table MATERIALMOVIMENTOESTOQUE
+add c_sinal integer

@@ -1,0 +1,4 @@
+select * from materiallocal
+    
+where materiallocal.idlocal=103
+and materiallocal.saldototal>0

@@ -1,0 +1,2 @@
+select * from MATERIALLOTE
+where  LOTE='I310724' and iditem='MPP01METAL'

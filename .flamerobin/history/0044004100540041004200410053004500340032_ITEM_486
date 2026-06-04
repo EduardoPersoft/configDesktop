@@ -1,0 +1,9 @@
+SELECT 
+    *
+from
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.FILIAL=110 and
+    MATERIALMOVIMENTOESTOQUE.IDITEM='MPP01TRAQMG17' and
+    materialmovimentoestoque.lote like '12738%' and
+    materialmovimentoestoque.idmovimento=18803

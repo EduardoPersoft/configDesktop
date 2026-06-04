@@ -1,0 +1,11 @@
+update
+    MERCADORIASPEDCOMPRA
+set
+    MERCADORIASPEDCOMPRA.CLASSIFICACAOTRIBUTARIA=(select itemestoque.TRIBUTACAOICMS
+                                                   from itemestoque
+                                                   where itemestoque.codigo=mercadoriaspedcompra.codigo)
+                                                    
+where 
+    filial=5 
+    and idnota= 67279
+

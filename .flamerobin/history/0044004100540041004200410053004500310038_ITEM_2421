@@ -1,0 +1,1 @@
+select * from c_comissao where filial=1 and idnota=71387

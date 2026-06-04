@@ -1,0 +1,34 @@
+select
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    TIPOITEMESTOQUE.descricao,
+    local.DESCRICAO,
+    ITEMESTOQUE.C_LARGURA,
+    itemestoque.C_COMPRIMENTO,
+    itemestoque.c_m2,
+    listaPadrao.preco,
+    listaPadrao.DESCONTOITEM,
+      0 as variavel,
+    cast('N' as char(1)) as p_char
+from
+    ITEMESTOQUE
+inner join
+    TIPOITEMESTOQUE on
+        TIPOITEMESTOQUE.id=itemestoque.TIPOPRODUTO
+inner join 
+    locallote on 
+    locallote.iditem=itemestoque.codigo and locallote.quantidade>0 
+
+inner join local on locallote.local=local.id
+LEFT join
+    listaprecoproduto listaPadrao on
+        listaPadrao.lista=20 and
+        listaPadrao.produto=itemestoque.codigo
+where 
+    ITEMESTOQUE.TIPOPRODUTO in ('3', '4') and
+    not exists (
+        select * from LISTAPRECOPRODUTO Listaatual
+        where Listaatual.lista=?
+        and Listaatual.produto=ITEMESTOQUE.codigo) and
+        itemestoque.codigo like 'PE-%'

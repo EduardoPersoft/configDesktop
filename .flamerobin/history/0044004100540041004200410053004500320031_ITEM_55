@@ -1,0 +1,8 @@
+select 
+    filial,
+    idnota,
+    idmercadoria,
+    quantidade,
+    mercadoriasnota.QTDBAIXA
+    from MERCADORIASNOTA
+where filial=1 and idnota=77890

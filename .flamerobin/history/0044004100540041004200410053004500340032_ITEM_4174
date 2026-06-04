@@ -1,0 +1,6 @@
+update 
+    LANTOCONTBANC   
+set
+    lantocontbanc.CONTACONTABIL='112030104'
+where
+    lantocontbanc.CONTACONTABIL='112030'

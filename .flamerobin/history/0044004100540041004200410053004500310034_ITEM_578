@@ -1,0 +1,8 @@
+select
+    filial,idnota,numeronota,uuid
+from
+    NOTAFISCAL
+where
+    notafiscal.filial=3941
+order by
+    notafiscal.idnota desc

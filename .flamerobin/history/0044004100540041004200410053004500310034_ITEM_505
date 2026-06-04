@@ -1,0 +1,15 @@
+select
+    movimentoestoque.emissao,
+    materialmovimentoestoque.codigo,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.VALOR
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        movimentoestoque.filial=materialmovmentoestoque.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MATERIALMOVIMENTOESTOQUE.codigo like 'MPP%'
+order by
+    movimentoestoque.emissao

@@ -1,0 +1,1 @@
+SELECT * FROM C_MOVFINANCEIRO where contariginal=2019 and contacorrenteimportada<>2019

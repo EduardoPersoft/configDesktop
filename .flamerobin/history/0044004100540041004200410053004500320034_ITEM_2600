@@ -1,0 +1,27 @@
+select
+    familia.ordemdestaque,
+    itemestoque.codigo,
+    itemestoque.referencia,
+    itemestoque.descricao,
+    itemestoque.definicao,
+    itemestoquexarquivo.NOMEARQUIVO
+from
+    itemestoquexarquivo
+inner join
+    itemestoque on
+        itemestoque.codigo=itemestoquexarquivo.CODIGO
+inner join
+    familia on
+        familia.id=itemestoque.familia
+where
+    ITEMESTOQUEXARQUIVO.ordem=0 and
+    familia.ordemdestaque is not null and
+    itemestoquexarquivo.nomeArquivo is not null
+order by 
+    familia.ordemdestaque,
+    case itemestoque.familia when 3 
+        then substring(itemestoque.referencia from 3 for 3) 
+        else '' 
+    end,
+    itemestoque.referencia,
+    itemestoque.codigo

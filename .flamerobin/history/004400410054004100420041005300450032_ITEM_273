@@ -1,0 +1,1 @@
+select * from locallote where iditem='08878'

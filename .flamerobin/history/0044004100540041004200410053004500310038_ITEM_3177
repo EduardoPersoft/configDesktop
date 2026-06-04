@@ -1,0 +1,17 @@
+select 
+    *
+from 
+    vendedoresorc 
+where 
+    vendedoresorc.VENDEDOR in (21, 207, 192) and
+    orcamentos.datacadastro>='01.12.2024' and
+
+    not exists (select pedido.IDORCAMENTO from pedido where
+                pedido.filial=vendedoresorc.filial and 
+                pedido.idorcamento=vendedoresorc.idnota ) and 
+    exists 
+        (select orcamento.idnota from orcamento where 
+                vendedoresorc.filial=orcamento.filial and 
+                vendedoresorc.IDNOTA=orcamento.idnota and 
+                    orcamento.C_LOJA=3 and 
+                    orcamento.C_STATUS=1 )

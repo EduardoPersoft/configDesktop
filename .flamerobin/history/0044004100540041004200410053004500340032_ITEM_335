@@ -1,0 +1,22 @@
+select
+    MATERIALMOVIMENTOESTOQUE.idmovimento,
+    materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+    materialmovimentoestoque.iditem,
+    materialmovimentoestoque.lote,
+    materialmovimentoestoque.quantidade
+from
+    MOVIMENTOESTOQUE
+inner join
+    MATERIALMOVIMENTOESTOQUE on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO
+where
+    MOVIMENTOESTOQUE.filial=110 and
+    movimentoestoque.PROCESSAMENTO>='01.10.2023' and
+    materialmovimentoestoque.lote like '%230930%' and
+    MOVIMENTOestoque.tipomovimento='04'
+order by
+    MATERIALMOVIMENTOESTOQUE.iditem,
+    materialmovimentoestoque.lote
+    
+    

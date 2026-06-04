@@ -1,0 +1,1 @@
+select * from c_listapreco where codigo between '01' and '99'

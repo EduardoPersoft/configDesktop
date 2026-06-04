@@ -1,0 +1,6 @@
+
+
+insert into c_movfinanceirod 
+select distinct documento,fatura from C_MOVFINANCEIRO
+group by documento,fatura,contacorrenteimportada
+having count(*)>1

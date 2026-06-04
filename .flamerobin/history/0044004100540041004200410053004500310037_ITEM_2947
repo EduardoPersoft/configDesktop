@@ -1,0 +1,18 @@
+select 
+    itemestoque.codigo,
+    itemestoque.descricao,
+    itemestoque.codigobarra,
+    itemestoque.referencia 
+from 
+    MERCADORIASNOTACOMPRA
+inner join
+    itemestoque i1 on
+        i1.codigo=mercadoriasnotacompra.iditem
+where 
+    mercadoriasnotacompra.filial=12826 and 
+    mercadoriasnotacompra.idnota=6654
+/*
+and
+ 
+    exists (select * from ITEMESTOQUE
+where */

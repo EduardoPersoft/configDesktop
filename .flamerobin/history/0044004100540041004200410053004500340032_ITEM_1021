@@ -1,0 +1,1 @@
+select * from locallote where quantidade<0 and iditem like 'MPP%'

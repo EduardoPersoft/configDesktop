@@ -1,0 +1,1 @@
+select idnota,simples from notafiscal where dataemissao is null order by idnota desc

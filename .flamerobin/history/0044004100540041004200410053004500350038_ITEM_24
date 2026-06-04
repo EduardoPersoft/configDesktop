@@ -1,0 +1,2 @@
+select * from mercadoriasnota
+where idnta=5285

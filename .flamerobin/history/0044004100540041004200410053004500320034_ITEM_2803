@@ -1,0 +1,8 @@
+update 
+    MERCADORIASNOTA
+set 
+    mercadoriasnota.PRECOLISTA=mercadoriasnota.PRECOLISTA*2,
+    mercadoriasnota.PRECOUNITARIO=mercadoriasnota.precounitario*2
+where
+    mercadoriasnota.filial=5 and
+    mercadoriasnota.idnota=300072

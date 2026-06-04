@@ -1,0 +1,4 @@
+delete from v
+delete from C_COMISSAOPEDIDOPAGA
+where 
+ID = 651 and VENDEDOR = 21 and FILIAL = 1 and IDNOTA = 53967 and IDMERCADORIA  = 1

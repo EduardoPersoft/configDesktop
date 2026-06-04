@@ -1,0 +1,24 @@
+select 
+    materialmovimentoestoque.idcentrocusto,
+    materialmovimentoestoque.quantidade,
+    materialmovimentoestoque.concluido,
+    materialmovimentoestoque.tempo,
+    materialmovimentoestoque.setup,
+    MAPAPRODUCAO.INICIO,
+    MAPAPRODUCAO.fim
+from 
+    materialmovimentoestoque
+inner join
+    movimentoestoque on
+        movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+left join
+    MAPAPRODUCAO on
+        MAPAPRODUCAO.FILIAL=MATERIALMOVIMENTOESTOQUE.filial and
+        mapaproducao.IDMOVIMENTO=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO and
+        mapaproducao.IDMOVIMENTOMATERIAL=MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL
+where
+    movimentoestoque.TIPOMOVIMENTO='12'
+order by
+    movimentoestoque.emissao,
+    MATERIALMOVIMENTOESTOQUE.IDMOVIMENTOMATERIAL

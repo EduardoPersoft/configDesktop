@@ -1,0 +1,2 @@
+create index unique  c_titulopag_documento
+on titulopag(filial,parceiro,titulo,fatura) 

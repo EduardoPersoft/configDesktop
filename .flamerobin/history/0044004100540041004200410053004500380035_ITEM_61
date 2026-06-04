@@ -1,0 +1,12 @@
+select 
+    mercadoriasped.filial,
+    mercadoriasped.idnota,
+    mercadoriasped.idmercadoria,
+    mercadoriasped.cfop,
+    mercadoriasped.PESOLIQUIDO,
+    mercadoriasped.PESOBRUTO,
+    mercadoriasped.QTDEVOLUME,
+    mercadoriasped.CLASSIFISCAL,
+    mercadoriasped.CLASSIFICACAOTRIBUTARIA
+from 
+    mercadoriasped

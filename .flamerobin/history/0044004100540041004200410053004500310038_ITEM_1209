@@ -1,0 +1,6 @@
+select 
+    *
+from
+    LANTOCONTPAG
+where 
+    lantocontpag.CENTROCUSTO='2700'

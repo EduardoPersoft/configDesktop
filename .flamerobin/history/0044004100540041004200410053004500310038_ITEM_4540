@@ -1,0 +1,12 @@
+update 
+    TITULOPAG
+set
+    titulopag.datareferencia = titulopag.VENCIMENTO-extract(day from titulopag.vencimento)
+where
+    titulopag.filial=1 and
+    titulopag.VENCIMENTO>'01.01.2026' and
+    exists (
+    select * from LANTOCONTPAG
+    where lantocontpag.filial=titulopag.filial and
+    lantocontpag.IDMOVTOBanc=titulopag.IDTITULO and
+    lantocontpag.CONTACONTABIL='20302')

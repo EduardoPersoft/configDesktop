@@ -1,0 +1,1 @@
+select * from orcamento where orcamento=1 and idnota=43877

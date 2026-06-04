@@ -1,0 +1,7 @@
+select * from movimentoestoque
+inner join 
+    materialmovimentoestoque on 
+        movimentoestoque.filial=materialmovimentoestoque.filial and
+        movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+where 
+    materialmovimentoestoque.iditem='PRO4183FLI001'

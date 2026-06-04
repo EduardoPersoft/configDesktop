@@ -1,0 +1,5 @@
+select
+    distinct
+    itemestoque.DESCRICAO
+from
+    itemestoque

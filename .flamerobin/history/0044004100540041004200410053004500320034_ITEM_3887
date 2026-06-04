@@ -1,0 +1,4 @@
+insert into ITEMESTOQUECODIGOS(codigo, codigoalternativo)
+
+select * from ITEMESTOQUECODIGOS
+where codigo='13555'

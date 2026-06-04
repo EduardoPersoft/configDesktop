@@ -1,0 +1,13 @@
+update
+    ITEMESTOQUE
+set 
+    itemestoque.C_LOCALIMPORTACAO=(select 
+                                    MATERIALFILIAL.C_LOCALIMPORTACAO
+                                   from
+                                     MATERIALFILIAL
+                                   where 
+                                    materialfilial.filial=1 and
+                                    materialfilial.iditem=itemestoque.codigo)
+
+
+    

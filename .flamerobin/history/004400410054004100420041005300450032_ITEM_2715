@@ -1,0 +1,6 @@
+UPDATE  
+    MERCADORIASPEDCOMPRA
+SET
+    minimobaixa=quantidade
+where 
+    mercadoriaspedcompra.MINIMOBAIXA>mercadoriaspedcompra.QUANTIDADE

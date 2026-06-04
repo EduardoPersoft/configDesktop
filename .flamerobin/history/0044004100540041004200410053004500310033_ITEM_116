@@ -1,0 +1,2 @@
+select codigo, sum(coalesce(consumo,0)) from C_POSICAOESTOQUERESERVACON(1, '01.05.2021', '31.07.2021')
+group by codigo

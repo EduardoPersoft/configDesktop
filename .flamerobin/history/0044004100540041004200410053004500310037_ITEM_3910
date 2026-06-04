@@ -1,0 +1,31 @@
+select 
+    TITULOREC.PARCEIRO,
+    titulorec.FILIAL,    
+    TITULOREC.TITULO,
+    TITULOREC.FATURA,
+    TITULOREC.EMISSAO,
+    TITULOREC.VENCIMENTO,
+    TITULOREC.VALORTITULO,
+    TITULOREC.VALOREMABERTO,
+    TITULOREC.CONTACORRENTE,
+    TITULOREC.TIPOTRANSACAO,
+    CONTACORRENTE.DESCRICAOCONTA,
+    TIPOCOBRANCA.DESCRICAO,
+    TITULOREC.FATURA,
+    case titulorec.NAOLIMITEFINANCEIRO when 'S' then 'red' else 'black' end as p_cor
+ from 
+    TITULOREC  
+ 
+inner join
+  CONTACORRENTE ON 
+  contacorrente.filial=titulorec.filial and 
+    contacorrente.CODIGO=titulorec.contacorrente
+INNER JOIN 
+   TIPOCOBRANCA ON 
+   TIPOCOBRANCA.TIPOCOBRANCA=TITULOREC.TIPOTRANSACAO
+WHERE 
+    titulorec.tipobaixa is null and 
+    COALESCE (TIPOCOBRANCA.TPAG,'') NOT IN ('3','4') and
+    titulorec.parceiro=14186
+
+

@@ -1,0 +1,4 @@
+select * from MOVIMENTOBANCARIO
+where filial=12826
+and idcontacorrente=21
+and idmovtobanc in (71616,71664,71666,71667)

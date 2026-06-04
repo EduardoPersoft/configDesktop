@@ -1,0 +1,6 @@
+update 
+    c_faturasped 
+set 
+    filialtitulo=1, idtitulo=127567,c_malote=27803,liberacao='26.06.2024',contacorrente=1002,
+    tipocobrancafinanceiro=4
+where filial=1 and idnota=72014

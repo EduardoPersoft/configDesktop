@@ -1,0 +1,11 @@
+select 
+    * 
+from 
+    MOVIMENTOESTOQUE
+inner join
+    c_coletas on
+        c_coletas.COLETA = movimentoestoque.coleta
+where
+    cast(movimentoestoque.coletadata as date)>'14.04.2026' and
+    cast(c_coletas.DATACOLETA as date)<='14.04.2026' and 
+    movimentoestoque.TIPOMOVIMENTO='13'

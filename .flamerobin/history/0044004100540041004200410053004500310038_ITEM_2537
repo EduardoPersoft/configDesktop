@@ -1,0 +1,2 @@
+select * from itemcustodata
+where datainventario='31.12.2023'

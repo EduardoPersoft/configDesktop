@@ -1,0 +1,12 @@
+select 
+    filial,
+    iditem,
+    lote,
+    quantidade,
+    c_largura,
+    c_gramatura 
+from 
+    materiallote 
+where 
+filial=110 and 
+lote like '470/1%' 

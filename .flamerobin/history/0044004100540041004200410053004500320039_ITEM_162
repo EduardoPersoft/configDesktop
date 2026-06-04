@@ -1,0 +1,4 @@
+select * from NOTAFISCAL
+where notafiscal.filial=1
+and notafiscal.idnota in (25712,
+25731,25732,25756)

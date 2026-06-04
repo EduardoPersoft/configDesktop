@@ -1,0 +1,11 @@
+select 
+    codigo,
+    count(*)
+from
+    MERCADORIASNOTA
+where
+    filial=1 and
+    idnota=334606 
+group by codigo
+having count(*)>1
+    order by CODIGO

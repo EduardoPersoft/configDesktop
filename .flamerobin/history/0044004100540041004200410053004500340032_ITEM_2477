@@ -1,0 +1,7 @@
+select * from locallote
+where quantidade < -0.009
+and filial=110
+and exists (select * from local 
+     where locallote."LOCAL"=local.id)
+and exists (select * from itemestoque
+     where itemestoque.iditem=locallote.iditem)     

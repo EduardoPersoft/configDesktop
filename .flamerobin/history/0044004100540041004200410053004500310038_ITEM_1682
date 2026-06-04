@@ -1,0 +1,2 @@
+select CODIGO,DESCRICAO,itemestoque.c_disponivel from ITEMESTOQUE
+where codigo IN ('PE-24859', 'PE-24860')

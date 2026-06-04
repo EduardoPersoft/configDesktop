@@ -1,0 +1,14 @@
+
+select 
+    max(movimentoestoque.emissao)
+FROM
+    MATERIALMOVIMENTOESTOQUE
+inner join
+    movimentoestoque on
+            MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+            materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento 
+where 
+    materialmovimentoestoque.filial=m2.filial and
+    materialmovimentoestoque.iditem=m2.iditem and
+    materialmovimentoestoque.localarmazenamento=m2.idlocal and
+    materialmovimentoestoque.sinal=1

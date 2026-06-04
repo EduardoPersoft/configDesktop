@@ -1,0 +1,6 @@
+SELECT 
+    *
+FROM
+   cadastroparceiros
+WHERE
+    cadastro=34009

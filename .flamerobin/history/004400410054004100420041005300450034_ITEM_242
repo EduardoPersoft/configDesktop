@@ -1,0 +1,109 @@
+select (case tipopagamento.tipopageletronico
+                when 1 then
+                    CASE TIPOPAGAMENTO.formapagamento WHEN '11' then 'O'
+                    ELSE  'J' END
+                when 2 then (CASE substring(titulopag.codremessa FROM 1 FOR 1)
+                             WHEN '1' THEN 'A'
+                             WHEN '9' THEN 'A'
+                             else
+                                (case when (coalesce(titulopag.valorir,0)+
+                                            coalesce(titulopag.valoriss,0)+
+                                            coalesce(titulopag.valoriof,0)+
+                                            coalesce(titulopag.valoroutrasdeducoes,0)+
+                                            coalesce(titulopag.valoroutrosacresc,0)+
+                                            coalesce(titulopag.valorinss,0)) > 0
+                                      then 'A,B,C'
+                                      else 'A,B'
+                                 end)
+                             END)
+              end) as segmento,
+              ((case when TITULOPAG.tipotitulo='1' AND titulopag.codigobarra <> '' then
+                   (case when substring(titulopag.codigobarra from 1 for 3)<>banco.banco
+                         then '31'
+                         else '30'
+                   end)
+               else tipopagamento.formapagamento
+              end)||tipopagamento.tipolancamento) as sequencia,
+              titulopag.filial,titulopag.idtitulo,
+              contacorrente.conveniocontapagar,
+              contacorrente.agencia, contacorrente.digitoagencia,
+              contacorrente.numccorrente, contacorrente.digitoccorrente,
+              contacorrente.digitoagcc, filial.razaosocial, filial.logradouro,
+              filial.numero, filial.complemento, filial.cidade, filial.cep,
+              filial.uf, filial.tipopessoa, filial.inscestadual,
+
+              (case when TITULOPAG.tipotitulo='1'   AND titulopag.codigobarra <> '' then
+                   (case when substring(titulopag.codigobarra from 1 for 3)<>banco.banco
+                         then '31'
+                         else '30'
+                   end)
+               else tipopagamento.formapagamento
+              end) as formapagamento,
+
+              banco.codcamaracomp,
+              (case when titulopag.codremessa <> '' then
+               (case cast(substring(titulopag.codremessa from 1 for 1) as integer)
+                 when 1 then 5
+                else cast(substring(titulopag.codremessa from 1 for 1) as integer)
+                end)
+              end) as tipomovimento,titulopag.codremessa as codigoinstrucaomovimento,
+             titulopag.codcamaracompensacaofornec,titulopag.bancocobrador,
+             titulopag.agenciacobradora, titulopag.digagenciacobradora,
+             titulopag.numcontacorrentefornec, titulopag.digitocontacorrentefornec,
+             titulopag.digitoagccfornec,
+              cast ( fornecedor.razaosocial as varchar (60)),
+              cast(titulopag.titulo as varchar(15)) as titulo,
+             titulopag.fatura, titulopag.datapagamento, CAST(moeda.layoutcnab AS VARCHAR(3)),
+             cast(0 as integer) as quantidademoeda,
+             titulopag.valoremaberto,titulopag.programacao,
+             tipopagamento.tipolancamento,
+             tipopagamento.avisofavorecido,
+             fornecedor.tipopessoa, fornecedor.inscestadual,
+             fornecedor.logradouro, fornecedor.numero,
+             SUBSTRING ( fornecedor.complemento FROM 1 FOR 20),
+             SUBSTRING (fornecedor.bairro FROM 1 FOR 72),
+             fornecedor.cidade, fornecedor.cep, fornecedor.uf,
+             titulopag.vencimento,
+             titulopag.valortitulo, titulopag.totalabatido,
+             titulopag.totaldesconto, titulopag.valormora, titulopag.valoroutrosacresc,
+             titulopag.valorir, titulopag.valoriss, titulopag.valoriof,
+             titulopag.valoroutrasdeducoes, titulopag.vlracrescimoeletron,
+             titulopag.valorinss, coalesce(titulopag.codigobarra,'00000000000000000000000000000000000000000000'),
+             (coalesce(titulopag.totalabatido,0)+coalesce(titulopag.vlrdescontoeletron,0)+coalesce(titulopag.valorcofins,0)+coalesce(titulopag.valorcsll,0)+
+             coalesce(titulopag.valorpis,0)+coalesce(titulopag.valorir,0)+coalesce(titulopag.valoriss,0)+
+             coalesce(titulopag.valorinss,0)) as desconto,
+             (coalesce(titulopag.valormora,0)+coalesce(titulopag.vlracrescimoeletron,0)) as acrescimo,
+             banco.descricao as bancodescricao,
+             substring(titulopag.finalidadedoctofornec from 1 for 2) as complementotiposervico,
+             CASE TITULOPAG.tipotitulo WHEN '2' THEN 9
+             ELSE coalesce(substring(titulopag.codigobarra from 4 for 1),0) END      as codmoeda,FORNECEDOR.CADASTRO,
+             filial.documento, cast('T' as char(1)) as tipo,
+             TITULOPAG.vlrdescontoeletron,
+             case when titulopag.documentoconta>'0' then cast(titulopag.documentoconta as varchar(20)) else cast(fornecedor.documento as varchar(20)) end,
+             titulopag.emissao, TITULOPAG.tipotitulo, contacorrente.narquivocontapagar,
+             titulopag.tipocontafornec,
+             case when titulopag.codigobarra <> '' then cast((substring(titulopag.codigobarra from 10 for 10) as integer)/100)
+             else 0 end,
+             contacorrente.identificacaoempresa,
+             titulopag.valorpis
+
+    from titulopag
+    inner join contacorrente on (contacorrente.codigo=titulopag.contacorrente and contacorrente.filial=titulopag.filial)
+    inner join banco on (banco.banco=contacorrente.banco)
+    inner join cadastroparceiros filial on (filial.cadastro=titulopag.filial)
+    inner join cadastroparceiros fornecedor on (fornecedor.cadastro=titulopag.parceiro)
+    inner join tipopagamento on (tipopagamento.id=titulopag.tipotransacao)
+    inner join moeda on (moeda.moeda=titulopag.moeda)
+    where titulopag.programacao between '09.04.2021' and '30.04.2021' and
+         tipopagamento.formapagamento <> '' and
+         tipopagamento.tipolancamento <> '' and
+         not tipopagamento.tipopageletronico is null and
+         titulopag.contacorrente=341 and
+         titulopag.filial=1 and
+         titulopag.baixa is null  and
+         (titulopag.codretorno is null or titulopag.codretorno='') and
+         not exists (select titulosanexadosprg.idtitulo
+                     from titulosanexadosprg where
+                     titulosanexadosprg.filial=titulopag.filial and
+                     titulosanexadosprg.idtitulo=titulopag.idtitulo)
+ 

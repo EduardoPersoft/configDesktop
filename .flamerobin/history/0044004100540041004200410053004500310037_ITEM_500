@@ -1,0 +1,11 @@
+SELECT
+    mercadoriasnotacompra.*
+FROM
+    MERCADORIASNOTACOMPRA
+inner JOIN
+    notacompra on
+        notacompra.filial=mercadoriasnotacompra.filial AND
+        notacompra.idnota=mercadoriasnotacompra.idnota
+WHERE
+    notacompra.filial=1 AND
+    mercadoriasnotacompra.cstipi=0

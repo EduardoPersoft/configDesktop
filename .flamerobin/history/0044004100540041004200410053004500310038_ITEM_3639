@@ -1,0 +1,2 @@
+select idnota,c_tipo from PEDIDO
+where idnota=75299

@@ -1,0 +1,2 @@
+select * from inventarioestoquedata where INVENTARIOESTOQUEDATA.codigo in ('203409','6039409') 
+ CODIGOBARRA='4030776046342'

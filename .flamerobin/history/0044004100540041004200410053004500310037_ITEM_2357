@@ -1,0 +1,5 @@
+select 
+    filial,idnota,datacadastro,datareferencia
+from    
+    orcamento
+

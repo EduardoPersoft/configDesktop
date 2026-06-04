@@ -1,0 +1,12 @@
+update
+    LISTAPRECOPRODUTO l1
+set 
+    l1.PRECO = (select
+                    l2.preco
+                from
+                    LISTAPRECOPRODUTO l2
+                where
+                    l2.lista=20 and
+                    l2.produto=l1.produto)
+where
+    l1.lista=308

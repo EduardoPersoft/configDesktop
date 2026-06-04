@@ -1,0 +1,4 @@
+update mercadoriasped 
+set idmercadoria=1
+where filial=110
+and idnota=11747

@@ -1,0 +1,172 @@
+select
+    cast(c_pedidodatafinLIB."DATA" as date),
+    pedido.idnota idpedido,
+    pedido.IDORCAMENTO,
+    case when  cadloja.C_INFORMATIVOCLIENTELOJA = 1 
+    and cadloja.cadastro<>46 then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME Loja,
+    cadven.nome Vendedor,
+    cadcli.nome cliente,
+    cadcli.cidade,
+    cadcli.uf,
+    'Fechado' status,
+    cast((pedido.vlrtotalnota-(coalesce(pedido.C_CREDITOCLIENTE,0)+
+                               coalesce(pedido.C_ADIANTAMENTOCLIENTE,0)
+                               )*coalesce(vped.COMISSAOVENDA,100)/100*c_pedidodatafinLIB.sinal as decimal(12,2)) vlrpedido,
+    cast((pedido.vlrtotalnota-(coalesce(pedido.C_CREDITOCLIENTE,0)+
+                               coalesce(pedido.C_ADIANTAMENTOCLIENTE,0)
+                               )*coalesce(vped.COMISSAOVENDA,100)/100*c_pedidodatafinLIB.sinal as decimal(12,2)) vlrorcto,
+
+    (select first 1
+        cadage.nome
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) Agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresped aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR and
+         agente.TIPOVENDEDOR>4
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE
+      where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4      ) Atividade
+from
+    c_pedidodatafinLIB('01.01.2021','31.01.2021') 
+inner join 
+    pedido on
+        c_pedidodatafinLIB.filial=pedido.filial and
+        c_pedidodatafinLIB.idnota=pedido.idnota
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+left join
+    orcamento on
+        orcamento.filial=pedido.filial and
+        orcamento.idnota=pedido.IDORCAMENTO
+left join
+    vendedoresped vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor
+left join
+    vendedor loja  on
+        loja.CADASTRO=vendedorPed.CANALRELACIONADO
+
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=loja.cadastro
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+
+where
+    
+    pedido.DATACANCELAMENTO is null  and
+    pedido.c_tipo=0 and
+        vendedorPed.TIPOVENDEDOR<=4
+order by
+4,5,2
+
+/*       
+union   
+select
+    cast(pedido.DATAEMISSAO as date),
+    null idpedido,
+    pedido.idnota idorcamento,
+    case cadloja.C_INFORMATIVOCLIENTELOJA when 1 then 'Loja' else 'Representantes' end grupo,
+    cadloja.NOME,
+    cadven.nome,
+    cadcli.nome,
+    cadcli.cidade,
+    cadcli.uf,
+    case pedido.C_STATUS when 0 then 'Rascunho'
+    when 1 then 'Aberto'
+    when 2 then 'Suspenso'
+    when 3 then 'Perdido'
+    else 'Fechado' end,
+    cast(0 as decimal(12,2)) vlrpedido,
+    cast(coalesce(pedido.VLRTOTALNOTA,
+             pedido.vlrtotalnota)*coalesce(vped.COMISSAOVENDA,100)/100 as decimal(12,2)) vlrorcamento,
+    (select first 1
+        cadage.nome
+     from
+        vendedoresorc aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) agente,
+    (select first 1
+        ramoatividade.descricao
+     from
+        vendedoresorc aped
+     inner join
+        vendedor agente on
+         agente.cadastro=aped.VENDEDOR 
+     inner join
+        CADASTROPARCEIROS cadage on
+            cadage.cadastro=agente.cadastro
+     inner join
+        RAMOATIVIDADE on 
+            RAMOATIVIDADE.RAMOATIVIDADE=cadage.RAMOATIVIDADE
+    where 
+        aped.filial=pedido.filial and
+        aped.idnota=pedido.idnota and
+         agente.TIPOVENDEDOR>4) ramoagente
+from
+    orcamento PEDIDO
+inner join 
+    CADASTROPARCEIROS cadcli on
+        cadcli.cadastro=pedido.destinatario
+inner join
+    CADASTROPARCEIROS cadloja on
+        cadloja.cadastro=pedido.C_LOJA
+left join
+    vendedoresorc vped on
+        vped.filial=pedido.filial and
+        vped.idnota=pedido.idnota 
+left join
+    vendedor vendedorPed on
+        vendedorPed.CADASTRO=vped.vendedor 
+
+left join   
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=vped.vendedor
+where
+    pedido.DATAEMISSAO>='01.01.2021' and
+    pedido.filial<59 and 
+    pedido.DATACANCELAMENTO is null  and
+    pedido.IDRELACAO is null and
+            vendedorPed.TIPOVENDEDOR<=4 and
+    pedido.c_tipo=0 and
+    pedido.c_status<4    
+
+   */

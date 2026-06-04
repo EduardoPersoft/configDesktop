@@ -1,0 +1,17 @@
+select 
+    pedido.filial,
+    pedido.idnota,
+    pedido.DATACADASTRO,
+    pedido.DATAREFERENCIA,
+    pedido.DATAEMISSAO,
+    (select
+        max(fatped.DATAVENCIMENTO)
+     from
+        FATPED
+     where
+        fatped.filial=pedido.filial and
+        fatped.idnota=pedido.idnota)
+from
+    PEDIDO
+order by
+    idnota desc

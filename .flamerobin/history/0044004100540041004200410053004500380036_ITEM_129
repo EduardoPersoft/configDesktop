@@ -1,0 +1,6 @@
+select 
+    itemestoque.CODIGO,
+    itemestoque.C_MATERIAPRIMABASE,
+    itemestoque.c_tinta
+from
+    itemestoque

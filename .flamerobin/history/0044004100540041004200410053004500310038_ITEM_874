@@ -1,0 +1,2 @@
+select * from C_fatped where
+filial =1 and idnota=67493

@@ -1,0 +1,2 @@
+select * from locallote 
+where filial=1 and iditem='39000-2605'

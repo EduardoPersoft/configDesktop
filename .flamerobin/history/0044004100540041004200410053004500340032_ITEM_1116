@@ -1,0 +1,6 @@
+select 
+    *
+from
+    MERCADORIASNOTA
+where
+    filial=110 and idnota=2569

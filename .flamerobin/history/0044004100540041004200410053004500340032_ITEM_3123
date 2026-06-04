@@ -1,0 +1,8 @@
+select 
+    *
+from 
+    MERCADORIASNOTA
+where
+    filial=110 
+order by
+    idnota desc

@@ -1,0 +1,6 @@
+DELETE
+FROM
+    PRAZOMERCPEDCOMPRA
+WHERE
+    prazomercpedcompra.filial=1 
+    and prazomercpedcompra.dias=75

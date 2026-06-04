@@ -1,0 +1,25 @@
+insert into ITEMESTOQUECODIGOS(codigo,codigoalternativo)
+select distinct
+    i2.codigo,
+    i1.REFERENCIA
+from 
+    ITEMESTOQUE i1
+inner join
+    itemestoque i2 on
+        i1.c_original=i2.c_original
+where 
+    i1.codigo<>i2.codigo
+    and not exists (
+        select
+            *
+        from
+            ITEMESTOQUECODIGOS
+        where 
+            itemestoquecodigos.codigo=i2.codigo and
+            itemestoquecodigos.CODIGOALTERNATIVO=i1.referencia
+    )
+order by
+
+    i2.codigo
+
+

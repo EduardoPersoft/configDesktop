@@ -1,0 +1,7 @@
+
+update 
+        CADASTROPARCEIROS
+set 
+    cidade='BETIM'
+WHERE 
+    CADASTRO=1208

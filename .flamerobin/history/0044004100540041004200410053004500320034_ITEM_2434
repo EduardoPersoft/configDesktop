@@ -1,0 +1,5 @@
+select
+    cfiscal,
+    descricao
+FROM
+    classificacaofiscal

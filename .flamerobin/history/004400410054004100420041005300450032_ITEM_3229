@@ -1,0 +1,43 @@
+SELECT  
+    mercadoriaspedcompra.filial,
+    mercadoriaspedcompra.idnota,
+    mercadoriaspedcompra.idmercadoria,
+    mercadoriaspedcompra.codigo,
+    itemestoque.descricao,
+    mercadoriaspedcompra.quantidade,
+    mercadoriaspedcompra.unidade,
+    mercadoriaspedcompra.MINIMOBAIXA,
+    mercadoriaspedcompra.QTDEENTREGUE,
+    (select
+        sum(mercadoriasnotacompra.quantidade)
+    from
+        MERCADORIASNOTACOMPRA
+    WHERE
+        mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+        mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+        mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.idmercadoria)
+    
+FROM
+    MERCADORIASPEDCOMPRA
+inner JOIN
+    pedidocompra on
+        pedidocompra.filial=mercadoriaspedcompra.filial AND
+        pedidocompra.idnota=mercadoriaspedcompra.IDNOTA
+inner join 
+    itemestoque on
+        itemestoque.codigo-mercadoriaspedcompra.CODIGO
+WHERE
+    pedidocompra.filial=5 AND
+    pedidocompra.DATAcadastro>='01.01.2021' AND
+    mercadoriaspedcompra.baixa='N' and
+    mercadoriaspedcompra.QTDEENTREGUE < (select
+                                            sum(mercadoriasnotacompra.quantidade)
+                                         from
+                                            MERCADORIASNOTACOMPRA
+                                         WHERE
+                                            mercadoriasnotacompra.filial=mercadoriaspedcompra.filial AND
+                                            mercadoriasnotacompra.idpedido=mercadoriaspedcompra.idnota AND
+                                            mercadoriasnotacompra.IDMERCPEDIDO=mercadoriaspedcompra.idmercadoria)
+order by 
+    mercadoriaspedcompra.idnota
+                                        

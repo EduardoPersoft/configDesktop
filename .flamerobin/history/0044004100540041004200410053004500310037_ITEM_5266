@@ -1,0 +1,6 @@
+select      
+    substring(mercadoriasnota.descricao 
+              from 1 for 100)
+where 
+    filial=1 and
+    idnta=365227

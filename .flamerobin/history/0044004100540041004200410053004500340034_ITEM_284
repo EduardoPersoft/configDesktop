@@ -1,0 +1,2 @@
+select * from LOCALLOTE
+where locallote.IDITEM='214264'

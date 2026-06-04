@@ -1,0 +1,10 @@
+update 
+    CONTACORRENTE
+set
+    CONTACORRENTE.SALDOREAL = (select 
+                    sum(MOVBANCARIOS.VALORMOVIMENTO*case MOVBANCARIOS.TIPOMOVIMENTO when 'C' then 1 else -1 end)
+                from 
+                    MOVBANCARIOS
+                where
+                    movbancarios.filial=CONTACORRENTE.filial and
+                    movbancarios.IDCONTACORRENTE=CONTACORRENTE.CODIGO)

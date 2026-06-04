@@ -1,0 +1,2 @@
+select * from TITULOREC
+where titulorec.DATAENVIO >= '29.10.2021'

@@ -1,0 +1,15 @@
+select
+    *
+from
+    LANTOCONTPAG
+where
+    NOT EXISTS (
+        select
+            *
+        from
+            CONTASCONTABEIS
+        where
+            IDPLANO=2 and
+            CONTASCONTABEIS.CONTACONTABIL=LANTOCONTPAG.CONTACONTABIL)
+order by
+        

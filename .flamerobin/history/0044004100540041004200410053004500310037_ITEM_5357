@@ -1,0 +1,2 @@
+select * from LOTESNFE
+order by datahora desc

@@ -1,0 +1,6 @@
+update
+    T_TITULOREC
+set 
+    importado = 'S'
+where 
+    importado is null

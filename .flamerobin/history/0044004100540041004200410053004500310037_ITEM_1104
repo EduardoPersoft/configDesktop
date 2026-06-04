@@ -1,0 +1,15 @@
+select
+    sum(materiallocal.SALDOTOTAL) as saldo,
+    sum(materiallocal.SALDOTOTAL) * MATERIALFILIAL.customedio custo
+from 
+    materialfilial
+inner join
+    materiallocal on
+        materiallocal.filial = materialfilial.filial and
+        materiallocal.iditem = materialfilial.IDITEM
+where
+    materialfilial.filial = 1 and
+    materiallocal.iditem between '2205111' and '2205111' and
+    materiallocal.idlocal between 0 and 9999
+group by
+    materialfilial.customedio

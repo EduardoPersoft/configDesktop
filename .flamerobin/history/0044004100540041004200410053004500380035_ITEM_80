@@ -1,0 +1,7 @@
+select
+    CADASTROPARCEIROS.cadastro,
+    CADASTROPARCEIROS.tipoempresa
+from 
+    CADASTROPARCEIROS
+order by
+    CADASTROPARCEIROS.cadastro desc

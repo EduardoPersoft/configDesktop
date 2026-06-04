@@ -1,0 +1,1 @@
+select * from INVENTARIOESTOQUEDATA where filial=110

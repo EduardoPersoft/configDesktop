@@ -1,0 +1,2 @@
+select * from ITEMESTOQUEXARQUIVO
+where nomesalvo='63a6e570-2b23-4617-b535-826c7d0fb700.jpg'

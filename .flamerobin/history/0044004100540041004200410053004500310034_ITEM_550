@@ -1,0 +1,2 @@
+select * from materiallote where filial=110 and iditem like 'MPP%' 
+order by data

@@ -1,0 +1,4 @@
+select filial, idnota,dataentrada,dataemissao,vlrtotalnota,notacompra.NRNOTAFORNECEDOR from NOTACOMPRA
+where notacompra.devolucao='S'
+and notacompra.DATAEMISSAO between '01.03.2024' and '31.03.2024'
+and notacompra.DATAENTRADA between '01.04.2024' and '30.04.2024'

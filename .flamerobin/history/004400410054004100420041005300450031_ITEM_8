@@ -1,0 +1,3 @@
+select * from CADASTROPARCEIROS
+where
+    documento='46062030000123'

@@ -1,0 +1,12 @@
+update
+    CADASTROPARCEIROS
+set
+    PARCEIROCLIENTE='S'
+where
+    EXISTS (
+        select 
+            *
+        from
+            CLIENTES
+        where
+            CLIENTE.CADASTRO=CADASTROPARCEIROS.CADSTRO)        

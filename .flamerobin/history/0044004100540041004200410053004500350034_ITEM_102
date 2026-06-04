@@ -1,0 +1,68 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ATUALIZAULTIMACOMPRA (
+    ENTRADAMAX timestamp )
+
+AS
+declare variable v_filial integer;
+declare variable v_idmercadoria integer;
+declare variable v_idmovimentomaterial integer;
+
+declare variable v_iditem varchar(15);
+declare variable v_valor double precision;
+declare variable v_idnota integer;
+declare variable v_idnotacompra integer;
+declare variable v_quantidade double precision;
+
+declare variable v_iditemAnterior varchar(15);
+declare variable v_valorAnterior double precision;
+declare variable v_TIPOMOVIMENTO double precision;
+
+
+begin
+  /* Procedure Text */
+  v_iditemAnterior = null;
+  v_valorAnterior = null;
+  for select MATERIALMOVIMENTOESTOQUE.IDITEm,
+             coalesce( (MATERIALMOVIMENTOESTOQUE.VALOR / materialmovimentoestoque.quantidade),0),
+             movimentoestoque.idnota,
+             movimentoestoque.idnotacompra,
+             movimentoestoque.filial, 
+             materialmovimentoestoque.IDMERCADORIA,
+             materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+             materialmovimentoestoque.quantidade,
+             MOVIMENTOESTOQUE.TIPOMOVIMENTO
+  from MOVIMENTOESTOQUE
+  inner join MATERIALMOVIMENTOESTOQUE on (MOVIMENTOESTOQUE.FILIAL = MATERIALMOVIMENTOESTOQUE.FILIAL and
+                                         MOVIMENTOESTOQUE.IDMOVIMENTO = MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+  where  MOVIMENTOESTOQUE.EMISSAO <= :ENTRADAMAX and
+        ( (MOVIMENTOESTOQUE.TIPOMOVIMENTO = '01' and (not MOVIMENTOESTOQUE.idnotacompra is null) ) or
+          (MOVIMENTOESTOQUE.TIPOMOVIMENTO = '02' AND MATERIALMOVIMENTOESTOQUE.VALOR>0)  or
+          movimentoestoque.tipomovimento in ('04', '15' ))
+  order by MATERIALMOVIMENTOESTOQUE.IDITEM, MOVIMENTOESTOQUE.EMISSAO
+  into :v_iditem, :v_valor, :v_idnota, :v_idnotacompra, :v_filial, :v_idmercadoria,
+       :v_idmovimentomaterial, :v_quantidade,:V_TIPOMOVIMENTO
+  do
+  begin
+
+    if(coalesce(v_idItemAnterior,v_idItem)<>v_idItem) then BEGIN
+        update itemestoque set itemestoque.valorultimacompra = :v_valoranterior
+        where itemestoque.codigo = :v_iditemanterior;
+        V_VALORANTERIOR = null;
+    END
+    v_idItemAnterior=v_iditem;
+    IF(V_TIPOMOVIMENTO IN ('01', '04', '15')) THEN
+        v_valorAnterior=v_valor;
+    IF(V_TIPOMOVIMENTO = '02' AND V_VALORANTERIOR IS NULL) THEN
+        v_valorAnterior=v_valor;    
+  end
+  update itemestoque set itemestoque.valorultimacompra = :v_valoranterior
+  where itemestoque.codigo = :v_iditemanterior;
+  
+end
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE C_ATUALIZAULTIMACOMPRA TO  SYSDBA;
+

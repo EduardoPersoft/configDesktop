@@ -1,0 +1,39 @@
+SELECT distinct NOTAFISCAL.FILIAL,
+       NOTAFISCAL.IDNOTA,
+       NOTAFISCAL.DESTINATARIO,
+       NOTAFISCAL.DATAEMISSAO,
+       NOTAFISCAL.OPERACAO,
+       NOTAFISCAL.MODELO,
+       CASE NATUREZAOPERACAO.Piscofins WHEN  'S'
+       THEN NOTAFISCAL.Piscofins ELSE 0 END,
+       NOTAFISCAL.PADMINISTRATIVO,
+       NOTAFISCAL.pdespesafinanceira,
+       NOTAFISCAL.ZONAFRANCA,
+       NOTAFISCAL.Piss,
+       CASE NATUREZAOPERACAO.Devolucaofaturamento When 'S' THEN -1 ELSE 1 END ,
+       coalesce (notafiscal.vlrfinalmercadorias,0)+coalesce  (notafiscal.vlrfinalservicos,0),       
+       notafiscal.custodireto,
+        notafiscal.VLRTOTALMERCADORIAS
+
+    FROM NOTAFISCAL
+    left JOIN NATUREZAOPERACAO ON (NOTAFISCAL.OPERACAO=NATUREZAOPERACAO.ID)
+    left join movimentoestoque on (notafiscal.filial=movimentoestoque.filial and notafiscal.idnota=movimentoestoque.idnota)
+    left join materialmovimentoestoque on (movimentoestoque.filial=materialmovimentoestoque.filial and
+                                       movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento)
+     WHERE NOTAFISCAL.FILIAL=5
+    AND NOTAFISCAL.DATAEMISSAO BETWEEN '01.03.2021' AND '31.03.2021'
+        /*
+
+    AND NOTAFISCAL.CANCELAMENTO='N'
+    
+
+    AND ( (NATUREZAOPERACAO.ENTRADASAIDA = 'S'     AND NATUREZAOPERACAO.FATURA='S')
+    or
+       (NATUREZAOPERACAO.Entradasaida='E' AND
+        NATUREZAOPERACAO.Devolucaofaturamento='S'    )
+        )
+
+    AND NOT EXISTS
+    (SELECT * FROM ESTABELECIMENTO
+     WHERE ESTABELECIMENTO.CADASTRO=NOTAFISCAL.DESTINATARIO
+     )*/

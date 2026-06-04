@@ -1,0 +1,8 @@
+update
+    ITEMCUSTODATA
+set
+    itemcustodata.quantidade=0
+where
+    itemcustodata.quantidade is null
+        
+        

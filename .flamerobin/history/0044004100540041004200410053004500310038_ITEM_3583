@@ -1,0 +1,4 @@
+select MATERIALMOVIMENTOESTOQUE.c_revisaofinal,
+materialmovimentoestoque.* from materialmovimentoestoque
+where filial=1 and idmovimento=15029
+and idmovimentomaterial=1

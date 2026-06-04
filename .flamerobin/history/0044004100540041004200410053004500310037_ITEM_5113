@@ -1,0 +1,7 @@
+select 
+    sum(C_COLETAS.valor),
+    sum(c_coletas.valormedio*C_COLETAS.QTDEXPEDICOES)
+from 
+    C_COLETAS
+where
+    c_coletas.DATACOLETA between '30.05.2025' and '27.06.2025' 

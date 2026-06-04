@@ -1,0 +1,10 @@
+update 
+    PEDIDO
+set
+    c_mensagem1 = 'PAGO ANTECIPADAMENTE
+CRÉDITOS:
+PARA SANTA MONICA - R$ 3.869,58
+PARA LKZ - R$ 475,35 
+Entrega em 17/05, sendo que o pedido precisa estar completo com a cor e documentos assinados ate 26/04.
+'
+ where filial=1 and idnota=71757

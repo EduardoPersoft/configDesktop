@@ -1,0 +1,13 @@
+select
+    contacorrente.codigo,
+    contacorrente.DESCRICAOCONTA,
+    banco.codcamaracomp
+from
+    CONTACORRENTE
+left join
+   banco on 
+        banco.banco=contacorrente.banco
+where
+    contacorrente.filial=1
+order by 
+     contacorrente.DESCRICAOCONTA

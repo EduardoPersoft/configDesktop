@@ -1,0 +1,16 @@
+SELECT
+    itemestoque.codigo,
+    itemestoque.DESCRICAO,
+    itemestoque.localizacao
+from 
+    itemestoque
+    
+inner JOIN 
+    materiallocal on
+        materiallocal.IDLOCAL=1 AND
+        materiallocal.iditem=itemestoque.codigo AND
+        materiallocal.filial=5
+
+WHERE
+    materiallocal.SALDOTOTAL = 0 AND
+    NOT EXISTS(SELECT * FROM INVENTARIOESTOQUEDATA WHERE INVENTARIOESTOQUEDATA.CODIGO=ITEMESTOQUE.CODIGO)

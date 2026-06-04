@@ -1,0 +1,6 @@
+insert into ITEMCUSTODATA(filial,datainventrio,codigo,custounitario,qauntidade,custototal)
+select materialfilial.filial,'31.12.2023',materialfilial.iditem,materialfilial.CUSTOMEDIO,0,0 
+from MATERIALFILIAL
+where materialfilial.filial=110
+and materialfilial.iditem in ('MAB01', 'MAP01', 'MII01', 'MIL01+02', 'MIL04+02', 
+                              'MPSTGERAL','MPSQGERAL''

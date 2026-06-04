@@ -1,0 +1,6 @@
+select 
+    *
+FROM
+    TITULOREC
+WHERE
+    titulorec.DATAENVIO ='16.07.2021'

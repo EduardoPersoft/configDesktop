@@ -1,0 +1,1 @@
+update notafiscal set obsentregaretira='Teste da observação da entrega' where idnota=361128

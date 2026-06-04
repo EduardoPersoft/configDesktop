@@ -1,0 +1,3 @@
+select * from C_COLETAS
+where c_coletas.DATACOLETA between '30.06.2025'
+and '30.07.2025' and valor<>valormedio*qtdexpedicoes

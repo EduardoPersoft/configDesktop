@@ -1,0 +1,6 @@
+update 
+    TITULOREC
+SET
+    numbolbanco = NULL
+WHERE
+    filial=5 and contacorrente=707 and emissao > '12.04.2022'

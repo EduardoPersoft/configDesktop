@@ -1,0 +1,11 @@
+update
+    PEDIDO
+set
+    pedido.obsentregaretira=logradouroentrega,
+    pedido.logradouroentrega=null
+where
+    coalesce(pedido.LOGRADOUROENTREGA,'')<>'' and
+    coalesce(pedido.CIDADEENTREGA,'')='' and
+    pedido.DATACADASTRO>='23.03.2026'
+order by
+    datacadastro

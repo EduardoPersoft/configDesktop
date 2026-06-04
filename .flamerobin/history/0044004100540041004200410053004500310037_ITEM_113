@@ -1,0 +1,12 @@
+SELECT  
+    *
+FROM
+    ITEMESTOQUE
+WHERE
+    EXISTS
+        (SELECT 
+            *
+        FROM   
+            C_LOGPRODUTOECOMMERCE
+        WHERE 
+            C_LOGPRODUTOECOMMERCE.CODIGO=ITEMESTOQUE.CODIGO)

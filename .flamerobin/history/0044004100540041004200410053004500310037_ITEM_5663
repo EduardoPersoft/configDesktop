@@ -1,0 +1,1 @@
+select * from LOTERELATORIOS where liberado is null

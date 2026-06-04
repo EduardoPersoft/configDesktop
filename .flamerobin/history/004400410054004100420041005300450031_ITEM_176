@@ -1,0 +1,8 @@
+update 
+    MATERIALMOVIMENTOESTOQUE
+SET
+    materialmovimentoestouqe.perdasprevistas = 
+        (select sum(composicaoop.PERDAESTIMADAQ) from COMPOSICAOOP
+         where composicaoop.filial=materialmovimentoestoque.filial 
+         and composicaoop.idmovimento=materialmovimentoestoque.IDMOVIMENTO
+         and composicaoop.IDMOVIMENTOMATERIAL=materialmovimentoestoque.IDMOVIMENTOMATERIAL)

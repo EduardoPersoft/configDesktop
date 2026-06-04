@@ -1,0 +1,71 @@
+select 
+    ITEMESTOQUE.codigo,
+    ITEMESTOQUE.DESCRICAO,
+    GRUPOMERCADORIA.GRUPO,
+    local.id,
+    local.descricao,
+    GRUPOMERCADORIA.DESCRICAO,
+    itemestoque.UNIDADE,
+    MATERIALLOTE.LOTE,
+    locallote.QUANTIDADE,
+    MATERIALLOTE.UUID,
+    MATERIALLOTE.CODIGOBARRA,
+    MATERIALLOTE.C_GRAMATURA,
+    materiallote.C_LARGURA,
+    cast('N' as char(1)) as p_check,
+    cast(0 as integer) as op,
+    cast(0 as integer) as idMaterial
+ from 
+    ITEMESTOQUE
+inner join 
+    MATERIALLOTE on 
+    ITEMESTOQUE.CODIGO=MATERIALLOTE.IDITEM
+inner join
+    locallote on
+        locallote.filial=materiallote.filial and
+        locallote.iditem=materiallote.iditem and
+        locallote.lote=materiallote.lote
+inner join
+    local on
+        local.id=locallote.local
+inner join 
+    MATERIALFILIAL on 
+    LOCALLOTE.FILIAL=MATERIALFILIAL.FILIAL and
+    LOCALLOTE.IDITEM=MATERIALFILIAL.IDITEM        
+left join 
+    GRUPOMERCADORIA on 
+    itemestoque.GRUPO=GRUPOMERCADORIA.GRUPO        
+left join
+    movimentoestoque on
+        movimentoestoque.filial = locallote.filial and
+        movimentoestoque.TIPOMOVIMENTO = '12' and
+        movimentoestoque.idmovimento in (
+            select  
+                APONTAMENTOCOMP.idmovimento
+            from 
+                APONTAMENTOCOMP
+            inner join  
+                composicaoop on
+                    APONTAMENTOCOMP.filial=composicaoop.filial and
+                    apontamentocomp.IDMOVIMENTO=COMPOSICAOOP.idmovimento and
+                    apontamentocomp.IDMATERIAL=composicaoop.IDMOVIMENTOMATERIAL and                
+                    APONTAMENTOCOMP.IDCOMPOSICAO=COMPOSICAOOP.IDCOMPOSICAO and
+                    composicaoop.CODIGO=locallote.IDITEM
+            inner join
+                MATERIALMOVIMENTOESTOQUE on
+                    materialmovimentoestoque.filial=composicaoop.filial and
+                    materialmovimentoestoque.IDMOVIMENTO=composicaoop.IDMOVIMENTO and
+                    materialmovimentoestoque.IDMOVIMENTOMATERIAL=composicaoop.IDMOVIMENTOMATERIAL and
+                    materialmovimentoestoque.concluido='N'
+            where
+                APONTAMENTOCOMP.filial=locallote.filial and
+                apontamentocomp.lote = locallote.lote
+            plan (APONTAMENTOCOMP index (i_APTCOMPLOTE),
+                  COMPOSICAOOP INDEX (RDB$PRIMARY244),
+                  materialmovimentoestoque index (RDB$PRIMARY199)) )
+where
+     materiallote.filial=110 and 
+     locallote.quantidade>0
+order by
+    ITEMESTOQUE.codigo,
+    MATERIALLOTE.LOTE

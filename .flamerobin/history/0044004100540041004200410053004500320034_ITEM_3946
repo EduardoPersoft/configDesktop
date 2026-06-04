@@ -1,0 +1,16 @@
+select  
+    *
+from
+    MERCADORIASPED
+where
+    filial=5 and
+    baixa = 'N' and 
+    exists 
+    (select
+        *
+     from
+        MERCADORIASNOTA
+     where
+        mercadoriasnota.filial=mercadoriasped.filial and
+        mercadoriasnota.idpedido=mercadoriasped.idnota and 
+        mercadoriasnota.idmercped=mercadoriasped.idmercadoria)

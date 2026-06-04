@@ -1,0 +1,16 @@
+SET TERM ^ ;
+CREATE trigger mercnota_atualizaexpedicao1 for mercadoriasnota
+active before delete position 0
+AS
+begin
+  /* Trigger text */
+  if (OLD.idmovimento is not null) then
+      update movimentoestoque set movimentoestoque.idnotaexpedicao = null
+      where movimentoestoque.filial=old.MOVIMENTOESTOQUEFILIAL
+      and movimentoestoque.idmovimento=old.idmovimento;
+end
+
+^
+SET TERM ; ^
+
+

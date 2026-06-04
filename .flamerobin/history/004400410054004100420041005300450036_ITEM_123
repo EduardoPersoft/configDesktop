@@ -1,0 +1,1 @@
+select * from SPEDFISCALEFD1(1,'01.03.2021', '19.03.2021')

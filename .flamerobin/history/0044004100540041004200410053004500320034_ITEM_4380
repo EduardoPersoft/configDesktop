@@ -1,0 +1,9 @@
+select
+    *
+from
+    TITULOREC
+where 
+    titulorec.filial=5 and
+    titulorec.CONTACORRENTE=707 and
+    titulorec.baixa is null and
+    coalesce(titulorec.codretorno, '')=''

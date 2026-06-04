@@ -1,0 +1,15 @@
+SELECT
+    fornecedoresitem.fornecedor,
+    cadastroparceiros.nome,
+    count(materiallocal.iditem)
+FROM
+    MATERIALLOCAL
+inner JOIN
+    fornecedoresitem on
+        fornecedoresitem.iditem=materiallocal.IDITEM
+inner JOIN
+    cadastroparceiros on
+        cadastroparceiros.cadastro=fornecedoresitem.FORNECEDOR
+WHERE
+    materiallocal.saldototal = 0 
+    and materiallocal.filial=5

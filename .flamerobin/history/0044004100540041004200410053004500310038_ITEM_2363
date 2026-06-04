@@ -1,0 +1,2 @@
+select * from ITEMCUSTODATA where datainventario='31.01.2024' 
+and substring(codigo from 1 for 2)='PE'

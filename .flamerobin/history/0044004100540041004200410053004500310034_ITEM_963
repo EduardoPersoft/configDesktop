@@ -1,0 +1,14 @@
+select 
+    *
+from
+    MOVIMENTOESTOQUE
+inner join
+    materialmovimentoestoque on
+        MATERIALMOVIMENTOESTOQUE.filial=movimentoestoque.filial and
+        materialmovimentoestoque.idmovimento=movimentoestoque.idmovimento
+where
+    movimentoestoque.filial=110 and
+    movimentoestoque.tipomovimento='12' and
+    coalesce(materialmovimentoestoque.concluido, 'N')='N' and
+    movimentoestoque.PERMITIREDITARPEDIDO='N' and
+    materialmovimentoestoque.iditem='PRO4350FLI004'

@@ -1,0 +1,19 @@
+SELECT
+    cadcli.cadastro,
+    cadcli.nome,
+    cadcli.logradouro
+    cadcli.cidade,
+    cadcli.uf,
+    cadven.vendedor,
+    cadven.nome as nomevendedor
+from
+    clientes
+inner JOIN
+    cadastroparceiros cadcli on
+        cadcli.CADASTRO = clientes.CADASTRO
+inner JOIN
+    cadastroparceiros cadven on
+        cadven.CADASTRO = vendedor.CADASTRO
+
+    
+

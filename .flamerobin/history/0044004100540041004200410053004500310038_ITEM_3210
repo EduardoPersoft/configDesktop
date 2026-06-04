@@ -1,0 +1,4 @@
+select * from VENDEDORESPED
+where filial=1 and 
+vendedor=165 and
+vendedoresped.C_IDCOMISSAO=769

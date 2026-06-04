@@ -1,0 +1,2 @@
+select * from cadastRoparceiros
+where UPPER(nome) like '%EURO%'

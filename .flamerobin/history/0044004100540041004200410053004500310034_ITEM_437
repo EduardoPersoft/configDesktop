@@ -1,0 +1,8 @@
+select
+    *
+from 
+    ITEMESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE
+where
+    MATERIALMOVIMENTOESTOQUE.iditem='MPP06CPPW-HTG60'

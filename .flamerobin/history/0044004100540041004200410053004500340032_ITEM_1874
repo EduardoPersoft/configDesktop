@@ -1,0 +1,21 @@
+UPDATE
+    ITEMCUSTODATA
+set
+    QUANTIDADE = coalesce((
+            select 
+                sum(materialmovimentoestoque.quantidade*
+                    materialmovimentoestoque.sinal)
+            from
+                MOVIMENTOESTOQUE
+            inner join
+                MATERIALMOVIMENTOESTOQUE on
+                    movimentoestoque.filial=MATERIALMOVIMENTOESTOQUE.filial and
+                    movimentoestoque.idmovimento=materialmovimentoestoque.idmovimento
+            where
+                movimentoestoque.emissao<=itemcustodata.DATAINVENTARIO and
+                movimentoestoque.filial=itemcustodata.filial and
+                materialmovimentoestoque.iditem=itemcustodata.codigo   ),0)              
+where
+    filial=110 and
+    datainventario='29.02.2024'
+    

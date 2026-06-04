@@ -1,0 +1,13 @@
+select
+    materiallocal.filial,
+    materiallocal.IDLOCAL,
+    local.descricao,
+    itemetoque
+from
+    MATERIALLOCAL
+inner join
+    local on
+        materiallocal.idlocal=local.ID
+inner join
+    itemestoque on
+        itemestoque.codigo=materiallocal.IDITEM

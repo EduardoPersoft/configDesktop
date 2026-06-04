@@ -1,0 +1,17 @@
+--insert into
+    --ITEMESTOQUECODIGOS
+select
+    DISTINCT
+    I1.CODIGO,
+    I1.CODIGOALTERNATIVO
+from
+    ITEMESTOQUECODIGOS I1
+where 
+    NOT EXISTS 
+    (SELECT 
+        * 
+     FROM 
+        ITEMESTOQUECODIGOS I2
+     WHERE   
+        I2.CODIGO=I1.CODIGO AND
+        I2.CODIGOALTERNATIVO=I1.CODIGO)

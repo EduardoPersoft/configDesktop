@@ -1,0 +1,4 @@
+
+
+select * from movtotitulopag
+where movtotitulopag.DATAPROCMOV='2025-01-23'

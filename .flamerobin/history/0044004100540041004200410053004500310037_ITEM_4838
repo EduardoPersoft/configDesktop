@@ -1,0 +1,1 @@
+select * from LOTESNFE where idnota in (360120,359887)

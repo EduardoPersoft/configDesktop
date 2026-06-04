@@ -1,0 +1,3 @@
+select *
+from saldoanteriorestoquelocal SALDOANTERIORESTOQUE
+where iditem='PE-18101'

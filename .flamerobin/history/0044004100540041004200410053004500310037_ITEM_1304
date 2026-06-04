@@ -1,0 +1,11 @@
+update
+    INVENTARIOESTOQUEDATA
+set
+    inventarioestoquedata.IDMOVIMENTO=-1
+where 
+    data<'31.12.2021' and exists
+    (select * from MATERIALLOCAL
+     where materiallocal.filial=inventarioestoquedata.filial
+     and materiallocal.iditem=inventarioestoquedata.codigo
+     and materiallocal.IDLOCAL=inventarioestoquedata.local
+     and materiallocal.saldototal=0)

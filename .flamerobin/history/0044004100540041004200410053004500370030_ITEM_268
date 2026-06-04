@@ -1,0 +1,14 @@
+update 
+    composicaomercped
+set
+    filial=233
+where
+    filial=110 and 
+    exists (
+        select 
+            *
+        from
+            PEDIDO
+        where
+            pedido.filial=233 and
+            pedido.idnota=mercadoriasped.idnota)

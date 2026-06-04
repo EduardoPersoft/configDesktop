@@ -1,0 +1,50 @@
+SET TERM ^ ;
+ALTER PROCEDURE C_ATUALIZAULTIMACOMPRA (
+    ENTRADAMAX timestamp )
+RETURNS (
+    STATUS varchar(50) )
+
+AS
+declare variable v_filial integer;
+declare variable v_idmercadoria integer;
+declare variable v_idmovimentomaterial integer;
+
+declare variable v_iditem varchar(15);
+declare variable v_valor double precision;
+declare variable v_idnota integer;
+declare variable v_idnotacompra integer;
+declare variable v_quantidade double precision;
+
+
+begin
+  /* Procedure Text */
+  for select MATERIALMOVIMENTOESTOQUE.IDITEm,
+             coalesce( (MATERIALMOVIMENTOESTOQUE.VALOR / materialmovimentoestoque.quantidade),0),
+             movimentoestoque.idnota,
+             movimentoestoque.idnotacompra,
+             movimentoestoque.filial, 
+             materialmovimentoestoque.IDMERCADORIA,
+             materialmovimentoestoque.IDMOVIMENTOMATERIAL,
+             materialmovimentoestoque.quantidade
+  from MOVIMENTOESTOQUE
+  inner join MATERIALMOVIMENTOESTOQUE on (MOVIMENTOESTOQUE.FILIAL = MATERIALMOVIMENTOESTOQUE.FILIAL and
+                                         MOVIMENTOESTOQUE.IDMOVIMENTO = MATERIALMOVIMENTOESTOQUE.IDMOVIMENTO)
+  where  MOVIMENTOESTOQUE.EMISSAO <= :ENTRADAMAX and
+        ( (MOVIMENTOESTOQUE.TIPOMOVIMENTO = '01' and (not MOVIMENTOESTOQUE.idnotacompra is null) ) or
+          (MOVIMENTOESTOQUE.TIPOMOVIMENTO = '02' and (not MOVIMENTOESTOQUE.IDNOTA is null))  or
+          movimentoestoque.tipomovimento in ('04', '15' ))
+  order by MATERIALMOVIMENTOESTOQUE.IDITEM, MOVIMENTOESTOQUE.EMISSAO
+  into :v_iditem, :v_valor, :v_idnota, :v_idnotacompra, :v_filial, :v_idmercadoria,
+       :v_idmovimentomaterial, :v_quantidade
+  do
+  begin
+
+    update itemestoque set itemestoque.valorultimacompra = :v_valor
+    where itemestoque.codigo = :v_iditem;
+
+    status = 'Atualizado em ' || :entradamax;
+    suspend;
+  end  
+end
+^
+SET TERM ; ^

@@ -1,0 +1,5 @@
+update  
+    pedido
+set
+    pedido.INDPRES=0
+where pedido.datacadastro>='01.01.2025'    

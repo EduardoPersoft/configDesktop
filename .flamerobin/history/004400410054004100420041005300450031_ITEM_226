@@ -1,0 +1,14 @@
+select 
+    i1.CODIGO,i2.C_CODIGOANT
+from 
+    ITEMESTOQUE i1
+WHERE
+    exists (
+        select
+            *
+        FROM
+            ITEMESTOQUE i2
+        WHERE
+            i1.c_codigoant=i2.c_codigoant AND
+            i1.codigo<>i2.codigo)
+            

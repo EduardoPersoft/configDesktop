@@ -1,0 +1,29 @@
+SET TERM ^ ;
+create or ALTER PROCEDURE C_GENERATORESTABELECIMENTO (
+    FILIAL integer,
+    NOME varchar(20),
+    SALTO integer )
+RETURNS (
+    VALOR integer,
+    "DATA" date,
+    DATAHORA timestamp )
+
+AS
+BEGIN
+
+  data = cast('now' as date);
+  dataHora = cast('now' as timestamp); 
+
+  if (NOME='C_FORADELISTA') then
+    valor=GEN_ID("C_GForaDeLista",salto);
+
+  VALOR = VALOR +1;
+  SUSPEND;
+END
+^
+SET TERM ; ^
+
+
+GRANT EXECUTE
+ ON PROCEDURE GENERATORESTABELECIMENTO TO  SYSDBA;
+

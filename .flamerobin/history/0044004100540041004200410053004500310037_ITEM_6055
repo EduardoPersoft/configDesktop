@@ -1,0 +1,43 @@
+select 
+    cadcli.CADASTRO,
+    cadcli.NOME,
+    cadcli.razaosocial,
+    CADVEN.NOME AS VENDEDOR,
+    cadcli.CIDADE,
+    cadcli.UF,
+     CASE WHEN (cadcli.DOCUMENTO<>'') AND
+          (NOT cadcli.DOCUMENTO IS NULL) THEN
+          CASE cadcli.TIPOPESSOA WHEN 'F' THEN
+            CAST(SUBSTRING(cadcli.DOCUMENTO FROM 1 FOR 3)||'.'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 4 FOR 3)||'.'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 7 FOR 3)||'-'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 10 FOR 2) AS VARCHAR(18))
+        WHEN 'J' THEN
+            CAST(SUBSTRING(cadcli.DOCUMENTO FROM 1 FOR 2)||'.'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 3 FOR 3)||'.'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 6 FOR 3)||'/'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 9 FOR 4)||'-'||
+                SUBSTRING(cadcli.DOCUMENTO FROM 13 FOR 2) AS VARCHAR(18))
+       ELSE NULL END
+    ELSE NULL END AS DOCUMENTO,
+    max(orcamento.datacadastro)/*,
+    (select max(pedido.dataCadastro) from pedido
+    where pedido.destinatario=cadcli.cadastro
+    and pedido.dataCancelamento is null ) as ultimoPedido,
+    (select max(orcamento.dataCadastro) from orcamento
+    where orcamento.destinatario=cadcli.cadastro
+    and orcamento.dataCancelamento is null ) as ultimoOrcamento
+*/
+from
+    CADASTROPARCEIROS cadcli
+inner join 
+    CLIENTES on 
+    CLIENTES.cadastro=cadcli.cadastro
+inner join 
+    CADASTROPARCEIROS CADVEN ON 
+    clientes.vendedor=cadven.cadastro
+inner join
+    orcamento on
+        orcamento.destinatario=cadcli.cadastro
+where 
+    cadcli.status = 1

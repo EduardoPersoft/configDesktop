@@ -1,0 +1,10 @@
+SELECT 
+    p.FILIAL, 
+    p.IDNOTA, 
+    p.DATACADASTRO, 
+    p.STATUS, 
+    p.VENDEDOR, 
+    p.NOME_LOJA,
+    p.VLRTOTALNOTA, 
+    p.uuid
+FROM C_LISTAORCCANAL (1, 12007) p

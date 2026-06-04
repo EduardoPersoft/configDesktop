@@ -1,0 +1,11 @@
+select 
+    materiallocal.*,
+    local.DESCRICAO
+from
+    MATERIALLOCAL
+inner join
+    local on 
+        materiallocal.IDLOCAL=local.ID
+where
+    materiallocal.filial=1 and
+    materiallocal.SALDOtotal <> 0

@@ -1,0 +1,9 @@
+select 
+    lote,
+    quantidade,
+    c_largura,
+    C_GRAMATURA
+from 
+    materiallote
+
+    

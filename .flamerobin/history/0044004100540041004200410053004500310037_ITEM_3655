@@ -1,0 +1,94 @@
+select 
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome vendedor,
+
+    (select 
+        count(orcamento.idnota) 
+     from 
+        ORCAMENTO
+     where
+        orcamento.destinatario=cadcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N')+
+    (select 
+        count(orcamento.idnota) 
+     from 
+        PEDIDO ORCAMENTO
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.idorcamento is null and
+        orcamento.CANCELAMENTO='N')        
+        
+         qtdOrcamento    , 
+
+
+    (select 
+        count(orcamento.idnota) 
+     from 
+        PEDIDO ORCAMENTO
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N') qtdConversao,
+        
+    ((select 
+        sum(1.0) 
+     from 
+        PEDIDO ORCAMENTO
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N')/
+    (coalesce((select 
+        sum(1.0) 
+     from 
+        ORCAMENTO
+     where
+        orcamento.destinatario=cadcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N'),0)+
+    coalesce((select 
+        sum(1.0) 
+     from 
+        PEDIDO ORCAMENTO
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.idorcamento is null and
+        orcamento.CANCELAMENTO='N'),0))*100.0 as pconversao
+         
+from 
+    CADASTROPARCEIROS cadcli
+inner join
+    clientes on 
+        cadcli.cadastro=clientes.CADASTRO
+inner join
+    CADASTROPARCEIROS cadven on
+        cadven.cadastro=clientes.vendedor
+where
+    exists 
+    (select 
+        * 
+     from 
+        orcamento
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N') or 
+ exists   (select 
+        * 
+     from 
+        pedido orcamento
+     where
+        orcamento.destinatario=CADcli.cadastro and
+        orcamento.DATACADASTRO between '01.01.2024' and '31.08.2024' and
+        orcamento.CANCELAMENTO='N')        
+        
+    
+group by    
+    cadcli.cadastro,
+    cadcli.nome,
+    cadven.nome
+order by 5 desc,4 desc

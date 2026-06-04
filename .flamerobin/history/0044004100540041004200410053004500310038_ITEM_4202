@@ -1,0 +1,2 @@
+select * from QRCODENFCE
+where filial=4

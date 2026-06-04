@@ -1,0 +1,6 @@
+delete from C_MOVFINANCEIROd
+/*
+insert into c_movfinanceirod 
+select documento,fatura from C_MOVFINANCEIRO
+group by documento,fatura
+having count(*)>1*/

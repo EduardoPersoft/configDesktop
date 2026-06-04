@@ -1,0 +1,13 @@
+ select 
+    c_ordemservico.IDORDEM as id,
+    (case c_ordemservico.tipoOrdem 
+     when 'A' then 'AT' 
+     when 'S' then 'SAC' 
+     else 'PED' end)||c_ordemServico.idpedido as title,
+    cast(c_ordemservico.agendadaPara as date) as "start"
+from
+    c_ordemservico
+where
+    c_ordemServico.filial = ?  and
+    c_ordemServico.agendadaPara between ? and ? and
+    c_ordemservico.agendadaPara is not null

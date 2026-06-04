@@ -1,0 +1,2 @@
+select * from MERCADORIASped
+where filial=12826 and idnota=168309

@@ -1,0 +1,1 @@
+select * from LOGALTERACAO where LOGALTERACAO.data='01.04.2026'
